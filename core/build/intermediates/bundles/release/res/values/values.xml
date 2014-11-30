@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/home/dmfrey/Development/Android/git/MythtvPlayerforAndroid/core/src/main/res/values/strings_activity_settings.xml -->
+    <eat-comment/>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+    <!-- From: file:/home/dmfrey/Development/Android/git/MythtvPlayerforAndroid/core/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="background_gradient_end">#DDDDDD</color>
+    <color name="background_gradient_start">#000000</color>
+    <color name="black">#59000000</color>
+    <color name="black_opaque">#AA000000</color>
+    <color name="default_background">#3d3d3d</color>
+    <color name="detail_background">#0096a6</color>
+    <color name="fastlane_background">#0096a6</color>
+    <color name="img_full_opaque">#00000000</color>
+    <color name="img_soft_opaque">#30FF0000</color>
+    <color name="orange">#FADCA7</color>
+    <color name="orange_transparent">#AAFADCA7</color>
+    <color name="sa_green">#1E9618</color>
+    <color name="sa_green_dark">#146310</color>
+    <color name="sa_green_transparent">#801E9618</color>
+    <color name="search_opaque">#ffaa3f</color>
+    <color name="soft_opaque">#30000000</color>
+    <color name="text_dark">#333333</color>
+    <color name="text_light">#888888</color>
+    <color name="text_medium">#555555</color>
+    <color name="white">#FFFFFF</color>
+    <color name="yellow">#EEFF41</color>
+    <!-- From: file:/home/dmfrey/Development/Android/git/MythtvPlayerforAndroid/core/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="margin">8dp</dimen>
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="outer_margin">16dp</dimen>
+    <!-- From: file:/home/dmfrey/Development/Android/git/MythtvPlayerforAndroid/core/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_name">Mythtv Player for Android</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <!-- From: file:/home/dmfrey/Development/Android/git/MythtvPlayerforAndroid/core/src/main/res/values/strings_activity_settings.xml -->
+    <eat-comment/>
+    <string name="pref_backend_port">6544</string>
+    <string name="pref_backend_port_description">The port of the master backend</string>
+    <string name="pref_backend_port_title">Master Backend Port</string>
+    <string name="pref_backend_url">hostname or ip address</string>
+    <string name="pref_backend_url_description">The hostname or ip address of the master backend</string>
+    <string name="pref_backend_url_title">Master Backend Address</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_ringtone_silent">Silent</string>
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="title_activity_settings">Settings</string>
+    <!-- From: file:/home/dmfrey/Development/Android/git/MythtvPlayerforAndroid/core/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <!-- From: file:/home/dmfrey/Development/Android/git/MythtvPlayerforAndroid/core/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+</resources>
