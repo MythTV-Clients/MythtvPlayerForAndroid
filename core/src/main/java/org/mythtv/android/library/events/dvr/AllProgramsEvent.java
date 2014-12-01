@@ -21,6 +21,7 @@ public class AllProgramsEvent extends ReadEvent {
     public AllProgramsEvent( final List<ProgramDetails> details ) {
 
         this.details = Collections.unmodifiableList( details );
+        this.entityFound = details.size() > 0;
 
         preparePrograms();
 

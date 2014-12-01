@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="org.mythtv.android.player.MainActivity"
+            android:name=".recordings.RecordingListActivity"
             android:label="@string/app_name" >
 
             <intent-filter>
@@ -23,6 +23,8 @@
             </intent-filter>
 
         </activity>
+
+        <!-- activity android:name=".recordings.RecordingListActivity"></activity -->
 
         <activity
             android:name="org.mythtv.android.library.ui.settings.SettingsActivity"

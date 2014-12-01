@@ -1,5 +1,6 @@
 package org.mythtv.android.library.ui.adapters;
 
+import org.joda.time.DateTimeZone;
 import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.domain.dvr.Program;
 
@@ -44,7 +45,7 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ViewHold
         final Program program = programs.get( position );
         viewHolder.setTitle(program.getTitle());
         viewHolder.setDescription( Html.fromHtml( program.getDescription() ) );
-        viewHolder.setDate( program.getStartTime().toString( "yyyy-MM-dd hh:mmA" ) );
+        viewHolder.setDate(program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
         viewHolder.setOnClickListener(new View.OnClickListener() {
 
             @Override

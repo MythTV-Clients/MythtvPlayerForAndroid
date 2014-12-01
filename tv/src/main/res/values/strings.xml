@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Mythtv Frontend for AndroidTV</string>
+    <string name="app_name">Mythtv Player for AndroidTV</string>
     <string name="browse_title"><![CDATA[Videos]]></string>
     <string name="recordings_browse_title"><![CDATA[MythTV Recordings]]></string>
     <string name="videos_browse_title"><![CDATA[MythTV Videos]]></string>

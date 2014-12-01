@@ -17,9 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
-import org.mythtv.android.library.R;
+import org.mythtv.android.player.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
+import org.mythtv.android.player.recordings.RecordingListActivity;
 
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -79,11 +80,21 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     public void onNavigationDrawerItemSelected( int position ) {
         Log.v( TAG, "onNavigationDrawerItemSelected : enter" );
 
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace( R.id.container, PlaceholderFragment.newInstance( position + 1 ) )
-                .commit();
+        switch( position ) {
+
+            case 0 :
+                Intent recordings = new Intent( this, RecordingListActivity.class );
+                startActivity( recordings );
+
+            case 1 :
+            case 2 :
+                // update the main content by replacing fragments
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace( R.id.container, PlaceholderFragment.newInstance( position + 1 ) )
+                        .commit();
+
+        }
 
         Log.v( TAG, "onNavigationDrawerItemSelected : exit" );
     }
