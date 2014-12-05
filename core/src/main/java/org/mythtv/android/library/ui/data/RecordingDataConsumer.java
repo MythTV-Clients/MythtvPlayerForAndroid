@@ -12,8 +12,6 @@ public interface RecordingDataConsumer {
 
     public void setPrograms( List<Program> programs );
 
-    public void setPrograms( Map<String, String> mCategories, Map<String, List<Program>> mPrograms );
-
     public void handleError( String message );
 
 }

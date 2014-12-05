@@ -1,6 +1,5 @@
 package org.mythtv.android.library.ui.data;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,15 +17,12 @@ import android.widget.Toast;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.service.DvrService;
-import org.mythtv.android.library.core.service.DvrServiceHelper;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Created by dmfrey on 11/29/14.
@@ -34,9 +30,6 @@ import java.util.TreeMap;
 public class RecordingsDataFragment extends Fragment {
 
     private static final String TAG = RecordingsDataFragment.class.getSimpleName();
-
-    private Map<String, List<Program>> mPrograms = new TreeMap<String, List<Program>>();
-    private Map<String, String> mCategories = new TreeMap<String, String>();
 
     private List<Program> programs = new ArrayList<Program>();
 
@@ -80,24 +73,12 @@ public class RecordingsDataFragment extends Fragment {
         Log.i( TAG, "onPause : exit" );
     }
 
-    @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
-        Log.v(TAG, "onAttach : enter");
+    public void setRecordingDataConsumer( RecordingDataConsumer consumer ) {
+        Log.i( TAG, "setRecordingDataConsumer : enter" );
 
-        if( activity instanceof RecordingDataConsumer ) {
-            consumer = (RecordingDataConsumer) activity;
-        }
+        this.consumer = consumer;
 
-        Log.v( TAG, "onAttach : exit" );
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.v( TAG, "onDestroyView : enter" );
-
-        Log.v( TAG, "onDestroyView : exit" );
+        Log.i( TAG, "setRecordingDataConsumer : exit" );
     }
 
     public boolean isLoading() {
@@ -110,37 +91,6 @@ public class RecordingsDataFragment extends Fragment {
         mDvrService = mainApplication.getDvrService();
 
         Log.v( TAG, "initializeClient : exit" );
-    }
-
-    private void preparePrograms() {
-        Log.d( TAG, "preparePrograms : enter" );
-
-        for( Program program : programs ) {
-
-            String cleanedTitle = program.getTitle(); //cleanArticles( program.getTitle() );
-            if( !mPrograms.containsKey( cleanedTitle ) ) {
-
-                List<Program> categoryPrograms = new ArrayList<Program>();
-                categoryPrograms.add( program );
-                mPrograms.put( cleanedTitle, categoryPrograms );
-
-                mCategories.put( cleanedTitle, program.getTitle() );
-
-            } else {
-
-                mPrograms.get( cleanedTitle ).add( program );
-
-            }
-
-        }
-
-        if( null != consumer ) {
-            Log.i( TAG, "preparePrograms : programs loaded" );
-
-            consumer.setPrograms( mCategories, mPrograms );
-        }
-
-        Log.d( TAG, "preparePrograms : exit" );
     }
 
     private class ProgramsLoaderAsyncTask extends AsyncTask<Void, Void, AllProgramsEvent> {
@@ -164,17 +114,19 @@ public class RecordingsDataFragment extends Fragment {
             Log.v( TAG, "onPostExecute : enter" );
 
             if( event.isEntityFound() ) {
+                Log.v( TAG, "onPostExecute : received programs" );
 
                 for( ProgramDetails programDetails : event.getDetails() ) {
+                    Log.v( TAG, "onPostExecute : programDetails iteration" );
 
                     Program program = Program.fromDetails( programDetails );
 
                     if( !"LiveTV".equals( program.getRecording().getStorageGroup() ) ) {
+                        Log.v( TAG, "onPostExecute : program added" );
                         programs.add( program );
                     }
                 }
 
-                preparePrograms();
                 consumer.setPrograms( programs );
 
             } else {
