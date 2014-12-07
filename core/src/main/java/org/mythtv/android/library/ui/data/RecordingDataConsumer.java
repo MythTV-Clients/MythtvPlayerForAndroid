@@ -8,10 +8,8 @@ import java.util.Map;
 /**
  * Created by dmfrey on 11/29/14.
  */
-public interface RecordingDataConsumer {
+public interface RecordingDataConsumer extends ErrorHandler {
 
     public void setPrograms( List<Program> programs );
-
-    public void handleError( String message );
 
 }

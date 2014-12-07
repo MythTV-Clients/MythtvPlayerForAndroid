@@ -1,10 +1,7 @@
 package org.mythtv.android.library.ui.data;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
@@ -31,54 +27,55 @@ public class RecordingsDataFragment extends Fragment {
 
     private static final String TAG = RecordingsDataFragment.class.getSimpleName();
 
-    private List<Program> programs = new ArrayList<Program>();
+    private List<Program> programs;
 
     private DvrService mDvrService;
 
     private RecordingDataConsumer consumer;
     private boolean loading = false;
 
-    private BackendConnectedBroadcastReceiver mBackendConnectedBroadcastReceiver = new BackendConnectedBroadcastReceiver();
-
     @Nullable
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.v( TAG, "onCreate : enter" );
+        Log.v(TAG, "onCreate : enter");
 
-        Log.v( TAG, "onCreate : exit" );
+        initializeClient((MainApplication) getActivity().getApplicationContext());
+        update();
+
+        Log.v(TAG, "onCreate : exit");
         return null;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.i( TAG, "onResume : enter" );
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i(TAG, "onDestroyView : enter");
 
-        IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
-        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
-        getActivity().registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
+        mDvrService = null;
 
-        Log.i( TAG, "onResume : exit" );
+        Log.i( TAG, "onDestroyView : exit" );
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.i( TAG, "onPause : enter" );
+    public void onAttach( Activity activity ) {
+        super.onAttach(activity);
+        Log.i(TAG, "onAttach : enter");
 
-        if( null != mBackendConnectedBroadcastReceiver ) {
-            getActivity().unregisterReceiver( mBackendConnectedBroadcastReceiver );
+        if( activity instanceof RecordingDataConsumer ) {
+            consumer = (RecordingDataConsumer) activity;
         }
 
-        Log.i( TAG, "onPause : exit" );
+        Log.i( TAG, "onAttach : exit" );
     }
 
-    public void setRecordingDataConsumer( RecordingDataConsumer consumer ) {
-        Log.i( TAG, "setRecordingDataConsumer : enter" );
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i( TAG, "onDetach : enter" );
 
-        this.consumer = consumer;
+        consumer = null;
 
-        Log.i( TAG, "setRecordingDataConsumer : exit" );
+        Log.i( TAG, "onDetach : exit" );
     }
 
     public boolean isLoading() {
@@ -93,6 +90,36 @@ public class RecordingsDataFragment extends Fragment {
         Log.v( TAG, "initializeClient : exit" );
     }
 
+    private void update() {
+        Log.v( TAG, "update : enter" );
+
+        if( programs == null && !isLoading() ) {
+
+            new ProgramsLoaderAsyncTask().execute();
+
+            loading = true;
+
+        } else {
+
+            if( programs != null ) {
+
+                handleUpdate();
+
+            }
+
+        }
+
+        Log.v( TAG, "update : exit" );
+    }
+
+    private void handleUpdate() {
+        Log.v( TAG, "handleUpdate : enter" );
+
+        consumer.setPrograms( programs );
+
+        Log.v(TAG, "handleUpdate : exit");
+    }
+
     private class ProgramsLoaderAsyncTask extends AsyncTask<Void, Void, AllProgramsEvent> {
 
         private String TAG = ProgramsLoaderAsyncTask.class.getSimpleName();
@@ -100,8 +127,6 @@ public class RecordingsDataFragment extends Fragment {
         @Override
         protected AllProgramsEvent doInBackground( Void... params ) {
             Log.v( TAG, "doInBackground : enter" );
-
-            loading = true;
 
             AllProgramsEvent event = mDvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( true, 1, -1, null, null, null ) );
 
@@ -111,10 +136,12 @@ public class RecordingsDataFragment extends Fragment {
 
         @Override
         protected void onPostExecute( AllProgramsEvent event ) {
-            Log.v( TAG, "onPostExecute : enter" );
+            Log.v(TAG, "onPostExecute : enter");
 
             if( event.isEntityFound() ) {
                 Log.v( TAG, "onPostExecute : received programs" );
+
+                programs = new ArrayList<Program>();
 
                 for( ProgramDetails programDetails : event.getDetails() ) {
                     Log.v( TAG, "onPostExecute : programDetails iteration" );
@@ -127,48 +154,20 @@ public class RecordingsDataFragment extends Fragment {
                     }
                 }
 
-                consumer.setPrograms( programs );
+                handleUpdate();
 
             } else {
-                Log.e( TAG, "onPostExecute : error, failed to load recorded programs" );
+                Log.e(TAG, "onPostExecute : error, failed to load recorded programs");
 
-                consumer.handleError( "failed to load recorded programs");
+                consumer.handleError( "failed to load recorded programs" );
 
             }
+
             loading = false;
 
-            Log.v( TAG, "onPostExecute : exit" );
+            Log.v(TAG, "onPostExecute : exit");
         }
 
     }
-
-    private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
-
-        private final String TAG = BackendConnectedBroadcastReceiver.class.getSimpleName();
-
-        @Override
-        public void onReceive( Context context, Intent intent ) {
-            Log.d( TAG, "onReceive : enter" );
-
-            if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
-                Log.v(TAG, "onReceive : backend is connected");
-
-                initializeClient( (MainApplication) getActivity().getApplicationContext() );
-                new ProgramsLoaderAsyncTask().execute();
-
-
-            }
-
-            if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
-                Log.v( TAG, "onReceive : backend is NOT connected" );
-
-                Toast.makeText(getActivity(), "Backend not connected", Toast.LENGTH_SHORT).show();
-            }
-
-            Log.d( TAG, "onReceive : exit" );
-        }
-
-    }
-
 
 }

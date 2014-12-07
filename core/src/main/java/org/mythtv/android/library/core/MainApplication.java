@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.core.service.VideoService;
@@ -22,6 +23,7 @@ import org.mythtv.services.api.MythTvApiContext;
 import org.mythtv.services.api.ServerVersionQuery;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by dmfrey on 11/15/14.
@@ -44,6 +46,8 @@ public class MainApplication extends Application {
     private ContentService mContentService;
     private DvrService mDvrService;
     private VideoService mVideoService;
+
+    private List<Program> programs;
 
     @Override
     public void onCreate() {
@@ -77,6 +81,14 @@ public class MainApplication extends Application {
 
     public String getMasterBackendUrl() {
         return "http://" + mBackendUrl + ":" + mBackendPort + "/";
+    }
+
+    public List<Program> getPrograms() {
+        return programs;
+    }
+
+    public void setPrograms(List<Program> programs) {
+        this.programs = programs;
     }
 
     private void initializeApi() {

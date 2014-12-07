@@ -39,11 +39,10 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ViewHold
     public ViewHolder onCreateViewHolder( ViewGroup viewGroup, int position ) {
         Log.v( TAG, "onCreateViewHolder : enter" );
 
-        Context context = viewGroup.getContext();
-        View parent = LayoutInflater.from( context ).inflate( R.layout.program_list_item, viewGroup, false );
+        View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.program_list_item, viewGroup, false );
 
-        Log.v( TAG, "onCreateViewHolder : exit" );
-        return ViewHolder.newInstance(parent);
+        ViewHolder vh = new ViewHolder( v );
+        return vh;
     }
 
     @Override
@@ -51,13 +50,13 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ViewHold
         Log.v( TAG, "onBindViewHolder : enter" );
 
         final Program program = programs.get( position );
-        viewHolder.setTitle(program.getTitle());
+        viewHolder.setTitle( program.getTitle() );
         viewHolder.setDescription( Html.fromHtml( program.getDescription() ) );
-        viewHolder.setDate(program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
-        viewHolder.setOnClickListener(new View.OnClickListener() {
+        viewHolder.setDate( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
+        viewHolder.setOnClickListener( new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
+            public void onClick( View v ) {
                 programClickListener.programClicked( program );
             }
 
@@ -83,25 +82,14 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ViewHold
         private final TextView description;
         private final TextView date;
 
-        public static ViewHolder newInstance( View parent ) {
-            Log.v( TAG, "newInstance : enter" );
-
-            TextView title = (TextView) parent.findViewById( R.id.program_item_title );
-            TextView description = (TextView) parent.findViewById( R.id.program_item_description );
-            TextView date = (TextView) parent.findViewById( R.id.program_item_date );
-
-            Log.v( TAG, "newInstance : exit" );
-            return new ViewHolder(parent, title, description, date);
-        }
-
-        private ViewHolder( View parent, TextView title, TextView description, TextView date ) {
-            super( parent );
+        public ViewHolder( View v ) {
+            super( v );
             Log.v( TAG, "initialize : enter" );
 
-            this.parent = parent;
-            this.title = title;
-            this.description = description;
-            this.date = date;
+            this.parent = v;
+            title = (TextView) parent.findViewById( R.id.program_item_title );
+            description = (TextView) parent.findViewById( R.id.program_item_description );
+            date = (TextView) parent.findViewById( R.id.program_item_date );
 
             Log.v( TAG, "initialize : exit" );
         }
