@@ -2,6 +2,7 @@ package org.mythtv.android.player.recordings;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -101,16 +102,21 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
             args.putString(RecordingsDataFragment.TITLE_INFO_TITLE, titleInfo.getTitle());
         }
 
-        RecordingsFragment recordingsFragment = (RecordingsFragment) getChildFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
-        if( null == recordingsFragment ) {
-            Log.d( TAG, "titleInfoSelected : creating new RecordingsFragment" );
+        Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
+        recordings.putExtras( args );
+        startActivity( recordings );
 
-            recordingsFragment = (RecordingsFragment) Fragment.instantiate( getActivity(), RecordingsFragment.class.getName(), args );
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
-            transaction.commit();
-        }
+//        RecordingsFragment recordingsFragment = (RecordingsFragment) getChildFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
+//        if( null == recordingsFragment ) {
+//            Log.d( TAG, "titleInfoSelected : creating new RecordingsFragment" );
+//
+//            recordingsFragment = (RecordingsFragment) Fragment.instantiate( getActivity(), RecordingsFragment.class.getName(), args );
+//
+//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//            transaction.replace( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
+//            transaction.addToBackStack( null );
+//            transaction.commit();
+//        }
 
         Log.v( TAG, "titleInfoClicked : exit" );
     }

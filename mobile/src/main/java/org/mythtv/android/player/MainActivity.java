@@ -1,11 +1,15 @@
 package org.mythtv.android.player;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,24 +17,19 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.ui.data.RecordingDataConsumer;
-import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
-import org.mythtv.android.player.recordings.RecordingsFragment;
 import org.mythtv.android.player.recordings.TitleInfosFragment;
-
-import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements NavAdapter.OnItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final String SELECTED_ITEM_STATE = "selected_item";
 
     private static final String TITLE_INFOS_FRAGMENT_TAG = TitleInfosFragment.class.getCanonicalName();
 
@@ -41,6 +40,9 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mNavTitles;
+    private int mSelectedItem;
+
+    private BackendConnectedBroadcastReceiver mBackendConnectedBroadcastReceiver = new BackendConnectedBroadcastReceiver();
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -90,19 +92,100 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
         mDrawerLayout.setDrawerListener( mDrawerToggle );
 
         if( savedInstanceState == null ) {
-            selectItem( 0 );
+            mSelectedItem = 0;
         }
 
         Log.v( TAG, "onCreate : exit" );
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i( TAG, "onResume : enter" );
+
+        if( ( (MainApplication) getApplicationContext() ).isConnected() ) {
+            Log.d( TAG, "onResume : backend already connected" );
+
+            selectItem( mSelectedItem );
+
+        } else {
+            Log.d( TAG, "onResume : backend NOT connected" );
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            String backendUrlPref = sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_URL, "" );
+
+            if( "".equals( backendUrlPref ) || getResources().getString( R.string.pref_backend_url ).equals( backendUrlPref ) ) {
+                Log.d( TAG, "onResume : backend not set, show settings" );
+
+                Intent prefs = new Intent( this, SettingsActivity.class );
+                startActivity( prefs );
+
+            } else {
+                Log.d( TAG, "onResume : resetting backend connection" );
+
+                ( (MainApplication) getApplicationContext() ).resetBackend();
+
+            }
+
+        }
+
+        IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
+        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
+        registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
+
+        Log.i( TAG, "onResume : exit" );
+    }
+
+    @Override
+    protected void onRestoreInstanceState( Bundle savedInstanceState ) {
+        super.onRestoreInstanceState( savedInstanceState );
+        Log.v( TAG, "onRestoreInstanceState : enter" );
+
+        if( savedInstanceState.containsKey( SELECTED_ITEM_STATE ) ) {
+            mSelectedItem = savedInstanceState.getInt( SELECTED_ITEM_STATE );
+        } else {
+            mSelectedItem = 0;
+        }
+
+        Log.v( TAG, "onRestoreInstanceState : exit" );
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i( TAG, "onPause : enter" );
+
+        if( null != mBackendConnectedBroadcastReceiver ) {
+            unregisterReceiver( mBackendConnectedBroadcastReceiver );
+        }
+
+        Log.i( TAG, "onPause : exit" );
+    }
+
+    @Override
+    protected void onSaveInstanceState( Bundle outState ) {
+        Log.v( TAG, "onSaveInstanceState : enter" );
+
+        outState.putInt( SELECTED_ITEM_STATE, mSelectedItem );
+
+        Log.v( TAG, "onSaveInstanceState : exit" );
+        super.onSaveInstanceState( outState );
+    }
+
     /* The click listener for RecyclerView in the navigation drawer */
     @Override
     public void onClick( View view, int position ) {
+        Log.v( TAG, "onClick : enter" );
+
+        mSelectedItem = position;
+
         selectItem( position );
+
+        Log.v( TAG, "onClick : exit" );
     }
 
     private void selectItem( int position ) {
+        Log.v( TAG, "selectItem : enter" );
 
         switch( position ) {
 
@@ -115,13 +198,13 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
                     titleInfosFragment = (TitleInfosFragment) Fragment.instantiate( this, TitleInfosFragment.class.getName() );
 
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG);
+                    transaction.replace( R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG );
                     transaction.commit();
 
                 } else {
 
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG);
+                    transaction.replace( R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG );
                     transaction.commit();
 
                 }
@@ -138,8 +221,10 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
         }
 
         // update selected item title, then close the drawer
-        setTitle(mNavTitles[position]);
+        setTitle( mNavTitles[ position ] );
         mDrawerLayout.closeDrawer( mDrawerList );
+
+        Log.v( TAG, "selectItem : exit" );
     }
 
     @Override
@@ -169,28 +254,28 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
         super.onConfigurationChanged( newConfig );
 
         // Pass any configuration change to the drawer toggle
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged( newConfig );
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
+//    @Override
+//    public boolean onCreateOptionsMenu( Menu menu ) {
+//
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate( R.menu.main, menu );
+//
+//        return true;
+//    }
 
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.main, menu );
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu( Menu menu ) {
-
-        // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen( mDrawerList );
-        menu.findItem( R.id.action_example ).setVisible( !drawerOpen );
-
-        return super.onPrepareOptionsMenu( menu );
-    }
+//    @Override
+//    public boolean onPrepareOptionsMenu( Menu menu ) {
+//
+//        // If the nav drawer is open, hide action items related to the content view
+//        boolean drawerOpen = mDrawerLayout.isDrawerOpen( mDrawerList );
+//        menu.findItem( R.id.action_example ).setVisible( !drawerOpen );
+//
+//        return super.onPrepareOptionsMenu( menu );
+//    }
 
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
@@ -207,18 +292,46 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if( id == R.id.action_settings ) {
-            Log.v( TAG, "onOptionsItemSelected : settings selected" );
-
-            Intent prefs = new Intent( this, SettingsActivity.class );
-            startActivity( prefs );
-
-            return true;
-        }
+//        //noinspection SimplifiableIfStatement
+//        if( id == R.id.action_settings ) {
+//            Log.v( TAG, "onOptionsItemSelected : settings selected" );
+//
+//            Intent prefs = new Intent( this, SettingsActivity.class );
+//            startActivity( prefs );
+//
+//            return true;
+//        }
 
         Log.v( TAG, "onOptionsItemSelected : exit" );
         return super.onOptionsItemSelected( item );
+    }
+
+    private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
+
+        private final String TAG = BackendConnectedBroadcastReceiver.class.getSimpleName();
+
+        @Override
+        public void onReceive( Context context, Intent intent ) {
+            Log.d( TAG, "onReceive : enter" );
+
+            if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
+                Log.v(TAG, "onReceive : backend is connected");
+
+
+                selectItem( mSelectedItem );
+
+            }
+
+            if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
+                Log.v( TAG, "onReceive : backend is NOT connected" );
+
+                Toast.makeText( MainActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
+
+            }
+
+            Log.d( TAG, "onReceive : exit" );
+        }
+
     }
 
 }

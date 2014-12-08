@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name=".FrontDoorActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
 
             <intent-filter>
@@ -24,7 +24,14 @@
 
         </activity>
 
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".recordings.RecordingsActivity"
+            android:parentActivityName=".MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
+        </activity>
 
         <activity
             android:name="org.mythtv.android.library.ui.settings.SettingsActivity"

@@ -102,7 +102,7 @@ public class MainApplication extends Application {
             backendPort = Integer.parseInt( sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_PORT, "6544" ) );
 
             try {
-                return ServerVersionQuery.getMythVersion("http://" + backendUrl + ":" + backendPort + "/");
+                return ServerVersionQuery.getMythVersion( "http://" + backendUrl + ":" + backendPort + "/" );
             } catch( IOException e ) {
                 Log.e( TAG, "error creating MythTvApiContext, could not reach '" + getMasterBackendUrl() + "'", e );
 
