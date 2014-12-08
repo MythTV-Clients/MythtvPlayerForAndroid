@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.core.service.DvrService;
-import org.mythtv.android.library.events.dvr.AllProgramsEvent;
-import org.mythtv.android.library.events.dvr.ProgramDetails;
-import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
+import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,28 +23,26 @@ import java.util.List;
 /**
  * Created by dmfrey on 11/29/14.
  */
-public class RecordingsDataFragment extends Fragment {
+public class TitleInfosDataFragment extends Fragment {
 
-    private static final String TAG = RecordingsDataFragment.class.getSimpleName();
+    private static final String TAG = TitleInfosDataFragment.class.getSimpleName();
 
-    public static final String TITLE_INFO_TITLE = "title_info_title";
-
-    private List<Program> programs;
+    private List<TitleInfo> titleInfos;
 
     private DvrService mDvrService;
 
-    private RecordingDataConsumer consumer;
+    private TitleInfoDataConsumer consumer;
     private boolean loading = false;
 
     @Nullable
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.v( TAG, "onCreate : enter" );
+        Log.v(TAG, "onCreate : enter" );
 
         initializeClient( (MainApplication) getActivity().getApplicationContext() );
         update();
 
-        Log.v( TAG, "onCreate : exit" );
+        Log.v(TAG, "onCreate : exit");
         return null;
     }
 
@@ -61,10 +59,10 @@ public class RecordingsDataFragment extends Fragment {
     @Override
     public void onAttach( Activity activity ) {
         super.onAttach( activity );
-        Log.i(TAG, "onAttach : enter");
+        Log.i( TAG, "onAttach : enter" );
 
-        if( activity instanceof RecordingDataConsumer ) {
-            consumer = (RecordingDataConsumer) activity;
+        if( activity instanceof TitleInfoDataConsumer ) {
+            consumer = (TitleInfoDataConsumer) activity;
         }
 
         Log.i( TAG, "onAttach : exit" );
@@ -80,7 +78,7 @@ public class RecordingsDataFragment extends Fragment {
         Log.i( TAG, "onDetach : exit" );
     }
 
-    public void setConsumer( RecordingDataConsumer consumer ) {
+    public void setConsumer( TitleInfoDataConsumer consumer ) {
 
         this.consumer = consumer;
 
@@ -101,20 +99,15 @@ public class RecordingsDataFragment extends Fragment {
     private void update() {
         Log.v( TAG, "update : enter" );
 
-        if( programs == null && !isLoading() ) {
+        if( titleInfos == null && !isLoading() ) {
 
-            String title = null;
-            if( getArguments().containsKey( TITLE_INFO_TITLE ) ) {
-                title = getArguments().getString( TITLE_INFO_TITLE );
-            }
-
-            new ProgramsLoaderAsyncTask().execute( title );
+            new TitleInfosLoaderAsyncTask().execute();
 
             loading = true;
 
         } else {
 
-            if( programs != null ) {
+            if( titleInfos != null ) {
 
                 handleUpdate();
 
@@ -128,45 +121,40 @@ public class RecordingsDataFragment extends Fragment {
     private void handleUpdate() {
         Log.v( TAG, "handleUpdate : enter" );
 
-        consumer.setPrograms( programs );
+        consumer.setTitleInfos(titleInfos);
 
         Log.v(TAG, "handleUpdate : exit");
     }
 
-    private class ProgramsLoaderAsyncTask extends AsyncTask<String, Void, AllProgramsEvent> {
+    private class TitleInfosLoaderAsyncTask extends AsyncTask<Void, Void, AllTitleInfosEvent> {
 
-        private String TAG = ProgramsLoaderAsyncTask.class.getSimpleName();
+        private String TAG = TitleInfosLoaderAsyncTask.class.getSimpleName();
 
         @Override
-        protected AllProgramsEvent doInBackground( String... params ) {
+        protected AllTitleInfosEvent doInBackground( Void... params ) {
             Log.v( TAG, "doInBackground : enter" );
 
-            String title = params[ 0 ];
-
-            AllProgramsEvent event = mDvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( true, 1, -1, title, null, null ) );
+            AllTitleInfosEvent event = mDvrService.getTitleInfos( new RequestAllTitleInfosEvent() );
 
             Log.v( TAG, "doInBackground : exit" );
             return event;
         }
 
         @Override
-        protected void onPostExecute( AllProgramsEvent event ) {
+        protected void onPostExecute( AllTitleInfosEvent event ) {
             Log.v(TAG, "onPostExecute : enter");
 
             if( event.isEntityFound() ) {
                 Log.v( TAG, "onPostExecute : received programs" );
 
-                programs = new ArrayList<Program>();
+                titleInfos = new ArrayList<TitleInfo>();
 
-                for( ProgramDetails programDetails : event.getDetails() ) {
-                    Log.v( TAG, "onPostExecute : programDetails iteration" );
+                for( TitleInfoDetails titleInfoDetails : event.getDetails() ) {
+                    Log.v( TAG, "onPostExecute : titleInfoDetails iteration" );
 
-                    Program program = Program.fromDetails( programDetails );
+                    TitleInfo titleInfo = TitleInfo.fromDetails( titleInfoDetails );
 
-                    if( !"LiveTV".equals( program.getRecording().getStorageGroup() ) ) {
-                        Log.v( TAG, "onPostExecute : program added" );
-                        programs.add( program );
-                    }
+                    titleInfos.add( titleInfo );
                 }
 
                 handleUpdate();

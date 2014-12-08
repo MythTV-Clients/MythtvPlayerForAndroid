@@ -2,5 +2,6 @@
 <resources>
 
     <string name="app_name">Mythtv Player for Android</string>
+    <string name="all_recordings">All Recordings</string>
 
 </resources>

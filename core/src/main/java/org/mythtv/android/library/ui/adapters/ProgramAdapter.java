@@ -25,12 +25,14 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ViewHold
 
     private List<Program> programs;
     private ProgramClickListener programClickListener;
+    private boolean showTitle;
 
-    public ProgramAdapter( List<Program> programs, @NonNull ProgramClickListener programClickListener ) {
+    public ProgramAdapter( List<Program> programs, @NonNull ProgramClickListener programClickListener, boolean showTitle ) {
         Log.v( TAG, "initialize : enter" );
 
         this.programs = programs;
         this.programClickListener = programClickListener;
+        this.showTitle = showTitle;
 
         Log.v( TAG, "initialize : exit" );
     }
@@ -50,7 +52,13 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ViewHold
         Log.v( TAG, "onBindViewHolder : enter" );
 
         final Program program = programs.get( position );
-        viewHolder.setTitle( program.getTitle() );
+
+        String title = program.getSubTitle();
+        if( showTitle ) {
+            title = program.getTitle() + ": " + title;
+        }
+
+        viewHolder.setTitle( title );
         viewHolder.setDescription( Html.fromHtml( program.getDescription() ) );
         viewHolder.setDate( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
         viewHolder.setOnClickListener( new View.OnClickListener() {

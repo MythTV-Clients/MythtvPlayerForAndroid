@@ -3,6 +3,8 @@ package org.mythtv.android.player.recordings;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.ui.adapters.ProgramAdapter;
 import org.mythtv.android.library.ui.data.RecordingDataConsumer;
@@ -32,6 +33,17 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
     ProgramAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
 
+    public static RecordingsFragment newInstance( String title ) {
+
+        Bundle args = new Bundle();
+        args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, title );
+
+        RecordingsFragment f = new RecordingsFragment();
+        f.setArguments( args );
+
+        return f;
+    }
+
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.v( TAG, "onCreateView : enter" );
@@ -40,7 +52,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
         if( null == recordingsDataFragment ) {
             Log.d( TAG, "selectItem : creating new RecordingsDataFragment");
 
-            recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate( getActivity(), RecordingsDataFragment.class.getName() );
+            recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate( getActivity(), RecordingsDataFragment.class.getName(), getArguments() );
             recordingsDataFragment.setRetainInstance( true );
             recordingsDataFragment.setConsumer( this );
 
@@ -59,6 +71,13 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
         super.onActivityCreated( savedInstanceState );
         Log.v( TAG, "onActivityCreated : enter" );
 
+        ActionBar actionBar = ( (ActionBarActivity) getActivity() ).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled( true );
+
+        if( getArguments().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
+            actionBar.setTitle( getArguments().getString( RecordingsDataFragment.TITLE_INFO_TITLE ) );
+        }
+
         mRecyclerView = (RecyclerView) getView().findViewById( R.id.list );
 
         // LinearLayoutManager is used here, this will layout the elements in a similar fashion
@@ -74,7 +93,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
     public void setPrograms( List<Program> programs ) {
         Log.v( TAG, "setPrograms : enter" );
 
-        mAdapter = new ProgramAdapter( programs, this );
+        mAdapter = new ProgramAdapter( programs, this, !getArguments().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) );
         mRecyclerView.setAdapter( mAdapter );
 
         Log.v( TAG, "setPrograms : exit" );
@@ -82,7 +101,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
 
     @Override
     public void handleError( String message ) {
-        Log.v( TAG, "handleError : enter" );
+        Log.v(TAG, "handleError : enter");
 
         Toast.makeText( getActivity(), message, Toast.LENGTH_LONG ).show();
 

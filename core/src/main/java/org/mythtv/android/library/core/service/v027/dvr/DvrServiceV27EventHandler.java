@@ -1,14 +1,22 @@
 package org.mythtv.android.library.core.service.v027.dvr;
 
+import android.content.Context;
+
+import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
+import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
+import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.services.api.ETagInfo;
 import org.mythtv.services.api.MythTvApi027Context;
 import org.mythtv.services.api.MythTvApiContext;
 import org.mythtv.services.api.v027.beans.Program;
 import org.mythtv.services.api.v027.beans.ProgramList;
+import org.mythtv.services.api.v027.beans.TitleInfo;
+import org.mythtv.services.api.v027.beans.TitleInfoList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +27,14 @@ import java.util.List;
 public class DvrServiceV27EventHandler implements DvrService {
 
     private static final String RECORDED_LIST_REQ_ID = "RECORDED_LIST_REQ_ID";
+    private static final String TITLE_INFO_LIST_REQ_ID = "TITLE_INFO_LIST_REQ_ID";
 
+    Context mContext;
     MythTvApi027Context mMythTvApiContext;
 
-    public DvrServiceV27EventHandler( MythTvApiContext mythTvApiContext ) {
+    public DvrServiceV27EventHandler( Context context, MythTvApiContext mythTvApiContext ) {
 
+        mContext = context;
         mMythTvApiContext = (MythTvApi027Context) mythTvApiContext;
 
     }
@@ -40,6 +51,21 @@ public class DvrServiceV27EventHandler implements DvrService {
         }
 
         return new AllProgramsEvent( programDetails );
+    }
+
+    @Override
+    public AllTitleInfosEvent getTitleInfos( RequestAllTitleInfosEvent event ) {
+
+        List<TitleInfoDetails> titleInfoDetails = new ArrayList<TitleInfoDetails>();
+        titleInfoDetails.add( new TitleInfoDetails( mContext.getResources().getString( R.string.all_recordings ), null ) );
+
+        ETagInfo eTagInfo = mMythTvApiContext.getEtag( TITLE_INFO_LIST_REQ_ID, true );
+        TitleInfoList titleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
+        for( TitleInfo titleInfo : titleInfoList.getTitleInfos() ) {
+            titleInfoDetails.add( TitleInfoHelper.toDetails( titleInfo ) );
+        }
+
+        return new AllTitleInfosEvent( titleInfoDetails );
     }
 
 }

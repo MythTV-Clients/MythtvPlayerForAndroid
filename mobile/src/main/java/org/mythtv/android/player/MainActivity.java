@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,14 +24,15 @@ import org.mythtv.android.library.ui.data.RecordingDataConsumer;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.android.player.recordings.RecordingsFragment;
+import org.mythtv.android.player.recordings.TitleInfosFragment;
 
 import java.util.List;
 
-public class MainActivity extends Activity implements NavAdapter.OnItemClickListener {
+public class MainActivity extends ActionBarActivity implements NavAdapter.OnItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private static final String RECORDINGS_FRAGMENT_TAG = RecordingsFragment.class.getCanonicalName();
+    private static final String TITLE_INFOS_FRAGMENT_TAG = TitleInfosFragment.class.getCanonicalName();
 
     private DrawerLayout mDrawerLayout;
     private RecyclerView mDrawerList;
@@ -60,10 +62,11 @@ public class MainActivity extends Activity implements NavAdapter.OnItemClickList
         mDrawerList.setLayoutManager( new LinearLayoutManager( this ) );
 
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new NavAdapter( mNavTitles, this ) );
+        mDrawerList.setAdapter( new NavAdapter( mNavTitles, this ) );
+
         // enable ActionBar app icon to behave as action to toggle nav drawer
-        getActionBar().setDisplayHomeAsUpEnabled( true );
-        getActionBar().setHomeButtonEnabled( true );
+        getSupportActionBar().setDisplayHomeAsUpEnabled( true );
+        getSupportActionBar().setHomeButtonEnabled( true );
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -75,12 +78,12 @@ public class MainActivity extends Activity implements NavAdapter.OnItemClickList
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
             public void onDrawerClosed( View view ) {
-                getActionBar().setTitle( mTitle );
+                getSupportActionBar().setTitle( mTitle );
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened( View drawerView ) {
-                getActionBar().setTitle( mDrawerTitle );
+                getSupportActionBar().setTitle( mDrawerTitle );
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -105,14 +108,20 @@ public class MainActivity extends Activity implements NavAdapter.OnItemClickList
 
             case 0 :
 
-                RecordingsFragment recordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
-                if( null == recordingsFragment ) {
-                    Log.d( TAG, "setPrograms : creating new RecordingsFragment" );
+                TitleInfosFragment titleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentByTag( TITLE_INFOS_FRAGMENT_TAG );
+                if( null == titleInfosFragment ) {
+                    Log.d( TAG, "selectItem : creating new TitleInfosFragment" );
 
-                    recordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName() );
+                    titleInfosFragment = (TitleInfosFragment) Fragment.instantiate( this, TitleInfosFragment.class.getName() );
 
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.add( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
+                    transaction.replace(R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG);
+                    transaction.commit();
+
+                } else {
+
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG);
                     transaction.commit();
 
                 }
@@ -129,7 +138,7 @@ public class MainActivity extends Activity implements NavAdapter.OnItemClickList
         }
 
         // update selected item title, then close the drawer
-        setTitle( mNavTitles[ position ] );
+        setTitle(mNavTitles[position]);
         mDrawerLayout.closeDrawer( mDrawerList );
     }
 
@@ -137,7 +146,7 @@ public class MainActivity extends Activity implements NavAdapter.OnItemClickList
     public void setTitle( CharSequence title ) {
 
         mTitle = title;
-        getActionBar().setTitle( mTitle );
+        getSupportActionBar().setTitle( mTitle );
 
     }
 
@@ -160,7 +169,7 @@ public class MainActivity extends Activity implements NavAdapter.OnItemClickList
         super.onConfigurationChanged( newConfig );
 
         // Pass any configuration change to the drawer toggle
-        mDrawerToggle.onConfigurationChanged( newConfig );
+        mDrawerToggle.onConfigurationChanged(newConfig);
 
     }
 
