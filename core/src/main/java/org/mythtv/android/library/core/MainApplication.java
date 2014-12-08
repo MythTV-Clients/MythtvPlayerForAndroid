@@ -47,8 +47,6 @@ public class MainApplication extends Application {
     private DvrService mDvrService;
     private VideoService mVideoService;
 
-    private List<Program> programs;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -81,14 +79,6 @@ public class MainApplication extends Application {
 
     public String getMasterBackendUrl() {
         return "http://" + mBackendUrl + ":" + mBackendPort + "/";
-    }
-
-    public List<Program> getPrograms() {
-        return programs;
-    }
-
-    public void setPrograms(List<Program> programs) {
-        this.programs = programs;
     }
 
     private void initializeApi() {

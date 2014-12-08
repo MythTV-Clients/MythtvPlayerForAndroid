@@ -78,6 +78,12 @@ public class RecordingsDataFragment extends Fragment {
         Log.i( TAG, "onDetach : exit" );
     }
 
+    public void setConsumer( RecordingDataConsumer consumer ) {
+
+        this.consumer = consumer;
+
+    }
+
     public boolean isLoading() {
         return loading;
     }

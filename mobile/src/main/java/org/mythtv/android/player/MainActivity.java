@@ -26,12 +26,11 @@ import org.mythtv.android.player.recordings.RecordingsFragment;
 
 import java.util.List;
 
-public class MainActivity extends Activity implements RecordingDataConsumer, NavAdapter.OnItemClickListener {
+public class MainActivity extends Activity implements NavAdapter.OnItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String RECORDINGS_FRAGMENT_TAG = RecordingsFragment.class.getCanonicalName();
-    private static final String RECORDINGS_DATA_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
 
     private DrawerLayout mDrawerLayout;
     private RecyclerView mDrawerList;
@@ -49,21 +48,22 @@ public class MainActivity extends Activity implements RecordingDataConsumer, Nav
         setContentView( R.layout.activity_main );
 
         mTitle = mDrawerTitle = getTitle();
-        mNavTitles = getResources().getStringArray(R.array.nav_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (RecyclerView) findViewById(R.id.left_drawer);
+        mNavTitles = getResources().getStringArray( R.array.nav_array );
+        mDrawerLayout = (DrawerLayout) findViewById( R.id.drawer_layout );
+        mDrawerList = (RecyclerView) findViewById( R.id.left_drawer );
 
         // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerLayout.setDrawerShadow( R.drawable.drawer_shadow, GravityCompat.START );
+
         // improve performance by indicating the list if fixed size.
-        mDrawerList.setHasFixedSize(true);
-        mDrawerList.setLayoutManager(new LinearLayoutManager(this));
+        mDrawerList.setHasFixedSize( true );
+        mDrawerList.setLayoutManager( new LinearLayoutManager( this ) );
 
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new NavAdapter(mNavTitles, this));
+        mDrawerList.setAdapter(new NavAdapter( mNavTitles, this ) );
         // enable ActionBar app icon to behave as action to toggle nav drawer
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled( true );
+        getActionBar().setHomeButtonEnabled( true );
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -74,20 +74,20 @@ public class MainActivity extends Activity implements RecordingDataConsumer, Nav
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
+            public void onDrawerClosed( View view ) {
+                getActionBar().setTitle( mTitle );
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
+            public void onDrawerOpened( View drawerView ) {
+                getActionBar().setTitle( mDrawerTitle );
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.setDrawerListener( mDrawerToggle );
 
-        if (savedInstanceState == null) {
-            selectItem(0);
+        if( savedInstanceState == null ) {
+            selectItem( 0 );
         }
 
         Log.v( TAG, "onCreate : exit" );
@@ -95,28 +95,34 @@ public class MainActivity extends Activity implements RecordingDataConsumer, Nav
 
     /* The click listener for RecyclerView in the navigation drawer */
     @Override
-    public void onClick(View view, int position) {
-        selectItem(position);
+    public void onClick( View view, int position ) {
+        selectItem( position );
     }
 
-    private void selectItem(int position) {
+    private void selectItem( int position ) {
 
         switch( position ) {
 
             case 0 :
 
-                RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
-                if( null == recordingsDataFragment ) {
-                    Log.d( TAG, "selectItem : creating new RecordingsDataFragment");
+                RecordingsFragment recordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
+                if( null == recordingsFragment ) {
+                    Log.d( TAG, "setPrograms : creating new RecordingsFragment" );
 
-                    recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate( this, RecordingsDataFragment.class.getName() );
-                    recordingsDataFragment.setRetainInstance( true );
+                    recordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName() );
 
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
+                    transaction.add( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
                     transaction.commit();
 
                 }
+
+                break;
+
+            case 1 :
+
+                Intent prefs = new Intent( this, SettingsActivity.class );
+                startActivity( prefs );
 
                 break;
 
@@ -204,36 +210,6 @@ public class MainActivity extends Activity implements RecordingDataConsumer, Nav
 
         Log.v( TAG, "onOptionsItemSelected : exit" );
         return super.onOptionsItemSelected( item );
-    }
-
-    @Override
-    public void setPrograms( List<Program> programs ) {
-        Log.v( TAG, "setPrograms : enter" );
-
-        ( (MainApplication) getApplicationContext() ).setPrograms( programs );
-
-        RecordingsFragment recordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
-        if( null == recordingsFragment ) {
-            Log.d( TAG, "setPrograms : creating new RecordingsFragment" );
-
-            recordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName() );
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.add( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
-            transaction.commit();
-
-        }
-
-        Log.v( TAG, "setPrograms : exit" );
-    }
-
-    @Override
-    public void handleError( String message ) {
-        Log.v( TAG, "handleError : enter" );
-
-        Toast.makeText( this, message, Toast.LENGTH_LONG ).show();
-
-        Log.v( TAG, "handleError : exit" );
     }
 
 }

@@ -1,6 +1,7 @@
 package org.mythtv.android.player.recordings;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,10 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.ui.adapters.ProgramAdapter;
+import org.mythtv.android.library.ui.data.RecordingDataConsumer;
+import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.player.R;
 
 import java.util.List;
@@ -19,9 +23,10 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class RecordingsFragment extends Fragment implements ProgramAdapter.ProgramClickListener {
+public class RecordingsFragment extends Fragment implements RecordingDataConsumer, ProgramAdapter.ProgramClickListener {
 
     private static final String TAG = RecordingsFragment.class.getSimpleName();
+    private static final String RECORDINGS_DATA_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
 
     RecyclerView mRecyclerView;
     ProgramAdapter mAdapter;
@@ -30,6 +35,20 @@ public class RecordingsFragment extends Fragment implements ProgramAdapter.Progr
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.v( TAG, "onCreateView : enter" );
+
+        RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getChildFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
+        if( null == recordingsDataFragment ) {
+            Log.d( TAG, "selectItem : creating new RecordingsDataFragment");
+
+            recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate( getActivity(), RecordingsDataFragment.class.getName() );
+            recordingsDataFragment.setRetainInstance( true );
+            recordingsDataFragment.setConsumer( this );
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
+            transaction.commit();
+
+        }
 
         Log.v( TAG, "onCreateView : exit" );
         return inflater.inflate( R.layout.program_list, container, false );
@@ -48,11 +67,26 @@ public class RecordingsFragment extends Fragment implements ProgramAdapter.Progr
         mLayoutManager = new LinearLayoutManager( getActivity() );
         mRecyclerView.setLayoutManager( mLayoutManager );
 
-        mAdapter = new ProgramAdapter( ( (MainApplication) getActivity().getApplicationContext() ).getPrograms(), this );
-        Log.v( TAG, "onCreateView : mAdapter count=" + mAdapter.getItemCount() );
+        Log.v( TAG, "onActivityCreated : exit" );
+    }
+
+    @Override
+    public void setPrograms( List<Program> programs ) {
+        Log.v( TAG, "setPrograms : enter" );
+
+        mAdapter = new ProgramAdapter( programs, this );
         mRecyclerView.setAdapter( mAdapter );
 
-        Log.v( TAG, "onActivityCreated : exit" );
+        Log.v( TAG, "setPrograms : exit" );
+    }
+
+    @Override
+    public void handleError( String message ) {
+        Log.v( TAG, "handleError : enter" );
+
+        Toast.makeText( getActivity(), message, Toast.LENGTH_LONG ).show();
+
+        Log.v( TAG, "handleError : exit" );
     }
 
     public void programClicked( Program program ) {
