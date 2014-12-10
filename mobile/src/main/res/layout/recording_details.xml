@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recording_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".recordings.RecordingDetailsFragment">
+
+    <ImageView
+        android:id="@+id/recording_preview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <android.support.v7.widget.CardView
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/outer_margin"
+        android:layout_marginLeft="@dimen/outer_margin"
+        android:layout_marginBottom="@dimen/outer_margin"
+        android:layout_marginRight="@dimen/outer_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/recording_title"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/recording_sub_title"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/recording_start_time"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/recording_description"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

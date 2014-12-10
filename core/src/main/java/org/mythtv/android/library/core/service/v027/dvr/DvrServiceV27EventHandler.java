@@ -1,6 +1,7 @@
 package org.mythtv.android.library.core.service.v027.dvr;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.service.DvrService;
@@ -21,16 +22,23 @@ import org.mythtv.services.api.v027.beans.TitleInfoList;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.RetrofitError;
+
 /**
  * Created by dmfrey on 11/13/14.
  */
 public class DvrServiceV27EventHandler implements DvrService {
+
+    private static final String TAG = DvrServiceV27EventHandler.class.getSimpleName();
 
     private static final String RECORDED_LIST_REQ_ID = "RECORDED_LIST_REQ_ID";
     private static final String TITLE_INFO_LIST_REQ_ID = "TITLE_INFO_LIST_REQ_ID";
 
     Context mContext;
     MythTvApi027Context mMythTvApiContext;
+
+    ProgramList mProgramList;
+    TitleInfoList mTitleInfoList;
 
     public DvrServiceV27EventHandler( Context context, MythTvApiContext mythTvApiContext ) {
 
@@ -44,10 +52,17 @@ public class DvrServiceV27EventHandler implements DvrService {
 
         List<ProgramDetails> programDetails = new ArrayList<ProgramDetails>();
 
-        ETagInfo eTagInfo = mMythTvApiContext.getEtag( RECORDED_LIST_REQ_ID, true );
-        ProgramList programList = mMythTvApiContext.getDvrService().getRecordedList( event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID );
-        for( Program program : programList.getPrograms() ) {
-            programDetails.add( ProgramHelper.toDetails( program ) );
+        try {
+            ETagInfo eTagInfo = mMythTvApiContext.getEtag(RECORDED_LIST_REQ_ID, true);
+            mProgramList = mMythTvApiContext.getDvrService().getRecordedList(event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID);
+        } catch( RetrofitError e ) {
+            Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
+        }
+
+        if( null != mProgramList ) {
+            for( Program program : mProgramList.getPrograms() ) {
+                programDetails.add(ProgramHelper.toDetails( program ) );
+            }
         }
 
         return new AllProgramsEvent( programDetails );
@@ -57,12 +72,22 @@ public class DvrServiceV27EventHandler implements DvrService {
     public AllTitleInfosEvent getTitleInfos( RequestAllTitleInfosEvent event ) {
 
         List<TitleInfoDetails> titleInfoDetails = new ArrayList<TitleInfoDetails>();
-        titleInfoDetails.add( new TitleInfoDetails( mContext.getResources().getString( R.string.all_recordings ), null ) );
 
-        ETagInfo eTagInfo = mMythTvApiContext.getEtag( TITLE_INFO_LIST_REQ_ID, true );
-        TitleInfoList titleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
-        for( TitleInfo titleInfo : titleInfoList.getTitleInfos() ) {
-            titleInfoDetails.add( TitleInfoHelper.toDetails( titleInfo ) );
+        try {
+            ETagInfo eTagInfo = mMythTvApiContext.getEtag( TITLE_INFO_LIST_REQ_ID, true );
+            mTitleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
+        } catch( RetrofitError e ) {
+            Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
+        }
+
+        if( null != mTitleInfoList ) {
+
+            titleInfoDetails.add( new TitleInfoDetails( mContext.getResources().getString( R.string.all_recordings ), null ) );
+
+            for( TitleInfo titleInfo : mTitleInfoList.getTitleInfos() ) {
+                titleInfoDetails.add(TitleInfoHelper.toDetails(titleInfo));
+            }
+
         }
 
         return new AllTitleInfosEvent( titleInfoDetails );

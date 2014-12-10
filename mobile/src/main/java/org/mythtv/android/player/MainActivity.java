@@ -213,6 +213,8 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
 
             case 1 :
 
+                mSelectedItem = 0;
+
                 Intent prefs = new Intent( this, SettingsActivity.class );
                 startActivity( prefs );
 

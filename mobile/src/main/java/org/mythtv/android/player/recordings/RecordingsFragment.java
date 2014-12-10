@@ -2,6 +2,7 @@ package org.mythtv.android.player.recordings;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -74,9 +75,9 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
         ActionBar actionBar = ( (ActionBarActivity) getActivity() ).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled( true );
 
-        if( getArguments().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
-            actionBar.setTitle( getArguments().getString( RecordingsDataFragment.TITLE_INFO_TITLE ) );
-        }
+//        if( getArguments().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
+//            actionBar.setTitle( getArguments().getString( RecordingsDataFragment.TITLE_INFO_TITLE ) );
+//        }
 
         mRecyclerView = (RecyclerView) getView().findViewById( R.id.list );
 
@@ -110,6 +111,13 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
 
     public void programClicked( Program program ) {
         Log.v( TAG, "programClicked : enter" );
+
+        Bundle args = new Bundle();
+        args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
+
+        Intent intent = new Intent( getActivity(), RecordingDetailsActivity.class );
+        intent.putExtras( args );
+        startActivity( intent );
 
         Log.v( TAG, "programClicked : exit" );
     }

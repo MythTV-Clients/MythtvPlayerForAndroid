@@ -56,28 +56,6 @@ public class TitleInfosDataFragment extends Fragment {
         Log.i( TAG, "onDestroyView : exit" );
     }
 
-    @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
-        Log.i( TAG, "onAttach : enter" );
-
-        if( activity instanceof TitleInfoDataConsumer ) {
-            consumer = (TitleInfoDataConsumer) activity;
-        }
-
-        Log.i( TAG, "onAttach : exit" );
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i( TAG, "onDetach : enter" );
-
-        consumer = null;
-
-        Log.i( TAG, "onDetach : exit" );
-    }
-
     public void setConsumer( TitleInfoDataConsumer consumer ) {
 
         this.consumer = consumer;
