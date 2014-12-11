@@ -54,8 +54,6 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         super.onCreate( savedInstanceState );
         Log.v( TAG, "onCreate : enter" );
 
-//        setActionBarIcon( R.drawable.ic_ab_drawer );
-
         mTitle = mDrawerTitle = getTitle();
         mNavTitles = getResources().getStringArray( R.array.nav_array );
         mDrawerLayout = (DrawerLayout) findViewById( R.id.drawer_layout );
@@ -220,21 +218,27 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
             case 0 :
 
-                TitleInfosFragment titleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentByTag( TITLE_INFOS_FRAGMENT_TAG );
-                if( null == titleInfosFragment ) {
-                    Log.d( TAG, "selectItem : creating new TitleInfosFragment" );
+                if( ( (MainApplication) getApplicationContext() ).isConnected() ) {
+                    TitleInfosFragment titleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentByTag(TITLE_INFOS_FRAGMENT_TAG);
+                    if (null == titleInfosFragment) {
+                        Log.d(TAG, "selectItem : creating new TitleInfosFragment");
 
-                    titleInfosFragment = (TitleInfosFragment) Fragment.instantiate( this, TitleInfosFragment.class.getName() );
+                        titleInfosFragment = (TitleInfosFragment) Fragment.instantiate(this, TitleInfosFragment.class.getName());
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace( R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG );
-                    transaction.commit();
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG);
+                        transaction.commit();
 
+                    } else {
+
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG);
+                        transaction.commit();
+
+                    }
                 } else {
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace( R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG );
-                    transaction.commit();
+                    Toast.makeText( MainActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
 
                 }
 

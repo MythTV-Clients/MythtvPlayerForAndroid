@@ -2,11 +2,12 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/connecting"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:textAppearance="?android:attr/textAppearanceListItem"
-    android:gravity="center_vertical"
+    android:gravity="center_vertical|center_horizontal"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:textColor="#fff"
+    android:textColor="#000000"
     android:background="?android:attr/activatedBackgroundIndicator"
-    android:minHeight="?android:attr/listPreferredItemHeight" />
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:text="@string/connecting" />
