@@ -13,7 +13,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,12 +24,13 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.android.player.recordings.TitleInfosFragment;
 
-public class MainActivity extends ActionBarActivity implements NavAdapter.OnItemClickListener {
+public class MainActivity extends BaseActionBarActivity implements NavAdapter.OnItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String SELECTED_ITEM_STATE = "selected_item";
 
+    private static final String CONNECTING_FRAGMENT_TAG = ConnectingFragment.class.getCanonicalName();
     private static final String TITLE_INFOS_FRAGMENT_TAG = TitleInfosFragment.class.getCanonicalName();
 
     private DrawerLayout mDrawerLayout;
@@ -45,11 +45,16 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
     private BackendConnectedBroadcastReceiver mBackendConnectedBroadcastReceiver = new BackendConnectedBroadcastReceiver();
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_main;
+    }
+
+    @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         Log.v( TAG, "onCreate : enter" );
 
-        setContentView( R.layout.activity_main );
+//        setActionBarIcon( R.drawable.ic_ab_drawer );
 
         mTitle = mDrawerTitle = getTitle();
         mNavTitles = getResources().getStringArray( R.array.nav_array );
@@ -65,10 +70,6 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
 
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter( new NavAdapter( mNavTitles, this ) );
-
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled( true );
-        getSupportActionBar().setHomeButtonEnabled( true );
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -103,6 +104,34 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
         super.onResume();
         Log.i( TAG, "onResume : enter" );
 
+        TitleInfosFragment titleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentByTag( TITLE_INFOS_FRAGMENT_TAG );
+        if( null != titleInfosFragment ) {
+            Log.d( TAG, "selectItem : removing new TitleInfosFragment" );
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.remove( titleInfosFragment );
+            transaction.commit();
+
+        }
+
+        ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONNECTING_FRAGMENT_TAG );
+        if( null == connectingFragment ) {
+            Log.d( TAG, "onResume : creating new ConnectingFragment" );
+
+            connectingFragment = (ConnectingFragment) Fragment.instantiate( this, ConnectingFragment.class.getName() );
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
+            transaction.commit();
+
+        } else {
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
+            transaction.commit();
+
+        }
+
         if( ( (MainApplication) getApplicationContext() ).isConnected() ) {
             Log.d( TAG, "onResume : backend already connected" );
 
@@ -111,7 +140,7 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
         } else {
             Log.d( TAG, "onResume : backend NOT connected" );
 
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( this );
             String backendUrlPref = sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_URL, "" );
 
             if( "".equals( backendUrlPref ) || getResources().getString( R.string.pref_backend_url ).equals( backendUrlPref ) ) {
@@ -317,8 +346,7 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
             Log.d( TAG, "onReceive : enter" );
 
             if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
-                Log.v(TAG, "onReceive : backend is connected");
-
+                Log.v( TAG, "onReceive : backend is connected" );
 
                 selectItem( mSelectedItem );
 
@@ -326,6 +354,29 @@ public class MainActivity extends ActionBarActivity implements NavAdapter.OnItem
 
             if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
                 Log.v( TAG, "onReceive : backend is NOT connected" );
+
+                Bundle args = new Bundle();
+                args.putBoolean( ConnectingFragment.CONNECTED_KEY, false );
+
+                ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONNECTING_FRAGMENT_TAG );
+                if( null == connectingFragment ) {
+                    Log.d( TAG, "onResume : creating new ConnectingFragment" );
+
+                    connectingFragment = (ConnectingFragment) Fragment.instantiate( MainActivity.this, ConnectingFragment.class.getName(), args );
+
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
+                    transaction.commit();
+
+                } else {
+
+                    connectingFragment = (ConnectingFragment) Fragment.instantiate( MainActivity.this, ConnectingFragment.class.getName(), args );
+
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
+                    transaction.commit();
+
+                }
 
                 Toast.makeText( MainActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
 

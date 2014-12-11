@@ -5,6 +5,8 @@ import android.util.Log;
 
 import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.service.DvrService;
+import org.mythtv.android.library.events.DeleteEvent;
+import org.mythtv.android.library.events.DeletedEvent;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
@@ -91,6 +93,15 @@ public class DvrServiceV28EventHandler implements DvrService {
         }
 
         return new AllTitleInfosEvent( titleInfoDetails );
+    }
+
+    @Override
+    public DeletedEvent cleanup( DeleteEvent event ) {
+
+        mProgramList = null;
+        mTitleInfoList = null;
+
+        return new DeletedEvent();
     }
 
 }

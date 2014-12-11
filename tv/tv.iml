@@ -93,8 +93,8 @@
     <orderEntry type="library" exported="" name="recyclerview-v7-21.0.2" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.3.2" level="project" />
     <orderEntry type="library" exported="" name="guava-18.0" level="project" />
+    <orderEntry type="library" exported="" name="mythtv-service-api-2.0.2" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.2" level="project" />
-    <orderEntry type="library" exported="" name="mythtv-service-api-2.0.1" level="project" />
     <orderEntry type="library" exported="" name="joda-time-2.5" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.0.0" level="project" />
     <orderEntry type="library" exported="" name="joda-convert-1.7" level="project" />

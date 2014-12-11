@@ -7,12 +7,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
+import org.mythtv.android.player.BaseActionBarActivity;
 import org.mythtv.android.player.R;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class RecordingsActivity extends ActionBarActivity {
+public class RecordingsActivity extends BaseActionBarActivity {
 
     private static final String TAG = RecordingsActivity.class.getSimpleName();
 
@@ -21,13 +22,16 @@ public class RecordingsActivity extends ActionBarActivity {
     String mTitle = null;
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_recordings;
+    }
+
+    @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         Log.v(TAG, "onCreate : enter");
 
-        setContentView( R.layout.activity_recordings );
-
-        if( null != getIntent().getExtras() && getIntent().getExtras().containsKey(RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
+        if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
             mTitle = getIntent().getStringExtra( RecordingsDataFragment.TITLE_INFO_TITLE );
         }
 

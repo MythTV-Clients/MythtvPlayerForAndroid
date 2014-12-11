@@ -8,7 +8,7 @@ import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 /**
  * Created by dmfrey on 11/13/14.
  */
-public interface DvrService {
+public interface DvrService extends Disconnect {
 
     AllProgramsEvent getRecordedPrograms( RequestAllRecordedProgramsEvent event );
 

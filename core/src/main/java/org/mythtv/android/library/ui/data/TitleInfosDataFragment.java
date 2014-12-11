@@ -99,7 +99,7 @@ public class TitleInfosDataFragment extends Fragment {
     private void handleUpdate() {
         Log.v( TAG, "handleUpdate : enter" );
 
-        consumer.setTitleInfos(titleInfos);
+        consumer.setTitleInfos( titleInfos );
 
         Log.v(TAG, "handleUpdate : exit");
     }

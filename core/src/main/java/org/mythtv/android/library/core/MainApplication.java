@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.service.DvrService;
@@ -17,6 +18,7 @@ import org.mythtv.android.library.core.service.v027.video.VideoServiceV27EventHa
 import org.mythtv.android.library.core.service.v028.content.ContentServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.video.VideoServiceV28EventHandler;
+import org.mythtv.android.library.events.DeleteEvent;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
@@ -24,6 +26,7 @@ import org.mythtv.services.api.ServerVersionQuery;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by dmfrey on 11/15/14.
@@ -50,6 +53,20 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+    }
+
+    public void disconnect() {
+
+        mConnected = false;
+
+        mDvrService.cleanup( new DeleteEvent() );
+
+//        mApiVersion = null;
+//        mBackendUrl = getResources().getString( R.string.pref_backend_url );
+//        mBackendPort = Integer.parseInt( getResources().getString( R.string.pref_backend_port ) );
+//
+//        mMythTvApiContext = null;
 
     }
 
@@ -91,40 +108,45 @@ public class MainApplication extends Application {
 
     private class ServerVersionAsyncTask extends AsyncTask<Void, Void, ApiVersion> {
 
-        String backendUrl;
-        int backendPort;
+        private final String TAG = ServerVersionAsyncTask.class.getSimpleName();
 
         @Override
-        protected ApiVersion doInBackground(Void... params) {
+        protected ApiVersion doInBackground( Void... params ) {
+            Log.v( TAG, "doInBackground : enter" );
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( MainApplication.this );
-            backendUrl = sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_URL, "" );
-            backendPort = Integer.parseInt( sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_PORT, "6544" ) );
+            mBackendUrl = sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_URL, "" );
+            mBackendPort = Integer.parseInt( sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_PORT, "6544" ) );
+
+            Log.v( TAG, "url=" + getMasterBackendUrl() );
 
             try {
-                return ServerVersionQuery.getMythVersion( "http://" + backendUrl + ":" + backendPort + "/" );
+                Log.v( TAG, "doInBackground : exit" );
+                return ServerVersionQuery.getMythVersion( getMasterBackendUrl(), 1000, TimeUnit.MILLISECONDS );
             } catch( IOException e ) {
                 Log.e( TAG, "error creating MythTvApiContext, could not reach '" + getMasterBackendUrl() + "'", e );
 
+                Log.v( TAG, "doInBackground : enter, not connected" );
                 return null;
             }
 
         }
 
         @Override
-        protected void onPostExecute(ApiVersion apiVersion) {
+        protected void onPostExecute( ApiVersion apiVersion ) {
+            Log.v( TAG, "onPostExecute : enter" );
 
             if( null != apiVersion ) {
+                Log.v( TAG, "onPostExecute : master backend connected" );
 
                 mApiVersion = apiVersion;
-                mBackendUrl = backendUrl;
-                mBackendPort = backendPort;
 
                 mMythTvApiContext = MythTvApiContext.newBuilder().setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).build();
 
                 switch( mApiVersion ) {
 
                     case v027:
+                        Log.v( TAG, "onPostExecute : connected to v0.27 master backend" );
 
                         mContentService = new ContentServiceV27EventHandler( mMythTvApiContext );
                         mDvrService = new DvrServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
@@ -133,6 +155,7 @@ public class MainApplication extends Application {
                         break;
 
                     case v028:
+                        Log.v( TAG, "onPostExecute : connected to v0.28 master backend" );
 
                         mContentService = new ContentServiceV28EventHandler( mMythTvApiContext );
                         mDvrService = new DvrServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
@@ -147,6 +170,7 @@ public class MainApplication extends Application {
                 sendBroadcast( connectedIntent );
 
             } else {
+                Log.v( TAG, "onPostExecute : master backend not connected" );
 
                 mConnected = false;
 
@@ -155,6 +179,7 @@ public class MainApplication extends Application {
 
             }
 
+            Log.v( TAG, "onPostExecute : exit" );
         }
 
     }
