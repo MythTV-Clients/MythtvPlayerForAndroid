@@ -1,4 +1,4 @@
-package org.mythtv.android.player;
+package org.mythtv.android.library.core.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.graphics.Point;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import org.mythtv.android.library.R;
 
 /**
  * A collection of utility methods, all static.

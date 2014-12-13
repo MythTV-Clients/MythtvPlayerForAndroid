@@ -36,7 +36,7 @@ import org.mythtv.android.library.events.content.LiveStreamRemovedEvent;
 import org.mythtv.android.library.events.content.RemoveLiveStreamEvent;
 import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
 import org.mythtv.android.player.recordings.RecordingDetailsActivity;
-import org.mythtv.android.player.videos.VideoDetailsActivity;
+//import org.mythtv.android.player.videos.VideoDetailsActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -359,11 +359,11 @@ public class PlayerActivity extends Activity {
                         startActivity(intent);
                     }
 
-                    if( null != mSelectedVideo ) {
-                        Intent intent = new Intent( PlayerActivity.this, VideoDetailsActivity.class );
-                        intent.putExtra( getResources().getString( R.string.video ), mSelectedVideo );
-                        startActivity( intent );
-                    }
+//                    if( null != mSelectedVideo ) {
+//                        Intent intent = new Intent( PlayerActivity.this, VideoDetailsActivity.class );
+//                        intent.putExtra( getResources().getString( R.string.video ), mSelectedVideo );
+//                        startActivity( intent );
+//                    }
 
                 }
             });
@@ -620,6 +620,7 @@ public class PlayerActivity extends Activity {
 
         @Override
         protected void onPostExecute( LiveStreamAddedEvent liveStreamAddedEvent ) {
+            Log.d( TAG, "onPostExecute : enter" );
 
             if( null != liveStreamAddedEvent.getKey() ) {
                 Log.d( TAG, "onPostExecute : recording hls added" );
@@ -632,6 +633,7 @@ public class PlayerActivity extends Activity {
                 Log.d( TAG, "onPostExecute : recording hls NOT added" );
             }
 
+            Log.d( TAG, "onPostExecute : exit" );
         }
 
     }

@@ -24,6 +24,11 @@
 
         </activity>
 
+        <activity
+            android:name=".PlayerActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
         <activity android:name=".recordings.RecordingsActivity"
             android:parentActivityName=".MainActivity">
 

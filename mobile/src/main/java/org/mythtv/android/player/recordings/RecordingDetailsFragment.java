@@ -1,6 +1,7 @@
 package org.mythtv.android.player.recordings;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.player.PlayerActivity;
 import org.mythtv.android.player.R;
 import org.mythtv.android.player.widgets.FloatingActionButton;
 
@@ -31,6 +33,8 @@ public class RecordingDetailsFragment extends Fragment implements FloatingAction
     ImageView preview;
     TextView title, subTitle, startTime, description;
     FloatingActionButton fab;
+
+    Program mProgram;
 
     int finalWidth, finalHeight;
 
@@ -81,15 +85,15 @@ public class RecordingDetailsFragment extends Fragment implements FloatingAction
 
         });
 
-        Program program = (Program) getArguments().getSerializable( PROGRAM_KEY );
+        mProgram = (Program) getArguments().getSerializable( PROGRAM_KEY );
 
-        title.setText( program.getTitle() );
-        subTitle.setText( program.getSubTitle() );
-        startTime.setText( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
-        description.setText( program.getDescription() );
+        title.setText( mProgram.getTitle() );
+        subTitle.setText( mProgram.getSubTitle() );
+        startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
+        description.setText( mProgram.getDescription() );
 
-        DateTime start = new DateTime( program.getRecording().getStartTs() );
-        String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        DateTime start = new DateTime( mProgram.getRecording().getStartTs() );
+        String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" );
         updatePreviewImage( url );
 
         Log.d( TAG, "onActivityCreated : exit" );
@@ -108,6 +112,11 @@ public class RecordingDetailsFragment extends Fragment implements FloatingAction
     @Override
     public void onCheckedChanged( FloatingActionButton fabView, boolean isChecked ) {
         Log.d( TAG, "onCheckedChanged : enter" );
+
+        Intent intent = new Intent( getActivity(), PlayerActivity.class );
+        intent.putExtra( getResources().getString( R.string.recording ), mProgram );
+        intent.putExtra( getResources().getString( R.string.should_start ), true );
+        startActivity( intent );
 
         Log.d( TAG, "onCheckedChanged : exit" );
     }
