@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="500"
+   height="500"
+   id="svg2991"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="play.svg"
+   inkscape:export-filename="/home/dmfrey/Development/Android/git/MythtvPlayerforAndroid/images/svg/play_48x48.png"
+   inkscape:export-xdpi="8.6400003"
+   inkscape:export-ydpi="8.6400003">
+  <defs
+     id="defs2993" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.49132"
+     inkscape:cx="375"
+     inkscape:cy="238.4422"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="989"
+     inkscape:window-height="862"
+     inkscape:window-x="1"
+     inkscape:window-y="66"
+     inkscape:window-maximized="0"
+     inkscape:snap-grids="true"
+     inkscape:snap-to-guides="true"
+     fit-margin-top="50"
+     fit-margin-left="50"
+     fit-margin-right="50"
+     fit-margin-bottom="50"
+     objecttolerance="10000" />
+  <metadata
+     id="metadata2996">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-552.36218)">
+    <path
+       sodipodi:type="star"
+       style="fill:#000000;fill-opacity:1"
+       id="path2999"
+       sodipodi:sides="3"
+       sodipodi:cx="99.594231"
+       sodipodi:cy="100.55219"
+       sodipodi:r1="142.39824"
+       sodipodi:r2="70.328285"
+       sodipodi:arg1="2.0815471"
+       sodipodi:arg2="3.1287447"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 29.985366,224.77725 29.27175,101.45574 26.816609,-21.84338 133.97297,39.199363 241.98072,98.72271 135.53797,161.00147 z"
+       transform="matrix(1.4143244,0.01692535,-0.01756214,1.2256895,62.123991,678.83811)"
+       inkscape:transform-center-x="-50.315593"
+       inkscape:transform-center-y="-0.08378819" />
+  </g>
+</svg>

@@ -2,9 +2,13 @@ package org.mythtv.android.player.recordings;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.View;
 
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.player.BaseActionBarActivity;
@@ -28,12 +32,28 @@ public class RecordingsActivity extends BaseActionBarActivity {
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate(savedInstanceState);
-        Log.v(TAG, "onCreate : enter");
+        super.onCreate( savedInstanceState );
+        Log.d( TAG, "onCreate : enter" );
+
+        if( null != savedInstanceState && savedInstanceState.containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
+            Log.d( TAG, "onCreate : retrieved title from savedInstanceState" );
+
+            mTitle = savedInstanceState.getString( RecordingsDataFragment.TITLE_INFO_TITLE );
+        }
 
         if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
+            Log.d( TAG, "onResume : retrieved title from intent extras" );
+
             mTitle = getIntent().getStringExtra( RecordingsDataFragment.TITLE_INFO_TITLE );
         }
+
+        Log.d( TAG, "onCreate : exit" );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d( TAG, "onResume : enter" );
 
         if( null != mTitle && !"".equals( mTitle ) ) {
             getSupportActionBar().setTitle( mTitle );
@@ -44,7 +64,7 @@ public class RecordingsActivity extends BaseActionBarActivity {
 
         RecordingsFragment recordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
         if( null == recordingsFragment ) {
-            Log.d( TAG, "onCreate : creating new RecordingsFragment" );
+            Log.d( TAG, "onResume : creating new RecordingsFragment" );
 
             Bundle args = new Bundle();
             if( null != mTitle ) {
@@ -53,35 +73,37 @@ public class RecordingsActivity extends BaseActionBarActivity {
 
             recordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName(), args );
 
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
-            transaction.addToBackStack( null );
-            transaction.commit();
         }
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
+        transaction.addToBackStack( null );
+        transaction.commit();
 
-        Log.v( TAG, "onCreate : exit" );
+        Log.d( TAG, "onResume : exit" );
     }
 
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
-        super.onSaveInstanceState( outState );
-        Log.v( TAG, "onSaveInstanceState : enter" );
+        Log.d( TAG, "onSaveInstanceState : enter" );
 
+        Log.d( TAG, "onSaveInstanceState : mTitle=" + mTitle );
         outState.putString( RecordingsDataFragment.TITLE_INFO_TITLE, mTitle );
 
-        Log.v(TAG, "onSaveInstanceState : exit");
+        Log.d(TAG, "onSaveInstanceState : exit");
+        super.onSaveInstanceState( outState );
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
         super.onRestoreInstanceState( savedInstanceState );
-        Log.v( TAG, "onRestoreInstanceState : enter" );
+        Log.d( TAG, "onRestoreInstanceState : enter" );
 
         if( savedInstanceState.containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
             mTitle = savedInstanceState.getString( RecordingsDataFragment.TITLE_INFO_TITLE );
+            Log.d( TAG, "onRestoreInstanceState : mTitle=" + mTitle );
         }
 
-        Log.v( TAG, "onRestoreInstanceState : exit" );
+        Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
 }

@@ -56,7 +56,7 @@ public class DvrServiceV28EventHandler implements DvrService {
 
         try {
             ETagInfo eTagInfo = mMythTvApiContext.getEtag( RECORDED_LIST_REQ_ID, true );
-            ProgramList programList = mMythTvApiContext.getDvrService().getRecordedList( event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID );
+            mProgramList = mMythTvApiContext.getDvrService().getRecordedList( event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID );
         } catch( RetrofitError e ) {
             Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
         }
@@ -77,7 +77,7 @@ public class DvrServiceV28EventHandler implements DvrService {
 
         try {
             ETagInfo eTagInfo = mMythTvApiContext.getEtag( TITLE_INFO_LIST_REQ_ID, true );
-            mTitleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList(eTagInfo, RECORDED_LIST_REQ_ID);
+            mTitleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
         } catch( RetrofitError e ) {
             Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
         }

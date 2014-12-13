@@ -4,8 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,7 +45,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.v( TAG, "onCreateView : enter" );
+        Log.d( TAG, "onCreateView : enter" );
 
         RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getChildFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
         if( null == recordingsDataFragment ) {
@@ -63,21 +61,14 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
 
         }
 
-        Log.v( TAG, "onCreateView : exit" );
+        Log.d( TAG, "onCreateView : exit" );
         return inflater.inflate( R.layout.program_list, container, false );
     }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
         super.onActivityCreated( savedInstanceState );
-        Log.v( TAG, "onActivityCreated : enter" );
-
-        ActionBar actionBar = ( (ActionBarActivity) getActivity() ).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled( true );
-
-//        if( getArguments().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
-//            actionBar.setTitle( getArguments().getString( RecordingsDataFragment.TITLE_INFO_TITLE ) );
-//        }
+        Log.d( TAG, "onActivityCreated : enter" );
 
         mRecyclerView = (RecyclerView) getView().findViewById( R.id.list );
 
@@ -87,30 +78,30 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
         mLayoutManager = new LinearLayoutManager( getActivity() );
         mRecyclerView.setLayoutManager( mLayoutManager );
 
-        Log.v( TAG, "onActivityCreated : exit" );
+        Log.d( TAG, "onActivityCreated : exit" );
     }
 
     @Override
     public void setPrograms( List<Program> programs ) {
-        Log.v( TAG, "setPrograms : enter" );
+        Log.d( TAG, "setPrograms : enter" );
 
         mAdapter = new ProgramAdapter( programs, this, !getArguments().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) );
         mRecyclerView.setAdapter( mAdapter );
 
-        Log.v( TAG, "setPrograms : exit" );
+        Log.d( TAG, "setPrograms : exit" );
     }
 
     @Override
     public void handleError( String message ) {
-        Log.v(TAG, "handleError : enter");
+        Log.d( TAG, "handleError : enter" );
 
         Toast.makeText( getActivity(), message, Toast.LENGTH_LONG ).show();
 
-        Log.v( TAG, "handleError : exit" );
+        Log.d( TAG, "handleError : exit" );
     }
 
     public void programClicked( Program program ) {
-        Log.v( TAG, "programClicked : enter" );
+        Log.d( TAG, "programClicked : enter" );
 
         Bundle args = new Bundle();
         args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
@@ -119,7 +110,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
         intent.putExtras( args );
         startActivity( intent );
 
-        Log.v( TAG, "programClicked : exit" );
+        Log.d( TAG, "programClicked : exit" );
     }
 
 }

@@ -55,8 +55,8 @@ public class DvrServiceV27EventHandler implements DvrService {
         List<ProgramDetails> programDetails = new ArrayList<ProgramDetails>();
 
         try {
-            ETagInfo eTagInfo = mMythTvApiContext.getEtag(RECORDED_LIST_REQ_ID, true);
-            mProgramList = mMythTvApiContext.getDvrService().getRecordedList(event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID);
+            ETagInfo eTagInfo = mMythTvApiContext.getEtag( RECORDED_LIST_REQ_ID, true  );
+            mProgramList = mMythTvApiContext.getDvrService().getRecordedList( event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID );
         } catch( RetrofitError e ) {
             Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
         }

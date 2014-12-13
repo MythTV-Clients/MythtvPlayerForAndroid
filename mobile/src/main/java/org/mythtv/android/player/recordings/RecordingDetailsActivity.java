@@ -29,7 +29,7 @@ public class RecordingDetailsActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        Log.v( TAG, "onCreate : enter" );
+        Log.d( TAG, "onCreate : enter" );
 
         if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( RecordingDetailsFragment.PROGRAM_KEY ) ) {
             mProgram = (Program) getIntent().getSerializableExtra( RecordingDetailsFragment.PROGRAM_KEY );
@@ -52,29 +52,29 @@ public class RecordingDetailsActivity extends BaseActionBarActivity {
             transaction.commit();
         }
 
-        Log.v( TAG, "onCreate : exit" );
+        Log.d( TAG, "onCreate : exit" );
     }
 
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
         super.onSaveInstanceState( outState );
-        Log.v( TAG, "onSaveInstanceState : enter" );
+        Log.d( TAG, "onSaveInstanceState : enter" );
 
         outState.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, mProgram );
 
-        Log.v( TAG, "onSaveInstanceState : exit" );
+        Log.d( TAG, "onSaveInstanceState : exit" );
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
         super.onRestoreInstanceState( savedInstanceState );
-        Log.v( TAG, "onRestoreInstanceState : enter" );
+        Log.d( TAG, "onRestoreInstanceState : enter" );
 
         if( savedInstanceState.containsKey( RecordingDetailsFragment.PROGRAM_KEY ) ) {
             mProgram = (Program) savedInstanceState.getSerializable( RecordingDetailsFragment.PROGRAM_KEY );
         }
 
-        Log.v( TAG, "onRestoreInstanceState : exit" );
+        Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
 }

@@ -31,7 +31,6 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
 
     private static final String TAG = TitleInfosFragment.class.getSimpleName();
     private static final String TITLE_INFOS_DATA_FRAGMENT_TAG = TitleInfosDataFragment.class.getCanonicalName();
-    private static final String RECORDINGS_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
 
     RecyclerView mRecyclerView;
     TitleInfoAdapter mAdapter;
@@ -39,7 +38,7 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.v( TAG, "onCreateView : enter" );
+        Log.d( TAG, "onCreateView : enter" );
 
         TitleInfosDataFragment titleInfosDataFragment = (TitleInfosDataFragment) getChildFragmentManager().findFragmentByTag( TITLE_INFOS_DATA_FRAGMENT_TAG );
         if( null == titleInfosDataFragment ) {
@@ -55,14 +54,14 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
 
         }
 
-        Log.v( TAG, "onCreateView : exit" );
+        Log.d( TAG, "onCreateView : exit" );
         return inflater.inflate( R.layout.program_list, container, false );
     }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
         super.onActivityCreated( savedInstanceState );
-        Log.v( TAG, "onActivityCreated : enter" );
+        Log.d( TAG, "onActivityCreated : enter" );
 
         mRecyclerView = (RecyclerView) getView().findViewById( R.id.list );
 
@@ -72,53 +71,41 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
         mLayoutManager = new LinearLayoutManager( getActivity() );
         mRecyclerView.setLayoutManager( mLayoutManager );
 
-        Log.v( TAG, "onActivityCreated : exit" );
+        Log.d( TAG, "onActivityCreated : exit" );
     }
 
     @Override
     public void setTitleInfos( List<TitleInfo> titleInfos ) {
-        Log.v( TAG, "setTitleInfos : enter" );
+        Log.d( TAG, "setTitleInfos : enter" );
 
         mAdapter = new TitleInfoAdapter( titleInfos, this );
         mRecyclerView.setAdapter( mAdapter );
 
-        Log.v( TAG, "setPrograms : exit" );
+        Log.d( TAG, "setPrograms : exit" );
     }
 
     @Override
     public void handleError( String message ) {
-        Log.v(TAG, "handleError : enter");
+        Log.d( TAG, "handleError : enter" );
 
         Toast.makeText( getActivity(), message, Toast.LENGTH_LONG ).show();
 
-        Log.v( TAG, "handleError : exit" );
+        Log.d( TAG, "handleError : exit" );
     }
 
     public void titleInfoClicked( TitleInfo titleInfo ) {
-        Log.v( TAG, "titleInfoClicked : enter" );
+        Log.d( TAG, "titleInfoClicked : enter" );
 
         Bundle args = new Bundle();
         if( !getActivity().getResources().getString( R.string.all_recordings ).equals( titleInfo.getTitle() ) ) {
-            args.putString(RecordingsDataFragment.TITLE_INFO_TITLE, titleInfo.getTitle());
+            args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, titleInfo.getTitle() );
         }
 
         Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
         recordings.putExtras( args );
         startActivity( recordings );
 
-//        RecordingsFragment recordingsFragment = (RecordingsFragment) getChildFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
-//        if( null == recordingsFragment ) {
-//            Log.d( TAG, "titleInfoSelected : creating new RecordingsFragment" );
-//
-//            recordingsFragment = (RecordingsFragment) Fragment.instantiate( getActivity(), RecordingsFragment.class.getName(), args );
-//
-//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//            transaction.replace( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
-//            transaction.addToBackStack( null );
-//            transaction.commit();
-//        }
-
-        Log.v( TAG, "titleInfoClicked : exit" );
+        Log.d( TAG, "titleInfoClicked : exit" );
     }
 
 }

@@ -52,7 +52,18 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        Log.v( TAG, "onCreate : enter" );
+        Log.d( TAG, "onCreate : enter" );
+
+        ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONNECTING_FRAGMENT_TAG );
+        if( null == connectingFragment ) {
+            Log.d( TAG, "onResume : creating new ConnectingFragment" );
+
+            connectingFragment = (ConnectingFragment) Fragment.instantiate( this, ConnectingFragment.class.getName() );
+
+        }
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
+        transaction.commit();
 
         mTitle = mDrawerTitle = getTitle();
         mNavTitles = getResources().getStringArray( R.array.nav_array );
@@ -94,7 +105,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
             mSelectedItem = 0;
         }
 
-        Log.v( TAG, "onCreate : exit" );
+        Log.d( TAG, "onCreate : exit" );
     }
 
     @Override
@@ -102,33 +113,9 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         super.onResume();
         Log.i( TAG, "onResume : enter" );
 
-        TitleInfosFragment titleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentByTag( TITLE_INFOS_FRAGMENT_TAG );
-        if( null != titleInfosFragment ) {
-            Log.d( TAG, "selectItem : removing new TitleInfosFragment" );
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.remove( titleInfosFragment );
-            transaction.commit();
-
-        }
-
-        ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONNECTING_FRAGMENT_TAG );
-        if( null == connectingFragment ) {
-            Log.d( TAG, "onResume : creating new ConnectingFragment" );
-
-            connectingFragment = (ConnectingFragment) Fragment.instantiate( this, ConnectingFragment.class.getName() );
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
-            transaction.commit();
-
-        } else {
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
-            transaction.commit();
-
-        }
+        IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
+        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
+        registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
 
         if( ( (MainApplication) getApplicationContext() ).isConnected() ) {
             Log.d( TAG, "onResume : backend already connected" );
@@ -156,25 +143,23 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         }
 
-        IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
-        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
-        registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
-
         Log.i( TAG, "onResume : exit" );
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
         super.onRestoreInstanceState( savedInstanceState );
-        Log.v( TAG, "onRestoreInstanceState : enter" );
+        Log.d( TAG, "onRestoreInstanceState : enter" );
 
         if( savedInstanceState.containsKey( SELECTED_ITEM_STATE ) ) {
+            Log.d( TAG, "onRestoreInstanceState : mSelectedItem retrieved from savedInstanceState" );
+
             mSelectedItem = savedInstanceState.getInt( SELECTED_ITEM_STATE );
         } else {
             mSelectedItem = 0;
         }
 
-        Log.v( TAG, "onRestoreInstanceState : exit" );
+        Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
     @Override
@@ -191,56 +176,44 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
-        Log.v( TAG, "onSaveInstanceState : enter" );
+        Log.d( TAG, "onSaveInstanceState : enter" );
 
         outState.putInt( SELECTED_ITEM_STATE, mSelectedItem );
 
-        Log.v( TAG, "onSaveInstanceState : exit" );
+        Log.d( TAG, "onSaveInstanceState : exit" );
         super.onSaveInstanceState( outState );
     }
 
     /* The click listener for RecyclerView in the navigation drawer */
     @Override
     public void onClick( View view, int position ) {
-        Log.v( TAG, "onClick : enter" );
+        Log.d( TAG, "onClick : enter" );
 
         mSelectedItem = position;
 
         selectItem( position );
 
-        Log.v( TAG, "onClick : exit" );
+        Log.d( TAG, "onClick : exit" );
     }
 
     private void selectItem( int position ) {
-        Log.v( TAG, "selectItem : enter" );
+        Log.d( TAG, "selectItem : enter" );
 
         switch( position ) {
 
             case 0 :
 
-                if( ( (MainApplication) getApplicationContext() ).isConnected() ) {
-                    TitleInfosFragment titleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentByTag(TITLE_INFOS_FRAGMENT_TAG);
-                    if (null == titleInfosFragment) {
-                        Log.d(TAG, "selectItem : creating new TitleInfosFragment");
+                TitleInfosFragment titleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentByTag( TITLE_INFOS_FRAGMENT_TAG );
+                if( null == titleInfosFragment ) {
+                    Log.d( TAG, "selectItem : creating new TitleInfosFragment") ;
 
-                        titleInfosFragment = (TitleInfosFragment) Fragment.instantiate(this, TitleInfosFragment.class.getName());
-
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG);
-                        transaction.commit();
-
-                    } else {
-
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG);
-                        transaction.commit();
-
-                    }
-                } else {
-
-                    Toast.makeText( MainActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
+                    titleInfosFragment = (TitleInfosFragment) Fragment.instantiate( this, TitleInfosFragment.class.getName() );
 
                 }
+
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace( R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG );
+                transaction.commit();
 
                 break;
 
@@ -259,7 +232,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         setTitle( mNavTitles[ position ] );
         mDrawerLayout.closeDrawer( mDrawerList );
 
-        Log.v( TAG, "selectItem : exit" );
+        Log.d( TAG, "selectItem : exit" );
     }
 
     @Override
@@ -314,7 +287,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
-        Log.v( TAG, "onOptionsItemSelected : enter" );
+        Log.d( TAG, "onOptionsItemSelected : enter" );
 
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
@@ -329,7 +302,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
 //        //noinspection SimplifiableIfStatement
 //        if( id == R.id.action_settings ) {
-//            Log.v( TAG, "onOptionsItemSelected : settings selected" );
+//            Log.d( TAG, "onOptionsItemSelected : settings selected" );
 //
 //            Intent prefs = new Intent( this, SettingsActivity.class );
 //            startActivity( prefs );
@@ -337,7 +310,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 //            return true;
 //        }
 
-        Log.v( TAG, "onOptionsItemSelected : exit" );
+        Log.d( TAG, "onOptionsItemSelected : exit" );
         return super.onOptionsItemSelected( item );
     }
 
@@ -350,14 +323,14 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
             Log.d( TAG, "onReceive : enter" );
 
             if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
-                Log.v( TAG, "onReceive : backend is connected" );
+                Log.d( TAG, "onReceive : backend is connected" );
 
                 selectItem( mSelectedItem );
 
             }
 
             if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
-                Log.v( TAG, "onReceive : backend is NOT connected" );
+                Log.d( TAG, "onReceive : backend is NOT connected" );
 
                 Bundle args = new Bundle();
                 args.putBoolean( ConnectingFragment.CONNECTED_KEY, false );
