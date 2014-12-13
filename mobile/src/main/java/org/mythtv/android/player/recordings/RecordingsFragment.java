@@ -1,5 +1,6 @@
 package org.mythtv.android.player.recordings;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -31,6 +32,14 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
     RecyclerView mRecyclerView;
     ProgramAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
+
+    OnRecordingClickedListener listener;
+
+    public interface OnRecordingClickedListener {
+
+        public void setProgram( Program program );
+
+    }
 
     public static RecordingsFragment newInstance( String title ) {
 
@@ -82,6 +91,28 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
     }
 
     @Override
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
+        Log.d( TAG, "onAttach : enter" );
+
+        if( activity instanceof OnRecordingClickedListener ) {
+            listener = (OnRecordingClickedListener) activity;
+        }
+
+        Log.d( TAG, "onAttach : exit" );
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d( TAG, "onDetach : enter" );
+
+        listener = null;
+
+        Log.d( TAG, "onDetach : exit" );
+    }
+
+    @Override
     public void setPrograms( List<Program> programs ) {
         Log.d( TAG, "setPrograms : enter" );
 
@@ -103,12 +134,14 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
     public void programClicked( Program program ) {
         Log.d( TAG, "programClicked : enter" );
 
-        Bundle args = new Bundle();
-        args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
+        listener.setProgram( program );
 
-        Intent intent = new Intent( getActivity(), RecordingDetailsActivity.class );
-        intent.putExtras( args );
-        startActivity( intent );
+//        Bundle args = new Bundle();
+//        args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
+//
+//        Intent intent = new Intent( getActivity(), RecordingDetailsActivity.class );
+//        intent.putExtras( args );
+//        startActivity( intent );
 
         Log.d( TAG, "programClicked : exit" );
     }

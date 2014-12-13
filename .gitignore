@@ -2,7 +2,12 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/.idea/*
 .DS_Store
 /build
 /core/build
-
+/core/core.iml
+/mobile/build
+/mobile/mobile.iml
+/tv/build
+/tv/tv.iml
