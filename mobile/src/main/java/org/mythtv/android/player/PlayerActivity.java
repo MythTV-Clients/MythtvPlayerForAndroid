@@ -171,7 +171,7 @@ public class PlayerActivity extends Activity {
             mShouldStartPlayback = b.getBoolean(getResources().getString(R.string.should_start));
             int startPosition = b.getInt(getResources().getString(R.string.start_position), 0);
 
-            String url = mLiveStreamInfo.getFullURL();
+            String url = ( (MainApplication) getApplicationContext() ).getMasterBackendUrl() + mLiveStreamInfo.getRelativeURL().substring( 1 );
             Log.i( TAG, "startVideoPlayerHls : url=" + url );
             mVideoView.setVideoURI( Uri.parse( url ) );
 
@@ -568,6 +568,7 @@ public class PlayerActivity extends Activity {
                 Log.d( TAG, "onPostExecute : livestream hls retrieved" );
 
                 mLiveStreamInfo = LiveStreamInfo.fromDetails( liveStreamDetailsEvent.getDetails() );
+                Log.d( TAG, "onPostExecute : mLiveStreamInfo=" + mLiveStreamInfo );
                 if( mLiveStreamInfo.getPercentComplete() > 2 ) {
                     Log.v( TAG, "onPostExecute : livestream hls processed greater than 2%" );
 
