@@ -6,4 +6,6 @@
     <color name="fab_color_2">#9c27b0</color>
     <color name="fab_color_2_muted">#a56ab0</color>
 
+    <color name="background_nav_draw">#ffcccccc</color>
+
 </resources>
