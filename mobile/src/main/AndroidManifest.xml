@@ -47,6 +47,15 @@
 
         </activity>
 
+        <activity android:name=".videos.VideoDetailsActivity"
+            android:parentActivityName=".MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
+        </activity>
+
         <activity
             android:name="org.mythtv.android.library.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings" >

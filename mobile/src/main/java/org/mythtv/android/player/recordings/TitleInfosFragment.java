@@ -12,11 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.library.ui.adapters.ProgramAdapter;
 import org.mythtv.android.library.ui.adapters.TitleInfoAdapter;
-import org.mythtv.android.library.ui.data.RecordingDataConsumer;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.library.ui.data.TitleInfoDataConsumer;
 import org.mythtv.android.library.ui.data.TitleInfosDataFragment;
