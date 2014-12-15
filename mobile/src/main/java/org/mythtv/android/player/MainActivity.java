@@ -23,6 +23,7 @@ import android.widget.Toast;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.android.player.recordings.TitleInfosFragment;
+import org.mythtv.android.player.videos.VideosFragment;
 
 public class MainActivity extends BaseActionBarActivity implements NavAdapter.OnItemClickListener {
 
@@ -32,6 +33,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
     private static final String CONNECTING_FRAGMENT_TAG = ConnectingFragment.class.getCanonicalName();
     private static final String TITLE_INFOS_FRAGMENT_TAG = TitleInfosFragment.class.getCanonicalName();
+    private static final String VIDEOS_FRAGMENT_TAG = VideosFragment.class.getCanonicalName();
 
     private DrawerLayout mDrawerLayout;
     private RecyclerView mDrawerList;
@@ -211,13 +213,29 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
                 }
 
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace( R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG );
-                transaction.commit();
+                FragmentTransaction tx0 = getFragmentManager().beginTransaction();
+                tx0.replace( R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG );
+                tx0.commit();
 
                 break;
 
             case 1 :
+
+                VideosFragment videosFragment = (VideosFragment) getFragmentManager().findFragmentByTag( VIDEOS_FRAGMENT_TAG );
+                if( null == videosFragment ) {
+                    Log.d( TAG, "selectItem : creating new VideosFragment") ;
+
+                    videosFragment = (VideosFragment) Fragment.instantiate( this, VideosFragment.class.getName() );
+
+                }
+
+                FragmentTransaction tx1 = getFragmentManager().beginTransaction();
+                tx1.replace( R.id.content_frame, videosFragment, VIDEOS_FRAGMENT_TAG );
+                tx1.commit();
+
+                break;
+
+            case 2 :
 
                 mSelectedItem = 0;
 

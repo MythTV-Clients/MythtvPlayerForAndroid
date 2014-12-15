@@ -3,6 +3,7 @@
 
     <string name="app_name">Mythtv Player for Android</string>
     <string name="all_recordings">All Recordings</string>
+    <string name="all_videos">All Videos</string>
 
     <string name="connecting">Connecting to master backend</string>
     <string name="connecting_failed">Connecting to master backend failed!</string>

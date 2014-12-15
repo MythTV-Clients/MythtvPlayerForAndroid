@@ -14,8 +14,8 @@
 
     <string-array name="nav_array">
         <item>Recordings</item>
-        <!-- item>Videos</item>
-        <item>Photos</item>
+        <item>Videos</item>
+        <!-- item>Photos</item>
         <item>Music</item -->
         <item>Settings</item>
     </string-array>
