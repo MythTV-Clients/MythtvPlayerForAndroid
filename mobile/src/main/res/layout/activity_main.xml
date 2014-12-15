@@ -36,7 +36,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:background="@color/background_nav_draw"
+        android:background="@color/background_navigation_drawer"
         android:divider="@null" />
 
 </android.support.v4.widget.DrawerLayout>

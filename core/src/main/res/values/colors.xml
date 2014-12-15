@@ -1,6 +1,8 @@
 <resources>
     <color name="background_gradient_start">#000000</color>
     <color name="background_gradient_end">#DDDDDD</color>
+    <color name="background_navigation_drawer">#7f98b4</color>
+    <color name="text_navigation_drawer">#000000</color>
     <color name="fastlane_background">#0096a6</color>
     <color name="search_opaque">#ffaa3f</color>
     <color name="detail_background">#0096a6</color>
@@ -23,8 +25,8 @@
     <color name="sa_green_transparent">#801E9618</color>
     <color name="sa_green_dark">#146310</color>
 
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#004D40</color>
+    <color name="colorPrimary">#3580b5</color>
+    <color name="colorPrimaryDark">#063e67</color>
     <color name="colorAccent">#FF3D00</color>
 
 </resources>
