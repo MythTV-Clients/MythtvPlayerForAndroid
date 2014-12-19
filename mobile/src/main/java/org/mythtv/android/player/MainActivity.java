@@ -104,7 +104,20 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         mDrawerLayout.setDrawerListener( mDrawerToggle );
 
         if( savedInstanceState == null ) {
+            Log.d( TAG, "onCreate : savedInstanceState == null" );
             mSelectedItem = 0;
+        } else {
+
+            if( savedInstanceState.containsKey( SELECTED_ITEM_STATE ) ) {
+                Log.d( TAG, "onCreate : mSelectedItem retrieved from savedInstanceState" );
+
+                mSelectedItem = savedInstanceState.getInt( SELECTED_ITEM_STATE );
+            } else {
+                Log.d( TAG, "onCreate : mSelectedItem set to default" );
+
+                mSelectedItem = 0;
+            }
+
         }
 
         Log.d( TAG, "onCreate : exit" );
@@ -158,6 +171,8 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
             mSelectedItem = savedInstanceState.getInt( SELECTED_ITEM_STATE );
         } else {
+            Log.d( TAG, "onRestoreInstanceState : mSelectedItem set to default" );
+
             mSelectedItem = 0;
         }
 
@@ -215,6 +230,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
                 FragmentTransaction tx0 = getFragmentManager().beginTransaction();
                 tx0.replace( R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG );
+                tx0.addToBackStack( null );
                 tx0.commit();
 
                 break;
@@ -231,6 +247,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
                 FragmentTransaction tx1 = getFragmentManager().beginTransaction();
                 tx1.replace( R.id.content_frame, videosFragment, VIDEOS_FRAGMENT_TAG );
+                tx1.addToBackStack( null );
                 tx1.commit();
 
                 break;

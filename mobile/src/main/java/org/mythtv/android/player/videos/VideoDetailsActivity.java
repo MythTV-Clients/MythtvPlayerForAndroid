@@ -2,8 +2,11 @@ package org.mythtv.android.player.videos;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.MenuItem;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.video.Video;
@@ -76,6 +79,30 @@ public class VideoDetailsActivity extends BaseActionBarActivity {
         }
 
         Log.d( TAG, "onRestoreInstanceState : exit" );
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+        Log.d( TAG, "onOptionsItemSelected : enter" );
+
+        switch( item.getItemId() ) {
+
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home :
+                Log.d( TAG, "onOptionsItemSelected : up selected" );
+
+                finish();
+//                NavUtils.navigateUpFromSameTask( this );
+//                Intent intent = NavUtils.getParentActivityIntent( this );
+//                intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP );
+//                NavUtils.navigateUpTo( this, intent );
+
+                return true;
+
+        }
+
+        Log.d( TAG, "onOptionsItemSelected : exit" );
+        return super.onOptionsItemSelected(item);
     }
 
 }
