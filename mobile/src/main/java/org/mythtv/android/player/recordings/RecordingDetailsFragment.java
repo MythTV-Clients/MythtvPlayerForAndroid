@@ -188,6 +188,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         Intent intent = new Intent( getActivity(), PlayerActivity.class );
         intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
+        intent.putExtra( getResources().getString( R.string.should_start ), true );
         startActivity( intent );
 
         Log.d( TAG, "onCheckedChanged : exit" );
