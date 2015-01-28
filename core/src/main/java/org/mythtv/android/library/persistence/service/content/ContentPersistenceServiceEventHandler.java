@@ -50,11 +50,6 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
 
             for( LiveStreamDetails details : event.getDetails() ) {
                 LiveStreamInfo liveStream = LiveStreamInfoHelper.fromDetails( details );
-                if( liveStream.getPercentComplete() == 100 ) {
-                    Log.v( TAG, "refreshLiveStreamInfoList : skipping completed live stream" );
-
-                    continue;
-                }
 
                 selectionArgs = new String[] { String.valueOf( liveStream.getId() ) };
 
