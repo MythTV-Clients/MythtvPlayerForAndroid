@@ -62,7 +62,10 @@ public class DvrServiceV28EventHandler implements DvrService {
         }
 
         if( null != mProgramList ) {
+            Log.v( TAG, "getRecordedList : programs returned, size=" + mProgramList.getCount() );
+
             for( Program program : mProgramList.getPrograms() ) {
+                Log.v( TAG, "getRecordedList : program iteration" );
                 programDetails.add(ProgramHelper.toDetails( program ) );
             }
         }

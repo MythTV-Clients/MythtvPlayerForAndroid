@@ -1,6 +1,5 @@
 package org.mythtv.android.library.ui.data;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;

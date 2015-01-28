@@ -1,14 +1,15 @@
 package org.mythtv.android.library.core;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.mythtv.android.library.R;
-import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.core.service.VideoService;
@@ -19,14 +20,16 @@ import org.mythtv.android.library.core.service.v028.content.ContentServiceV28Eve
 import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.video.VideoServiceV28EventHandler;
 import org.mythtv.android.library.events.DeleteEvent;
+import org.mythtv.android.library.events.content.RequestAllLiveStreamInfosEvent;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
 import org.mythtv.services.api.ServerVersionQuery;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import retrofit.RestAdapter;
 
 /**
  * Created by dmfrey on 11/15/14.
@@ -50,11 +53,8 @@ public class MainApplication extends Application {
     private DvrService mDvrService;
     private VideoService mVideoService;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-    }
+    private AlarmManager mAlarmManager;
+    private PendingIntent mPendingIntent;
 
     public void disconnect() {
 
@@ -67,6 +67,26 @@ public class MainApplication extends Application {
 //        mBackendPort = Integer.parseInt( getResources().getString( R.string.pref_backend_port ) );
 //
 //        mMythTvApiContext = null;
+
+    }
+
+    public void scheduleAlarms() {
+
+        mAlarmManager = (AlarmManager) getSystemService( Context.ALARM_SERVICE );
+        Intent intent = new Intent( MainApplication.this, RefreshLiveStreamsReceiver.class );
+        mPendingIntent = PendingIntent.getBroadcast( MainApplication.this, 0, intent, 0 );
+
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 5000, mPendingIntent );
+
+    }
+
+    public void cancelAlarms() {
+
+        if( mAlarmManager != null ) {
+            Log.v( TAG, "onPause : cancelling live stream refresh" );
+
+            mAlarmManager.cancel( mPendingIntent );
+        }
 
     }
 
@@ -141,14 +161,14 @@ public class MainApplication extends Application {
 
                 mApiVersion = apiVersion;
 
-                mMythTvApiContext = MythTvApiContext.newBuilder().setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).build();
+                mMythTvApiContext = MythTvApiContext.newBuilder().setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).setLogLevel(RestAdapter.LogLevel.FULL).build();
 
                 switch( mApiVersion ) {
 
                     case v027:
                         Log.v( TAG, "onPostExecute : connected to v0.27 master backend" );
 
-                        mContentService = new ContentServiceV27EventHandler( mMythTvApiContext );
+                        mContentService = new ContentServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
                         mDvrService = new DvrServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
                         mVideoService = new VideoServiceV27EventHandler( mMythTvApiContext );
 
@@ -157,7 +177,7 @@ public class MainApplication extends Application {
                     case v028:
                         Log.v( TAG, "onPostExecute : connected to v0.28 master backend" );
 
-                        mContentService = new ContentServiceV28EventHandler( mMythTvApiContext );
+                        mContentService = new ContentServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
                         mDvrService = new DvrServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
                         mVideoService = new VideoServiceV28EventHandler( mMythTvApiContext );
 
@@ -165,6 +185,8 @@ public class MainApplication extends Application {
                 }
 
                 mConnected = true;
+
+                new RefreshLiveStreamsTask().execute();
 
                 Intent connectedIntent = new Intent( ACTION_CONNECTED );
                 sendBroadcast( connectedIntent );
@@ -180,6 +202,22 @@ public class MainApplication extends Application {
             }
 
             Log.v( TAG, "onPostExecute : exit" );
+        }
+
+    }
+
+    private class RefreshLiveStreamsTask extends AsyncTask<Void, Void, Void> {
+
+        private final String TAG = RefreshLiveStreamsTask.class.getSimpleName();
+
+        @Override
+        protected Void doInBackground( Void... params ) {
+            Log.v( TAG, "doInBackground : enter" );
+
+            mContentService.getLiveStreamInfoList( new RequestAllLiveStreamInfosEvent() );
+
+            Log.v( TAG, "doInBackground : exit" );
+            return null;
         }
 
     }

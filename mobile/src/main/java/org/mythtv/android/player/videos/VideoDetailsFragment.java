@@ -2,6 +2,7 @@ package org.mythtv.android.player.videos;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +20,9 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.PlayerActivity;
-import org.mythtv.android.player.R;
+import org.mythtv.android.R;
+import org.mythtv.android.player.player.DemoUtil;
+import org.mythtv.android.player.player.SimplePlayerActivity;
 import org.mythtv.android.player.widgets.FloatingActionButton;
 
 /**
@@ -109,10 +112,17 @@ public class VideoDetailsFragment extends Fragment implements FloatingActionButt
     public void onCheckedChanged( FloatingActionButton fabView, boolean isChecked ) {
         Log.d( TAG, "onCheckedChanged : enter" );
 
-        Intent intent = new Intent( getActivity(), PlayerActivity.class );
-        intent.putExtra( getResources().getString( R.string.video ), mVideo );
-        intent.putExtra( getResources().getString( R.string.should_start ), true );
-        startActivity( intent );
+//        Intent intent = new Intent( getActivity(), PlayerActivity.class );
+//        intent.putExtra( getResources().getString( R.string.video ), mVideo );
+//        intent.putExtra( getResources().getString( R.string.should_start ), true );
+//        startActivity( intent );
+
+        String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetVideo?Id=" + mVideo.getId();
+        Intent mpdIntent = new Intent(getActivity(), SimplePlayerActivity.class)
+                .setData(Uri.parse(url))
+                .putExtra(DemoUtil.CONTENT_ID_EXTRA, mVideo.getId())
+                .putExtra(DemoUtil.CONTENT_TYPE_EXTRA, DemoUtil.TYPE_OTHER);
+        startActivity(mpdIntent);
 
         Log.d( TAG, "onCheckedChanged : exit" );
     }

@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.BaseActionBarActivity;
-import org.mythtv.android.player.R;
+import org.mythtv.android.R;
 import org.mythtv.android.player.recordings.RecordingDetailsFragment;
 
 /**

@@ -17,7 +17,7 @@ import org.mythtv.android.library.ui.adapters.TitleInfoAdapter;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.library.ui.data.TitleInfoDataConsumer;
 import org.mythtv.android.library.ui.data.TitleInfosDataFragment;
-import org.mythtv.android.player.R;
+import org.mythtv.android.R;
 
 import java.util.List;
 

@@ -8,7 +8,7 @@ import android.util.Log;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.player.BaseActionBarActivity;
-import org.mythtv.android.player.R;
+import org.mythtv.android.R;
 
 /**
  * Created by dmfrey on 12/8/14.

@@ -16,7 +16,7 @@ import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.ui.adapters.VideoAdapter;
 import org.mythtv.android.library.ui.data.VideoDataConsumer;
 import org.mythtv.android.library.ui.data.VideosDataFragment;
-import org.mythtv.android.player.R;
+import org.mythtv.android.R;
 
 import java.util.List;
 

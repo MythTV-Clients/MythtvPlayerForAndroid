@@ -34,7 +34,7 @@ public class MasterBackendV28ConnectionTests extends TestCase {
 
         DvrService dvrService = new DvrServiceV28EventHandler( mMythTvApiContext );
 
-        AllProgramsEvent event = dvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( false, 0, -1, null, null, null ) );
+        AllProgramsEvent event = dvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( false, 0, null, null, null, null ) );
         assertNotNull( event );
         assertTrue( event.isEntityFound() );
 

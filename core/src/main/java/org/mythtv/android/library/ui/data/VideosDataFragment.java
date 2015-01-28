@@ -132,14 +132,15 @@ public class VideosDataFragment extends Fragment {
                     Log.v( TAG, "onPostExecute : videoDetails iteration" );
 
                     Video video = Video.fromDetails( videoDetails );
-
-                    videos.add( video );
+                    //if( video.getFileName().endsWith( ".mp4" ) ) {
+                        videos.add( video );
+                    //}
                 }
 
                 handleUpdate();
 
             } else {
-                Log.e( TAG, "onPostExecute : error, failed to load videos" );
+                Log.e(TAG, "onPostExecute : error, failed to load videos");
 
                 consumer.handleError( "failed to load videos" );
 

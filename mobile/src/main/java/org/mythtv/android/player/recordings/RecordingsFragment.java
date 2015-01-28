@@ -17,7 +17,7 @@ import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.ui.adapters.ProgramAdapter;
 import org.mythtv.android.library.ui.data.RecordingDataConsumer;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
-import org.mythtv.android.player.R;
+import org.mythtv.android.R;
 
 import java.util.List;
 

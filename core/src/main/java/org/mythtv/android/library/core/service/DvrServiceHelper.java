@@ -86,7 +86,7 @@ public class DvrServiceHelper {
         @Override
         protected AllProgramsEvent doInBackground( Void... params ) {
 
-            return mDvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( false, 1, -1, null, null, null ) );
+            return mDvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( false, 0, null, null, null, null ) );
         }
 
         @Override
@@ -94,10 +94,14 @@ public class DvrServiceHelper {
             Log.i( TAG, "onPostExecute : enter" );
 
             if( event.isEntityFound() ) {
+                Log.i( TAG, "onPostExecute : recorded programs returned" );
 
                 for( ProgramDetails program : event.getDetails() ) {
+                    Log.i( TAG, "onPostExecute : recorded program iteration" );
 
-                    if( !"LiveTV".equals( program.getRecording().getStorageGroup() ) ) {
+                    if( !"LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ) {
+                        Log.i( TAG, "onPostExecute : recorded program added" );
+
                         programs.add( Program.fromDetails( program ) );
                     }
                 }

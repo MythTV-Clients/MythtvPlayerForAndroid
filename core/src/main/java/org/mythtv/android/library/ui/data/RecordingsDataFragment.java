@@ -1,6 +1,5 @@
 package org.mythtv.android.library.ui.data;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -120,8 +119,9 @@ public class RecordingsDataFragment extends Fragment {
             Log.v( TAG, "doInBackground : enter" );
 
             String title = params[ 0 ];
+            Log.v( TAG, "doInBackground : title=" + title );
 
-            AllProgramsEvent event = mDvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( true, 1, -1, title, null, null ) );
+            AllProgramsEvent event = mDvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( true, 0, null, title, null, null ) );
 
             Log.v( TAG, "doInBackground : exit" );
             return event;
@@ -141,7 +141,7 @@ public class RecordingsDataFragment extends Fragment {
 
                     Program program = Program.fromDetails( programDetails );
 
-                    if( !"LiveTV".equals( program.getRecording().getStorageGroup() ) ) {
+                    if( !"LiveTV".equals( program.getRecording().getRecGroup() ) ) {
                         Log.v( TAG, "onPostExecute : program added" );
                         programs.add( program );
                     }

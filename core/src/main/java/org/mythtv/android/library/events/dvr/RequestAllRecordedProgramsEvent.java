@@ -2,6 +2,9 @@ package org.mythtv.android.library.events.dvr;
 
 import org.mythtv.android.library.events.RequestReadEvent;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Created by dmfrey on 11/12/14.
  */
@@ -38,7 +41,19 @@ public class RequestAllRecordedProgramsEvent extends RequestReadEvent {
     }
 
     public String getTitleRegEx() {
+
         return titleRegEx;
+
+//        if( null == titleRegEx ) {
+//            return null;
+//        }
+//
+//        try {
+//            return URLEncoder.encode( titleRegEx, "UTF-8" );
+//        } catch( UnsupportedEncodingException e ) {
+//            return null;
+//        }
+
     }
 
     public String getRecGroup() {

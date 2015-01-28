@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.mythtv.android.R;
+
 /**
  * Created by dmfrey on 12/3/14.
  */

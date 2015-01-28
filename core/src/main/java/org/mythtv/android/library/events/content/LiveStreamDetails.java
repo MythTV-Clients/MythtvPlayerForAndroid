@@ -355,4 +355,32 @@ public class LiveStreamDetails implements Serializable {
         this.audioOnlyBitrate = audioOnlyBitrate;
     }
 
+    @Override
+    public String toString() {
+        return "LiveStreamDetails{" +
+                "id=" + id +
+                ", width=" + width +
+                ", height=" + height +
+                ", bitrate=" + bitrate +
+                ", audioBitrate=" + audioBitrate +
+                ", segmentSize=" + segmentSize +
+                ", maxSegments=" + maxSegments +
+                ", startSegment=" + startSegment +
+                ", currentSegment=" + currentSegment +
+                ", segmentCount=" + segmentCount +
+                ", percentComplete=" + percentComplete +
+                ", created=" + created +
+                ", lastModified=" + lastModified +
+                ", relativeURL='" + relativeURL + '\'' +
+                ", fullURL='" + fullURL + '\'' +
+                ", statusStr='" + statusStr + '\'' +
+                ", statusInt=" + statusInt +
+                ", statusMessage='" + statusMessage + '\'' +
+                ", sourceFile='" + sourceFile + '\'' +
+                ", sourceHost='" + sourceHost + '\'' +
+                ", sourceWidth=" + sourceWidth +
+                ", sourceHeight=" + sourceHeight +
+                ", audioOnlyBitrate=" + audioOnlyBitrate +
+                '}';
+    }
 }

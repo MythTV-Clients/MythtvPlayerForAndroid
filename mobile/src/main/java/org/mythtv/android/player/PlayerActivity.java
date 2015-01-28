@@ -22,6 +22,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
@@ -280,6 +281,9 @@ public class PlayerActivity extends Activity {
         mVideoView.pause();
         mPlaybackState = PlaybackState.PAUSED;
         updatePlayButton(PlaybackState.PAUSED);
+
+        ( (MainApplication) getApplicationContext() ).cancelAlarms();
+
     }
 
     @Override
@@ -312,6 +316,9 @@ public class PlayerActivity extends Activity {
     protected void onResume() {
         Log.d(TAG, "onResume() was called");
         super.onResume();
+
+        ( (MainApplication) getApplicationContext() ).scheduleAlarms();
+
     }
 
     private class HideControllersTask extends TimerTask {
