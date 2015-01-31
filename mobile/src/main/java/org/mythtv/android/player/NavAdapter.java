@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.mythtv.android.R;
@@ -20,43 +22,69 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
      * Interface for receiving click events from cells.
      */
     public interface OnItemClickListener {
-        public void onClick(View view, int position);
+        public void onClick( View view, int position );
     }
 
     /**
      * Custom viewholder for our planet views.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mTextView;
 
-        public ViewHolder(TextView v) {
+        private final View parent;
+        private final ImageView mImageView;
+        private final TextView mTextView;
+
+
+        public ViewHolder( View v ) {
             super(v);
-            mTextView = v;
+
+            this.parent = v;
+            mImageView = (ImageView) parent.findViewById( android.R.id.icon1 );
+            mTextView = (TextView) parent.findViewById( android.R.id.text1 );
+
         }
+
+        public void setText( CharSequence text ) {
+
+            mTextView.setText( text );
+
+        }
+
+        public void setOnClickListener( View.OnClickListener listener ) {
+
+            parent.setOnClickListener( listener );
+
+        }
+
     }
 
-    public NavAdapter(String[] myDataset, OnItemClickListener listener) {
+    public NavAdapter( String[] myDataset, OnItemClickListener listener ) {
         mDataset = myDataset;
         mListener = listener;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater vi = LayoutInflater.from(parent.getContext());
-        View v = vi.inflate(R.layout.drawer_list_item, parent, false);
-        TextView tv = (TextView) v.findViewById(android.R.id.text1);
-        return new ViewHolder(tv);
+    public ViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
+
+        LayoutInflater vi = LayoutInflater.from( parent.getContext() );
+        View v = vi.inflate( R.layout.drawer_list_item, parent, false );
+
+        return new ViewHolder( v );
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.mTextView.setText(mDataset[position]);
-        holder.mTextView.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder( ViewHolder holder, final int position ) {
+
+        holder.mTextView.setText( mDataset[ position ] );
+        holder.mTextView.setOnClickListener( new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
-                mListener.onClick(view, position);
+            public void onClick( View view ) {
+                mListener.onClick( view, position );
             }
+
         });
+
     }
 
     @Override

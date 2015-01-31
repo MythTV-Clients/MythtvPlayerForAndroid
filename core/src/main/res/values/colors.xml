@@ -21,12 +21,13 @@
     <color name="text_medium">#555555</color>
     <color name="text_light">#888888</color>
 
-    <color name="sa_green">#1E9618</color>
-    <color name="sa_green_transparent">#801E9618</color>
-    <color name="sa_green_dark">#146310</color>
+    <color name="colorPrimary">#88a1bb</color>
+    <color name="colorPrimaryDark">#222233</color>
+    <color name="colorAccent">#e6e6f0</color>
+    <color name="textColorPrimary">#111155</color>
+    <color name="textColorSecondary">#696978</color>
+    <color name="windowBackground">#e6e6f0</color>
 
-    <color name="colorPrimary">#3580b5</color>
-    <color name="colorPrimaryDark">#063e67</color>
-    <color name="colorAccent">#FF3D00</color>
+    <color name="navigationBackground">#e6e6f0</color>
 
 </resources>

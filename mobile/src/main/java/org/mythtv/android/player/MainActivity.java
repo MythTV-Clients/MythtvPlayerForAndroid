@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.mythtv.android.R;
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
     private static final String VIDEOS_FRAGMENT_TAG = VideosFragment.class.getCanonicalName();
 
     private DrawerLayout mDrawerLayout;
+    private LinearLayout mDrawer;
     private RecyclerView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -71,7 +73,8 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         mTitle = mDrawerTitle = getTitle();
         mNavTitles = getResources().getStringArray( R.array.nav_array );
         mDrawerLayout = (DrawerLayout) findViewById( R.id.drawer_layout );
-        mDrawerList = (RecyclerView) findViewById( R.id.left_drawer );
+        mDrawer = (LinearLayout) findViewById( R.id.nav_drawer );
+        mDrawerList = (RecyclerView) findViewById( R.id.nav_drawer_items );
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow( R.drawable.drawer_shadow, GravityCompat.START );
@@ -266,7 +269,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         // update selected item title, then close the drawer
         setTitle( mNavTitles[ position ] );
-        mDrawerLayout.closeDrawer( mDrawerList );
+        mDrawerLayout.closeDrawer( mDrawer );
 
         Log.d( TAG, "selectItem : exit" );
     }
