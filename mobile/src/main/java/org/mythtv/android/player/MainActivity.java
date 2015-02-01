@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mythtv.android.R;
@@ -37,9 +38,12 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
     private static final String TITLE_INFOS_FRAGMENT_TAG = TitleInfosFragment.class.getCanonicalName();
     private static final String VIDEOS_FRAGMENT_TAG = VideosFragment.class.getCanonicalName();
 
+    private MainApplication mMainApplication;
+
     private DrawerLayout mDrawerLayout;
     private LinearLayout mDrawer;
     private RecyclerView mDrawerList;
+    private TextView mMythVersion;
     private ActionBarDrawerToggle mDrawerToggle;
 
     private CharSequence mDrawerTitle;
@@ -59,6 +63,8 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         super.onCreate( savedInstanceState );
         Log.d( TAG, "onCreate : enter" );
 
+        mMainApplication = (MainApplication) getApplicationContext();
+
         ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONNECTING_FRAGMENT_TAG );
         if( null == connectingFragment ) {
             Log.d( TAG, "onResume : creating new ConnectingFragment" );
@@ -74,6 +80,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         mNavTitles = getResources().getStringArray( R.array.nav_array );
         mDrawerLayout = (DrawerLayout) findViewById( R.id.drawer_layout );
         mDrawer = (LinearLayout) findViewById( R.id.nav_drawer );
+        mMythVersion = (TextView) findViewById( R.id.mythtv_version );
         mDrawerList = (RecyclerView) findViewById( R.id.nav_drawer_items );
 
         // set a custom shadow that overlays the main content when the drawer opens
@@ -215,6 +222,14 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         selectItem( position );
 
         Log.d( TAG, "onClick : exit" );
+    }
+
+    private void updateNavigationDrawerVersion() {
+
+        if( null != mMainApplication.getMasterBackendHostName() ) {
+            mMythVersion.setText( mMainApplication.getMasterBackendHostName() );
+        }
+
     }
 
     private void selectItem( int position ) {
@@ -365,6 +380,8 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
                 Log.d( TAG, "onReceive : backend is connected" );
 
                 selectItem( mSelectedItem );
+
+                updateNavigationDrawerVersion();
 
             }
 

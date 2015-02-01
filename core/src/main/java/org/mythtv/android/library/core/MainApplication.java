@@ -12,15 +12,20 @@ import android.util.Log;
 
 import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.service.DvrService;
+import org.mythtv.android.library.core.service.MythService;
 import org.mythtv.android.library.core.service.VideoService;
 import org.mythtv.android.library.core.service.v027.content.ContentServiceV27EventHandler;
 import org.mythtv.android.library.core.service.v027.dvr.DvrServiceV27EventHandler;
+import org.mythtv.android.library.core.service.v027.myth.MythServiceV27EventHandler;
 import org.mythtv.android.library.core.service.v027.video.VideoServiceV27EventHandler;
 import org.mythtv.android.library.core.service.v028.content.ContentServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28EventHandler;
+import org.mythtv.android.library.core.service.v028.myth.MythServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.video.VideoServiceV28EventHandler;
 import org.mythtv.android.library.events.DeleteEvent;
 import org.mythtv.android.library.events.content.RequestAllLiveStreamInfosEvent;
+import org.mythtv.android.library.events.myth.HostNameDetailsEvent;
+import org.mythtv.android.library.events.myth.RequestHostNameEvent;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
@@ -42,7 +47,7 @@ public class MainApplication extends Application {
     public static final String ACTION_NOT_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_NOT_CONNECTED";
 
     boolean mConnected = false;
-    String mBackendUrl;
+    String mBackendUrl, mBackendHostname;
     int mBackendPort;
 
     private ApiVersion mApiVersion;
@@ -51,6 +56,7 @@ public class MainApplication extends Application {
 
     private ContentService mContentService;
     private DvrService mDvrService;
+    private MythService mMythService;
     private VideoService mVideoService;
 
     private AlarmManager mAlarmManager;
@@ -61,12 +67,6 @@ public class MainApplication extends Application {
         mConnected = false;
 
         mDvrService.cleanup( new DeleteEvent() );
-
-//        mApiVersion = null;
-//        mBackendUrl = getResources().getString( R.string.pref_backend_url );
-//        mBackendPort = Integer.parseInt( getResources().getString( R.string.pref_backend_port ) );
-//
-//        mMythTvApiContext = null;
 
     }
 
@@ -108,6 +108,8 @@ public class MainApplication extends Application {
         return mDvrService;
     }
 
+    public MythService getMythService() { return mMythService; }
+
     public VideoService getVideoService() {
         return mVideoService;
     }
@@ -117,6 +119,8 @@ public class MainApplication extends Application {
     public String getMasterBackendUrl() {
         return "http://" + mBackendUrl + ":" + mBackendPort + "/";
     }
+
+    public String getMasterBackendHostName() { return mBackendHostname; }
 
     private void initializeApi() {
         Log.d( TAG, "initializeApi : enter" );
@@ -170,6 +174,7 @@ public class MainApplication extends Application {
 
                         mContentService = new ContentServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
                         mDvrService = new DvrServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
+                        mMythService = new MythServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
                         mVideoService = new VideoServiceV27EventHandler( mMythTvApiContext );
 
                         break;
@@ -179,6 +184,7 @@ public class MainApplication extends Application {
 
                         mContentService = new ContentServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
                         mDvrService = new DvrServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
+                        mMythService = new MythServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
                         mVideoService = new VideoServiceV28EventHandler( mMythTvApiContext );
 
                         break;
@@ -187,6 +193,7 @@ public class MainApplication extends Application {
                 mConnected = true;
 
                 new RefreshLiveStreamsTask().execute();
+                new GetHostNameTask().execute();
 
                 Intent connectedIntent = new Intent( ACTION_CONNECTED );
                 sendBroadcast( connectedIntent );
@@ -218,6 +225,39 @@ public class MainApplication extends Application {
 
             Log.v( TAG, "doInBackground : exit" );
             return null;
+        }
+
+    }
+
+    private class GetHostNameTask extends AsyncTask<Void, Void, HostNameDetailsEvent> {
+
+        private final String TAG = GetHostNameTask.class.getSimpleName();
+
+        @Override
+        protected HostNameDetailsEvent doInBackground( Void... params ) {
+            Log.v( TAG, "doInBackground : enter" );
+
+            HostNameDetailsEvent event = mMythService.getHostName( new RequestHostNameEvent() );
+
+            Log.v( TAG, "doInBackground : exit" );
+            return event;
+        }
+
+        @Override
+        protected void onPostExecute( HostNameDetailsEvent event ) {
+            Log.v( TAG, "onPostExecute : enter" );
+
+            if( event.isEntityFound() ) {
+                Log.v( TAG, "onPostExecute : hostname returned" );
+
+                mBackendHostname = event.getDetails().getHostname();
+
+                Intent connectedIntent = new Intent( ACTION_CONNECTED );
+                sendBroadcast( connectedIntent );
+
+            }
+
+            Log.v( TAG, "onPostExecute : exit" );
         }
 
     }
