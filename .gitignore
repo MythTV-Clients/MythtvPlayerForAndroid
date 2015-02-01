@@ -7,6 +7,8 @@
 /build
 /core/build
 /core/core.iml
+/ExoPlayer/build
+/ExoPlayer/build/ExoPlayer.iml
 /mobile/build
 /mobile/mobile.iml
 /tv/build
