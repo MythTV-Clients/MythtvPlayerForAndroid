@@ -76,7 +76,7 @@ public class TitleInfosDataFragment extends Fragment {
     private void update() {
         Log.v( TAG, "update : enter" );
 
-        if( titleInfos == null && !isLoading() ) {
+        if( null == titleInfos && !isLoading() ) {
 
             new TitleInfosLoaderAsyncTask().execute();
 
@@ -84,7 +84,7 @@ public class TitleInfosDataFragment extends Fragment {
 
         } else {
 
-            if( titleInfos != null ) {
+            if( null != titleInfos ) {
 
                 handleUpdate();
 

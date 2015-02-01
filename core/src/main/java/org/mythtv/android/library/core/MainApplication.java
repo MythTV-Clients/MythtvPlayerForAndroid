@@ -195,9 +195,6 @@ public class MainApplication extends Application {
                 new RefreshLiveStreamsTask().execute();
                 new GetHostNameTask().execute();
 
-                Intent connectedIntent = new Intent( ACTION_CONNECTED );
-                sendBroadcast( connectedIntent );
-
             } else {
                 Log.v( TAG, "onPostExecute : master backend not connected" );
 
@@ -253,6 +250,14 @@ public class MainApplication extends Application {
                 mBackendHostname = event.getDetails().getHostname();
 
                 Intent connectedIntent = new Intent( ACTION_CONNECTED );
+                sendBroadcast( connectedIntent );
+
+            } else {
+                Log.v( TAG, "onPostExecute : master backend not connected" );
+
+                mConnected = false;
+
+                Intent connectedIntent = new Intent( ACTION_NOT_CONNECTED );
                 sendBroadcast( connectedIntent );
 
             }

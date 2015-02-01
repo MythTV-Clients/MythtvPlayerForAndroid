@@ -26,4 +26,8 @@
 
     </style>
 
+    <style name="CustomTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
 </resources>
