@@ -1,10 +1,10 @@
 package org.mythtv.android.player.recordings;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.ui.adapters.ProgramAdapter;
+import org.mythtv.android.library.ui.adapters.ProgramItemAdapter;
 import org.mythtv.android.library.ui.data.RecordingDataConsumer;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.R;
@@ -24,13 +24,13 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class RecordingsFragment extends Fragment implements RecordingDataConsumer, ProgramAdapter.ProgramClickListener {
+public class RecordingsFragment extends Fragment implements RecordingDataConsumer, ProgramItemAdapter.ProgramItemClickListener {
 
     private static final String TAG = RecordingsFragment.class.getSimpleName();
     private static final String RECORDINGS_DATA_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
 
     RecyclerView mRecyclerView;
-    ProgramAdapter mAdapter;
+    ProgramItemAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
 
     OnRecordingClickedListener listener;
@@ -64,7 +64,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
             recordingsDataFragment.setRetainInstance( true );
             recordingsDataFragment.setConsumer( this );
 
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
             transaction.commit();
 
@@ -78,6 +78,13 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
     public void onActivityCreated( Bundle savedInstanceState ) {
         super.onActivityCreated( savedInstanceState );
         Log.d( TAG, "onActivityCreated : enter" );
+
+        String title = getArguments().getString( RecordingsDataFragment.TITLE_INFO_TITLE );
+        if( null == title || "".equals( title ) ) {
+            title = getResources().getString( R.string.all_recordings );
+        }
+
+        ( (ActionBarActivity) getActivity() ).getSupportActionBar().setTitle( title );
 
         mRecyclerView = (RecyclerView) getView().findViewById( R.id.list );
 
@@ -116,7 +123,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
     public void setPrograms( List<Program> programs ) {
         Log.d( TAG, "setPrograms : enter" );
 
-        mAdapter = new ProgramAdapter( programs, this, !getArguments().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) );
+        mAdapter = new ProgramItemAdapter( programs, this, !getArguments().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) );
         mRecyclerView.setAdapter( mAdapter );
 
         Log.d( TAG, "setPrograms : exit" );
@@ -131,8 +138,8 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
         Log.d( TAG, "handleError : exit" );
     }
 
-    public void programClicked( Program program ) {
-        Log.d( TAG, "programClicked : enter" );
+    public void programItemClicked(Program program) {
+        Log.d( TAG, "programItemClicked : enter" );
 
         listener.setProgram( program );
 
@@ -143,7 +150,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
 //        intent.putExtras( args );
 //        startActivity( intent );
 
-        Log.d( TAG, "programClicked : exit" );
+        Log.d( TAG, "programItemClicked : exit" );
     }
 
 }

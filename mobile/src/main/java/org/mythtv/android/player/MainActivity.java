@@ -1,7 +1,5 @@
 package org.mythtv.android.player;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +9,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,19 +25,20 @@ import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.domain.dvr.TitleInfo;
+import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
+import org.mythtv.android.player.recordings.RecordingsFragment;
 import org.mythtv.android.player.recordings.TitleInfosFragment;
 import org.mythtv.android.player.videos.VideosFragment;
 
-public class MainActivity extends BaseActionBarActivity implements NavAdapter.OnItemClickListener {
+public class MainActivity extends BaseActionBarActivity implements NavAdapter.OnItemClickListener, TitleInfosFragment.OnTitleInfoClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String SELECTED_ITEM_STATE = "selected_item";
 
-    private static final String CONNECTING_FRAGMENT_TAG = ConnectingFragment.class.getCanonicalName();
-    private static final String TITLE_INFOS_FRAGMENT_TAG = TitleInfosFragment.class.getCanonicalName();
-    private static final String VIDEOS_FRAGMENT_TAG = VideosFragment.class.getCanonicalName();
+    private static final String CONTENT_FRAGMENT_TAG = "content_fragment";
 
     private MainApplication mMainApplication;
 
@@ -51,6 +53,13 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
     private String[] mNavTitles;
     private int mSelectedItem;
 
+    private TitleInfosFragment mTitleInfosFragment;
+    private TitleInfo mTitleInfo;
+
+    private RecordingsFragment mRecordingsFragment;
+
+    private VideosFragment mVideosFragment;
+
     private BackendConnectedBroadcastReceiver mBackendConnectedBroadcastReceiver = new BackendConnectedBroadcastReceiver();
 
     @Override
@@ -64,17 +73,6 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         Log.d( TAG, "onCreate : enter" );
 
         mMainApplication = (MainApplication) getApplicationContext();
-
-        ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONNECTING_FRAGMENT_TAG );
-        if( null == connectingFragment ) {
-            Log.d( TAG, "onResume : creating new ConnectingFragment" );
-
-            connectingFragment = (ConnectingFragment) Fragment.instantiate( this, ConnectingFragment.class.getName() );
-
-        }
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
-        transaction.commit();
 
         mTitle = mDrawerTitle = getTitle();
         mNavTitles = getResources().getStringArray( R.array.nav_array );
@@ -138,6 +136,38 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
     public void onResume() {
         super.onResume();
         Log.i( TAG, "onResume : enter" );
+
+        getSupportFragmentManager().addOnBackStackChangedListener( new FragmentManager.OnBackStackChangedListener() {
+
+            @Override
+            public void onBackStackChanged() {
+                Log.v( TAG, "onBackStackChanged : enter" );
+
+                boolean canback = getSupportFragmentManager().getBackStackEntryCount() > 0;
+                Log.v( TAG, "onBackStackChanged : canback=" + canback );
+                getSupportActionBar().setDisplayHomeAsUpEnabled( canback );
+
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag( CONTENT_FRAGMENT_TAG );
+                if( null != fragment ) {
+                    Log.v( TAG, "onBackStackChanged : fragment " + fragment.getClass().getName() );
+                }
+
+                if( fragment instanceof TitleInfosFragment ) {
+                    Log.v( TAG, "onBackStackChanged : resetting for TitleInfosFragment" );
+
+                    setTitle( getResources().getStringArray( R.array.nav_array ) [ 0 ] );
+                }
+
+                if( fragment instanceof VideosFragment ) {
+                    Log.v( TAG, "onBackStackChanged : resetting for VideosFragment" );
+
+                    setTitle( getResources().getStringArray( R.array.nav_array ) [ 1 ] );
+                }
+
+                Log.v( TAG, "onBackStackChanged : exit" );
+            }
+
+        });
 
         IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
         backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
@@ -239,35 +269,27 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
             case 0 :
 
-                TitleInfosFragment titleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentByTag( TITLE_INFOS_FRAGMENT_TAG );
-                if( null == titleInfosFragment ) {
+                if( null == mTitleInfosFragment ) {
                     Log.d( TAG, "selectItem : creating new TitleInfosFragment") ;
 
-                    titleInfosFragment = (TitleInfosFragment) Fragment.instantiate( this, TitleInfosFragment.class.getName() );
+                    mTitleInfosFragment = (TitleInfosFragment) Fragment.instantiate( this, TitleInfosFragment.class.getName() );
 
                 }
 
-                FragmentTransaction tx0 = getFragmentManager().beginTransaction();
-                tx0.replace( R.id.content_frame, titleInfosFragment, TITLE_INFOS_FRAGMENT_TAG );
-                tx0.addToBackStack( null );
-                tx0.commit();
+                replaceFragment( mTitleInfosFragment, CONTENT_FRAGMENT_TAG, true );
 
                 break;
 
             case 1 :
 
-                VideosFragment videosFragment = (VideosFragment) getFragmentManager().findFragmentByTag( VIDEOS_FRAGMENT_TAG );
-                if( null == videosFragment ) {
-                    Log.d( TAG, "selectItem : creating new VideosFragment") ;
+                if( null == mVideosFragment ) {
+                    Log.d( TAG, "selectItem : creating new VideosFragment" ) ;
 
-                    videosFragment = (VideosFragment) Fragment.instantiate( this, VideosFragment.class.getName() );
+                    mVideosFragment = (VideosFragment) Fragment.instantiate( this, VideosFragment.class.getName() );
 
                 }
 
-                FragmentTransaction tx1 = getFragmentManager().beginTransaction();
-                tx1.replace( R.id.content_frame, videosFragment, VIDEOS_FRAGMENT_TAG );
-                tx1.addToBackStack( null );
-                tx1.commit();
+                replaceFragment( mVideosFragment, CONTENT_FRAGMENT_TAG, true );
 
                 break;
 
@@ -287,6 +309,40 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         mDrawerLayout.closeDrawer( mDrawer );
 
         Log.d( TAG, "selectItem : exit" );
+    }
+
+    private void addFragment( Fragment fragment, String tag, boolean addToBackStack ) {
+
+        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        tx.add(R.id.content_frame, fragment, tag);
+
+        if( addToBackStack ) {
+            tx.addToBackStack( null );
+        }
+
+        tx.commit();
+
+    }
+
+    private void replaceFragment( Fragment fragment, String tag, boolean addToBackStack ) {
+
+        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        tx.replace( R.id.content_frame, fragment, tag );
+
+        if( addToBackStack ) {
+            tx.addToBackStack( null );
+        }
+
+        tx.commit();
+
+    }
+
+    private void removeFragment( Fragment fragment ) {
+
+        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        tx.remove( fragment );
+        tx.commit();
+
     }
 
     @Override
@@ -368,6 +424,32 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         return super.onOptionsItemSelected( item );
     }
 
+    @Override
+    public void onTitleInfoClicked( TitleInfo titleInfo ) {
+        Log.d( TAG, "onTitleInfoClicked : enter" );
+
+        mTitleInfo = titleInfo;
+
+//        setTitle( titleInfo.getTitle() );
+
+        if( null != mRecordingsFragment ) {
+            Log.d(TAG, "onTitleInfoClicked : creating new RecordingsFragment");
+
+            removeFragment( mRecordingsFragment );
+        }
+
+        Bundle args = new Bundle();
+        if( !mTitleInfo.getTitle().equals( getResources().getString( R.string.all_recordings ) ) ) {
+            args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, mTitleInfo.getTitle() );
+        }
+
+        mRecordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName(), args );
+
+        replaceFragment( mRecordingsFragment, CONTENT_FRAGMENT_TAG, true );
+
+        Log.d( TAG, "onTitleInfoClicked : exit" );
+    }
+
     private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
 
         private final String TAG = BackendConnectedBroadcastReceiver.class.getSimpleName();
@@ -391,22 +473,14 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
                 Bundle args = new Bundle();
                 args.putBoolean( ConnectingFragment.CONNECTED_KEY, false );
 
-                ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONNECTING_FRAGMENT_TAG );
+                ConnectingFragment connectingFragment = (ConnectingFragment) getSupportFragmentManager().findFragmentByTag( CONTENT_FRAGMENT_TAG );
                 if( null == connectingFragment ) {
                     Log.d( TAG, "onResume : creating new ConnectingFragment" );
 
                     connectingFragment = (ConnectingFragment) Fragment.instantiate( MainActivity.this, ConnectingFragment.class.getName(), args );
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
-                    transaction.commit();
-
-                } else {
-
-                    connectingFragment = (ConnectingFragment) Fragment.instantiate( MainActivity.this, ConnectingFragment.class.getName(), args );
-
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace( R.id.content_frame, connectingFragment, CONNECTING_FRAGMENT_TAG );
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace( R.id.content_frame, connectingFragment, CONTENT_FRAGMENT_TAG );
                     transaction.commit();
 
                 }

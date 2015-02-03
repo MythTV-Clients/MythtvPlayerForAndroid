@@ -8,8 +8,8 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" />
+        android:paddingLeft="@dimen/outer_margin"
+        android:paddingRight="@dimen/outer_margin" />
 
     <TextView
         android:id="@+id/empty"

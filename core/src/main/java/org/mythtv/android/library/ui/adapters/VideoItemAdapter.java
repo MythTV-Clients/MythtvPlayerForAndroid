@@ -9,25 +9,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.mythtv.android.library.R;
-import org.mythtv.android.library.core.domain.dvr.TitleInfo;
+import org.mythtv.android.library.core.domain.video.Video;
 
 import java.util.List;
 
 /**
  * Created by dmfrey on 11/29/14.
  */
-public class TitleInfoAdapter extends RecyclerView.Adapter<TitleInfoAdapter.ViewHolder> {
+public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.ViewHolder> {
 
-    private final String TAG = TitleInfoAdapter.class.getSimpleName();
+    private final String TAG = VideoItemAdapter.class.getSimpleName();
 
-    private List<TitleInfo> titleInfos;
-    private TitleInfoClickListener titleInfoClickListener;
+    private List<Video> videos;
+    private VideoItemClickListener videoItemClickListener;
 
-    public TitleInfoAdapter( List<TitleInfo> titleInfos, @NonNull TitleInfoClickListener titleInfoClickListener ) {
+    public VideoItemAdapter(List<Video> videos, @NonNull VideoItemClickListener videoItemClickListener) {
         Log.v( TAG, "initialize : enter" );
 
-        this.titleInfos = titleInfos;
-        this.titleInfoClickListener = titleInfoClickListener;
+        this.videos = videos;
+        this.videoItemClickListener = videoItemClickListener;
 
         Log.v( TAG, "initialize : exit" );
     }
@@ -36,7 +36,7 @@ public class TitleInfoAdapter extends RecyclerView.Adapter<TitleInfoAdapter.View
     public ViewHolder onCreateViewHolder( ViewGroup viewGroup, int position ) {
         Log.v( TAG, "onCreateViewHolder : enter" );
 
-        View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.title_info_list_item, viewGroup, false );
+        View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.video_list_item, viewGroup, false );
 
         ViewHolder vh = new ViewHolder( v );
         return vh;
@@ -46,13 +46,13 @@ public class TitleInfoAdapter extends RecyclerView.Adapter<TitleInfoAdapter.View
     public void onBindViewHolder( ViewHolder viewHolder, int position ) {
         Log.v( TAG, "onBindViewHolder : enter" );
 
-        final TitleInfo titleInfo = titleInfos.get( position );
-        viewHolder.setTitle( titleInfo.getTitle() );
+        final Video video = videos.get( position );
+        viewHolder.setTitle( video.getTitle() );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
             @Override
             public void onClick( View v ) {
-                titleInfoClickListener.titleInfoClicked( titleInfo );
+                videoItemClickListener.videoItemClicked(video);
             }
 
         });
@@ -65,7 +65,7 @@ public class TitleInfoAdapter extends RecyclerView.Adapter<TitleInfoAdapter.View
         Log.v( TAG, "getItemCount : enter" );
 
         Log.v( TAG, "getItemCount : exit" );
-        return titleInfos.size();
+        return videos.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -74,14 +74,13 @@ public class TitleInfoAdapter extends RecyclerView.Adapter<TitleInfoAdapter.View
 
         private final View parent;
         private final TextView title;
-        private String inetref;
 
         public ViewHolder( View v ) {
             super( v );
             Log.v( TAG, "initialize : enter" );
 
             this.parent = v;
-            title = (TextView) parent.findViewById( R.id.title_info_item_title );
+            title = (TextView) parent.findViewById( R.id.video_item_title );
 
             Log.v( TAG, "initialize : exit" );
         }
@@ -92,16 +91,6 @@ public class TitleInfoAdapter extends RecyclerView.Adapter<TitleInfoAdapter.View
 
         }
 
-        public void setInetref( String inetref ) {
-
-            this.inetref = inetref;
-
-        }
-
-        public String getInetref() {
-            return inetref;
-        }
-
         public void setOnClickListener( View.OnClickListener listener ) {
 
             parent.setOnClickListener( listener );
@@ -110,9 +99,9 @@ public class TitleInfoAdapter extends RecyclerView.Adapter<TitleInfoAdapter.View
 
     }
 
-    public interface TitleInfoClickListener {
+    public interface VideoItemClickListener {
 
-        void titleInfoClicked( TitleInfo titleInfo );
+        void videoItemClicked(Video video);
 
     }
 

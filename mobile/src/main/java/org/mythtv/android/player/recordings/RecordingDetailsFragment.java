@@ -1,13 +1,14 @@
 package org.mythtv.android.player.recordings;
 
-import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -156,7 +157,9 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         });
 
-        mProgram = (Program) getArguments().getSerializable(PROGRAM_KEY);
+        mProgram = (Program) getArguments().getSerializable( PROGRAM_KEY );
+
+        ( (ActionBarActivity) getActivity() ).getSupportActionBar().setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
 
         title.setText( mProgram.getTitle() );
         subTitle.setText( mProgram.getSubTitle() );
@@ -167,7 +170,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" );
         updatePreviewImage(url);
 
-        getLoaderManager().initLoader(0, getArguments(), this);
+        getLoaderManager().initLoader( 0, getArguments(), this );
 
         Log.d( TAG, "onActivityCreated : exit" );
     }

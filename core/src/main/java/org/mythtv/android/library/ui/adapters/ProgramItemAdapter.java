@@ -4,7 +4,6 @@ import org.joda.time.DateTimeZone;
 import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.domain.dvr.Program;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -19,19 +18,19 @@ import java.util.List;
 /**
  * Created by dmfrey on 11/29/14.
  */
-public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ViewHolder> {
+public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.ViewHolder> {
 
-    private final String TAG = ProgramAdapter.class.getSimpleName();
+    private final String TAG = ProgramItemAdapter.class.getSimpleName();
 
     private List<Program> programs;
-    private ProgramClickListener programClickListener;
+    private ProgramItemClickListener programItemClickListener;
     private boolean showTitle;
 
-    public ProgramAdapter( List<Program> programs, @NonNull ProgramClickListener programClickListener, boolean showTitle ) {
+    public ProgramItemAdapter(List<Program> programs, @NonNull ProgramItemClickListener programItemClickListener, boolean showTitle) {
         Log.v( TAG, "initialize : enter" );
 
         this.programs = programs;
-        this.programClickListener = programClickListener;
+        this.programItemClickListener = programItemClickListener;
         this.showTitle = showTitle;
 
         Log.v( TAG, "initialize : exit" );
@@ -65,7 +64,7 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ViewHold
 
             @Override
             public void onClick( View v ) {
-                programClickListener.programClicked( program );
+                programItemClickListener.programItemClicked(program);
             }
 
         });
@@ -128,9 +127,9 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.ViewHold
 
     }
 
-    public interface ProgramClickListener {
+    public interface ProgramItemClickListener {
 
-        void programClicked( Program program );
+        void programItemClicked(Program program);
 
     }
 

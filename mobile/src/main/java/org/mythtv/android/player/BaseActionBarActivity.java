@@ -18,9 +18,10 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate(savedInstanceState);
+        super.onCreate( savedInstanceState );
 
-        setContentView(getLayoutResource());
+        setContentView( getLayoutResource() );
+
         toolbar = (Toolbar) findViewById( R.id.toolbar );
         if( toolbar != null ) {
             setSupportActionBar( toolbar );

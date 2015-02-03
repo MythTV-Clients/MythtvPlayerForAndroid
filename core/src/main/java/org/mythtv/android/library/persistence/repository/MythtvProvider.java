@@ -56,7 +56,7 @@ public class MythtvProvider extends ContentProvider {
 
     @Override
     public String getType( Uri uri ) {
-        Log.v( TAG, "getType : enter" );
+//        Log.v( TAG, "getType : enter" );
 
         switch( URI_MATCHER.match( uri ) ) {
 
@@ -79,7 +79,7 @@ public class MythtvProvider extends ContentProvider {
 
     @Override
     public Cursor query( Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder ) {
-        Log.v( TAG, "query : enter" );
+//        Log.v( TAG, "query : enter" );
 
         db = mOpenHelper.getReadableDatabase();
 
@@ -88,7 +88,7 @@ public class MythtvProvider extends ContentProvider {
         switch( URI_MATCHER.match( uri ) ) {
 
             case LiveStreamConstants.ALL :
-                Log.v( TAG, "query : querying for all live streams" );
+//                Log.v( TAG, "query : querying for all live streams" );
 
                 cursor = db.query( LiveStreamConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
 
@@ -97,7 +97,7 @@ public class MythtvProvider extends ContentProvider {
                 return cursor;
 
             case LiveStreamConstants.ALL_RECORDINGS :
-                Log.v( TAG, "query : querying for all recordings" );
+//                Log.v( TAG, "query : querying for all recordings" );
 
                 selection = LiveStreamConstants.FIELD_RECORDED_ID + " IS NOT NULL OR (" + LiveStreamConstants.FIELD_CHAN_ID + " IS NOT NULL AND " + LiveStreamConstants.FIELD_START_TIME + " IS NOT NULL)" + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
 
@@ -108,7 +108,7 @@ public class MythtvProvider extends ContentProvider {
                 return cursor;
 
             case LiveStreamConstants.ALL_VIDEOS :
-                Log.v( TAG, "query : querying for all videos" );
+//                Log.v( TAG, "query : querying for all videos" );
 
                 selection = LiveStreamConstants.FIELD_VIDEO_ID + " IS NOT NULL" + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
 
@@ -119,7 +119,7 @@ public class MythtvProvider extends ContentProvider {
                 return cursor;
 
             case LiveStreamConstants.SINGLE :
-                Log.v( TAG, "query : querying for single live stream" );
+//                Log.v( TAG, "query : querying for single live stream" );
 
                 selection = LiveStreamConstants._ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
 
@@ -130,7 +130,7 @@ public class MythtvProvider extends ContentProvider {
                 return cursor;
 
             case LiveStreamConstants.SINGLE_RECORDING :
-                Log.v( TAG, "query : querying for single recording" );
+//                Log.v( TAG, "query : querying for single recording" );
 
                 selection = LiveStreamConstants.FIELD_RECORDED_ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
 
@@ -141,7 +141,7 @@ public class MythtvProvider extends ContentProvider {
                 return cursor;
 
             case LiveStreamConstants.SINGLE_VIDEO :
-                Log.v( TAG, "query : querying for single video" );
+//                Log.v( TAG, "query : querying for single video" );
 
                 selection = LiveStreamConstants.FIELD_VIDEO_ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
 
@@ -160,7 +160,7 @@ public class MythtvProvider extends ContentProvider {
 
     @Override
     public Uri insert( Uri uri, ContentValues values ) {
-        Log.v( TAG, "insert : enter" );
+//        Log.v( TAG, "insert : enter" );
 
         db = mOpenHelper.getWritableDatabase();
 
@@ -169,7 +169,7 @@ public class MythtvProvider extends ContentProvider {
         switch( URI_MATCHER.match( uri ) ) {
 
             case LiveStreamConstants.ALL:
-                Log.v( TAG, "insert : inserting new live stream" );
+//                Log.v( TAG, "insert : inserting new live stream" );
 
                 newUri = ContentUris.withAppendedId( LiveStreamConstants.CONTENT_URI, db.insertWithOnConflict( LiveStreamConstants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE ) );
 
@@ -186,7 +186,7 @@ public class MythtvProvider extends ContentProvider {
 
     @Override
     public int delete( Uri uri, String selection, String[] selectionArgs ) {
-        Log.v( TAG, "delete : enter" );
+//        Log.v( TAG, "delete : enter" );
 
         db = mOpenHelper.getWritableDatabase();
 
@@ -267,7 +267,7 @@ public class MythtvProvider extends ContentProvider {
 
     @Override
     public int update( Uri uri, ContentValues values, String selection, String[] selectionArgs ) {
-        Log.v( TAG, "update : enter" );
+//        Log.v( TAG, "update : enter" );
 
         db = mOpenHelper.getWritableDatabase();
 
@@ -348,7 +348,7 @@ public class MythtvProvider extends ContentProvider {
 
     @Override
     public ContentProviderResult[] applyBatch( ArrayList<ContentProviderOperation> operations )	 throws OperationApplicationException {
-        Log.v( TAG, "applyBatch : enter" );
+//        Log.v( TAG, "applyBatch : enter" );
 
         db = mOpenHelper.getWritableDatabase();
         db.beginTransaction();
@@ -361,7 +361,7 @@ public class MythtvProvider extends ContentProvider {
             }
             db.setTransactionSuccessful();
 
-            Log.v( TAG, "applyBatch : exit" );
+//            Log.v( TAG, "applyBatch : exit" );
             return results;
 
         } finally {

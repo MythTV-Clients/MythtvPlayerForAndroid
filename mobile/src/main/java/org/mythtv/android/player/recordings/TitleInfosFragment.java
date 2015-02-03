@@ -1,9 +1,9 @@
 package org.mythtv.android.player.recordings;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.library.ui.adapters.TitleInfoAdapter;
-import org.mythtv.android.library.ui.data.RecordingsDataFragment;
+import org.mythtv.android.library.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.library.ui.data.TitleInfoDataConsumer;
 import org.mythtv.android.library.ui.data.TitleInfosDataFragment;
 import org.mythtv.android.R;
@@ -24,14 +23,16 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class TitleInfosFragment extends Fragment implements TitleInfoDataConsumer, TitleInfoAdapter.TitleInfoClickListener {
+public class TitleInfosFragment extends Fragment implements TitleInfoDataConsumer, TitleInfoItemAdapter.TitleInfoItemClickListener {
 
     private static final String TAG = TitleInfosFragment.class.getSimpleName();
     private static final String TITLE_INFOS_DATA_FRAGMENT_TAG = TitleInfosDataFragment.class.getCanonicalName();
 
     RecyclerView mRecyclerView;
-    TitleInfoAdapter mAdapter;
+    TitleInfoItemAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
+
+    OnTitleInfoClickListener mListener;
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
@@ -45,7 +46,7 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
             titleInfosDataFragment.setRetainInstance( true );
             titleInfosDataFragment.setConsumer( this );
 
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.add( titleInfosDataFragment, TITLE_INFOS_DATA_FRAGMENT_TAG );
             transaction.commit();
 
@@ -72,10 +73,26 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
     }
 
     @Override
+    public void onAttach( Activity activity ) {
+        Log.d( TAG, "onAttach : enter" );
+        super.onAttach( activity );
+
+        try {
+
+            mListener = (OnTitleInfoClickListener) activity;
+
+        } catch( ClassCastException e ) {
+            throw new ClassCastException( activity.toString() + " must implement OnTitleInfoClickListener" );
+        }
+
+        Log.d( TAG, "onAttach : exit" );
+    }
+
+    @Override
     public void setTitleInfos( List<TitleInfo> titleInfos ) {
         Log.d( TAG, "setTitleInfos : enter" );
 
-        mAdapter = new TitleInfoAdapter( titleInfos, this );
+        mAdapter = new TitleInfoItemAdapter( titleInfos, this );
         mRecyclerView.setAdapter( mAdapter );
 
         Log.d( TAG, "setPrograms : exit" );
@@ -90,19 +107,27 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
         Log.d( TAG, "handleError : exit" );
     }
 
-    public void titleInfoClicked( TitleInfo titleInfo ) {
-        Log.d( TAG, "titleInfoClicked : enter" );
+    public void titleInfoItemClicked( TitleInfo titleInfo ) {
+        Log.d( TAG, "titleInfoItemClicked : enter" );
 
-        Bundle args = new Bundle();
-        if( !getActivity().getResources().getString( R.string.all_recordings ).equals( titleInfo.getTitle() ) ) {
-            args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, titleInfo.getTitle() );
-        }
+        mListener.onTitleInfoClicked( titleInfo );
 
-        Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
-        recordings.putExtras( args );
-        startActivity( recordings );
+//        Bundle args = new Bundle();
+//        if( !getActivity().getResources().getString( R.string.all_recordings ).equals( titleInfo.getTitle() ) ) {
+//            args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, titleInfo.getTitle() );
+//        }
+//
+//        Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
+//        recordings.putExtras( args );
+//        startActivity( recordings );
 
-        Log.d( TAG, "titleInfoClicked : exit" );
+        Log.d( TAG, "titleInfoItemClicked : exit" );
+    }
+
+    public interface OnTitleInfoClickListener {
+
+        void onTitleInfoClicked( TitleInfo titleInfo );
+
     }
 
 }

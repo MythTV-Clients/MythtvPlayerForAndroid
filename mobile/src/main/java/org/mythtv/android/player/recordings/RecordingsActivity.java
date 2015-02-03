@@ -1,14 +1,9 @@
 package org.mythtv.android.player.recordings;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.View;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
@@ -44,20 +39,13 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
             mTitle = savedInstanceState.getString( RecordingsDataFragment.TITLE_INFO_TITLE );
         }
 
-        if( null != getIntent().getExtras() && getIntent().getExtras().containsKey(RecordingsDataFragment.TITLE_INFO_TITLE) ) {
+        if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
             Log.d( TAG, "onCreate : retrieved title from intent extras" );
 
-            mTitle = getIntent().getStringExtra(RecordingsDataFragment.TITLE_INFO_TITLE);
+            mTitle = getIntent().getStringExtra( RecordingsDataFragment.TITLE_INFO_TITLE );
         }
 
-        if( null != mTitle && !"".equals( mTitle ) ) {
-            getSupportActionBar().setTitle( mTitle );
-        } else {
-            getSupportActionBar().setTitle( getResources().getString( R.string.all_recordings ) );
-        }
-        getSupportActionBar().setDisplayHomeAsUpEnabled( true );
-
-        RecordingsFragment recordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
+        RecordingsFragment recordingsFragment = (RecordingsFragment) getSupportFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
         if( null == recordingsFragment ) {
             Log.d( TAG, "onCreate : creating new RecordingsFragment" );
 
@@ -67,13 +55,28 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
             }
 
             recordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName(), args );
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
+//            transaction.addToBackStack( null );
             transaction.commit();
 
         }
 
         Log.d( TAG, "onCreate : exit" );
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d( TAG, "onResume : enter" );
+        super.onResume();
+
+        if( null != mTitle && !"".equals( mTitle ) ) {
+            getSupportActionBar().setTitle( mTitle );
+        } else {
+            getSupportActionBar().setTitle( getResources().getString( R.string.all_recordings ) );
+        }
+
+        Log.d( TAG, "onResume : exit" );
     }
 
     @Override
@@ -112,9 +115,15 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
     public boolean onSupportNavigateUp() {
         Log.d( TAG, "onSupportNavigateUp : enter" );
 
-        Log.d( TAG, "onSupportNavigateUp : backstack count=" + getFragmentManager().getBackStackEntryCount() );
-        if( getFragmentManager().getBackStackEntryCount() > 0 ) {
-            getFragmentManager().popBackStack();
+        Log.d( TAG, "onSupportNavigateUp : backstack count=" + getSupportFragmentManager().getBackStackEntryCount() );
+        if( getSupportFragmentManager().getBackStackEntryCount() > 0 ) {
+            getSupportFragmentManager().popBackStack();
+
+            if( null != mTitle && !"".equals( mTitle ) ) {
+                getSupportActionBar().setTitle( mTitle );
+            } else {
+                getSupportActionBar().setTitle( getResources().getString( R.string.all_recordings ) );
+            }
 
             Log.d( TAG, "onSupportNavigateUp : exit, removing recordingDetailsFragment" );
             return true;
@@ -131,12 +140,12 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
         Bundle args = new Bundle();
         args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
 
-        RecordingDetailsFragment recordingDetailsFragment = (RecordingDetailsFragment) getFragmentManager().findFragmentByTag( RECORDING_DETAILS_FRAGMENT_TAG );
+        RecordingDetailsFragment recordingDetailsFragment = (RecordingDetailsFragment) getSupportFragmentManager().findFragmentByTag( RECORDING_DETAILS_FRAGMENT_TAG );
         if( null == recordingDetailsFragment ) {
 
             recordingDetailsFragment = (RecordingDetailsFragment) Fragment.instantiate( this, RecordingDetailsFragment.class.getName(), args );
 
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace( R.id.content_frame, recordingDetailsFragment, RECORDING_DETAILS_FRAGMENT_TAG );
             transaction.addToBackStack( null );
             transaction.commit();

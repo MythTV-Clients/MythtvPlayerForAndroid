@@ -61,7 +61,7 @@ public class ContentServiceV28EventHandler implements ContentService {
         try {
             mLiveStreamInfoList = mMythTvApiContext.getContentService().getLiveStreamList( event.getFileName(), eTagInfo, ALL_LIVE_STREAM_REQ_ID ) ;
         } catch( RetrofitError e ) {
-            Log.e( TAG, "getLiveStreamInfoList : error", e );
+            Log.e( TAG, "getLiveStreamInfoList : error - " + e.getMessage() );
         }
 
         if( null != mLiveStreamInfoList ) {

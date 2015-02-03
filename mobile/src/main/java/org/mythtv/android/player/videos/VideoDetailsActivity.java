@@ -1,10 +1,8 @@
 package org.mythtv.android.player.videos;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -41,7 +39,7 @@ public class VideoDetailsActivity extends BaseActionBarActivity {
 
         getSupportActionBar().setTitle( mVideo.getTitle() );
 
-        VideoDetailsFragment videoDetailsFragment = (VideoDetailsFragment) getFragmentManager().findFragmentByTag( VIDEO_DETAILS_FRAGMENT_TAG );
+        VideoDetailsFragment videoDetailsFragment = (VideoDetailsFragment) getSupportFragmentManager().findFragmentByTag( VIDEO_DETAILS_FRAGMENT_TAG );
         if( null == videoDetailsFragment ) {
             Log.d( TAG, "onCreate : creating new VideoDetailsFragment" );
 
@@ -50,7 +48,7 @@ public class VideoDetailsActivity extends BaseActionBarActivity {
 
             videoDetailsFragment = (VideoDetailsFragment) Fragment.instantiate( this, VideoDetailsFragment.class.getName(), args );
 
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace( R.id.content_frame, videoDetailsFragment, VIDEO_DETAILS_FRAGMENT_TAG );
             transaction.addToBackStack( null );
             transaction.commit();
