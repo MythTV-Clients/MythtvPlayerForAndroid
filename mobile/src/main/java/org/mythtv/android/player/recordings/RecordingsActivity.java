@@ -134,8 +134,8 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
     }
 
     @Override
-    public void setProgram( Program program ) {
-        Log.d( TAG, "setProgram : enter" );
+    public void onSetProgram( Program program ) {
+        Log.d( TAG, "onSetProgram : enter" );
 
         Bundle args = new Bundle();
         args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
@@ -152,7 +152,7 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
 
         }
 
-        Log.d( TAG, "setProgram : exit" );
+        Log.d( TAG, "onSetProgram : exit" );
     }
 
 }

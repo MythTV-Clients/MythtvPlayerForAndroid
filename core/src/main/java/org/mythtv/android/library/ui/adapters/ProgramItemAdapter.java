@@ -64,7 +64,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
             @Override
             public void onClick( View v ) {
-                programItemClickListener.programItemClicked(program);
+                programItemClickListener.onProgramItemClicked(program);
             }
 
         });
@@ -129,7 +129,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
     public interface ProgramItemClickListener {
 
-        void programItemClicked(Program program);
+        void onProgramItemClicked( Program program );
 
     }
 

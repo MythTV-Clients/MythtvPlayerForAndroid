@@ -2,10 +2,12 @@ package org.mythtv.android.library.core.domain.dvr;
 
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 
+import java.io.Serializable;
+
 /**
  * Created by dmfrey on 12/7/14.
  */
-public class TitleInfo {
+public class TitleInfo implements Serializable {
 
     private String title;
     private String inetref;

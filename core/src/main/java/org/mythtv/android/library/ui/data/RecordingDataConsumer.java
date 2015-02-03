@@ -10,6 +10,6 @@ import java.util.Map;
  */
 public interface RecordingDataConsumer extends ErrorHandler {
 
-    public void setPrograms( List<Program> programs );
+    public void onSetPrograms(List<Program> programs);
 
 }

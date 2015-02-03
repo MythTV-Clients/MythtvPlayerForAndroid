@@ -142,7 +142,7 @@ public class VideosDataFragment extends Fragment {
             } else {
                 Log.e(TAG, "onPostExecute : error, failed to load videos");
 
-                consumer.handleError( "failed to load videos" );
+                consumer.onHandleError("failed to load videos");
 
             }
 

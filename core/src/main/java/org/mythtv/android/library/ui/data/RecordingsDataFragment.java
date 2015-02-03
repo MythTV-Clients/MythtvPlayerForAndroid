@@ -105,7 +105,7 @@ public class RecordingsDataFragment extends Fragment {
     private void handleUpdate() {
         Log.v( TAG, "handleUpdate : enter" );
 
-        consumer.setPrograms( programs );
+        consumer.onSetPrograms(programs);
 
         Log.v(TAG, "handleUpdate : exit");
     }
@@ -152,7 +152,7 @@ public class RecordingsDataFragment extends Fragment {
             } else {
                 Log.e(TAG, "onPostExecute : error, failed to load recorded programs");
 
-                consumer.handleError( "failed to load recorded programs" );
+                consumer.onHandleError("failed to load recorded programs");
 
             }
 

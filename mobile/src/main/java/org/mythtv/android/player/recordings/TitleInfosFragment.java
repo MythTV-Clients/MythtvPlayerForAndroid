@@ -95,16 +95,16 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
         mAdapter = new TitleInfoItemAdapter( titleInfos, this );
         mRecyclerView.setAdapter( mAdapter );
 
-        Log.d( TAG, "setPrograms : exit" );
+        Log.d( TAG, "onSetPrograms : exit" );
     }
 
     @Override
-    public void handleError( String message ) {
-        Log.d( TAG, "handleError : enter" );
+    public void onHandleError(String message) {
+        Log.d( TAG, "onHandleError : enter" );
 
         Toast.makeText( getActivity(), message, Toast.LENGTH_LONG ).show();
 
-        Log.d( TAG, "handleError : exit" );
+        Log.d( TAG, "onHandleError : exit" );
     }
 
     public void titleInfoItemClicked( TitleInfo titleInfo ) {

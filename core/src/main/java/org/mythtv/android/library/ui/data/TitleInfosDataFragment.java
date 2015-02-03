@@ -139,7 +139,7 @@ public class TitleInfosDataFragment extends Fragment {
             } else {
                 Log.e(TAG, "onPostExecute : error, failed to load recorded programs");
 
-                consumer.handleError( "failed to load recorded programs" );
+                consumer.onHandleError("failed to load recorded programs");
 
             }
 

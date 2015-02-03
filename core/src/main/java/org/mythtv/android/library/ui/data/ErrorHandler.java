@@ -5,6 +5,6 @@ package org.mythtv.android.library.ui.data;
  */
 public interface ErrorHandler {
 
-    public void handleError( String message );
+    public void onHandleError(String message);
 
 }

@@ -81,12 +81,12 @@ public class VideosFragment extends Fragment implements VideoDataConsumer, Video
     }
 
     @Override
-    public void handleError( String message ) {
-        Log.d( TAG, "handleError : enter" );
+    public void onHandleError(String message) {
+        Log.d( TAG, "onHandleError : enter" );
 
         Toast.makeText( getActivity(), message, Toast.LENGTH_LONG ).show();
 
-        Log.d( TAG, "handleError : exit" );
+        Log.d( TAG, "onHandleError : exit" );
     }
 
     public void videoItemClicked(Video video) {

@@ -33,11 +33,11 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
     ProgramItemAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
 
-    OnRecordingClickedListener listener;
+    OnRecordingClickedListener mListener;
 
     public interface OnRecordingClickedListener {
 
-        public void setProgram( Program program );
+        public void onSetProgram( Program program );
 
     }
 
@@ -47,14 +47,14 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
         args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, title );
 
         RecordingsFragment f = new RecordingsFragment();
-        f.setArguments( args );
+        f.setArguments(args);
 
         return f;
     }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.d( TAG, "onCreateView : enter" );
+        Log.d(TAG, "onCreateView : enter");
 
         RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getChildFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
         if( null == recordingsDataFragment ) {
@@ -76,7 +76,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
-        super.onActivityCreated( savedInstanceState );
+        super.onActivityCreated(savedInstanceState);
         Log.d( TAG, "onActivityCreated : enter" );
 
         String title = getArguments().getString( RecordingsDataFragment.TITLE_INFO_TITLE );
@@ -99,58 +99,45 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
 
     @Override
     public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+        super.onAttach(activity);
         Log.d( TAG, "onAttach : enter" );
 
-        if( activity instanceof OnRecordingClickedListener ) {
-            listener = (OnRecordingClickedListener) activity;
+        try {
+
+            mListener = (OnRecordingClickedListener) activity;
+
+        } catch( ClassCastException e ) {
+            throw new ClassCastException( activity.toString() + " must implement OnRecordingClickedListener" );
         }
 
         Log.d( TAG, "onAttach : exit" );
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d( TAG, "onDetach : enter" );
-
-        listener = null;
-
-        Log.d( TAG, "onDetach : exit" );
-    }
-
-    @Override
-    public void setPrograms( List<Program> programs ) {
-        Log.d( TAG, "setPrograms : enter" );
+    public void onSetPrograms( List<Program> programs ) {
+        Log.d( TAG, "onSetPrograms : enter" );
 
         mAdapter = new ProgramItemAdapter( programs, this, !getArguments().containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) );
         mRecyclerView.setAdapter( mAdapter );
 
-        Log.d( TAG, "setPrograms : exit" );
+        Log.d( TAG, "onSetPrograms : exit" );
     }
 
     @Override
-    public void handleError( String message ) {
-        Log.d( TAG, "handleError : enter" );
+    public void onHandleError(String message) {
+        Log.d( TAG, "onHandleError : enter" );
 
         Toast.makeText( getActivity(), message, Toast.LENGTH_LONG ).show();
 
-        Log.d( TAG, "handleError : exit" );
+        Log.d( TAG, "onHandleError : exit" );
     }
 
-    public void programItemClicked(Program program) {
-        Log.d( TAG, "programItemClicked : enter" );
+    public void onProgramItemClicked( Program program ) {
+        Log.d( TAG, "onProgramItemClicked : enter" );
 
-        listener.setProgram( program );
+        mListener.onSetProgram( program );
 
-//        Bundle args = new Bundle();
-//        args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
-//
-//        Intent intent = new Intent( getActivity(), RecordingDetailsActivity.class );
-//        intent.putExtras( args );
-//        startActivity( intent );
-
-        Log.d( TAG, "programItemClicked : exit" );
+        Log.d( TAG, "onProgramItemClicked : exit" );
     }
 
 }

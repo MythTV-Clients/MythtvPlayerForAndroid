@@ -25,18 +25,23 @@ import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
+import org.mythtv.android.player.recordings.RecordingDetailsFragment;
 import org.mythtv.android.player.recordings.RecordingsFragment;
 import org.mythtv.android.player.recordings.TitleInfosFragment;
 import org.mythtv.android.player.videos.VideosFragment;
 
-public class MainActivity extends BaseActionBarActivity implements NavAdapter.OnItemClickListener, TitleInfosFragment.OnTitleInfoClickListener {
+public class MainActivity extends BaseActionBarActivity implements NavAdapter.OnItemClickListener, TitleInfosFragment.OnTitleInfoClickListener, RecordingsFragment.OnRecordingClickedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String SELECTED_ITEM_STATE = "selected_item";
+    private static final String SELECTED_TITLE_STATE = "selected_title";
+    private static final String SELECTED_TITLE_INFO_STATE = "selected_title_info";
+    private static final String SELECTED_PROGRAM_STATE = "selected_program";
 
     private static final String CONTENT_FRAGMENT_TAG = "content_fragment";
 
@@ -57,6 +62,9 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
     private TitleInfo mTitleInfo;
 
     private RecordingsFragment mRecordingsFragment;
+    private Program mProgram;
+
+    private RecordingDetailsFragment mRecordingDetailsFragment;
 
     private VideosFragment mVideosFragment;
 
@@ -143,10 +151,6 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
             public void onBackStackChanged() {
                 Log.v( TAG, "onBackStackChanged : enter" );
 
-                boolean canback = getSupportFragmentManager().getBackStackEntryCount() > 0;
-                Log.v( TAG, "onBackStackChanged : canback=" + canback );
-                getSupportActionBar().setDisplayHomeAsUpEnabled( canback );
-
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag( CONTENT_FRAGMENT_TAG );
                 if( null != fragment ) {
                     Log.v( TAG, "onBackStackChanged : fragment " + fragment.getClass().getName() );
@@ -217,6 +221,26 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
             mSelectedItem = 0;
         }
 
+        if( savedInstanceState.containsKey( SELECTED_TITLE_STATE ) ) {
+            Log.d( TAG, "onRestoreInstanceState : mTitle retrieved from savedInstanceState" );
+
+            mTitle = savedInstanceState.getString( SELECTED_TITLE_STATE );
+
+            setTitle( mTitle );
+        }
+
+        if( savedInstanceState.containsKey( SELECTED_TITLE_INFO_STATE ) ) {
+            Log.d( TAG, "onRestoreInstanceState : mTitleInfo retrieved from savedInstanceState" );
+
+            mTitleInfo = (TitleInfo) savedInstanceState.getSerializable( SELECTED_TITLE_INFO_STATE );
+        }
+
+        if( savedInstanceState.containsKey( SELECTED_PROGRAM_STATE ) ) {
+            Log.d( TAG, "onRestoreInstanceState : mProgram retrieved from savedInstanceState" );
+
+            mProgram = (Program) savedInstanceState.getSerializable( SELECTED_PROGRAM_STATE );
+        }
+
         Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
@@ -238,8 +262,30 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         outState.putInt( SELECTED_ITEM_STATE, mSelectedItem );
 
+        if( null != mTitle ) {
+            outState.putString( SELECTED_TITLE_STATE, mTitle.toString() );
+        }
+
+        if( null != mTitleInfo ) {
+            outState.putSerializable(SELECTED_TITLE_INFO_STATE, mTitleInfo);
+        }
+
+        if( null != mProgram ) {
+            outState.putSerializable( SELECTED_PROGRAM_STATE, mProgram );
+        }
+
         Log.d( TAG, "onSaveInstanceState : exit" );
         super.onSaveInstanceState( outState );
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Log.d( TAG, "onSupportNavigateUp : enter" );
+
+        getSupportFragmentManager().popBackStack();
+
+        Log.d( TAG, "onSupportNavigateUp : exit" );
+        return true;
     }
 
     /* The click listener for RecyclerView in the navigation drawer */
@@ -276,7 +322,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
                 }
 
-                replaceFragment( mTitleInfosFragment, CONTENT_FRAGMENT_TAG, true );
+                replaceFragment( mTitleInfosFragment, CONTENT_FRAGMENT_TAG, false );
 
                 break;
 
@@ -289,7 +335,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
                 }
 
-                replaceFragment( mVideosFragment, CONTENT_FRAGMENT_TAG, true );
+                replaceFragment( mVideosFragment, CONTENT_FRAGMENT_TAG, false );
 
                 break;
 
@@ -430,8 +476,6 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         mTitleInfo = titleInfo;
 
-//        setTitle( titleInfo.getTitle() );
-
         if( null != mRecordingsFragment ) {
             Log.d(TAG, "onTitleInfoClicked : creating new RecordingsFragment");
 
@@ -448,6 +492,28 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         replaceFragment( mRecordingsFragment, CONTENT_FRAGMENT_TAG, true );
 
         Log.d( TAG, "onTitleInfoClicked : exit" );
+    }
+
+    @Override
+    public void onSetProgram( Program program ) {
+        Log.d( TAG, "onSetProgram : enter" );
+
+        mProgram = program;
+
+        if( null != mRecordingDetailsFragment ) {
+            Log.d(TAG, "onTitleInfoClicked : creating new RecordingDetailsFragment");
+
+            removeFragment( mRecordingDetailsFragment );
+        }
+
+        Bundle args = new Bundle();
+        args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
+
+        mRecordingDetailsFragment = (RecordingDetailsFragment) Fragment.instantiate( this, RecordingDetailsFragment.class.getName(), args );
+
+        replaceFragment( mRecordingDetailsFragment, CONTENT_FRAGMENT_TAG, true );
+
+        Log.d( TAG, "onSetProgram : exit" );
     }
 
     private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
