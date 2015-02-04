@@ -107,7 +107,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View rootView = inflater.inflate( R.layout.recording_details, container, false );
+        View rootView = inflater.inflate( R.layout.fragment_recording_details, container, false );
         preview = (ImageView) rootView.findViewById( R.id.recording_preview );
         title = (TextView) rootView.findViewById( R.id.recording_title );
         subTitle = (TextView) rootView.findViewById( R.id.recording_sub_title );
