@@ -2,6 +2,7 @@ package org.mythtv.android.player.recordings;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -96,8 +97,8 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        super.onRestoreInstanceState( savedInstanceState );
         Log.d( TAG, "onRestoreInstanceState : enter" );
+        super.onRestoreInstanceState( savedInstanceState );
 
         if( savedInstanceState.containsKey( RecordingsDataFragment.TITLE_INFO_TITLE ) ) {
             mTitle = savedInstanceState.getString( RecordingsDataFragment.TITLE_INFO_TITLE );
@@ -111,27 +112,27 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
         Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        Log.d( TAG, "onSupportNavigateUp : enter" );
-
-        Log.d( TAG, "onSupportNavigateUp : backstack count=" + getSupportFragmentManager().getBackStackEntryCount() );
-        if( getSupportFragmentManager().getBackStackEntryCount() > 0 ) {
-            getSupportFragmentManager().popBackStack();
-
-            if( null != mTitle && !"".equals( mTitle ) ) {
-                getSupportActionBar().setTitle( mTitle );
-            } else {
-                getSupportActionBar().setTitle( getResources().getString( R.string.all_recordings ) );
-            }
-
-            Log.d( TAG, "onSupportNavigateUp : exit, removing recordingDetailsFragment" );
-            return true;
-        }
-
-        Log.d( TAG, "onSupportNavigateUp : exit" );
-        return super.onSupportNavigateUp();
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        Log.d( TAG, "onSupportNavigateUp : enter" );
+//
+//        Log.d( TAG, "onSupportNavigateUp : backstack count=" + getSupportFragmentManager().getBackStackEntryCount() );
+//        if( getSupportFragmentManager().getBackStackEntryCount() > 0 ) {
+//            getSupportFragmentManager().popBackStack();
+//
+//            if( null != mTitle && !"".equals( mTitle ) ) {
+//                getSupportActionBar().setTitle( mTitle );
+//            } else {
+//                getSupportActionBar().setTitle( getResources().getString( R.string.all_recordings ) );
+//            }
+//
+//            Log.d( TAG, "onSupportNavigateUp : exit, removing recordingDetailsFragment" );
+//            return true;
+//        }
+//
+//        Log.d( TAG, "onSupportNavigateUp : exit" );
+//        return super.onSupportNavigateUp();
+//    }
 
     @Override
     public void onSetProgram( Program program ) {
@@ -140,17 +141,21 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
         Bundle args = new Bundle();
         args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
 
-        RecordingDetailsFragment recordingDetailsFragment = (RecordingDetailsFragment) getFragmentManager().findFragmentByTag( RECORDING_DETAILS_FRAGMENT_TAG );
-        if( null == recordingDetailsFragment ) {
+        Intent recordingDetails = new Intent( RecordingsActivity.this, RecordingDetailsActivity.class );
+        recordingDetails.putExtras( args );
+        startActivity( recordingDetails );
 
-            recordingDetailsFragment = (RecordingDetailsFragment) Fragment.instantiate( this, RecordingDetailsFragment.class.getName(), args );
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace( R.id.content_frame, recordingDetailsFragment, RECORDING_DETAILS_FRAGMENT_TAG );
-            transaction.addToBackStack( null );
-            transaction.commit();
-
-        }
+//        RecordingDetailsFragment recordingDetailsFragment = (RecordingDetailsFragment) getFragmentManager().findFragmentByTag( RECORDING_DETAILS_FRAGMENT_TAG );
+//        if( null == recordingDetailsFragment ) {
+//
+//            recordingDetailsFragment = (RecordingDetailsFragment) Fragment.instantiate( this, RecordingDetailsFragment.class.getName(), args );
+//
+//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//            transaction.replace( R.id.content_frame, recordingDetailsFragment, RECORDING_DETAILS_FRAGMENT_TAG );
+//            transaction.addToBackStack( null );
+//            transaction.commit();
+//
+//        }
 
         Log.d( TAG, "onSetProgram : exit" );
     }

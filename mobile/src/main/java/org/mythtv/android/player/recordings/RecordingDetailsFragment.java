@@ -53,17 +53,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
     String fullUrl;
 
-    public static RecordingDetailsFragment newInstance( Program program ) {
-
-        Bundle args = new Bundle();
-        args.putSerializable(PROGRAM_KEY, program);
-
-        RecordingDetailsFragment f = new RecordingDetailsFragment();
-        f.setArguments( args );
-
-        return f;
-    }
-
     @Override
     public Loader onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
