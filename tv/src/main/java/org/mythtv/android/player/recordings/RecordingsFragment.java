@@ -1,9 +1,8 @@
 package org.mythtv.android.player.recordings;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -31,24 +31,28 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.core.service.DvrServiceHelper;
+import org.mythtv.android.library.ui.data.RecordingDataConsumer;
+import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.android.player.PicassoBackgroundManagerTarget;
-import org.mythtv.android.player.R;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 
-public class RecordingsFragment extends BrowseFragment {
+public class RecordingsFragment extends BrowseFragment implements RecordingDataConsumer {
 
     private static final String TAG = RecordingsFragment.class.getSimpleName();
+    private static final String RECORDINGS_DATA_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
 
     private ArrayObjectAdapter mRowsAdapter;
     private Drawable mDefaultBackground;
@@ -59,70 +63,80 @@ public class RecordingsFragment extends BrowseFragment {
     private URI mBackgroundURI;
     RecordingCardPresenter mRecordingCardPresenter;
 
-    DvrServiceHelper mDvrServiceHelper;
-
     BrowseFragment mBrowseFragment;
 
-    private ProgramLoaderCompleteReceiver mProgramLoaderCompleteReceiver = new ProgramLoaderCompleteReceiver();
-    private BackendConnectedBroadcastReceiver mBackendConnectedBroadcastReceiver = new BackendConnectedBroadcastReceiver();
+    @Override
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
+        Log.i(TAG, "onCreateView : enter");
+
+        RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getChildFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
+        if( null == recordingsDataFragment ) {
+            Log.d( TAG, "selectItem : creating new RecordingsDataFragment");
+
+            recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate(getActivity(), RecordingsDataFragment.class.getName(), getArguments());
+            recordingsDataFragment.setRetainInstance( true );
+            recordingsDataFragment.setConsumer( this );
+
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
+            transaction.commit();
+
+        }
+
+        Log.i( TAG, "onCreateView : exit" );
+        return super.onCreateView( inflater, container, savedInstanceState );
+    }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
         super.onActivityCreated( savedInstanceState );
         Log.i( TAG, "onActivityCreated : enter" );
 
+        prepareBackgroundManager();
+        setupUIElements();
+        setupEventListeners();
+
         Log.i( TAG, "onActivityCreated : exit" );
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume : enter");
+    public void onSetPrograms( List<Program> programs ) {
+        Log.i( TAG, "onSetPrograms : enter" );
 
-        IntentFilter programLoaderCompleteIntentFilter = new IntentFilter( DvrServiceHelper.ACTION_COMPLETE );
-        getActivity().registerReceiver( mProgramLoaderCompleteReceiver, programLoaderCompleteIntentFilter );
+        Map<String, String> categoryMap = new TreeMap<String, String>();
+        Map<String, List<Program>> programMap = new TreeMap<String, List<Program>>();
 
-        IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
-        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
-        getActivity().registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
+        for( Program program : programs ) {
 
-        Log.i( TAG, "onResume : exit" );
-    }
+            String cleanedTitle = program.getTitle(); //cleanArticles( program.getTitle() );
+            if( !programMap.containsKey( cleanedTitle ) ) {
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause : enter");
+                List<Program> categoryPrograms = new ArrayList<Program>();
+                categoryPrograms.add( program );
+                programMap.put( cleanedTitle, categoryPrograms );
 
-        if( null != mProgramLoaderCompleteReceiver ) {
-            getActivity().unregisterReceiver( mProgramLoaderCompleteReceiver );
+                categoryMap.put( cleanedTitle, program.getTitle() );
+
+            } else {
+
+                programMap.get( cleanedTitle ).add( program );
+
+            }
+
         }
-
-        if( null != mBackendConnectedBroadcastReceiver ) {
-            getActivity().unregisterReceiver( mBackendConnectedBroadcastReceiver );
-        }
-
-        Log.i( TAG, "onPause : exit" );
-    }
-
-    private void loadRows() {
-        Log.d( TAG, "loadRows : enter" );
-
-        Map<String, String> categories = mDvrServiceHelper.getCategories();
-        Map<String, List<Program>> programs = mDvrServiceHelper.getPrograms();
 
         mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
         mRecordingCardPresenter = new RecordingCardPresenter();
 
         int i = 0;
-        for( String category : categories.keySet() ) {
+        for( String category : categoryMap.keySet() ) {
 
             ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( mRecordingCardPresenter );
-            for( Program program : programs.get( category ) ) {
+            for( Program program : programMap.get( category ) ) {
                 listRowAdapter.add( program );
             }
 
-            HeaderItem header = new HeaderItem( i, categories.get( category ), null );
+            HeaderItem header = new HeaderItem( i, categoryMap.get( category ), null );
             mRowsAdapter.add(new ListRow( header, listRowAdapter ) );
 
             i++;
@@ -137,7 +151,16 @@ public class RecordingsFragment extends BrowseFragment {
 
         setAdapter( mRowsAdapter );
 
-        Log.d( TAG, "loadRows : exit" );
+        Log.i( TAG, "onSetPrograms : exit" );
+    }
+
+    @Override
+    public void onHandleError( String message ) {
+        Log.i( TAG, "onHandleError : enter" );
+
+        Toast.makeText( getActivity(), message, Toast.LENGTH_LONG ).show();
+
+        Log.i( TAG, "onHandleError : exit" );
     }
 
     private void prepareBackgroundManager() {
@@ -241,21 +264,21 @@ public class RecordingsFragment extends BrowseFragment {
         };
     }
 
-    protected void setDefaultBackground(Drawable background) {
+    protected void setDefaultBackground( Drawable background ) {
         mDefaultBackground = background;
     }
 
-    protected void setDefaultBackground(int resourceId) {
-        mDefaultBackground = getResources().getDrawable(resourceId);
+    protected void setDefaultBackground( int resourceId ) {
+        mDefaultBackground = getResources().getDrawable( resourceId );
     }
 
-    protected void updateBackground(URI uri) {
-        Picasso.with(getActivity())
-                .load(uri.toString())
-                .resize(mMetrics.widthPixels, mMetrics.heightPixels)
+    protected void updateBackground( URI uri ) {
+        Picasso.with( getActivity() )
+                .load( uri.toString() )
+                .resize( mMetrics.widthPixels, mMetrics.heightPixels )
                 .centerCrop()
-                .error(mDefaultBackground)
-                .into(mBackgroundTarget);
+                .error( mDefaultBackground )
+                .into( mBackgroundTarget );
     }
 
     protected void updateBackground(Drawable drawable) {
@@ -311,52 +334,6 @@ public class RecordingsFragment extends BrowseFragment {
         @Override
         public void onUnbindViewHolder(ViewHolder viewHolder) {
         }
-    }
-
-    private class ProgramLoaderCompleteReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive( Context context, Intent intent ) {
-
-            // when we receive a syc complete action reset the loader so it can refresh the content
-            if( intent.getAction().equals( DvrServiceHelper.ACTION_COMPLETE ) ) {
-                loadRows();
-            }
-
-        }
-
-    }
-
-    private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
-
-        private final String TAG = BackendConnectedBroadcastReceiver.class.getSimpleName();
-
-        @Override
-        public void onReceive( Context context, Intent intent ) {
-            Log.d( TAG, "onReceive : enter" );
-
-            if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
-                Log.v(TAG, "onReceive : backend is connected");
-
-                mDvrServiceHelper = new DvrServiceHelper( getActivity().getApplicationContext() );
-
-                prepareBackgroundManager();
-
-                setupUIElements();
-
-                setupEventListeners();
-
-            }
-
-            if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
-                Log.v( TAG, "onReceive : backend is NOT connected" );
-
-                Toast.makeText( getActivity(), "Backend not connected", Toast.LENGTH_SHORT ).show();
-            }
-
-            Log.d( TAG, "onReceive : exit" );
-        }
-
     }
 
 }

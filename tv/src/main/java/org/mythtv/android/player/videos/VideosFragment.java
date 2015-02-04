@@ -31,12 +31,12 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.service.VideoServiceHelper;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.android.player.PicassoBackgroundManagerTarget;
-import org.mythtv.android.player.R;
 
 import java.net.URI;
 import java.net.URISyntaxException;

@@ -14,9 +14,9 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.player.R;
 
 public class RecordingCardPresenter extends Presenter {
 

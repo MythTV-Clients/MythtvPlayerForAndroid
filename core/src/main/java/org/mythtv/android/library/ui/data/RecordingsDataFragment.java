@@ -1,9 +1,9 @@
 package org.mythtv.android.library.ui.data;
 
+import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,7 +105,7 @@ public class RecordingsDataFragment extends Fragment {
     private void handleUpdate() {
         Log.v( TAG, "handleUpdate : enter" );
 
-        consumer.onSetPrograms(programs);
+        consumer.onSetPrograms( programs );
 
         Log.v(TAG, "handleUpdate : exit");
     }
@@ -141,7 +141,7 @@ public class RecordingsDataFragment extends Fragment {
 
                     Program program = Program.fromDetails( programDetails );
 
-                    if( !"LiveTV".equals( program.getRecording().getRecGroup() ) ) {
+                    if( !"LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ) {
                         Log.v( TAG, "onPostExecute : program added" );
                         programs.add( program );
                     }
@@ -152,7 +152,7 @@ public class RecordingsDataFragment extends Fragment {
             } else {
                 Log.e(TAG, "onPostExecute : error, failed to load recorded programs");
 
-                consumer.onHandleError("failed to load recorded programs");
+                consumer.onHandleError( "failed to load recorded programs" );
 
             }
 

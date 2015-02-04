@@ -3,8 +3,7 @@ package org.mythtv.android.player.recordings;
 import android.app.Activity;
 import android.os.Bundle;
 
-import org.mythtv.android.player.R;
-
+import org.mythtv.android.R;
 
 public class RecordingDetailsActivity extends Activity {
     /**

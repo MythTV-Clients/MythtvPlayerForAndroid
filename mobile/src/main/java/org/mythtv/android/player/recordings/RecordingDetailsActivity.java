@@ -1,8 +1,8 @@
 package org.mythtv.android.player.recordings;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
@@ -36,7 +36,7 @@ public class RecordingDetailsActivity extends BaseActionBarActivity {
 
         getSupportActionBar().setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
 
-        RecordingDetailsFragment recordingDetailsFragment = (RecordingDetailsFragment) getSupportFragmentManager().findFragmentByTag( RECORDING_DETAILS_FRAGMENT_TAG );
+        RecordingDetailsFragment recordingDetailsFragment = (RecordingDetailsFragment) getFragmentManager().findFragmentByTag( RECORDING_DETAILS_FRAGMENT_TAG );
         if( null == recordingDetailsFragment ) {
             Log.d( TAG, "onCreate : creating new RecordingDetailsFragment" );
 
@@ -45,7 +45,7 @@ public class RecordingDetailsActivity extends BaseActionBarActivity {
 
             recordingDetailsFragment = (RecordingDetailsFragment) Fragment.instantiate( this, RecordingDetailsFragment.class.getName(), args );
 
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace( R.id.content_frame, recordingDetailsFragment, RECORDING_DETAILS_FRAGMENT_TAG );
             transaction.addToBackStack( null );
             transaction.commit();

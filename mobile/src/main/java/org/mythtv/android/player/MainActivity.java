@@ -1,5 +1,8 @@
 package org.mythtv.android.player;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +12,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -145,13 +145,20 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         super.onResume();
         Log.i( TAG, "onResume : enter" );
 
-        getSupportFragmentManager().addOnBackStackChangedListener( new FragmentManager.OnBackStackChangedListener() {
+        getFragmentManager().addOnBackStackChangedListener( new FragmentManager.OnBackStackChangedListener() {
 
             @Override
             public void onBackStackChanged() {
                 Log.v( TAG, "onBackStackChanged : enter" );
 
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag( CONTENT_FRAGMENT_TAG );
+                Log.v( TAG, "onBackStackChanged : backstack count=" + getFragmentManager().getBackStackEntryCount() );
+                if( getFragmentManager().getBackStackEntryCount() > 0 ) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled( true );
+                } else {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled( false );
+                }
+
+                Fragment fragment = getFragmentManager().findFragmentByTag( CONTENT_FRAGMENT_TAG );
                 if( null != fragment ) {
                     Log.v( TAG, "onBackStackChanged : fragment " + fragment.getClass().getName() );
                 }
@@ -177,7 +184,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
         registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
 
-        if( ( (MainApplication) getApplicationContext() ).isConnected() ) {
+        if( mMainApplication.isConnected() ) {
             Log.d( TAG, "onResume : backend already connected" );
 
             selectItem( mSelectedItem );
@@ -197,7 +204,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
             } else {
                 Log.d( TAG, "onResume : resetting backend connection" );
 
-                ( (MainApplication) getApplicationContext() ).resetBackend();
+                mMainApplication.resetBackend();
 
             }
 
@@ -359,7 +366,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
     private void addFragment( Fragment fragment, String tag, boolean addToBackStack ) {
 
-        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction tx = getFragmentManager().beginTransaction();
         tx.add(R.id.content_frame, fragment, tag);
 
         if( addToBackStack ) {
@@ -372,7 +379,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
     private void replaceFragment( Fragment fragment, String tag, boolean addToBackStack ) {
 
-        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction tx = getFragmentManager().beginTransaction();
         tx.replace( R.id.content_frame, fragment, tag );
 
         if( addToBackStack ) {
@@ -385,7 +392,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
     private void removeFragment( Fragment fragment ) {
 
-        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction tx = getFragmentManager().beginTransaction();
         tx.remove( fragment );
         tx.commit();
 
@@ -421,25 +428,6 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         mDrawerToggle.onConfigurationChanged( newConfig );
 
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu( Menu menu ) {
-//
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate( R.menu.main, menu );
-//
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu( Menu menu ) {
-//
-//        // If the nav drawer is open, hide action items related to the content view
-//        boolean drawerOpen = mDrawerLayout.isDrawerOpen( mDrawerList );
-//        menu.findItem( R.id.action_example ).setVisible( !drawerOpen );
-//
-//        return super.onPrepareOptionsMenu( menu );
-//    }
 
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
@@ -489,7 +477,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         mRecordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName(), args );
 
-        replaceFragment( mRecordingsFragment, CONTENT_FRAGMENT_TAG, true );
+        addFragment( mRecordingsFragment, CONTENT_FRAGMENT_TAG, true );
 
         Log.d( TAG, "onTitleInfoClicked : exit" );
     }
@@ -511,7 +499,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         mRecordingDetailsFragment = (RecordingDetailsFragment) Fragment.instantiate( this, RecordingDetailsFragment.class.getName(), args );
 
-        replaceFragment( mRecordingDetailsFragment, CONTENT_FRAGMENT_TAG, true );
+        addFragment( mRecordingDetailsFragment, CONTENT_FRAGMENT_TAG, true );
 
         Log.d( TAG, "onSetProgram : exit" );
     }
@@ -539,13 +527,13 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
                 Bundle args = new Bundle();
                 args.putBoolean( ConnectingFragment.CONNECTED_KEY, false );
 
-                ConnectingFragment connectingFragment = (ConnectingFragment) getSupportFragmentManager().findFragmentByTag( CONTENT_FRAGMENT_TAG );
+                ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONTENT_FRAGMENT_TAG );
                 if( null == connectingFragment ) {
                     Log.d( TAG, "onResume : creating new ConnectingFragment" );
 
                     connectingFragment = (ConnectingFragment) Fragment.instantiate( MainActivity.this, ConnectingFragment.class.getName(), args );
 
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace( R.id.content_frame, connectingFragment, CONTENT_FRAGMENT_TAG );
                     transaction.commit();
 

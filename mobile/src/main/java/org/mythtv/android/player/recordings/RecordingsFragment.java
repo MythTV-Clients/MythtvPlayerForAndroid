@@ -1,9 +1,9 @@
 package org.mythtv.android.player.recordings;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,7 +64,7 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
             recordingsDataFragment.setRetainInstance( true );
             recordingsDataFragment.setConsumer( this );
 
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
             transaction.commit();
 

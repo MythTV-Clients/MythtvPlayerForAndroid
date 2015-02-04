@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
-import org.mythtv.android.player.R;
 
 public class VideosActivity extends Activity {
 

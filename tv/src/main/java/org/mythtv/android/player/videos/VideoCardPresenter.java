@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.player.R;
 
 public class VideoCardPresenter extends Presenter {
 

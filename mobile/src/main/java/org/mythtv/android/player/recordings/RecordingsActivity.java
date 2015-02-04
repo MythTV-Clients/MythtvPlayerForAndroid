@@ -1,8 +1,8 @@
 package org.mythtv.android.player.recordings;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
@@ -45,7 +45,7 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
             mTitle = getIntent().getStringExtra( RecordingsDataFragment.TITLE_INFO_TITLE );
         }
 
-        RecordingsFragment recordingsFragment = (RecordingsFragment) getSupportFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
+        RecordingsFragment recordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
         if( null == recordingsFragment ) {
             Log.d( TAG, "onCreate : creating new RecordingsFragment" );
 
@@ -55,7 +55,7 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
             }
 
             recordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName(), args );
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
 //            transaction.addToBackStack( null );
             transaction.commit();
@@ -140,12 +140,12 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
         Bundle args = new Bundle();
         args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
 
-        RecordingDetailsFragment recordingDetailsFragment = (RecordingDetailsFragment) getSupportFragmentManager().findFragmentByTag( RECORDING_DETAILS_FRAGMENT_TAG );
+        RecordingDetailsFragment recordingDetailsFragment = (RecordingDetailsFragment) getFragmentManager().findFragmentByTag( RECORDING_DETAILS_FRAGMENT_TAG );
         if( null == recordingDetailsFragment ) {
 
             recordingDetailsFragment = (RecordingDetailsFragment) Fragment.instantiate( this, RecordingDetailsFragment.class.getName(), args );
 
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace( R.id.content_frame, recordingDetailsFragment, RECORDING_DETAILS_FRAGMENT_TAG );
             transaction.addToBackStack( null );
             transaction.commit();

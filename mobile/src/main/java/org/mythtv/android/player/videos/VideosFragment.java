@@ -1,9 +1,9 @@
 package org.mythtv.android.player.videos;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,7 +44,7 @@ public class VideosFragment extends Fragment implements VideoDataConsumer, Video
             videosDataFragment.setRetainInstance( true );
             videosDataFragment.setConsumer( this );
 
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.add( videosDataFragment, VIDEOS_DATA_FRAGMENT_TAG );
             transaction.commit();
 
