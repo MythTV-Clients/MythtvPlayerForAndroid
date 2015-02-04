@@ -41,17 +41,6 @@ public class RecordingsFragment extends Fragment implements RecordingDataConsume
 
     }
 
-    public static RecordingsFragment newInstance( String title ) {
-
-        Bundle args = new Bundle();
-        args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, title );
-
-        RecordingsFragment f = new RecordingsFragment();
-        f.setArguments(args);
-
-        return f;
-    }
-
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d(TAG, "onCreateView : enter");

@@ -34,6 +34,12 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
 
     OnTitleInfoClickListener mListener;
 
+    public interface OnTitleInfoClickListener {
+
+        void onTitleInfoClicked( TitleInfo titleInfo );
+
+    }
+
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
@@ -122,12 +128,6 @@ public class TitleInfosFragment extends Fragment implements TitleInfoDataConsume
 //        startActivity( recordings );
 
         Log.d( TAG, "titleInfoItemClicked : exit" );
-    }
-
-    public interface OnTitleInfoClickListener {
-
-        void onTitleInfoClicked( TitleInfo titleInfo );
-
     }
 
 }

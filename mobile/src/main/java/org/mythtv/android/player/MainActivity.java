@@ -30,6 +30,7 @@ import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.android.player.recordings.RecordingDetailsFragment;
+import org.mythtv.android.player.recordings.RecordingsActivity;
 import org.mythtv.android.player.recordings.RecordingsFragment;
 import org.mythtv.android.player.recordings.TitleInfosFragment;
 import org.mythtv.android.player.videos.VideosFragment;
@@ -478,9 +479,13 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
             args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, mTitleInfo.getTitle() );
         }
 
-        mRecordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName(), args );
+        Intent recordings = new Intent( MainActivity.this, RecordingsActivity.class );
+        recordings.putExtras( args );
+        startActivity( recordings );
 
-        replaceFragment( mRecordingsFragment, RECORDINGS_FRAGMENT_TAG, true );
+//        mRecordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName(), args );
+
+//        replaceFragment( mRecordingsFragment, RECORDINGS_FRAGMENT_TAG, true );
 
         Log.d( TAG, "onTitleInfoClicked : exit" );
     }
