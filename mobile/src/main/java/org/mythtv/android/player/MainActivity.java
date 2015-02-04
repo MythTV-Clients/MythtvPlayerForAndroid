@@ -44,6 +44,9 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
     private static final String SELECTED_PROGRAM_STATE = "selected_program";
 
     private static final String CONTENT_FRAGMENT_TAG = "content_fragment";
+    private static final String TITLE_INFOS_FRAGEMENT_TAG = TitleInfosFragment.class.getCanonicalName();
+    private static final String RECORDINGS_FRAGMENT_TAG = RecordingsFragment.class.getCanonicalName();
+    private static final String RECORDING_DETAILS_FRAGMENT_TAG = RecordingDetailsFragment.class.getCanonicalName();
 
     private MainApplication mMainApplication;
 
@@ -329,7 +332,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
                 }
 
-                replaceFragment( mTitleInfosFragment, CONTENT_FRAGMENT_TAG, false );
+                replaceFragment( mTitleInfosFragment, TITLE_INFOS_FRAGEMENT_TAG, false );
 
                 break;
 
@@ -407,7 +410,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
     }
 
     /**
-     * When using the ActionBarDrawerToggle, you must call it during
+     * When using the ActionBarDrawerTogCONTENT_FRAGMENT_TAGgle, you must call it during
      * onPostCreate() and onConfigurationChanged()...
      */
 
@@ -477,7 +480,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         mRecordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName(), args );
 
-        addFragment( mRecordingsFragment, CONTENT_FRAGMENT_TAG, true );
+        replaceFragment( mRecordingsFragment, RECORDINGS_FRAGMENT_TAG, true );
 
         Log.d( TAG, "onTitleInfoClicked : exit" );
     }
@@ -499,7 +502,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         mRecordingDetailsFragment = (RecordingDetailsFragment) Fragment.instantiate( this, RecordingDetailsFragment.class.getName(), args );
 
-        addFragment( mRecordingDetailsFragment, CONTENT_FRAGMENT_TAG, true );
+        replaceFragment( mRecordingDetailsFragment, RECORDING_DETAILS_FRAGMENT_TAG, true );
 
         Log.d( TAG, "onSetProgram : exit" );
     }
