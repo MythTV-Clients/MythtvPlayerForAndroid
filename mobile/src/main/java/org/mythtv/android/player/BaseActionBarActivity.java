@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
@@ -48,6 +49,8 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
 
         if( MainApplication.getInstance().isConnected() ) {
             updateData();
+        } else {
+            MainApplication.getInstance().resetBackend();
         }
 
     }
@@ -60,6 +63,7 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
             unregisterReceiver( mBackendConnectedBroadcastReceiver );
         }
 
+        MainApplication.getInstance().disconnect();
     }
 
     protected abstract int getLayoutResource();
@@ -115,8 +119,8 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
 
             }
 
-//            if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
-//
+            if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
+
 //                Bundle args = new Bundle();
 //                args.putBoolean( ConnectingFragment.CONNECTED_KEY, false );
 //
@@ -130,10 +134,10 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
 //                    transaction.commit();
 //
 //                }
-//
-//                Toast.makeText( ShowsActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
-//
-//            }
+
+                Toast.makeText( BaseActionBarActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
+
+            }
 
         }
 

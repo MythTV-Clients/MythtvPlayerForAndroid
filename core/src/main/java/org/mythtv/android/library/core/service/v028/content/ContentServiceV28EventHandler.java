@@ -3,6 +3,7 @@ package org.mythtv.android.library.core.service.v028.content;
 import android.content.Context;
 import android.util.Log;
 
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.events.content.AddLiveStreamEvent;
 import org.mythtv.android.library.events.content.AddRecordingLiveStreamEvent;
@@ -62,6 +63,11 @@ public class ContentServiceV28EventHandler implements ContentService {
             mLiveStreamInfoList = mMythTvApiContext.getContentService().getLiveStreamList( event.getFileName(), eTagInfo, ALL_LIVE_STREAM_REQ_ID ) ;
         } catch( RetrofitError e ) {
             Log.e( TAG, "getLiveStreamInfoList : error - " + e.getMessage() );
+
+            if( e.getKind() == RetrofitError.Kind.NETWORK ) {
+                MainApplication.getInstance().disconnect();
+            }
+
         }
 
         if( null != mLiveStreamInfoList ) {
@@ -94,6 +100,10 @@ public class ContentServiceV28EventHandler implements ContentService {
 
                 Log.v( TAG, "getLiveStream : exit, not modified" );
                 return LiveStreamDetailsEvent.notModified( event.getKey() );
+            }
+
+            if( e.getKind() == RetrofitError.Kind.NETWORK ) {
+                MainApplication.getInstance().disconnect();
             }
 
         }

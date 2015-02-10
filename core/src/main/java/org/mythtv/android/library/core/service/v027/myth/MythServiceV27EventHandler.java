@@ -3,6 +3,7 @@ package org.mythtv.android.library.core.service.v027.myth;
 import android.content.Context;
 import android.util.Log;
 
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.service.MythService;
 import org.mythtv.android.library.events.myth.HostNameDetails;
 import org.mythtv.android.library.events.myth.HostNameDetailsEvent;
@@ -52,6 +53,10 @@ public class MythServiceV27EventHandler implements MythService {
 
                 Log.v( TAG, "getHostName : exit, not modified" );
                 return new HostNameDetailsEvent( new HostNameDetails( mHostName ) );
+            }
+
+            if( e.getKind() == RetrofitError.Kind.NETWORK ) {
+                MainApplication.getInstance().disconnect();
             }
 
         }

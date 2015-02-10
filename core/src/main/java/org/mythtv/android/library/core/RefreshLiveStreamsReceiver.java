@@ -15,15 +15,15 @@ import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants
  */
 public class RefreshLiveStreamsReceiver extends BroadcastReceiver {
 
-    private static final String TAG = RefreshLiveStreamsReceiver.class.getSimpleName();
-    
     @Override
     public void onReceive( Context context, Intent intent ) {
-        Log.v( TAG, "onReceive : enter" );
 
-        new RefreshLiveStreamsTask( context ).execute();
+        if( MainApplication.getInstance().isConnected() ) {
 
-        Log.v( TAG, "onReceive : exit" );
+            new RefreshLiveStreamsTask( context ).execute();
+
+        }
+
     }
 
     private class RefreshLiveStreamsTask extends AsyncTask<Void, Void, Void> {

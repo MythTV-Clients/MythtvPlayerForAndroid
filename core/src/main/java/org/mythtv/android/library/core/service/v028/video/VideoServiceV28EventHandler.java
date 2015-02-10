@@ -2,6 +2,7 @@ package org.mythtv.android.library.core.service.v028.video;
 
 import android.util.Log;
 
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.service.VideoService;
 import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.RequestAllVideosEvent;
@@ -46,6 +47,11 @@ public class VideoServiceV28EventHandler implements VideoService {
             mVideoList = mMythTvApiContext.getVideoService().getVideoList( event.getFolder(), event.getSort(), event.getDescending(), event.getStartIndex(), event.getCount(), eTagInfo, VIDEO_LIST_REQ_ID );
         } catch( RetrofitError e ) {
             Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
+
+            if( e.getKind() == RetrofitError.Kind.NETWORK ) {
+                MainApplication.getInstance().disconnect();
+            }
+
         }
 
         if( null != mVideoList ) {

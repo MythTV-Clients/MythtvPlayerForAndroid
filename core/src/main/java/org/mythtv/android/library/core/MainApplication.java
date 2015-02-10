@@ -76,7 +76,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        initializeApi();
+//        initializeApi();
 
         sInstance = this;
 
@@ -92,10 +92,14 @@ public class MainApplication extends Application {
     }
 
     public void disconnect() {
+        Log.i( TAG, "Disconnecting..." );
+
+        if( mConnected ) {
+            mDvrService.cleanup(new DeleteEvent());
+        }
 
         mConnected = false;
-
-        mDvrService.cleanup( new DeleteEvent() );
+        cancelAlarms();
 
     }
 
@@ -152,11 +156,9 @@ public class MainApplication extends Application {
     public String getMasterBackendHostName() { return mBackendHostname; }
 
     private void initializeApi() {
-        Log.d( TAG, "initializeApi : enter" );
 
         new ServerVersionAsyncTask().execute();
 
-        Log.d( TAG, "initializeApi : exit" );
     }
 
     private class ServerVersionAsyncTask extends AsyncTask<Void, Void, ApiVersion> {
@@ -174,8 +176,10 @@ public class MainApplication extends Application {
             Log.v( TAG, "url=" + getMasterBackendUrl() );
 
             try {
+
                 Log.v( TAG, "doInBackground : exit" );
                 return ServerVersionQuery.getMythVersion( getMasterBackendUrl(), 1000, TimeUnit.MILLISECONDS );
+
             } catch( IOException e ) {
                 Log.e( TAG, "error creating MythTvApiContext, could not reach '" + getMasterBackendUrl() + "'", e );
 

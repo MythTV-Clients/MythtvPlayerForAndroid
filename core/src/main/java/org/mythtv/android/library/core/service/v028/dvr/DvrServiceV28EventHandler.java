@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import org.mythtv.android.library.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.events.DeleteEvent;
 import org.mythtv.android.library.events.DeletedEvent;
@@ -59,6 +60,11 @@ public class DvrServiceV28EventHandler implements DvrService {
             mProgramList = mMythTvApiContext.getDvrService().getRecordedList( event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID );
         } catch( RetrofitError e ) {
             Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
+
+            if( e.getKind() == RetrofitError.Kind.NETWORK ) {
+                MainApplication.getInstance().disconnect();
+            }
+
         }
 
         if( null != mProgramList ) {
@@ -83,6 +89,11 @@ public class DvrServiceV28EventHandler implements DvrService {
             mTitleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
         } catch( RetrofitError e ) {
             Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
+
+            if( e.getKind() == RetrofitError.Kind.NETWORK ) {
+                MainApplication.getInstance().disconnect();
+            }
+
         }
 
         if( null != mTitleInfoList ) {
