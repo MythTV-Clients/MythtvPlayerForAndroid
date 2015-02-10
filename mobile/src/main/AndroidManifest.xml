@@ -28,10 +28,6 @@
             android:name=".player.player.SimplePlayerActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <!-- activity
-            android:name=".player.recordings.ShowsActivity"
-            android:label="@string/drawer_item_watch_recordings" >
-        </activity -->
         <activity
             android:name=".player.recordings.RecordingsActivity"
             android:launchMode="singleTop"
@@ -53,10 +49,10 @@
         </activity>
         <activity
             android:name=".player.videos.VideoDetailsActivity"
-            android:parentActivityName=".player.MainActivity" >
+            android:parentActivityName=".player.videos.VideosActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".player.MainActivity" />
+                android:value=".player.videos.VideosActivity" />
         </activity>
         <activity
             android:name=".library.ui.settings.SettingsActivity"
