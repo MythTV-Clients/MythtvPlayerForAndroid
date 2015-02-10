@@ -120,17 +120,6 @@ public class NavigationDrawerFragment extends Fragment {
             public void onClick( View view, int position ) {
                 Log.v( TAG, "onClick : enter" );
 
-                mDrawerLayout.closeDrawer(containerView);
-                mDrawerLayout.post( new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                        mDrawerToggle.syncState();
-
-                    }
-
-                });
 
                 switch( position ) {
 
@@ -140,6 +129,8 @@ public class NavigationDrawerFragment extends Fragment {
                             startActivity( new Intent( getActivity(), ShowsActivity.class ) );
                         }
 
+                        mDrawerLayout.closeDrawer( containerView );
+
                         break;
 
                     case 1 :
@@ -148,11 +139,16 @@ public class NavigationDrawerFragment extends Fragment {
                             startActivity( new Intent( getActivity(), VideosActivity.class ) );
                         }
 
+                        mDrawerLayout.closeDrawer( containerView );
+
                         break;
 
                     case 2 :
 
                         startActivity( new Intent( getActivity(), SettingsActivity.class ) );
+
+                        mDrawerLayout.closeDrawer( containerView );
+
                         break;
 
                 }
@@ -168,17 +164,30 @@ public class NavigationDrawerFragment extends Fragment {
 
                     case 0 :
 
-                        startActivity( new Intent( getActivity(), ShowsActivity.class ) );
+                        if( !( getActivity() instanceof ShowsActivity ) ) {
+                            startActivity( new Intent( getActivity(), ShowsActivity.class ) );
+                        }
+
+                        mDrawerLayout.closeDrawer( containerView );
+
                         break;
 
                     case 1 :
 
-                        startActivity( new Intent( getActivity(), VideosActivity.class ) );
+                        if( !( getActivity() instanceof VideosActivity ) ) {
+                            startActivity( new Intent( getActivity(), VideosActivity.class ) );
+                        }
+
+                        mDrawerLayout.closeDrawer( containerView );
+
                         break;
 
                     case 2 :
 
                         startActivity( new Intent( getActivity(), SettingsActivity.class ) );
+
+                        mDrawerLayout.closeDrawer( containerView );
+
                         break;
 
                 }
