@@ -86,7 +86,7 @@ public class NavigationDrawerFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mUserLearnedDrawer = Boolean.valueOf( readFromPreferences( getActivity(), KEY_USER_LEARNED_DRAWER, "false" ) );
-        mSelectedItem = Integer.parseInt(readFromPreferences(getActivity(), SELECTED_ITEM_STATE, "0"));
+        mSelectedItem = Integer.parseInt( readFromPreferences( getActivity(), SELECTED_ITEM_STATE, "0" ) );
 
         if( savedInstanceState == null ) {
 
@@ -120,7 +120,7 @@ public class NavigationDrawerFragment extends Fragment {
             public void onClick( View view, int position ) {
                 Log.v( TAG, "onClick : enter" );
 
-                mDrawerLayout.closeDrawer( containerView );
+                mDrawerLayout.closeDrawer(containerView);
                 mDrawerLayout.post( new Runnable() {
 
                     @Override
@@ -136,12 +136,18 @@ public class NavigationDrawerFragment extends Fragment {
 
                     case 0 :
 
-                        startActivity( new Intent( getActivity(), ShowsActivity.class ) );
+                        if( !( getActivity() instanceof ShowsActivity ) ) {
+                            startActivity( new Intent( getActivity(), ShowsActivity.class ) );
+                        }
+
                         break;
 
                     case 1 :
 
-                        startActivity( new Intent( getActivity(), VideosActivity.class ) );
+                        if( !( getActivity() instanceof VideosActivity ) ) {
+                            startActivity( new Intent( getActivity(), VideosActivity.class ) );
+                        }
+
                         break;
 
                     case 2 :
