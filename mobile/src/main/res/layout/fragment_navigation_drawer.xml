@@ -15,9 +15,9 @@
             android:id="@+id/nav_drawer_logo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/drawer_margin_top"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_mythtv_logo"
-            android:layout_marginTop="@dimen/drawer_margin_top" />
+            android:src="@drawable/ic_mythtv_logo" />
 
     </LinearLayout>
 
