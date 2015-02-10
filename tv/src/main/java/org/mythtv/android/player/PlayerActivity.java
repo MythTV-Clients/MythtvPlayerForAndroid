@@ -78,7 +78,6 @@ public class PlayerActivity extends Activity {
     private int mDuration;
     private DisplayMetrics mMetrics;
 
-    private ContentService mContentService;
     private LiveStreamInfo mLiveStreamInfo;
 
     /*
@@ -94,8 +93,6 @@ public class PlayerActivity extends Activity {
         Log.i( TAG, "onCreate : enter" );
 
         setContentView(R.layout.activity_player);
-
-        mContentService = ( (MainApplication) getApplicationContext() ).getContentService();
 
         mMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
@@ -555,7 +552,7 @@ public class PlayerActivity extends Activity {
         protected LiveStreamDetailsEvent doInBackground( Void... params ) {
             Log.d( TAG, "doInBackground : get livestream hls" );
 
-            return mContentService.getLiveStream( new RequestLiveStreamDetailsEvent( mLiveStreamInfo.getId() ) );
+            return MainApplication.getInstance().getContentService().getLiveStream( new RequestLiveStreamDetailsEvent( mLiveStreamInfo.getId() ) );
         }
 
         @Override
@@ -616,7 +613,7 @@ public class PlayerActivity extends Activity {
         protected LiveStreamAddedEvent doInBackground( Void... params ) {
             Log.d( TAG, "doInBackground : adding recording hls" );
 
-            return mContentService.addRecordingLiveStream( new AddRecordingLiveStreamEvent( mSelectedProgram.getRecording().getRecordedId(), mSelectedProgram.getChannel().getChanId(), mSelectedProgram.getRecording().getStartTs(), 0, mMetrics.widthPixels, mMetrics.heightPixels, null, null, null ) );
+            return MainApplication.getInstance().getContentService().addRecordingLiveStream( new AddRecordingLiveStreamEvent( mSelectedProgram.getRecording().getRecordedId(), mSelectedProgram.getChannel().getChanId(), mSelectedProgram.getRecording().getStartTs(), 0, mMetrics.widthPixels, mMetrics.heightPixels, null, null, null ) );
         }
 
         @Override
@@ -645,7 +642,7 @@ public class PlayerActivity extends Activity {
         protected LiveStreamAddedEvent doInBackground( Void... params ) {
             Log.d( TAG, "doInBackground : adding recording hls" );
 
-            return mContentService.addVideoLiveStream( new AddVideoLiveStreamEvent( mSelectedVideo.getId(), 0, mMetrics.widthPixels, mMetrics.heightPixels, null, null, null ) );
+            return MainApplication.getInstance().getContentService().addVideoLiveStream( new AddVideoLiveStreamEvent( mSelectedVideo.getId(), 0, mMetrics.widthPixels, mMetrics.heightPixels, null, null, null ) );
         }
 
         @Override
@@ -674,7 +671,7 @@ public class PlayerActivity extends Activity {
         protected LiveStreamRemovedEvent doInBackground( Void... params ) {
             Log.d( TAG, "doInBackground : removing recording hls" );
 
-            return mContentService.removeLiveStream( new RemoveLiveStreamEvent( mLiveStreamInfo.getId() ) );
+            return MainApplication.getInstance().getContentService().removeLiveStream( new RemoveLiveStreamEvent( mLiveStreamInfo.getId() ) );
         }
 
         @Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.mythtv.android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.mythtv.android" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,57 +11,53 @@
         android:icon="@drawable/ic_mythtv"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
-            android:name=".player.MainActivity"
+            android:name=".player.recordings.ShowsActivity"
             android:label="@string/app_name" >
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".player.PlayerActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
         <activity
             android:name=".player.player.SimplePlayerActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
-        <activity android:name=".player.recordings.RecordingsActivity"
+        <!-- activity
+            android:name=".player.recordings.ShowsActivity"
+            android:label="@string/drawer_item_watch_recordings" >
+        </activity -->
+        <activity
+            android:name=".player.recordings.RecordingsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".player.MainActivity">
-
+            android:parentActivityName=".player.recordings.ShowsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".player.MainActivity" />
-
+                android:value=".player.recordings.ShowsActivity" />
         </activity>
-
-        <activity android:name=".player.recordings.RecordingDetailsActivity"
-            android:parentActivityName=".player.recordings.RecordingsActivity">
-
+        <activity
+            android:name=".player.recordings.RecordingDetailsActivity"
+            android:parentActivityName=".player.recordings.RecordingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".player.recordings.RecordingsActivity" />
-
         </activity>
-
-        <activity android:name=".player.videos.VideoDetailsActivity"
-            android:parentActivityName=".player.MainActivity">
-
+        <activity
+            android:name=".player.videos.VideosActivity"
+            android:label="@string/drawer_item_watch_videos" >
+        </activity>
+        <activity
+            android:name=".player.videos.VideoDetailsActivity"
+            android:parentActivityName=".player.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".player.MainActivity" />
-
         </activity>
-
         <activity
             android:name=".library.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings" >
@@ -76,7 +72,7 @@
             android:authorities="org.mythtv.android.provider"
             android:enabled="true"
             android:exported="true"
-            android:syncable="false"/>
+            android:syncable="false" />
 
     </application>
 

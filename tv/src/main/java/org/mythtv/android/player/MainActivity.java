@@ -36,8 +36,6 @@ public class MainActivity extends Activity {
 
     private static final String CONTENT_FRAGMENT_TAG = "content_fragment";
 
-    private MainApplication mMainApplication;
-
     private CharSequence mTitle;
     private TitleInfo mTitleInfo;
     private Program mProgram;
@@ -47,8 +45,6 @@ public class MainActivity extends Activity {
     public void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
-
-        mMainApplication = (MainApplication) getApplicationContext();
 
         setContentView( R.layout.activity_main );
 
@@ -114,10 +110,10 @@ public class MainActivity extends Activity {
         backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
         registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
 
-        if( mMainApplication.isConnected() ) {
+        if( MainApplication.getInstance().isConnected() ) {
             Log.d( TAG, "onResume : backend already connected" );
 
-            mMainApplication.scheduleAlarms();
+//            MainApplication.getInstance().scheduleAlarms();
 
         } else {
             Log.d( TAG, "onResume : backend NOT connected" );
@@ -134,7 +130,7 @@ public class MainActivity extends Activity {
             } else {
                 Log.d( TAG, "onResume : resetting backend connection" );
 
-                mMainApplication.resetBackend();
+                MainApplication.getInstance().resetBackend();
 
             }
 
@@ -151,7 +147,7 @@ public class MainActivity extends Activity {
             unregisterReceiver( mBackendConnectedBroadcastReceiver );
         }
 
-        mMainApplication.cancelAlarms();
+//        MainApplication.getInstance().cancelAlarms();
 
     }
 
@@ -214,7 +210,7 @@ public class MainActivity extends Activity {
             if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
                 Log.d(TAG, "onReceive : backend is connected");
 
-                mMainApplication.scheduleAlarms();
+//                MainApplication.getInstance().scheduleAlarms();
 
             }
 

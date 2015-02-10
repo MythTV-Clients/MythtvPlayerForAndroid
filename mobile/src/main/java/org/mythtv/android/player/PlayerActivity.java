@@ -180,7 +180,7 @@ public class PlayerActivity extends Activity {
             int startPosition = b.getInt(getResources().getString(R.string.start_position), 0);
 
 //            String url = ( (MainApplication) getApplicationContext() ).getMasterBackendUrl() + mLiveStreamInfo.getRelativeURL().substring( 1 );
-            String url = ( (MainApplication) getApplicationContext() ).getMasterBackendUrl() + mFileUrl.substring( 1 );
+            String url = MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring( 1 );
             Log.i( TAG, "startVideoPlayerHls : url=" + url );
             mVideoView.setVideoURI( Uri.parse( url ) );
 
@@ -290,7 +290,7 @@ public class PlayerActivity extends Activity {
         mPlaybackState = PlaybackState.PAUSED;
         updatePlayButton(PlaybackState.PAUSED);
 
-        ( (MainApplication) getApplicationContext() ).cancelAlarms();
+//        MainApplication.getInstance().cancelAlarms();
 
     }
 
@@ -325,7 +325,7 @@ public class PlayerActivity extends Activity {
         Log.d(TAG, "onResume() was called");
         super.onResume();
 
-        ( (MainApplication) getApplicationContext() ).scheduleAlarms();
+//        MainApplication.getInstance().scheduleAlarms();
 
     }
 

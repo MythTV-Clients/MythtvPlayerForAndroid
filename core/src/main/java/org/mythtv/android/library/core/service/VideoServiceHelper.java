@@ -27,8 +27,6 @@ public class VideoServiceHelper {
 
     private final Context mContext;
 
-    private VideoService mVideoService;
-
     private Map<String, List<Video>> mVideos = new TreeMap<String, List<Video>>();
     private Map<String, String> mCategories = new TreeMap<String, String>();
 
@@ -37,8 +35,6 @@ public class VideoServiceHelper {
     public VideoServiceHelper( final Context context ) {
 
         mContext = context;
-
-        initializeClient();
 
         new VideosLoaderAsyncTask().execute();
 
@@ -79,12 +75,6 @@ public class VideoServiceHelper {
 
     }
 
-    private void initializeClient() {
-
-        mVideoService = ( (MainApplication) mContext ).getVideoService();
-
-    }
-
     private String cleanArticles( String value ) {
 
         if( null == value || "".equals( value ) ) {
@@ -112,7 +102,7 @@ public class VideoServiceHelper {
         @Override
         protected AllVideosEvent doInBackground( Void... params ) {
 
-            return mVideoService.getVideoList( new RequestAllVideosEvent( null, null, false, null, null ) );
+            return MainApplication.getInstance().getVideoService().getVideoList( new RequestAllVideosEvent( null, null, false, null, null ) );
         }
 
         @Override

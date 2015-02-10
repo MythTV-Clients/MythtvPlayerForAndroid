@@ -42,8 +42,6 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
     Button queueHls;
     FloatingActionButton fab;
 
-    private ContentService mContentService;
-
     Video mVideo;
 
     int finalWidth, finalHeight;
@@ -115,7 +113,7 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d(TAG, "onCreateView : enter");
 
-        View rootView = inflater.inflate( R.layout.video_details, container, false );
+        View rootView = inflater.inflate( R.layout.fragment_video_details, container, false );
         coverart = (ImageView) rootView.findViewById( R.id.video_coverart );
         title = (TextView) rootView.findViewById( R.id.video_title );
         description = (TextView) rootView.findViewById( R.id.video_description );
@@ -154,22 +152,12 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
         title.setText( mVideo.getTitle() );
         description.setText( mVideo.getDescription() );
 
-        String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + mVideo.getId() + "&Type=coverart";
+        String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + mVideo.getId() + "&Type=coverart";
         updatePreviewImage( url );
 
         getLoaderManager().initLoader( 0, getArguments(), this );
 
         Log.d( TAG, "onActivityCreated : exit" );
-    }
-
-    @Override
-    public void onResume() {
-        Log.d(TAG, "onResume : enter");
-        super.onResume();
-
-        mContentService = ( (MainApplication) getActivity().getApplicationContext() ).getContentService();
-
-        Log.d( TAG, "onResume : exit" );
     }
 
     @Override
@@ -222,7 +210,7 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
         protected Void doInBackground( Void... params ) {
             Log.d( TAG, "doInBackground : adding video hls" );
 
-            mContentService.addVideoLiveStream( new AddVideoLiveStreamEvent( mVideo.getId(), null, 1280, 720, null, null, null ) );
+            MainApplication.getInstance().getContentService().addVideoLiveStream( new AddVideoLiveStreamEvent( mVideo.getId(), null, 1280, 720, null, null, null ) );
 
             return null;
         }

@@ -46,6 +46,8 @@ public class MainApplication extends Application {
     public static final String ACTION_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_CONNECTED";
     public static final String ACTION_NOT_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_NOT_CONNECTED";
 
+    private static MainApplication sInstance;
+
     boolean mConnected = false;
     String mBackendUrl, mBackendHostname;
     int mBackendPort;
@@ -62,6 +64,33 @@ public class MainApplication extends Application {
     private AlarmManager mAlarmManager;
     private PendingIntent mPendingIntent;
 
+    public static MainApplication getInstance() {
+        return sInstance;
+    }
+
+    public static Context getAppContext() {
+        return sInstance.getApplicationContext();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        initializeApi();
+
+        sInstance = this;
+
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        cancelAlarms();
+
+        sInstance = null;
+    }
+
     public void disconnect() {
 
         mConnected = false;
@@ -70,7 +99,7 @@ public class MainApplication extends Application {
 
     }
 
-    public void scheduleAlarms() {
+    private void scheduleAlarms() {
 
         mAlarmManager = (AlarmManager) getSystemService( Context.ALARM_SERVICE );
         Intent intent = new Intent( MainApplication.this, RefreshLiveStreamsReceiver.class );
@@ -80,7 +109,7 @@ public class MainApplication extends Application {
 
     }
 
-    public void cancelAlarms() {
+    private void cancelAlarms() {
 
         if( mAlarmManager != null ) {
             Log.v( TAG, "onPause : cancelling live stream refresh" );
@@ -163,6 +192,8 @@ public class MainApplication extends Application {
             if( null != apiVersion ) {
                 Log.v( TAG, "onPostExecute : master backend connected" );
 
+                scheduleAlarms();
+
                 mApiVersion = apiVersion;
 
                 mMythTvApiContext = MythTvApiContext.newBuilder().setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).setLogLevel(RestAdapter.LogLevel.FULL).build();
@@ -193,7 +224,9 @@ public class MainApplication extends Application {
                 mConnected = true;
 
                 new RefreshLiveStreamsTask().execute();
-                new GetHostNameTask().execute();
+
+                Intent connectedIntent = new Intent( ACTION_CONNECTED );
+                sendBroadcast( connectedIntent );
 
             } else {
                 Log.v( TAG, "onPostExecute : master backend not connected" );
@@ -222,47 +255,6 @@ public class MainApplication extends Application {
 
             Log.v( TAG, "doInBackground : exit" );
             return null;
-        }
-
-    }
-
-    private class GetHostNameTask extends AsyncTask<Void, Void, HostNameDetailsEvent> {
-
-        private final String TAG = GetHostNameTask.class.getSimpleName();
-
-        @Override
-        protected HostNameDetailsEvent doInBackground( Void... params ) {
-            Log.v( TAG, "doInBackground : enter" );
-
-            HostNameDetailsEvent event = mMythService.getHostName( new RequestHostNameEvent() );
-
-            Log.v( TAG, "doInBackground : exit" );
-            return event;
-        }
-
-        @Override
-        protected void onPostExecute( HostNameDetailsEvent event ) {
-            Log.v( TAG, "onPostExecute : enter" );
-
-            if( event.isEntityFound() ) {
-                Log.v( TAG, "onPostExecute : hostname returned" );
-
-                mBackendHostname = event.getDetails().getHostname();
-
-                Intent connectedIntent = new Intent( ACTION_CONNECTED );
-                sendBroadcast( connectedIntent );
-
-            } else {
-                Log.v( TAG, "onPostExecute : master backend not connected" );
-
-                mConnected = false;
-
-                Intent connectedIntent = new Intent( ACTION_NOT_CONNECTED );
-                sendBroadcast( connectedIntent );
-
-            }
-
-            Log.v( TAG, "onPostExecute : exit" );
         }
 
     }

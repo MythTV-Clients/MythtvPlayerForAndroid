@@ -76,4 +76,9 @@ public class RecordingDetailsActivity extends BaseActionBarActivity {
         Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
+    @Override
+    protected void updateData() {
+
+    }
+
 }

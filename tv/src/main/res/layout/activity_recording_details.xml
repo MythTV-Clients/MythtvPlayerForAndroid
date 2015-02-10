@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/recording_details_fragment"
-    android:name="org.mythtv.android.player.recordings.RecordingDetailsFragment" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".recordings.RecordingDetailsActivity" tools:deviceIds="tv" />
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".recordings.RecordingDetailsActivity"
+    tools:deviceIds="tv" />

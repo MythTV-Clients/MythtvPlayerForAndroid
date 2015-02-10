@@ -185,7 +185,7 @@ public class VideosFragment extends BrowseFragment {
             @Override
             public void onItemSelected(Object item, Row row) {
                 if( item instanceof Video ) {
-                    String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + ((Video) item).getId();
+                    String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + ((Video) item).getId();
                     try {
                         mBackgroundURI = new URI( url );
                         updateBackground( mBackgroundURI );
@@ -231,7 +231,7 @@ public class VideosFragment extends BrowseFragment {
             public void onItemSelected(Presenter.ViewHolder viewHolder, Object item, RowPresenter.ViewHolder viewHolder2, Row row) {
 
                 if( item instanceof Video ) {
-                    String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + ((Video) item).getId();
+                    String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + ((Video) item).getId();
                     try {
                         URI uri = new URI( url );
                         updateBackground( uri );

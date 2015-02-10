@@ -63,8 +63,8 @@ public class RecordingCardPresenter extends Presenter {
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        Log.d(TAG, "onCreateViewHolder");
+    public ViewHolder onCreateViewHolder( ViewGroup parent ) {
+        Log.d( TAG, "onCreateViewHolder" );
 
         mContext = parent.getContext().getApplicationContext();
 
@@ -90,43 +90,44 @@ public class RecordingCardPresenter extends Presenter {
         Log.i( TAG, program.toString() );
 
         DateTime start = new DateTime( program.getRecording().getStartTs() );
-        Log.i( TAG, ( (MainApplication) mContext ).getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Width=" + CARD_WIDTH );
-            ((ViewHolder) viewHolder).updateCardViewImage( ( (MainApplication) mContext ).getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Width=" + CARD_WIDTH);
+        Log.i( TAG, MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Width=" + CARD_WIDTH );
+            ((ViewHolder) viewHolder).updateCardViewImage( MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Width=" + CARD_WIDTH);
 //        }
     }
 
     @Override
-    public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        Log.d(TAG, "onUnbindViewHolder");
+    public void onUnbindViewHolder( Presenter.ViewHolder viewHolder ) {
+        Log.d( TAG, "onUnbindViewHolder" );
     }
 
     @Override
-    public void onViewAttachedToWindow(Presenter.ViewHolder viewHolder) {
-        Log.d(TAG, "onViewAttachedToWindow");
+    public void onViewAttachedToWindow( Presenter.ViewHolder viewHolder ) {
+        Log.d( TAG, "onViewAttachedToWindow" );
     }
 
     public static class PicassoImageCardViewTarget implements Target {
         private ImageCardView mImageCardView;
 
-        public PicassoImageCardViewTarget(ImageCardView mImageCardView) {
+        public PicassoImageCardViewTarget( ImageCardView mImageCardView ) {
             this.mImageCardView = mImageCardView;
         }
 
         @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-            Drawable bitmapDrawable = new BitmapDrawable(mContext.getResources(), bitmap);
-            mImageCardView.setMainImage(bitmapDrawable);
+        public void onBitmapLoaded( Bitmap bitmap, Picasso.LoadedFrom loadedFrom ) {
+            Drawable bitmapDrawable = new BitmapDrawable( mContext.getResources(), bitmap );
+            mImageCardView.setMainImage( bitmapDrawable );
         }
 
         @Override
-        public void onBitmapFailed(Drawable drawable) {
-            mImageCardView.setMainImage(drawable);
+        public void onBitmapFailed( Drawable drawable ) {
+            mImageCardView.setMainImage( drawable );
         }
 
         @Override
-        public void onPrepareLoad(Drawable drawable) {
+        public void onPrepareLoad( Drawable drawable ) {
             // Do nothing, default_background manager has its own transitions
         }
+
     }
 
 }

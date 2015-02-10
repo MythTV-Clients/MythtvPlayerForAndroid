@@ -30,8 +30,6 @@ public class RecordingsDataFragment extends Fragment {
 
     private List<Program> programs;
 
-    private DvrService mDvrService;
-
     private RecordingDataConsumer consumer;
     private boolean loading = false;
 
@@ -40,21 +38,10 @@ public class RecordingsDataFragment extends Fragment {
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.v( TAG, "onCreate : enter" );
 
-        initializeClient( (MainApplication) getActivity().getApplicationContext() );
         update();
 
         Log.v( TAG, "onCreate : exit" );
         return null;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i( TAG, "onDestroyView : enter" );
-
-        mDvrService = null;
-
-        Log.i( TAG, "onDestroyView : exit" );
     }
 
     public void setConsumer( RecordingDataConsumer consumer ) {
@@ -65,14 +52,6 @@ public class RecordingsDataFragment extends Fragment {
 
     public boolean isLoading() {
         return loading;
-    }
-
-    private void initializeClient( MainApplication mainApplication ) {
-        Log.v( TAG, "initializeClient : enter" );
-
-        mDvrService = mainApplication.getDvrService();
-
-        Log.v( TAG, "initializeClient : exit" );
     }
 
     private void update() {
@@ -121,7 +100,7 @@ public class RecordingsDataFragment extends Fragment {
             String title = params[ 0 ];
             Log.v( TAG, "doInBackground : title=" + title );
 
-            AllProgramsEvent event = mDvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( true, 0, null, title, null, null ) );
+            AllProgramsEvent event = MainApplication.getInstance().getDvrService().getRecordedPrograms( new RequestAllRecordedProgramsEvent( true, 0, null, title, null, null ) );
 
             Log.v( TAG, "doInBackground : exit" );
             return event;

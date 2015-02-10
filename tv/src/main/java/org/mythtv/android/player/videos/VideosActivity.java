@@ -20,10 +20,10 @@ public class VideosActivity extends Activity {
         super.onCreate( savedInstanceState );
         Log.i( TAG, "onCreate : enter" );
 
-        if( ( (MainApplication) getApplicationContext() ).isConnected() ) {
+        if( MainApplication.getInstance().isConnected() ) {
             Log.d(TAG, "onCreate : backend already connected");
 
-            ( (MainApplication) getApplicationContext() ).resetBackend();
+            MainApplication.getInstance().resetBackend();
 
         } else {
             Log.d( TAG, "onCreate : backend NOT connected" );
@@ -38,7 +38,7 @@ public class VideosActivity extends Activity {
                 startActivity( prefs );
             } else {
 
-                ( (MainApplication) getApplicationContext() ).resetBackend();
+                MainApplication.getInstance().resetBackend();
 
             }
 

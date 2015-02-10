@@ -40,13 +40,10 @@ public class SettingsActivity extends PreferenceActivity {
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
-    static MainApplication mMainApplication;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
 
-        mMainApplication = ( (MainApplication) getApplicationContext() );
     }
 
     @Override
@@ -59,7 +56,7 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onDestroy() {
 
-        mMainApplication.disconnect();
+        MainApplication.getInstance().disconnect();
 
         super.onDestroy();
     }
@@ -150,7 +147,7 @@ public class SettingsActivity extends PreferenceActivity {
                 preference.setSummary(stringValue);
             }
 
-            mMainApplication.disconnect();
+            MainApplication.getInstance().disconnect();
 
             return true;
         }

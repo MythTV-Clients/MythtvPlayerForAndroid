@@ -88,8 +88,8 @@ public class VideoCardPresenter extends Presenter {
             //        R.drawable.videos_by_google_icon));
         Log.i( TAG, video.toString() );
 
-        Log.i( TAG, ( (MainApplication) mContext ).getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + video.getId() + "&Width=" + CARD_WIDTH );
-            ((ViewHolder) viewHolder).updateCardViewImage( ( (MainApplication) mContext ).getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + video.getId() + "&Width=" + CARD_WIDTH );
+        Log.i( TAG, MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + video.getId() + "&Width=" + CARD_WIDTH );
+            ((ViewHolder) viewHolder).updateCardViewImage( MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + video.getId() + "&Width=" + CARD_WIDTH );
 //        }
     }
 

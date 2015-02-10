@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
-    <string name="action_settings">Settings</string>
-
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
-    <string-array name="nav_array">
-        <item>Watch Recordings</item>
-        <item>Watch Videos</item>
-        <!-- item>Photos</item>
-        <item>Music</item -->
-        <item>Settings</item>
-    </string-array>
+    <string name="drawer_item_watch_recordings">Watch Recordings</string>
+    <string name="drawer_item_watch_videos">Watch Videos</string>
+    <string name="drawer_item_preferences">Settings</string>
+    <string name="title_activity_videos">VideosActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

@@ -54,10 +54,8 @@ public class RefreshLiveStreamsReceiver extends BroadcastReceiver {
 
                     if( null != mContext.getApplicationContext() ) {
 
-                        MainApplication application = (MainApplication) mContext.getApplicationContext();
-
-                        if( null != application.getContentService() ) {
-                            application.getContentService().getLiveStreamInfoList(new RequestAllLiveStreamInfosEvent());
+                        if( null != MainApplication.getInstance().getContentService() ) {
+                            MainApplication.getInstance().getContentService().getLiveStreamInfoList( new RequestAllLiveStreamInfosEvent() );
                         }
 
                     }

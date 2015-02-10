@@ -207,7 +207,7 @@ public class RecordingsFragment extends BrowseFragment implements RecordingDataC
             @Override
             public void onItemSelected(Object item, Row row) {
                 if (item instanceof Program) {
-                    String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + ((Program) item).getInetref();
+                    String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + ((Program) item).getInetref();
                     try {
                         mBackgroundURI = new URI( url );
                         updateBackground( mBackgroundURI );
@@ -224,21 +224,22 @@ public class RecordingsFragment extends BrowseFragment implements RecordingDataC
         return new OnItemClickedListener() {
             @Override
             public void onItemClicked(Object item, Row row) {
-                if (item instanceof Program) {
+                if( item instanceof Program ) {
+
                     Program program = (Program) item;
                     Log.d(TAG, "Program: " + item.toString());
                     Intent intent = new Intent( getActivity(), RecordingDetailsActivity.class );
-                    intent.putExtra( getString( R.string.recording ), program );
-                    startActivity(intent);
-                } else if (item instanceof String) {
+                    intent.putExtra( RecordingDetailsFragment.PROGRAM_KEY, program );
+                    startActivity( intent );
+
+                } else if( item instanceof String ) {
 
                     if( item.equals( getResources().getString( R.string.personal_settings ) ) ) {
-                        Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                        startActivity(intent);
+                        Intent intent = new Intent( getActivity(), SettingsActivity.class );
+                        startActivity( intent );
                     }
 
-                    Toast.makeText(getActivity(), (String) item, Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText( getActivity(), (String) item, Toast.LENGTH_SHORT ).show();
                 }
             }
         };
@@ -250,7 +251,7 @@ public class RecordingsFragment extends BrowseFragment implements RecordingDataC
             @Override
             public void onItemSelected(Presenter.ViewHolder viewHolder, Object item, RowPresenter.ViewHolder viewHolder2, Row row) {
                 if (item instanceof Program ) {
-                    String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + ((Program) item).getInetref();
+                    String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + ((Program) item).getInetref();
                     try {
                         URI uri = new URI( url );
                         updateBackground(uri);

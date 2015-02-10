@@ -87,7 +87,7 @@ public class VideoDetailsFragment extends DetailsFragment {
             DetailsOverviewRow row = new DetailsOverviewRow( selectedVideo );
             try {
                 Bitmap poster = Picasso.with(getActivity())
-                        .load( ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + selectedVideo.getId() + "&Width=" + DETAIL_THUMB_WIDTH )
+                        .load( MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + selectedVideo.getId() + "&Width=" + DETAIL_THUMB_WIDTH )
                         .resize( dpToPx( DETAIL_THUMB_WIDTH, getActivity().getApplicationContext() ),
                                 dpToPx( DETAIL_THUMB_HEIGHT, getActivity().getApplicationContext() ) )
                         .centerCrop()

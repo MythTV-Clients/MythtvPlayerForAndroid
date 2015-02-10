@@ -27,8 +27,6 @@ public class DvrServiceHelper {
 
     private final Context mContext;
 
-    private DvrService mDvrService;
-
     private Map<String, List<Program>> mPrograms = new TreeMap<String, List<Program>>();
     private Map<String, String> mCategories = new TreeMap<String, String>();
 
@@ -37,8 +35,6 @@ public class DvrServiceHelper {
     public DvrServiceHelper( final Context context ) {
 
         mContext = context;
-
-        initializeClient();
 
         new ProgramsLoaderAsyncTask().execute();
 
@@ -75,18 +71,12 @@ public class DvrServiceHelper {
 
     }
 
-    private void initializeClient() {
-
-        mDvrService = ( (MainApplication) mContext ).getDvrService();
-
-    }
-
     private class ProgramsLoaderAsyncTask extends AsyncTask<Void, Void, AllProgramsEvent> {
 
         @Override
         protected AllProgramsEvent doInBackground( Void... params ) {
 
-            return mDvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( false, 0, null, null, null, null ) );
+            return MainApplication.getInstance().getDvrService().getRecordedPrograms( new RequestAllRecordedProgramsEvent( false, 0, null, null, null, null ) );
         }
 
         @Override

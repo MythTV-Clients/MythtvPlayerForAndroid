@@ -1,17 +1,16 @@
 package org.mythtv.android.library.ui.data;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.core.service.VideoService;
 import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.RequestAllVideosEvent;
 import org.mythtv.android.library.events.video.VideoDetails;
@@ -24,13 +23,7 @@ import java.util.List;
  */
 public class VideosDataFragment extends Fragment {
 
-    private static final String TAG = VideosDataFragment.class.getSimpleName();
-
-    public static final String VIDEO_TITLE = "video_title";
-
     private List<Video> videos;
-
-    private VideoService mVideoService;
 
     private VideoDataConsumer consumer;
     private boolean loading = false;
@@ -38,28 +31,23 @@ public class VideosDataFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.v( TAG, "onCreate : enter" );
 
-        initializeClient( (MainApplication) getActivity().getApplicationContext() );
         update();
 
-        Log.v( TAG, "onCreate : exit" );
         return null;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i( TAG, "onDestroyView : enter" );
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
 
-        mVideoService = null;
+        try {
 
-        Log.i( TAG, "onDestroyView : exit" );
-    }
+            consumer = (VideoDataConsumer) activity;
 
-    public void setConsumer( VideoDataConsumer consumer ) {
-
-        this.consumer = consumer;
+        } catch( ClassCastException e ) {
+            throw new ClassCastException( activity.toString() + " must implement VideoDataConsumer" );
+        }
 
     }
 
@@ -67,16 +55,7 @@ public class VideosDataFragment extends Fragment {
         return loading;
     }
 
-    private void initializeClient( MainApplication mainApplication ) {
-        Log.v( TAG, "initializeClient : enter" );
-
-        mVideoService = mainApplication.getVideoService();
-
-        Log.v( TAG, "initializeClient : exit" );
-    }
-
     private void update() {
-        Log.v( TAG, "update : enter" );
 
         if( videos == null && !isLoading() ) {
 
@@ -94,15 +73,12 @@ public class VideosDataFragment extends Fragment {
 
         }
 
-        Log.v( TAG, "update : exit" );
     }
 
     private void handleUpdate() {
-        Log.v( TAG, "handleUpdate : enter" );
 
-        consumer.setVideos(videos);
+        consumer.setVideos( videos );
 
-        Log.v(TAG, "handleUpdate : exit");
     }
 
     private class VideosLoaderAsyncTask extends AsyncTask<Void, Void, AllVideosEvent> {
@@ -111,44 +87,36 @@ public class VideosDataFragment extends Fragment {
 
         @Override
         protected AllVideosEvent doInBackground( Void... params ) {
-            Log.v( TAG, "doInBackground : enter" );
 
-            AllVideosEvent event = mVideoService.getVideoList( new RequestAllVideosEvent( null, null, false, null, null ) );
+            AllVideosEvent event = MainApplication.getInstance().getVideoService().getVideoList( new RequestAllVideosEvent( null, null, false, null, null ) );
 
-            Log.v( TAG, "doInBackground : exit" );
             return event;
         }
 
         @Override
         protected void onPostExecute( AllVideosEvent event ) {
-            Log.v(TAG, "onPostExecute : enter");
 
             if( event.isEntityFound() ) {
-                Log.v( TAG, "onPostExecute : received videos" );
 
                 videos = new ArrayList<Video>();
 
                 for( VideoDetails videoDetails : event.getDetails() ) {
-                    Log.v( TAG, "onPostExecute : videoDetails iteration" );
 
                     Video video = Video.fromDetails( videoDetails );
-                    //if( video.getFileName().endsWith( ".mp4" ) ) {
-                        videos.add( video );
-                    //}
+                    videos.add( video );
+
                 }
 
                 handleUpdate();
 
             } else {
-                Log.e(TAG, "onPostExecute : error, failed to load videos");
 
-                consumer.onHandleError("failed to load videos");
+                consumer.onHandleError( "failed to load videos" );
 
             }
 
             loading = false;
 
-            Log.v( TAG, "onPostExecute : exit" );
         }
 
     }

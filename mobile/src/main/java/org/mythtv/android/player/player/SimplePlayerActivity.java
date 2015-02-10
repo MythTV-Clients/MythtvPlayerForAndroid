@@ -128,7 +128,7 @@ public class SimplePlayerActivity extends Activity implements SurfaceHolder.Call
     callback = new RendererBuilderCallback();
     builder.buildRenderers(callback);
 
-      ( (MainApplication) getApplicationContext() ).scheduleAlarms();
+//      MainApplication.getInstance().scheduleAlarms();
 
   }
 
@@ -145,7 +145,7 @@ public class SimplePlayerActivity extends Activity implements SurfaceHolder.Call
     videoRenderer = null;
     shutterView.setVisibility(View.VISIBLE);
 
-      ( (MainApplication) getApplicationContext() ).cancelAlarms();
+//      MainApplication.getInstance().cancelAlarms();
 
   }
 

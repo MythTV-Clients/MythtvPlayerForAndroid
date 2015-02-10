@@ -103,4 +103,9 @@ public class VideoDetailsActivity extends BaseActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void updateData() {
+
+    }
+
 }

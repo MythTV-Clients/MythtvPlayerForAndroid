@@ -52,4 +52,20 @@ public class RecordingsActivity extends Activity {
 
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        MainApplication.getInstance().scheduleAlarms();
+//
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//
+//        MainApplication.getInstance().cancelAlarms();
+//
+//    }
+
 }

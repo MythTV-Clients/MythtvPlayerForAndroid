@@ -112,6 +112,11 @@ public class RecordingsActivity extends BaseActionBarActivity implements Recordi
         Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
+    @Override
+    protected void updateData() {
+
+    }
+
 //    @Override
 //    public boolean onSupportNavigateUp() {
 //        Log.d( TAG, "onSupportNavigateUp : enter" );

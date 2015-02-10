@@ -8,18 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +28,7 @@ import org.mythtv.android.player.recordings.RecordingsFragment;
 import org.mythtv.android.player.recordings.TitleInfosFragment;
 import org.mythtv.android.player.videos.VideosFragment;
 
-public class MainActivity extends BaseActionBarActivity implements NavAdapter.OnItemClickListener, TitleInfosFragment.OnTitleInfoClickListener, RecordingsFragment.OnRecordingClickedListener {
+public class MainActivity extends BaseActionBarActivity implements RecordingsFragment.OnRecordingClickedListener, NavigationDrawerFragment.ClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -49,17 +42,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
     private static final String RECORDINGS_FRAGMENT_TAG = RecordingsFragment.class.getCanonicalName();
     private static final String RECORDING_DETAILS_FRAGMENT_TAG = RecordingDetailsFragment.class.getCanonicalName();
 
-    private MainApplication mMainApplication;
-
-    private DrawerLayout mDrawerLayout;
-    private LinearLayout mDrawer;
-    private RecyclerView mDrawerList;
-    private TextView mMythVersion;
-    private ActionBarDrawerToggle mDrawerToggle;
-
-    private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mNavTitles;
     private int mSelectedItem;
 
     private TitleInfosFragment mTitleInfosFragment;
@@ -72,8 +55,6 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
     private VideosFragment mVideosFragment;
 
-    private BackendConnectedBroadcastReceiver mBackendConnectedBroadcastReceiver = new BackendConnectedBroadcastReceiver();
-
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_main;
@@ -81,48 +62,13 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
-        Log.d( TAG, "onCreate : enter" );
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate : enter");
 
-        mMainApplication = (MainApplication) getApplicationContext();
+        mTitle = getTitle();
 
-        mTitle = mDrawerTitle = getTitle();
-        mNavTitles = getResources().getStringArray( R.array.nav_array );
-        mDrawerLayout = (DrawerLayout) findViewById( R.id.drawer_layout );
-        mDrawer = (LinearLayout) findViewById( R.id.nav_drawer );
-        mMythVersion = (TextView) findViewById( R.id.mythtv_version );
-        mDrawerList = (RecyclerView) findViewById( R.id.nav_drawer_items );
-
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow( R.drawable.drawer_shadow, GravityCompat.START );
-
-        // improve performance by indicating the list if fixed size.
-        mDrawerList.setHasFixedSize( true );
-        mDrawerList.setLayoutManager( new LinearLayoutManager( this ) );
-
-        // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter( new NavAdapter( mNavTitles, this ) );
-
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
-        ) {
-            public void onDrawerClosed( View view ) {
-                getSupportActionBar().setTitle( mTitle );
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened( View drawerView ) {
-                getSupportActionBar().setTitle( mDrawerTitle );
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        mDrawerLayout.setDrawerListener( mDrawerToggle );
+        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById( R.id.fragment_navigation_drawer );
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
         if( savedInstanceState == null ) {
             Log.d( TAG, "onCreate : savedInstanceState == null" );
@@ -141,13 +87,13 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         }
 
-        Log.d( TAG, "onCreate : exit" );
+        Log.d(TAG, "onCreate : exit");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.i( TAG, "onResume : enter" );
+        Log.i(TAG, "onResume : enter");
 
         getFragmentManager().addOnBackStackChangedListener( new FragmentManager.OnBackStackChangedListener() {
 
@@ -170,13 +116,13 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
                 if( fragment instanceof TitleInfosFragment ) {
                     Log.v( TAG, "onBackStackChanged : resetting for TitleInfosFragment" );
 
-                    setTitle( getResources().getStringArray( R.array.nav_array ) [ 0 ] );
+                    setTitle( getResources().getString( R.string.drawer_item_watch_recordings ) );
                 }
 
                 if( fragment instanceof VideosFragment ) {
                     Log.v( TAG, "onBackStackChanged : resetting for VideosFragment" );
 
-                    setTitle( getResources().getStringArray( R.array.nav_array ) [ 1 ] );
+                    setTitle( getResources().getString( R.string.drawer_item_watch_videos ) );
                 }
 
                 Log.v( TAG, "onBackStackChanged : exit" );
@@ -184,11 +130,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         });
 
-        IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
-        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
-        registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
-
-        if( mMainApplication.isConnected() ) {
+        if( MainApplication.getInstance().isConnected() ) {
             Log.d( TAG, "onResume : backend already connected" );
 
             selectItem( mSelectedItem );
@@ -208,19 +150,19 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
             } else {
                 Log.d( TAG, "onResume : resetting backend connection" );
 
-                mMainApplication.resetBackend();
+                MainApplication.getInstance().resetBackend();
 
             }
 
         }
 
-        Log.i( TAG, "onResume : exit" );
+        Log.i(TAG, "onResume : exit");
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        super.onRestoreInstanceState( savedInstanceState );
-        Log.d( TAG, "onRestoreInstanceState : enter" );
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.d(TAG, "onRestoreInstanceState : enter");
 
         if( savedInstanceState.containsKey( SELECTED_ITEM_STATE ) ) {
             Log.d( TAG, "onRestoreInstanceState : mSelectedItem retrieved from savedInstanceState" );
@@ -252,26 +194,14 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
             mProgram = (Program) savedInstanceState.getSerializable( SELECTED_PROGRAM_STATE );
         }
 
-        Log.d( TAG, "onRestoreInstanceState : exit" );
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i( TAG, "onPause : enter" );
-
-        if( null != mBackendConnectedBroadcastReceiver ) {
-            unregisterReceiver( mBackendConnectedBroadcastReceiver );
-        }
-
-        Log.i( TAG, "onPause : exit" );
+        Log.d(TAG, "onRestoreInstanceState : exit");
     }
 
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
         Log.d( TAG, "onSaveInstanceState : enter" );
 
-        outState.putInt( SELECTED_ITEM_STATE, mSelectedItem );
+        outState.putInt(SELECTED_ITEM_STATE, mSelectedItem);
 
         if( null != mTitle ) {
             outState.putString( SELECTED_TITLE_STATE, mTitle.toString() );
@@ -295,27 +225,12 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         getSupportFragmentManager().popBackStack();
 
-        Log.d( TAG, "onSupportNavigateUp : exit" );
+        Log.d(TAG, "onSupportNavigateUp : exit");
         return true;
     }
 
-    /* The click listener for RecyclerView in the navigation drawer */
     @Override
-    public void onClick( View view, int position ) {
-        Log.d( TAG, "onClick : enter" );
-
-        mSelectedItem = position;
-
-        selectItem( position );
-
-        Log.d( TAG, "onClick : exit" );
-    }
-
-    private void updateNavigationDrawerVersion() {
-
-        if( null != mMainApplication.getMasterBackendHostName() ) {
-            mMythVersion.setText( mMainApplication.getMasterBackendHostName() );
-        }
+    protected void updateData() {
 
     }
 
@@ -361,45 +276,7 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
 
         }
 
-        // update selected item title, then close the drawer
-        setTitle( mNavTitles[ position ] );
-        mDrawerLayout.closeDrawer( mDrawer );
-
         Log.d( TAG, "selectItem : exit" );
-    }
-
-    private void addFragment( Fragment fragment, String tag, boolean addToBackStack ) {
-
-        FragmentTransaction tx = getFragmentManager().beginTransaction();
-        tx.add(R.id.content_frame, fragment, tag);
-
-        if( addToBackStack ) {
-            tx.addToBackStack( null );
-        }
-
-        tx.commit();
-
-    }
-
-    private void replaceFragment( Fragment fragment, String tag, boolean addToBackStack ) {
-
-        FragmentTransaction tx = getFragmentManager().beginTransaction();
-        tx.replace( R.id.content_frame, fragment, tag );
-
-        if( addToBackStack ) {
-            tx.addToBackStack( null );
-        }
-
-        tx.commit();
-
-    }
-
-    private void removeFragment( Fragment fragment ) {
-
-        FragmentTransaction tx = getFragmentManager().beginTransaction();
-        tx.remove( fragment );
-        tx.commit();
-
     }
 
     @Override
@@ -408,86 +285,6 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         mTitle = title;
         getSupportActionBar().setTitle( mTitle );
 
-    }
-
-    /**
-     * When using the ActionBarDrawerTogCONTENT_FRAGMENT_TAGgle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */
-
-    @Override
-    protected void onPostCreate( Bundle savedInstanceState ) {
-        super.onPostCreate( savedInstanceState );
-
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-
-    }
-
-    @Override
-    public void onConfigurationChanged( Configuration newConfig ) {
-        super.onConfigurationChanged( newConfig );
-
-        // Pass any configuration change to the drawer toggle
-        mDrawerToggle.onConfigurationChanged( newConfig );
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected( MenuItem item ) {
-        Log.d( TAG, "onOptionsItemSelected : enter" );
-
-        // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
-        if( mDrawerToggle.onOptionsItemSelected( item ) ) {
-            return true;
-        }
-
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-//        //noinspection SimplifiableIfStatement
-//        if( id == R.id.action_settings ) {
-//            Log.d( TAG, "onOptionsItemSelected : settings selected" );
-//
-//            Intent prefs = new Intent( this, SettingsActivity.class );
-//            startActivity( prefs );
-//
-//            return true;
-//        }
-
-        Log.d( TAG, "onOptionsItemSelected : exit" );
-        return super.onOptionsItemSelected( item );
-    }
-
-    @Override
-    public void onTitleInfoClicked( TitleInfo titleInfo ) {
-        Log.d( TAG, "onTitleInfoClicked : enter" );
-
-        mTitleInfo = titleInfo;
-
-        if( null != mRecordingsFragment ) {
-            Log.d(TAG, "onTitleInfoClicked : creating new RecordingsFragment");
-
-            removeFragment( mRecordingsFragment );
-        }
-
-        Bundle args = new Bundle();
-        if( !mTitleInfo.getTitle().equals( getResources().getString( R.string.all_recordings ) ) ) {
-            args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, mTitleInfo.getTitle() );
-        }
-
-        Intent recordings = new Intent( MainActivity.this, RecordingsActivity.class );
-        recordings.putExtras( args );
-        startActivity( recordings );
-
-//        mRecordingsFragment = (RecordingsFragment) Fragment.instantiate( this, RecordingsFragment.class.getName(), args );
-
-//        replaceFragment( mRecordingsFragment, RECORDINGS_FRAGMENT_TAG, true );
-
-        Log.d( TAG, "onTitleInfoClicked : exit" );
     }
 
     @Override
@@ -512,48 +309,20 @@ public class MainActivity extends BaseActionBarActivity implements NavAdapter.On
         Log.d( TAG, "onSetProgram : exit" );
     }
 
-    private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
+    @Override
+    public void onClick( View view, int position ) {
+        Log.d( TAG, "onClick : enter" );
 
-        private final String TAG = BackendConnectedBroadcastReceiver.class.getSimpleName();
+        selectItem( position );
 
-        @Override
-        public void onReceive( Context context, Intent intent ) {
-            Log.d( TAG, "onReceive : enter" );
+        Log.d( TAG, "onClick : exit" );
+    }
 
-            if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
-                Log.d( TAG, "onReceive : backend is connected" );
+    @Override
+    public void onLongClick( View view, int position ) {
+        Log.d( TAG, "onLongClick : enter" );
 
-                selectItem( mSelectedItem );
-
-                updateNavigationDrawerVersion();
-
-            }
-
-            if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
-                Log.d( TAG, "onReceive : backend is NOT connected" );
-
-                Bundle args = new Bundle();
-                args.putBoolean( ConnectingFragment.CONNECTED_KEY, false );
-
-                ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONTENT_FRAGMENT_TAG );
-                if( null == connectingFragment ) {
-                    Log.d( TAG, "onResume : creating new ConnectingFragment" );
-
-                    connectingFragment = (ConnectingFragment) Fragment.instantiate( MainActivity.this, ConnectingFragment.class.getName(), args );
-
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace( R.id.content_frame, connectingFragment, CONTENT_FRAGMENT_TAG );
-                    transaction.commit();
-
-                }
-
-                Toast.makeText( MainActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
-
-            }
-
-            Log.d( TAG, "onReceive : exit" );
-        }
-
+        Log.d( TAG, "onLongClick : exit" );
     }
 
 }

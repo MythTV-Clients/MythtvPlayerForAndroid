@@ -1,7 +1,11 @@
 package org.mythtv.android.player.recordings;
 
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -28,13 +32,14 @@ import com.squareup.picasso.Target;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.player.PicassoBackgroundManagerTarget;
 import org.mythtv.android.player.PlayerActivity;
 
 import java.io.IOException;
 import java.net.URI;
 
-public class RecordingDetailsFragment extends DetailsFragment {
+public class RecordingDetailsFragment extends DetailsFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = RecordingDetailsFragment.class.getSimpleName();
 
@@ -47,89 +52,156 @@ public class RecordingDetailsFragment extends DetailsFragment {
 
     private static final int NUM_COLS = 10;
 
-    private static final String PROGRAM = "Recording";
+    public static final String PROGRAM_KEY = "program";
 
     private Program selectedProgram;
+
+    String fullUrl;
 
     private Drawable mDefaultBackground;
     private Target mBackgroundTarget;
     private DisplayMetrics mMetrics;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate DetailsFragment");
-        super.onCreate(savedInstanceState);
+    public Loader onCreateLoader( int id, Bundle args ) {
+        Log.v( TAG, "onCreateLoader : enter" );
 
-        BackgroundManager backgroundManager = BackgroundManager.getInstance(getActivity());
-        backgroundManager.attach(getActivity().getWindow());
-        mBackgroundTarget = new PicassoBackgroundManagerTarget(backgroundManager);
+        Program program = (Program) args.getSerializable( PROGRAM_KEY );
 
-        mDefaultBackground = getResources().getDrawable(R.drawable.default_background);
+        String[] projection = new String[] { LiveStreamConstants._ID, LiveStreamConstants.FIELD_PERCENT_COMPLETE, LiveStreamConstants.FIELD_FULL_URL, LiveStreamConstants.FIELD_RELATIVE_URL };
+        String selection = LiveStreamConstants.FIELD_SOURCE_FILE + " like ?";
+        String[] selectionArgs = new String[] { "%" + program.getFileName() };
 
-        mMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
-
-        selectedProgram = (Program) getActivity().getIntent().getSerializableExtra(PROGRAM);
-        new DetailRowBuilderTask().execute(selectedProgram);
-
-        setOnItemClickedListener(getDefaultItemClickedListener());
-//        updateBackground(selectedProgram.getBackgroundImageURI());
-
+        Log.v( TAG, "onCreateLoader : exit" );
+        return new CursorLoader( getActivity(), LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
     }
 
-    private class DetailRowBuilderTask extends AsyncTask<Program, Integer, DetailsOverviewRow> {
-        @Override
-        protected DetailsOverviewRow doInBackground(Program... programs) {
-            selectedProgram = programs[0];
+    @Override
+    public void onLoadFinished( Loader<Cursor> loader, Cursor data ) {
+        Log.v( TAG, "onLoaderFinished : enter" );
 
-            DetailsOverviewRow row = new DetailsOverviewRow(selectedProgram);
-            try {
-                Bitmap poster = Picasso.with(getActivity())
-                        .load( ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + selectedProgram.getInetref() + "&Width=" + DETAIL_THUMB_WIDTH )
-                        .resize(dpToPx(DETAIL_THUMB_WIDTH, getActivity().getApplicationContext()),
-                                dpToPx(DETAIL_THUMB_HEIGHT, getActivity().getApplicationContext()))
-                        .centerCrop()
-                        .get();
-                row.setImageBitmap(getActivity(), poster);
-            } catch (IOException e) {
+        if( null != data && data.moveToNext() ) {
+            Log.v( TAG, "onLoaderReset : cursor found live stream" );
+
+            int percent = data.getInt( data.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
+            if( percent > 0 ) {
+                Log.v( TAG, "onLoaderReset : updating percent complete" );
+
+//                percentComplete.setText( "HLS: " + String.valueOf( percent ) + "%" );
+
+                if( percent > 2 ) {
+                    fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
+                }
             }
 
-            row.addAction(new Action( ACTION_WATCH, getResources().getString( R.string.watch_recording ) ) );
+//            queueHls.setVisibility( View.INVISIBLE );
+
+        } else {
+//            queueHls.setVisibility( View.VISIBLE );
+        }
+
+        Log.v( TAG, "onLoaderReset : exit" );
+    }
+
+    @Override
+    public void onLoaderReset( Loader<Cursor> loader ) {
+        Log.v( TAG, "onLoaderReset : enter" );
+
+        Log.v( TAG, "onLoaderReset : exit" );
+    }
+
+    @Override
+    public void onCreate( Bundle savedInstanceState ) {
+        Log.i( TAG, "onCreate : enter" );
+        super.onCreate( savedInstanceState );
+
+        BackgroundManager backgroundManager = BackgroundManager.getInstance( getActivity() );
+        backgroundManager.attach( getActivity().getWindow() );
+        mBackgroundTarget = new PicassoBackgroundManagerTarget( backgroundManager );
+
+        mDefaultBackground = getResources().getDrawable( R.drawable.default_background );
+
+        mMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics( mMetrics );
+
+        selectedProgram = (Program) getActivity().getIntent().getSerializableExtra( PROGRAM_KEY );
+
+        new DetailRowBuilderTask().execute();
+
+        setOnItemClickedListener( getDefaultItemClickedListener() );
+//        updateBackground(selectedProgram.getBackgroundImageURI());
+
+        getLoaderManager().initLoader( 0, getArguments(), this );
+
+        Log.i( TAG, "onCreate : exit" );
+    }
+
+    private class DetailRowBuilderTask extends AsyncTask<Void, Integer, DetailsOverviewRow> {
+
+        private final String TAG = DetailRowBuilderTask.class.getSimpleName();
+
+        @Override
+        protected DetailsOverviewRow doInBackground( Void... args ) {
+            Log.v( TAG, "doInBackground : enter" );
+
+            DetailsOverviewRow row = new DetailsOverviewRow( selectedProgram );
+            try {
+                Bitmap poster = Picasso.with(getActivity())
+                        .load( MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + selectedProgram.getInetref() + "&Width=" + DETAIL_THUMB_WIDTH )
+                        .resize( dpToPx( DETAIL_THUMB_WIDTH, getActivity().getApplicationContext() ),
+                                dpToPx( DETAIL_THUMB_HEIGHT, getActivity().getApplicationContext() ) )
+                        .centerCrop()
+                        .get();
+                row.setImageBitmap( getActivity(), poster );
+            } catch( IOException e ) {
+            }
+
+            row.addAction( new Action( ACTION_WATCH, getResources().getString( R.string.watch_recording ) ) );
 //            row.addAction(new Action(ACTION_RENT, getResources().getString(R.string.rent_1),
 //                    getResources().getString(R.string.rent_2)));
 //            row.addAction(new Action(ACTION_BUY, getResources().getString(R.string.buy_1),
 //                    getResources().getString(R.string.buy_2)));
+
+            Log.v( TAG, "doInBackground : exit" );
             return row;
         }
 
         @Override
-        protected void onPostExecute(DetailsOverviewRow detailRow) {
+        protected void onPostExecute( DetailsOverviewRow detailRow ) {
+            Log.v( TAG, "onPostExecute : enter" );
+
             ClassPresenterSelector ps = new ClassPresenterSelector();
-            DetailsOverviewRowPresenter dorPresenter =
-                    new DetailsOverviewRowPresenter(new RecordingDetailsDescriptionPresenter());
+            DetailsOverviewRowPresenter dorPresenter = new DetailsOverviewRowPresenter( new RecordingDetailsDescriptionPresenter() );
+
             // set detail background and style
-            dorPresenter.setBackgroundColor(getResources().getColor(R.color.background_navigation_drawer));
-            dorPresenter.setStyleLarge(true);
-            dorPresenter.setOnActionClickedListener(new OnActionClickedListener() {
+            dorPresenter.setBackgroundColor( getResources().getColor( R.color.background_navigation_drawer ) );
+            dorPresenter.setStyleLarge( true );
+            dorPresenter.setOnActionClickedListener( new OnActionClickedListener() {
+
                 @Override
-                public void onActionClicked(Action action) {
-                    if (action.getId() == ACTION_WATCH) {
-                        Intent intent = new Intent(getActivity(), PlayerActivity.class);
-                        intent.putExtra(getResources().getString(R.string.recording), selectedProgram);
-                        intent.putExtra(getResources().getString(R.string.should_start), true);
-                        startActivity(intent);
+                public void onActionClicked( Action action ) {
+
+                    if( action.getId() == ACTION_WATCH ) {
+
+                        Intent intent = new Intent( getActivity(), PlayerActivity.class );
+                        intent.putExtra( getResources().getString( R.string.recording ), selectedProgram );
+                        intent.putExtra( getResources().getString( R.string.should_start ), true );
+                        startActivity( intent );
+
                     } else {
-                        Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText( getActivity(), action.toString(), Toast.LENGTH_SHORT ).show();
+
                     }
+
                 }
             });
 
-            ps.addClassPresenter(DetailsOverviewRow.class, dorPresenter);
-            ps.addClassPresenter(ListRow.class,
-                    new ListRowPresenter());
+            ps.addClassPresenter( DetailsOverviewRow.class, dorPresenter );
+            ps.addClassPresenter( ListRow.class, new ListRowPresenter() );
 
-            ArrayObjectAdapter adapter = new ArrayObjectAdapter(ps);
-            adapter.add(detailRow);
+            ArrayObjectAdapter adapter = new ArrayObjectAdapter( ps );
+            adapter.add( detailRow );
 
 //            String subcategories[] = {
 //                    getString(R.string.related_movies)
@@ -144,7 +216,9 @@ public class RecordingDetailsFragment extends DetailsFragment {
 //            HeaderItem header = new HeaderItem(0, subcategories[0], null);
 //            adapter.add(new ListRow(header, listRowAdapter));
 
-            setAdapter(adapter);
+            setAdapter( adapter );
+
+            Log.v( TAG, "onPostExecute : exit" );
         }
 
     }
@@ -153,28 +227,35 @@ public class RecordingDetailsFragment extends DetailsFragment {
         return new OnItemClickedListener() {
             @Override
             public void onItemClicked(Object item, Row row) {
-                if (item instanceof Program) {
-                    Program program = (Program) item;
-                    Intent intent = new Intent(getActivity(), RecordingDetailsActivity.class);
-                    intent.putExtra(PROGRAM, program);
-                    startActivity(intent);
-                }
+
+            if( item instanceof Program ) {
+
+                Program program = (Program) item;
+                Intent intent = new Intent( getActivity(), RecordingDetailsActivity.class );
+                intent.putExtra( PROGRAM_KEY, program );
+                startActivity( intent );
+
+            }
+
             }
         };
     }
 
-    protected void updateBackground(URI uri) {
-        Log.d(TAG, "uri" + uri);
-        Log.d(TAG, "metrics" + mMetrics.toString());
-        Picasso.with(getActivity())
-                .load(uri.toString())
-                .resize(mMetrics.widthPixels, mMetrics.heightPixels)
-                .error(mDefaultBackground)
-                .into(mBackgroundTarget);
+    protected void updateBackground( URI uri ) {
+        Log.d( TAG, "uri" + uri );
+        Log.d( TAG, "metrics" + mMetrics.toString() );
+        Picasso.with( getActivity() )
+                .load( uri.toString() )
+                .resize( mMetrics.widthPixels, mMetrics.heightPixels )
+                .error( mDefaultBackground )
+                .into( mBackgroundTarget );
     }
 
-    public static int dpToPx(int dp, Context ctx) {
+    public static int dpToPx( int dp, Context ctx ) {
+
         float density = ctx.getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
+
+        return Math.round( (float) dp * density );
     }
+
 }

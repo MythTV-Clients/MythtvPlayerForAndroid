@@ -45,8 +45,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     Button queueHls, deleteRecording;
     FloatingActionButton fab;
 
-    private ContentService mContentService;
-
     Program mProgram;
 
     int finalWidth, finalHeight;
@@ -156,22 +154,12 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         description.setText( mProgram.getDescription() );
 
         DateTime start = new DateTime( mProgram.getRecording().getStartTs() );
-        String url = ( (MainApplication) getActivity().getApplicationContext() ).getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" );
         updatePreviewImage(url);
 
         getLoaderManager().initLoader( 0, getArguments(), this );
 
         Log.d( TAG, "onActivityCreated : exit" );
-    }
-
-    @Override
-    public void onResume() {
-        Log.d( TAG, "onResume : enter" );
-        super.onResume();
-
-        mContentService = ( (MainApplication) getActivity().getApplicationContext() ).getContentService();
-
-        Log.d( TAG, "onResume : exit" );
     }
 
     @Override
@@ -229,7 +217,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         protected Void doInBackground( Void... params ) {
             Log.d( TAG, "doInBackground : adding recording hls" );
 
-            mContentService.addRecordingLiveStream( new AddRecordingLiveStreamEvent( mProgram.getRecording().getRecordedId(), mProgram.getChannel().getChanId(), mProgram.getRecording().getStartTs(), 0, 1280, 720, null, null, null ) );
+            MainApplication.getInstance().getContentService().addRecordingLiveStream( new AddRecordingLiveStreamEvent( mProgram.getRecording().getRecordedId(), mProgram.getChannel().getChanId(), mProgram.getRecording().getStartTs(), 0, 1280, 720, null, null, null ) );
 
             return null;
         }
