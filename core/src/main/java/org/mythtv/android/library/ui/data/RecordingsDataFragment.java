@@ -1,17 +1,16 @@
 package org.mythtv.android.library.ui.data;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
@@ -24,8 +23,6 @@ import java.util.List;
  */
 public class RecordingsDataFragment extends Fragment {
 
-    private static final String TAG = RecordingsDataFragment.class.getSimpleName();
-
     public static final String TITLE_INFO_TITLE = "title_info_title";
 
     private List<Program> programs;
@@ -36,17 +33,23 @@ public class RecordingsDataFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.v( TAG, "onCreate : enter" );
 
         update();
 
-        Log.v( TAG, "onCreate : exit" );
         return null;
     }
 
-    public void setConsumer( RecordingDataConsumer consumer ) {
+    @Override
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
 
-        this.consumer = consumer;
+        try {
+
+            consumer = (RecordingDataConsumer) activity;
+
+        } catch( ClassCastException e ) {
+            throw new ClassCastException( activity.toString() + " must implement RecordingDataConsumer" );
+        }
 
     }
 
@@ -55,7 +58,6 @@ public class RecordingsDataFragment extends Fragment {
     }
 
     private void update() {
-        Log.v( TAG, "update : enter" );
 
         if( programs == null && !isLoading() ) {
 
@@ -78,15 +80,12 @@ public class RecordingsDataFragment extends Fragment {
 
         }
 
-        Log.v( TAG, "update : exit" );
     }
 
     private void handleUpdate() {
-        Log.v( TAG, "handleUpdate : enter" );
 
         consumer.onSetPrograms( programs );
 
-        Log.v(TAG, "handleUpdate : exit");
     }
 
     private class ProgramsLoaderAsyncTask extends AsyncTask<String, Void, AllProgramsEvent> {
@@ -95,33 +94,26 @@ public class RecordingsDataFragment extends Fragment {
 
         @Override
         protected AllProgramsEvent doInBackground( String... params ) {
-            Log.v( TAG, "doInBackground : enter" );
 
             String title = params[ 0 ];
-            Log.v( TAG, "doInBackground : title=" + title );
 
             AllProgramsEvent event = MainApplication.getInstance().getDvrService().getRecordedPrograms( new RequestAllRecordedProgramsEvent( true, 0, null, title, null, null ) );
 
-            Log.v( TAG, "doInBackground : exit" );
             return event;
         }
 
         @Override
         protected void onPostExecute( AllProgramsEvent event ) {
-            Log.v(TAG, "onPostExecute : enter");
 
             if( event.isEntityFound() ) {
-                Log.v( TAG, "onPostExecute : received programs" );
 
                 programs = new ArrayList<Program>();
 
                 for( ProgramDetails programDetails : event.getDetails() ) {
-                    Log.v( TAG, "onPostExecute : programDetails iteration" );
 
                     Program program = Program.fromDetails( programDetails );
 
                     if( !"LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ) {
-                        Log.v( TAG, "onPostExecute : program added" );
                         programs.add( program );
                     }
                 }
@@ -129,7 +121,6 @@ public class RecordingsDataFragment extends Fragment {
                 handleUpdate();
 
             } else {
-                Log.e(TAG, "onPostExecute : error, failed to load recorded programs");
 
                 consumer.onHandleError( "failed to load recorded programs" );
 
@@ -137,7 +128,6 @@ public class RecordingsDataFragment extends Fragment {
 
             loading = false;
 
-            Log.v(TAG, "onPostExecute : exit");
         }
 
     }

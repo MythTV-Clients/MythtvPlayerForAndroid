@@ -18,6 +18,9 @@ import org.mythtv.android.library.persistence.repository.MythtvProvider;
 import org.mythtv.android.library.persistence.service.ContentPersistenceService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dmfrey on 1/25/15.
@@ -38,18 +41,34 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
     public AllLiveStreamInfosEvent refreshLiveStreamInfoList( AllLiveStreamInfosEvent event ) {
         Log.v( TAG, "refreshLiveStreamInfoList : enter" );
 
+        String[] projection = new String[]{ LiveStreamConstants._ID, LiveStreamConstants.FIELD_LIVE_STREAM_ID };
+        String selection = null;
+        String[] selectionArgs = null;
+
+        Map<Integer, Long> liveStreamIds = new HashMap<Integer, Long>();
+
+        Cursor cursor = mContext.getContentResolver().query( LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+        while( cursor.moveToNext() ) {
+
+            liveStreamIds.put( cursor.getInt( cursor.getColumnIndex( LiveStreamConstants.FIELD_LIVE_STREAM_ID ) ), cursor.getLong( cursor.getColumnIndex( LiveStreamConstants._ID ) ) );
+
+        }
+        cursor.close();
+
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
 
             ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
-            String[] projection = new String[]{ LiveStreamConstants._ID };
-            String selection = LiveStreamConstants.FIELD_LIVE_STREAM_ID + " = ?";
-            String[] selectionArgs = null;
+            selection = LiveStreamConstants.FIELD_LIVE_STREAM_ID + " = ?";
 
             ContentValues values;
 
             for( LiveStreamDetails details : event.getDetails() ) {
                 LiveStreamInfo liveStream = LiveStreamInfoHelper.fromDetails( details );
+
+                if( liveStreamIds.containsKey( liveStream.getId() ) ) {
+                    liveStreamIds.remove( liveStream.getId() );
+                }
 
                 selectionArgs = new String[] { String.valueOf( liveStream.getId() ) };
 
@@ -77,7 +96,7 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
                 values.put( LiveStreamConstants.FIELD_CREATED_DATE, liveStream.getCreated().getMillis() );
                 values.put( LiveStreamConstants.FIELD_LAST_MODIFIED_DATE, liveStream.getLastModified().getMillis() );
 
-                Cursor cursor = mContext.getContentResolver().query( LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+                cursor = mContext.getContentResolver().query( LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
                 if( cursor.moveToFirst() ) {
 
                     Long id = cursor.getLong( cursor.getColumnIndexOrThrow( LiveStreamConstants._ID ) );
@@ -92,8 +111,8 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
 
                     ops.add(
                             ContentProviderOperation
-                                    .newInsert(LiveStreamConstants.CONTENT_URI)
-                                    .withValues(values)
+                                    .newInsert( LiveStreamConstants.CONTENT_URI )
+                                    .withValues( values )
                                     .build()
                     );
 
@@ -109,6 +128,33 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
             } catch( Exception e ) {
 
                 Log.e( TAG, "refreshLiveStreamInfoList : error processing live streams", e );
+
+            } finally {
+
+                if (!liveStreamIds.isEmpty()) {
+
+                    for( Integer liveStreamId : liveStreamIds.keySet() ) {
+                        Log.v( TAG, "refreshLiveStreamInfoList : deleting..." + liveStreamId );
+
+                        ops.add(
+                                ContentProviderOperation
+                                        .newDelete( ContentUris.withAppendedId( LiveStreamConstants.CONTENT_URI, liveStreamIds.get( liveStreamId ) ) )
+                                        .build()
+                        );
+
+                    }
+
+                    try {
+
+                        mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
+
+                    } catch( Exception e ) {
+
+                        Log.e( TAG, "refreshLiveStreamInfoList : error processing deleted live streams", e );
+
+                    }
+
+                }
 
             }
 

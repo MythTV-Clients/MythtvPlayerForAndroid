@@ -80,6 +80,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
                 if( percent > 2 ) {
                     fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
+                    Log.v( TAG, "onLoaderReset : fullUrl=" + fullUrl );
                     fab.setVisibility( View.VISIBLE );
                 }
             }

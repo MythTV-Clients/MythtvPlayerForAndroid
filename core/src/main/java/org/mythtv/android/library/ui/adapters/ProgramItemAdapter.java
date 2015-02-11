@@ -7,7 +7,6 @@ import org.mythtv.android.library.core.domain.dvr.Program;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,25 +19,20 @@ import java.util.List;
  */
 public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.ViewHolder> {
 
-    private final String TAG = ProgramItemAdapter.class.getSimpleName();
-
     private List<Program> programs;
     private ProgramItemClickListener programItemClickListener;
     private boolean showTitle;
 
     public ProgramItemAdapter(List<Program> programs, @NonNull ProgramItemClickListener programItemClickListener, boolean showTitle) {
-        Log.v( TAG, "initialize : enter" );
 
         this.programs = programs;
         this.programItemClickListener = programItemClickListener;
         this.showTitle = showTitle;
 
-        Log.v( TAG, "initialize : exit" );
     }
 
     @Override
     public ViewHolder onCreateViewHolder( ViewGroup viewGroup, int position ) {
-        Log.v( TAG, "onCreateViewHolder : enter" );
 
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.program_list_item, viewGroup, false );
 
@@ -48,7 +42,6 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
     @Override
     public void onBindViewHolder( ViewHolder viewHolder, int position ) {
-        Log.v( TAG, "onBindViewHolder : enter" );
 
         final Program program = programs.get( position );
 
@@ -69,14 +62,11 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         });
 
-        Log.v( TAG, "onBindViewHolder : exit" );
     }
 
     @Override
     public int getItemCount() {
-        Log.v( TAG, "getItemCount : enter" );
 
-        Log.v( TAG, "getItemCount : exit" );
         return programs.size();
     }
 
@@ -91,14 +81,12 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         public ViewHolder( View v ) {
             super( v );
-            Log.v( TAG, "initialize : enter" );
 
             this.parent = v;
             title = (TextView) parent.findViewById( R.id.program_item_title );
             description = (TextView) parent.findViewById( R.id.program_item_description );
             date = (TextView) parent.findViewById( R.id.program_item_date );
 
-            Log.v( TAG, "initialize : exit" );
         }
 
         public void setTitle( CharSequence text ) {
