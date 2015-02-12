@@ -24,17 +24,16 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.events.content.AddRecordingLiveStreamEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.player.PlayerActivity;
 import org.mythtv.android.R;
-import org.mythtv.android.player.widgets.FloatingActionButton;
+//import org.mythtv.android.player.widgets.FloatingActionButton;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class RecordingDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, FloatingActionButton.OnCheckedChangeListener, View.OnClickListener  {
+public class RecordingDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener { //}, FloatingActionButton.OnCheckedChangeListener  {
 
     private static final String TAG = RecordingDetailsFragment.class.getSimpleName();
 
@@ -42,8 +41,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
     ImageView preview;
     TextView title, subTitle, startTime, description, percentComplete;
-    Button queueHls, deleteRecording;
-    FloatingActionButton fab;
+    Button play, queueHls, deleteRecording;
+//    FloatingActionButton fab;
 
     Program mProgram;
 
@@ -81,7 +80,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                 if( percent > 2 ) {
                     fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
                     Log.v( TAG, "onLoaderReset : fullUrl=" + fullUrl );
-                    fab.setVisibility( View.VISIBLE );
+//                    fab.setVisibility( View.VISIBLE );
+                    play.setVisibility( View.VISIBLE );
                 }
             }
 
@@ -89,7 +89,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         } else {
             queueHls.setVisibility( View.VISIBLE );
-            fab.setVisibility( View.GONE );
+//            fab.setVisibility( View.GONE );
+            play.setVisibility( View.GONE );
         }
 
         Log.v( TAG, "onLoaderReset : exit" );
@@ -117,11 +118,14 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         queueHls = (Button) rootView.findViewById( R.id.recording_queue_hls );
         queueHls.setOnClickListener( this );
 
+        play = (Button) rootView.findViewById( R.id.recording_play );
+        play.setOnClickListener( this );
+
         deleteRecording = (Button) rootView.findViewById( R.id.recording_delete );
         deleteRecording.setOnClickListener( this );
 
-        fab = (FloatingActionButton) rootView.findViewById( R.id.recording_fab );
-        fab.setOnCheckedChangeListener( this );
+//        fab = (FloatingActionButton) rootView.findViewById( R.id.recording_fab );
+//        fab.setOnCheckedChangeListener( this );
 
         Log.d( TAG, "onCreateView : exit" );
         return rootView;
@@ -147,7 +151,10 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         mProgram = (Program) getArguments().getSerializable( PROGRAM_KEY );
 
-        ( (ActionBarActivity) getActivity() ).getSupportActionBar().setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
+        ( (ActionBarActivity) getActivity() ).getSupportActionBar().setTitle( mProgram.getTitle() );
+        if( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) {
+            ( (ActionBarActivity) getActivity() ).getSupportActionBar().setSubtitle( mProgram.getSubTitle() );
+        }
 
         title.setText( mProgram.getTitle() );
         subTitle.setText( mProgram.getSubTitle() );
@@ -163,23 +170,32 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         Log.d( TAG, "onActivityCreated : exit" );
     }
 
-    @Override
-    public void onCheckedChanged( FloatingActionButton fabView, boolean isChecked ) {
-        Log.d(TAG, "onCheckedChanged : enter");
-
-        Intent intent = new Intent( getActivity(), PlayerActivity.class );
-        intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
-        intent.putExtra( getResources().getString( R.string.should_start ), true );
-        startActivity( intent );
-
-        Log.d( TAG, "onCheckedChanged : exit" );
-    }
+//    @Override
+//    public void onCheckedChanged( FloatingActionButton fabView, boolean isChecked ) {
+//        Log.d(TAG, "onCheckedChanged : enter");
+//
+//        Intent intent = new Intent( getActivity(), PlayerActivity.class );
+//        intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
+//        intent.putExtra( getResources().getString( R.string.should_start ), true );
+//        startActivity( intent );
+//
+//        Log.d( TAG, "onCheckedChanged : exit" );
+//    }
 
     @Override
     public void onClick( View v ) {
         Log.d( TAG, "onClick : enter" );
 
         switch( v.getId() ) {
+
+            case R.id.recording_play :
+
+                Intent intent = new Intent( getActivity(), PlayerActivity.class );
+                intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
+                intent.putExtra( getResources().getString( R.string.should_start ), true );
+                startActivity( intent );
+
+                break;
 
             case R.id.recording_queue_hls :
                 Log.d( TAG, "onClick : queue hls click" );

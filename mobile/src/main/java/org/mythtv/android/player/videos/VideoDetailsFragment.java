@@ -21,17 +21,16 @@ import com.squareup.picasso.Picasso;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.events.content.AddVideoLiveStreamEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.player.PlayerActivity;
 import org.mythtv.android.R;
-import org.mythtv.android.player.widgets.FloatingActionButton;
+//import org.mythtv.android.player.widgets.FloatingActionButton;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class VideoDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, FloatingActionButton.OnCheckedChangeListener, View.OnClickListener {
+public class VideoDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener { //, FloatingActionButton.OnCheckedChangeListener {
 
     private static final String TAG = VideoDetailsFragment.class.getSimpleName();
 
@@ -39,8 +38,8 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
     ImageView coverart;
     TextView title, description, percentComplete;
-    Button queueHls;
-    FloatingActionButton fab;
+    Button play, queueHls;
+//    FloatingActionButton fab;
 
     Video mVideo;
 
@@ -88,7 +87,8 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
                 if( percent > 2 ) {
                     fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
-                    fab.setVisibility( View.VISIBLE );
+//                    fab.setVisibility( View.VISIBLE );
+                    play.setVisibility( View.VISIBLE );
                 }
             }
 
@@ -96,7 +96,8 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
         } else {
             queueHls.setVisibility( View.VISIBLE );
-            fab.setVisibility( View.GONE );
+//            fab.setVisibility( View.GONE );
+            play.setVisibility( View.GONE );
         }
 
         Log.v( TAG, "onLoaderReset : exit" );
@@ -122,8 +123,11 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
         queueHls = (Button) rootView.findViewById( R.id.video_queue_hls );
         queueHls.setOnClickListener( this );
 
-        fab = (FloatingActionButton) rootView.findViewById( R.id.video_fab );
-        fab.setOnCheckedChangeListener( this );
+        play = (Button) rootView.findViewById( R.id.video_play );
+        play.setOnClickListener( this );
+
+//        fab = (FloatingActionButton) rootView.findViewById( R.id.video_fab );
+//        fab.setOnCheckedChangeListener( this );
 
         Log.d( TAG, "onCreateView : exit" );
         return rootView;
@@ -160,23 +164,32 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
         Log.d( TAG, "onActivityCreated : exit" );
     }
 
-    @Override
-    public void onCheckedChanged( FloatingActionButton fabView, boolean isChecked ) {
-        Log.d(TAG, "onCheckedChanged : enter");
-
-        Intent intent = new Intent( getActivity(), PlayerActivity.class );
-        intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
-        intent.putExtra( getResources().getString( R.string.should_start ), true );
-        startActivity( intent );
-
-        Log.d( TAG, "onCheckedChanged : exit" );
-    }
+//    @Override
+//    public void onCheckedChanged( FloatingActionButton fabView, boolean isChecked ) {
+//        Log.d(TAG, "onCheckedChanged : enter");
+//
+//        Intent intent = new Intent( getActivity(), PlayerActivity.class );
+//        intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
+//        intent.putExtra( getResources().getString( R.string.should_start ), true );
+//        startActivity( intent );
+//
+//        Log.d( TAG, "onCheckedChanged : exit" );
+//    }
 
     @Override
     public void onClick( View v ) {
         Log.d( TAG, "onClick : enter" );
 
         switch( v.getId() ) {
+
+            case R.id.video_play :
+
+                Intent intent = new Intent( getActivity(), PlayerActivity.class );
+                intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
+                intent.putExtra( getResources().getString( R.string.should_start ), true );
+                startActivity( intent );
+
+                break;
 
             case R.id.video_queue_hls :
                 Log.d( TAG, "onClick : queue hls click" );

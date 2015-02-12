@@ -74,6 +74,14 @@
         android:gravity="center_horizontal">
 
         <Button
+            android:id="@+id/recording_play"
+            android:layout_margin="@dimen/margin"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Play"
+            android:visibility="gone" />
+
+        <Button
             android:id="@+id/recording_queue_hls"
             android:layout_margin="@dimen/margin"
             android:layout_width="100dp"
@@ -89,7 +97,7 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <!-- FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -112,6 +120,6 @@
 
         </org.mythtv.android.player.widgets.FloatingActionButton>
 
-    </FrameLayout>
+    </FrameLayout -->
 
 </LinearLayout>
