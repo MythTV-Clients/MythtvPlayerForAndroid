@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +33,10 @@ import org.mythtv.android.R;
  */
 public class RecordingDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener { //}, FloatingActionButton.OnCheckedChangeListener  {
 
-    private static final String TAG = RecordingDetailsFragment.class.getSimpleName();
-
     public static final String PROGRAM_KEY = "program";
 
     ImageView preview;
-    TextView title, subTitle, startTime, description, percentComplete;
+    TextView startTime, description, percentComplete;
     Button play, queueHls, deleteRecording;
 //    FloatingActionButton fab;
 
@@ -52,34 +48,27 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
     @Override
     public Loader onCreateLoader( int id, Bundle args ) {
-        Log.v( TAG, "onCreateLoader : enter" );
-
-        Program program = (Program) args.getSerializable( PROGRAM_KEY );
 
         String[] projection = new String[] { LiveStreamConstants._ID, LiveStreamConstants.FIELD_PERCENT_COMPLETE, LiveStreamConstants.FIELD_FULL_URL, LiveStreamConstants.FIELD_RELATIVE_URL };
         String selection = LiveStreamConstants.FIELD_SOURCE_FILE + " like ?";
-        String[] selectionArgs = new String[] { "%" + program.getFileName() };
+        String[] selectionArgs = new String[] { "%" + mProgram.getFileName() };
 
-        Log.v( TAG, "onCreateLoader : exit" );
         return new CursorLoader( getActivity(), LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
     }
 
     @Override
     public void onLoadFinished( Loader<Cursor> loader, Cursor data ) {
-        Log.v( TAG, "onLoaderFinished : enter" );
 
         if( null != data && data.moveToNext() ) {
-            Log.v( TAG, "onLoaderReset : cursor found live stream" );
 
             int percent = data.getInt( data.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
             if( percent > 0 ) {
-                Log.v( TAG, "onLoaderReset : updating percent complete" );
 
                 percentComplete.setText( "HLS: " + String.valueOf( percent ) + "%" );
 
                 if( percent > 2 ) {
                     fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
-                    Log.v( TAG, "onLoaderReset : fullUrl=" + fullUrl );
+//                    Log.v( TAG, "onLoaderReset : fullUrl=" + fullUrl );
 //                    fab.setVisibility( View.VISIBLE );
                     play.setVisibility( View.VISIBLE );
                 }
@@ -93,24 +82,16 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
             play.setVisibility( View.GONE );
         }
 
-        Log.v( TAG, "onLoaderReset : exit" );
     }
 
     @Override
-    public void onLoaderReset( Loader<Cursor> loader ) {
-        Log.v( TAG, "onLoaderReset : enter" );
-
-        Log.v( TAG, "onLoaderReset : exit" );
-    }
+    public void onLoaderReset( Loader<Cursor> loader ) { }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.d( TAG, "onCreateView : enter" );
 
         View rootView = inflater.inflate( R.layout.fragment_recording_details, container, false );
         preview = (ImageView) rootView.findViewById( R.id.recording_preview );
-        title = (TextView) rootView.findViewById( R.id.recording_title );
-        subTitle = (TextView) rootView.findViewById( R.id.recording_sub_title );
         startTime = (TextView) rootView.findViewById( R.id.recording_start_time );
         description = (TextView) rootView.findViewById( R.id.recording_description );
         percentComplete = (TextView) rootView.findViewById( R.id.hls_percent_complete );
@@ -127,14 +108,12 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 //        fab = (FloatingActionButton) rootView.findViewById( R.id.recording_fab );
 //        fab.setOnCheckedChangeListener( this );
 
-        Log.d( TAG, "onCreateView : exit" );
         return rootView;
     }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
         super.onActivityCreated(savedInstanceState);
-        Log.d( TAG, "onActivityCreated : enter" );
 
         ViewTreeObserver vto = preview.getViewTreeObserver();
         vto.addOnPreDrawListener( new ViewTreeObserver.OnPreDrawListener() {
@@ -149,15 +128,12 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         });
 
-        mProgram = (Program) getArguments().getSerializable( PROGRAM_KEY );
+    }
 
-        ( (ActionBarActivity) getActivity() ).getSupportActionBar().setTitle( mProgram.getTitle() );
-        if( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) {
-            ( (ActionBarActivity) getActivity() ).getSupportActionBar().setSubtitle( mProgram.getSubTitle() );
-        }
+    public void setProgram( Program program ) {
 
-        title.setText( mProgram.getTitle() );
-        subTitle.setText( mProgram.getSubTitle() );
+        mProgram = program;
+
         startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
         description.setText( mProgram.getDescription() );
 
@@ -167,24 +143,20 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         getLoaderManager().initLoader( 0, getArguments(), this );
 
-        Log.d( TAG, "onActivityCreated : exit" );
     }
 
 //    @Override
 //    public void onCheckedChanged( FloatingActionButton fabView, boolean isChecked ) {
-//        Log.d(TAG, "onCheckedChanged : enter");
 //
 //        Intent intent = new Intent( getActivity(), PlayerActivity.class );
 //        intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
 //        intent.putExtra( getResources().getString( R.string.should_start ), true );
 //        startActivity( intent );
 //
-//        Log.d( TAG, "onCheckedChanged : exit" );
 //    }
 
     @Override
     public void onClick( View v ) {
-        Log.d( TAG, "onClick : enter" );
 
         switch( v.getId() ) {
 
@@ -198,7 +170,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                 break;
 
             case R.id.recording_queue_hls :
-                Log.d( TAG, "onClick : queue hls click" );
 
                 new AddRecordingLiveStreamAsyncTask().execute();
                 queueHls.setVisibility( View.INVISIBLE );
@@ -207,13 +178,11 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                 break;
 
             case R.id.recording_delete :
-                Log.d( TAG, "onClick : delete clicked" );
 
                 break;
 
         }
 
-        Log.d( TAG, "onClick : exit" );
     }
 
     private void updatePreviewImage( String uri ) {
@@ -228,11 +197,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
     private class AddRecordingLiveStreamAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private String TAG = AddRecordingLiveStreamAsyncTask.class.getSimpleName();
-
         @Override
         protected Void doInBackground( Void... params ) {
-            Log.d( TAG, "doInBackground : adding recording hls" );
 
             MainApplication.getInstance().getContentService().addRecordingLiveStream( new AddRecordingLiveStreamEvent( mProgram.getRecording().getRecordedId(), mProgram.getChannel().getChanId(), mProgram.getRecording().getStartTs(), 0, 1280, 720, null, null, null ) );
 

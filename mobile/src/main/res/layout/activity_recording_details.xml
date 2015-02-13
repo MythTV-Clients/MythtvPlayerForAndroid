@@ -12,20 +12,20 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <include
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar"/>
 
 
-            <!-- As the main content view, the view below consumes the entire
-                 space available using match_parent in both dimensions. -->
-            <FrameLayout
-                android:id="@+id/content_frame"
+            <fragment
+                android:id="@+id/fragment_recording_details"
                 android:layout_below="@id/toolbar"
+                android:name="org.mythtv.android.player.recordings.RecordingDetailsFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_recording_details" />
 
         </RelativeLayout>
 
