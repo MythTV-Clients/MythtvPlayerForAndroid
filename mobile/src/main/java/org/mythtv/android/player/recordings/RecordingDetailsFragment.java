@@ -24,6 +24,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.events.content.AddRecordingLiveStreamEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.library.ui.utils.ImageUtils;
 import org.mythtv.android.player.PlayerActivity;
 import org.mythtv.android.R;
 //import org.mythtv.android.player.widgets.FloatingActionButton;
@@ -139,7 +140,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         DateTime start = new DateTime( mProgram.getRecording().getStartTs() );
         String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" );
-        updatePreviewImage(url);
+        ImageUtils.updatePreviewImage(getActivity(), preview, url );
 
         getLoaderManager().initLoader( 0, getArguments(), this );
 
@@ -182,16 +183,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                 break;
 
         }
-
-    }
-
-    private void updatePreviewImage( String uri ) {
-
-        Picasso.with( getActivity() )
-                .load( uri.toString() )
-//                .resize( finalWidth, finalHeight )
-//                .centerCrop()
-                .into(preview);
 
     }
 

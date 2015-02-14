@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.ui.adapters.TitleInfoItemAdapter;
-import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.R;
 
 import java.util.List;
@@ -48,7 +47,9 @@ public class TitleInfosFragment extends Fragment implements TitleInfoItemAdapter
 
         Bundle args = new Bundle();
         if( !getActivity().getResources().getString( R.string.all_recordings ).equals( titleInfo.getTitle() ) ) {
-            args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, titleInfo.getTitle() );
+
+            args.putSerializable( RecordingsActivity.TITLE_INFO, titleInfo );
+
         }
 
         Intent recordings = new Intent( getActivity(), RecordingsActivity.class );

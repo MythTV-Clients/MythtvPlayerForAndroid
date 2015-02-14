@@ -42,12 +42,6 @@ public class RecordingsFragment extends Fragment implements ProgramItemAdapter.P
         mAdapter = new ProgramItemAdapter( programs, this, null == title );
         mRecyclerView.setAdapter( mAdapter );
 
-        if( null == title || "".equals( title ) ) {
-            title = getResources().getString( R.string.all_recordings );
-        }
-
-        ( (ActionBarActivity) getActivity() ).getSupportActionBar().setTitle( title );
-
     }
 
     public void onProgramItemClicked( Program program ) {

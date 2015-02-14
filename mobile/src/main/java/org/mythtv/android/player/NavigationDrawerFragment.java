@@ -120,7 +120,8 @@ public class NavigationDrawerFragment extends Fragment {
             public void onClick( View view, int position ) {
                 Log.v( TAG, "onClick : enter" );
 
-
+                mSelectedItem = position;
+                
                 switch( position ) {
 
                     case 0 :
