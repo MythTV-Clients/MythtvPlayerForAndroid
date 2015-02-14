@@ -74,40 +74,6 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
         toolbar.setNavigationIcon( iconRes );
     }
 
-    protected void addFragment( Fragment fragment, String tag, boolean addToBackStack ) {
-
-        FragmentTransaction tx = getFragmentManager().beginTransaction();
-        tx.add(R.id.content_frame, fragment, tag);
-
-        if( addToBackStack ) {
-            tx.addToBackStack( null );
-        }
-
-        tx.commit();
-
-    }
-
-    protected void replaceFragment( Fragment fragment, String tag, boolean addToBackStack ) {
-
-        FragmentTransaction tx = getFragmentManager().beginTransaction();
-        tx.replace( R.id.content_frame, fragment, tag );
-
-        if( addToBackStack ) {
-            tx.addToBackStack( null );
-        }
-
-        tx.commit();
-
-    }
-
-    protected void removeFragment( Fragment fragment ) {
-
-        FragmentTransaction tx = getFragmentManager().beginTransaction();
-        tx.remove( fragment );
-        tx.commit();
-
-    }
-
     private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
 
         @Override

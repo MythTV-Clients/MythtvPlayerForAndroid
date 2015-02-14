@@ -1,13 +1,13 @@
 package org.mythtv.android.player.videos;
 
+import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +23,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.events.content.AddVideoLiveStreamEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.library.ui.utils.ImageUtils;
 import org.mythtv.android.player.PlayerActivity;
 import org.mythtv.android.R;
 //import org.mythtv.android.player.widgets.FloatingActionButton;
@@ -32,12 +33,10 @@ import org.mythtv.android.R;
  */
 public class VideoDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener { //, FloatingActionButton.OnCheckedChangeListener {
 
-    private static final String TAG = VideoDetailsFragment.class.getSimpleName();
-
     public static final String VIDEO_KEY = "video";
 
     ImageView coverart;
-    TextView title, description, percentComplete;
+    TextView description, percentComplete;
     Button play, queueHls;
 //    FloatingActionButton fab;
 
@@ -47,41 +46,23 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
     String fullUrl;
 
-    public static VideoDetailsFragment newInstance( Video video ) {
-
-        Bundle args = new Bundle();
-        args.putSerializable( VIDEO_KEY, video );
-
-        VideoDetailsFragment f = new VideoDetailsFragment();
-        f.setArguments( args );
-
-        return f;
-    }
-
     @Override
     public Loader onCreateLoader( int id, Bundle args ) {
-        Log.v( TAG, "onCreateLoader : enter" );
-
-        Video video = (Video) args.getSerializable( VIDEO_KEY );
 
         String[] projection = new String[] { LiveStreamConstants._ID, LiveStreamConstants.FIELD_PERCENT_COMPLETE, LiveStreamConstants.FIELD_FULL_URL, LiveStreamConstants.FIELD_RELATIVE_URL };
         String selection = LiveStreamConstants.FIELD_SOURCE_FILE + " like ?";
-        String[] selectionArgs = new String[] { "%" + video.getFileName() };
+        String[] selectionArgs = new String[] { "%" + mVideo.getFileName() };
 
-        Log.v( TAG, "onCreateLoader : exit" );
         return new CursorLoader( getActivity(), LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
     }
 
     @Override
     public void onLoadFinished( Loader<Cursor> loader, Cursor data ) {
-        Log.v( TAG, "onLoaderFinished : enter" );
 
         if( null != data && data.moveToNext() ) {
-            Log.v( TAG, "onLoaderReset : cursor found live stream" );
 
             int percent = data.getInt( data.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
             if( percent > 0 ) {
-                Log.v( TAG, "onLoaderReset : updating percent complete" );
 
                 percentComplete.setText( "HLS: " + String.valueOf( percent ) + "%" );
 
@@ -100,23 +81,16 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
             play.setVisibility( View.GONE );
         }
 
-        Log.v( TAG, "onLoaderReset : exit" );
     }
 
     @Override
-    public void onLoaderReset( Loader<Cursor> loader ) {
-        Log.v( TAG, "onLoaderReset : enter" );
-
-        Log.v( TAG, "onLoaderReset : exit" );
-    }
+    public void onLoaderReset( Loader<Cursor> loader ) { }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.d(TAG, "onCreateView : enter");
 
         View rootView = inflater.inflate( R.layout.fragment_video_details, container, false );
         coverart = (ImageView) rootView.findViewById( R.id.video_coverart );
-        title = (TextView) rootView.findViewById( R.id.video_title );
         description = (TextView) rootView.findViewById( R.id.video_description );
         percentComplete = (TextView) rootView.findViewById( R.id.hls_percent_complete );
 
@@ -129,39 +103,39 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 //        fab = (FloatingActionButton) rootView.findViewById( R.id.video_fab );
 //        fab.setOnCheckedChangeListener( this );
 
-        Log.d( TAG, "onCreateView : exit" );
         return rootView;
     }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
         super.onActivityCreated(savedInstanceState);
-        Log.d( TAG, "onActivityCreated : enter" );
 
         ViewTreeObserver vto = coverart.getViewTreeObserver();
         vto.addOnPreDrawListener( new ViewTreeObserver.OnPreDrawListener() {
 
             public boolean onPreDraw() {
 
-                finalWidth = coverart.getMeasuredWidth();
-                finalHeight = coverart.getMeasuredHeight();
+            finalWidth = coverart.getMeasuredWidth();
+            finalHeight = coverart.getMeasuredHeight();
 
-                return true;
+            return true;
             }
 
         });
 
-        mVideo = (Video) getArguments().getSerializable(VIDEO_KEY);
+    }
 
-        title.setText( mVideo.getTitle() );
+    public void setVideo( Video video ) {
+
+        mVideo = video;
+
         description.setText( mVideo.getDescription() );
 
         String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + mVideo.getId() + "&Type=coverart";
-        updatePreviewImage( url );
+        ImageUtils.updatePreviewImage( getActivity(), coverart, url );
 
         getLoaderManager().initLoader( 0, getArguments(), this );
 
-        Log.d( TAG, "onActivityCreated : exit" );
     }
 
 //    @Override
@@ -178,7 +152,6 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onClick( View v ) {
-        Log.d( TAG, "onClick : enter" );
 
         switch( v.getId() ) {
 
@@ -192,7 +165,6 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
                 break;
 
             case R.id.video_queue_hls :
-                Log.d( TAG, "onClick : queue hls click" );
 
                 new AddVideoLiveStreamAsyncTask().execute();
                 queueHls.setVisibility( View.INVISIBLE );
@@ -201,17 +173,6 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
                 break;
 
         }
-
-        Log.d( TAG, "onClick : exit" );
-    }
-
-    private void updatePreviewImage( String uri ) {
-
-        Picasso.with( getActivity() )
-                .load( uri.toString() )
-//                .resize( finalWidth, finalHeight )
-//                .centerCrop()
-                .into( coverart );
 
     }
 
