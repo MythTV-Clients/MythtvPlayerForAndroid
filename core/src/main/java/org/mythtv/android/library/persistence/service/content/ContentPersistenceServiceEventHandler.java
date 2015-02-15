@@ -133,26 +133,7 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
 
                 if (!liveStreamIds.isEmpty()) {
 
-                    for( Integer liveStreamId : liveStreamIds.keySet() ) {
-                        Log.v( TAG, "refreshLiveStreamInfoList : deleting..." + liveStreamId );
-
-                        ops.add(
-                                ContentProviderOperation
-                                        .newDelete( ContentUris.withAppendedId( LiveStreamConstants.CONTENT_URI, liveStreamIds.get( liveStreamId ) ) )
-                                        .build()
-                        );
-
-                    }
-
-                    try {
-
-                        mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
-
-                    } catch( Exception e ) {
-
-                        Log.e( TAG, "refreshLiveStreamInfoList : error processing deleted live streams", e );
-
-                    }
+                    event.setDeleted( liveStreamIds );
 
                 }
 
@@ -338,7 +319,10 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
 
         if( event.isDeletionCompleted() ) {
 
-            mContext.getContentResolver().delete( ContentUris.withAppendedId( LiveStreamConstants.CONTENT_URI, event.getKey() ), null, null );
+            String selection = LiveStreamConstants.FIELD_LIVE_STREAM_ID + " = ?";
+            String[] selectionArgs = new String[] { String.valueOf( event.getKey() )};
+
+            mContext.getContentResolver().delete( LiveStreamConstants.CONTENT_URI, selection, selectionArgs );
 
             Log.v( TAG, "removeLiveStream : live stream removed" );
         }

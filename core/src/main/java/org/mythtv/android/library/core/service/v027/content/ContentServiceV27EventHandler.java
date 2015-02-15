@@ -59,9 +59,9 @@ public class ContentServiceV27EventHandler implements ContentService {
 
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( ALL_LIVE_STREAM_REQ_ID, false );
         try {
-            mLiveStreamInfoList = mMythTvApiContext.getContentService().getLiveStreamList(event.getFileName(), eTagInfo, ALL_LIVE_STREAM_REQ_ID) ;
+            mLiveStreamInfoList = mMythTvApiContext.getContentService().getLiveStreamList( event.getFileName(), eTagInfo, ALL_LIVE_STREAM_REQ_ID ) ;
         } catch( RetrofitError e ) {
-            Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
+            Log.w( TAG, "getLiveStreamInfoList : error - " + e.getMessage() );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
@@ -69,19 +69,34 @@ public class ContentServiceV27EventHandler implements ContentService {
 
         }
 
+        AllLiveStreamInfosEvent refreshedEvent = new AllLiveStreamInfosEvent( liveStreamDetails );
+
         if( null != mLiveStreamInfoList ) {
             for( LiveStreamInfo liveStreamInfo : mLiveStreamInfoList.getLiveStreamInfos() ) {
-                liveStreamDetails.add( LiveStreamInfoHelper.toDetails( liveStreamInfo ));
+                liveStreamDetails.add( LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
             }
+
+            mContentPersistenceService.refreshLiveStreamInfoList( refreshedEvent );
+
+            if( null != refreshedEvent.getDeleted() && !refreshedEvent.getDeleted().isEmpty() ) {
+
+                for( Integer liveStreamId : refreshedEvent.getDeleted().keySet() ) {
+
+                    removeLiveStream( new RemoveLiveStreamEvent( liveStreamId ) );
+
+                }
+
+            }
+
         }
 
-        return new AllLiveStreamInfosEvent( liveStreamDetails );
+        return refreshedEvent;
     }
 
     @Override
     public LiveStreamDetailsEvent getLiveStream( RequestLiveStreamDetailsEvent event ) {
 
-        ETagInfo eTagInfo = mMythTvApiContext.getEtag( LIVE_STREAM_REQ_ID, false );
+        ETagInfo eTagInfo = mMythTvApiContext.getEtag( LIVE_STREAM_REQ_ID, true );
         try {
             LiveStreamInfo liveStreamInfo = mMythTvApiContext.getContentService().getLiveStream(event.getKey(), eTagInfo, LIVE_STREAM_REQ_ID);
             if( null != liveStreamInfo ) {
@@ -91,6 +106,7 @@ public class ContentServiceV27EventHandler implements ContentService {
 
                 return details;
             }
+
         } catch( RetrofitError e ) {
             if( e.getResponse().getStatus() == 304 ) {
 
@@ -98,7 +114,6 @@ public class ContentServiceV27EventHandler implements ContentService {
             } else if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
             }
-
 
         }
 

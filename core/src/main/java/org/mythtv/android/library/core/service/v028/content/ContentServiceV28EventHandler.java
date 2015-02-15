@@ -54,7 +54,6 @@ public class ContentServiceV28EventHandler implements ContentService {
 
     @Override
     public AllLiveStreamInfosEvent getLiveStreamInfoList( RequestAllLiveStreamInfosEvent event ) {
-        Log.v( TAG, "getLiveStreamInfoList : enter" );
 
         List<LiveStreamDetails> liveStreamDetails = new ArrayList<LiveStreamDetails>();
 
@@ -62,59 +61,67 @@ public class ContentServiceV28EventHandler implements ContentService {
         try {
             mLiveStreamInfoList = mMythTvApiContext.getContentService().getLiveStreamList( event.getFileName(), eTagInfo, ALL_LIVE_STREAM_REQ_ID ) ;
         } catch( RetrofitError e ) {
-            Log.e( TAG, "getLiveStreamInfoList : error - " + e.getMessage() );
+            Log.w( TAG, "getLiveStreamInfoList : error - " + e.getMessage() );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
             }
 
         }
+
+        AllLiveStreamInfosEvent refreshedEvent = new AllLiveStreamInfosEvent( liveStreamDetails );
 
         if( null != mLiveStreamInfoList ) {
             for( LiveStreamInfo liveStreamInfo : mLiveStreamInfoList.getLiveStreamInfos() ) {
                 liveStreamDetails.add( LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
             }
 
-            mContentPersistenceService.refreshLiveStreamInfoList( new AllLiveStreamInfosEvent( liveStreamDetails ) );
+            mContentPersistenceService.refreshLiveStreamInfoList( refreshedEvent );
+
+            if( null != refreshedEvent.getDeleted() && !refreshedEvent.getDeleted().isEmpty() ) {
+
+                for( Integer liveStreamId : refreshedEvent.getDeleted().keySet() ) {
+
+                    removeLiveStream( new RemoveLiveStreamEvent( liveStreamId ) );
+
+                }
+
+            }
+
         }
 
-        Log.v( TAG, "getLiveStreamInfoList : enter" );
-        return new AllLiveStreamInfosEvent( liveStreamDetails );
+        return refreshedEvent;
     }
 
     @Override
     public LiveStreamDetailsEvent getLiveStream( RequestLiveStreamDetailsEvent event ) {
-        Log.v( TAG, "getLiveStream : enter" );
 
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( LIVE_STREAM_REQ_ID, true );
         try {
             LiveStreamInfo liveStreamInfo = mMythTvApiContext.getContentService().getLiveStream(event.getKey(), eTagInfo, LIVE_STREAM_REQ_ID);
             if( null != liveStreamInfo ) {
 
-                Log.v( TAG, "getLiveStream : exit" );
-                return new LiveStreamDetailsEvent( liveStreamInfo.getId(), LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
+                LiveStreamDetailsEvent details = new LiveStreamDetailsEvent( liveStreamInfo.getId(), LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
+                mContentPersistenceService.updateLiveStream( details );
+
+                return details;
             }
 
         } catch( RetrofitError e ) {
             if( e.getResponse().getStatus() == 304 ) {
 
-                Log.v( TAG, "getLiveStream : exit, not modified" );
                 return LiveStreamDetailsEvent.notModified( event.getKey() );
-            }
-
-            if( e.getKind() == RetrofitError.Kind.NETWORK ) {
+            } else if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
             }
 
         }
 
-        Log.v( TAG, "getLiveStream : exit, not found" );
         return LiveStreamDetailsEvent.notFound( event.getKey() );
     }
 
     @Override
     public LiveStreamAddedEvent addLiveStream( AddLiveStreamEvent event ) {
-        Log.v( TAG, "addLiveStream : enter" );
 
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( LIVE_STREAM_REQ_ID, false );
         LiveStreamInfo liveStreamInfo = mMythTvApiContext.getContentService().addLiveStream( event.getStorageGroup(), event.getFileName(), event.getHostName(), event.getMaxSegments(), event.getWidth(), event.getHeight(), event.getBitrate(), event.getAudioBitrate(), event.getSampleRate(), eTagInfo, LIVE_STREAM_REQ_ID );
@@ -123,17 +130,14 @@ public class ContentServiceV28EventHandler implements ContentService {
             LiveStreamAddedEvent added = new LiveStreamAddedEvent( liveStreamInfo.getId(), LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
             mContentPersistenceService.addLiveStream( added );
 
-            Log.v( TAG, "addLiveStream : exit" );
             return added;
         }
 
-        Log.v( TAG, "addLiveStream : exit, not added" );
         return LiveStreamAddedEvent.notAdded();
     }
 
     @Override
     public LiveStreamAddedEvent addRecordingLiveStream( AddRecordingLiveStreamEvent event ) {
-        Log.v( TAG, "addRecordingLiveStream : enter" );
 
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( LIVE_STREAM_REQ_ID, false );
         LiveStreamInfo liveStreamInfo = mMythTvApiContext.getContentService().addRecordingLiveStream( event.getRecordedId(), event.getChanId(), event.getStartTime(), event.getMaxSegments(), event.getWidth(), event.getHeight(), event.getBitrate(), event.getAudioBitrate(), event.getSampleRate(), eTagInfo, LIVE_STREAM_REQ_ID );
@@ -142,17 +146,14 @@ public class ContentServiceV28EventHandler implements ContentService {
             LiveStreamAddedEvent added = LiveStreamAddedEvent.recordingAdded( event.getRecordedId(), LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
             mContentPersistenceService.addLiveStream( added );
 
-            Log.v( TAG, "addRecordingLiveStream : exit" );
             return added;
         }
 
-        Log.v( TAG, "addRecordingLiveStream : exit, not added" );
         return LiveStreamAddedEvent.notAdded();
     }
 
     @Override
     public LiveStreamAddedEvent addVideoLiveStream( AddVideoLiveStreamEvent event ) {
-        Log.v( TAG, "addVideoLiveStream : enter" );
 
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( LIVE_STREAM_REQ_ID, false );
         LiveStreamInfo liveStreamInfo = mMythTvApiContext.getContentService().addVideoLiveStream( event.getId(), event.getMaxSegments(), event.getWidth(), event.getHeight(), event.getBitrate(), event.getAudioBitrate(), event.getSampleRate(), eTagInfo, LIVE_STREAM_REQ_ID );
@@ -161,17 +162,14 @@ public class ContentServiceV28EventHandler implements ContentService {
             LiveStreamAddedEvent added = LiveStreamAddedEvent.recordingAdded( event.getId(), LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
             mContentPersistenceService.addLiveStream( added );
 
-            Log.v( TAG, "addVideoLiveStream : exit" );
             return added;
         }
 
-        Log.v( TAG, "addVideoLiveStream : exit, not added" );
         return LiveStreamAddedEvent.notAdded();
     }
 
     @Override
     public LiveStreamRemovedEvent removeLiveStream( RemoveLiveStreamEvent event ) {
-        Log.v( TAG, "removeLiveStream : enter" );
 
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( LIVE_STREAM_REQ_ID, false );
         Bool deleted = mMythTvApiContext.getContentService().removeLiveStream( event.getKey(), eTagInfo, LIVE_STREAM_REQ_ID );
@@ -180,11 +178,9 @@ public class ContentServiceV28EventHandler implements ContentService {
             LiveStreamRemovedEvent removed = new LiveStreamRemovedEvent( event.getKey() );
             mContentPersistenceService.removeLiveStream( removed );
 
-            Log.v( TAG, "removeLiveStream : exit" );
             return removed;
         }
 
-        Log.v( TAG, "removeLiveStream : exit, delete failed" );
         return LiveStreamRemovedEvent.deletionFailed( event.getKey() );
     }
 
