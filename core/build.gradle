@@ -35,7 +35,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.squareup.picasso:picasso:2.5.0'
 
-    compile 'org.mythtv.android:mythtv-service-api:2.0.3'
+    compile 'org.mythtv.android:mythtv-service-api:2.0.4'
 
     androidTestCompile 'junit:junit:4.11'
 

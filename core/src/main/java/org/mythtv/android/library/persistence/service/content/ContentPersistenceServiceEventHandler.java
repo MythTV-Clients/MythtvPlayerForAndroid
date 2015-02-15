@@ -31,7 +31,7 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
 
     Context mContext;
 
-    public ContentPersistenceServiceEventHandler(Context context) {
+    public ContentPersistenceServiceEventHandler( Context context ) {
 
         mContext = context;
 

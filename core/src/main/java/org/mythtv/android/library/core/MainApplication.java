@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.squareup.okhttp.OkHttpClient;
+
 import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.core.service.MythService;
@@ -200,7 +202,10 @@ public class MainApplication extends Application {
 
                 mApiVersion = apiVersion;
 
-                mMythTvApiContext = MythTvApiContext.newBuilder().setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).setLogLevel(RestAdapter.LogLevel.FULL).build();
+                OkHttpClient okHttpClient = new OkHttpClient();
+                okHttpClient.setFollowRedirects( true );
+
+                mMythTvApiContext = MythTvApiContext.newBuilder().setOkHttpClient( okHttpClient ).setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).setLogLevel(RestAdapter.LogLevel.FULL).build();
 
                 switch( mApiVersion ) {
 
