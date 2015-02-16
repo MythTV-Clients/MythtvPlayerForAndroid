@@ -57,8 +57,6 @@
         android:id="@+id/drawer_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nav_drawer_sub_header"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" />
+        android:layout_below="@+id/nav_drawer_sub_header" />
 
 </RelativeLayout>

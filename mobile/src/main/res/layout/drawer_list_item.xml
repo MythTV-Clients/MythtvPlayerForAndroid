@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:background="@drawable/click_list_item"
-    android:clickable="true">
+    android:clickable="true"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <ImageView
         android:id="@android:id/icon1"

@@ -3,6 +3,7 @@ package org.mythtv.android.player;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -11,9 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,7 +27,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends Fragment implements NavigationDrawerAdapter.NavigationDrawerCallbacks {
 
     private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
 
@@ -40,17 +39,12 @@ public class NavigationDrawerFragment extends Fragment {
     private RecyclerView recyclerView;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private NavAdapter adapter;
+    private NavigationDrawerAdapter adapter;
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
     private View containerView;
-    private boolean isDrawerOpened = false;
 
     private int mSelectedItem;
-
-    public NavigationDrawerFragment() {
-        // Required empty public constructor
-    }
 
     public static List<NavigationItem> getNavigationItems( Context context ) {
 
@@ -65,44 +59,24 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
 
-    public static void saveToPreferences( Context context, String preferenceName, String preferenceValue ) {
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences( PREF_FILE_NAME, Context.MODE_PRIVATE );
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString( preferenceName, preferenceValue );
-        editor.apply();
-
-    }
-
-    public static String readFromPreferences( Context context, String preferenceName, String defaultValue ) {
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences( PREF_FILE_NAME, Context.MODE_PRIVATE );
-
-        return sharedPreferences.getString( preferenceName, defaultValue );
-    }
-
     @Override
     public void onCreate( Bundle savedInstanceState ) {
-        super.onCreate(savedInstanceState);
+        super.onCreate( savedInstanceState );
 
         mUserLearnedDrawer = Boolean.valueOf( readFromPreferences( getActivity(), KEY_USER_LEARNED_DRAWER, "false" ) );
         mSelectedItem = Integer.parseInt( readFromPreferences( getActivity(), SELECTED_ITEM_STATE, "0" ) );
+        Log.i( TAG, "onCreate : loading position from sharedPreferences, position=" + mSelectedItem );
 
-        if( savedInstanceState == null ) {
-
-            mSelectedItem = 0;
-
-        } else {
-
-            mFromSavedInstanceState = true;
-
-            if( savedInstanceState.containsKey( SELECTED_ITEM_STATE ) ) {
-
-                mSelectedItem = savedInstanceState.getInt( SELECTED_ITEM_STATE );
-
-            }
-
-        }
+//        if( null != savedInstanceState ) {
+//
+//            if( savedInstanceState.containsKey( SELECTED_ITEM_STATE ) ) {
+//
+//                mSelectedItem = savedInstanceState.getInt( SELECTED_ITEM_STATE );
+//                mFromSavedInstanceState = true;
+//
+//            }
+//
+//        }
 
     }
 
@@ -111,92 +85,13 @@ public class NavigationDrawerFragment extends Fragment {
 
         View layout = inflater.inflate( R.layout.fragment_navigation_drawer, container, false );
         recyclerView = (RecyclerView) layout.findViewById( R.id.drawer_list );
-        adapter = new NavAdapter( getActivity(), getNavigationItems(getActivity()) );
+        adapter = new NavigationDrawerAdapter( getNavigationItems( getActivity() ) );
+        adapter.setNavigationDrawerCallbacks( this );
         recyclerView.setAdapter( adapter );
         recyclerView.setLayoutManager( new LinearLayoutManager( getActivity() ) );
-        recyclerView.addOnItemTouchListener( new RecyclerTouchListener( getActivity(), recyclerView, new ClickListener() {
 
-            @Override
-            public void onClick( View view, int position ) {
-                Log.v( TAG, "onClick : enter" );
-
-                mSelectedItem = position;
-                
-                switch( position ) {
-
-                    case 0 :
-
-                        if( !( getActivity() instanceof ShowsActivity ) ) {
-                            startActivity( new Intent( getActivity(), ShowsActivity.class ) );
-                        }
-
-                        mDrawerLayout.closeDrawer( containerView );
-
-                        break;
-
-                    case 1 :
-
-                        if( !( getActivity() instanceof VideosActivity ) ) {
-                            startActivity( new Intent( getActivity(), VideosActivity.class ) );
-                        }
-
-                        mDrawerLayout.closeDrawer( containerView );
-
-                        break;
-
-                    case 2 :
-
-                        startActivity( new Intent( getActivity(), SettingsActivity.class ) );
-
-                        mDrawerLayout.closeDrawer( containerView );
-
-                        break;
-
-                }
-
-                Log.v( TAG, "onClick : exit" );
-            }
-
-            @Override
-            public void onLongClick( View view, int position ) {
-                Log.v( TAG, "onLongClick : enter" );
-
-                switch( position ) {
-
-                    case 0 :
-
-                        if( !( getActivity() instanceof ShowsActivity ) ) {
-                            startActivity( new Intent( getActivity(), ShowsActivity.class ) );
-                        }
-
-                        mDrawerLayout.closeDrawer( containerView );
-
-                        break;
-
-                    case 1 :
-
-                        if( !( getActivity() instanceof VideosActivity ) ) {
-                            startActivity( new Intent( getActivity(), VideosActivity.class ) );
-                        }
-
-                        mDrawerLayout.closeDrawer( containerView );
-
-                        break;
-
-                    case 2 :
-
-                        startActivity( new Intent( getActivity(), SettingsActivity.class ) );
-
-                        mDrawerLayout.closeDrawer( containerView );
-
-                        break;
-
-                }
-
-                Log.v( TAG, "onLongClick : exit" );
-            }
-
-        }));
+        Log.i( TAG, "onCreateView : position=" + mSelectedItem );
+        selectItem( mSelectedItem );
 
         return layout;
     }
@@ -208,10 +103,7 @@ public class NavigationDrawerFragment extends Fragment {
         if( null != savedInstanceState && savedInstanceState.containsKey( SELECTED_ITEM_STATE ) ) {
 
             mSelectedItem = savedInstanceState.getInt( SELECTED_ITEM_STATE );
-
-        } else {
-
-            mSelectedItem = 0;
+            Log.i( TAG, "onViewStateRestored : loading position from savedInstanceState, " + mSelectedItem );
 
         }
 
@@ -221,7 +113,30 @@ public class NavigationDrawerFragment extends Fragment {
     public void onSaveInstanceState( Bundle outState ) {
         super.onSaveInstanceState( outState );
 
+        saveToPreferences( getActivity(), SELECTED_ITEM_STATE, String.valueOf( mSelectedItem ) );
         outState.putInt( SELECTED_ITEM_STATE, mSelectedItem );
+        Log.i( TAG, "onViewStateRestored : saving position to savedInstanceState, " + mSelectedItem );
+
+    }
+
+    public void openDrawer() {
+
+        mDrawerLayout.openDrawer( containerView );
+
+    }
+
+    public void closeDrawer() {
+
+        mDrawerLayout.closeDrawer( containerView );
+
+    }
+
+
+    @Override
+    public void onNavigationDrawerItemSelected( int position ) {
+        Log.i( TAG, "onNavigationDrawerItemSelected : position=" + position );
+
+        selectItem( position );
 
     }
 
@@ -235,6 +150,8 @@ public class NavigationDrawerFragment extends Fragment {
             public void onDrawerOpened( View drawerView ) {
                 super.onDrawerOpened( drawerView );
 
+                if( !isAdded() ) return;
+
                 if( !mUserLearnedDrawer ) {
                     mUserLearnedDrawer = true;
                     saveToPreferences( getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "" );
@@ -247,6 +164,8 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerClosed( View drawerView ) {
                 super.onDrawerClosed( drawerView );
+
+                if( !isAdded() ) return;
 
                 getActivity().invalidateOptionsMenu();
 
@@ -265,7 +184,6 @@ public class NavigationDrawerFragment extends Fragment {
             mDrawerLayout.openDrawer( containerView );
         }
 
-        mDrawerLayout.setDrawerListener( mDrawerToggle );
         mDrawerLayout.post( new Runnable() {
 
             @Override
@@ -277,65 +195,80 @@ public class NavigationDrawerFragment extends Fragment {
 
         });
 
-    }
-
-    public static interface ClickListener {
-
-        public void onClick( View view, int position );
-
-        public void onLongClick( View view, int position );
+        mDrawerLayout.setDrawerListener( mDrawerToggle );
 
     }
 
-    static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+    void selectItem( int position ) {
+        Log.i( TAG, "selectItem : position=" + position );
 
-        private GestureDetector gestureDetector;
-        private ClickListener clickListener;
+        mSelectedItem = position;
+        saveToPreferences( getActivity(), SELECTED_ITEM_STATE, String.valueOf( mSelectedItem ) );
 
-        public RecyclerTouchListener( Context context, final RecyclerView recyclerView, final ClickListener clickListener ) {
+        if( null != mDrawerLayout ) {
+            mDrawerLayout.closeDrawer( containerView );
+        }
 
-            this.clickListener = clickListener;
+//        if( null != mCallbacks ) {
+//            mCallbacks.onNavigationDrawerItemSelected( position );
+//        }
 
-            gestureDetector = new GestureDetector( context, new GestureDetector.SimpleOnGestureListener() {
+        ((NavigationDrawerAdapter) recyclerView.getAdapter() ).selectPosition( position );
 
-                @Override
-                public boolean onSingleTapUp( MotionEvent e ) {
-                    return true;
+        switch( position ) {
+
+            case 0 :
+
+                if( !( getActivity() instanceof ShowsActivity ) ) {
+                    startActivity( new Intent( getActivity(), ShowsActivity.class ) );
                 }
 
-                @Override
-                public void onLongPress( MotionEvent e ) {
+                break;
 
-                    View child = recyclerView.findChildViewUnder( e.getX(), e.getY() );
-                    if( null != child && null != clickListener ) {
+            case 1 :
 
-                        clickListener.onLongClick( child, recyclerView.getChildPosition( child ) );
-
-                    }
-
+                if( !( getActivity() instanceof VideosActivity ) ) {
+                    startActivity( new Intent( getActivity(), VideosActivity.class ) );
                 }
 
-            });
+                break;
+
+            case 2 :
+
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+
+                break;
 
         }
 
-        @Override
-        public boolean onInterceptTouchEvent( RecyclerView rv, MotionEvent e ) {
+    }
 
-            View child = rv.findChildViewUnder( e.getX(), e.getY() );
-            if( null != child && null != clickListener && gestureDetector.onTouchEvent( e ) ) {
+    public boolean isDrawerOpen() {
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen( containerView );
+    }
 
-                clickListener.onClick( child, rv.getChildPosition( child ) );
+    @Override
+    public void onConfigurationChanged( Configuration newConfig ) {
+        super.onConfigurationChanged( newConfig );
 
-            }
+        mDrawerToggle.onConfigurationChanged( newConfig );
 
-            return false;
-        }
+    }
 
-        @Override
-        public void onTouchEvent( RecyclerView rv, MotionEvent e ) {
-        }
+    public static void saveToPreferences( Context context, String preferenceName, String preferenceValue ) {
 
+        SharedPreferences sharedPreferences = context.getSharedPreferences( PREF_FILE_NAME, Context.MODE_PRIVATE );
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString( preferenceName, preferenceValue );
+        editor.apply();
+
+    }
+
+    public static String readFromPreferences( Context context, String preferenceName, String defaultValue ) {
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences( PREF_FILE_NAME, Context.MODE_PRIVATE );
+
+        return sharedPreferences.getString( preferenceName, defaultValue );
     }
 
 }
