@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +27,6 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerAdapter.NavigationDrawerCallbacks {
-
-    private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
 
     public static final String PREF_FILE_NAME = "mythtv_preference";
     public static final String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
@@ -65,18 +62,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         mUserLearnedDrawer = Boolean.valueOf( readFromPreferences( getActivity(), KEY_USER_LEARNED_DRAWER, "false" ) );
         mSelectedItem = Integer.parseInt( readFromPreferences( getActivity(), SELECTED_ITEM_STATE, "0" ) );
-        Log.i( TAG, "onCreate : loading position from sharedPreferences, position=" + mSelectedItem );
-
-//        if( null != savedInstanceState ) {
-//
-//            if( savedInstanceState.containsKey( SELECTED_ITEM_STATE ) ) {
-//
-//                mSelectedItem = savedInstanceState.getInt( SELECTED_ITEM_STATE );
-//                mFromSavedInstanceState = true;
-//
-//            }
-//
-//        }
 
     }
 
@@ -90,7 +75,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         recyclerView.setAdapter( adapter );
         recyclerView.setLayoutManager( new LinearLayoutManager( getActivity() ) );
 
-        Log.i( TAG, "onCreateView : position=" + mSelectedItem );
         selectItem( mSelectedItem );
 
         return layout;
@@ -103,7 +87,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         if( null != savedInstanceState && savedInstanceState.containsKey( SELECTED_ITEM_STATE ) ) {
 
             mSelectedItem = savedInstanceState.getInt( SELECTED_ITEM_STATE );
-            Log.i( TAG, "onViewStateRestored : loading position from savedInstanceState, " + mSelectedItem );
 
         }
 
@@ -115,7 +98,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         saveToPreferences( getActivity(), SELECTED_ITEM_STATE, String.valueOf( mSelectedItem ) );
         outState.putInt( SELECTED_ITEM_STATE, mSelectedItem );
-        Log.i( TAG, "onViewStateRestored : saving position to savedInstanceState, " + mSelectedItem );
 
     }
 
@@ -134,7 +116,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     @Override
     public void onNavigationDrawerItemSelected( int position ) {
-        Log.i( TAG, "onNavigationDrawerItemSelected : position=" + position );
 
         selectItem( position );
 
@@ -200,7 +181,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     }
 
     void selectItem( int position ) {
-        Log.i( TAG, "selectItem : position=" + position );
 
         mSelectedItem = position;
         saveToPreferences( getActivity(), SELECTED_ITEM_STATE, String.valueOf( mSelectedItem ) );

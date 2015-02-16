@@ -2,7 +2,6 @@ package org.mythtv.android.player;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,8 +18,6 @@ import java.util.List;
  * Created by dmfrey on 12/3/14.
  */
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.ViewHolder> {
-
-    private static final String TAG = NavigationDrawerAdapter.class.getSimpleName();
 
     private List<NavigationItem> mData = Collections.EMPTY_LIST;
     private NavigationDrawerCallbacks mNavigationDrawerCallbacks;
@@ -107,7 +104,6 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             public void onClick( View v ) {
 
                 if( null != mNavigationDrawerCallbacks ) {
-                    Log.i( TAG, "onClick : position=" + position );
 
                     mNavigationDrawerCallbacks.onNavigationDrawerItemSelected( position );
 
