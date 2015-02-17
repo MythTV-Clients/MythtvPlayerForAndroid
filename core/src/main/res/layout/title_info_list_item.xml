@@ -6,16 +6,19 @@
     <LinearLayout
         android:id="@+id/title_info_item"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeight"
         android:orientation="vertical">
+
 
         <TextView
             android:id="@+id/title_info_item_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:text="test title" />
 
     </LinearLayout>
 
