@@ -46,10 +46,14 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         final Program program = programs.get( position );
 
         String title = program.getSubTitle();
-        if( showTitle && !( null == title || "".equals( title )  ) ) {
-            title = program.getTitle() + ": " + title;
-        } else {
-            title = program.getTitle();
+        if( showTitle ) {
+
+            if( !( null == title || "".equals( title ) ) ) {
+                title = program.getTitle() + ": " + title;
+            } else {
+                title = program.getTitle();
+            }
+
         }
 
         viewHolder.setTitle( title );
