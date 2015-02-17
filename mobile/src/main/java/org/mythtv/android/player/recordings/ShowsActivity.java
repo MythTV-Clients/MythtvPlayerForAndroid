@@ -41,7 +41,15 @@ public class ShowsActivity extends BaseActionBarActivity implements TitleInfoDat
         mDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById( R.id.fragment_navigation_drawer );
         mDrawerFragment.setUp( R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar );
 
-        setTitle( getResources().getString( R.string.drawer_item_watch_recordings ) );
+        setTitle(getResources().getString(R.string.drawer_item_watch_recordings));
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mDrawerFragment.selectItem( 0 );
 
     }
 

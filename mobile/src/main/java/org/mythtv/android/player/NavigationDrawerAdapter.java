@@ -117,11 +117,13 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
 
             holder.itemView.setBackgroundColor( holder.itemView.getContext().getResources().getColor( R.color.primary_light ) );
             holder.mTextView.setTextColor( holder.itemView.getContext().getResources().getColor( R.color.primary_text ) );
+            holder.mImageView.setColorFilter( holder.itemView.getContext().getResources().getColor( R.color.primary_text ) );
 
         } else {
 
             holder.itemView.setBackgroundColor( Color.TRANSPARENT );
             holder.mTextView.setTextColor( holder.itemView.getContext().getResources().getColor( R.color.secondary_text ) );
+            holder.mImageView.setColorFilter( holder.itemView.getContext().getResources().getColor( R.color.secondary_text ) );
 
         }
 

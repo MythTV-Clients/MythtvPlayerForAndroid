@@ -43,6 +43,14 @@ public class VideosActivity extends BaseActionBarActivity implements VideoDataCo
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        mDrawerFragment.selectItem( 1 );
+
+    }
+
+    @Override
     protected void updateData() {
 
         VideosDataFragment videosDataFragment = (VideosDataFragment) getFragmentManager().findFragmentByTag(VIDEOS_DATA_FRAGMENT_TAG);
