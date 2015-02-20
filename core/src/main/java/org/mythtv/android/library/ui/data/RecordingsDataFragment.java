@@ -53,6 +53,12 @@ public class RecordingsDataFragment extends Fragment {
 
     }
 
+    public void reset() {
+
+        update();
+
+    }
+
     public boolean isLoading() {
         return loading;
     }

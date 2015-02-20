@@ -11,12 +11,17 @@ import android.view.ViewGroup;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
+import org.mythtv.android.library.core.domain.video.VideoDirectory;
+import org.mythtv.android.library.core.utils.TreeNode;
 import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.RequestAllVideosEvent;
 import org.mythtv.android.library.events.video.VideoDetails;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Created by dmfrey on 11/29/14.
@@ -48,6 +53,12 @@ public class VideosDataFragment extends Fragment {
         } catch( ClassCastException e ) {
             throw new ClassCastException( activity.toString() + " must implement VideoDataConsumer" );
         }
+
+    }
+
+    public void reset() {
+
+        update();
 
     }
 
@@ -119,6 +130,28 @@ public class VideosDataFragment extends Fragment {
 
         }
 
+    }
+
+    private Map<String, TreeNode<VideoDirectory>> processDirectories( List<Video> videos ) {
+
+        Map<String, TreeNode<VideoDirectory>> directories = new HashMap<String, TreeNode<VideoDirectory>>();
+        if( null != videos && !videos.isEmpty() ) {
+
+            for( Video video : videos ) {
+
+                String filename = video.getFileName().substring( 1 );
+                StringTokenizer st = new StringTokenizer( video.getFileName(), "/" );
+                while( st.hasMoreTokens() ) {
+
+
+
+                }
+
+            }
+
+        }
+
+        return directories;
     }
 
 }

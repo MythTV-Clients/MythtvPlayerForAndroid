@@ -2,25 +2,20 @@ package org.mythtv.android.player.recordings;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
 
 import org.mythtv.android.R;
-import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.ui.data.TitleInfoDataConsumer;
 import org.mythtv.android.library.ui.data.TitleInfosDataFragment;
-import org.mythtv.android.player.BaseActionBarActivity;
+import org.mythtv.android.player.AbstractBaseActionBarActivity;
 import org.mythtv.android.player.NavigationDrawerFragment;
 
 import java.util.List;
 
-public class ShowsActivity extends BaseActionBarActivity implements TitleInfoDataConsumer {
+public class ShowsActivity extends AbstractBaseActionBarActivity implements TitleInfoDataConsumer {
 
     private static final String TITLE_INFOS_DATA_FRAGMENT_TAG = TitleInfosDataFragment.class.getCanonicalName();
 
@@ -79,6 +74,10 @@ public class ShowsActivity extends BaseActionBarActivity implements TitleInfoDat
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.add( titleInfosDataFragment, TITLE_INFOS_DATA_FRAGMENT_TAG );
             transaction.commit();
+
+        } else {
+
+            titleInfosDataFragment.reset();
 
         }
 

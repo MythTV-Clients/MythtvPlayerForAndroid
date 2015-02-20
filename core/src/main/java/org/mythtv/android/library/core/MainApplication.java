@@ -103,6 +103,9 @@ public class MainApplication extends Application {
         mConnected = false;
         cancelAlarms();
 
+        Intent connectedIntent = new Intent( ACTION_NOT_CONNECTED );
+        sendBroadcast( connectedIntent );
+
     }
 
     private void scheduleAlarms() {

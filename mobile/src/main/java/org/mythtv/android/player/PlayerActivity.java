@@ -7,7 +7,6 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -24,18 +23,9 @@ import android.widget.VideoView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.utils.Utils;
-import org.mythtv.android.library.events.content.AddRecordingLiveStreamEvent;
-import org.mythtv.android.library.events.content.AddVideoLiveStreamEvent;
-import org.mythtv.android.library.events.content.LiveStreamAddedEvent;
-import org.mythtv.android.library.events.content.LiveStreamDetailsEvent;
-import org.mythtv.android.library.events.content.LiveStreamRemovedEvent;
-import org.mythtv.android.library.events.content.RemoveLiveStreamEvent;
-import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
 import org.mythtv.android.player.recordings.RecordingDetailsActivity;
 //import org.mythtv.android.player.videos.VideoDetailsActivity;
 

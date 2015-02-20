@@ -199,7 +199,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
             case 0 :
 
-                if( !( getActivity() instanceof ShowsActivity ) ) {
+                if( !( getActivity() instanceof ShowsActivity) ) {
                     startActivity( new Intent( getActivity(), ShowsActivity.class ) );
                 }
 
@@ -207,7 +207,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
             case 1 :
 
-                if( !( getActivity() instanceof VideosActivity ) ) {
+                if( !( getActivity() instanceof VideosActivity) ) {
                     startActivity( new Intent( getActivity(), VideosActivity.class ) );
                 }
 

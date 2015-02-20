@@ -61,6 +61,11 @@
 
         <!-- MythTV Receivers -->
         <receiver android:name=".library.core.RefreshLiveStreamsReceiver" />
+        <receiver android:name=".library.core.NetworkConnectionBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
 
         <!-- MythTV Providers -->
         <provider

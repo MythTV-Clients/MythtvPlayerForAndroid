@@ -3,23 +3,19 @@ package org.mythtv.android.player.videos;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.ui.data.VideoDataConsumer;
 import org.mythtv.android.library.ui.data.VideosDataFragment;
-import org.mythtv.android.player.BaseActionBarActivity;
+import org.mythtv.android.player.AbstractBaseActionBarActivity;
 import org.mythtv.android.player.NavigationDrawerFragment;
 
 import java.util.List;
 
-public class VideosActivity extends BaseActionBarActivity implements VideoDataConsumer {
+public class VideosActivity extends AbstractBaseActionBarActivity implements VideoDataConsumer {
 
     private static final String VIDEOS_DATA_FRAGMENT_TAG = VideosDataFragment.class.getCanonicalName();
 
@@ -62,6 +58,10 @@ public class VideosActivity extends BaseActionBarActivity implements VideoDataCo
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.add( videosDataFragment, VIDEOS_DATA_FRAGMENT_TAG );
             transaction.commit();
+
+        } else {
+
+            videosDataFragment.reset();
 
         }
 

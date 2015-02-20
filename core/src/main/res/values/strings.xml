@@ -30,4 +30,5 @@
 
     <string name="failed">Playback failed</string>
 
+    <string name="not_connected">Master Backend connection failed!.\nCheck your network connection or the master backend settings.</string>
 </resources>

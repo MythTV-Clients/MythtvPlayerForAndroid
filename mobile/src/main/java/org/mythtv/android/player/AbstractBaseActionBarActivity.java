@@ -1,7 +1,5 @@
 package org.mythtv.android.player;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +7,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mythtv.android.R;
@@ -17,9 +17,9 @@ import org.mythtv.android.library.core.MainApplication;
 /**
  * Created by dmfrey on 12/10/14.
  */
-public abstract class BaseActionBarActivity extends ActionBarActivity {
+public abstract class AbstractBaseActionBarActivity extends ActionBarActivity {
 
-    private static final String TAG = BaseActionBarActivity.class.getSimpleName();
+    private static final String TAG = AbstractBaseActionBarActivity.class.getSimpleName();
 
     protected Toolbar toolbar;
 
@@ -27,7 +27,7 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
         setContentView( getLayoutResource() );
 
@@ -44,7 +44,7 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
         super.onResume();
 
         IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
-        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
+        backendConnectedIntentFilter.addAction(MainApplication.ACTION_NOT_CONNECTED);
         registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
 
         if( MainApplication.getInstance().isConnected() ) {
@@ -70,10 +70,6 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
 
     protected abstract void updateData();
 
-    protected void setActionBarIcon( int iconRes ) {
-        toolbar.setNavigationIcon( iconRes );
-    }
-
     private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
 
         @Override
@@ -87,27 +83,12 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
 
             if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
 
-//                Bundle args = new Bundle();
-//                args.putBoolean( ConnectingFragment.CONNECTED_KEY, false );
-//
-//                ConnectingFragment connectingFragment = (ConnectingFragment) getFragmentManager().findFragmentByTag( CONTENT_FRAGMENT_TAG );
-//                if( null == connectingFragment ) {
-//
-//                    connectingFragment = (ConnectingFragment) Fragment.instantiate( ShowsActivity.this, ConnectingFragment.class.getName(), args );
-//
-//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                    transaction.replace( R.id.content_frame, connectingFragment, CONTENT_FRAGMENT_TAG );
-//                    transaction.commit();
-//
-//                }
-
-                Toast.makeText( BaseActionBarActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
+                Toast.makeText( AbstractBaseActionBarActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
 
             }
 
         }
 
     }
-
 
 }

@@ -1,21 +1,15 @@
 package org.mythtv.android.player.videos;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.MenuItem;
 
-import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.player.BaseActionBarActivity;
+import org.mythtv.android.player.AbstractBaseActionBarActivity;
 import org.mythtv.android.R;
-import org.mythtv.android.player.recordings.RecordingDetailsFragment;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class VideoDetailsActivity extends BaseActionBarActivity {
+public class VideoDetailsActivity extends AbstractBaseActionBarActivity {
 
     private VideoDetailsFragment mVideoDetailsFragment;
     Video mVideo;

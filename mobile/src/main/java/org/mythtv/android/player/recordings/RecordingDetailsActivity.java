@@ -3,13 +3,13 @@ package org.mythtv.android.player.recordings;
 import android.os.Bundle;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.player.BaseActionBarActivity;
+import org.mythtv.android.player.AbstractBaseActionBarActivity;
 import org.mythtv.android.R;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class RecordingDetailsActivity extends BaseActionBarActivity {
+public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
 
     private RecordingDetailsFragment mRecordingDetailsFragment;
     Program mProgram;

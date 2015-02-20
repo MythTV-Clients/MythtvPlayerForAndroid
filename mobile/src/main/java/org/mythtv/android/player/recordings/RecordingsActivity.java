@@ -9,7 +9,7 @@ import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.ui.data.RecordingDataConsumer;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
-import org.mythtv.android.player.BaseActionBarActivity;
+import org.mythtv.android.player.AbstractBaseActionBarActivity;
 import org.mythtv.android.R;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class RecordingsActivity extends BaseActionBarActivity  implements RecordingDataConsumer {
+public class RecordingsActivity extends AbstractBaseActionBarActivity implements RecordingDataConsumer {
 
     private static final String RECORDINGS_DATA_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
     public static final String TITLE_INFO = "title_info";
@@ -115,6 +115,10 @@ public class RecordingsActivity extends BaseActionBarActivity  implements Record
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
             transaction.commit();
+
+        } else {
+
+            recordingsDataFragment.reset();
 
         }
 
