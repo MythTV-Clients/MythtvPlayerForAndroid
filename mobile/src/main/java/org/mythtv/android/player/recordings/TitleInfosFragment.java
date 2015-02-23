@@ -2,6 +2,8 @@ package org.mythtv.android.player.recordings;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,11 +44,11 @@ public class TitleInfosFragment extends AbstractBaseFragment implements TitleInf
     public void setTitleInfos( List<TitleInfo> titleInfos ) {
 
         mAdapter = new TitleInfoItemAdapter( titleInfos, this );
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter( mAdapter );
 
     }
 
-    public void titleInfoItemClicked( TitleInfo titleInfo ) {
+    public void titleInfoItemClicked( View v, TitleInfo titleInfo ) {
 
         Bundle args = new Bundle();
         if( !getActivity().getResources().getString( R.string.all_recordings ).equals( titleInfo.getTitle() ) ) {
@@ -56,8 +58,16 @@ public class TitleInfosFragment extends AbstractBaseFragment implements TitleInf
         }
 
         Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
-        recordings.putExtras(args);
-        startActivity(recordings);
+        recordings.putExtras( args );
+//        startActivity( recordings );
+
+        String transitionName = getString( R.string.transition );
+        ActivityOptionsCompat options =
+            ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
+                v,   // The view which starts the transition
+                transitionName    // The transitionName of the view we’re transitioning to
+            );
+        ActivityCompat.startActivity( getActivity(), recordings, options.toBundle() );
 
     }
 

@@ -32,8 +32,9 @@ public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
 
             mRecordingDetailsFragment.setProgram( mProgram );
 
-            getSupportActionBar().setTitle( mProgram.getTitle() );
-            getSupportActionBar().setSubtitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : "" );
+            //getSupportActionBar().setTitle( mProgram.getTitle() );
+            //getSupportActionBar().setSubtitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : "" );
+            getSupportActionBar().setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : "" );
 
         }
 

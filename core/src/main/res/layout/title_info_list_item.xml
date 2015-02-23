@@ -18,6 +18,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:transitionName="@string/transition"
             android:text="test title" />
 
     </LinearLayout>

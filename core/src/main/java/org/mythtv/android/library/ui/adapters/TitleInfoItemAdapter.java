@@ -45,7 +45,9 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 
             @Override
             public void onClick( View v ) {
-                titleInfoItemClickListener.titleInfoItemClicked(titleInfo);
+
+                titleInfoItemClickListener.titleInfoItemClicked( v, titleInfo );
+
             }
 
         });
@@ -98,7 +100,7 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 
     public interface TitleInfoItemClickListener {
 
-        void titleInfoItemClicked( TitleInfo titleInfo );
+        void titleInfoItemClicked( View v, TitleInfo titleInfo );
 
     }
 

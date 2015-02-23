@@ -46,24 +46,36 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         final Program program = programs.get( position );
 
         String title = program.getSubTitle();
+        String subTitle = program.getTitle();
         if( showTitle ) {
 
             if( !( null == title || "".equals( title ) ) ) {
-                title = program.getTitle() + ": " + title;
+
+                viewHolder.setSubTitleVisibility( View.VISIBLE );
+
             } else {
+
+                viewHolder.setSubTitleVisibility( View.GONE);
                 title = program.getTitle();
+                subTitle = "";
+
             }
+
+        } else {
+
+            viewHolder.setSubTitleVisibility( View.GONE );
 
         }
 
         viewHolder.setTitle( title );
+        viewHolder.setSubTitle( subTitle );
         viewHolder.setDescription( Html.fromHtml( program.getDescription() ) );
         viewHolder.setDate( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
             @Override
             public void onClick( View v ) {
-                programItemClickListener.onProgramItemClicked(program);
+                programItemClickListener.onProgramItemClicked( v, program );
             }
 
         });
@@ -82,6 +94,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         private final View parent;
         private final TextView title;
+        private final TextView subTitle;
         private final TextView description;
         private final TextView date;
 
@@ -90,6 +103,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
             this.parent = v;
             title = (TextView) parent.findViewById( R.id.program_item_title );
+            subTitle = (TextView) parent.findViewById( R.id.program_item_sub_title );
             description = (TextView) parent.findViewById( R.id.program_item_description );
             date = (TextView) parent.findViewById( R.id.program_item_date );
 
@@ -98,6 +112,18 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         public void setTitle( CharSequence text ) {
 
             title.setText( text );
+
+        }
+
+        public void setSubTitle( CharSequence text ) {
+
+            subTitle.setText( text );
+
+        }
+
+        public void setSubTitleVisibility( int visibility ) {
+
+            subTitle.setVisibility( visibility );
 
         }
 
@@ -123,7 +149,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
     public interface ProgramItemClickListener {
 
-        void onProgramItemClicked( Program program );
+        void onProgramItemClicked( View v, Program program );
 
     }
 

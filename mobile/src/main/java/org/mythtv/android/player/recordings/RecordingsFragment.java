@@ -2,6 +2,8 @@ package org.mythtv.android.player.recordings;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,14 +48,22 @@ public class RecordingsFragment extends AbstractBaseFragment implements ProgramI
 
     }
 
-    public void onProgramItemClicked( Program program ) {
+    public void onProgramItemClicked( View v, Program program ) {
 
         Bundle args = new Bundle();
         args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
 
         Intent recordingDetails = new Intent( getActivity(), RecordingDetailsActivity.class );
         recordingDetails.putExtras(args);
-        startActivity(recordingDetails);
+//        startActivity(recordingDetails);
+
+        String transitionName = getString( R.string.transition );
+        ActivityOptionsCompat options =
+            ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
+                v,   // The view which starts the transition
+                transitionName    // The transitionName of the view we’re transitioning to
+            );
+        ActivityCompat.startActivity( getActivity(), recordingDetails, options.toBundle() );
 
     }
 

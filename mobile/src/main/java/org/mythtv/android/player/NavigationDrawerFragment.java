@@ -48,9 +48,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         //load only static data inside a drawer
         List<NavigationItem> items = new ArrayList<>();
 
-        items.add( new NavigationItem( R.drawable.ic_tv_black, context.getResources().getString( R.string.drawer_item_watch_recordings ) ) );
-        items.add( new NavigationItem( R.drawable.ic_video_collection_black, context.getResources().getString( R.string.drawer_item_watch_videos ) ) );
-        items.add( new NavigationItem( R.drawable.ic_settings_black, context.getResources().getString( R.string.drawer_item_preferences ) ) );
+        items.add( new NavigationItem( R.drawable.navigation_drawer_watch_recordings, context.getResources().getString( R.string.drawer_item_watch_recordings ) ) );
+        items.add( new NavigationItem( R.drawable.navigation_drawer_watch_videos, context.getResources().getString( R.string.drawer_item_watch_videos ) ) );
+        items.add( new NavigationItem( R.drawable.navigation_drawer_settings, context.getResources().getString( R.string.drawer_item_preferences ) ) );
 
         return items;
     }

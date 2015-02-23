@@ -2,6 +2,8 @@ package org.mythtv.android.player.videos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,14 +48,22 @@ public class VideosFragment extends AbstractBaseFragment implements VideoItemAda
 
     }
 
-    public void videoItemClicked( Video video ) {
+    public void videoItemClicked( View v, Video video ) {
 
         Bundle args = new Bundle();
         args.putSerializable( VideoDetailsFragment.VIDEO_KEY, video );
 
         Intent videoDetails = new Intent( getActivity(), VideoDetailsActivity.class );
         videoDetails.putExtras(args);
-        startActivity( videoDetails );
+//        startActivity( videoDetails );
+
+        String transitionName = getString( R.string.transition );
+        ActivityOptionsCompat options =
+            ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
+                v,   // The view which starts the transition
+                transitionName    // The transitionName of the view we’re transitioning to
+            );
+        ActivityCompat.startActivity( getActivity(), videoDetails, options.toBundle() );
 
     }
 
@@ -68,7 +78,7 @@ public class VideosFragment extends AbstractBaseFragment implements VideoItemAda
     @Override
     public void notConnected() {
 
-        mRecyclerView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility( View.GONE );
         mEmpty.setVisibility(View.VISIBLE);
 
     }

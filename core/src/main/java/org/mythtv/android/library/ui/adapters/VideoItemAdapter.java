@@ -52,7 +52,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
             @Override
             public void onClick( View v ) {
-                videoItemClickListener.videoItemClicked(video);
+                videoItemClickListener.videoItemClicked( v, video );
             }
 
         });
@@ -101,7 +101,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
     public interface VideoItemClickListener {
 
-        void videoItemClicked(Video video);
+        void videoItemClicked( View v, Video video );
 
     }
 
