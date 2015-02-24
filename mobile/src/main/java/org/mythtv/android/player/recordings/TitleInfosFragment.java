@@ -61,7 +61,7 @@ public class TitleInfosFragment extends AbstractBaseFragment implements TitleInf
         recordings.putExtras( args );
 //        startActivity( recordings );
 
-        String transitionName = getString( R.string.transition );
+        String transitionName = getString( R.string.title_info_transition );
         ActivityOptionsCompat options =
             ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
                 v,   // The view which starts the transition

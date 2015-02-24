@@ -57,7 +57,7 @@ public class VideosFragment extends AbstractBaseFragment implements VideoItemAda
         videoDetails.putExtras(args);
 //        startActivity( videoDetails );
 
-        String transitionName = getString( R.string.transition );
+        String transitionName = getString( R.string.video_transition );
         ActivityOptionsCompat options =
             ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
                 v,   // The view which starts the transition

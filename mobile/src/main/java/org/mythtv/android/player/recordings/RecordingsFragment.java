@@ -57,7 +57,7 @@ public class RecordingsFragment extends AbstractBaseFragment implements ProgramI
         recordingDetails.putExtras(args);
 //        startActivity(recordingDetails);
 
-        String transitionName = getString( R.string.transition );
+        String transitionName = getString( R.string.recording_transition );
         ActivityOptionsCompat options =
             ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
                 v,   // The view which starts the transition

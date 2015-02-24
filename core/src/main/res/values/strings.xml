@@ -32,6 +32,8 @@
 
     <string name="not_connected">Master Backend connection failed!.\nCheck your network connection or the master backend settings.</string>
 
-    <string name="transition">transition</string>
+    <string name="title_info_transition">title_info_transition</string>
+    <string name="recording_transition">recording_transition</string>
+    <string name="video_transition">title_info_transition</string>
 
 </resources>

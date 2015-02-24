@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:transitionName="@string/transition"
+            android:transitionName="@string/recording_transition"
             android:text="test title" />
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-            android:transitionName="@string/transition"
+            android:transitionName="@string/title_info_transition"
             android:text="test sub title" />
 
         <TextView
