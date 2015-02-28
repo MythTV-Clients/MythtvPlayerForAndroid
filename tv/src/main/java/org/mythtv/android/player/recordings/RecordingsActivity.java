@@ -8,17 +8,23 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.ui.data.RecordingDataConsumer;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 
-public class RecordingsActivity extends Activity {
+import java.util.List;
+
+public class RecordingsActivity extends Activity implements RecordingDataConsumer {
 
     private static final String TAG = RecordingsActivity.class.getSimpleName();
-    private static final String RECORDINGS_FRAGMENT_TAG = RecordingsFragment.class.getCanonicalName();
+    private static final String RECORDINGS_DATA_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
 
+    private RecordingsFragment mRecordingsFragment;
     String mTitle = null;
 
     @Override
@@ -34,38 +40,46 @@ public class RecordingsActivity extends Activity {
             mTitle = getIntent().getStringExtra( RecordingsDataFragment.TITLE_INFO_TITLE );
         }
 
-        RecordingsFragment recordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentByTag( RECORDINGS_FRAGMENT_TAG );
-        if( null == recordingsFragment ) {
-            Log.d( TAG, "onCreate : creating new RecordingsFragment" );
+        mRecordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentById( R.id.fragment_recordings );
+
+        update();
+
+    }
+
+    @Override
+    public void onSetPrograms( List<Program> programs ) {
+
+        mRecordingsFragment.setPrograms( programs );
+
+    }
+
+    @Override
+    public void onHandleError( String message ) {
+
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+    }
+
+    public void update() {
+
+        RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
+        if( null == recordingsDataFragment ) {
+            Log.d( TAG, "selectItem : creating new RecordingsDataFragment");
 
             Bundle args = new Bundle();
             if( null != mTitle ) {
                 args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, mTitle );
             }
 
-            recordingsFragment = (RecordingsFragment) Fragment.instantiate(this, RecordingsFragment.class.getName(), args);
+            recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate( this, RecordingsDataFragment.class.getName(), args );
+            recordingsDataFragment.setRetainInstance( true );
+
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace( R.id.content_frame, recordingsFragment, RECORDINGS_FRAGMENT_TAG );
+            transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
             transaction.commit();
 
         }
 
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        MainApplication.getInstance().scheduleAlarms();
-//
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//
-//        MainApplication.getInstance().cancelAlarms();
-//
-//    }
 
 }

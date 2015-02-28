@@ -49,10 +49,9 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 
 
-public class RecordingsFragment extends BrowseFragment implements RecordingDataConsumer {
+public class RecordingsFragment extends BrowseFragment {
 
     private static final String TAG = RecordingsFragment.class.getSimpleName();
-    private static final String RECORDINGS_DATA_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
 
     private ArrayObjectAdapter mRowsAdapter;
     private Drawable mDefaultBackground;
@@ -67,21 +66,7 @@ public class RecordingsFragment extends BrowseFragment implements RecordingDataC
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.i(TAG, "onCreateView : enter");
-
-        RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getChildFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
-        if( null == recordingsDataFragment ) {
-            Log.d( TAG, "selectItem : creating new RecordingsDataFragment");
-
-            recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate(getActivity(), RecordingsDataFragment.class.getName(), getArguments());
-            recordingsDataFragment.setRetainInstance( true );
-            recordingsDataFragment.setConsumer( this );
-
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
-            transaction.commit();
-
-        }
+        Log.i( TAG, "onCreateView : enter" );
 
         Log.i( TAG, "onCreateView : exit" );
         return super.onCreateView( inflater, container, savedInstanceState );
@@ -99,9 +84,8 @@ public class RecordingsFragment extends BrowseFragment implements RecordingDataC
         Log.i( TAG, "onActivityCreated : exit" );
     }
 
-    @Override
-    public void onSetPrograms( List<Program> programs ) {
-        Log.i( TAG, "onSetPrograms : enter" );
+    public void setPrograms( List<Program> programs ) {
+        Log.i( TAG, "setPrograms : enter" );
 
         Map<String, String> categoryMap = new TreeMap<String, String>();
         Map<String, List<Program>> programMap = new TreeMap<String, List<Program>>();
@@ -151,16 +135,7 @@ public class RecordingsFragment extends BrowseFragment implements RecordingDataC
 
         setAdapter( mRowsAdapter );
 
-        Log.i( TAG, "onSetPrograms : exit" );
-    }
-
-    @Override
-    public void onHandleError( String message ) {
-        Log.i( TAG, "onHandleError : enter" );
-
-        Toast.makeText( getActivity(), message, Toast.LENGTH_LONG ).show();
-
-        Log.i( TAG, "onHandleError : exit" );
+        Log.i( TAG, "setPrograms : exit" );
     }
 
     private void prepareBackgroundManager() {
@@ -315,6 +290,7 @@ public class RecordingsFragment extends BrowseFragment implements RecordingDataC
     }
 
     private class GridItemPresenter extends Presenter {
+
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent) {
             TextView view = new TextView(parent.getContext());
@@ -335,6 +311,7 @@ public class RecordingsFragment extends BrowseFragment implements RecordingDataC
         @Override
         public void onUnbindViewHolder(ViewHolder viewHolder) {
         }
+
     }
 
 }

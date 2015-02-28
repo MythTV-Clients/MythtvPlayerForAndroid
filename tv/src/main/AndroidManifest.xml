@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Leanback">
 
         <activity android:name="org.mythtv.android.player.MainActivity"
-            android:logo="@drawable/app_icon_quantum"
+            android:logo="@drawable/mythtv_logo"
             android:screenOrientation="landscape"
             android:label="@string/app_name">
 
