@@ -22,6 +22,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
 import org.mythtv.android.library.events.content.AddRecordingLiveStreamEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.library.ui.utils.ImageUtils;
@@ -172,7 +173,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
             case R.id.recording_queue_hls :
 
-                new AddRecordingLiveStreamAsyncTask().execute();
+                new AddRecordingLiveStreamAsyncTask().execute( mProgram );
                 queueHls.setVisibility( View.INVISIBLE );
                 percentComplete.setText( "Queued..." );
 
@@ -182,18 +183,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
                 break;
 
-        }
-
-    }
-
-    private class AddRecordingLiveStreamAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground( Void... params ) {
-
-            MainApplication.getInstance().getContentService().addRecordingLiveStream( new AddRecordingLiveStreamEvent( mProgram.getRecording().getRecordedId(), mProgram.getChannel().getChanId(), mProgram.getRecording().getStartTs(), 0, 1280, 720, null, null, null ) );
-
-            return null;
         }
 
     }

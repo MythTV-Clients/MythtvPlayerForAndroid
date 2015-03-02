@@ -70,8 +70,6 @@ public class PlayerActivity extends Activity {
     private int mDuration;
     private DisplayMetrics mMetrics;
 
-//    private ContentService mContentService;
-//    private LiveStreamInfo mLiveStreamInfo;
     private String mFileUrl;
 
     /*
@@ -86,9 +84,7 @@ public class PlayerActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.i( TAG, "onCreate : enter" );
 
-        setContentView(R.layout.activity_player);
-
-//        mContentService = ( (MainApplication) getApplicationContext() ).getContentService();
+        setContentView( R.layout.activity_player );
 
         mMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
@@ -101,65 +97,7 @@ public class PlayerActivity extends Activity {
         startVideoPlayerHls();
         updateMetadata( true );
 
-//        if( null != getIntent().getSerializableExtra( getResources().getString( R.string.recording ) ) ) {
-//
-//            mSelectedProgram = (Program) getIntent().getSerializableExtra( getResources().getString( R.string.recording ) );
-//            new AddRecordingLiveStreamAsyncTask().execute();
-//
-//        }
-//
-//        if( null != getIntent().getSerializableExtra( getResources().getString( R.string.video ) ) ) {
-//
-//            mSelectedVideo = (Video) getIntent().getSerializableExtra( getResources().getString( R.string.video ) );
-//
-//            if( mSelectedVideo.getFileName().endsWith( ".mp4" ) ) {
-//                startVideoPlayerSupported();
-//                updateMetadata(true);
-//            } else if( mSelectedVideo.getFileName().endsWith( ".3gp" ) ) {
-//                startVideoPlayerSupported();
-//                updateMetadata( true );
-//            } else if( mSelectedVideo.getFileName().endsWith( ".webm" ) ) {
-//                startVideoPlayerSupported();
-//                updateMetadata( true );
-//            } else if( mSelectedVideo.getFileName().endsWith( ".mkv" ) ) {
-//                startVideoPlayerSupported();
-//                updateMetadata( true );
-//            } else {
-//                new AddVideoLiveStreamAsyncTask().execute();
-//            }
-//
-//        }
-
     }
-
-//    private void startVideoPlayerSupported() {
-//        Log.i( TAG, "startVideoPlayerSupported : enter" );
-//
-//        Bundle b = getIntent().getExtras();
-//        if (null != b) {
-//            mShouldStartPlayback = b.getBoolean(getResources().getString(R.string.should_start));
-//            int startPosition = b.getInt(getResources().getString(R.string.start_position), 0);
-//
-//            String url = ( (MainApplication) getApplicationContext() ).getMasterBackendUrl() + "/Content/GetVideo?Id=" + mSelectedVideo.getId();
-//            Log.i( TAG, "startVideoPlayerSupported : url=" + url );
-//            mVideoView.setVideoURI( Uri.parse( url ) );
-//
-//            if (mShouldStartPlayback) {
-//                mPlaybackState = PlaybackState.PLAYING;
-//                updatePlayButton(mPlaybackState);
-//                if (startPosition > 0) {
-//                    mVideoView.seekTo(startPosition);
-//                }
-//                mVideoView.start();
-//                mPlayPause.requestFocus();
-//                startControllersTimer();
-//            } else {
-//                updatePlaybackLocation();
-//                mPlaybackState = PlaybackState.PAUSED;
-//                updatePlayButton(mPlaybackState);
-//            }
-//        }
-//    }
 
     private void startVideoPlayerHls() {
         Log.i( TAG, "startVideoPlayerHls : enter" );
@@ -169,7 +107,6 @@ public class PlayerActivity extends Activity {
             mShouldStartPlayback = b.getBoolean(getResources().getString(R.string.should_start));
             int startPosition = b.getInt(getResources().getString(R.string.start_position), 0);
 
-//            String url = ( (MainApplication) getApplicationContext() ).getMasterBackendUrl() + mLiveStreamInfo.getRelativeURL().substring( 1 );
             Log.i( TAG, "startVideoPlayerHls : mFileUrl=" + mFileUrl );
             String url = MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring( 1 );
             Log.i( TAG, "startVideoPlayerHls : url=" + url );
@@ -241,20 +178,6 @@ public class PlayerActivity extends Activity {
         mControllersTimer.schedule(new HideControllersTask(), HIDE_CONTROLLER_TIME);
     }
 
-//    private void stopGetLiveStreamTimer() {
-//        if( null != mGetLiveStreamTimer ) {
-//            mGetLiveStreamTimer.cancel();
-//        }
-//    }
-//
-//    private void startGetLiveStreamTimer() {
-//        if( null != mGetLiveStreamTimer ) {
-//            mGetLiveStreamTimer.cancel();
-//        }
-//        mGetLiveStreamTimer = new Timer();
-//        mGetLiveStreamTimer.schedule( mGetLiveStreamTask, 10000, 5000 );
-//    }
-
     private void updateControlersVisibility(boolean show) {
         if (show) {
             mControllers.setVisibility(View.VISIBLE);
@@ -280,9 +203,6 @@ public class PlayerActivity extends Activity {
         mVideoView.pause();
         mPlaybackState = PlaybackState.PAUSED;
         updatePlayButton(PlaybackState.PAUSED);
-
-//        MainApplication.getInstance().cancelAlarms();
-
     }
 
     @Override
@@ -294,10 +214,6 @@ public class PlayerActivity extends Activity {
     @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy() is called");
-
-//        if( null != mLiveStreamInfo ) {
-//            new RemoveRecordingLiveStreamAsyncTask().execute();
-//        }
 
         stopControllersTimer();
         stopSeekBarTimer();
@@ -315,9 +231,6 @@ public class PlayerActivity extends Activity {
     protected void onResume() {
         Log.d(TAG, "onResume() was called");
         super.onResume();
-
-//        MainApplication.getInstance().scheduleAlarms();
-
     }
 
     private class HideControllersTask extends TimerTask {
@@ -551,152 +464,5 @@ public class PlayerActivity extends Activity {
             }
         }
     };
-
-//    private class GetLiveStreamAsyncTask extends AsyncTask<Void, Void, LiveStreamDetailsEvent> {
-//
-//        private String TAG = GetLiveStreamAsyncTask.class.getSimpleName();
-//
-//        @Override
-//        protected LiveStreamDetailsEvent doInBackground( Void... params ) {
-//            Log.d( TAG, "doInBackground : get livestream hls" );
-//
-//            return mContentService.getLiveStream( new RequestLiveStreamDetailsEvent( mLiveStreamInfo.getId() ) );
-//        }
-//
-//        @Override
-//        protected void onPostExecute( LiveStreamDetailsEvent liveStreamDetailsEvent ) {
-//
-//            if( !liveStreamDetailsEvent.isModified() ) {
-//                Log.d( TAG, "onPostExecute : livestream hls is not modified" );
-//            }
-//
-//            if( liveStreamDetailsEvent.isEntityFound() ) {
-//                Log.d( TAG, "onPostExecute : livestream hls retrieved" );
-//
-//                mLiveStreamInfo = LiveStreamInfo.fromDetails( liveStreamDetailsEvent.getDetails() );
-//                Log.d( TAG, "onPostExecute : mLiveStreamInfo=" + mLiveStreamInfo );
-//                if( mLiveStreamInfo.getPercentComplete() > 2 ) {
-//                    Log.v( TAG, "onPostExecute : livestream hls processed greater than 2%" );
-//
-//                    stopGetLiveStreamTimer();
-//
-////                    loadViews();
-////                    setupController();
-////                    setupControlsCallbacks();
-//                    startVideoPlayerHls();
-//                    updateMetadata( true );
-//
-//                }
-//
-//            }
-//
-//        }
-//
-//    }
-
-//    TimerTask mGetLiveStreamTask = new TimerTask() {
-//
-//        @Override
-//        public void run() {
-//
-//            mHandler.post( new Runnable() {
-//
-//                @Override
-//                public void run() {
-//
-//                    new GetLiveStreamAsyncTask().execute();
-//
-//                }
-//
-//            });
-//
-//        }
-//
-//    };
-
-//    private class AddRecordingLiveStreamAsyncTask extends AsyncTask<Void, Void, LiveStreamAddedEvent> {
-//
-//        private String TAG = AddRecordingLiveStreamAsyncTask.class.getSimpleName();
-//
-//        @Override
-//        protected LiveStreamAddedEvent doInBackground( Void... params ) {
-//            Log.d( TAG, "doInBackground : adding recording hls" );
-//
-//            return mContentService.addRecordingLiveStream( new AddRecordingLiveStreamEvent( mSelectedProgram.getRecording().getRecordedId(), mSelectedProgram.getChannel().getChanId(), mSelectedProgram.getRecording().getStartTs(), 0, mMetrics.widthPixels, mMetrics.heightPixels, null, null, null ) );
-//        }
-//
-//        @Override
-//        protected void onPostExecute( LiveStreamAddedEvent liveStreamAddedEvent ) {
-//            Log.d( TAG, "onPostExecute : enter" );
-//
-//            if( null != liveStreamAddedEvent.getKey() ) {
-//                Log.d( TAG, "onPostExecute : recording hls added" );
-//
-//                mLiveStreamInfo = LiveStreamInfo.fromDetails( liveStreamAddedEvent.getDetails() );
-//
-//                startGetLiveStreamTimer();
-//
-//            } else {
-//                Log.d( TAG, "onPostExecute : recording hls NOT added" );
-//            }
-//
-//            Log.d( TAG, "onPostExecute : exit" );
-//        }
-//
-//    }
-//
-//    private class AddVideoLiveStreamAsyncTask extends AsyncTask<Void, Void, LiveStreamAddedEvent> {
-//
-//        private String TAG = AddVideoLiveStreamAsyncTask.class.getSimpleName();
-//
-//        @Override
-//        protected LiveStreamAddedEvent doInBackground( Void... params ) {
-//            Log.d( TAG, "doInBackground : adding recording hls" );
-//
-//            return mContentService.addVideoLiveStream( new AddVideoLiveStreamEvent( mSelectedVideo.getId(), 0, mMetrics.widthPixels, mMetrics.heightPixels, null, null, null ) );
-//        }
-//
-//        @Override
-//        protected void onPostExecute( LiveStreamAddedEvent liveStreamAddedEvent ) {
-//
-//            if( null != liveStreamAddedEvent.getKey() ) {
-//                Log.d( TAG, "onPostExecute : recording hls added" );
-//
-//                mLiveStreamInfo = LiveStreamInfo.fromDetails( liveStreamAddedEvent.getDetails() );
-//
-//                startGetLiveStreamTimer();
-//
-//            } else {
-//                Log.d( TAG, "onPostExecute : recording hls NOT added" );
-//            }
-//
-//        }
-//
-//    }
-//
-//    private class RemoveRecordingLiveStreamAsyncTask extends AsyncTask<Void, Void, LiveStreamRemovedEvent> {
-//
-//        private String TAG = RemoveRecordingLiveStreamAsyncTask.class.getSimpleName();
-//
-//        @Override
-//        protected LiveStreamRemovedEvent doInBackground( Void... params ) {
-//            Log.d( TAG, "doInBackground : removing recording hls" );
-//
-//            return mContentService.removeLiveStream( new RemoveLiveStreamEvent( mLiveStreamInfo.getId() ) );
-//        }
-//
-//        @Override
-//        protected void onPostExecute( LiveStreamRemovedEvent liveStreamRemovedEvent ) {
-//
-//            if( liveStreamRemovedEvent.isDeletionCompleted() ) {
-//                Log.d( TAG, "onPostExecute : recording hls removed" );
-//
-//            } else {
-//                Log.d( TAG, "onPostExecute : recording hls NOT removed" );
-//            }
-//
-//        }
-//
-//    }
 
 }
