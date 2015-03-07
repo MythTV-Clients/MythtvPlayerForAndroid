@@ -5,7 +5,7 @@ package org.mythtv.android.library.events.dvr;
  */
 public class ArtworkInfoDetails {
 
-    private String uRL;
+    private String url;
     private String fileName;
     private String storageGroup;
     private String type;
@@ -13,19 +13,19 @@ public class ArtworkInfoDetails {
     public ArtworkInfoDetails() {
     }
 
-    public ArtworkInfoDetails(String uRL, String fileName, String storageGroup, String type) {
-        this.uRL = uRL;
+    public ArtworkInfoDetails( String url, String fileName, String storageGroup, String type ) {
+        this.url = url;
         this.fileName = fileName;
         this.storageGroup = storageGroup;
         this.type = type;
     }
 
-    public String getuRL() {
-        return uRL;
+    public String getUrl() {
+        return url;
     }
 
-    public void setuRL(String uRL) {
-        this.uRL = uRL;
+    public void setUrl( String url ) {
+        this.url = url;
     }
 
     public String getFileName() {

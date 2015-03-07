@@ -11,7 +11,7 @@ public class ArtworkInfoHelper {
     public static ArtworkInfoDetails toDetails( ArtworkInfo artworkInfo ) {
 
         ArtworkInfoDetails details = new ArtworkInfoDetails();
-        details.setuRL( artworkInfo.getURL() );
+        details.setUrl( artworkInfo.getURL() );
         details.setFileName( artworkInfo.getFileName() );
         details.setStorageGroup( artworkInfo.getStorageGroup() );
         details.setType( artworkInfo.getType() );
@@ -22,7 +22,7 @@ public class ArtworkInfoHelper {
     public static ArtworkInfo fromDetails( ArtworkInfoDetails details ) {
 
         ArtworkInfo artworkInfo = new ArtworkInfo();
-        artworkInfo.setURL(details.getuRL());
+        artworkInfo.setURL(details.getUrl());
         artworkInfo.setFileName( details.getFileName() );
         artworkInfo.setStorageGroup( details.getStorageGroup() );
         artworkInfo.setType( details.getType() );

@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,9 @@ public class MythtvProvider extends ContentProvider {
         URI_MATCHER.addURI( AUTHORITY, LiveStreamConstants.TABLE_NAME + "/videos", LiveStreamConstants.ALL_VIDEOS );
         URI_MATCHER.addURI( AUTHORITY, LiveStreamConstants.TABLE_NAME + "/videos/#",  LiveStreamConstants.SINGLE_VIDEO );
 
+        URI_MATCHER.addURI( AUTHORITY, TitleInfoConstants.TABLE_NAME, TitleInfoConstants.ALL );
+        URI_MATCHER.addURI( AUTHORITY, TitleInfoConstants.TABLE_NAME + "/#",  TitleInfoConstants.SINGLE );
+
     }
 
     @Override
@@ -69,6 +73,12 @@ public class MythtvProvider extends ContentProvider {
             case LiveStreamConstants.SINGLE_RECORDING :
             case LiveStreamConstants.SINGLE_VIDEO :
                 return LiveStreamConstants.CONTENT_ITEM_TYPE;
+
+            case TitleInfoConstants.ALL :
+                return TitleInfoConstants.CONTENT_TYPE;
+
+            case TitleInfoConstants.SINGLE :
+                return TitleInfoConstants.CONTENT_ITEM_TYPE;
 
             default :
                 throw new IllegalArgumentException( "Unknown URI : " + uri );
@@ -151,6 +161,30 @@ public class MythtvProvider extends ContentProvider {
 
                 return cursor;
 
+            case TitleInfoConstants.ALL :
+//                Log.v( TAG, "query : querying for all title infos" );
+
+                if( null == sortOrder ) {
+                    sortOrder = TitleInfoConstants.FIELD_SORT + ", " + TitleInfoConstants.FIELD_TITLE_SORT;
+                }
+
+                cursor = db.query( TitleInfoConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case TitleInfoConstants.SINGLE :
+//                Log.v( TAG, "query : querying for single title info" );
+
+                selection = TitleInfoConstants._ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
+
+                cursor = db.query( TitleInfoConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
             default :
                 throw new IllegalArgumentException( "Unknown URI : " + uri );
 
@@ -172,6 +206,15 @@ public class MythtvProvider extends ContentProvider {
 //                Log.v( TAG, "insert : inserting new live stream" );
 
                 newUri = ContentUris.withAppendedId( LiveStreamConstants.CONTENT_URI, db.insertWithOnConflict( LiveStreamConstants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE ) );
+
+                getContext().getContentResolver().notifyChange( newUri, null );
+
+                return newUri;
+
+            case TitleInfoConstants.ALL:
+//                Log.v( TAG, "insert : inserting new title info" );
+
+                newUri = ContentUris.withAppendedId( TitleInfoConstants.CONTENT_URI, db.insertWithOnConflict( TitleInfoConstants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE ) );
 
                 getContext().getContentResolver().notifyChange( newUri, null );
 
@@ -258,6 +301,26 @@ public class MythtvProvider extends ContentProvider {
 
                 return deleted;
 
+            case TitleInfoConstants.ALL:
+
+                deleted = db.delete( TitleInfoConstants.TABLE_NAME, selection, selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return deleted;
+
+            case TitleInfoConstants.SINGLE:
+
+                deleted = db.delete( TitleInfoConstants.TABLE_NAME, TitleInfoConstants._ID
+                        + "="
+                        + uri.getLastPathSegment()
+                        + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" )
+                        , selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return deleted;
+
             default:
                 throw new IllegalArgumentException( "Unknown URI " + uri );
 
@@ -333,6 +396,26 @@ public class MythtvProvider extends ContentProvider {
                         + "="
                         + uri.getLastPathSegment()
                         + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" ),
+                        selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return affected;
+
+            case TitleInfoConstants.ALL:
+
+                affected = db.update( TitleInfoConstants.TABLE_NAME, values, selection, selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return affected;
+
+            case TitleInfoConstants.SINGLE:
+
+                affected = db.update( TitleInfoConstants.TABLE_NAME, values, TitleInfoConstants._ID
+                                + "="
+                                + uri.getLastPathSegment()
+                                + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" ),
                         selectionArgs );
 
                 getContext().getContentResolver().notifyChange( uri, null );

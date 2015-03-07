@@ -152,33 +152,33 @@ public class LiveStreamConstants extends AbstractBaseDatabase {
         StringBuilder insert = new StringBuilder();
 
         insert.append( "INSERT INTO " ).append( TABLE_NAME ).append( " ( " );
-        insert.append( FIELD_LIVE_STREAM_ID ).append( "," );
-        insert.append( FIELD_WIDTH ).append( "," );
-        insert.append( FIELD_HEIGHT ).append( "," );
-        insert.append( FIELD_BITRATE ).append( "," );
-        insert.append( FIELD_AUDIO_BITRATE ).append( "," );
-        insert.append( FIELD_SEGMENT_SIZE ).append( "," );
-        insert.append( FIELD_MAX_SEGMENTS ).append( "," );
-        insert.append( FIELD_START_SEGMENT ).append( "," );
-        insert.append( FIELD_CURRENT_SEGMENT ).append( "," );
-        insert.append( FIELD_SEGMENT_COUNT ).append( "," );
-        insert.append( FIELD_PERCENT_COMPLETE ).append( "," );
-        insert.append( FIELD_RELATIVE_URL ).append( "," );
-        insert.append( FIELD_FULL_URL ).append( "," );
-        insert.append( FIELD_STATUS_STR ).append( "," );
-        insert.append( FIELD_STATUS_INT ).append( "," );
-        insert.append( FIELD_STATUS_MESSAGE ).append( "," );
-        insert.append( FIELD_SOURCE_FILE ).append( "," );
-        insert.append( FIELD_SOURCE_HOST ).append( "," );
-        insert.append( FIELD_SOURCE_WIDTH ).append( "," );
-        insert.append( FIELD_SOURCE_HEIGHT ).append( "," );
-        insert.append( FIELD_AUDIO_ONLY_BITRATE ).append( "," );
-        insert.append( FIELD_CREATED_DATE ).append( "," );
-        insert.append( FIELD_LAST_MODIFIED_DATE ).append( "," );
+        insert.append( FIELD_LIVE_STREAM_ID ).append( ", " );
+        insert.append( FIELD_WIDTH ).append( ", " );
+        insert.append( FIELD_HEIGHT ).append( ", " );
+        insert.append( FIELD_BITRATE ).append( ", " );
+        insert.append( FIELD_AUDIO_BITRATE ).append( ", " );
+        insert.append( FIELD_SEGMENT_SIZE ).append( ", " );
+        insert.append( FIELD_MAX_SEGMENTS ).append( ", " );
+        insert.append( FIELD_START_SEGMENT ).append( ", " );
+        insert.append( FIELD_CURRENT_SEGMENT ).append( ", " );
+        insert.append( FIELD_SEGMENT_COUNT ).append( ", " );
+        insert.append( FIELD_PERCENT_COMPLETE ).append( ", " );
+        insert.append( FIELD_RELATIVE_URL ).append( ", " );
+        insert.append( FIELD_FULL_URL ).append( ", " );
+        insert.append( FIELD_STATUS_STR ).append( ", " );
+        insert.append( FIELD_STATUS_INT ).append( ", " );
+        insert.append( FIELD_STATUS_MESSAGE ).append( ", " );
+        insert.append( FIELD_SOURCE_FILE ).append( ", " );
+        insert.append( FIELD_SOURCE_HOST ).append( ", " );
+        insert.append( FIELD_SOURCE_WIDTH ).append( ", " );
+        insert.append( FIELD_SOURCE_HEIGHT ).append( ", " );
+        insert.append( FIELD_AUDIO_ONLY_BITRATE ).append( ", " );
+        insert.append( FIELD_CREATED_DATE ).append( ", " );
+        insert.append( FIELD_LAST_MODIFIED_DATE ).append( ", " );
         insert.append( FIELD_RECORDED_ID ).append( "," );
-        insert.append( FIELD_CHAN_ID ).append( "," );
-        insert.append( FIELD_START_TIME ).append( "," );
-        insert.append( FIELD_VIDEO_ID ).append( "," );
+        insert.append( FIELD_CHAN_ID ).append( ", " );
+        insert.append( FIELD_START_TIME ).append( ", " );
+        insert.append( FIELD_VIDEO_ID ).append( " " );
         insert.append( " ) " );
         insert.append( "VALUES( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )" );
 
@@ -187,33 +187,33 @@ public class LiveStreamConstants extends AbstractBaseDatabase {
         StringBuilder update = new StringBuilder();
 
         update.append( "UPDATE " ).append( TABLE_NAME ).append( " SET " );
-        update.append( FIELD_LIVE_STREAM_ID ).append( "=?," );
-        update.append( FIELD_WIDTH ).append( "=?," );
-        update.append( FIELD_HEIGHT ).append( "=?," );
-        update.append( FIELD_BITRATE ).append( "=?," );
-        update.append( FIELD_AUDIO_BITRATE ).append( "=?," );
-        update.append( FIELD_SEGMENT_SIZE ).append( "=?," );
-        update.append( FIELD_MAX_SEGMENTS ).append( "=?," );
-        update.append( FIELD_START_SEGMENT ).append( "=?," );
-        update.append( FIELD_CURRENT_SEGMENT ).append( "=?," );
-        update.append( FIELD_SEGMENT_COUNT ).append( "=?," );
-        update.append( FIELD_PERCENT_COMPLETE ).append( "=?," );
-        update.append( FIELD_RELATIVE_URL ).append( "=?," );
-        update.append( FIELD_FULL_URL ).append( "=?," );
-        update.append( FIELD_STATUS_STR ).append( "=?," );
-        update.append( FIELD_STATUS_INT ).append( "=?," );
-        update.append( FIELD_STATUS_MESSAGE ).append( "=?," );
-        update.append( FIELD_SOURCE_FILE ).append( "=?," );
-        update.append( FIELD_SOURCE_HOST ).append( "=?," );
-        update.append( FIELD_SOURCE_WIDTH ).append( "=?," );
-        update.append( FIELD_SOURCE_HEIGHT ).append( "=?," );
-        update.append( FIELD_AUDIO_ONLY_BITRATE ).append( "=?," );
-        update.append( FIELD_CREATED_DATE ).append( "=?," );
-        update.append( FIELD_LAST_MODIFIED_DATE ).append( "=?," );
-        update.append( FIELD_RECORDED_ID ).append( "=?," );
-        update.append( FIELD_CHAN_ID ).append( "=?," );
-        update.append( FIELD_START_TIME ).append( "=?," );
-        update.append( FIELD_VIDEO_ID ).append( "=?" );
+        update.append( FIELD_LIVE_STREAM_ID ).append( "=?, " );
+        update.append( FIELD_WIDTH ).append( "=?, " );
+        update.append( FIELD_HEIGHT ).append( "=?, " );
+        update.append( FIELD_BITRATE ).append( "=?, " );
+        update.append( FIELD_AUDIO_BITRATE ).append( "=?, " );
+        update.append( FIELD_SEGMENT_SIZE ).append( "=?, " );
+        update.append( FIELD_MAX_SEGMENTS ).append( "=?, " );
+        update.append( FIELD_START_SEGMENT ).append( "=?, " );
+        update.append( FIELD_CURRENT_SEGMENT ).append( "=?, " );
+        update.append( FIELD_SEGMENT_COUNT ).append( "=?, " );
+        update.append( FIELD_PERCENT_COMPLETE ).append( "=?, " );
+        update.append( FIELD_RELATIVE_URL ).append( "=?, " );
+        update.append( FIELD_FULL_URL ).append( "=?, " );
+        update.append( FIELD_STATUS_STR ).append( "=?, " );
+        update.append( FIELD_STATUS_INT ).append( "=?, " );
+        update.append( FIELD_STATUS_MESSAGE ).append( "=?, " );
+        update.append( FIELD_SOURCE_FILE ).append( "=?, " );
+        update.append( FIELD_SOURCE_HOST ).append( "=?, " );
+        update.append( FIELD_SOURCE_WIDTH ).append( "=?, " );
+        update.append( FIELD_SOURCE_HEIGHT ).append( "=?, " );
+        update.append( FIELD_AUDIO_ONLY_BITRATE ).append( "=?, " );
+        update.append( FIELD_CREATED_DATE ).append( "=?, " );
+        update.append( FIELD_LAST_MODIFIED_DATE ).append( "=?, " );
+        update.append( FIELD_RECORDED_ID ).append( "=?, " );
+        update.append( FIELD_CHAN_ID ).append( "=?, " );
+        update.append( FIELD_START_TIME ).append( "=?, " );
+        update.append( FIELD_VIDEO_ID ).append( "=? " );
         update.append( "WHERE " ).append( _ID ).append( " = ? " );
 
         UPDATE_ROW = update.toString();
@@ -224,6 +224,7 @@ public class LiveStreamConstants extends AbstractBaseDatabase {
         delete.append( "WHERE " ).append( _ID ).append( " = ?" );
 
         DELETE_ROW = delete.toString();
+
     }
 
 }

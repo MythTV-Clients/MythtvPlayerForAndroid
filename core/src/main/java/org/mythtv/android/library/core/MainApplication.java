@@ -78,8 +78,6 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-//        initializeApi();
-
         sInstance = this;
 
     }
@@ -216,7 +214,7 @@ public class MainApplication extends Application {
                         Log.v( TAG, "onPostExecute : connected to v0.27 master backend" );
 
                         mContentService = new ContentServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
-                        mDvrService = new DvrServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
+                        mDvrService = new DvrServiceV27EventHandler();
                         mMythService = new MythServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
                         mVideoService = new VideoServiceV27EventHandler( mMythTvApiContext );
 
@@ -226,7 +224,7 @@ public class MainApplication extends Application {
                         Log.v( TAG, "onPostExecute : connected to v0.28 master backend" );
 
                         mContentService = new ContentServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
-                        mDvrService = new DvrServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
+                        mDvrService = new DvrServiceV28EventHandler();
                         mMythService = new MythServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
                         mVideoService = new VideoServiceV28EventHandler( mMythTvApiContext );
 

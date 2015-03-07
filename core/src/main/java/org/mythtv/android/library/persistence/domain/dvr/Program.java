@@ -1,12 +1,7 @@
 package org.mythtv.android.library.persistence.domain.dvr;
 
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.mythtv.android.library.core.domain.dvr.ArtworkInfo;
-import org.mythtv.android.library.core.domain.dvr.CastMember;
-import org.mythtv.android.library.core.domain.dvr.ChannelInfo;
-import org.mythtv.android.library.core.domain.dvr.RecordingInfo;
 import org.mythtv.android.library.events.dvr.ArtworkInfoDetails;
 import org.mythtv.android.library.events.dvr.CastMemberDetails;
 import org.mythtv.android.library.events.dvr.ProgramDetails;

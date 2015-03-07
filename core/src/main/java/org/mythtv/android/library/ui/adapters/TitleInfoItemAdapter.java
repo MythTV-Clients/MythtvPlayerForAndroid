@@ -20,7 +20,7 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
     private List<TitleInfo> titleInfos;
     private TitleInfoItemClickListener titleInfoItemClickListener;
 
-    public TitleInfoItemAdapter(List<TitleInfo> titleInfos, @NonNull TitleInfoItemClickListener titleInfoItemClickListener) {
+    public TitleInfoItemAdapter( List<TitleInfo> titleInfos, @NonNull TitleInfoItemClickListener titleInfoItemClickListener ) {
 
         this.titleInfos = titleInfos;
         this.titleInfoItemClickListener = titleInfoItemClickListener;

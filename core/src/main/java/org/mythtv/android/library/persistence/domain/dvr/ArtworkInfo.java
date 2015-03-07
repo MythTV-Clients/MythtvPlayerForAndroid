@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class ArtworkInfo implements Serializable {
 
-    private String uRL;
+    private String url;
     private String fileName;
     private String storageGroup;
     private String type;
@@ -17,19 +17,19 @@ public class ArtworkInfo implements Serializable {
     public ArtworkInfo() {
     }
 
-    public ArtworkInfo(String uRL, String fileName, String storageGroup, String type) {
-        this.uRL = uRL;
+    public ArtworkInfo( String url, String fileName, String storageGroup, String type ) {
+        this.url = url;
         this.fileName = fileName;
         this.storageGroup = storageGroup;
         this.type = type;
     }
 
-    public String getuRL() {
-        return uRL;
+    public String getUrl() {
+        return url;
     }
 
-    public void setuRL(String uRL) {
-        this.uRL = uRL;
+    public void setUrl( String url ) {
+        this.url = url;
     }
 
     public String getFileName() {
@@ -59,7 +59,7 @@ public class ArtworkInfo implements Serializable {
     @Override
     public String toString() {
         return "ArtworkInfo{" +
-                "uRL='" + uRL + '\'' +
+                "url='" + url + '\'' +
                 ", fileName='" + fileName + '\'' +
                 ", storageGroup='" + storageGroup + '\'' +
                 ", type='" + type + '\'' +
@@ -69,7 +69,7 @@ public class ArtworkInfo implements Serializable {
     public ArtworkInfoDetails toDetails() {
 
         ArtworkInfoDetails details = new ArtworkInfoDetails();
-        details.setuRL( uRL );
+        details.setUrl( url );
         details.setFileName( fileName );
         details.setStorageGroup( storageGroup );
         details.setType( type );
@@ -80,7 +80,7 @@ public class ArtworkInfo implements Serializable {
     public static ArtworkInfo fromDetails( ArtworkInfoDetails details ) {
 
         ArtworkInfo artworkInfo = new ArtworkInfo();
-        artworkInfo.setuRL( details.getuRL() );
+        artworkInfo.setUrl( details.getUrl() );
         artworkInfo.setFileName( details.getFileName() );
         artworkInfo.setStorageGroup( details.getStorageGroup() );
         artworkInfo.setType( details.getType() );

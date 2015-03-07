@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 /**
  * Created by dmfrey on 1/25/15.
@@ -15,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "mythtvdb";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     public DatabaseHelper( Context context ) {
         super( context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -43,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         dropTables( db );
 
         createTableLiveStreams( db );
+        createTableTitleInfos( db );
 
         Log.i( TAG, "onCreate : exit" );
     }
@@ -70,6 +72,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.execSQL( dropLiveStreams );
 
+        String dropTitleInfos = TitleInfoConstants.DROP_TABLE;
+        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
+            Log.v( TAG, "dropTable : dropTitleInfos=" + dropTitleInfos );
+        }
+        db.execSQL( dropTitleInfos );
+
         Log.v( TAG, "dropTables : exit" );
     }
 
@@ -83,6 +91,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL( sql );
 
         Log.v( TAG, "createTableLiveStreams : exit" );
+    }
+
+    private void createTableTitleInfos( SQLiteDatabase db ) {
+        Log.v( TAG, "createTableTitleInfos : enter" );
+
+        String sql = TitleInfoConstants.CREATE_TABLE;
+        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
+            Log.v( TAG, "createTableTitleInfos : sql=" + sql );
+        }
+        db.execSQL( sql );
+
+        Log.v( TAG, "createTableTitleInfos : exit" );
     }
 
 }

@@ -1,6 +1,10 @@
 package org.mythtv.android.player.recordings;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -12,21 +16,58 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
+import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 import org.mythtv.android.library.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.player.AbstractBaseFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class TitleInfosFragment extends AbstractBaseFragment implements TitleInfoItemAdapter.TitleInfoItemClickListener {
+public class TitleInfosFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, TitleInfoItemAdapter.TitleInfoItemClickListener {
 
     RecyclerView mRecyclerView;
     TitleInfoItemAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
     TextView mEmpty;
+
+    @Override
+    public Loader<Cursor> onCreateLoader( int id, Bundle args ) {
+
+        String[] projection = new String[] { TitleInfoConstants._ID, TitleInfoConstants.FIELD_TITLE, TitleInfoConstants.FIELD_INETREF };
+        String selection = null;
+        String[] selectionArgs = null;
+
+        return new CursorLoader( getActivity(), TitleInfoConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+    }
+
+    @Override
+    public void onLoadFinished( Loader<Cursor> loader, Cursor data ) {
+
+        List<TitleInfo> titleInfos = new ArrayList<TitleInfo>();
+        while( data.moveToNext() ) {
+
+            titleInfos.add( new TitleInfo( data.getString( data.getColumnIndex( TitleInfoConstants.FIELD_TITLE ) ), data.getString( data.getColumnIndex( TitleInfoConstants.FIELD_INETREF ) ) ) );
+
+        }
+        data.close();
+
+        if( !titleInfos.isEmpty() ) {
+
+            mAdapter = new TitleInfoItemAdapter( titleInfos, this );
+            mRecyclerView.setAdapter( mAdapter );
+
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset( Loader<Cursor> loader ) {
+
+    }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
@@ -35,16 +76,23 @@ public class TitleInfosFragment extends AbstractBaseFragment implements TitleInf
 
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mLayoutManager = new LinearLayoutManager( getActivity() );
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager( mLayoutManager );
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;
     }
 
+    @Override
+    public void onActivityCreated( Bundle savedInstanceState ) {
+        super.onActivityCreated( savedInstanceState );
+
+        getLoaderManager().initLoader( 0, null, this );
+
+    }
+
     public void setTitleInfos( List<TitleInfo> titleInfos ) {
 
-        mAdapter = new TitleInfoItemAdapter( titleInfos, this );
-        mRecyclerView.setAdapter( mAdapter );
+        getLoaderManager().restartLoader( 0, null, this );
 
     }
 
@@ -59,7 +107,6 @@ public class TitleInfosFragment extends AbstractBaseFragment implements TitleInf
 
         Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
         recordings.putExtras( args );
-//        startActivity( recordings );
 
         String transitionName = getString( R.string.title_info_transition );
         ActivityOptionsCompat options =

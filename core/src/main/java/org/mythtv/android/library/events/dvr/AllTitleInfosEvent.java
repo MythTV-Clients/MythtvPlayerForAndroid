@@ -14,8 +14,10 @@ import java.util.TreeMap;
 public class AllTitleInfosEvent extends ReadEvent {
 
     private final List<TitleInfoDetails> details;
+    private Map<String, Long> deleted;
 
-    public AllTitleInfosEvent(final List<TitleInfoDetails> details) {
+
+    public AllTitleInfosEvent( final List<TitleInfoDetails> details ) {
 
         this.details = Collections.unmodifiableList( details );
         this.entityFound = details.size() > 0;
@@ -24,6 +26,16 @@ public class AllTitleInfosEvent extends ReadEvent {
 
     public List<TitleInfoDetails> getDetails() {
         return details;
+    }
+
+    public Map<String, Long> getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted( Map<String, Long> deleted ) {
+
+        this.deleted = deleted;
+
     }
 
 }

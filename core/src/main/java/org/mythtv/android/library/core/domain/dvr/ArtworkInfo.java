@@ -69,7 +69,7 @@ public class ArtworkInfo implements Serializable {
     public ArtworkInfoDetails toDetails() {
 
         ArtworkInfoDetails details = new ArtworkInfoDetails();
-        details.setuRL( uRL );
+        details.setUrl( uRL );
         details.setFileName( fileName );
         details.setStorageGroup( storageGroup );
         details.setType( type );
@@ -80,7 +80,7 @@ public class ArtworkInfo implements Serializable {
     public static ArtworkInfo fromDetails( ArtworkInfoDetails details ) {
 
         ArtworkInfo artworkInfo = new ArtworkInfo();
-        artworkInfo.setuRL( details.getuRL() );
+        artworkInfo.setuRL( details.getUrl() );
         artworkInfo.setFileName( details.getFileName() );
         artworkInfo.setStorageGroup( details.getStorageGroup() );
         artworkInfo.setType( details.getType() );

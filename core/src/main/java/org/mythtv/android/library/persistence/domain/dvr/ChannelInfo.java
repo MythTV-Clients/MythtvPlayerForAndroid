@@ -1,6 +1,5 @@
 package org.mythtv.android.library.persistence.domain.dvr;
 
-import org.mythtv.android.library.core.domain.dvr.*;
 import org.mythtv.android.library.events.dvr.ChannelInfoDetails;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 
@@ -33,7 +32,7 @@ public class ChannelInfo implements Serializable {
     private Boolean visible;
     private String xMLTVID;
     private String defaultAuth;
-    private List<org.mythtv.android.library.core.domain.dvr.Program> programs;
+    private List<Program> programs;
 
     public ChannelInfo() {
     }
@@ -198,11 +197,11 @@ public class ChannelInfo implements Serializable {
         this.defaultAuth = defaultAuth;
     }
 
-    public List<org.mythtv.android.library.core.domain.dvr.Program> getPrograms() {
+    public List<Program> getPrograms() {
         return programs;
     }
 
-    public void setPrograms(List<org.mythtv.android.library.core.domain.dvr.Program> programs) {
+    public void setPrograms(List<Program> programs) {
         this.programs = programs;
     }
 
@@ -259,7 +258,7 @@ public class ChannelInfo implements Serializable {
 
         List<ProgramDetails> programDetails = new ArrayList<ProgramDetails>();
         if( null != programs && !programs.isEmpty() ) {
-            for( org.mythtv.android.library.core.domain.dvr.Program program : programs ) {
+            for( Program program : programs ) {
                 programDetails.add( program.toDetails() );
             }
         }
@@ -292,10 +291,10 @@ public class ChannelInfo implements Serializable {
         channelInfo.setxMLTVID( details.getxMLTVID() );
         channelInfo.setDefaultAuth( details.getDefaultAuth() );
 
-        List<org.mythtv.android.library.core.domain.dvr.Program> programs = new ArrayList<org.mythtv.android.library.core.domain.dvr.Program>();
+        List<Program> programs = new ArrayList<Program>();
         if( null != details.getPrograms() && !details.getPrograms().isEmpty() ) {
             for( ProgramDetails detail : details.getPrograms() ) {
-                programs.add( org.mythtv.android.library.core.domain.dvr.Program.fromDetails(detail) );
+                programs.add( Program.fromDetails(detail) );
             }
         }
         channelInfo.setPrograms( programs );
