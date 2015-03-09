@@ -22,6 +22,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
     private List<Program> programs;
     private ProgramItemClickListener programItemClickListener;
     private boolean showTitle;
+    private int previousPosition = 0;
 
     public ProgramItemAdapter(List<Program> programs, @NonNull ProgramItemClickListener programItemClickListener, boolean showTitle) {
 
@@ -79,6 +80,14 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
             }
 
         });
+
+        if( position > previousPosition ) {
+
+
+        } else {
+
+
+        }
 
     }
 

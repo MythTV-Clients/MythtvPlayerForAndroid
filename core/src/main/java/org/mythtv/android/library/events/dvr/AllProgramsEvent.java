@@ -17,6 +17,7 @@ public class AllProgramsEvent extends ReadEvent {
 
     private Map<String, List<ProgramDetails>> mPrograms = new TreeMap<String, List<ProgramDetails>>();
     private Map<String, String> mCategories = new TreeMap<String, String>();
+    private Map<ProgramDetails, Long> deleted;
 
     public AllProgramsEvent( final List<ProgramDetails> details ) {
 
@@ -37,6 +38,16 @@ public class AllProgramsEvent extends ReadEvent {
 
     public Map<String, String> getCategories() {
         return mCategories;
+    }
+
+    public Map<ProgramDetails, Long> getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted( Map<ProgramDetails, Long> deleted ) {
+
+        this.deleted = deleted;
+
     }
 
     private void preparePrograms() {

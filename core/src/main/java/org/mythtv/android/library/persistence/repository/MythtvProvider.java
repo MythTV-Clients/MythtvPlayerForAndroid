@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ public class MythtvProvider extends ContentProvider {
 
         URI_MATCHER.addURI( AUTHORITY, TitleInfoConstants.TABLE_NAME, TitleInfoConstants.ALL );
         URI_MATCHER.addURI( AUTHORITY, TitleInfoConstants.TABLE_NAME + "/#",  TitleInfoConstants.SINGLE );
+
+        URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME, ProgramConstants.ALL );
+        URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME + "/#",  ProgramConstants.SINGLE );
 
     }
 
@@ -79,6 +83,12 @@ public class MythtvProvider extends ContentProvider {
 
             case TitleInfoConstants.SINGLE :
                 return TitleInfoConstants.CONTENT_ITEM_TYPE;
+
+            case ProgramConstants.ALL :
+                return ProgramConstants.CONTENT_TYPE;
+
+            case ProgramConstants.SINGLE :
+                return ProgramConstants.CONTENT_ITEM_TYPE;
 
             default :
                 throw new IllegalArgumentException( "Unknown URI : " + uri );
@@ -185,6 +195,26 @@ public class MythtvProvider extends ContentProvider {
 
                 return cursor;
 
+            case ProgramConstants.ALL :
+//                Log.v( TAG, "query : querying for all programs" );
+
+                cursor = db.query( ProgramConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case ProgramConstants.SINGLE :
+//                Log.v( TAG, "query : querying for single program" );
+
+                selection = ProgramConstants._ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
+
+                cursor = db.query( ProgramConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
             default :
                 throw new IllegalArgumentException( "Unknown URI : " + uri );
 
@@ -215,6 +245,15 @@ public class MythtvProvider extends ContentProvider {
 //                Log.v( TAG, "insert : inserting new title info" );
 
                 newUri = ContentUris.withAppendedId( TitleInfoConstants.CONTENT_URI, db.insertWithOnConflict( TitleInfoConstants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE ) );
+
+                getContext().getContentResolver().notifyChange( newUri, null );
+
+                return newUri;
+
+            case ProgramConstants.ALL:
+//                Log.v( TAG, "insert : inserting new program" );
+
+                newUri = ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, db.insertWithOnConflict( ProgramConstants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE ) );
 
                 getContext().getContentResolver().notifyChange( newUri, null );
 
@@ -321,6 +360,26 @@ public class MythtvProvider extends ContentProvider {
 
                 return deleted;
 
+            case ProgramConstants.ALL:
+
+                deleted = db.delete( ProgramConstants.TABLE_NAME, selection, selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return deleted;
+
+            case ProgramConstants.SINGLE:
+
+                deleted = db.delete( ProgramConstants.TABLE_NAME, ProgramConstants._ID
+                        + "="
+                        + uri.getLastPathSegment()
+                        + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" )
+                        , selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return deleted;
+
             default:
                 throw new IllegalArgumentException( "Unknown URI " + uri );
 
@@ -413,6 +472,26 @@ public class MythtvProvider extends ContentProvider {
             case TitleInfoConstants.SINGLE:
 
                 affected = db.update( TitleInfoConstants.TABLE_NAME, values, TitleInfoConstants._ID
+                                + "="
+                                + uri.getLastPathSegment()
+                                + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" ),
+                        selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return affected;
+
+            case ProgramConstants.ALL:
+
+                affected = db.update( ProgramConstants.TABLE_NAME, values, selection, selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return affected;
+
+            case ProgramConstants.SINGLE:
+
+                affected = db.update( ProgramConstants.TABLE_NAME, values, ProgramConstants._ID
                                 + "="
                                 + uri.getLastPathSegment()
                                 + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" ),

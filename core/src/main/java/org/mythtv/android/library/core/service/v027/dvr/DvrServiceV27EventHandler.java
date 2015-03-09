@@ -11,6 +11,8 @@ import org.mythtv.android.library.events.DeletedEvent;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
+import org.mythtv.android.library.events.dvr.ProgramRemovedEvent;
+import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
@@ -70,16 +72,38 @@ public class DvrServiceV27EventHandler implements DvrService {
 
         }
 
+        AllProgramsEvent refreshedEvent = new AllProgramsEvent( programDetails );
+
         if( null != mProgramList ) {
             Log.v( TAG, "getRecordedList : programs returned, size=" + mProgramList.getCount() );
 
             for( Program program : mProgramList.getPrograms() ) {
                 Log.v( TAG, "getRecordedList : program iteration" );
-                programDetails.add(ProgramHelper.toDetails( program ) );
+                programDetails.add( ProgramHelper.toDetails( program ) );
             }
+
+            refreshedEvent = new AllProgramsEvent( programDetails );
+            mDvrPersistenceService.refreshRecordedPrograms( refreshedEvent );
+
+//            if( null != refreshedEvent.getDeleted() && !refreshedEvent.getDeleted().isEmpty() ) {
+//
+//                for( Long programId : refreshedEvent.getDeleted().values() ) {
+//
+//                    removeProgram( new RemoveProgramEvent( programId ) );
+//
+//                }
+//
+//            }
+
         }
 
-        return new AllProgramsEvent( programDetails );
+        return refreshedEvent;
+    }
+
+    @Override
+    public ProgramRemovedEvent removeProgram( RemoveProgramEvent event ) {
+
+        return mDvrPersistenceService.removeProgram( event );
     }
 
     @Override
@@ -109,6 +133,7 @@ public class DvrServiceV27EventHandler implements DvrService {
                 titleInfoDetails.add( TitleInfoHelper.toDetails( titleInfo ) );
             }
 
+            refreshedEvent = new AllTitleInfosEvent( titleInfoDetails );
             mDvrPersistenceService.refreshTitleInfos( refreshedEvent );
 
             if( null != refreshedEvent.getDeleted() && !refreshedEvent.getDeleted().isEmpty() ) {
@@ -123,7 +148,7 @@ public class DvrServiceV27EventHandler implements DvrService {
 
         }
 
-        return new AllTitleInfosEvent( titleInfoDetails );
+        return refreshedEvent;
     }
 
     @Override

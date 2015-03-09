@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 /**
@@ -16,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "mythtvdb";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public DatabaseHelper( Context context ) {
         super( context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -34,17 +35,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
 
-        Log.i( TAG, "onOpen : exit" );
+        Log.i(TAG, "onOpen : exit");
     }
 
     @Override
     public void onCreate( SQLiteDatabase db ) {
-        Log.i( TAG, "onCreate : enter" );
+        Log.i(TAG, "onCreate : enter");
 
-        dropTables( db );
+        dropTables(db);
 
         createTableLiveStreams( db );
-        createTableTitleInfos( db );
+        createTableTitleInfos(db);
+        createTablePrograms(db);
 
         Log.i( TAG, "onCreate : exit" );
     }
@@ -70,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
             Log.v( TAG, "dropTable : dropLiveStreams=" + dropLiveStreams );
         }
-        db.execSQL( dropLiveStreams );
+        db.execSQL(dropLiveStreams);
 
         String dropTitleInfos = TitleInfoConstants.DROP_TABLE;
         if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
@@ -78,11 +80,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.execSQL( dropTitleInfos );
 
+        String dropPrograms = ProgramConstants.DROP_TABLE;
+        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
+            Log.v( TAG, "dropTable : dropPrograms=" + dropPrograms );
+        }
+        db.execSQL( dropPrograms );
+
         Log.v( TAG, "dropTables : exit" );
     }
 
     private void createTableLiveStreams( SQLiteDatabase db ) {
-        Log.v( TAG, "createTableLiveStreams : enter" );
+        Log.v(TAG, "createTableLiveStreams : enter");
 
         String sql = LiveStreamConstants.CREATE_TABLE;
         if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
@@ -103,6 +111,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL( sql );
 
         Log.v( TAG, "createTableTitleInfos : exit" );
+    }
+
+    private void createTablePrograms( SQLiteDatabase db ) {
+        Log.v( TAG, "createTablePrograms : enter" );
+
+        String sql = ProgramConstants.CREATE_TABLE;
+        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
+            Log.v( TAG, "createTablePrograms : sql=" + sql );
+        }
+        db.execSQL( sql );
+
+        Log.v( TAG, "createTablePrograms : exit" );
     }
 
 }
