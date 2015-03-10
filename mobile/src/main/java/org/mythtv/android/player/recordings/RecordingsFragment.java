@@ -75,7 +75,7 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
             program.setChannel( channel );
 
             RecordingInfo recording = new RecordingInfo();
-            program.setStartTime( new DateTime( data.getLong( data.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
+            recording.setStartTs( new DateTime( data.getLong( data.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
             program.setRecording( recording );
 
             programs.add( program );

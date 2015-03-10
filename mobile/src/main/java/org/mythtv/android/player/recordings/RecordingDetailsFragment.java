@@ -139,8 +139,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
         description.setText( mProgram.getDescription() );
 
-        DateTime start = new DateTime( mProgram.getRecording().getStartTs() );
-        String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + mProgram.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         ImageUtils.updatePreviewImage(getActivity(), preview, url );
 
         getLoaderManager().initLoader( 0, getArguments(), this );
