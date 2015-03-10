@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
+import org.mythtv.android.library.ui.animation.AnimationUtils;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 
     private List<TitleInfo> titleInfos;
     private TitleInfoItemClickListener titleInfoItemClickListener;
+    private int previousPosition = 0;
 
     public TitleInfoItemAdapter( List<TitleInfo> titleInfos, @NonNull TitleInfoItemClickListener titleInfoItemClickListener ) {
 
@@ -51,6 +53,17 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
             }
 
         });
+
+        if( position > previousPosition ) {
+
+            AnimationUtils.animate(viewHolder, true);
+
+        } else {
+
+            AnimationUtils.animate( viewHolder, false );
+
+        }
+        previousPosition = position;
 
     }
 

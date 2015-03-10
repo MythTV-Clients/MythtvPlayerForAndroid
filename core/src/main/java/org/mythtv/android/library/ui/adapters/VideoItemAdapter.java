@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.domain.video.Video;
+import org.mythtv.android.library.ui.animation.AnimationUtils;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
     private List<Video> videos;
     private VideoItemClickListener videoItemClickListener;
+    private int previousPosition = 0;
 
     public VideoItemAdapter(List<Video> videos, @NonNull VideoItemClickListener videoItemClickListener) {
         Log.v( TAG, "initialize : enter" );
@@ -56,6 +58,17 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
             }
 
         });
+
+        if( position > previousPosition ) {
+
+            AnimationUtils.animate(viewHolder, true);
+
+        } else {
+
+            AnimationUtils.animate( viewHolder, false );
+
+        }
+        previousPosition = position;
 
         Log.v( TAG, "onBindViewHolder : exit" );
     }
