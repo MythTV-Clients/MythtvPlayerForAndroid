@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
@@ -89,9 +90,8 @@ public class RecordingCardPresenter extends Presenter {
             //        R.drawable.videos_by_google_icon));
         Log.i( TAG, program.toString() );
 
-        DateTime start = new DateTime( program.getRecording().getStartTs() );
-        Log.i( TAG, MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Width=" + CARD_WIDTH );
-            ((ViewHolder) viewHolder).updateCardViewImage( MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + start.toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Width=" + CARD_WIDTH);
+        Log.i( TAG, MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + program.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Width=" + CARD_WIDTH );
+            ((ViewHolder) viewHolder).updateCardViewImage( MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + program.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString("yyyy-MM-dd'T'HH:mm:ss") + "&Width=" + CARD_WIDTH);
 //        }
     }
 
