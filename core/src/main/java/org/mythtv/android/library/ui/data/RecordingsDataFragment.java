@@ -13,7 +13,9 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
+import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
+import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,22 +96,22 @@ public class RecordingsDataFragment extends Fragment {
 
     }
 
-    private class ProgramsLoaderAsyncTask extends AsyncTask<String, Void, AllProgramsEvent> {
+    private class ProgramsLoaderAsyncTask extends AsyncTask<String, Void, ProgramsUpdatedEvent> {
 
         private String TAG = ProgramsLoaderAsyncTask.class.getSimpleName();
 
         @Override
-        protected AllProgramsEvent doInBackground( String... params ) {
+        protected ProgramsUpdatedEvent doInBackground( String... params ) {
 
             String title = params[ 0 ];
 
-            AllProgramsEvent event = MainApplication.getInstance().getDvrService().getRecordedPrograms( new RequestAllRecordedProgramsEvent( true, 0, null, title, null, null ) );
+            ProgramsUpdatedEvent event = MainApplication.getInstance().getDvrService().updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null, title, null, null ) );
 
             return event;
         }
 
         @Override
-        protected void onPostExecute( AllProgramsEvent event ) {
+        protected void onPostExecute( ProgramsUpdatedEvent event ) {
 
             if( event.isEntityFound() ) {
 

@@ -14,6 +14,8 @@ import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
+import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
+import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,18 +89,18 @@ public class TitleInfosDataFragment extends Fragment {
 
     }
 
-    private class TitleInfosLoaderAsyncTask extends AsyncTask<Void, Void, AllTitleInfosEvent> {
+    private class TitleInfosLoaderAsyncTask extends AsyncTask<Void, Void, TitleInfosUpdatedEvent> {
 
         @Override
-        protected AllTitleInfosEvent doInBackground( Void... params ) {
+        protected TitleInfosUpdatedEvent doInBackground( Void... params ) {
 
-            AllTitleInfosEvent event = MainApplication.getInstance().getDvrService().getTitleInfos( new RequestAllTitleInfosEvent() );
+            TitleInfosUpdatedEvent event = MainApplication.getInstance().getDvrService().updateTitleInfos( new UpdateTitleInfosEvent() );
 
             return event;
         }
 
         @Override
-        protected void onPostExecute( AllTitleInfosEvent event ) {
+        protected void onPostExecute( TitleInfosUpdatedEvent event ) {
 
             if( event.isEntityFound() ) {
 

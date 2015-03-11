@@ -9,16 +9,26 @@ import java.io.Serializable;
  */
 public class TitleInfo implements Serializable {
 
+    private long id;
     private String title;
     private String inetref;
 
     public TitleInfo() { }
 
-    public TitleInfo( String title, String inetref ) {
+    public TitleInfo( long id, String title, String inetref ) {
 
+        this.id = id;
         this.title = title;
         this.inetref = inetref;
 
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId( long id ) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -40,6 +50,7 @@ public class TitleInfo implements Serializable {
     public TitleInfoDetails toDetails() {
 
         TitleInfoDetails details = new TitleInfoDetails();
+        details.setId( id );
         details.setTitle( title );
         details.setInetref( inetref );
 
@@ -49,6 +60,7 @@ public class TitleInfo implements Serializable {
     public static TitleInfo fromDetails( TitleInfoDetails details ) {
 
         TitleInfo titleInfo = new TitleInfo();
+        titleInfo.setId( details.getId() );
         titleInfo.setTitle( details.getTitle() );
         titleInfo.setInetref( details.getInetref() );
 

@@ -1,33 +1,33 @@
 package org.mythtv.android.player.recordings;
 
 import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 import org.mythtv.android.library.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.R;
+import org.mythtv.android.library.ui.loaders.TitleInfosAsyncTaskLoader;
 import org.mythtv.android.player.AbstractBaseFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class TitleInfosFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, TitleInfoItemAdapter.TitleInfoItemClickListener {
+public class TitleInfosFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<TitleInfo>>, TitleInfoItemAdapter.TitleInfoItemClickListener {
+
+    private static final String TAG = TitleInfosFragment.class.getSimpleName();
 
     RecyclerView mRecyclerView;
     TitleInfoItemAdapter mAdapter;
@@ -35,42 +35,34 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     TextView mEmpty;
 
     @Override
-    public Loader<Cursor> onCreateLoader( int id, Bundle args ) {
+    public Loader<List<TitleInfo>> onCreateLoader( int id, Bundle args ) {
+        Log.v( TAG, "onCreateLoader : enter" );
 
-        String[] projection = new String[] { TitleInfoConstants._ID, TitleInfoConstants.FIELD_TITLE, TitleInfoConstants.FIELD_INETREF };
-        String selection = null;
-        String[] selectionArgs = null;
-
-        return new CursorLoader( getActivity(), TitleInfoConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+        Log.v( TAG, "onCreateLoader : exit" );
+        return new TitleInfosAsyncTaskLoader( getActivity() );
     }
 
     @Override
-    public void onLoadFinished( Loader<Cursor> loader, Cursor data ) {
-
-        List<TitleInfo> titleInfos = new ArrayList<TitleInfo>();
-        while( data.moveToNext() ) {
-
-            titleInfos.add( new TitleInfo( data.getString( data.getColumnIndex( TitleInfoConstants.FIELD_TITLE ) ), data.getString( data.getColumnIndex( TitleInfoConstants.FIELD_INETREF ) ) ) );
-
-        }
-        data.close();
+    public void onLoadFinished( Loader<List<TitleInfo>> loader, List<TitleInfo> titleInfos ) {
+        Log.v( TAG, "onLoadFinished : enter" );
 
         if( !titleInfos.isEmpty() ) {
+            Log.v( TAG, "onLoadFinished : loaded titleInfos from db" );
 
             mAdapter = new TitleInfoItemAdapter( titleInfos, this );
             mRecyclerView.setAdapter( mAdapter );
 
         }
 
+        Log.v( TAG, "onLoadFinished : exit" );
     }
 
     @Override
-    public void onLoaderReset( Loader<Cursor> loader ) {
-
-    }
+    public void onLoaderReset( Loader<List<TitleInfo>> loader ) { }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
+        Log.v( TAG, "onCreateView : enter" );
 
         View view = inflater.inflate( R.layout.title_info_list, container, false );
 
@@ -79,21 +71,24 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
         mRecyclerView.setLayoutManager( mLayoutManager );
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
+        Log.v( TAG, "onCreateView : exit" );
         return view;
     }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
+        Log.v( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
 
-        getLoaderManager().initLoader( 0, null, this );
-
+        Log.v( TAG, "onActivityCreated : exit" );
     }
 
     public void setTitleInfos( List<TitleInfo> titleInfos ) {
+        Log.v( TAG, "setTitleInfos : enter" );
 
-        getLoaderManager().restartLoader( 0, null, this );
+        getLoaderManager().initLoader( 0, null, this );
 
+        Log.v( TAG, "setTitleInfos : exit" );
     }
 
     public void titleInfoItemClicked( View v, TitleInfo titleInfo ) {

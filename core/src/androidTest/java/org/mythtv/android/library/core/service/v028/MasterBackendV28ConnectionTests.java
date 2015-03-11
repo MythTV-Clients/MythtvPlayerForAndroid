@@ -8,7 +8,9 @@ import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28EventHandler;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
+import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
+import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
 import org.mythtv.services.api.ServerVersionQuery;
@@ -32,9 +34,9 @@ public class MasterBackendV28ConnectionTests extends TestCase {
 
         MythTvApiContext mMythTvApiContext = MythTvApiContext.newBuilder().setHostName( hostname ).setPort( port ).setVersion( apiVersion ).build();
 
-        DvrService dvrService = new DvrServiceV28EventHandler( mMythTvApiContext );
+        DvrService dvrService = new DvrServiceV28EventHandler();
 
-        AllProgramsEvent event = dvrService.getRecordedPrograms( new RequestAllRecordedProgramsEvent( false, 0, null, null, null, null ) );
+        ProgramsUpdatedEvent event = dvrService.updateRecordedPrograms( new UpdateRecordedProgramsEvent( false, 0, null, null, null, null ) );
         assertNotNull( event );
         assertTrue( event.isEntityFound() );
 

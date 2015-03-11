@@ -5,16 +5,33 @@ package org.mythtv.android.library.events.dvr;
  */
 public class TitleInfoDetails {
 
+    private long id;
     private String title;
     private String inetref;
 
     public TitleInfoDetails() { }
 
-    public TitleInfoDetails(String title, String inetref) {
+    public TitleInfoDetails( long id, String title, String inetref ) {
+
+        this.id = id;
+        this.title = title;
+        this.inetref = inetref;
+
+    }
+
+    public TitleInfoDetails( String title, String inetref ) {
 
         this.title = title;
         this.inetref = inetref;
 
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId( long id ) {
+        this.id = id;
     }
 
     public String getTitle() {

@@ -16,10 +16,16 @@ import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.ProgramRemovedEvent;
+import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
 import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
+import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
+import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.events.dvr.TitleInfoRemovedEvent;
+import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
+import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
+import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 import org.mythtv.android.library.persistence.domain.dvr.ChannelInfo;
 import org.mythtv.android.library.persistence.domain.dvr.Program;
 import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
@@ -31,6 +37,7 @@ import org.mythtv.android.library.persistence.service.DvrPersistenceService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,7 +56,60 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
     }
 
     @Override
-    public AllProgramsEvent refreshRecordedPrograms( AllProgramsEvent event ) {
+    public AllProgramsEvent requestAllRecordedPrograms( RequestAllRecordedProgramsEvent event ) {
+        Log.v( TAG, "requestAllRecordedPrograms : enter" );
+
+        List<Program> programs = new ArrayList<>();
+
+        String[] projection = new String[]{ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_START_TS };
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_REC_GROUP + " != ?";
+        String[] selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), "LiveTV" };
+        String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
+
+        if( null != event.getTitle() && !"".equals( event.getTitle() )  ) {
+            selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_REC_GROUP + " != ? AND " + ProgramConstants.FIELD_PROGRAM_TITLE + " = ?";
+            selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), "LiveTV", event.getTitle() };
+        }
+
+        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, sort );
+        while( cursor.moveToNext() ) {
+
+            Program program = new Program();
+            program.setStartTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_START_TIME ) ) ) );
+            program.setTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_TITLE ) ) );
+            program.setSubTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_SUB_TITLE ) ) );
+            program.setInetref( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_INETREF ) ) );
+            program.setDescription( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_DESCRIPTION ) ) );
+
+            ChannelInfo channel = new ChannelInfo();
+            channel.setChanId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_CHANNEL_CHAN_ID ) ) );
+            program.setChannel( channel );
+
+            RecordingInfo recording = new RecordingInfo();
+            recording.setStartTs( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
+            program.setRecording( recording );
+
+            programs.add( program );
+
+        }
+        cursor.close();
+
+        List<ProgramDetails> details = new ArrayList<>();
+        if( !programs.isEmpty() ) {
+
+            for( Program program : programs ) {
+
+                details.add( program.toDetails() );
+
+            }
+
+        }
+
+        return new AllProgramsEvent( details );
+    }
+
+    @Override
+    public ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event ) {
 
         String[] projection = new String[] { ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants._ID };
         String selection = null;
@@ -108,7 +168,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 values.put( ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ( null == program.getDescription() ? "" : program.getDescription() ) );
                 values.put( ProgramConstants.FIELD_PROGRAM_INETREF, program.getInetref() );
                 values.put( ProgramConstants.FIELD_PROGRAM_SEASON, program.getSeason() );
-                values.put(ProgramConstants.FIELD_PROGRAM_EPISODE, program.getEpisode());
+                values.put( ProgramConstants.FIELD_PROGRAM_EPISODE, program.getEpisode() );
 
                 values.put( ProgramConstants.FIELD_CHANNEL_CHAN_ID, program.getChannel().getChanId() );
                 values.put( ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ( null == program.getChannel().getChanNum() ? "" : program.getChannel().getChanNum() ) );
@@ -155,37 +215,37 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 }
                 cursor.close();
 
+                if( !programIds.isEmpty() ) {
+
+                    for( long id : programIds.values() ) {
+
+                        ops.add(
+                                ContentProviderOperation
+                                        .newDelete( ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, id ) )
+                                        .build()
+                        );
+
+                    }
+
+                }
+
             }
 
             try {
 
                 mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
 
+                return new ProgramsUpdatedEvent( event.getDetails() );
+
             } catch( Exception e ) {
 
                 Log.e( TAG, "refreshPrograms : error processing programs", e);
-
-            } finally {
-
-                if( !programIds.isEmpty() ) {
-
-                    Map<ProgramDetails, Long> programDetailsIds = new HashMap<>();
-
-                    for( long programId : programIds.values() ) {
-
-                        removeProgram( new RemoveProgramEvent( programId ) );
-
-                    }
-
-                    event.setDeleted( programDetailsIds );
-
-                }
 
             }
 
         }
 
-        return event;
+        return ProgramsUpdatedEvent.notUpdated();
     }
 
     @Override
@@ -207,8 +267,47 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
     }
 
     @Override
-    public AllTitleInfosEvent refreshTitleInfos( AllTitleInfosEvent event ) {
-        Log.v( TAG, "refreshTitleInfos : enter" );
+    public AllTitleInfosEvent requestAllTitleInfos( RequestAllTitleInfosEvent event ) {
+        Log.v( TAG, "requestAllTitleInfos : enter" );
+
+        List<TitleInfoDetails> titleInfosDetails = new ArrayList<>();
+        List<TitleInfo> titleInfos = new ArrayList<>();
+
+        String[] projection = null;
+        String selection = null;
+        String[] selectionArgs = null;
+        String sort = TitleInfoConstants.FIELD_SORT + ", " + TitleInfoConstants.FIELD_TITLE_SORT;
+
+        Cursor cursor = mContext.getContentResolver().query( TitleInfoConstants.CONTENT_URI, projection, selection, selectionArgs, sort );
+        while( cursor.moveToNext() ) {
+
+            TitleInfo titleInfo = new TitleInfo();
+            titleInfo.setId( cursor.getLong( cursor.getColumnIndex( TitleInfoConstants._ID ) ) );
+            titleInfo.setTitle( cursor.getString( cursor.getColumnIndex( TitleInfoConstants.FIELD_TITLE ) ) );
+            titleInfo.setInetref( cursor.getString( cursor.getColumnIndex( TitleInfoConstants.FIELD_INETREF ) ) );
+
+            titleInfos.add( titleInfo );
+            Log.v( TAG, "requestAllTitleInfos : cursor iteration, titleInfo=" + titleInfo );
+
+        }
+        cursor.close();
+
+        if( !titleInfos.isEmpty() ) {
+
+            for( TitleInfo titleInfo : titleInfos ) {
+
+                titleInfosDetails.add( titleInfo.toDetails() );
+
+            }
+
+        }
+
+        Log.v( TAG, "requestAllTitleInfos : exit" );
+        return new AllTitleInfosEvent( titleInfosDetails );
+    }
+
+    @Override
+    public TitleInfosUpdatedEvent updateTitleInfos( UpdateTitleInfosEvent event ) {
 
         String[] projection = new String[]{ TitleInfoConstants.FIELD_TITLE, TitleInfoConstants._ID };
         String selection = null;
@@ -248,7 +347,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
                 if( titleInfo.getTitle().equals( MainApplication.getInstance().getResources().getString( R.string.all_recordings ) ) ) {
 
-                    values.put(TitleInfoConstants.FIELD_SORT, 0);
+                    values.put( TitleInfoConstants.FIELD_SORT, 0 );
 
                 } else {
 
@@ -281,28 +380,35 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
             }
 
-            try {
+            if( !titleInfoIds.isEmpty() ) {
 
-                mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
+                for( Long id : titleInfoIds.values() ) {
 
-            } catch( Exception e ) {
-
-                Log.e( TAG, "refreshTitleInfos : error processing title infos", e );
-
-            } finally {
-
-                if( !titleInfoIds.isEmpty() ) {
-
-                    event.setDeleted( titleInfoIds );
+                    ops.add(
+                            ContentProviderOperation
+                                    .newDelete( ContentUris.withAppendedId( TitleInfoConstants.CONTENT_URI, id ) )
+                                    .build()
+                    );
 
                 }
 
             }
 
+            try {
+
+                mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
+
+                return new TitleInfosUpdatedEvent( event.getDetails() );
+
+            } catch( Exception e ) {
+
+                Log.e( TAG, "updateTitleInfos : error processing title infos", e );
+
+            }
+
         }
 
-        Log.v( TAG, "refreshTitleInfos : exit" );
-        return event;
+        return TitleInfosUpdatedEvent.notUpdated();
     }
 
     @Override
@@ -321,12 +427,6 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         Log.v( TAG, "removeTitleInfo : error, title info not deleted" );
         return TitleInfoRemovedEvent.deletionFailed(event.getKey());
-    }
-
-    @Override
-    public DeletedEvent cleanup( DeleteEvent event ) {
-
-        return null;
     }
 
     private String removeArticles( String value ) {

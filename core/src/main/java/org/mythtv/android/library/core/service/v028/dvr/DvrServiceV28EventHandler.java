@@ -12,12 +12,16 @@ import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.ProgramRemovedEvent;
+import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
 import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.events.dvr.TitleInfoRemovedEvent;
+import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
+import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
+import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 import org.mythtv.android.library.persistence.service.DvrPersistenceService;
 import org.mythtv.android.library.persistence.service.dvr.DvrPersistenceServiceEventHandler;
 import org.mythtv.services.api.ETagInfo;
@@ -46,7 +50,6 @@ public class DvrServiceV28EventHandler implements DvrService {
     DvrPersistenceService mDvrPersistenceService;
 
     ProgramList mProgramList;
-    TitleInfoList mTitleInfoList;
 
     public DvrServiceV28EventHandler() {
 
@@ -56,15 +59,39 @@ public class DvrServiceV28EventHandler implements DvrService {
     }
 
     @Override
-    public AllProgramsEvent getRecordedPrograms( RequestAllRecordedProgramsEvent event ) {
+    public AllProgramsEvent requestAllRecordedPrograms( RequestAllRecordedProgramsEvent event ) {
 
-        List<ProgramDetails> programDetails = new ArrayList<ProgramDetails>();
+        return mDvrPersistenceService.requestAllRecordedPrograms( event );
+    }
+
+    @Override
+    public ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event ) {
 
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( RECORDED_LIST_REQ_ID, true );
         try {
-            mProgramList = mMythTvApiContext.getDvrService().getRecordedList( event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID );
+
+            ProgramList programList = mMythTvApiContext.getDvrService().getRecordedList( event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID );
+            if( null != programList ) {
+
+                List<ProgramDetails> programDetails = new ArrayList<ProgramDetails>();
+
+                for( Program program : programList.getPrograms() ) {
+
+                    programDetails.add( ProgramHelper.toDetails( program ) );
+
+                }
+
+                event.setDetails( programDetails );
+                ProgramsUpdatedEvent updated = mDvrPersistenceService.updateRecordedPrograms( event );
+                if( updated.isEntityFound() ) {
+
+                    return new ProgramsUpdatedEvent( updated.getDetails() );
+                }
+
+            }
+
         } catch( RetrofitError e ) {
-            Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
+            Log.w( TAG, "updateRecordedPrograms : HTTP Response - " + e.getResponse().getStatus(), e );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
@@ -72,32 +99,7 @@ public class DvrServiceV28EventHandler implements DvrService {
 
         }
 
-        AllProgramsEvent refreshedEvent = new AllProgramsEvent( programDetails );
-
-        if( null != mProgramList ) {
-            Log.v( TAG, "getRecordedList : programs returned, size=" + mProgramList.getCount() );
-
-            for( Program program : mProgramList.getPrograms() ) {
-                Log.v( TAG, "getRecordedList : program iteration" );
-                programDetails.add( ProgramHelper.toDetails( program ) );
-            }
-
-            refreshedEvent = new AllProgramsEvent( programDetails );
-            mDvrPersistenceService.refreshRecordedPrograms( refreshedEvent );
-
-//            if( null != refreshedEvent.getDeleted() && !refreshedEvent.getDeleted().isEmpty() ) {
-//
-//                for( Long programId : refreshedEvent.getDeleted().values() ) {
-//
-//                    removeProgram( new RemoveProgramEvent( programId ) );
-//
-//                }
-//
-//            }
-
-        }
-
-        return refreshedEvent;
+        return ProgramsUpdatedEvent.notUpdated();
     }
 
     @Override
@@ -107,15 +109,43 @@ public class DvrServiceV28EventHandler implements DvrService {
     }
 
     @Override
-    public AllTitleInfosEvent getTitleInfos( RequestAllTitleInfosEvent event ) {
+    public AllTitleInfosEvent requestAllTitleInfos( RequestAllTitleInfosEvent event ) {
 
-        List<TitleInfoDetails> titleInfoDetails = new ArrayList<TitleInfoDetails>();
+        return mDvrPersistenceService.requestAllTitleInfos( event );
+    }
+
+    @Override
+    public TitleInfosUpdatedEvent updateTitleInfos( UpdateTitleInfosEvent event ) {
 
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( TITLE_INFO_LIST_REQ_ID, true );
         try {
-            mTitleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
+
+            List<TitleInfoDetails> titleInfoDetails = new ArrayList<TitleInfoDetails>();
+
+            TitleInfoList titleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
+            if( null != titleInfoList ) {
+
+                titleInfoDetails.add( new TitleInfoDetails( MainApplication.getInstance().getApplicationContext().getResources().getString( R.string.all_recordings ), "-1" ) );
+
+                for( TitleInfo titleInfo : titleInfoList.getTitleInfos() ) {
+                    titleInfoDetails.add( TitleInfoHelper.toDetails( titleInfo ) );
+                }
+
+                TitleInfosUpdatedEvent updated = mDvrPersistenceService.updateTitleInfos( new UpdateTitleInfosEvent( titleInfoDetails ) );
+                if( updated.isEntityFound() ) {
+
+                    AllTitleInfosEvent allTitleInfos = mDvrPersistenceService.requestAllTitleInfos( new RequestAllTitleInfosEvent() );
+                    if( allTitleInfos.isEntityFound() ) {
+
+                        return new TitleInfosUpdatedEvent( allTitleInfos.getDetails() );
+                    }
+
+                }
+
+            }
+
         } catch( RetrofitError e ) {
-            Log.w( TAG, "HTTP Response:" + e.getResponse().getStatus(), e );
+            Log.w( TAG, "updateTitleInfos : HTTP Response - " + e.getResponse().getStatus(), e );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
@@ -123,32 +153,7 @@ public class DvrServiceV28EventHandler implements DvrService {
 
         }
 
-        AllTitleInfosEvent refreshedEvent = new AllTitleInfosEvent( titleInfoDetails );
-
-        if( null != mTitleInfoList ) {
-
-            titleInfoDetails.add( new TitleInfoDetails( MainApplication.getInstance().getApplicationContext().getResources().getString( R.string.all_recordings ), "-1" ) );
-
-            for( TitleInfo titleInfo : mTitleInfoList.getTitleInfos() ) {
-                titleInfoDetails.add( TitleInfoHelper.toDetails( titleInfo ) );
-            }
-
-            refreshedEvent = new AllTitleInfosEvent( titleInfoDetails );
-            mDvrPersistenceService.refreshTitleInfos( refreshedEvent );
-
-            if( null != refreshedEvent.getDeleted() && !refreshedEvent.getDeleted().isEmpty() ) {
-
-                for( Long titleInfoId : refreshedEvent.getDeleted().values() ) {
-
-                    removeTitleInfo( new RemoveTitleInfoEvent( titleInfoId ) );
-
-                }
-
-            }
-
-        }
-
-        return refreshedEvent;
+        return TitleInfosUpdatedEvent.notUpdated();
     }
 
     @Override
@@ -161,7 +166,6 @@ public class DvrServiceV28EventHandler implements DvrService {
     public DeletedEvent cleanup( DeleteEvent event ) {
 
         mProgramList = null;
-        mTitleInfoList = null;
 
         return new DeletedEvent();
     }

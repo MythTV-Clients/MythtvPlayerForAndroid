@@ -1,12 +1,8 @@
 package org.mythtv.android.player.recordings;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -35,13 +31,10 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.domain.dvr.ChannelInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.core.domain.dvr.RecordingInfo;
-import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
+import org.mythtv.android.library.ui.loaders.ProgramsAsyncTaskLoader;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.android.player.PicassoBackgroundManagerTarget;
 
@@ -55,7 +48,7 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 
 
-public class RecordingsFragment extends BrowseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class RecordingsFragment extends BrowseFragment implements LoaderManager.LoaderCallbacks<List<Program>> {
 
     private static final String TAG = RecordingsFragment.class.getSimpleName();
 
@@ -71,41 +64,13 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
     BrowseFragment mBrowseFragment;
 
     @Override
-    public Loader<Cursor> onCreateLoader( int id, Bundle args ) {
+    public Loader<List<Program>> onCreateLoader( int id, Bundle args ) {
 
-        String[] projection = new String[]{ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_START_TS };
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_REC_GROUP + " != ?";
-        String[] selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), "LiveTV" };
-        String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
-
-        return new CursorLoader( getActivity(), ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, sort );
+        return new ProgramsAsyncTaskLoader( getActivity() );
     }
 
     @Override
-    public void onLoadFinished( Loader<Cursor> loader, Cursor data ) {
-
-        List<Program> programs = new ArrayList<Program>();
-        while( data.moveToNext() ) {
-
-            Program program = new Program();
-            program.setStartTime( new DateTime( data.getLong( data.getColumnIndex( ProgramConstants.FIELD_PROGRAM_START_TIME ) ) ) );
-            program.setTitle( data.getString( data.getColumnIndex( ProgramConstants.FIELD_PROGRAM_TITLE ) ) );
-            program.setSubTitle( data.getString( data.getColumnIndex( ProgramConstants.FIELD_PROGRAM_SUB_TITLE ) ) );
-            program.setInetref( data.getString( data.getColumnIndex( ProgramConstants.FIELD_PROGRAM_INETREF ) ) );
-            program.setDescription( data.getString( data.getColumnIndex( ProgramConstants.FIELD_PROGRAM_DESCRIPTION ) ) );
-
-            ChannelInfo channel = new ChannelInfo();
-            channel.setChanId( data.getInt( data.getColumnIndex( ProgramConstants.FIELD_CHANNEL_CHAN_ID ) ) );
-            program.setChannel( channel );
-
-            RecordingInfo recording = new RecordingInfo();
-            recording.setStartTs( new DateTime( data.getLong( data.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
-            program.setRecording( recording );
-
-            programs.add( program );
-
-        }
-        data.close();
+    public void onLoadFinished( Loader<List<Program>> loader, List<Program> programs ) {
 
         if( !programs.isEmpty() ) {
 
@@ -116,7 +81,7 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
     }
 
     @Override
-    public void onLoaderReset( Loader<Cursor> loader ) {
+    public void onLoaderReset( Loader<List<Program>> loader ) {
 
     }
 

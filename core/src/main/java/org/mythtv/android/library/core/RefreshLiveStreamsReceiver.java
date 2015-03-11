@@ -42,20 +42,9 @@ public class RefreshLiveStreamsReceiver extends BroadcastReceiver {
         protected Void doInBackground( Void... params ) {
             Log.v( TAG, "doInBackground : enter" );
 
-//            String[] projection = null;
-//            String selection = LiveStreamConstants.FIELD_PERCENT_COMPLETE + " < ?";
-//            String[] selectionArgs = new String[] { "100" };
-//
-//            Cursor cursor = mContext.getContentResolver().query( LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
-//            if( cursor.moveToNext() ) {
-//                Log.v( TAG, "doInBackground : live streams need refreshing" );
-
-                if( MainApplication.getInstance().isConnected() ) {
-                    MainApplication.getInstance().getContentService().getLiveStreamInfoList( new RequestAllLiveStreamInfosEvent() );
-                }
-
-//            }
-//            cursor.close();
+            if( MainApplication.getInstance().isConnected() ) {
+                MainApplication.getInstance().getContentService().getLiveStreamInfoList( new RequestAllLiveStreamInfosEvent() );
+            }
 
             Log.v( TAG, "doInBackground : exit" );
             return null;
