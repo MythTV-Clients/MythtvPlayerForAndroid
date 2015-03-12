@@ -33,6 +33,7 @@ public class RecordingInfoHelper {
     public static RecordingInfo fromDetails( RecordingInfoDetails details ) {
 
         RecordingInfo recordingInfo = new RecordingInfo();
+        recordingInfo.setRecordedId( details.getRecordedId() );
         recordingInfo.setStatus( details.getStatus() );
         recordingInfo.setPriority( details.getPriority() );
         recordingInfo.setStartTs( details.getStartTs() );

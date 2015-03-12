@@ -61,14 +61,14 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         List<Program> programs = new ArrayList<>();
 
-        String[] projection = new String[]{ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_START_TS };
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_REC_GROUP + " != ?";
-        String[] selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), "LiveTV" };
+        String[] projection = new String[]{ ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID };
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String[] selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name() };
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
 
         if( null != event.getTitle() && !"".equals( event.getTitle() )  ) {
-            selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_REC_GROUP + " != ? AND " + ProgramConstants.FIELD_PROGRAM_TITLE + " = ?";
-            selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), "LiveTV", event.getTitle() };
+            selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_PROGRAM_TITLE + " = ?";
+            selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), event.getTitle() };
         }
 
         Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, sort );
@@ -86,7 +86,9 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             program.setChannel( channel );
 
             RecordingInfo recording = new RecordingInfo();
+            recording.setRecordedId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORDED_ID ) ) );
             recording.setStartTs( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
+            recording.setRecordId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORD_ID ) ) );
             program.setRecording( recording );
 
             programs.add( program );
@@ -110,6 +112,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
     @Override
     public ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event ) {
+        Log.v( TAG, "updateRecordedPrograms : enter" );
 
         String[] projection = new String[] { ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants._ID };
         String selection = null;
@@ -139,9 +142,17 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             for( ProgramDetails details : event.getDetails() ) {
 
                 Program program = ProgramHelper.fromDetails( details );
+                Log.v( TAG, "updateRecordedPrograms : program=" + program );
+
+                if( "LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ) {
+                    continue;
+                }
+
                 ProgramKey existing = new ProgramKey( program.getChannel().getChanId(), program.getRecording().getStartTs().getMillis() );
 
                 if( programIds.containsKey( existing ) ) {
+                    Log.v( TAG, "updateRecordedPrograms : program won't be deleted" );
+
                     programIds.remove( existing );
                 }
 
@@ -194,6 +205,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
                 cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
                 if( cursor.moveToFirst() ) {
+                    Log.v( TAG, "updateRecordedPrograms : updating existing program" );
 
                     Long id = cursor.getLong( cursor.getColumnIndexOrThrow( ProgramConstants._ID ) );
                     ops.add(
@@ -204,6 +216,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                     );
 
                 } else {
+                    Log.v( TAG, "updateRecordedPrograms : adding new program" );
 
                     ops.add(
                             ContentProviderOperation
@@ -215,17 +228,17 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 }
                 cursor.close();
 
-                if( !programIds.isEmpty() ) {
+            }
 
-                    for( long id : programIds.values() ) {
+            if( !programIds.isEmpty() ) {
 
-                        ops.add(
-                                ContentProviderOperation
-                                        .newDelete( ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, id ) )
-                                        .build()
-                        );
+                for( long id : programIds.values() ) {
 
-                    }
+                    ops.add(
+                            ContentProviderOperation
+                                    .newDelete( ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, id ) )
+                                    .build()
+                    );
 
                 }
 
@@ -235,16 +248,18 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
                 mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
 
+                Log.v( TAG, "updateRecordedPrograms : exit" );
                 return new ProgramsUpdatedEvent( event.getDetails() );
 
             } catch( Exception e ) {
 
-                Log.e( TAG, "refreshPrograms : error processing programs", e);
+                Log.e( TAG, "updateRecordedPrograms : error processing programs", e );
 
             }
 
         }
 
+        Log.w( TAG, "updateRecordedPrograms : exit, programs not updated" );
         return ProgramsUpdatedEvent.notUpdated();
     }
 

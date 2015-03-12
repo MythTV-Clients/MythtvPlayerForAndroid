@@ -105,9 +105,15 @@ public class RecordingsDataFragment extends Fragment {
 
             String title = params[ 0 ];
 
-            ProgramsUpdatedEvent event = MainApplication.getInstance().getDvrService().updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null, title, null, null ) );
+            try {
 
-            return event;
+                ProgramsUpdatedEvent event = MainApplication.getInstance().getDvrService().updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null, title, null, null ) );
+
+                return event;
+
+            } catch( NullPointerException e ) { }
+
+            return null;
         }
 
         @Override

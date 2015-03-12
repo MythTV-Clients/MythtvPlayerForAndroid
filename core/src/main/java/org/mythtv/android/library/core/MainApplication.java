@@ -26,8 +26,8 @@ import org.mythtv.android.library.core.service.v028.myth.MythServiceV28EventHand
 import org.mythtv.android.library.core.service.v028.video.VideoServiceV28EventHandler;
 import org.mythtv.android.library.events.DeleteEvent;
 import org.mythtv.android.library.events.content.RequestAllLiveStreamInfosEvent;
-import org.mythtv.android.library.events.myth.HostNameDetailsEvent;
-import org.mythtv.android.library.events.myth.RequestHostNameEvent;
+import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
+import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
@@ -64,7 +64,9 @@ public class MainApplication extends Application {
     private VideoService mVideoService;
 
     private AlarmManager mAlarmManager;
-    private PendingIntent mPendingIntent;
+    private PendingIntent mRefreshLiveStreamPendingIntent;
+    private PendingIntent mRefreshTitleInfosPendingIntent;
+    private PendingIntent mRefreshRecordedProgramsPendingIntent;
 
     public static MainApplication getInstance() {
         return sInstance;
@@ -94,10 +96,6 @@ public class MainApplication extends Application {
     public void disconnect() {
         Log.i( TAG, "Disconnecting..." );
 
-        if( mConnected ) {
-            mDvrService.cleanup(new DeleteEvent());
-        }
-
         mConnected = false;
         cancelAlarms();
 
@@ -109,10 +107,19 @@ public class MainApplication extends Application {
     private void scheduleAlarms() {
 
         mAlarmManager = (AlarmManager) getSystemService( Context.ALARM_SERVICE );
-        Intent intent = new Intent( MainApplication.this, RefreshLiveStreamsReceiver.class );
-        mPendingIntent = PendingIntent.getBroadcast( MainApplication.this, 0, intent, 0 );
 
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 5000, mPendingIntent );
+        Intent refreshLiveStreamIntent = new Intent( this, RefreshLiveStreamsReceiver.class );
+        mRefreshLiveStreamPendingIntent = PendingIntent.getBroadcast( this, 0, refreshLiveStreamIntent, 0 );
+
+        Intent refreshTitleInfosIntent = new Intent( MainApplication.this, RefreshTitleInfosReceiver.class );
+        mRefreshTitleInfosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshTitleInfosIntent, 0 );
+
+        Intent refreshRecordedProgramsIntent = new Intent( MainApplication.this, RefreshRecordedProgramsReceiver.class );
+        mRefreshRecordedProgramsPendingIntent = PendingIntent.getBroadcast( this, 0, refreshRecordedProgramsIntent, 0 );
+
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent );
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshTitleInfosPendingIntent );
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 240000, 600000, mRefreshRecordedProgramsPendingIntent );
 
     }
 
@@ -121,15 +128,17 @@ public class MainApplication extends Application {
         if( mAlarmManager != null ) {
             Log.v( TAG, "onPause : cancelling live stream refresh" );
 
-            mAlarmManager.cancel( mPendingIntent );
+            mAlarmManager.cancel( mRefreshLiveStreamPendingIntent );
         }
 
     }
 
     public void resetBackend() {
+        Log.v( TAG, "resetBackend : enter" );
 
         initializeApi();
 
+        Log.v( TAG, "resetBackend : exit" );
     }
 
     public MythTvApiContext getMythTvApiContext() {
@@ -199,8 +208,6 @@ public class MainApplication extends Application {
             if( null != apiVersion ) {
                 Log.v( TAG, "onPostExecute : master backend connected" );
 
-                scheduleAlarms();
-
                 mApiVersion = apiVersion;
 
                 OkHttpClient okHttpClient = new OkHttpClient();
@@ -234,6 +241,10 @@ public class MainApplication extends Application {
                 mConnected = true;
 
                 new RefreshLiveStreamsTask().execute();
+                new RefreshTitleInfosTask().execute();
+                new RefreshRecordedProgramsTask().execute();
+
+                scheduleAlarms();
 
                 Intent connectedIntent = new Intent( ACTION_CONNECTED );
                 sendBroadcast( connectedIntent );
@@ -262,6 +273,38 @@ public class MainApplication extends Application {
             Log.v( TAG, "doInBackground : enter" );
 
             mContentService.getLiveStreamInfoList( new RequestAllLiveStreamInfosEvent() );
+
+            Log.v( TAG, "doInBackground : exit" );
+            return null;
+        }
+
+    }
+
+    private class RefreshTitleInfosTask extends AsyncTask<Void, Void, Void> {
+
+        private final String TAG = RefreshTitleInfosTask.class.getSimpleName();
+
+        @Override
+        protected Void doInBackground( Void... params ) {
+            Log.v( TAG, "doInBackground : enter" );
+
+            mDvrService.updateTitleInfos( new UpdateTitleInfosEvent() );
+
+            Log.v( TAG, "doInBackground : exit" );
+            return null;
+        }
+
+    }
+
+    private class RefreshRecordedProgramsTask extends AsyncTask<Void, Void, Void> {
+
+        private final String TAG = RefreshRecordedProgramsTask.class.getSimpleName();
+
+        @Override
+        protected Void doInBackground( Void... params ) {
+            Log.v( TAG, "doInBackground : enter" );
+
+            mDvrService.updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null,null, null, null  ) );
 
             Log.v( TAG, "doInBackground : exit" );
             return null;

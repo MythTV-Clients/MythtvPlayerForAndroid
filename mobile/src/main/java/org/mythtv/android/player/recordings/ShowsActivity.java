@@ -65,21 +65,21 @@ public class ShowsActivity extends AbstractBaseActionBarActivity implements Titl
     @Override
     protected void updateData() {
 
-        TitleInfosDataFragment titleInfosDataFragment = (TitleInfosDataFragment) getFragmentManager().findFragmentByTag( TITLE_INFOS_DATA_FRAGMENT_TAG );
-        if( null == titleInfosDataFragment ) {
-
-            titleInfosDataFragment = (TitleInfosDataFragment) Fragment.instantiate( this, TitleInfosDataFragment.class.getName() );
-            titleInfosDataFragment.setRetainInstance(true);
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.add( titleInfosDataFragment, TITLE_INFOS_DATA_FRAGMENT_TAG );
-            transaction.commit();
-
-        } else {
-
-            titleInfosDataFragment.reset();
-
-        }
+//        TitleInfosDataFragment titleInfosDataFragment = (TitleInfosDataFragment) getFragmentManager().findFragmentByTag( TITLE_INFOS_DATA_FRAGMENT_TAG );
+//        if( null == titleInfosDataFragment ) {
+//
+//            titleInfosDataFragment = (TitleInfosDataFragment) Fragment.instantiate( this, TitleInfosDataFragment.class.getName() );
+//            titleInfosDataFragment.setRetainInstance(true);
+//
+//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//            transaction.add( titleInfosDataFragment, TITLE_INFOS_DATA_FRAGMENT_TAG );
+//            transaction.commit();
+//
+//        } else {
+//
+//            titleInfosDataFragment.reset();
+//
+//        }
 
     }
 

@@ -64,6 +64,8 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
 
         }
 
+        mRecordingsFragment.setPrograms( ( null != mTitleInfo ? mTitleInfo.getTitle() : null ), null );
+
     }
 
     @Override
@@ -103,26 +105,26 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
     @Override
     protected void updateData() {
 
-        RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
-        if( null == recordingsDataFragment ) {
-
-            Bundle args = new Bundle();
-            if( null != mTitleInfo ) {
-                args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, mTitleInfo.getTitle() );
-            }
-
-            recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate( this, RecordingsDataFragment.class.getName(), args );
-            recordingsDataFragment.setRetainInstance( true );
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
-            transaction.commit();
-
-        } else {
-
-            recordingsDataFragment.reset();
-
-        }
+//        RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
+//        if( null == recordingsDataFragment ) {
+//
+//            Bundle args = new Bundle();
+//            if( null != mTitleInfo ) {
+//                args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, mTitleInfo.getTitle() );
+//            }
+//
+//            recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate( this, RecordingsDataFragment.class.getName(), args );
+//            recordingsDataFragment.setRetainInstance( true );
+//
+//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//            transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
+//            transaction.commit();
+//
+//        } else {
+//
+//            recordingsDataFragment.reset();
+//
+//        }
 
     }
 

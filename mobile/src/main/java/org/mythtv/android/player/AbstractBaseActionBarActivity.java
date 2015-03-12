@@ -63,7 +63,7 @@ public abstract class AbstractBaseActionBarActivity extends ActionBarActivity {
             unregisterReceiver( mBackendConnectedBroadcastReceiver );
         }
 
-        MainApplication.getInstance().disconnect();
+//        MainApplication.getInstance().disconnect();
     }
 
     protected abstract int getLayoutResource();

@@ -35,7 +35,7 @@ public abstract class AbstractBaseFragment extends Fragment {
             getActivity().unregisterReceiver( mBackendConnectedBroadcastReceiver );
         }
 
-        MainApplication.getInstance().disconnect();
+//        MainApplication.getInstance().disconnect();
     }
 
     public abstract void connected();

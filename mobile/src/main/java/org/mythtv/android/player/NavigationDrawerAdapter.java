@@ -1,6 +1,8 @@
 package org.mythtv.android.player;
 
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -134,17 +136,31 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         return mData.size();
     }
 
-    private void touchPosition( int position ) {
+    private void touchPosition( final int position ) {
 
-        int lastPosition = mTouchedPosition;
+        final int lastPosition = mTouchedPosition;
         mTouchedPosition = position;
 
         if( lastPosition >= 0 ) {
-            notifyItemChanged(lastPosition);
+
+            mHandler.post( new Runnable() {
+                @Override
+                public void run() {
+                    notifyItemChanged( lastPosition );
+                }
+            });
+
         }
 
         if( position >= 0 ) {
-            notifyItemChanged( position );
+
+            mHandler.post( new Runnable() {
+                @Override
+                public void run() {
+                    notifyItemChanged( position );
+                }
+            });
+
         }
 
     }
@@ -176,5 +192,15 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         }
 
     }
+
+    private final Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage( Message msg ) {
+            super.handleMessage( msg );
+
+        }
+
+    };
 
 }

@@ -37,20 +37,40 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
     @Override
     public List<Program> loadInBackground() {
+        Log.v( TAG, "loadInBackground : enter" );
 
         List<Program> programs = new ArrayList<>();
 
-        AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title ) );
-        if( event.isEntityFound() ) {
+        try {
 
-            for( ProgramDetails details : event.getDetails() ) {
+            if( MainApplication.getInstance().isConnected() ) {
 
-                programs.add( Program.fromDetails( details ) );
+                AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title ) );
+                if( event.isEntityFound() ) {
+                    Log.v( TAG, "loadInBackground : programs loaded from db" );
+
+                    for( ProgramDetails details : event.getDetails() ) {
+                        Log.v( TAG, "loadInBackground : program iteration" );
+
+                        programs.add( Program.fromDetails( details ) );
+
+                    }
+
+                }
+
+            } else {
+
+                Log.w( TAG, "loadInBackground : MasterBackend NOT Connected!!" );
 
             }
 
+        } catch( NullPointerException e ) {
+
+            Log.e( TAG, "loadInBackground : error", e );
+
         }
 
+        Log.v( TAG, "loadInBackground : exit" );
         return programs;
     }
 
@@ -105,7 +125,7 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
         // Begin monitoring the underlying data source.
         if( null == mObserver ) {
 
-            mObserver = new ProgramsContentProviderObserver( mHandler );
+            mObserver = new ProgramsContentProviderObserver( mHandler, this );
             getContext().getContentResolver().registerContentObserver( ProgramConstants.CONTENT_URI, true, mObserver );
 
         }
@@ -190,8 +210,13 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
     private class ProgramsContentProviderObserver extends ContentObserver {
 
-        public ProgramsContentProviderObserver( Handler handler ) {
+        private ProgramsAsyncTaskLoader mLoader;
+
+        public ProgramsContentProviderObserver( Handler handler, ProgramsAsyncTaskLoader loader ) {
             super( handler );
+
+            mLoader = loader;
+
         }
 
         @Override
@@ -203,11 +228,17 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
         @Override
         public void onChange( boolean selfChange ) {
             super.onChange( selfChange );
+
+            mLoader.onContentChanged();
+
         }
 
         @Override
         public void onChange( boolean selfChange, Uri uri ) {
             super.onChange( selfChange, uri );
+
+            mLoader.onContentChanged();
+
         }
 
     }
