@@ -176,7 +176,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 values.put( ProgramConstants.FIELD_PROGRAM_LAST_MODIFIED, program.getLastModified().getMillis() );
                 values.put( ProgramConstants.FIELD_PROGRAM_FILE_NAME, ( null == program.getFileName() ? "" : program.getFileName() ) );
                 values.put( ProgramConstants.FIELD_PROGRAM_HOSTNAME, ( null == program.getHostName() ? "" : program.getHostName() ) );
-                values.put( ProgramConstants.FIELD_PROGRAM_AIR_DATE, program.getAirdate().toDate().getTime() );
+                values.put( ProgramConstants.FIELD_PROGRAM_AIR_DATE, ( null == program.getAirdate() ? 0 : program.getAirdate().toDate().getTime() ) );
                 values.put( ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ( null == program.getDescription() ? "" : program.getDescription() ) );
                 values.put( ProgramConstants.FIELD_PROGRAM_INETREF, program.getInetref() );
                 values.put( ProgramConstants.FIELD_PROGRAM_SEASON, program.getSeason() );
