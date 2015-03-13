@@ -43,4 +43,6 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
 
+    <color name="recording_card_default">#727272</color>
+
 </resources>

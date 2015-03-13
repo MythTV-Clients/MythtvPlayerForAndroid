@@ -7,12 +7,8 @@
     android:orientation="vertical"
     tools:context=".recordings.RecordingDetailsFragment">
 
-    <ImageView
-        android:id="@+id/recording_preview"
-        android:layout_width="match_parent"
-        android:layout_height="300dp" />
-
     <android.support.v7.widget.CardView
+        android:id="@+id/recording_card"
         android:layout_height="0dp"
         android:layout_width="match_parent"
         android:layout_weight="1"
@@ -26,64 +22,95 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/recording_preview"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin"
                 android:gravity="fill_horizontal">
 
+                <ImageView
+                    android:id="@+id/recording_coverart"
+                    android:layout_width="75dp"
+                    android:layout_height="125dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp" />
+
+                <TextView
+                    android:id="@+id/recording_show_name"
+                    android:layout_margin="@dimen/margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_toRightOf="@+id/recording_coverart"
+                    android:layout_toEndOf="@+id/recording_coverart" />
+
+                <TextView
+                    android:id="@+id/recording_episode_name"
+                    android:layout_margin="@dimen/margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_below="@+id/recording_show_name"
+                    android:layout_toRightOf="@+id/recording_coverart"
+                    android:layout_toEndOf="@+id/recording_coverart" />
+
                 <TextView
                     android:id="@+id/recording_start_time"
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_below="@+id/recording_episode_name"
+                    android:layout_toRightOf="@+id/recording_coverart"
+                    android:layout_toEndOf="@+id/recording_coverart" />
 
                 <TextView
                     android:id="@+id/hls_percent_complete"
+                    android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/recording_description"
                 android:layout_margin="@dimen/margin"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/recording_play"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Play"
+                style="?android:attr/borderlessButtonStyle"
+                android:textColor="@android:color/white"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/recording_queue_hls"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Queue HLS"
+                android:textColor="@android:color/white"
+                style="?android:attr/borderlessButtonStyle"/>
 
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin"
-        android:gravity="center_horizontal">
-
-        <Button
-            android:id="@+id/recording_play"
-            android:layout_margin="@dimen/margin"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="Play"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/recording_queue_hls"
-            android:layout_margin="@dimen/margin"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="Queue HLS" />
-
-        <Button
-            android:id="@+id/recording_delete"
-            android:layout_margin="@dimen/margin"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="Delete" />
-
-    </LinearLayout>
 
     <!-- FrameLayout
         android:layout_width="match_parent"

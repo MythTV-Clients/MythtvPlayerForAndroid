@@ -6,8 +6,12 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +20,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
-import org.mythtv.android.library.events.content.AddRecordingLiveStreamEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
-import org.mythtv.android.library.ui.utils.ImageUtils;
+import org.mythtv.android.library.ui.transform.PaletteTransformation;
 import org.mythtv.android.player.PlayerActivity;
 import org.mythtv.android.R;
 //import org.mythtv.android.player.widgets.FloatingActionButton;
@@ -37,9 +40,10 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
     public static final String PROGRAM_KEY = "program";
 
-    ImageView preview;
-    TextView startTime, description, percentComplete;
-    Button play, queueHls, deleteRecording;
+    CardView cardView;
+    ImageView preview, coverart;
+    TextView showName, episodeName, startTime, description, percentComplete;
+    Button play, queueHls;
 //    FloatingActionButton fab;
 
     Program mProgram;
@@ -93,7 +97,11 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
         View rootView = inflater.inflate( R.layout.fragment_recording_details, container, false );
+        cardView = (CardView) rootView.findViewById( R.id.recording_card );
         preview = (ImageView) rootView.findViewById( R.id.recording_preview );
+        coverart = (ImageView) rootView.findViewById( R.id.recording_coverart );
+        showName = (TextView) rootView.findViewById( R.id.recording_show_name );
+        episodeName = (TextView) rootView.findViewById( R.id.recording_episode_name );
         startTime = (TextView) rootView.findViewById( R.id.recording_start_time );
         description = (TextView) rootView.findViewById( R.id.recording_description );
         percentComplete = (TextView) rootView.findViewById( R.id.hls_percent_complete );
@@ -103,9 +111,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         play = (Button) rootView.findViewById( R.id.recording_play );
         play.setOnClickListener( this );
-
-        deleteRecording = (Button) rootView.findViewById( R.id.recording_delete );
-        deleteRecording.setOnClickListener( this );
 
 //        fab = (FloatingActionButton) rootView.findViewById( R.id.recording_fab );
 //        fab.setOnCheckedChangeListener( this );
@@ -136,11 +141,41 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         mProgram = program;
 
+        showName.setText( mProgram.getTitle() );
+        episodeName.setText( mProgram.getSubTitle() );
         startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
         description.setText( mProgram.getDescription() );
 
-        String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + mProgram.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
-        ImageUtils.updatePreviewImage(getActivity(), preview, url );
+        String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + mProgram.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+
+        final PaletteTransformation paletteTransformation = PaletteTransformation.getInstance();
+        Picasso.with( getActivity() )
+                .load( previewUrl )
+                .fit().centerCrop()
+                .transform( paletteTransformation )
+                .into( preview, new Callback.EmptyCallback() {
+
+                    @Override
+                    public void onSuccess() {
+
+                        Bitmap bitmap = ( (BitmapDrawable) preview.getDrawable() ).getBitmap(); // Ew!
+                        Palette palette = PaletteTransformation.getPalette( bitmap );
+
+                        cardView.setBackgroundColor( palette.getDarkMutedColor( R.color.recording_card_default ) );
+
+                    }
+                });
+//        ImageUtils.updatePreviewImage( getActivity(), preview, url );
+
+        if( null != mProgram.getInetref() && !"".equals( mProgram.getInetref() ) ) {
+
+            String coverartUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + mProgram.getInetref() + "&Type=coverart&Width=150";
+            Picasso.with( getActivity() )
+                    .load( coverartUrl )
+                    .fit().centerCrop()
+                    .into( coverart );
+
+        }
 
         getLoaderManager().initLoader( 0, getArguments(), this );
 
@@ -175,10 +210,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                 new AddRecordingLiveStreamAsyncTask().execute( mProgram );
                 queueHls.setVisibility( View.INVISIBLE );
                 percentComplete.setText( "Queued..." );
-
-                break;
-
-            case R.id.recording_delete :
 
                 break;
 
