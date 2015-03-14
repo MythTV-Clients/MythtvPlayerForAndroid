@@ -61,6 +61,17 @@ public class SettingsActivity extends PreferenceActivity {
         super.onDestroy();
     }
 
+    @Override
+    protected boolean isValidFragment( String fragmentName ) {
+
+        if( fragmentName.equals( GeneralPreferenceFragment.class.getName() ) ) {
+
+            return true;
+        }
+
+        return super.isValidFragment( fragmentName );
+    }
+
     /**
      * Shows the simplified settings UI if the device configuration if the
      * device configuration dictates that a simplified, single-pane UI should be
