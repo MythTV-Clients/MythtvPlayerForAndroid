@@ -151,13 +151,13 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
                 listRowAdapter.add( program );
             }
 
-            HeaderItem header = new HeaderItem( i, categoryMap.get( category ), null );
+            HeaderItem header = new HeaderItem( i, categoryMap.get( category ) );
             mRowsAdapter.add(new ListRow( header, listRowAdapter ) );
 
             i++;
         }
 
-        HeaderItem gridHeader = new HeaderItem( i, "PREFERENCES", null );
+        HeaderItem gridHeader = new HeaderItem( i, "PREFERENCES" );
 
         GridItemPresenter mGridPresenter = new GridItemPresenter();
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter( mGridPresenter );

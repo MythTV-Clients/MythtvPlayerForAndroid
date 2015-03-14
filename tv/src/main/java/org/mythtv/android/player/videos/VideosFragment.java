@@ -121,13 +121,13 @@ public class VideosFragment extends BrowseFragment {
                 listRowAdapter.add( video );
             }
 
-            HeaderItem header = new HeaderItem( i, categories.get( category ), null );
+            HeaderItem header = new HeaderItem( i, categories.get( category ) );
             mRowsAdapter.add(new ListRow( header, listRowAdapter ) );
 
             i++;
         }
 
-        HeaderItem gridHeader = new HeaderItem( i, "PREFERENCES", null );
+        HeaderItem gridHeader = new HeaderItem( i, "PREFERENCES" );
 
         GridItemPresenter mGridPresenter = new GridItemPresenter();
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter( mGridPresenter );
