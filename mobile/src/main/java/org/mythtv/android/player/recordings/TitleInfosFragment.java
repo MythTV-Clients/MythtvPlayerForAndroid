@@ -6,6 +6,7 @@ import android.content.Loader;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
+import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
 import org.mythtv.android.library.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.library.ui.loaders.TitleInfosAsyncTaskLoader;
@@ -25,10 +28,11 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class TitleInfosFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<TitleInfo>>, TitleInfoItemAdapter.TitleInfoItemClickListener {
+public class TitleInfosFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<TitleInfo>>, TitleInfoItemAdapter.TitleInfoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshTitleInfosTask.OnRefreshRecordedProgramTaskListener {
 
     private static final String TAG = TitleInfosFragment.class.getSimpleName();
 
+    SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
     TitleInfoItemAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
@@ -65,6 +69,9 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
         Log.v( TAG, "onCreateView : enter" );
 
         View view = inflater.inflate( R.layout.title_info_list, container, false );
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
+        mSwipeRefreshLayout.setOnRefreshListener( this );
 
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mLayoutManager = new LinearLayoutManager( getActivity() );
@@ -128,6 +135,22 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
         mRecyclerView.setVisibility( View.GONE );
         mEmpty.setVisibility( View.VISIBLE );
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+        new RefreshTitleInfosTask( this ).execute();
+
+    }
+
+    @Override
+    public void onRefreshComplete() {
+
+        if( mSwipeRefreshLayout.isRefreshing() ) {
+            mSwipeRefreshLayout.setRefreshing( false );
+        }
 
     }
 

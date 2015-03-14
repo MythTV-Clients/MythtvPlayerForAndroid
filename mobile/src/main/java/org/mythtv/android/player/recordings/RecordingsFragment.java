@@ -6,6 +6,7 @@ import android.content.Loader;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
 import org.mythtv.android.library.ui.adapters.ProgramItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.library.ui.loaders.ProgramsAsyncTaskLoader;
@@ -24,15 +27,17 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class RecordingsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Program>>, ProgramItemAdapter.ProgramItemClickListener {
+public class RecordingsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Program>>, ProgramItemAdapter.ProgramItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshRecordedProgramsTask.OnRefreshRecordedProgramTaskListener {
 
     private static final String PROGRAM_TITLE_KEY = "program_title";
 
+    SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
     ProgramItemAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
     TextView mEmpty;
     boolean mShowTitle = false;
+    String mTitle;
 
     @Override
     public Loader<List<Program>> onCreateLoader( int id, Bundle args ) {
@@ -70,6 +75,9 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
 
         View view = inflater.inflate( R.layout.program_list, container, false );
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
+        mSwipeRefreshLayout.setOnRefreshListener( this );
+
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mLayoutManager = new LinearLayoutManager( getActivity() );
         mRecyclerView.setLayoutManager( mLayoutManager );
@@ -81,6 +89,7 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
     public void setPrograms( String title, List<Program> programs ) {
 
         mShowTitle = ( null == title );
+        mTitle = title;
 
         Bundle args = new Bundle();
         if( null != title ) {
@@ -122,6 +131,24 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
 
         mRecyclerView.setVisibility( View.GONE );
         mEmpty.setVisibility( View.VISIBLE );
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+        new RefreshRecordedProgramsTask( this ).execute( mTitle );
+
+    }
+
+    @Override
+    public void onRefreshComplete() {
+
+        if( mSwipeRefreshLayout.isRefreshing() ) {
+
+            mSwipeRefreshLayout.setRefreshing( false );
+
+        }
 
     }
 

@@ -24,6 +24,8 @@ import org.mythtv.android.library.core.service.v028.content.ContentServiceV28Eve
 import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.myth.MythServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.video.VideoServiceV28EventHandler;
+import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
+import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
 import org.mythtv.android.library.events.DeleteEvent;
 import org.mythtv.android.library.events.content.RequestAllLiveStreamInfosEvent;
 import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
@@ -100,7 +102,7 @@ public class MainApplication extends Application {
         cancelAlarms();
 
         Intent connectedIntent = new Intent( ACTION_NOT_CONNECTED );
-        sendBroadcast( connectedIntent );
+        sendBroadcast(connectedIntent);
 
     }
 
@@ -241,8 +243,8 @@ public class MainApplication extends Application {
                 mConnected = true;
 
                 new RefreshLiveStreamsTask().execute();
-                new RefreshTitleInfosTask().execute();
-                new RefreshRecordedProgramsTask().execute();
+                new RefreshTitleInfosTask( null ).execute();
+                new RefreshRecordedProgramsTask( null ).execute();
 
                 scheduleAlarms();
 
@@ -272,39 +274,7 @@ public class MainApplication extends Application {
         protected Void doInBackground( Void... params ) {
             Log.v( TAG, "doInBackground : enter" );
 
-            mContentService.getLiveStreamInfoList( new RequestAllLiveStreamInfosEvent() );
-
-            Log.v( TAG, "doInBackground : exit" );
-            return null;
-        }
-
-    }
-
-    private class RefreshTitleInfosTask extends AsyncTask<Void, Void, Void> {
-
-        private final String TAG = RefreshTitleInfosTask.class.getSimpleName();
-
-        @Override
-        protected Void doInBackground( Void... params ) {
-            Log.v( TAG, "doInBackground : enter" );
-
-            mDvrService.updateTitleInfos( new UpdateTitleInfosEvent() );
-
-            Log.v( TAG, "doInBackground : exit" );
-            return null;
-        }
-
-    }
-
-    private class RefreshRecordedProgramsTask extends AsyncTask<Void, Void, Void> {
-
-        private final String TAG = RefreshRecordedProgramsTask.class.getSimpleName();
-
-        @Override
-        protected Void doInBackground( Void... params ) {
-            Log.v( TAG, "doInBackground : enter" );
-
-            mDvrService.updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null,null, null, null  ) );
+            mContentService.getLiveStreamInfoList(new RequestAllLiveStreamInfosEvent());
 
             Log.v( TAG, "doInBackground : exit" );
             return null;
