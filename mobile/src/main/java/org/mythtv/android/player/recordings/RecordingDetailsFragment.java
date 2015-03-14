@@ -141,6 +141,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         mProgram = program;
 
+        cardView.setRadius( 2.0f );
         showName.setText( mProgram.getTitle() );
         episodeName.setText( mProgram.getSubTitle() );
         startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
@@ -161,7 +162,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                         Bitmap bitmap = ( (BitmapDrawable) preview.getDrawable() ).getBitmap(); // Ew!
                         Palette palette = PaletteTransformation.getPalette( bitmap );
 
-                        cardView.setBackgroundColor( palette.getDarkMutedColor( R.color.recording_card_default ) );
+                        cardView.setCardBackgroundColor( palette.getDarkMutedColor( R.color.recording_card_default ) );
 
                     }
                 });
