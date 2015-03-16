@@ -17,6 +17,7 @@ import android.widget.TextView;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.ui.adapters.ProgramItemAdapter;
+import org.mythtv.android.library.ui.adapters.SearchResultItemAdapter;
 import org.mythtv.android.library.ui.loaders.SearchProgramsAsyncTaskLoader;
 import org.mythtv.android.player.AbstractBaseFragment;
 import org.mythtv.android.player.recordings.RecordingDetailsActivity;
@@ -27,17 +28,16 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class SearchableRecordingsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Program>>, ProgramItemAdapter.ProgramItemClickListener {
+public class SearchableRecordingsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Program>>, SearchResultItemAdapter.ProgramItemClickListener {
 
     private static final String TAG = SearchableRecordingsFragment.class.getSimpleName();
 
     private static final String QUERY_KEY = "query";
 
     RecyclerView mRecyclerView;
-    ProgramItemAdapter mAdapter;
+    SearchResultItemAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
     TextView mEmpty;
-    boolean mShowTitle = false;
 
     @Override
     public Loader<List<Program>> onCreateLoader( int id, Bundle args ) {
@@ -53,7 +53,7 @@ public class SearchableRecordingsFragment extends AbstractBaseFragment implement
 
         if( !programs.isEmpty() ) {
 
-            mAdapter = new ProgramItemAdapter( programs, this, mShowTitle );
+            mAdapter = new SearchResultItemAdapter( programs, this );
             mRecyclerView.setAdapter( mAdapter );
 
         }
@@ -83,8 +83,6 @@ public class SearchableRecordingsFragment extends AbstractBaseFragment implement
     public void setQuery( String query ) {
         Log.v( TAG, "setQuery : enter" );
 
-        mShowTitle = true;
-
         Bundle args = new Bundle();
         if( null != query ) {
             args.putString( QUERY_KEY, query );
@@ -102,14 +100,7 @@ public class SearchableRecordingsFragment extends AbstractBaseFragment implement
 
         Intent recordingDetails = new Intent( getActivity(), RecordingDetailsActivity.class );
         recordingDetails.putExtras(args);
-
-        String transitionName = getString( R.string.recording_transition );
-        ActivityOptionsCompat options =
-            ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
-                v,   // The view which starts the transition
-                transitionName    // The transitionName of the view we’re transitioning to
-            );
-        ActivityCompat.startActivity(getActivity(), recordingDetails, options.toBundle());
+        startActivity( recordingDetails );
 
     }
 

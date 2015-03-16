@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/program_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/program_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:text="test title" />
+
+        <TextView
+            android:id="@+id/program_item_sub_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+            android:text="test sub title" />
+
+        <TextView
+            android:id="@+id/program_item_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:text="test description" />
+
+        <TextView
+            android:id="@+id/program_item_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin"
+            android:gravity="right|end"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:text="test date" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground" />
+
+</FrameLayout>
