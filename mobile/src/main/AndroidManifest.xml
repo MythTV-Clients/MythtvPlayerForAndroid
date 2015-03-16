@@ -124,6 +124,10 @@
             android:exported="true"
             android:syncable="false" />
 
+        <provider
+            android:name=".library.persistence.repository.MythtvSearchSuggestionProvider"
+            android:authorities="org.mythtv.android.library.persistence.repository.MythtvSearchSuggestionProvider" />
+
     </application>
 
 </manifest>
