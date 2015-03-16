@@ -1,9 +1,15 @@
 package org.mythtv.android.player.recordings;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import org.mythtv.android.R;
@@ -12,12 +18,13 @@ import org.mythtv.android.library.ui.data.TitleInfoDataConsumer;
 import org.mythtv.android.library.ui.data.TitleInfosDataFragment;
 import org.mythtv.android.player.AbstractBaseActionBarActivity;
 import org.mythtv.android.player.NavigationDrawerFragment;
+import org.mythtv.android.player.search.SearchableActivity;
 
 import java.util.List;
 
 public class ShowsActivity extends AbstractBaseActionBarActivity implements TitleInfoDataConsumer {
 
-    private static final String TITLE_INFOS_DATA_FRAGMENT_TAG = TitleInfosDataFragment.class.getCanonicalName();
+    private static final String TAG = ShowsActivity.class.getSimpleName();
 
     private TitleInfosFragment mTitleInfosFragment;
     private NavigationDrawerFragment mDrawerFragment;
@@ -44,8 +51,23 @@ public class ShowsActivity extends AbstractBaseActionBarActivity implements Titl
     protected void onResume() {
         super.onResume();
 
-        mDrawerFragment.selectItem( 0 );
+        mDrawerFragment.selectItem(0);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu( Menu menu ) {
+
+        // Inflate the options menu from XML
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate( R.menu.main, menu );
+
+        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
+        SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
+        searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
+        searchView.setIconifiedByDefault( false );
+
+        return super.onCreateOptionsMenu( menu );
     }
 
     @Override
@@ -64,22 +86,6 @@ public class ShowsActivity extends AbstractBaseActionBarActivity implements Titl
 
     @Override
     protected void updateData() {
-
-//        TitleInfosDataFragment titleInfosDataFragment = (TitleInfosDataFragment) getFragmentManager().findFragmentByTag( TITLE_INFOS_DATA_FRAGMENT_TAG );
-//        if( null == titleInfosDataFragment ) {
-//
-//            titleInfosDataFragment = (TitleInfosDataFragment) Fragment.instantiate( this, TitleInfosDataFragment.class.getName() );
-//            titleInfosDataFragment.setRetainInstance(true);
-//
-//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//            transaction.add( titleInfosDataFragment, TITLE_INFOS_DATA_FRAGMENT_TAG );
-//            transaction.commit();
-//
-//        } else {
-//
-//            titleInfosDataFragment.reset();
-//
-//        }
 
     }
 

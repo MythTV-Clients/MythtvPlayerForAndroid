@@ -7,6 +7,9 @@
     <string name="all_recordings">All Recordings</string>
     <string name="all_videos">All Videos</string>
 
+    <string name="search_title">Search</string>
+    <string name="search_results">Search Results</string>
+
     <string name="connecting">Connecting to master backend</string>
     <string name="connecting_failed">Connecting to master backend failed!</string>
 
@@ -35,5 +38,6 @@
     <string name="title_info_transition">title_info_transition</string>
     <string name="recording_transition">recording_transition</string>
     <string name="video_transition">title_info_transition</string>
+    <string name="search_hint">Show, Episode, Actor</string>
 
 </resources>

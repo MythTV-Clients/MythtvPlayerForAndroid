@@ -8,6 +8,7 @@ import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.SearchRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoRemovedEvent;
 import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
 import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
@@ -19,6 +20,8 @@ import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 public interface DvrService extends Disconnect {
 
     AllProgramsEvent requestAllRecordedPrograms( RequestAllRecordedProgramsEvent event );
+
+    AllProgramsEvent searchRecordedPrograms( SearchRecordedProgramsEvent event );
 
     ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event );
 

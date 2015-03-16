@@ -17,6 +17,7 @@ import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.SearchRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.events.dvr.TitleInfoRemovedEvent;
 import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
@@ -60,6 +61,12 @@ public class DvrServiceV27EventHandler implements DvrService {
     public AllProgramsEvent requestAllRecordedPrograms( RequestAllRecordedProgramsEvent event ) {
 
         return mDvrPersistenceService.requestAllRecordedPrograms( event );
+    }
+
+    @Override
+    public AllProgramsEvent searchRecordedPrograms( SearchRecordedProgramsEvent event ) {
+
+        return mDvrPersistenceService.searchRecordedPrograms( event );
     }
 
     @Override

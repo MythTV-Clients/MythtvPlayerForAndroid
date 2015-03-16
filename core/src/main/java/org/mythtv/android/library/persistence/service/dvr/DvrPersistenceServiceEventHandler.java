@@ -21,6 +21,7 @@ import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.SearchRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.events.dvr.TitleInfoRemovedEvent;
 import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
@@ -70,6 +71,59 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_PROGRAM_TITLE + " = ?";
             selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), event.getTitle() };
         }
+
+        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, sort );
+        while( cursor.moveToNext() ) {
+
+            Program program = new Program();
+            program.setStartTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_START_TIME ) ) ) );
+            program.setTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_TITLE ) ) );
+            program.setSubTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_SUB_TITLE ) ) );
+            program.setInetref( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_INETREF ) ) );
+            program.setDescription( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_DESCRIPTION ) ) );
+            program.setFileName( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_FILE_NAME ) ) );
+
+            ChannelInfo channel = new ChannelInfo();
+            channel.setChanId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_CHANNEL_CHAN_ID ) ) );
+            program.setChannel( channel );
+
+            RecordingInfo recording = new RecordingInfo();
+            recording.setRecordedId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORDED_ID ) ) );
+            recording.setStartTs( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
+            recording.setRecordId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORD_ID ) ) );
+            program.setRecording( recording );
+
+            programs.add( program );
+
+        }
+        cursor.close();
+
+        List<ProgramDetails> details = new ArrayList<>();
+        if( !programs.isEmpty() ) {
+
+            for( Program program : programs ) {
+
+                details.add( program.toDetails() );
+
+            }
+
+        }
+
+        return new AllProgramsEvent( details );
+    }
+
+    @Override
+    public AllProgramsEvent searchRecordedPrograms( SearchRecordedProgramsEvent event ) {
+        Log.v( TAG, "searchRecordedPrograms : enter" );
+
+        List<Program> programs = new ArrayList<>();
+
+        String query = "%" + event.getQuery().toUpperCase() + "%";
+
+        String[] projection = new String[]{ ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND (upper(" + ProgramConstants.FIELD_PROGRAM_TITLE + ") like ? OR upper(" + ProgramConstants.FIELD_PROGRAM_SUB_TITLE + ") like ? OR upper(" + ProgramConstants.FIELD_PROGRAM_DESCRIPTION + ") like ?)";
+        String[] selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), query, query, query };
+        String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
 
         Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, sort );
         while( cursor.moveToNext() ) {

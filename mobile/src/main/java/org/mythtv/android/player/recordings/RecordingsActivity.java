@@ -3,8 +3,13 @@ package org.mythtv.android.player.recordings;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.Toast;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
@@ -21,7 +26,6 @@ import java.util.List;
  */
 public class RecordingsActivity extends AbstractBaseActionBarActivity implements RecordingDataConsumer {
 
-    private static final String RECORDINGS_DATA_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
     public static final String TITLE_INFO = "title_info";
 
     private RecordingsFragment mRecordingsFragment;
@@ -71,14 +75,14 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
 
-        outState.putSerializable( TITLE_INFO, mTitleInfo );
+        outState.putSerializable(TITLE_INFO, mTitleInfo);
 
         super.onSaveInstanceState( outState );
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        super.onRestoreInstanceState( savedInstanceState );
+        super.onRestoreInstanceState(savedInstanceState);
 
         if( savedInstanceState.containsKey( TITLE_INFO ) ) {
 
@@ -86,6 +90,21 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
 
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu( Menu menu ) {
+
+        // Inflate the options menu from XML
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate( R.menu.main, menu );
+
+        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
+        SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
+        searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
+        searchView.setIconifiedByDefault( false );
+
+        return super.onCreateOptionsMenu( menu );
     }
 
     @Override
