@@ -7,7 +7,6 @@ import android.util.Log;
 
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
-import org.mythtv.android.library.persistence.domain.dvr.ProgramFtsConstants;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 /**
@@ -18,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "mythtvdb";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 10;
 
     public DatabaseHelper( Context context ) {
         super( context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -48,7 +47,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createTableLiveStreams( db );
         createTableTitleInfos( db );
         createTablePrograms( db );
-        createTableProgramsFts(db);
 
         Log.i( TAG, "onCreate : exit" );
     }
@@ -88,12 +86,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.execSQL( dropPrograms );
 
-        String dropProgramsFts = ProgramFtsConstants.DROP_TABLE;
-        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
-            Log.v( TAG, "dropTable : dropProgramsFts=" + dropProgramsFts );
-        }
-        db.execSQL( dropProgramsFts );
-
         Log.v( TAG, "dropTables : exit" );
     }
 
@@ -131,18 +123,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL( sql );
 
         Log.v( TAG, "createTablePrograms : exit" );
-    }
-
-    private void createTableProgramsFts( SQLiteDatabase db ) {
-        Log.v( TAG, "createTableProgramsFts : enter" );
-
-        String sql = ProgramFtsConstants.CREATE_TABLE;
-        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
-            Log.v( TAG, "createTableProgramsFts : sql=" + sql );
-        }
-        db.execSQL( sql );
-
-        Log.v( TAG, "createTableProgramsFts : exit" );
     }
 
 }

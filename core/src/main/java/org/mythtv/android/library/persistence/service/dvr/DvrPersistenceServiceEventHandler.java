@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 
 import org.joda.time.DateTime;
@@ -27,10 +28,10 @@ import org.mythtv.android.library.events.dvr.TitleInfoRemovedEvent;
 import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
 import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
+import org.mythtv.android.library.persistence.domain.dvr.CastMember;
 import org.mythtv.android.library.persistence.domain.dvr.ChannelInfo;
 import org.mythtv.android.library.persistence.domain.dvr.Program;
 import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
-import org.mythtv.android.library.persistence.domain.dvr.ProgramFtsConstants;
 import org.mythtv.android.library.persistence.domain.dvr.RecordingInfo;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfo;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
@@ -122,11 +123,11 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         String query = "%" + event.getQuery().toUpperCase() + "%";
 
         String[] projection = new String[]{ ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
-        String selection = ProgramFtsConstants.TABLE_NAME + " MATCH ?";
+        String selection = ProgramConstants.TABLE_NAME + " MATCH ?";
         String[] selectionArgs = new String[] { query + "*" };
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
 
-        Cursor cursor = mContext.getContentResolver().query( ProgramFtsConstants.CONTENT_URI, projection, selection, selectionArgs, sort );
+        Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath( ProgramConstants.CONTENT_URI, "/fts" ), projection, selection, selectionArgs, sort );
         while( cursor.moveToNext() ) {
 
             Program program = new Program();
@@ -170,7 +171,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
     public ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event ) {
         Log.v( TAG, "updateRecordedPrograms : enter" );
 
-        String[] projection = new String[] { ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants._ID };
+        String[] projection = new String[] { ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_START_TS, "docid as " + ProgramConstants._ID };
         String selection = null;
         String[] selectionArgs = null;
 
@@ -193,7 +194,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             projection = new String[] { ProgramConstants._ID };
             selection = ProgramConstants.FIELD_CHANNEL_CHAN_ID + " = ? AND " + ProgramConstants.FIELD_RECORDING_START_TS + " = ?";
 
-            ContentValues values, ftsValues;
+            ContentValues values;
 
             for( ProgramDetails details : event.getDetails() ) {
 
@@ -259,6 +260,34 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 values.put( ProgramConstants.FIELD_RECORDING_ENCODER_NAME, ( null == program.getRecording().getEncoderName() ? "" : program.getRecording().getEncoderName() ) );
                 values.put( ProgramConstants.FIELD_RECORDING_PROFILE, ( null == program.getRecording().getProfile() ? "" : program.getRecording().getProfile() ) );
 
+                if( null != program.getCastMembers() && !program.getCastMembers().isEmpty() ) {
+
+                    StringBuilder castMemberNames = new StringBuilder();
+                    StringBuilder castMemberCharacters = new StringBuilder();
+                    StringBuilder castMemberRoles = new StringBuilder();
+
+                    for( CastMember castMember : program.getCastMembers() ) {
+
+                        if( null != castMember.getName() && !"".equals( castMember.getName() ) ) {
+                            castMemberNames.append( castMember.getName() ).append( " " );
+                        }
+
+                        if( null != castMember.getCharacterName() && !"".equals( castMember.getCharacterName() ) ) {
+                            castMemberCharacters.append( castMember.getCharacterName() ).append( " " );
+                        }
+
+                        if( null != castMember.getRole() && !"".equals( castMember.getRole() ) ) {
+                            castMemberRoles.append( castMember.getRole() ).append( " " );
+                        }
+
+                    }
+
+                    values.put( ProgramConstants.FIELD_CAST_MEMBER_NAMES, castMemberNames.toString() );
+                    values.put( ProgramConstants.FIELD_CAST_MEMBER_CHARACTERS, castMemberCharacters.toString() );
+                    values.put( ProgramConstants.FIELD_CAST_MEMBER_ROLES, castMemberRoles.toString() );
+
+                }
+
                 cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
                 if( cursor.moveToFirst() ) {
                     Log.v( TAG, "updateRecordedPrograms : updating existing program" );
@@ -297,78 +326,6 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                     );
 
                 }
-
-            }
-
-            try {
-
-                mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
-
-//                Log.v( TAG, "updateRecordedPrograms : exit" );
-//                return new ProgramsUpdatedEvent( event.getDetails() );
-
-            } catch( Exception e ) {
-
-                Log.e( TAG, "updateRecordedPrograms : error processing programs", e );
-
-            }
-
-            mContext.getContentResolver().delete( ProgramFtsConstants.CONTENT_URI, null, null );
-
-            Log.i( TAG, "updateRecordedPrograms : update recorded program fts" );
-            for( ProgramDetails details : event.getDetails() ) {
-
-                Program program = ProgramHelper.fromDetails( details );
-                Log.v( TAG, "updateRecordedPrograms : program=" + program );
-
-                if( "LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ) {
-                    continue;
-                }
-
-                selectionArgs = new String[] { String.valueOf( program.getChannel().getChanId() ), String.valueOf( program.getRecording().getStartTs().getMillis() ) };
-
-                long programId = -1;
-                cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
-                if( cursor.moveToNext() ) {
-                    programId = cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) );
-                }
-                cursor.close();;
-
-                values = new ContentValues();
-                values.put( ProgramConstants._ID, programId );
-                values.put( ProgramConstants.FIELD_PROGRAM_TYPE, ProgramConstants.ProgramType.RECORDED.name() );
-                values.put( ProgramConstants.FIELD_PROGRAM_START_TIME, program.getStartTime().getMillis() );
-                values.put( ProgramConstants.FIELD_PROGRAM_END_TIME, program.getEndTime().getMillis() );
-                values.put( ProgramConstants.FIELD_PROGRAM_TITLE_SORT, removeArticles(program.getTitle()).toUpperCase() );
-                values.put( ProgramConstants.FIELD_PROGRAM_TITLE, program.getTitle() );
-                values.put( ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ( null == program.getSubTitle() ? "" : program.getSubTitle() ) );
-                values.put( ProgramConstants.FIELD_PROGRAM_CATEGORY, ( null == program.getCategory() ? "" : program.getCategory() ) );
-                values.put( ProgramConstants.FIELD_PROGRAM_HOSTNAME, ( null == program.getHostName() ? "" : program.getHostName() ) );
-                values.put( ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ( null == program.getDescription() ? "" : program.getDescription() ) );
-                values.put( ProgramConstants.FIELD_PROGRAM_INETREF, program.getInetref() );
-
-                values.put( ProgramConstants.FIELD_CHANNEL_CHAN_ID, program.getChannel().getChanId() );
-                values.put( ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ( null == program.getChannel().getChanNum() ? "" : program.getChannel().getChanNum() ) );
-                values.put( ProgramConstants.FIELD_CHANNEL_CALLSIGN, ( null == program.getChannel().getCallSign() ? "" : program.getChannel().getCallSign() ) );
-                values.put( ProgramConstants.FIELD_CHANNEL_CHANNEL_NAME, ( null == program.getChannel().getChannelName() ? "" : program.getChannel().getChannelName() ) );
-
-                values.put( ProgramConstants.FIELD_RECORDING_RECORDED_ID, ( null == program.getRecording().getRecordedId() ? -1 : program.getRecording().getRecordedId() ) );
-                values.put( ProgramConstants.FIELD_RECORDING_STATUS, program.getRecording().getStatus() );
-                values.put( ProgramConstants.FIELD_RECORDING_PRIORITY, program.getRecording().getPriority() );
-                values.put( ProgramConstants.FIELD_RECORDING_START_TS, program.getRecording().getStartTs().getMillis() );
-                values.put( ProgramConstants.FIELD_RECORDING_END_TS, program.getRecording().getEndTs().getMillis() );
-                values.put( ProgramConstants.FIELD_RECORDING_RECORD_ID, program.getRecording().getRecordId() );
-                values.put( ProgramConstants.FIELD_RECORDING_REC_GROUP, ( null == program.getRecording().getRecGroup() ? "" : program.getRecording().getRecGroup() ) );
-                values.put( ProgramConstants.FIELD_RECORDING_PLAY_GROUP, ( null == program.getRecording().getPlayGroup() ? "" : program.getRecording().getPlayGroup() ) );
-                values.put( ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ( null == program.getRecording().getStorageGroup() ? "" : program.getRecording().getStorageGroup() ) );
-
-                Log.v( TAG, "updateRecordedPrograms : adding new program" );
-                ops.add(
-                        ContentProviderOperation
-                                .newInsert( ProgramFtsConstants.CONTENT_URI )
-                                .withValues( values )
-                                .build()
-                );
 
             }
 

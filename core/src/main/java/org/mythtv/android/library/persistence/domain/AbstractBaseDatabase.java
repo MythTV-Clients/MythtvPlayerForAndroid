@@ -9,7 +9,7 @@ public abstract class AbstractBaseDatabase implements BaseColumns {
 
     public static final String FIELD_ID_DATA_TYPE = "INTEGER";
     public static final String FIELD_ID_PRIMARY_KEY = "PRIMARY KEY";
-    public static final String FIELD_ID_PRIMARY_KEY_AUTOINCREMENT = "PRIMARY KEY AUTOINCREMENT";
+    public static final String FIELD_ID_PRIMARY_KEY_AUTOINCREMENT = "PRIMARY KEY AUTOINCREMENT NOT NULL";
 
     public static final String FIELD_CREATED_DATE = "created";
     public static final String FIELD_CREATED_DATE_DATA_TYPE = "INTEGER";
