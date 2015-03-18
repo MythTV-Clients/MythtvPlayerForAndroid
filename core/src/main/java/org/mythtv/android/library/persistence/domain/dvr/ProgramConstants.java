@@ -19,6 +19,7 @@ public class ProgramConstants extends AbstractBaseDatabase {
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + MythtvProvider.AUTHORITY + "." + TABLE_NAME;
     public static final int ALL		    			= 210;
     public static final int SINGLE    				= 211;
+    public static final int ALL_FTS		    		= 212;
 
     public static final String CREATE_TABLE, DROP_TABLE;
 
@@ -208,12 +209,21 @@ public class ProgramConstants extends AbstractBaseDatabase {
     public static final String FIELD_RECORDING_PROFILE = "recording_profile";
     public static final String FIELD_RECORDING_PROFILE_DATA_TYPE = "TEXT";
 
+    public static final String FIELD_CAST_MEMBER_NAMES = "cast_member_names";
+    public static final String FIELD_CAST_MEMBER_NAMES_DATA_TYPE = "TEXT";
+
+    public static final String FIELD_CAST_MEMBER_CHARACTERS = "cast_member_characters";
+    public static final String FIELD_CAST_MEMBER_CHARACTERS_DATA_TYPE = "TEXT";
+
+    public static final String FIELD_CAST_MEMBER_ROLES = "cast_member_roles";
+    public static final String FIELD_CAST_MEMBER_ROLES_DATA_TYPE = "TEXT";
+
 
     static {
 
         StringBuilder createTable = new StringBuilder();
 
-        createTable.append( "CREATE TABLE " + TABLE_NAME + " (" );
+        createTable.append( "CREATE VIRTUAL TABLE " + TABLE_NAME + " using fts3 (" );
         createTable.append( _ID ).append( " " ).append( FIELD_ID_DATA_TYPE ).append( " " ).append( FIELD_ID_PRIMARY_KEY_AUTOINCREMENT ).append(", ");
         createTable.append( FIELD_PROGRAM_TYPE ).append( " " ).append( FIELD_PROGRAM_TYPE_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_PROGRAM_START_TIME ).append( " " ).append( FIELD_PROGRAM_START_TIME_DATA_TYPE ).append( ", " );
@@ -277,7 +287,11 @@ public class ProgramConstants extends AbstractBaseDatabase {
         createTable.append( FIELD_RECORDING_DUP_METHOD ).append( " " ).append( FIELD_RECORDING_DUP_METHOD_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_RECORDING_ENCODER_ID ).append( " " ).append( FIELD_RECORDING_ENCODER_ID_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_RECORDING_ENCODER_NAME ).append( " " ).append( FIELD_RECORDING_ENCODER_NAME_DATA_TYPE ).append( ", " );
-        createTable.append( FIELD_RECORDING_PROFILE ).append( " " ).append( FIELD_RECORDING_PROFILE_DATA_TYPE );
+        createTable.append( FIELD_RECORDING_PROFILE ).append( " " ).append( FIELD_RECORDING_PROFILE_DATA_TYPE ).append( ", " );
+
+        createTable.append( FIELD_CAST_MEMBER_NAMES ).append( " " ).append( FIELD_CAST_MEMBER_NAMES_DATA_TYPE ).append( ", " );
+        createTable.append( FIELD_CAST_MEMBER_CHARACTERS ).append( " " ).append( FIELD_CAST_MEMBER_CHARACTERS_DATA_TYPE ).append( ", " );
+        createTable.append( FIELD_CAST_MEMBER_ROLES ).append( " " ).append( FIELD_CAST_MEMBER_ROLES_DATA_TYPE );
 
         createTable.append( ");" );
 
