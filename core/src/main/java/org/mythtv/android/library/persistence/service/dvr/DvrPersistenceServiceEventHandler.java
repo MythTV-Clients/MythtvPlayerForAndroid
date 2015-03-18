@@ -185,6 +185,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         }
         cursor.close();
+        Log.v( TAG, "updateRecordedPrograms : programIds=" + programIds );
 
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
 
@@ -193,7 +194,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             projection = new String[] { ProgramConstants._ID };
             selection = ProgramConstants.FIELD_CHANNEL_CHAN_ID + " = ? AND " + ProgramConstants.FIELD_RECORDING_START_TS + " = ?";
 
-            ContentValues values, ftsValues;
+            ContentValues values;
 
             for( ProgramDetails details : event.getDetails() ) {
 
@@ -212,7 +213,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                     programIds.remove( existing );
                 }
 
-                selectionArgs = new String[] { String.valueOf( program.getChannel().getChanId() ), String.valueOf( program.getRecording().getStartTs().getMillis() ) };
+                selectionArgs = new String[] { String.valueOf( program.getChannel().getChanId() ), String.valueOf(program.getRecording().getStartTs().getMillis()) };
 
                 values = new ContentValues();
                 values.put( ProgramConstants.FIELD_PROGRAM_TYPE, ProgramConstants.ProgramType.RECORDED.name() );
@@ -261,9 +262,9 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
                 cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
                 if( cursor.moveToFirst() ) {
-                    Log.v( TAG, "updateRecordedPrograms : updating existing program" );
 
                     Long id = cursor.getLong( cursor.getColumnIndexOrThrow( ProgramConstants._ID ) );
+                    Log.v( TAG, "updateRecordedPrograms : updating existing program - " + id );
                     ops.add(
                             ContentProviderOperation
                                     .newUpdate( ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, id ) )
@@ -303,7 +304,6 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             try {
 
                 mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
-
 //                Log.v( TAG, "updateRecordedPrograms : exit" );
 //                return new ProgramsUpdatedEvent( event.getDetails() );
 
@@ -313,13 +313,14 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
             }
 
+            ops.clear();
             mContext.getContentResolver().delete( ProgramFtsConstants.CONTENT_URI, null, null );
 
             Log.i( TAG, "updateRecordedPrograms : update recorded program fts" );
             for( ProgramDetails details : event.getDetails() ) {
 
                 Program program = ProgramHelper.fromDetails( details );
-                Log.v( TAG, "updateRecordedPrograms : program=" + program );
+                Log.v( TAG, "updateRecordedPrograms : program_fts=" + program );
 
                 if( "LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ) {
                     continue;
@@ -362,7 +363,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 values.put( ProgramConstants.FIELD_RECORDING_PLAY_GROUP, ( null == program.getRecording().getPlayGroup() ? "" : program.getRecording().getPlayGroup() ) );
                 values.put( ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ( null == program.getRecording().getStorageGroup() ? "" : program.getRecording().getStorageGroup() ) );
 
-                Log.v( TAG, "updateRecordedPrograms : adding new program" );
+                Log.v( TAG, "updateRecordedPrograms : adding new program_fts" );
                 ops.add(
                         ContentProviderOperation
                                 .newInsert( ProgramFtsConstants.CONTENT_URI )
@@ -629,6 +630,14 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             int result = chanId;
             result = 31 * result + (int) (startTs ^ (startTs >>> 32));
             return result;
+        }
+
+        @Override
+        public String toString() {
+            return "ProgramKey{" +
+                    "chanId=" + chanId +
+                    ", startTs=" + startTs +
+                    '}';
         }
 
     }
