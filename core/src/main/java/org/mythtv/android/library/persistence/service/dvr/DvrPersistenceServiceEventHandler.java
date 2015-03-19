@@ -15,8 +15,10 @@ import org.mythtv.android.library.events.DeleteEvent;
 import org.mythtv.android.library.events.DeletedEvent;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.DeleteProgramsEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.ProgramRemovedEvent;
+import org.mythtv.android.library.events.dvr.ProgramsDeletedEvent;
 import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
 import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
@@ -64,7 +66,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         List<Program> programs = new ArrayList<>();
 
-        String[] projection = new String[]{ ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
+        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
         String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
         String[] selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name() };
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
@@ -122,7 +124,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         String query = "%" + event.getQuery().toUpperCase() + "%";
 
-        String[] projection = new String[]{ ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
+        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
         String selection = ProgramConstants.TABLE_NAME + " MATCH ?";
         String[] selectionArgs = new String[] { query + "*" };
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
@@ -171,29 +173,13 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
     public ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event ) {
         Log.v( TAG, "updateRecordedPrograms : enter" );
 
-        String[] projection = new String[] { ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_START_TS, "docid as " + ProgramConstants._ID };
-        String selection = null;
+        String[] projection = new String[] { "rowid as " + ProgramConstants._ID };
+        String selection = ProgramConstants.FIELD_PROGRAM_FILE_NAME + " = ?";
         String[] selectionArgs = null;
-
-        Map<ProgramKey, Long> programIds = new HashMap<>();
-
-        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
-        while( cursor.moveToNext() ) {
-
-            ProgramKey key = new ProgramKey( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_CHANNEL_CHAN_ID ) ), cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) );
-
-            programIds.put( key, cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) ) );
-
-        }
-        cursor.close();
-        Log.v( TAG, "updateRecordedPrograms : programIds=" + programIds );
 
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
 
             ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-
-            projection = new String[] { ProgramConstants._ID };
-            selection = ProgramConstants.FIELD_CHANNEL_CHAN_ID + " = ? AND " + ProgramConstants.FIELD_RECORDING_START_TS + " = ?";
 
             ContentValues values;
 
@@ -206,15 +192,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                     continue;
                 }
 
-                ProgramKey existing = new ProgramKey( program.getChannel().getChanId(), program.getRecording().getStartTs().getMillis() );
-
-                if( programIds.containsKey( existing ) ) {
-                    Log.v( TAG, "updateRecordedPrograms : program won't be deleted" );
-
-                    programIds.remove( existing );
-                }
-
-                selectionArgs = new String[] { String.valueOf( program.getChannel().getChanId() ), String.valueOf(program.getRecording().getStartTs().getMillis()) };
+                selectionArgs = new String[] { program.getFileName() };
 
                 values = new ContentValues();
                 values.put( ProgramConstants.FIELD_PROGRAM_TYPE, ProgramConstants.ProgramType.RECORDED.name() );
@@ -289,11 +267,11 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
                 }
 
-                cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+                Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
                 if( cursor.moveToFirst() ) {
 
-                    Long id = cursor.getLong( cursor.getColumnIndexOrThrow( ProgramConstants._ID ) );
-                    Log.v( TAG, "updateRecordedPrograms : updating existing program - " + id );
+                    Long id = cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) );
+                    Log.v( TAG, "updateRecordedPrograms : updating existing program - rowid=" + id );
                     ops.add(
                             ContentProviderOperation
                                     .newUpdate( ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, id ) )
@@ -316,20 +294,6 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
             }
 
-            if( !programIds.isEmpty() ) {
-
-                for( long id : programIds.values() ) {
-
-                    ops.add(
-                            ContentProviderOperation
-                                    .newDelete( ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, id ) )
-                                    .build()
-                    );
-
-                }
-
-            }
-
             try {
 
                 mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
@@ -347,6 +311,71 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         Log.w( TAG, "updateRecordedPrograms : exit, programs not updated" );
         return ProgramsUpdatedEvent.notUpdated();
+    }
+
+    @Override
+    public ProgramsDeletedEvent deleteRecordedPrograms(DeleteProgramsEvent event) {
+        Log.v( TAG, "deleteRecordedPrograms : enter" );
+
+        String[] projection = new String[] { "rowid as " + ProgramConstants._ID };
+        String selection = ProgramConstants.FIELD_PROGRAM_FILE_NAME + " = ?";
+        String[] selectionArgs = null;
+
+        if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
+
+            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+            ContentValues values;
+
+            for( ProgramDetails details : event.getDetails() ) {
+
+                Program program = ProgramHelper.fromDetails( details );
+                Log.v( TAG, "deleteRecordedPrograms : program=" + program );
+
+                Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+                if( cursor.moveToFirst() ) {
+
+//                    Long id = cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) );
+//                    Log.v( TAG, "deleteRecordedPrograms : updating existing program - rowid=" + id );
+//                    ops.add(
+//                            ContentProviderOperation
+//                                    .newUpdate( ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, id ) )
+//                                    .withValues( values )
+//                                    .build()
+//                    );
+
+                } else {
+                    Log.v( TAG, "updateRecordedPrograms : adding new program" );
+
+//                    ops.add(
+//                            ContentProviderOperation
+//                                    .newInsert( ProgramConstants.CONTENT_URI )
+//                                    .withValues( values )
+//                                    .build()
+//                    );
+
+                }
+                cursor.close();
+
+            }
+
+            try {
+
+                mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
+
+                Log.v( TAG, "deleteRecordedPrograms : exit" );
+                return new ProgramsDeletedEvent( event.getDetails() );
+
+            } catch( Exception e ) {
+
+                Log.e( TAG, "deleteRecordedPrograms : error processing programs", e );
+
+            }
+
+        }
+
+        Log.v( TAG, "deleteRecordedPrograms : error, delete failed" );
+        return ProgramsDeletedEvent.deletionFailed();
     }
 
     @Override

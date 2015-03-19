@@ -2,7 +2,9 @@ package org.mythtv.android.library.persistence.service;
 
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.DeleteProgramsEvent;
 import org.mythtv.android.library.events.dvr.ProgramRemovedEvent;
+import org.mythtv.android.library.events.dvr.ProgramsDeletedEvent;
 import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
 import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
@@ -24,6 +26,8 @@ public interface DvrPersistenceService {
     AllProgramsEvent searchRecordedPrograms( SearchRecordedProgramsEvent event );
 
     ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event );
+
+    ProgramsDeletedEvent deleteRecordedPrograms( DeleteProgramsEvent event );
 
     ProgramRemovedEvent removeProgram( RemoveProgramEvent event );
 

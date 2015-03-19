@@ -224,7 +224,6 @@ public class ProgramConstants extends AbstractBaseDatabase {
         StringBuilder createTable = new StringBuilder();
 
         createTable.append( "CREATE VIRTUAL TABLE " + TABLE_NAME + " using fts3 (" );
-        createTable.append( _ID ).append( " " ).append( FIELD_ID_DATA_TYPE ).append( " " ).append( FIELD_ID_PRIMARY_KEY_AUTOINCREMENT ).append(", ");
         createTable.append( FIELD_PROGRAM_TYPE ).append( " " ).append( FIELD_PROGRAM_TYPE_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_PROGRAM_START_TIME ).append( " " ).append( FIELD_PROGRAM_START_TIME_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_PROGRAM_END_TIME ).append( " " ).append( FIELD_PROGRAM_END_TIME_DATA_TYPE ).append( ", " );
