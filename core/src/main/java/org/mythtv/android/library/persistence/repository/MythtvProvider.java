@@ -210,7 +210,7 @@ public class MythtvProvider extends ContentProvider {
             case ProgramConstants.SINGLE :
 //                Log.v( TAG, "query : querying for single program" );
 
-                selection = ProgramConstants._ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
+                selection = "rowid = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
 
                 cursor = db.query( ProgramConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
 
@@ -385,8 +385,8 @@ public class MythtvProvider extends ContentProvider {
 
             case ProgramConstants.SINGLE:
 
-                deleted = db.delete( ProgramConstants.TABLE_NAME, ProgramConstants._ID
-                        + "="
+                deleted = db.delete( ProgramConstants.TABLE_NAME,
+                        "rowid ="
                         + uri.getLastPathSegment()
                         + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" )
                         , selectionArgs );
@@ -506,8 +506,8 @@ public class MythtvProvider extends ContentProvider {
 
             case ProgramConstants.SINGLE:
 
-                affected = db.update( ProgramConstants.TABLE_NAME, values, ProgramConstants._ID
-                                + "="
+                affected = db.update( ProgramConstants.TABLE_NAME, values,
+                                "rowid ="
                                 + uri.getLastPathSegment()
                                 + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" ),
                         selectionArgs );
