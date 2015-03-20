@@ -173,13 +173,29 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
     public ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event ) {
         Log.v( TAG, "updateRecordedPrograms : enter" );
 
-        String[] projection = new String[] { "rowid as " + ProgramConstants._ID };
-        String selection = ProgramConstants.FIELD_PROGRAM_FILE_NAME + " = ?";
-        String[] selectionArgs = null;
+        String[] projection = new String[] { "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String[] selectionArgs = new String[] { "RECORDED" };
+
+        if( null != event.getTitleRegEx() && !"".equals( event.getTitleRegEx() ) ) {
+
+            selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_PROGRAM_TITLE + " = ?";
+            selectionArgs = new String[] { "RECORDED", event.getTitleRegEx() };
+
+        }
+
+        Map<String, Long> programIds = new HashMap<String, Long>();
+        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+        while( cursor.moveToNext() ) {
+            programIds.put( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_FILE_NAME ) ), cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) ) );
+        }
+        cursor.close();
 
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
 
             ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+            projection = new String[] { "rowid as " + ProgramConstants._ID };
 
             ContentValues values;
 
@@ -192,6 +208,11 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                     continue;
                 }
 
+                if( programIds.containsKey( program.getFileName() ) ) {
+                    programIds.remove( program.getFileName() );
+                }
+
+                selection = ProgramConstants.FIELD_PROGRAM_FILE_NAME + " = ?";
                 selectionArgs = new String[] { program.getFileName() };
 
                 values = new ContentValues();
@@ -267,7 +288,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
                 }
 
-                Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+                cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
                 if( cursor.moveToFirst() ) {
 
                     Long id = cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) );
@@ -291,6 +312,21 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
                 }
                 cursor.close();
+
+            }
+
+            if( !programIds.isEmpty() ) {
+
+                for( Long programId : programIds.values() ) {
+                    Log.v( TAG, "updateRecordedPrograms : deleting stale program" );
+
+                    ops.add(
+                            ContentProviderOperation
+                                    .newDelete( ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, programId ) )
+                                    .build()
+                    );
+
+                }
 
             }
 
