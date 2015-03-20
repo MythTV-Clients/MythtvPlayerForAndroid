@@ -35,7 +35,11 @@ public class RefreshTitleInfosTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground( Void... params ) {
         Log.v(TAG, "doInBackground : enter");
 
-        MainApplication.getInstance().getDvrService().updateTitleInfos(new UpdateTitleInfosEvent());
+        if( MainApplication.getInstance().isConnected() ) {
+
+            MainApplication.getInstance().getDvrService().updateTitleInfos( new UpdateTitleInfosEvent() );
+
+        }
 
         Log.v( TAG, "doInBackground : exit" );
         return null;
