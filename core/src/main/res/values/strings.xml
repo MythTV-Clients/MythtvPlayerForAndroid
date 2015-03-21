@@ -38,6 +38,6 @@
     <string name="title_info_transition">title_info_transition</string>
     <string name="recording_transition">recording_transition</string>
     <string name="video_transition">title_info_transition</string>
-    <string name="search_hint">Show, Episode, Actor</string>
+    <string name="search_hint">Show, Movie, Actor, Character, Channel</string>
 
 </resources>

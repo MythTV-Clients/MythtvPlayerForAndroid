@@ -3,10 +3,18 @@
     package="org.mythtv.android" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
+
+    <uses-feature android:name="android.software.leanback"
+        android:required="true" />
 
     <application
         android:name=".library.core.MainApplication"
@@ -27,10 +35,12 @@
         </activity>
 
         <activity
-            android:name=".player.PlayerActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:name=".player.recordings.RecordingsActivity">
 
-        <activity android:name=".player.recordings.RecordingsActivity" />
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.search.SearchableActivity" />
+
+        </activity>
         <activity android:name=".player.recordings.RecordingDetailsActivity" />
 
         <activity android:name=".player.videos.VideosActivity" />
@@ -40,6 +50,23 @@
             android:name=".library.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+
+        <activity
+            android:name=".player.search.SearchableActivity"
+            android:launchMode="singleTop">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+        </activity>
+
+        <activity
+            android:name=".player.PlayerActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <!-- MythTV Receivers -->
         <receiver android:name=".library.core.RefreshLiveStreamsReceiver" />

@@ -4,18 +4,15 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.mythtv.android.R;
-import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.ui.data.RecordingDataConsumer;
 import org.mythtv.android.library.ui.data.RecordingsDataFragment;
-import org.mythtv.android.library.ui.settings.SettingsActivity;
+import org.mythtv.android.player.search.SearchableActivity;
 
 import java.util.List;
 
@@ -47,6 +44,14 @@ public class RecordingsActivity extends Activity implements RecordingDataConsume
     }
 
     @Override
+    public boolean onSearchRequested() {
+
+        startActivity( new Intent( this, SearchableActivity.class ) );
+
+        return true;
+    }
+
+    @Override
     public void onSetPrograms( List<Program> programs ) {
 
         mRecordingsFragment.setPrograms( programs );
@@ -56,7 +61,7 @@ public class RecordingsActivity extends Activity implements RecordingDataConsume
     @Override
     public void onHandleError( String message ) {
 
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText( this, message, Toast.LENGTH_LONG ).show();
 
     }
 

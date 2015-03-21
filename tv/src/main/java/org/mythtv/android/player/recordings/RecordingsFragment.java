@@ -37,6 +37,7 @@ import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.ui.loaders.ProgramsAsyncTaskLoader;
 import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.android.player.PicassoBackgroundManagerTarget;
+import org.mythtv.android.player.search.SearchableActivity;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -199,12 +200,14 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
         setOnItemSelectedListener(getDefaultItemSelectedListener());
         setOnItemClickedListener(getDefaultItemClickedListener());
         setOnItemViewSelectedListener( getDefaultItemViewSelectedListener() );
-        setOnSearchClickedListener(new View.OnClickListener() {
+        setOnSearchClickedListener( new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
-                        .show();
+            public void onClick( View view ) {
+                Intent intent = new Intent( getActivity(), SearchableActivity.class );
+                startActivity( intent );
             }
+
         });
     }
 

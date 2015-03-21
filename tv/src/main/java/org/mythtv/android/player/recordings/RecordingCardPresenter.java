@@ -26,6 +26,8 @@ public class RecordingCardPresenter extends Presenter {
     private static Context mContext;
     private static int CARD_WIDTH = 313;
     private static int CARD_HEIGHT = 176;
+    private static int sSelectedBackgroundColor;
+    private static int sDefaultBackgroundColor;
 
     static class ViewHolder extends Presenter.ViewHolder {
         private Program mProgram;
@@ -67,30 +69,57 @@ public class RecordingCardPresenter extends Presenter {
     public ViewHolder onCreateViewHolder( ViewGroup parent ) {
         Log.d( TAG, "onCreateViewHolder" );
 
+        sDefaultBackgroundColor = parent.getResources().getColor( R.color.primary_dark );
+        sSelectedBackgroundColor = parent.getResources().getColor( R.color.primary );
+
         mContext = parent.getContext().getApplicationContext();
 
-        ImageCardView cardView = new ImageCardView(mContext);
-        cardView.setFocusable(true);
-        cardView.setFocusableInTouchMode(true);
-        cardView.setBackgroundColor(mContext.getResources().getColor(R.color.background_navigation_drawer));
-        return new ViewHolder(cardView);
+        ImageCardView cardView = new ImageCardView( mContext ) {
+
+            @Override
+            public void setSelected( boolean selected ) {
+
+                updateCardBackgroundColor( this, selected );
+
+                super.setSelected( selected );
+            }
+
+        };
+
+        cardView.setFocusable( true );
+        cardView.setFocusableInTouchMode( true );
+        updateCardBackgroundColor( cardView, false );
+
+        return new ViewHolder( cardView );
+    }
+
+    private static void updateCardBackgroundColor( ImageCardView view, boolean selected ) {
+
+        int color = selected ? sSelectedBackgroundColor : sDefaultBackgroundColor;
+
+        // Both background colors should be set because the view's background is temporarily visible
+        // during animations.
+        view.setBackgroundColor( color );
+        view.findViewById( R.id.info_field ).setBackgroundColor( color );
+
     }
 
     @Override
     public void onBindViewHolder( Presenter.ViewHolder viewHolder, Object item ) {
         Program program = (Program) item;
-        ((ViewHolder) viewHolder).setProgram(program);
+        ImageCardView cardView = (ImageCardView) viewHolder.view;
+        ( (ViewHolder) viewHolder ).setProgram( program );
 
-        Log.d( TAG, "onBindViewHolder" );
+        Log.d( TAG, "onBindViewHolder : program=" + program.toString() );
 //        if ( program.getCardImageUrl() != null) {
-            ((ViewHolder) viewHolder).mCardView.setTitleText( program.getSubTitle() );
-            ((ViewHolder) viewHolder).mCardView.setContentText( program.getDescription() );
-            ((ViewHolder) viewHolder).mCardView.setMainImageDimensions( CARD_WIDTH, CARD_HEIGHT );
+        cardView.setTitleText( program.getSubTitle() );
+        cardView.setContentText( program.getDescription() );
+        cardView.setMainImageDimensions( CARD_WIDTH, CARD_HEIGHT );
             //((ViewHolder) viewHolder).mCardView.setBadgeImage(mContext.getResources().getDrawable(
             //        R.drawable.videos_by_google_icon));
-        Log.i( TAG, program.toString() );
 
-        Log.i( TAG, MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + program.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Width=" + CARD_WIDTH );
+
+        Log.i( TAG, "onBindViewHolder : imageUrl=" + MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + program.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Width=" + CARD_WIDTH );
             ((ViewHolder) viewHolder).updateCardViewImage( MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + program.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString("yyyy-MM-dd'T'HH:mm:ss") + "&Width=" + CARD_WIDTH);
 //        }
     }
@@ -98,11 +127,6 @@ public class RecordingCardPresenter extends Presenter {
     @Override
     public void onUnbindViewHolder( Presenter.ViewHolder viewHolder ) {
         Log.d( TAG, "onUnbindViewHolder" );
-    }
-
-    @Override
-    public void onViewAttachedToWindow( Presenter.ViewHolder viewHolder ) {
-        Log.d( TAG, "onViewAttachedToWindow" );
     }
 
     public static class PicassoImageCardViewTarget implements Target {
