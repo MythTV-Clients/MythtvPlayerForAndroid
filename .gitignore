@@ -1,7 +1,5 @@
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
 /.idea/*
 .DS_Store
 /build
@@ -15,3 +13,4 @@
 /tv/tv.iml
 /MythtvPlayerForAndroid.iml
 /MythtvPlayerforAndroid.iml
+gradle.properties
