@@ -200,7 +200,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             case 0 :
 
                 if( !( getActivity() instanceof ShowsActivity) ) {
-                    startActivity( new Intent( getActivity(), ShowsActivity.class ) );
+
+                    Intent i = new Intent( getActivity(), ShowsActivity.class );
+                    i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+                    startActivity( i );
+                    getActivity().finish();
+
                 }
 
                 break;
@@ -208,7 +213,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             case 1 :
 
                 if( !( getActivity() instanceof VideosActivity) ) {
-                    startActivity( new Intent( getActivity(), VideosActivity.class ) );
+
+                    Intent i = new Intent( getActivity(), VideosActivity.class );
+                    i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+                    startActivity( i );
+                    getActivity().finish();
+
                 }
 
                 break;

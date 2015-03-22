@@ -30,7 +30,7 @@
 
         <activity
             android:name=".player.recordings.RecordingsActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:parentActivityName=".player.recordings.ShowsActivity" >
 
             <meta-data
@@ -58,7 +58,7 @@
         <activity
             android:name=".player.videos.VideosActivity"
             android:label="@string/drawer_item_watch_videos"
-            android:launchMode="singleTop">
+            android:launchMode="singleTask">
 
             <meta-data android:name="android.app.default_searchable"
                 android:value=".player.search.SearchableActivity" />
