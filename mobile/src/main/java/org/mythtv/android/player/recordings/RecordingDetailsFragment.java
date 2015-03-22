@@ -8,11 +8,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -37,6 +42,8 @@ import org.mythtv.android.R;
  * Created by dmfrey on 12/8/14.
  */
 public class RecordingDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener { //}, FloatingActionButton.OnCheckedChangeListener  {
+
+    private static final String TAG = RecordingDetailsFragment.class.getSimpleName();
 
     public static final String PROGRAM_KEY = "program";
 
@@ -94,6 +101,14 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     public void onLoaderReset( Loader<Cursor> loader ) { }
 
     @Override
+    public void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
+
+        setHasOptionsMenu( true );
+
+    }
+
+    @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
         View rootView = inflater.inflate( R.layout.fragment_recording_details, container, false );
@@ -135,6 +150,35 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         });
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
+
+        inflater.inflate( R.menu.menu_details, menu );
+
+        super.onCreateOptionsMenu( menu, inflater );
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+
+        switch( item.getItemId() ) {
+
+            case R.id.play_external :
+
+                String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mProgram.getFileName();
+                Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
+
+                final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
+                externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
+                startActivity( externalPlayer );
+
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected( item );
     }
 
     public void setProgram( Program program ) {

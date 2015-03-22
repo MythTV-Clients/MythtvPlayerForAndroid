@@ -66,7 +66,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         List<Program> programs = new ArrayList<>();
 
-        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
+        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP };
         String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
         String[] selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name() };
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
@@ -95,6 +95,8 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             recording.setRecordedId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORDED_ID ) ) );
             recording.setStartTs( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
             recording.setRecordId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORD_ID ) ) );
+            recording.setRecGroup( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_REC_GROUP ) ) );
+            recording.setStorageGroup( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_STORAGE_GROUP ) ) );
             program.setRecording( recording );
 
             programs.add( program );
@@ -122,7 +124,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         List<Program> programs = new ArrayList<>();
 
-        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
+        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP };
         String selection = ProgramConstants.TABLE_NAME + " MATCH ?";
         String[] selectionArgs = new String[] { event.getQuery() + "*" };
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
@@ -146,6 +148,8 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             recording.setRecordedId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORDED_ID ) ) );
             recording.setStartTs( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
             recording.setRecordId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORD_ID ) ) );
+            recording.setRecGroup( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_REC_GROUP ) ) );
+            recording.setStorageGroup( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_STORAGE_GROUP ) ) );
             program.setRecording( recording );
 
             programs.add( program );
