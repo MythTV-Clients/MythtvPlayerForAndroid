@@ -223,7 +223,15 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     }
 
-    public boolean isDrawerOpen() {
+    public void setSelectItem( int position ) {
+
+        mSelectedItem = position;
+        saveToPreferences( getActivity(), SELECTED_ITEM_STATE, String.valueOf( mSelectedItem ) );
+
+    }
+
+
+        public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen( containerView );
     }
 

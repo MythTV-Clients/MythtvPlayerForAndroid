@@ -42,7 +42,7 @@ public class VideosActivity extends AbstractBaseActionBarActivity implements Vid
     protected void onResume() {
         super.onResume();
 
-        mDrawerFragment.selectItem( 1 );
+        mDrawerFragment.setSelectItem( 1 );
 
     }
 

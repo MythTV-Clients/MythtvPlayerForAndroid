@@ -51,7 +51,7 @@ public class ShowsActivity extends AbstractBaseActionBarActivity implements Titl
     protected void onResume() {
         super.onResume();
 
-        mDrawerFragment.selectItem(0);
+        mDrawerFragment.setSelectItem( 0 );
 
     }
 
