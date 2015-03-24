@@ -153,6 +153,14 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        getLoaderManager().restartLoader( 0, getArguments(), this );
+
+    }
+
+    @Override
     public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
 
         inflater.inflate( R.menu.menu_details, menu );
@@ -216,7 +224,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
             String coverartUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + mProgram.getInetref() + "&Type=coverart&Width=150";
             Picasso.with( getActivity() )
-                    .load( coverartUrl )
+                    .load(coverartUrl)
                     .fit().centerCrop()
                     .into( coverart );
 

@@ -33,6 +33,13 @@ public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
         }
 
         mRecordingDetailsFragment = (RecordingDetailsFragment) getFragmentManager().findFragmentById( R.id.fragment_recording_details );
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         if( null != mProgram ) {
 
             mRecordingDetailsFragment.setProgram( mProgram );
