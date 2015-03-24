@@ -43,7 +43,7 @@ public class ShowsActivity extends AbstractBaseActionBarActivity implements Titl
         mDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById( R.id.fragment_navigation_drawer );
         mDrawerFragment.setUp( R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar );
 
-        setTitle(getResources().getString(R.string.drawer_item_watch_recordings));
+        setTitle( getResources().getString( R.string.drawer_item_watch_recordings ) );
 
     }
 

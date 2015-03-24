@@ -71,9 +71,9 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         String[] selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name() };
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
 
-        if( null != event.getTitle() && !"".equals( event.getTitle() )  ) {
-            selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_PROGRAM_TITLE + " = ?";
-            selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), event.getTitle() };
+        if( null != event.getInetref() && !"".equals( event.getInetref() )  ) {
+            selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_PROGRAM_INETREF + " = ?";
+            selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), event.getInetref() };
         }
 
         Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, sort );

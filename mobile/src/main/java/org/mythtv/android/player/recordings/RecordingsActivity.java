@@ -68,7 +68,7 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
 
         }
 
-        mRecordingsFragment.setPrograms( ( null != mTitleInfo ? mTitleInfo.getTitle() : null ), null );
+        mRecordingsFragment.setPrograms( ( null != mTitleInfo ? mTitleInfo.getTitle() : null ), ( null != mTitleInfo ? mTitleInfo.getInetref() : null ), null );
 
     }
 
@@ -110,7 +110,7 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
     @Override
     public void onSetPrograms( List<Program> programs ) {
 
-        mRecordingsFragment.setPrograms( ( null != mTitleInfo ? mTitleInfo.getTitle() : null ), programs );
+        mRecordingsFragment.setPrograms( ( null != mTitleInfo ? mTitleInfo.getTitle() : null ), ( null != mTitleInfo ? mTitleInfo.getInetref() : null ), programs );
 
     }
 
