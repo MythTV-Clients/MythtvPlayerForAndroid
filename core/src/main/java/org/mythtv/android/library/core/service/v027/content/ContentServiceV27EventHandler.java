@@ -189,10 +189,10 @@ public class ContentServiceV27EventHandler implements ContentService {
     @Override
     public LiveStreamRemovedEvent removeLiveStream( RemoveLiveStreamEvent event ) {
 
-        ETagInfo eTagInfo = mMythTvApiContext.getEtag( LIVE_STREAM_REQ_ID, false );
+        ETagInfo eTagInfo = mMythTvApiContext.getEtag( String.valueOf( event.getKey() ), true );
         try {
 
-            Bool deleted = mMythTvApiContext.getContentService().removeLiveStream( event.getKey(), eTagInfo, LIVE_STREAM_REQ_ID );
+            Bool deleted = mMythTvApiContext.getContentService().removeLiveStream( event.getKey(), eTagInfo, String.valueOf( event.getKey() ) );
             if( deleted.getValue() ) {
 
                 LiveStreamRemovedEvent removed = new LiveStreamRemovedEvent( event.getKey() );
@@ -203,6 +203,11 @@ public class ContentServiceV27EventHandler implements ContentService {
 
         } catch( RetrofitError e ) {
             Log.w( TAG, "removeLiveStream : error - " + e.getMessage() );
+
+            LiveStreamRemovedEvent removed = new LiveStreamRemovedEvent( event.getKey() );
+            mContentPersistenceService.removeLiveStream( removed );
+
+            return removed;
         }
 
         return LiveStreamRemovedEvent.deletionFailed( event.getKey() );
