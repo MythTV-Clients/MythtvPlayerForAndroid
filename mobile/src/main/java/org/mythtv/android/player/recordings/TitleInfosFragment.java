@@ -111,14 +111,15 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
         Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
         recordings.putExtras( args );
+        startActivity( recordings );
 
-        String transitionName = getString( R.string.title_info_transition );
-        ActivityOptionsCompat options =
-            ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
-                v,   // The view which starts the transition
-                transitionName    // The transitionName of the view we’re transitioning to
-            );
-        ActivityCompat.startActivity( getActivity(), recordings, options.toBundle() );
+//        String transitionName = getString( R.string.title_info_transition );
+//        ActivityOptionsCompat options =
+//            ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
+//                v,   // The view which starts the transition
+//                transitionName    // The transitionName of the view we’re transitioning to
+//            );
+//        ActivityCompat.startActivity( getActivity(), recordings, options.toBundle() );
 
     }
 

@@ -107,14 +107,15 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
 
         Intent recordingDetails = new Intent( getActivity(), RecordingDetailsActivity.class );
         recordingDetails.putExtras(args);
+        startActivity( recordingDetails );
 
-        String transitionName = getString( R.string.recording_transition );
-        ActivityOptionsCompat options =
-            ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
-                v,   // The view which starts the transition
-                transitionName    // The transitionName of the view we’re transitioning to
-            );
-        ActivityCompat.startActivity( getActivity(), recordingDetails, options.toBundle() );
+//        String transitionName = getString( R.string.recording_transition );
+//        ActivityOptionsCompat options =
+//            ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
+//                v,   // The view which starts the transition
+//                transitionName    // The transitionName of the view we’re transitioning to
+//            );
+//        ActivityCompat.startActivity( getActivity(), recordingDetails, options.toBundle() );
 
     }
 
