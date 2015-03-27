@@ -5,9 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.mythtv.android.library.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.ui.animation.AnimationUtils;
 
@@ -43,12 +47,13 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 
         final TitleInfo titleInfo = titleInfos.get( position );
         viewHolder.setTitle( titleInfo.getTitle() );
-        viewHolder.setOnClickListener( new View.OnClickListener() {
+        viewHolder.setInetref( ( null != titleInfo.getInetref() && !"-1".equals(titleInfo.getInetref() ) ? titleInfo.getInetref() : "" ) );
+        viewHolder.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick( View v ) {
+            public void onClick(View v) {
 
-                titleInfoItemClickListener.titleInfoItemClicked( v, titleInfo );
+                titleInfoItemClickListener.titleInfoItemClicked(v, titleInfo);
 
             }
 
@@ -56,7 +61,7 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 
         if( position > previousPosition ) {
 
-            AnimationUtils.animate(viewHolder, true);
+            AnimationUtils.animate( viewHolder, true );
 
         } else {
 
@@ -64,6 +69,16 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 
         }
         previousPosition = position;
+
+        if( !"-1".equals( titleInfo.getInetref() ) ) {
+
+            String coverartUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + titleInfo.getInetref() + "&Type=coverart&Width=150";
+            Picasso.with(MainApplication.getInstance())
+                    .load(coverartUrl)
+                    .fit().centerCrop()
+                    .into(viewHolder.coverart);
+
+        }
 
     }
 
@@ -76,32 +91,25 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final View parent;
+        private final ImageView coverart;
         private final TextView title;
-        private String inetref;
+        private final TextView inetref;
 
         public ViewHolder( View v ) {
             super( v );
 
             this.parent = v;
+            coverart = (ImageView) parent.findViewById( R.id.title_info_item_coverart );
             title = (TextView) parent.findViewById( R.id.title_info_item_title );
+            inetref = (TextView) parent.findViewById( R.id.title_info_item_inetref );
 
         }
 
-        public void setTitle( CharSequence text ) {
+        public void setTitle( CharSequence text ) { title.setText( text ); }
 
-            title.setText( text );
+        public void setInetref( String text ) { inetref.setText( text ); }
 
-        }
-
-        public void setInetref( String inetref ) {
-
-            this.inetref = inetref;
-
-        }
-
-        public String getInetref() {
-            return inetref;
-        }
+        public String getInetref() { return inetref.getText().toString(); }
 
         public void setOnClickListener( View.OnClickListener listener ) {
 

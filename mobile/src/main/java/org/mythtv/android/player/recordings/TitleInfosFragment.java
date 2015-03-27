@@ -62,7 +62,11 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     }
 
     @Override
-    public void onLoaderReset( Loader<List<TitleInfo>> loader ) { }
+    public void onLoaderReset( Loader<List<TitleInfo>> loader ) {
+
+        mRecyclerView.setAdapter( null );
+
+    }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
