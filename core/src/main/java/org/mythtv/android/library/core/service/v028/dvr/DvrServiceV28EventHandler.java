@@ -132,7 +132,7 @@ public class DvrServiceV28EventHandler implements DvrService {
             TitleInfoList titleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
             if( null != titleInfoList ) {
 
-                titleInfoDetails.add( new TitleInfoDetails( MainApplication.getInstance().getApplicationContext().getResources().getString( R.string.all_recordings ), "-1" ) );
+//                titleInfoDetails.add( new TitleInfoDetails( MainApplication.getInstance().getApplicationContext().getResources().getString( R.string.all_recordings ), "-1" ) );
 
                 for( TitleInfo titleInfo : titleInfoList.getTitleInfos() ) {
                     titleInfoDetails.add( TitleInfoHelper.toDetails( titleInfo ) );

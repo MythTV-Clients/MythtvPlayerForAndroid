@@ -1,21 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/title_info_all_recordings_header"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_margin="@dimen/outer_margin"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/title_info_all_recordings"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/all_recordings"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/title_info_all_recordings_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            tools:text="10" />
+
+    </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/outer_margin"
+        android:layout_marginStart="@dimen/outer_margin"
+        android:layout_marginRight="@dimen/outer_margin"
+        android:layout_marginEnd="@dimen/outer_margin">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin"
-            android:paddingLeft="@dimen/outer_margin"
-            android:paddingRight="@dimen/outer_margin" />
+        <include layout="@layout/recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -26,6 +56,7 @@
         android:gravity="center"
         android:visibility="gone"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:text="@string/not_connected" />
+        android:text="@string/not_connected"
+        android:layout_margin="@dimen/outer_margin" />
 
-</FrameLayout>
+</LinearLayout>

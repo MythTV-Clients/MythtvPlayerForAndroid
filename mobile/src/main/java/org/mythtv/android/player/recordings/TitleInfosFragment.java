@@ -13,11 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
+import org.mythtv.android.library.events.dvr.AllProgramsEvent;
+import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.library.ui.loaders.TitleInfosAsyncTaskLoader;
@@ -36,7 +40,8 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     RecyclerView mRecyclerView;
     TitleInfoItemAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
-    TextView mEmpty;
+    RelativeLayout mHeader;
+    TextView mAllRecordings, mAllRecordingsCount, mEmpty;
 
     @Override
     public Loader<List<TitleInfo>> onCreateLoader( int id, Bundle args ) {
@@ -56,6 +61,10 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
             mAdapter = new TitleInfoItemAdapter( titleInfos, this );
             mRecyclerView.setAdapter( mAdapter );
 
+            AllProgramsEvent programs = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( null ) );
+            mAllRecordingsCount.setText( String.valueOf( programs.getDetails().size() ) );
+
+            mHeader.setVisibility( View.VISIBLE );
         }
 
         Log.v( TAG, "onLoadFinished : exit" );
@@ -80,7 +89,23 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mLayoutManager = new LinearLayoutManager( getActivity() );
         mRecyclerView.setLayoutManager( mLayoutManager );
+        mAllRecordings = (TextView) view.findViewById( R.id.title_info_all_recordings );
+        mAllRecordingsCount = (TextView) view.findViewById( R.id.title_info_all_recordings_count );
         mEmpty = (TextView) view.findViewById( R.id.empty );
+
+        mHeader = (RelativeLayout) view.findViewById( R.id.title_info_all_recordings_header );
+        mHeader.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
+                recordings.putExtras( new Bundle() );
+                startActivity( recordings );
+
+            }
+
+        });
 
         Log.v( TAG, "onCreateView : exit" );
         return view;
@@ -107,11 +132,7 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     public void titleInfoItemClicked( View v, TitleInfo titleInfo ) {
 
         Bundle args = new Bundle();
-        if( !getActivity().getResources().getString( R.string.all_recordings ).equals( titleInfo.getTitle() ) ) {
-
-            args.putSerializable( RecordingsActivity.TITLE_INFO, titleInfo );
-
-        }
+        args.putSerializable( RecordingsActivity.TITLE_INFO, titleInfo );
 
         Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
         recordings.putExtras( args );
@@ -130,16 +151,18 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     @Override
     public void connected() {
 
-        mRecyclerView.setVisibility( View.VISIBLE );
-        mEmpty.setVisibility( View.GONE );
+//        mHeader.setVisibility( View.VISIBLE );
+//        mRecyclerView.setVisibility( View.VISIBLE );
+//        mEmpty.setVisibility( View.GONE );
 
     }
 
     @Override
     public void notConnected() {
 
-        mRecyclerView.setVisibility( View.GONE );
-        mEmpty.setVisibility( View.VISIBLE );
+//        mHeader.setVisibility( View.GONE );
+//        mRecyclerView.setVisibility( View.GONE );
+//        mEmpty.setVisibility( View.VISIBLE );
 
     }
 
