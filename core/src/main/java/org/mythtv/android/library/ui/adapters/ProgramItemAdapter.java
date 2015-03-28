@@ -4,8 +4,10 @@ import org.joda.time.DateTimeZone;
 import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.library.ui.animation.AnimationUtils;
 
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -96,6 +98,27 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         }
         previousPosition = position;
 
+        String[] projection = new String[] { LiveStreamConstants._ID, LiveStreamConstants.FIELD_PERCENT_COMPLETE, LiveStreamConstants.FIELD_FULL_URL, LiveStreamConstants.FIELD_RELATIVE_URL };
+        String selection = LiveStreamConstants.FIELD_SOURCE_FILE + " like ?";
+        String[] selectionArgs = new String[] { "%" + program.getFileName() };
+
+        Cursor cursor = MainApplication.getAppContext().getContentResolver().query( LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+        if( cursor.moveToNext() ) {
+
+            int percent = cursor.getInt( cursor.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
+            if( percent > 2 ) {
+                viewHolder.readyToStream.setVisibility( View.VISIBLE );
+            } else {
+                viewHolder.readyToStream.setVisibility( View.INVISIBLE );
+            }
+
+        } else {
+
+            viewHolder.readyToStream.setVisibility( View.INVISIBLE );
+
+        }
+        cursor.close();
+
         String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + program.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         Picasso.with( MainApplication.getInstance() )
                .load( previewUrl )
@@ -119,6 +142,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         private final TextView title;
         private final TextView subTitle;
         private final TextView date;
+        private final TextView readyToStream;
 
         public ViewHolder( View v ) {
             super( v );
@@ -128,6 +152,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
             title = (TextView) parent.findViewById( R.id.program_item_title );
             subTitle = (TextView) parent.findViewById( R.id.program_item_sub_title );
             date = (TextView) parent.findViewById( R.id.program_item_date );
+            readyToStream = (TextView) parent.findViewById( R.id.program_item_stream_ready );
 
         }
 

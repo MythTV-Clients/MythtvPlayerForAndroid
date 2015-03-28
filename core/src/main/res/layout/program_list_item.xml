@@ -59,6 +59,22 @@
             android:layout_toEndOf="@+id/program_item_preview"
             tools:text="test date" />
 
+        <TextView
+            android:id="@+id/program_item_stream_ready"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:layout_below="@+id/program_item_date"
+            android:layout_toRightOf="@+id/program_item_preview"
+            android:layout_toEndOf="@+id/program_item_preview"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:text="@string/ready_to_stream"
+            android:textColor="@color/primary_dark"
+            android:gravity="end"
+            android:visibility="invisible"
+            tools:text="Ready to Stream" />
+
     </RelativeLayout>
 
     <View

@@ -39,5 +39,6 @@
     <string name="recording_transition">recording_transition</string>
     <string name="video_transition">title_info_transition</string>
     <string name="search_hint">Show, Movie, Actor, Character, Channel</string>
+    <string name="ready_to_stream">Ready to Stream</string>
 
 </resources>
