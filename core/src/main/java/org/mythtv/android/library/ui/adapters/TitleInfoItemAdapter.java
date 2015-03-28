@@ -76,7 +76,11 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
             Picasso.with(MainApplication.getInstance())
                     .load(coverartUrl)
                     .fit().centerCrop()
-                    .into(viewHolder.coverart);
+                    .into( viewHolder.coverart );
+
+        } else {
+
+            viewHolder.coverart.setImageDrawable( null );
 
         }
 

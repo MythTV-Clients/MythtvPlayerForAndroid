@@ -1,50 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/program_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:orientation="vertical">
+        android:layout_marginTop="@dimen/margin"
+        android:layout_marginBottom="@dimen/margin"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/program_item_preview"
+            android:layout_width="125dp"
+            android:layout_height="75dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" />
 
         <TextView
             android:id="@+id/program_item_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:text="test title" />
+            android:layout_toRightOf="@+id/program_item_preview"
+            android:layout_toEndOf="@+id/program_item_preview"
+            tool:text="test title" />
 
         <TextView
             android:id="@+id/program_item_sub_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-            android:text="test sub title" />
-
-        <TextView
-            android:id="@+id/program_item_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:text="test description" />
+            android:layout_below="@+id/program_item_title"
+            android:layout_toRightOf="@+id/program_item_preview"
+            android:layout_toEndOf="@+id/program_item_preview"
+            tool:text="test sub title" />
 
         <TextView
             android:id="@+id/program_item_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin"
-            android:gravity="right|end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:text="test date" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:layout_below="@+id/program_item_sub_title"
+            android:layout_toRightOf="@+id/program_item_preview"
+            android:layout_toEndOf="@+id/program_item_preview"
+            tool:text="test date" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package org.mythtv.android.library.ui.adapters;
 
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.library.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.ui.animation.AnimationUtils;
 
@@ -11,7 +12,10 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -71,7 +75,6 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         viewHolder.setTitle( title );
         viewHolder.setSubTitle( subTitle );
-        viewHolder.setDescription( Html.fromHtml( program.getDescription() ) );
         viewHolder.setDate( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
@@ -93,6 +96,12 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         }
         previousPosition = position;
 
+        String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + program.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        Picasso.with( MainApplication.getInstance() )
+               .load( previewUrl )
+               .fit().centerCrop()
+               .into( viewHolder.preview );
+
     }
 
     @Override
@@ -106,18 +115,18 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         private static String TAG = ViewHolder.class.getSimpleName();
 
         private final View parent;
+        private final ImageView preview;
         private final TextView title;
         private final TextView subTitle;
-        private final TextView description;
         private final TextView date;
 
         public ViewHolder( View v ) {
             super( v );
 
             this.parent = v;
+            preview = (ImageView) parent.findViewById( R.id.program_item_preview );
             title = (TextView) parent.findViewById( R.id.program_item_title );
             subTitle = (TextView) parent.findViewById( R.id.program_item_sub_title );
-            description = (TextView) parent.findViewById( R.id.program_item_description );
             date = (TextView) parent.findViewById( R.id.program_item_date );
 
         }
@@ -137,12 +146,6 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         public void setSubTitleVisibility( int visibility ) {
 
             subTitle.setVisibility( visibility );
-
-        }
-
-        public void setDescription( CharSequence text ) {
-
-            description.setText( text );
 
         }
 
