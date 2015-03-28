@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin"
+    android:layout_marginBottom="@dimen/margin">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/video_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/video_item_title"
@@ -20,11 +22,11 @@
             android:transitionName="@string/video_transition"
             android:text="test title" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:attr/selectableItemBackground" />
 
-</FrameLayout>
+</android.support.v7.widget.CardView>

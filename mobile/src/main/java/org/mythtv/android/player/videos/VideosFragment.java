@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,8 +22,9 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class VideosFragment extends AbstractBaseFragment implements VideoItemAdapter.VideoItemClickListener {
+public class VideosFragment extends AbstractBaseFragment implements VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
+    SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
     VideoItemAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
@@ -32,6 +34,9 @@ public class VideosFragment extends AbstractBaseFragment implements VideoItemAda
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
         View view = inflater.inflate( R.layout.video_list, container, false );
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
+        mSwipeRefreshLayout.setOnRefreshListener( this );
 
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mLayoutManager = new LinearLayoutManager( getActivity() );
@@ -45,6 +50,12 @@ public class VideosFragment extends AbstractBaseFragment implements VideoItemAda
 
         mAdapter = new VideoItemAdapter( videos, this );
         mRecyclerView.setAdapter( mAdapter );
+
+        if( mSwipeRefreshLayout.isRefreshing() ) {
+
+            mSwipeRefreshLayout.setRefreshing( false );
+
+        }
 
     }
 
@@ -80,6 +91,13 @@ public class VideosFragment extends AbstractBaseFragment implements VideoItemAda
 
         mRecyclerView.setVisibility( View.GONE );
         mEmpty.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+        ( (VideosActivity) getActivity() ).updateData();
 
     }
 
