@@ -94,15 +94,19 @@ public class TitleInfosDataFragment extends Fragment {
         @Override
         protected TitleInfosUpdatedEvent doInBackground( Void... params ) {
 
-            TitleInfosUpdatedEvent event = MainApplication.getInstance().getDvrService().updateTitleInfos( new UpdateTitleInfosEvent() );
+            try {
+                TitleInfosUpdatedEvent event = MainApplication.getInstance().getDvrService().updateTitleInfos(new UpdateTitleInfosEvent());
 
-            return event;
+                return event;
+            } catch( NullPointerException e ) { }
+
+            return null;
         }
 
         @Override
         protected void onPostExecute( TitleInfosUpdatedEvent event ) {
 
-            if( event.isEntityFound() ) {
+            if( null != event && event.isEntityFound() ) {
 
                 List<String> titles = new ArrayList<String>();
                 titleInfos = new ArrayList<TitleInfo>();

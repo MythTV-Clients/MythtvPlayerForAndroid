@@ -99,15 +99,19 @@ public class VideosDataFragment extends Fragment {
         @Override
         protected AllVideosEvent doInBackground( Void... params ) {
 
-            AllVideosEvent event = MainApplication.getInstance().getVideoService().getVideoList( new RequestAllVideosEvent( null, null, false, null, null ) );
+            try {
+                AllVideosEvent event = MainApplication.getInstance().getVideoService().getVideoList(new RequestAllVideosEvent(null, null, false, null, null));
 
-            return event;
+                return event;
+            } catch( NullPointerException e ) { }
+
+            return null;
         }
 
         @Override
         protected void onPostExecute( AllVideosEvent event ) {
 
-            if( event.isEntityFound() ) {
+            if( null != event && event.isEntityFound() ) {
 
                 videos = new ArrayList<Video>();
 

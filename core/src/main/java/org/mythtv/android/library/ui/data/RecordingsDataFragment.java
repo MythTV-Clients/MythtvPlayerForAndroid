@@ -119,7 +119,7 @@ public class RecordingsDataFragment extends Fragment {
         @Override
         protected void onPostExecute( ProgramsUpdatedEvent event ) {
 
-            if( event.isEntityFound() ) {
+            if( null != event && event.isEntityFound() ) {
 
                 programs = new ArrayList<Program>();
 
