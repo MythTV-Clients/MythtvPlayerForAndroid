@@ -1,4 +1,4 @@
-package org.mythtv.android.player;
+package org.mythtv.android.player.common;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,7 +26,8 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.Utils;
-import org.mythtv.android.player.tv.recordings.RecordingDetailsActivity;
+import org.mythtv.android.player.app.recordings.RecordingDetailsActivity;
+//import VideoDetailsActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
