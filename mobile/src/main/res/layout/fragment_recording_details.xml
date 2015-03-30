@@ -92,15 +92,6 @@
                     android:max="100"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/hls_percent_complete"
-                    android:layout_margin="@dimen/margin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true" />
-
             </RelativeLayout>
 
             <TextView

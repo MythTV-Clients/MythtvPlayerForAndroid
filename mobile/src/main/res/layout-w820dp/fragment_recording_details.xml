@@ -72,14 +72,22 @@
                     android:layout_toRightOf="@+id/recording_coverart"
                     android:layout_toEndOf="@+id/recording_coverart" />
 
-                <TextView
-                    android:id="@+id/hls_percent_complete"
-                    android:layout_margin="@dimen/margin"
-                    android:layout_width="wrap_content"
+                <ProgressBar
+                    android:id="@+id/recording_progress"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true" />
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_below="@+id/recording_start_time"
+                    android:layout_toRightOf="@+id/recording_coverart"
+                    android:layout_toEndOf="@+id/recording_coverart"
+                    android:indeterminate="true"
+                    android:minHeight="10dp"
+                    android:maxHeight="10dp"
+                    android:minWidth="100dp"
+                    android:maxWidth="100dp"
+                    android:progress="0"
+                    android:max="100"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
