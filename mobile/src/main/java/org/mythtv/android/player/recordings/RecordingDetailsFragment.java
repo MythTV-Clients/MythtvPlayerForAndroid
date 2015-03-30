@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
@@ -49,8 +50,9 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
     CardView cardView;
     ImageView preview, coverart;
-    TextView showName, episodeName, startTime, description, percentComplete;
+    TextView showName, episodeName, startTime, description;
     Button play, queueHls;
+    ProgressBar progress;
 //    FloatingActionButton fab;
 
     Program mProgram;
@@ -77,7 +79,12 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
             int percent = data.getInt( data.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
             if( percent > 0 ) {
 
-                percentComplete.setText( "HLS: " + String.valueOf( percent ) + "%" );
+                if( percent > 1 ) {
+
+                    progress.setIndeterminate( false );
+                    progress.setProgress( percent );
+
+                }
 
                 if( percent > 2 ) {
                     fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
@@ -85,6 +92,17 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 //                    fab.setVisibility( View.VISIBLE );
                     play.setVisibility( View.VISIBLE );
                 }
+
+                if( percent == 100 ) {
+
+                    progress.setVisibility( View.GONE );
+
+                } else {
+
+                    progress.setVisibility( View.VISIBLE );
+
+                }
+
             }
 
             queueHls.setVisibility( View.INVISIBLE );
@@ -119,13 +137,14 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         episodeName = (TextView) rootView.findViewById( R.id.recording_episode_name );
         startTime = (TextView) rootView.findViewById( R.id.recording_start_time );
         description = (TextView) rootView.findViewById( R.id.recording_description );
-        percentComplete = (TextView) rootView.findViewById( R.id.hls_percent_complete );
 
         queueHls = (Button) rootView.findViewById( R.id.recording_queue_hls );
         queueHls.setOnClickListener( this );
 
         play = (Button) rootView.findViewById( R.id.recording_play );
         play.setOnClickListener( this );
+
+        progress = (ProgressBar) rootView.findViewById( R.id.recording_progress );
 
 //        fab = (FloatingActionButton) rootView.findViewById( R.id.recording_fab );
 //        fab.setOnCheckedChangeListener( this );
@@ -260,9 +279,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
             case R.id.recording_queue_hls :
 
-                new AddRecordingLiveStreamAsyncTask().execute( mProgram );
-                queueHls.setVisibility( View.INVISIBLE );
-                percentComplete.setText( "Queued..." );
+                new AddRecordingLiveStreamAsyncTask().execute(mProgram);
+                queueHls.setVisibility(View.INVISIBLE);
 
                 break;
 
