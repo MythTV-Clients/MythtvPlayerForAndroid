@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Mythtv Player</string>
-    <string name="app_version">v1.0-beta-1</string>
+    <string name="app_version">v1.0</string>
 
     <string name="all_recordings">All Recordings</string>
     <string name="all_videos">All Videos</string>
