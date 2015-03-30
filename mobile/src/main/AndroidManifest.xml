@@ -101,11 +101,6 @@
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
-        <activity
-            android:name=".player.player.SimplePlayerActivity"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
         <!-- MythTV Receivers -->
         <receiver android:name=".library.core.RefreshLiveStreamsReceiver" />
         <receiver android:name=".library.core.RefreshTitleInfosReceiver" />

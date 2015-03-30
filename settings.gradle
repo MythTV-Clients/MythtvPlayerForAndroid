@@ -1,1 +1,1 @@
-include ':core', ':mobile', ':tv', ':ExoPlayer'
+include ':core', ':mobile', ':tv'
