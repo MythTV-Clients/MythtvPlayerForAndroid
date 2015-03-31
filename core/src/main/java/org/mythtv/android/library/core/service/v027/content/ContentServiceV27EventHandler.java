@@ -61,7 +61,7 @@ public class ContentServiceV27EventHandler implements ContentService {
         try {
             mLiveStreamInfoList = mMythTvApiContext.getContentService().getLiveStreamList( event.getFileName(), eTagInfo, ALL_LIVE_STREAM_REQ_ID ) ;
         } catch( RetrofitError e ) {
-            Log.w( TAG, "getLiveStreamInfoList : error - " + e.getMessage() );
+            Log.w( TAG, "getLiveStreamInfoList : error", e );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
@@ -108,6 +108,8 @@ public class ContentServiceV27EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
+            Log.w( TAG, "getLiveStream : error", e );
+
             if( e.getResponse().getStatus() == 304 ) {
 
                 return LiveStreamDetailsEvent.notModified( event.getKey() );
@@ -136,7 +138,7 @@ public class ContentServiceV27EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "addLiveStream : error - " + e.getMessage() );
+            Log.w( TAG, "addLiveStream : error", e );
         }
 
         return LiveStreamAddedEvent.notAdded();
@@ -158,7 +160,7 @@ public class ContentServiceV27EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "addRecordingLiveStream : error - " + e.getMessage() );
+            Log.w( TAG, "addRecordingLiveStream : error", e );
         }
 
         return LiveStreamAddedEvent.notAdded();
@@ -180,7 +182,7 @@ public class ContentServiceV27EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "addVideoLiveStream : error - " + e.getMessage() );
+            Log.w( TAG, "addVideoLiveStream : error", e );
         }
 
         return LiveStreamAddedEvent.notAdded();
@@ -202,7 +204,7 @@ public class ContentServiceV27EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "removeLiveStream : error - " + e.getMessage() );
+            Log.w( TAG, "removeLiveStream : error", e );
 
             LiveStreamRemovedEvent removed = new LiveStreamRemovedEvent( event.getKey() );
             mContentPersistenceService.removeLiveStream( removed );

@@ -47,7 +47,7 @@ public class MythServiceV27EventHandler implements MythService {
             return new HostNameDetailsEvent( new HostNameDetails( mHostName ) );
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "getHostName : HTTP Response " + e.getResponse().getStatus(), e );
+            Log.w( TAG, "getHostName : error", e );
 
             if( 304 == e.getResponse().getStatus() ) {
 

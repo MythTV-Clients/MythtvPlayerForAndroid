@@ -46,7 +46,7 @@ public class VideoServiceV27EventHandler implements VideoService {
             ETagInfo eTagInfo = mMythTvApiContext.getEtag( VIDEO_LIST_REQ_ID, true );
             mVideoList = mMythTvApiContext.getVideoService().getVideoList( event.getDescending(), event.getStartIndex(), event.getCount(), eTagInfo, VIDEO_LIST_REQ_ID );
         } catch( RetrofitError e ) {
-            Log.e( TAG, "Retrofit Error", e );
+            Log.w( TAG, "getVideoList : error", e );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
