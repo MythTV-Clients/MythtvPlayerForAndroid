@@ -87,14 +87,6 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
     }
 
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.i( TAG, "onCreateView : enter" );
-
-        Log.i( TAG, "onCreateView : exit" );
-        return super.onCreateView( inflater, container, savedInstanceState );
-    }
-
-    @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
         super.onActivityCreated( savedInstanceState );
         Log.i( TAG, "onActivityCreated : enter" );

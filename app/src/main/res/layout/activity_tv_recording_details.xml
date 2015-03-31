@@ -3,5 +3,5 @@
     android:id="@+id/content_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recordings.RecordingDetailsActivity"
+    tools:context="org.mythtv.android.player.tv.recordings.RecordingDetailsActivity"
     tools:deviceIds="tv" />

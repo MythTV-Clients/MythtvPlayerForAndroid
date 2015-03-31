@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/videos_browse_fragment"
-    android:name="VideosFragment"
+    android:name="org.mythtv.android.player.tv.videos.VideosFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".videos.VideosActivity"
+    tools:context="org.mythtv.android.player.tv.videos.VideosActivity"
     tools:deviceIds="tv"
     tools:ignore="MergeRootFrame" />
