@@ -46,9 +46,9 @@ public class TvActivity extends Activity {
         Log.d( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
-        setContentView( R.layout.activity_tv);
+        setContentView( R.layout.activity_tv );
 
-        String[] values = new String[] { "Recordings", "Videos", "Photos", "Music", "Settings" };
+        String[] values = new String[] { "Recordings", "Videos", "Settings" };
 
         final ArrayList<String> list = new ArrayList<String>();
         for( int i = 0; i < values.length; ++i ) {
@@ -80,12 +80,6 @@ public class TvActivity extends Activity {
                         break;
 
                     case 2 :
-                        break;
-
-                    case 3 :
-                        break;
-
-                    case 4 :
 
                         Intent prefs = new Intent( TvActivity.this, SettingsActivity.class );
                         startActivity( prefs );
