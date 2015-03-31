@@ -2,8 +2,11 @@ package org.mythtv.android.player.app.recordings;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.transition.Slide;
+import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.Toast;
@@ -35,6 +38,17 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
+
+//        if( Build.VERSION.SDK_INT >= 21 ) {
+//
+//            Slide slide = new Slide();
+//            slide.setDuration( 5000 );
+//            getWindow().setEnterTransition( slide );
+//
+//            getWindow().setReturnTransition( TransitionInflater.from( this ).inflateTransition( R.transition.transition_title ) );
+//
+//        }
+
         super.onCreate( savedInstanceState );
 
         mRecordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentById( R.id.fragment_recordings );

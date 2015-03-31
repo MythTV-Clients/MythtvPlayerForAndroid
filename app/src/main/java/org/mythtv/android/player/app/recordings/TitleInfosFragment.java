@@ -3,7 +3,9 @@ package org.mythtv.android.player.app.recordings;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -133,15 +135,17 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
         Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
         recordings.putExtras( args );
-        startActivity( recordings );
 
-//        String transitionName = getString( R.string.title_info_transition );
-//        ActivityOptionsCompat options =
-//            ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(),
-//                v,   // The view which starts the transition
-//                transitionName    // The transitionName of the view we’re transitioning to
-//            );
-//        ActivityCompat.startActivity( getActivity(), recordings, options.toBundle() );
+        if( Build.VERSION.SDK_INT >= 16 ) {
+
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null );
+            startActivity( recordings, options.toBundle() );
+
+        } else {
+
+            startActivity( recordings );
+
+        }
 
     }
 

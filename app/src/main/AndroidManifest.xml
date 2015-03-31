@@ -6,6 +6,7 @@
     <uses-sdk tools:overrideLibrary="android.support.v17.leanback" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature
@@ -41,7 +42,7 @@
             </intent-filter>
 
             <meta-data android:name="android.app.default_searchable"
-                android:value=".player.search.SearchableActivity" />
+                android:value=".player.app.search.SearchableActivity" />
 
         </activity>
 
@@ -55,7 +56,7 @@
                 android:value=".player.app.recordings.ShowsActivity" />
 
             <meta-data android:name="android.app.default_searchable"
-                android:value=".player.search.SearchableActivity" />
+                android:value=".player.app.search.SearchableActivity" />
 
         </activity>
 
@@ -68,7 +69,7 @@
                 android:value=".player.app.recordings.RecordingsActivity" />
 
             <meta-data android:name="android.app.default_searchable"
-                android:value=".player.search.SearchableActivity" />
+                android:value=".player.app.search.SearchableActivity" />
 
         </activity>
 
@@ -78,7 +79,7 @@
             android:launchMode="singleTask">
 
             <meta-data android:name="android.app.default_searchable"
-                android:value=".player.search.SearchableActivity" />
+                android:value=".player.app.search.SearchableActivity" />
 
         </activity>
 
@@ -91,7 +92,7 @@
                 android:value=".player.app.videos.VideosActivity" />
 
             <meta-data android:name="android.app.default_searchable"
-                android:value=".player.search.SearchableActivity" />
+                android:value=".player.app.search.SearchableActivity" />
 
         </activity>
 
@@ -126,16 +127,43 @@
             android:theme="@style/Theme.Leanback">
 
             <meta-data android:name="android.app.default_searchable"
-                android:value=".player.search.SearchableActivity" />
+                android:value=".player.tv.search.SearchableActivity" />
 
         </activity>
         <activity android:name=".player.tv.recordings.RecordingDetailsActivity"
-            android:theme="@style/Theme.Leanback" />
+            android:theme="@style/Theme.Leanback">
 
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.tv.search.SearchableActivity" />
+
+        </activity>
         <activity android:name=".player.tv.videos.VideosActivity"
-            android:theme="@style/Theme.Leanback" />
+            android:theme="@style/Theme.Leanback">
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.tv.search.SearchableActivity" />
+
+        </activity>
         <activity android:name=".player.tv.videos.VideoDetailsActivity"
-            android:theme="@style/Theme.Leanback" />
+            android:theme="@style/Theme.Leanback">
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.tv.search.SearchableActivity" />
+
+        </activity>
+        <activity
+            android:name=".player.tv.search.SearchableActivity"
+            android:theme="@style/Theme.Leanback"
+            android:launchMode="singleTop">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+        </activity>
 
 
         <!-- Common activities across app and androidTv -->

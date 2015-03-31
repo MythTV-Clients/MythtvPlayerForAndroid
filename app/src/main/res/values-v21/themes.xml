@@ -15,6 +15,7 @@
 
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTransitionBackgroundFadeDuration">5000</item>
 
         <!-- specify enter and exit transitions -->
         <!-- item name="android:windowEnterTransition">@android:transition/explode</item>

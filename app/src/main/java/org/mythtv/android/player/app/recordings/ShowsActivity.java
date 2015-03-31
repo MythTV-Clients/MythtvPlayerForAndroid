@@ -2,8 +2,12 @@ package org.mythtv.android.player.app.recordings;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.support.v7.widget.SearchView;
@@ -31,6 +35,19 @@ public class ShowsActivity extends AbstractBaseActionBarActivity implements Titl
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
+
+//        if( Build.VERSION.SDK_INT >= 21 ) {
+//
+//            TransitionInflater inflater = TransitionInflater.from( this );
+//            Transition transition = inflater.inflateTransition( R.transition.transition_title );
+//            getWindow().setExitTransition( transition );
+//
+//            Slide slide = new Slide();
+//            slide.setDuration( 5000 );
+//            getWindow().setReenterTransition( slide );
+//
+//        }
+
         super.onCreate(savedInstanceState);
 
         mTitleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentById( R.id.fragment_shows );
@@ -58,7 +75,7 @@ public class ShowsActivity extends AbstractBaseActionBarActivity implements Titl
         inflater.inflate( R.menu.main, menu );
 
         SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
-        SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
+        SearchView searchView = (SearchView) menu.findItem( R.id.search_action ).getActionView();
         searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
         searchView.setIconifiedByDefault( false );
 
