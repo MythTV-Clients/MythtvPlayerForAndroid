@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recording_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".recordings.RecordingDetailsFragment">
+
+    <ImageView
+        android:id="@+id/video_coverart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <android.support.v7.widget.CardView
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/outer_margin"
+        android:layout_marginLeft="@dimen/outer_margin"
+        android:layout_marginBottom="@dimen/outer_margin"
+        android:layout_marginRight="@dimen/outer_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/hls_percent_complete"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/video_description"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/video_play"
+            android:layout_margin="@dimen/margin"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Play"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/video_queue_hls"
+            android:layout_margin="@dimen/margin"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Queue HLS" />
+
+    </LinearLayout>
+
+    <!-- FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FloatingActionButton
+            android:id="@+id/video_fab"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:elevation="@dimen/fab_elevation"
+            android:background="@drawable/fab_background"
+            android:stateListAnimator="@animator/fab_anim"
+            android:layout_margin="12dp"
+            android:layout_gravity="right">
+
+            <ImageView
+                android:layout_width="@dimen/fab_icon_size"
+                android:layout_height="@dimen/fab_icon_size"
+                android:src="@drawable/fab_icons"
+                android:layout_gravity="center"
+                android:duplicateParentState="true"/>
+
+        </FloatingActionButton>
+
+    </FrameLayout -->
+
+</LinearLayout>

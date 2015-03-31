@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.mythtv.android">
+
+    <uses-sdk tools:overrideLibrary="android.support.v17.leanback" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <uses-feature android:name="android.software.leanback"
+        android:required="false" />
+
+    <application
+        android:name=".library.core.MainApplication"
+        android:allowBackup="true"
+        android:banner="@drawable/mythtv_logo"
+        android:icon="@drawable/ic_mythtv"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+
+        <!-- App Activities -->
+        <activity
+            android:name=".player.app.recordings.ShowsActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.search.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".player.app.recordings.RecordingsActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".player.app.recordings.ShowsActivity" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".player.app.recordings.ShowsActivity" />
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.search.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".player.app.recordings.RecordingDetailsActivity"
+            android:parentActivityName=".player.app.recordings.RecordingsActivity" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".player.app.recordings.RecordingsActivity" />
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.search.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".player.app.videos.VideosActivity"
+            android:label="@string/drawer_item_watch_videos"
+            android:launchMode="singleTask">
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.search.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".player.app.videos.VideoDetailsActivity"
+            android:parentActivityName=".player.app.videos.VideosActivity" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".player.app.videos.VideosActivity" />
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.search.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".player.app.search.SearchableActivity"
+            android:launchMode="singleTop">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+        </activity>
+
+
+        <!-- AndroidTv activities -->
+        <activity android:name=".player.tv.TvActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Leanback">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".player.tv.recordings.RecordingsActivity"
+            android:theme="@style/Theme.Leanback">
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.search.SearchableActivity" />
+
+        </activity>
+        <activity android:name=".player.tv.recordings.RecordingDetailsActivity"
+            android:theme="@style/Theme.Leanback" />
+
+        <activity android:name=".player.tv.videos.VideosActivity"
+            android:theme="@style/Theme.Leanback" />
+        <activity android:name=".player.tv.videos.VideoDetailsActivity"
+            android:theme="@style/Theme.Leanback" />
+
+
+        <!-- Common activities across app and androidTv -->
+        <activity
+            android:name=".library.ui.settings.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+
+        <activity
+            android:name=".player.common.PlayerActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+
+        <!-- MythTV Receivers -->
+        <receiver android:name=".library.core.RefreshLiveStreamsReceiver" />
+        <receiver android:name=".library.core.RefreshTitleInfosReceiver" />
+        <receiver android:name=".library.core.RefreshRecordedProgramsReceiver" />
+        <receiver android:name=".library.core.NetworkConnectionBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+
+        <!-- MythTV Providers -->
+        <provider
+            android:name=".library.persistence.repository.MythtvProvider"
+            android:authorities="org.mythtv.android.provider"
+            android:enabled="true"
+            android:exported="true"
+            android:syncable="false" />
+
+        <provider
+            android:name=".library.persistence.repository.MythtvSearchSuggestionProvider"
+            android:authorities="org.mythtv.android.library.persistence.repository.MythtvSearchSuggestionProvider" />
+
+    </application>
+
+</manifest>

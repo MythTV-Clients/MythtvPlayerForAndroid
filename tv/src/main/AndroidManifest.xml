@@ -19,11 +19,12 @@
     <application
         android:name=".library.core.MainApplication"
         android:allowBackup="false"
+        android:banner="@drawable/mythtv_logo"
         android:icon="@drawable/ic_mythtv"
         android:label="@string/app_name"
         android:theme="@style/Theme.Leanback">
 
-        <activity android:name="org.mythtv.android.player.MainActivity"
+        <activity android:name=".player.tv.TvActivity"
             android:logo="@drawable/mythtv_logo"
             android:screenOrientation="landscape"
             android:label="@string/app_name">
@@ -36,16 +37,16 @@
         </activity>
 
         <activity
-            android:name=".player.recordings.RecordingsActivity">
+            android:name=".player.tv.recordings.RecordingsActivity">
 
             <meta-data android:name="android.app.default_searchable"
                 android:value=".player.search.SearchableActivity" />
 
         </activity>
-        <activity android:name=".player.recordings.RecordingDetailsActivity" />
+        <activity android:name=".player.tv.recordings.RecordingDetailsActivity" />
 
-        <activity android:name=".player.videos.VideosActivity" />
-        <activity android:name=".player.videos.VideoDetailsActivity" />
+        <activity android:name=".player.tv.videos.VideosActivity" />
+        <activity android:name=".player.tv.videos.VideoDetailsActivity" />
 
         <activity
             android:name=".library.ui.settings.SettingsActivity"
@@ -53,7 +54,7 @@
         </activity>
 
         <activity
-            android:name=".player.search.SearchableActivity"
+            android:name=".player.tv.search.SearchableActivity"
             android:launchMode="singleTop">
 
             <intent-filter>
