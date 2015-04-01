@@ -1,0 +1,24 @@
+Take the screenshot on any device.
+
+List it's filename (if it wasn't renamed):
+
+    adb {-s <device>} shell ls mnt/sdcard/Pictures/Screenshots
+
+Copy the file to the proper directory (wild cards don't work):
+
+    adb {-s <device>} pull -a -p mnt/sdcard/Pictures/Screenshots/<from the above> \
+        ~/AndroidstudioProjects/MythtvPlayerForAndroid/images/store_listing/screenshots/<device name, lower case>/<name, see next...>
+
+For consistancy, the names should be:
+
+    Navigation_Drawer.jpg
+
+    Watch_Recordings.jpg
+
+        WR_Title.jpg
+        WR_Episode.jpg
+
+    Watch_Videos.jpg
+        WV_Title.jpg
+        WV_Episode.jpg
+
