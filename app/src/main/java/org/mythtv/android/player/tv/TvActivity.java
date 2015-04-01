@@ -9,10 +9,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mythtv.android.R;
@@ -24,6 +29,8 @@ import org.mythtv.android.player.tv.recordings.RecordingsActivity;
 import org.mythtv.android.player.tv.videos.VideosActivity;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.Inflater;
 
 public class TvActivity extends Activity {
 
@@ -48,13 +55,8 @@ public class TvActivity extends Activity {
 
         setContentView( R.layout.activity_tv );
 
-        String[] values = new String[] { "Recordings", "Videos", "Settings" };
-
-        final ArrayList<String> list = new ArrayList<String>();
-        for( int i = 0; i < values.length; ++i ) {
-            list.add( values[ i ] );
-        }
-        final ArrayAdapter adapter = new ArrayAdapter( this, android.R.layout.simple_list_item_1, list );
+//        final ArrayAdapter adapter = new ArrayAdapter( this, android.R.layout.simple_list_item_1, list );
+        final CategoryAdapter adapter = new CategoryAdapter( this );
 
         GridView gridview = (GridView) findViewById( R.id.gridview );
         gridview.setAdapter( adapter );
@@ -191,6 +193,125 @@ public class TvActivity extends Activity {
 
         Log.d( TAG, "onSaveInstanceState : exit" );
         super.onSaveInstanceState( outState );
+    }
+
+    private class Category {
+
+        String title;
+        Integer drawable;
+
+        Category() { }
+
+        Category( String title, Integer drawable ) {
+
+            this.title = title;
+            this.drawable = drawable;
+
+        }
+
+        public String getTitle() {
+
+            return title;
+        }
+
+        public void setTitle( String title ) {
+
+            this.title = title;
+
+        }
+
+        public Integer getDrawable() {
+
+            return drawable;
+        }
+
+        public void setDrawable( Integer drawable ) {
+
+            this.drawable = drawable;
+
+        }
+
+    }
+
+    private class CategoryAdapter extends BaseAdapter {
+
+        private final Context mContext;
+        private final LayoutInflater mInflater;
+
+        String[] titles = new String[] {
+            getResources().getString( R.string.drawer_item_watch_recordings ),
+            getResources().getString( R.string.drawer_item_watch_videos ),
+            getResources().getString( R.string.drawer_item_preferences )
+        };
+
+        Integer[] categories = new Integer[] {
+            R.drawable.tv_watch_recordings,
+            R.drawable.tv_watch_videos,
+            R.drawable.tv_watch_recordings
+        };
+
+        public CategoryAdapter( Context context ) {
+
+            mContext = context;
+            mInflater = getLayoutInflater();
+        }
+
+        @Override
+        public int getCount() {
+
+            return titles.length;
+        }
+
+        @Override
+        public Category getItem( int position ) {
+
+            return new Category( titles[ position ], categories[ position ] );
+        }
+
+        @Override
+        public long getItemId( int position ) {
+
+            return position;
+        }
+
+        @Override
+        public View getView( int position, View convertView, ViewGroup parent ) {
+
+            Category category = getItem( position );
+
+            ViewHolder holder = null;
+
+            if( null == convertView ) {
+
+                holder = new ViewHolder();
+
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                convertView = inflater.inflate( R.layout.tv_item, parent, false );
+
+                holder.title = (TextView) convertView.findViewById( R.id.tv_item_title );
+                holder.category = (ImageView) convertView.findViewById( R.id.tv_item_category );
+
+                convertView.setTag( holder );
+
+            } else {
+
+                holder = (ViewHolder) convertView.getTag();
+
+            }
+
+            holder.title.setText( category.getTitle() );
+            holder.category.setImageResource( category.getDrawable() );
+
+            return convertView;
+        }
+
+    }
+
+    static class ViewHolder {
+
+        TextView title;
+        ImageView category;
+
     }
 
     private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
