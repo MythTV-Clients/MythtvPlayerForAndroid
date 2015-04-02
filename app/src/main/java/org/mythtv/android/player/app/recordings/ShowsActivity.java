@@ -2,12 +2,8 @@ package org.mythtv.android.player.app.recordings;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.transition.Slide;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.support.v7.widget.SearchView;
@@ -15,7 +11,7 @@ import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.library.ui.data.TitleInfoDataConsumer;
+import org.mythtv.android.player.common.ui.data.TitleInfoDataConsumer;
 import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
 import org.mythtv.android.player.app.NavigationDrawerFragment;
 

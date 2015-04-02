@@ -1,4 +1,4 @@
-package org.mythtv.android.library.ui.loaders;
+package org.mythtv.android.player.common.ui.loaders;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -12,7 +12,6 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
-import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.SearchRecordedProgramsEvent;
 import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 

@@ -1,4 +1,4 @@
-package org.mythtv.android.library.ui.loaders;
+package org.mythtv.android.player.common.ui.loaders;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;

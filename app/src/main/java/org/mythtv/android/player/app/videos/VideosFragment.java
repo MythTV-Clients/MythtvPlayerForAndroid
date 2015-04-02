@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.ui.adapters.VideoItemAdapter;
+import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 

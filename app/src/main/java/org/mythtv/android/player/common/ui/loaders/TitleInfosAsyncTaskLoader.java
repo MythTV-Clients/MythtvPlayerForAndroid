@@ -1,10 +1,7 @@
-package org.mythtv.android.library.ui.loaders;
+package org.mythtv.android.player.common.ui.loaders;
 
 import android.content.AsyncTaskLoader;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;

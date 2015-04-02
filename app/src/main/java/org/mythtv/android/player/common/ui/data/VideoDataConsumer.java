@@ -1,6 +1,5 @@
-package org.mythtv.android.library.ui.data;
+package org.mythtv.android.player.common.ui.data;
 
-import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.core.domain.video.Video;
 
 import java.util.List;

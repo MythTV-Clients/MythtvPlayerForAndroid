@@ -1,4 +1,4 @@
-package org.mythtv.android.library.ui.data;
+package org.mythtv.android.player.common.ui.data;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
-import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
 import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;

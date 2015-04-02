@@ -1,4 +1,4 @@
-package org.mythtv.android.library.ui.data;
+package org.mythtv.android.player.common.ui.data;
 
 import android.app.Activity;
 import android.app.Fragment;

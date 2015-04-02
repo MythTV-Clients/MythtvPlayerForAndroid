@@ -33,7 +33,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
-import org.mythtv.android.library.ui.transform.PaletteTransformation;
+import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
 import org.mythtv.android.player.common.PlayerActivity;
 import org.mythtv.android.R;
 //import FloatingActionButton;

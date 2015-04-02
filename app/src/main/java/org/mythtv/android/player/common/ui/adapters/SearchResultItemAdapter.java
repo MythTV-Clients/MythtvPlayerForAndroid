@@ -1,8 +1,7 @@
-package org.mythtv.android.library.ui.adapters;
+package org.mythtv.android.player.common.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,10 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTimeZone;
-import org.mythtv.android.library.R;
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.ui.animation.AnimationUtils;
+import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
 import java.util.List;
 

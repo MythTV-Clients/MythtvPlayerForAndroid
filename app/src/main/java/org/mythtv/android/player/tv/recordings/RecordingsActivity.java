@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.ui.data.RecordingDataConsumer;
-import org.mythtv.android.library.ui.data.RecordingsDataFragment;
+import org.mythtv.android.player.common.ui.data.RecordingDataConsumer;
+import org.mythtv.android.player.common.ui.data.RecordingsDataFragment;
 import org.mythtv.android.player.tv.search.SearchableActivity;
 
 import java.util.List;

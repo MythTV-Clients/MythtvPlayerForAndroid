@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.ui.loaders.SearchProgramsAsyncTaskLoader;
+import org.mythtv.android.player.common.ui.loaders.SearchProgramsAsyncTaskLoader;
 import org.mythtv.android.player.tv.recordings.RecordingCardPresenter;
 import org.mythtv.android.player.tv.recordings.RecordingDetailsActivity;
 import org.mythtv.android.player.tv.recordings.RecordingDetailsFragment;

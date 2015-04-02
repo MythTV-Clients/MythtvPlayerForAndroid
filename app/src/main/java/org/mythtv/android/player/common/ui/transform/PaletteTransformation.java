@@ -1,4 +1,4 @@
-package org.mythtv.android.library.ui.transform;
+package org.mythtv.android.player.common.ui.transform;
 
 import android.graphics.Bitmap;
 import android.support.v7.graphics.Palette;

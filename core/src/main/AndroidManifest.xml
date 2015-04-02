@@ -4,14 +4,6 @@
 
     <application>
 
-        <!-- MythTV Providers -->
-        <provider
-            android:name=".persistence.repository.MythtvProvider"
-            android:authorities="org.mythtv.android.provider"
-            android:enabled="true"
-            android:exported="true"
-            android:syncable="false"/>
-
     </application>
 
 </manifest>

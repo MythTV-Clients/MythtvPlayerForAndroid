@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
-import org.mythtv.android.library.ui.adapters.ProgramItemAdapter;
+import org.mythtv.android.player.common.ui.adapters.ProgramItemAdapter;
 import org.mythtv.android.R;
-import org.mythtv.android.library.ui.loaders.ProgramsAsyncTaskLoader;
+import org.mythtv.android.player.common.ui.loaders.ProgramsAsyncTaskLoader;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 
 import java.util.List;

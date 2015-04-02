@@ -49,7 +49,7 @@
         <activity android:name=".player.tv.videos.VideoDetailsActivity" />
 
         <activity
-            android:name=".library.ui.settings.SettingsActivity"
+            android:name=".player.common.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
 

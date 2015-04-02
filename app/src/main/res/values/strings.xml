@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_name">Mythtv Player</string>
+    <string name="app_version">v1.1</string>
+
+    <string name="all_recordings">All Recordings</string>
+    <string name="all_videos">All Videos</string>
+
+    <string name="search_title">Search</string>
+    <string name="search_results">Search Results</string>
+
+    <string name="connecting">Connecting to master backend</string>
+    <string name="connecting_failed">Connecting to master backend failed!</string>
+
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="init_text">00:00</string>
+    <string name="play_pause_description">Play Pause Button</string>
+    <string name="loading">Loading…</string>
+    <string name="no_video_found">No video was found</string>
+    <string name="recording">Recording</string>
+    <string name="video">Video</string>
+    <string name="should_start">shouldStart</string>
+    <string name="start_position">startPosition</string>
+    <string name="video_error_media_load_timeout">Media loading timed out</string>
+    <string name="video_error_server_unaccessible">Media server was not reachable</string>
+    <string name="video_error_unknown_error">Failed to load video</string>
+    <string name="oops">Oops</string>
+
+    <string name="failed">Playback failed</string>
+
+    <string name="not_connected">Master Backend connection failed!.\nCheck your network connection or the master backend settings.</string>
+
+    <string name="title_info_transition">title_info_transition</string>
+    <string name="recording_transition">recording_transition</string>
+    <string name="video_transition">title_info_transition</string>
+    <string name="search_hint">Show, Movie, Actor, Character, Channel</string>
+    <string name="ready_to_stream">Ready to Stream</string>
+
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
@@ -29,6 +69,5 @@
     <string name="queued">HLS Queued</string>
     <string name="queued_notice">HLS Transcode in progress, please wait.</string>
     <string name="watch_video">Watch video</string>
-    <string name="search_results">Search Results</string>
 
 </resources>

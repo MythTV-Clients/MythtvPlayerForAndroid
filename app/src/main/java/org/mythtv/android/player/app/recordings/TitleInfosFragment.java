@@ -21,9 +21,9 @@ import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
-import org.mythtv.android.library.ui.adapters.TitleInfoItemAdapter;
+import org.mythtv.android.player.common.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.R;
-import org.mythtv.android.library.ui.loaders.TitleInfosAsyncTaskLoader;
+import org.mythtv.android.player.common.ui.loaders.TitleInfosAsyncTaskLoader;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 
 import java.util.List;

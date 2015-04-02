@@ -33,7 +33,7 @@ import com.squareup.picasso.Target;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.ui.loaders.ProgramsAsyncTaskLoader;
+import org.mythtv.android.player.common.ui.loaders.ProgramsAsyncTaskLoader;
 import org.mythtv.android.player.app.settings.SettingsActivity;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 import org.mythtv.android.player.tv.search.SearchableActivity;

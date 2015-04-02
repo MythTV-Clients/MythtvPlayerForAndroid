@@ -1,4 +1,4 @@
-package org.mythtv.android.library.ui.utils;
+package org.mythtv.android.player.common.ui.utils;
 
 import android.content.Context;
 import android.widget.ImageView;

@@ -1,9 +1,8 @@
-package org.mythtv.android.library.ui.animation;
+package org.mythtv.android.player.common.ui.animation;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.support.v7.widget.RecyclerView;
-import android.view.animation.AnticipateInterpolator;
 
 /**
  * Created by dmfrey on 3/9/15.

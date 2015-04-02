@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.ui.adapters.SearchResultItemAdapter;
-import org.mythtv.android.library.ui.loaders.SearchProgramsAsyncTaskLoader;
+import org.mythtv.android.player.common.ui.adapters.SearchResultItemAdapter;
+import org.mythtv.android.player.common.ui.loaders.SearchProgramsAsyncTaskLoader;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 import org.mythtv.android.player.app.recordings.RecordingDetailsActivity;
 import org.mythtv.android.player.app.recordings.RecordingDetailsFragment;

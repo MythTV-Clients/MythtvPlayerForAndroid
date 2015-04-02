@@ -1,4 +1,4 @@
-package org.mythtv.android.library.ui.adapters;
+package org.mythtv.android.player.common.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.mythtv.android.library.R;
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.ui.animation.AnimationUtils;
+import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
 import java.util.List;
 

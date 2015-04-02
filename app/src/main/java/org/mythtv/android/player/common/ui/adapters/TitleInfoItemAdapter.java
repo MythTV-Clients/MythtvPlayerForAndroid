@@ -1,4 +1,4 @@
-package org.mythtv.android.library.ui.adapters;
+package org.mythtv.android.player.common.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.mythtv.android.library.R;
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.library.ui.animation.AnimationUtils;
+import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
 import java.util.List;
 

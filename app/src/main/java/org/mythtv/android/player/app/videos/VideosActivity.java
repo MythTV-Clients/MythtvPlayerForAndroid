@@ -8,8 +8,8 @@ import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.ui.data.VideoDataConsumer;
-import org.mythtv.android.library.ui.data.VideosDataFragment;
+import org.mythtv.android.player.common.ui.data.VideoDataConsumer;
+import org.mythtv.android.player.common.ui.data.VideosDataFragment;
 import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
 import org.mythtv.android.player.app.NavigationDrawerFragment;
 
