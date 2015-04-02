@@ -22,7 +22,6 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -35,7 +34,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.ui.loaders.ProgramsAsyncTaskLoader;
-import org.mythtv.android.library.ui.settings.SettingsActivity;
+import org.mythtv.android.player.app.settings.SettingsActivity;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 import org.mythtv.android.player.tv.search.SearchableActivity;
 

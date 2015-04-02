@@ -9,7 +9,7 @@ import android.util.Log;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.ui.settings.SettingsActivity;
+import org.mythtv.android.player.app.settings.SettingsActivity;
 
 public class VideosActivity extends Activity {
 
@@ -29,7 +29,7 @@ public class VideosActivity extends Activity {
             Log.d( TAG, "onCreate : backend NOT connected" );
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            String backendUrlPref = sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_URL, "" );
+            String backendUrlPref = sharedPref.getString( MainApplication.KEY_PREF_BACKEND_URL, "" );
 
             if( "".equals( backendUrlPref ) || getResources().getString( R.string.pref_backend_url ).equals( backendUrlPref ) ) {
                 Log.d( TAG, "onCreate : backend not set, show settings" );

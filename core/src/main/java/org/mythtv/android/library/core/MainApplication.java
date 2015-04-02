@@ -26,11 +26,7 @@ import org.mythtv.android.library.core.service.v028.myth.MythServiceV28EventHand
 import org.mythtv.android.library.core.service.v028.video.VideoServiceV28EventHandler;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
 import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
-import org.mythtv.android.library.events.DeleteEvent;
 import org.mythtv.android.library.events.content.RequestAllLiveStreamInfosEvent;
-import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
-import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
-import org.mythtv.android.library.ui.settings.SettingsActivity;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
 import org.mythtv.services.api.ServerVersionQuery;
@@ -45,6 +41,8 @@ import retrofit.RestAdapter;
  */
 public class MainApplication extends Application {
 
+    public static final String KEY_PREF_BACKEND_URL = "backend_url";
+    public static final String KEY_PREF_BACKEND_PORT = "backend_port";
     private static final String TAG = MainApplication.class.getSimpleName();
 
     public static final String ACTION_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_CONNECTED";
@@ -184,8 +182,8 @@ public class MainApplication extends Application {
             Log.v( TAG, "doInBackground : enter" );
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( MainApplication.this );
-            mBackendUrl = sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_URL, "" );
-            mBackendPort = Integer.parseInt( sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_PORT, "6544" ) );
+            mBackendUrl = sharedPref.getString( KEY_PREF_BACKEND_URL, "" );
+            mBackendPort = Integer.parseInt( sharedPref.getString( KEY_PREF_BACKEND_PORT, "6544" ) );
 
             Log.v( TAG, "url=" + getMasterBackendUrl() );
 

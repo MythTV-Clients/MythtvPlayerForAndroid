@@ -2,17 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="@dimen/outer_margin" >
+    android:orientation="vertical"
+    android:padding="@dimen/outer_margin">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.Leanback.Title"
+        android:layout_marginBottom="@dimen/margin" />
 
     <GridView
         android:id="@+id/gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnWidth="400dp"
+        android:layout_height="wrap_content"
+        android:columnWidth="300dp"
         android:numColumns="3"
-        android:verticalSpacing="100dp"
-        android:horizontalSpacing="100dp"
+        android:verticalSpacing="25dp"
+        android:horizontalSpacing="25dp"
         android:stretchMode="columnWidth"
         android:gravity="center"
 />

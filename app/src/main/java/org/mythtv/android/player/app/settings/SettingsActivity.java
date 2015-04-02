@@ -1,4 +1,4 @@
-package org.mythtv.android.library.ui.settings;
+package org.mythtv.android.player.app.settings;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
-import org.mythtv.android.library.R;
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 
 import java.util.List;
@@ -28,9 +28,6 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity {
-
-    public static final String KEY_PREF_BACKEND_URL = "backend_url";
-    public static final String KEY_PREF_BACKEND_PORT = "backend_port";
 
     /**
      * Determines whether to always show the simplified settings UI, where

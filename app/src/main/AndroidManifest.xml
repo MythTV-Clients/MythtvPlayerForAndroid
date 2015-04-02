@@ -109,6 +109,10 @@
 
         </activity>
 
+        <activity
+            android:name=".player.app.settings.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
 
         <!-- AndroidTv activities -->
         <activity android:name=".player.tv.TvActivity"
@@ -165,13 +169,15 @@
 
         </activity>
 
-
-        <!-- Common activities across app and androidTv -->
         <activity
-            android:name=".library.ui.settings.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:name=".player.tv.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/Theme.Leanback"
+            >
         </activity>
 
+
+        <!-- Common activities across app and androidTv -->
         <activity
             android:name=".player.common.PlayerActivity"
             android:screenOrientation="landscape"

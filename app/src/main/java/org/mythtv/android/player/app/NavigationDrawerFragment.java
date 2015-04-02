@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.mythtv.android.R;
-import org.mythtv.android.library.ui.settings.SettingsActivity;
+import org.mythtv.android.player.app.settings.SettingsActivity;
 import org.mythtv.android.player.app.recordings.ShowsActivity;
 import org.mythtv.android.player.app.videos.VideosActivity;
 

@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -24,13 +23,9 @@ import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.library.ui.settings.SettingsActivity;
+import org.mythtv.android.player.tv.settings.SettingsActivity;
 import org.mythtv.android.player.tv.recordings.RecordingsActivity;
 import org.mythtv.android.player.tv.videos.VideosActivity;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.Inflater;
 
 public class TvActivity extends Activity {
 
@@ -115,7 +110,7 @@ public class TvActivity extends Activity {
             Log.d( TAG, "onResume : backend NOT connected" );
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( this );
-            String backendUrlPref = sharedPref.getString( SettingsActivity.KEY_PREF_BACKEND_URL, "" );
+            String backendUrlPref = sharedPref.getString( MainApplication.KEY_PREF_BACKEND_URL, "" );
 
             if( "".equals( backendUrlPref ) || getResources().getString( R.string.pref_backend_url ).equals( backendUrlPref ) ) {
                 Log.d( TAG, "onResume : backend not set, show settings" );
@@ -247,7 +242,7 @@ public class TvActivity extends Activity {
         Integer[] categories = new Integer[] {
             R.drawable.tv_watch_recordings,
             R.drawable.tv_watch_videos,
-            R.drawable.tv_watch_recordings
+            R.drawable.tv_setting
         };
 
         public CategoryAdapter( Context context ) {
