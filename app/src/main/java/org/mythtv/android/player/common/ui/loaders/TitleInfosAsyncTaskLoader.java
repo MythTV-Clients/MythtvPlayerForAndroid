@@ -9,13 +9,18 @@ import android.os.Message;
 import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
+import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.ProgramDetails;
+import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,16 +48,26 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
             if( ( (MainApplication) getContext().getApplicationContext() ).isConnected() ) {
 
-                AllTitleInfosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getDvrService().requestAllTitleInfos( new RequestAllTitleInfosEvent() );
+                AllProgramsEvent event = ( (MainApplication) getContext().getApplicationContext() ).getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( null, null ) );
                 if( event.isEntityFound() ) {
                     Log.v( TAG, "loadInBackground : titleInfos loaded from db" );
 
-                    for( TitleInfoDetails details : event.getDetails() ) {
+                    for( ProgramDetails details : event.getDetails() ) {
                         Log.v( TAG, "loadInBackground : titleInfo iteration" );
 
-                        titleInfos.add( TitleInfo.fromDetails( details ) );
+                        Program program = Program.fromDetails( details );
+
+                        TitleInfo titleInfo = new TitleInfo();
+                        titleInfo.setTitle( program.getTitle() );
+                        titleInfo.setInetref( program.getInetref() );
+
+                        if( !titleInfos.contains( titleInfo ) ) {
+                            titleInfos.add( titleInfo );
+                        }
 
                     }
+
+                    Collections.sort( titleInfos );
 
                 }
 
@@ -179,7 +194,7 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
         }
 
-        Log.v( TAG, "onReset : exit" );
+        Log.v(TAG, "onReset : exit");
     }
 
     @Override

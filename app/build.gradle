@@ -9,8 +9,9 @@ android {
         applicationId "org.mythtv.android"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 3
-        versionName "1.1"
+        versionCode 4
+        versionName "1.1.1"
+        archivesBaseName = applicationId + "-" + versionName
     }
 
     if( project.hasProperty( "MythtvPlayer.properties" )

@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class Program implements Serializable {
 
+    private long id;
     private DateTime startTime;
     private DateTime endTime;
     private String title;
@@ -45,7 +46,14 @@ public class Program implements Serializable {
     private List<ArtworkInfo> artworkInfos;
     private List<CastMember> castMembers;
 
-    public Program() {
+    public Program() { }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId( long id ) {
+        this.id = id;
     }
 
     public DateTime getStartTime() {
@@ -275,7 +283,8 @@ public class Program implements Serializable {
     @Override
     public String toString() {
         return "Program{" +
-                "startTime=" + startTime +
+                "id=" + id +
+                ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", title='" + title + '\'' +
                 ", subTitle='" + subTitle + '\'' +
@@ -309,6 +318,7 @@ public class Program implements Serializable {
     public ProgramDetails toDetails() {
 
         ProgramDetails details = new ProgramDetails();
+        details.setId(id);
         details.setStartTime(startTime);
         details.setEndTime(endTime);
         details.setTitle(title);
@@ -364,6 +374,7 @@ public class Program implements Serializable {
     public static Program fromDetails( ProgramDetails details ) {
 
         Program program = new Program();
+        program.setId( details.getId() );
         program.setStartTime( details.getStartTime() );
         program.setEndTime( details.getEndTime() );
         program.setTitle( details.getTitle() );

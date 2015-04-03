@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class ProgramDetails {
 
+    private long id;
     private DateTime startTime;
     private DateTime endTime;
     private String title;
@@ -40,7 +41,14 @@ public class ProgramDetails {
     private List<ArtworkInfoDetails> artworkInfos;
     private List<CastMemberDetails> castMembers;
 
-    public ProgramDetails() {
+    public ProgramDetails() { }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId( long id ) {
+        this.id = id;
     }
 
     public DateTime getStartTime() {

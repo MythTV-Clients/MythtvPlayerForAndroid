@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class RecordingsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Program>>, ProgramItemAdapter.ProgramItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshRecordedProgramsTask.OnRefreshRecordedProgramTaskListener {
 
+    private static final String PROGRAM_TITLE_KEY = "program_title";
     private static final String PROGRAM_INETREF_KEY = "program_inetref";
 
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -41,6 +42,12 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
     public Loader<List<Program>> onCreateLoader( int id, Bundle args ) {
 
         ProgramsAsyncTaskLoader loader = new ProgramsAsyncTaskLoader( getActivity() );
+
+        if( args.containsKey( PROGRAM_TITLE_KEY ) ) {
+
+            loader.setTitle(args.getString(PROGRAM_TITLE_KEY));
+
+        }
 
         if( args.containsKey( PROGRAM_INETREF_KEY ) ) {
 
@@ -91,6 +98,9 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
         mInetref = inetref;
 
         Bundle args = new Bundle();
+        if( null != title ) {
+            args.putString( PROGRAM_TITLE_KEY, title );
+        }
         if( null != inetref ) {
             args.putString( PROGRAM_INETREF_KEY, inetref );
         }

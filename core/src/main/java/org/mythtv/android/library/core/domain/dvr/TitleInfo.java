@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by dmfrey on 12/7/14.
  */
-public class TitleInfo implements Serializable {
+public class TitleInfo implements Serializable, Comparable<TitleInfo> {
 
     private long id;
     private String title;
@@ -47,6 +47,51 @@ public class TitleInfo implements Serializable {
         this.inetref = inetref;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TitleInfo titleInfo = (TitleInfo) o;
+
+        if (!title.equals(titleInfo.title)) return false;
+        return !(inetref != null ? !inetref.equals(titleInfo.inetref) : titleInfo.inetref != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = title.hashCode();
+        result = 31 * result + (inetref != null ? inetref.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public int compareTo( TitleInfo another ) {
+
+        final int BEFORE = -1;
+        final int EQUAL = 0;
+        final int AFTER = 1;
+
+        if( this == another ) return EQUAL;
+
+        String thisTitle = removeArticles( this.title );
+        String thatTitle = removeArticles( another.title );
+
+        int comparison = thisTitle.compareTo( thatTitle );
+        if( comparison != EQUAL ) return comparison;
+
+        String thisInetref = ( null != inetref ? inetref : "" );
+        String thatInetref = ( null != another.inetref ? another.inetref : "" );
+
+        comparison = thisInetref.compareTo( thatInetref );
+        if( comparison != EQUAL ) return comparison;
+
+        assert this.equals( another ) : "compareTo inconsistent with equals.";
+
+        return EQUAL;
+    }
+
     public TitleInfoDetails toDetails() {
 
         TitleInfoDetails details = new TitleInfoDetails();
@@ -65,6 +110,30 @@ public class TitleInfo implements Serializable {
         titleInfo.setInetref( details.getInetref() );
 
         return titleInfo;
+    }
+
+    private String removeArticles( String value ) {
+
+        if( null == value ) {
+
+            return value;
+        }
+
+        String ret = value;
+
+        if( value.toLowerCase().startsWith( "the " ) ) {
+            ret = ret.substring( "the ".length() );
+        }
+
+        if( value.toLowerCase().startsWith("an ") ) {
+            ret = ret.substring( "an ".length() );
+        }
+
+        if( value.toLowerCase().startsWith( "a " ) ) {
+            ret = ret.substring( "a ".length() );
+        }
+
+        return ret;
     }
 
 }
