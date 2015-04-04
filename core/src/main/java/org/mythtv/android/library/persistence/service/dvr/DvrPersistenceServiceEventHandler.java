@@ -67,7 +67,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         List<Program> programs = new ArrayList<>();
 
         String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP };
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " = -3";
 
         List<String> selectionArgs = new ArrayList<>();
         selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
