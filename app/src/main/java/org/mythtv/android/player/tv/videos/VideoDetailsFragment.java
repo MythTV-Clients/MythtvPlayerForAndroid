@@ -29,7 +29,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
-import org.mythtv.android.player.common.PlayerActivity;
+import org.mythtv.android.player.tv.player.PlayerActivity;
 
 import java.io.IOException;
 import java.net.URI;
