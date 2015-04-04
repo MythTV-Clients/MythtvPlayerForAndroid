@@ -60,7 +60,7 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
             mAdapter = new TitleInfoItemAdapter( titleInfos, this );
             mRecyclerView.setAdapter( mAdapter );
 
-            AllProgramsEvent programs = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( null ) );
+            AllProgramsEvent programs = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( null, null ) );
             mAllRecordingsCount.setText( String.valueOf( programs.getDetails().size() ) );
 
             mHeader.setVisibility( View.VISIBLE );

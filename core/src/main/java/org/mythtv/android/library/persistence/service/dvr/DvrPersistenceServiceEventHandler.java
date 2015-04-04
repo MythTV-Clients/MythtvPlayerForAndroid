@@ -67,19 +67,35 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         List<Program> programs = new ArrayList<>();
 
         String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP };
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
-        String[] selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name() };
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " = -3";
+
+        List<String> selectionArgs = new ArrayList<>();
+        selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
+
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
 
-        if( null != event.getInetref() && !"".equals( event.getInetref() )  ) {
-            selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_PROGRAM_INETREF + " = ?";
-            selectionArgs = new String[] { ProgramConstants.ProgramType.RECORDED.name(), event.getInetref() };
+        if( null != event.getTitle() && !"".equals( event.getTitle() )  ) {
+            selection += " AND upper(" + ProgramConstants.FIELD_PROGRAM_TITLE + ") = ?";
+            selectionArgs.add( event.getTitle().toUpperCase() );
         }
 
-        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, sort );
+        if( null != event.getInetref() && !"".equals( event.getInetref() )  ) {
+            selection += " AND " + ProgramConstants.FIELD_PROGRAM_INETREF + " = ?";
+            selectionArgs.add( event.getInetref() );
+        } else {
+
+            if( null != event.getTitle() && !"".equals( event.getTitle() )  ) {
+                selection += " AND (" + ProgramConstants.FIELD_PROGRAM_INETREF + " IS NULL OR "  + ProgramConstants.FIELD_PROGRAM_INETREF + " = ? )";
+                selectionArgs.add( "" );
+            }
+
+        }
+
+        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
         while( cursor.moveToNext() ) {
 
             Program program = new Program();
+            program.setId( cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) ) );
             program.setStartTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_START_TIME ) ) ) );
             program.setTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_TITLE ) ) );
             program.setSubTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_SUB_TITLE ) ) );
@@ -124,7 +140,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         List<Program> programs = new ArrayList<>();
 
-        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP };
+        String[] projection = new String[]{ ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP };
         String selection = ProgramConstants.TABLE_NAME + " MATCH ?";
         String[] selectionArgs = new String[] { event.getQuery() + "*" };
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";

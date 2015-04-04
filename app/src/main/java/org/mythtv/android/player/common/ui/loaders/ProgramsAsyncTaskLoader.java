@@ -28,6 +28,7 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
     private ProgramsContentProviderObserver mObserver;
     private List<Program> mPrograms;
 
+    private String title;
     private String inetref;
 
     public ProgramsAsyncTaskLoader( Context context ) {
@@ -45,7 +46,7 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
             if( MainApplication.getInstance().isConnected() ) {
 
-                AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( inetref ) );
+                AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title, inetref ) );
                 if( event.isEntityFound() ) {
                     Log.v( TAG, "loadInBackground : programs loaded from db" );
 
@@ -72,6 +73,12 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
         Log.v( TAG, "loadInBackground : exit" );
         return programs;
+    }
+
+    public void setTitle( String title ) {
+
+        this.title = title;
+
     }
 
     public void setInetref( String inetref ) {
