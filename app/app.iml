@@ -92,7 +92,10 @@
     <orderEntry type="library" exported="" name="picasso-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="jackson-datatype-joda-2.4.3" level="project" />
     <orderEntry type="library" exported="" name="jackson-core-2.4.3" level="project" />
+<<<<<<< HEAD
     <orderEntry type="library" exported="" name="okhttp-2.2.0" level="project" />
+=======
+>>>>>>> 013923b35307b31f4cc9c6149249ebce42130b12
     <orderEntry type="library" exported="" name="jackson-datatype-joda-2.4.3" level="project" />
     <orderEntry type="library" exported="" name="jackson-databind-2.4.3" level="project" />
     <orderEntry type="library" exported="" name="okhttp-urlconnection-2.2.0" level="project" />
@@ -111,4 +114,8 @@
     <orderEntry type="library" exported="" name="jackson-annotations-2.4.3" level="project" />
     <orderEntry type="module" module-name="core" exported="" />
   </component>
+<<<<<<< HEAD
 </module>
+=======
+</module>
+>>>>>>> 013923b35307b31f4cc9c6149249ebce42130b12
