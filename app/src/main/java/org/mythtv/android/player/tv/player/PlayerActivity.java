@@ -1,7 +1,6 @@
-package org.mythtv.android.player.common;
+package org.mythtv.android.player.tv.player;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -23,10 +22,7 @@ import android.widget.VideoView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.Utils;
-import org.mythtv.android.player.app.recordings.RecordingDetailsActivity;
 //import VideoDetailsActivity;
 
 import java.util.Timer;
@@ -63,8 +59,6 @@ public class PlayerActivity extends Activity {
     private Timer mGetLiveStreamTimer;
     private PlaybackState mPlaybackState;
     private final Handler mHandler = new Handler();
-    private Program mSelectedProgram;
-    private Video mSelectedVideo;
     private boolean mShouldStartPlayback;
     private boolean mControlersVisible;
     private int mDuration;
@@ -84,7 +78,7 @@ public class PlayerActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.i( TAG, "onCreate : enter" );
 
-        setContentView( R.layout.activity_player );
+        setContentView( R.layout.activity_tv_player);
 
         mMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
@@ -263,32 +257,32 @@ public class PlayerActivity extends Activity {
         }
     }
 
-    private class BackToDetailTask extends TimerTask {
-
-        @Override
-        public void run() {
-            mHandler.post( new Runnable() {
-
-                @Override
-                public void run() {
-
-                    if( null != mSelectedProgram ) {
-                        Intent intent = new Intent( PlayerActivity.this, RecordingDetailsActivity.class );
-                        intent.putExtra( getResources().getString( R.string.recording ), mSelectedProgram );
-                        startActivity(intent);
-                    }
-
+//    private class BackToDetailTask extends TimerTask {
+//
+//        @Override
+//        public void run() {
+//            mHandler.post( new Runnable() {
+//
+//                @Override
+//                public void run() {
+//
+//                    if( null != mSelectedProgram ) {
+//                        Intent intent = new Intent( PlayerActivity.this, RecordingDetailsActivity.class );
+//                        intent.putExtra( getResources().getString( R.string.recording ), mSelectedProgram );
+//                        startActivity(intent);
+//                    }
+//
 //                    if( null != mSelectedVideo ) {
 //                        Intent intent = new Intent( PlayerActivity.this, VideoDetailsActivity.class );
 //                        intent.putExtra( getResources().getString( R.string.video ), mSelectedVideo );
 //                        startActivity( intent );
 //                    }
-
-                }
-            });
-
-        }
-    }
+//
+//                }
+//            });
+//
+//        }
+//    }
 
     private void setupController() {
 
@@ -344,8 +338,10 @@ public class PlayerActivity extends Activity {
                 stopSeekBarTimer();
                 mPlaybackState = PlaybackState.IDLE;
                 updatePlayButton(PlaybackState.IDLE);
-                mControllersTimer = new Timer();
-                mControllersTimer.schedule(new BackToDetailTask(), HIDE_CONTROLLER_TIME);
+//                mControllersTimer = new Timer();
+//                mControllersTimer.schedule(new BackToDetailTask(), HIDE_CONTROLLER_TIME);
+
+                PlayerActivity.this.finish();
             }
         });
     }
@@ -431,16 +427,17 @@ public class PlayerActivity extends Activity {
     }
 
     private void loadViews() {
-        mVideoView = (VideoView) findViewById(R.id.videoView);
-        mStartText = (TextView) findViewById(R.id.startText);
-        mEndText = (TextView) findViewById(R.id.endText);
-        mSeekbar = (SeekBar) findViewById(R.id.seekBar);
-        mPlayPause = (ImageView) findViewById(R.id.playpause);
-        mLoading = (ProgressBar) findViewById(R.id.progressBar);
-        mControllers = findViewById(R.id.controllers);
-        mContainer = findViewById(R.id.container);
+        mVideoView = (VideoView) findViewById( R.id.videoView );
+        mStartText = (TextView) findViewById( R.id.startText );
+        mEndText = (TextView) findViewById( R.id.endText );
+        mSeekbar = (SeekBar) findViewById( R.id.seekBar );
+        mPlayPause = (ImageView) findViewById( R.id.playpause );
+        mLoading = (ProgressBar) findViewById( R.id.progressBar );
+        mControllers = findViewById( R.id.controllers );
+        mContainer = findViewById( R.id.container );
 
-        mVideoView.setOnClickListener(mPlayPauseHandler);
+        mVideoView.setOnClickListener( mPlayPauseHandler );
+        mSeekbar.setOnSeekBarChangeListener( mSeekBarChangedHandler );
     }
 
     View.OnClickListener mPlayPauseHandler = new View.OnClickListener() {
@@ -463,6 +460,54 @@ public class PlayerActivity extends Activity {
                 stopControllersTimer();
             }
         }
+    };
+
+    SeekBar.OnSeekBarChangeListener mSeekBarChangedHandler = new SeekBar.OnSeekBarChangeListener() {
+
+        @Override
+        public void onProgressChanged( SeekBar seekBar, int progress, boolean fromUser ) {
+
+        }
+
+        @Override
+        public void onStartTrackingTouch( SeekBar seekBar ) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch( SeekBar seekBar ) {
+
+            play( seekBar.getProgress() );
+
+//            int currentPos = 0;
+//            int delta = (int) ( mDuration / SCRUB_SEGMENT_DIVISOR );
+//            if( delta < MIN_SCRUB_TIME ) {
+//                delta = MIN_SCRUB_TIME;
+//            }
+//
+//            currentPos = mVideoView.getCurrentPosition();
+//            if( currentPos > seekBar.getProgress() ) {
+//
+//                Log.i( TAG, "onStopTrackingTouch : currentPos=" + currentPos + ", seek to=" + (currentPos -= delta) );
+//                currentPos -= delta;
+//                if( currentPos > 0 ) {
+//                    play( currentPos );
+//                } else {
+//                    play( 0 );
+//                }
+//
+//            } else {
+//
+//                Log.i( TAG, "onStopTrackingTouch : currentPos=" + currentPos + ", seek to=" + (currentPos += delta) );
+//                currentPos += delta;
+//                if( currentPos < mDuration ) {
+//                    play( currentPos );
+//                }
+//
+//            }
+//
+        }
+
     };
 
 }

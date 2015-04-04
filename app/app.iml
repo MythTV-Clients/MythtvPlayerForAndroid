@@ -93,6 +93,7 @@
     <orderEntry type="library" exported="" name="jackson-datatype-joda-2.4.3" level="project" />
     <orderEntry type="library" exported="" name="jackson-core-2.4.3" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.2.0" level="project" />
+    <orderEntry type="library" exported="" name="jackson-datatype-joda-2.4.3" level="project" />
     <orderEntry type="library" exported="" name="jackson-databind-2.4.3" level="project" />
     <orderEntry type="library" exported="" name="okhttp-urlconnection-2.2.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.0.0" level="project" />

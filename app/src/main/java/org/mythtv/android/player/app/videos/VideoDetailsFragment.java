@@ -26,7 +26,7 @@ import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.events.content.AddVideoLiveStreamEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.player.common.ui.utils.ImageUtils;
-import org.mythtv.android.player.common.PlayerActivity;
+import org.mythtv.android.player.app.player.PlayerActivity;
 import org.mythtv.android.R;
 //import FloatingActionButton;
 

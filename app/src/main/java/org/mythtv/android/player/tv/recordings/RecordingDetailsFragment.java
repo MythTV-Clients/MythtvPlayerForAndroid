@@ -35,7 +35,7 @@ import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
-import org.mythtv.android.player.common.PlayerActivity;
+import org.mythtv.android.player.tv.player.PlayerActivity;
 
 import java.io.IOException;
 import java.net.URI;
