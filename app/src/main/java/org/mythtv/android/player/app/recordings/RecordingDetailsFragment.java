@@ -22,7 +22,9 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
@@ -48,6 +50,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     public static final String PROGRAM_KEY = "program";
 
     CardView cardView;
+    RelativeLayout layout;
     ImageView preview, coverart;
     TextView showName, episodeName, startTime, description;
     Button play, queueHls;
@@ -130,6 +133,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         View rootView = inflater.inflate( R.layout.fragment_recording_details, container, false );
         cardView = (CardView) rootView.findViewById( R.id.recording_card );
+        layout = (RelativeLayout) rootView.findViewById( R.id.recording_layout );
         preview = (ImageView) rootView.findViewById( R.id.recording_preview );
         coverart = (ImageView) rootView.findViewById( R.id.recording_coverart );
         showName = (TextView) rootView.findViewById( R.id.recording_show_name );
@@ -230,9 +234,17 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                     public void onSuccess() {
 
                         Bitmap bitmap = ( (BitmapDrawable) preview.getDrawable() ).getBitmap(); // Ew!
-                        Palette palette = PaletteTransformation.getPalette( bitmap );
+                        Palette palette = PaletteTransformation.getPalette(bitmap);
+                        Palette.Swatch swatch = palette.getDarkMutedSwatch();
 
-                        cardView.setCardBackgroundColor( palette.getDarkMutedColor( R.color.recording_card_default ) );
+                        layout.setBackgroundColor( palette.getDarkMutedColor( R.color.recording_card_default ) );
+                        showName.setTextColor(swatch.getTitleTextColor());
+                        episodeName.setTextColor( swatch.getTitleTextColor() );
+                        startTime.setTextColor( swatch.getTitleTextColor() );
+                        description.setTextColor(swatch.getTitleTextColor());
+
+                        queueHls.setTextColor( swatch.getTitleTextColor() );
+                        play.setTextColor( swatch.getTitleTextColor() );
 
                     }
                 });
