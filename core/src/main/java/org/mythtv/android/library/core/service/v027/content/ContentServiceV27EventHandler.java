@@ -8,14 +8,16 @@ import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.events.content.AddLiveStreamEvent;
 import org.mythtv.android.library.events.content.AddRecordingLiveStreamEvent;
 import org.mythtv.android.library.events.content.AddVideoLiveStreamEvent;
-import org.mythtv.android.library.events.content.AllLiveStreamInfosEvent;
+import org.mythtv.android.library.events.content.AllLiveStreamsEvent;
 import org.mythtv.android.library.events.content.LiveStreamAddedEvent;
 import org.mythtv.android.library.events.content.LiveStreamDetails;
 import org.mythtv.android.library.events.content.LiveStreamDetailsEvent;
 import org.mythtv.android.library.events.content.LiveStreamRemovedEvent;
+import org.mythtv.android.library.events.content.LiveStreamsUpdatedEvent;
 import org.mythtv.android.library.events.content.RemoveLiveStreamEvent;
-import org.mythtv.android.library.events.content.RequestAllLiveStreamInfosEvent;
+import org.mythtv.android.library.events.content.RequestAllLiveStreamsEvent;
 import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
+import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 import org.mythtv.android.library.persistence.service.ContentPersistenceService;
 import org.mythtv.android.library.persistence.service.content.ContentPersistenceServiceEventHandler;
 import org.mythtv.services.api.Bool;
@@ -53,44 +55,47 @@ public class ContentServiceV27EventHandler implements ContentService {
     }
 
     @Override
-    public AllLiveStreamInfosEvent getLiveStreamInfoList( RequestAllLiveStreamInfosEvent event ) {
+    public AllLiveStreamsEvent requestAllLiveStreams( RequestAllLiveStreamsEvent event ) {
 
-        List<LiveStreamDetails> liveStreamDetails = new ArrayList<LiveStreamDetails>();
+        return  mContentPersistenceService.requestAllLiveStreams( event );
+    }
+
+    @Override
+    public LiveStreamsUpdatedEvent updateLiveStreams( UpdateLiveStreamsEvent event ) {
 
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( ALL_LIVE_STREAM_REQ_ID, false );
         try {
+
             mLiveStreamInfoList = mMythTvApiContext.getContentService().getLiveStreamList( event.getFileName(), eTagInfo, ALL_LIVE_STREAM_REQ_ID ) ;
+
+            List<LiveStreamDetails> liveStreamDetails = new ArrayList<>();
+
+            for( LiveStreamInfo liveStreamInfo : mLiveStreamInfoList.getLiveStreamInfos() ) {
+
+                liveStreamDetails.add( LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
+
+            }
+
+            event.setDetails( liveStreamDetails );
+
+            LiveStreamsUpdatedEvent updated = mContentPersistenceService.updateLiveStreams( event );
+            if( updated.isEntityFound() ) {
+
+                return new LiveStreamsUpdatedEvent( updated.getDetails() );
+            }
+
         } catch( RetrofitError e ) {
             Log.w( TAG, "getLiveStreamInfoList : error", e );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
+
                 MainApplication.getInstance().disconnect();
-            }
-
-        }
-
-        AllLiveStreamInfosEvent refreshedEvent = new AllLiveStreamInfosEvent( liveStreamDetails );
-
-        if( null != mLiveStreamInfoList ) {
-            for( LiveStreamInfo liveStreamInfo : mLiveStreamInfoList.getLiveStreamInfos() ) {
-                liveStreamDetails.add( LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
-            }
-
-            mContentPersistenceService.refreshLiveStreamInfoList( refreshedEvent );
-
-            if( null != refreshedEvent.getDeleted() && !refreshedEvent.getDeleted().isEmpty() ) {
-
-                for( Integer liveStreamId : refreshedEvent.getDeleted().keySet() ) {
-
-                    removeLiveStream( new RemoveLiveStreamEvent( liveStreamId ) );
-
-                }
 
             }
 
         }
 
-        return refreshedEvent;
+        return LiveStreamsUpdatedEvent.notUpdated();
     }
 
     @Override

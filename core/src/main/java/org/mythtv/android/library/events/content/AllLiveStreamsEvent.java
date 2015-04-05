@@ -9,12 +9,12 @@ import java.util.Map;
 /**
  * Created by dmfrey on 11/12/14.
  */
-public class AllLiveStreamInfosEvent extends ReadEvent {
+public class AllLiveStreamsEvent extends ReadEvent {
 
     private final List<LiveStreamDetails> details;
     private Map<Integer, Long> deleted;
 
-    public AllLiveStreamInfosEvent( final List<LiveStreamDetails> details ) {
+    public AllLiveStreamsEvent(final List<LiveStreamDetails> details) {
 
         this.details = Collections.unmodifiableList( details );
         this.entityFound = details.size() > 0;

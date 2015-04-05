@@ -3,12 +3,11 @@ package org.mythtv.android.library.core;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.mythtv.android.library.events.content.RequestAllLiveStreamInfosEvent;
-import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.library.events.content.RequestAllLiveStreamsEvent;
+import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 
 /**
  * Created by dmfrey on 1/26/15.
@@ -34,7 +33,7 @@ public class RefreshLiveStreamsReceiver extends BroadcastReceiver {
 
                 if( MainApplication.getInstance().isConnected() ) {
 
-                    MainApplication.getInstance().getContentService().getLiveStreamInfoList( new RequestAllLiveStreamInfosEvent() );
+                    MainApplication.getInstance().getContentService().updateLiveStreams( new UpdateLiveStreamsEvent() );
 
                 }
 

@@ -26,7 +26,8 @@ import org.mythtv.android.library.core.service.v028.myth.MythServiceV28EventHand
 import org.mythtv.android.library.core.service.v028.video.VideoServiceV28EventHandler;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
 import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
-import org.mythtv.android.library.events.content.RequestAllLiveStreamInfosEvent;
+import org.mythtv.android.library.events.content.RequestAllLiveStreamsEvent;
+import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
 import org.mythtv.services.api.ServerVersionQuery;
@@ -118,8 +119,8 @@ public class MainApplication extends Application {
         mRefreshRecordedProgramsPendingIntent = PendingIntent.getBroadcast( this, 0, refreshRecordedProgramsIntent, 0 );
 
         mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent );
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshTitleInfosPendingIntent );
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 240000, 600000, mRefreshRecordedProgramsPendingIntent );
+//        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshTitleInfosPendingIntent );
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent );
 
     }
 
@@ -272,7 +273,7 @@ public class MainApplication extends Application {
         protected Void doInBackground( Void... params ) {
             Log.v( TAG, "doInBackground : enter" );
 
-            mContentService.getLiveStreamInfoList(new RequestAllLiveStreamInfosEvent());
+            mContentService.updateLiveStreams( new UpdateLiveStreamsEvent() );
 
             Log.v( TAG, "doInBackground : exit" );
             return null;
