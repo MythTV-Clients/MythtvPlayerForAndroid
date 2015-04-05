@@ -56,30 +56,26 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         viewHolder.setFilename( program.getFileName() );
 
-        String title = program.getSubTitle();
-        String subTitle = program.getTitle();
-        if( showTitle ) {
+        String title = program.getTitle();
+        String subTitle = program.getSubTitle();
+        if( !showTitle ) {
 
-            if( !( null == title || "".equals( title ) ) ) {
+            title = subTitle;
+            subTitle = "";
 
-                viewHolder.setSubTitleVisibility( View.VISIBLE );
+        }
 
-            } else {
+        viewHolder.setTitle( title );
+        if( null != subTitle && !"".equals( subTitle ) ) {
 
-                viewHolder.setSubTitleVisibility( View.GONE);
-                title = program.getTitle();
-                subTitle = "";
-
-            }
+            viewHolder.setSubTitle( subTitle );
+            viewHolder.setSubTitleVisibility( View.VISIBLE );
 
         } else {
 
             viewHolder.setSubTitleVisibility( View.GONE );
 
         }
-
-        viewHolder.setTitle( title );
-        viewHolder.setSubTitle( subTitle );
         viewHolder.setDate( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
