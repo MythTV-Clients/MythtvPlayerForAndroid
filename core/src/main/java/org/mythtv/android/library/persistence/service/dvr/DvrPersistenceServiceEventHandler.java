@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Created by dmfrey on 3/7/15.
@@ -66,7 +67,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         List<Program> programs = new ArrayList<>();
 
-        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP };
+        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
         String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " = -3";
 
         List<String> selectionArgs = new ArrayList<>();
@@ -97,9 +98,10 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             Program program = new Program();
             program.setId( cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) ) );
             program.setStartTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_START_TIME ) ) ) );
+            program.setEndTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_END_TIME ) ) ) );
             program.setTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_TITLE ) ) );
             program.setSubTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_SUB_TITLE ) ) );
-            program.setInetref( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_INETREF ) ) );
+            program.setInetref( cursor.getString (cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_INETREF ) ) );
             program.setDescription( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_DESCRIPTION ) ) );
             program.setFileName( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_FILE_NAME ) ) );
 
@@ -110,10 +112,27 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             RecordingInfo recording = new RecordingInfo();
             recording.setRecordedId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORDED_ID ) ) );
             recording.setStartTs( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
-            recording.setRecordId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORD_ID ) ) );
+            recording.setRecordId (cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORD_ID ) ) );
             recording.setRecGroup( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_REC_GROUP ) ) );
             recording.setStorageGroup( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_STORAGE_GROUP ) ) );
             program.setRecording( recording );
+
+            String castMembers = cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_CAST_MEMBER_NAMES ) );
+            if( null != castMembers && !"".equals( castMembers ) ) {
+
+                List<CastMember> castMemberNames = new ArrayList<>();
+
+                StringTokenizer st = new StringTokenizer( castMembers, "|" );
+                while( st.hasMoreTokens() ) {
+
+                    CastMember member = new CastMember();
+                    member.setName( st.nextToken() );
+                    castMemberNames.add( member );
+
+                }
+                program.setCastMembers( castMemberNames );
+
+            }
 
             programs.add( program );
 
@@ -140,7 +159,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         List<Program> programs = new ArrayList<>();
 
-        String[] projection = new String[]{ ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP };
+        String[] projection = new String[]{ ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
         String selection = ProgramConstants.TABLE_NAME + " MATCH ?";
         String[] selectionArgs = new String[] { event.getQuery() + "*" };
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
@@ -150,6 +169,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
             Program program = new Program();
             program.setStartTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_START_TIME ) ) ) );
+            program.setEndTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_END_TIME ) ) ) );
             program.setTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_TITLE ) ) );
             program.setSubTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_SUB_TITLE ) ) );
             program.setInetref( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_INETREF ) ) );
@@ -289,22 +309,37 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                     for( CastMember castMember : program.getCastMembers() ) {
 
                         if( null != castMember.getName() && !"".equals( castMember.getName() ) ) {
-                            castMemberNames.append( castMember.getName() ).append( " " );
+                            castMemberNames.append( castMember.getName() ).append( "|" );
                         }
 
                         if( null != castMember.getCharacterName() && !"".equals( castMember.getCharacterName() ) ) {
-                            castMemberCharacters.append( castMember.getCharacterName() ).append( " " );
+                            castMemberCharacters.append( castMember.getCharacterName() ).append( "|" );
                         }
 
                         if( null != castMember.getRole() && !"".equals( castMember.getRole() ) ) {
-                            castMemberRoles.append( castMember.getRole() ).append( " " );
+                            castMemberRoles.append( castMember.getRole() ).append( "|" );
                         }
 
                     }
 
-                    values.put( ProgramConstants.FIELD_CAST_MEMBER_NAMES, castMemberNames.toString() );
-                    values.put( ProgramConstants.FIELD_CAST_MEMBER_CHARACTERS, castMemberCharacters.toString() );
-                    values.put( ProgramConstants.FIELD_CAST_MEMBER_ROLES, castMemberRoles.toString() );
+                    String names = castMemberNames.toString();
+                    if( names.endsWith( "|" ) ) {
+                        names = names.substring( 0, names.length() - 1 );
+                    }
+
+                    String characters = castMemberCharacters.toString();
+                    if( characters.endsWith( "|" ) ) {
+                        characters = characters.substring( 0, characters.length() - 1 );
+                    }
+
+                    String roles = castMemberRoles.toString();
+                    if( roles.endsWith( "|" ) ) {
+                        roles = roles.substring( 0, roles.length() - 1 );
+                    }
+
+                    values.put( ProgramConstants.FIELD_CAST_MEMBER_NAMES, names );
+                    values.put( ProgramConstants.FIELD_CAST_MEMBER_CHARACTERS, characters );
+                    values.put( ProgramConstants.FIELD_CAST_MEMBER_ROLES, roles );
 
                 }
 

@@ -115,7 +115,11 @@
         </activity>
 
         <activity
-            android:name=".player.app.player.PlayerActivity"
+            android:name=".player.app.player.RecordingPlayerActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <activity
+            android:name=".player.app.player.VideoPlayerActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
 

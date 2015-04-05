@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <!-- ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/videoView">
+
+        <RelativeLayout
+            android:id="@+id/player_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            tools:background="@color/primary_dark">
+
+            <TextView
+                android:id="@+id/player_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/player_show_name"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/player_title"
+                tools:text="Show Name" />
+
+            <TextView
+                android:id="@+id/player_episode_name"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/player_show_name"
+                tools:text="Episode Name" />
+
+            <TextView
+                android:id="@+id/player_duration"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/player_show_name"
+                android:layout_toRightOf="@id/player_episode_name"
+                android:layout_toEndOf="@id/player_episode_name"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                tools:text="60 mins" />
+
+            <TextView
+                android:id="@+id/player_start_time"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/player_episode_name"
+                tools:text="Start Time" />
+
+            <TextView
+                android:id="@+id/player_end_time"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/player_episode_name"
+                android:layout_toRightOf="@id/player_start_time"
+                android:layout_toEndOf="@id/player_start_time"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                tools:text="End Time" />
+
+            <TextView
+                android:id="@+id/player_description"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/player_start_time"
+                tools:text="Description" />
+
+            <TextView
+                android:id="@+id/player_cast"
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/player_description"
+                tools:text="Cast" />
+
+        </RelativeLayout>
+
+    </ScrollView -->
+
+</RelativeLayout>

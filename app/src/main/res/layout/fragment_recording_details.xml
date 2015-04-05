@@ -77,7 +77,7 @@
                     android:layout_below="@+id/recording_episode_name"
                     android:layout_toRightOf="@+id/recording_coverart"
                     android:layout_toEndOf="@+id/recording_coverart"
-                    tools:name="Start Time" />
+                    tools:text="Start Time" />
 
                 <ProgressBar
                     android:id="@+id/recording_progress"

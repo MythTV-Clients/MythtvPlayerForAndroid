@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,7 +35,7 @@ import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
-import org.mythtv.android.player.app.player.PlayerActivity;
+import org.mythtv.android.player.app.player.RecordingPlayerActivity;
 import org.mythtv.android.R;
 //import FloatingActionButton;
 
@@ -281,16 +280,16 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
             case R.id.recording_play :
 
-                Intent intent = new Intent( getActivity(), PlayerActivity.class );
-                intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
-                intent.putExtra( getResources().getString( R.string.should_start ), true );
+                Intent intent = new Intent( getActivity(), RecordingPlayerActivity.class );
+                intent.putExtra( RecordingPlayerActivity.FULL_URL_TAG, fullUrl );
+                intent.putExtra( RecordingPlayerActivity.PROGRAM_TAG, mProgram );
                 startActivity( intent );
 
                 break;
 
             case R.id.recording_queue_hls :
 
-                new AddRecordingLiveStreamAsyncTask().execute(mProgram);
+                new AddRecordingLiveStreamAsyncTask().execute( mProgram );
                 queueHls.setVisibility(View.INVISIBLE);
 
                 break;

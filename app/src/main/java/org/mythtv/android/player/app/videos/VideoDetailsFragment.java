@@ -25,8 +25,8 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.events.content.AddVideoLiveStreamEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.player.app.player.VideoPlayerActivity;
 import org.mythtv.android.player.common.ui.utils.ImageUtils;
-import org.mythtv.android.player.app.player.PlayerActivity;
 import org.mythtv.android.R;
 //import FloatingActionButton;
 
@@ -198,9 +198,9 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
             case R.id.video_play :
 
-                Intent intent = new Intent( getActivity(), PlayerActivity.class );
-                intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
-                intent.putExtra( getResources().getString( R.string.should_start ), true );
+                Intent intent = new Intent( getActivity(), VideoPlayerActivity.class );
+                intent.putExtra( VideoPlayerActivity.FULL_URL_TAG, fullUrl );
+                intent.putExtra( VideoPlayerActivity.VIDEO_TAG, mVideo );
                 startActivity( intent );
 
                 break;
