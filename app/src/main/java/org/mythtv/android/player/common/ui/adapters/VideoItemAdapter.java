@@ -59,15 +59,15 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
         });
 
-        if( position > previousPosition ) {
-
-            AnimationUtils.animate(viewHolder, true);
-
-        } else {
-
-            AnimationUtils.animate( viewHolder, false );
-
-        }
+//        if( position > previousPosition ) {
+//
+//            AnimationUtils.animate(viewHolder, true);
+//
+//        } else {
+//
+//            AnimationUtils.animate( viewHolder, false );
+//
+//        }
         previousPosition = position;
 
         Log.v( TAG, "onBindViewHolder : exit" );

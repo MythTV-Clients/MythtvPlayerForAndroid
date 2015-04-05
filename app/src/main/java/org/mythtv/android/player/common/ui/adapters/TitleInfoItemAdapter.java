@@ -59,15 +59,15 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 
         });
 
-        if( position > previousPosition ) {
-
-            AnimationUtils.animate( viewHolder, true );
-
-        } else {
-
-            AnimationUtils.animate( viewHolder, false );
-
-        }
+//        if( position > previousPosition ) {
+//
+//            AnimationUtils.animate( viewHolder, true );
+//
+//        } else {
+//
+//            AnimationUtils.animate( viewHolder, false );
+//
+//        }
         previousPosition = position;
 
         if( !"-1".equals( titleInfo.getInetref() ) ) {

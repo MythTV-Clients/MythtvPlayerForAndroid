@@ -75,15 +75,15 @@ public class SearchResultItemAdapter extends RecyclerView.Adapter<SearchResultIt
 
         });
 
-        if( position > previousPosition ) {
-
-            AnimationUtils.animate( viewHolder, true );
-
-        } else {
-
-            AnimationUtils.animate( viewHolder, false );
-
-        }
+//        if( position > previousPosition ) {
+//
+//            AnimationUtils.animate( viewHolder, true );
+//
+//        } else {
+//
+//            AnimationUtils.animate( viewHolder, false );
+//
+//        }
         previousPosition = position;
 
         String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + program.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
