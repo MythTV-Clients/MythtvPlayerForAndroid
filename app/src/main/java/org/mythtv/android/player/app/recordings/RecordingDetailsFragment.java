@@ -236,14 +236,29 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                         Palette palette = PaletteTransformation.getPalette(bitmap);
                         Palette.Swatch swatch = palette.getDarkMutedSwatch();
 
-                        layout.setBackgroundColor( palette.getDarkMutedColor( R.color.recording_card_default ) );
-                        showName.setTextColor(swatch.getTitleTextColor());
-                        episodeName.setTextColor( swatch.getTitleTextColor() );
-                        startTime.setTextColor( swatch.getTitleTextColor() );
-                        description.setTextColor(swatch.getTitleTextColor());
+                        try {
 
-                        queueHls.setTextColor( swatch.getTitleTextColor() );
-                        play.setTextColor( swatch.getTitleTextColor() );
+                            layout.setBackgroundColor(palette.getDarkMutedColor( R.color.recording_card_default ) );
+                            showName.setTextColor(swatch.getTitleTextColor() );
+                            episodeName.setTextColor( swatch.getTitleTextColor() );
+                            startTime.setTextColor( swatch.getTitleTextColor() );
+                            description.setTextColor( swatch.getTitleTextColor() );
+
+                            queueHls.setTextColor( swatch.getTitleTextColor() );
+                            play.setTextColor( swatch.getTitleTextColor() );
+
+                        } catch( Exception  e ) {
+
+                            layout.setBackgroundColor( getActivity().getResources().getColor( R.color.primary_dark ) );
+                            showName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                            episodeName.setTextColor( getActivity().getResources().getColor(R.color.white) );
+                            startTime.setTextColor( getActivity().getResources().getColor(R.color.white) );
+                            description.setTextColor( getActivity().getResources().getColor(R.color.white) );
+
+                            queueHls.setTextColor( getActivity().getResources().getColor(R.color.white) );
+                            play.setTextColor( getActivity().getResources().getColor(R.color.white) );
+
+                        }
 
                     }
                 });
