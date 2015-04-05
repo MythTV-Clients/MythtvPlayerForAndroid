@@ -60,8 +60,10 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         String subTitle = program.getSubTitle();
         if( !showTitle ) {
 
-            title = subTitle;
-            subTitle = "";
+            if( null != subTitle && !"".equals( subTitle ) ) {
+                title = subTitle;
+                subTitle = "";
+            }
 
         }
 
