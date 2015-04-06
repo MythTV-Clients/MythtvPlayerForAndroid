@@ -17,10 +17,15 @@ import org.mythtv.android.library.events.content.LiveStreamsUpdatedEvent;
 import org.mythtv.android.library.events.content.RequestAllLiveStreamsEvent;
 import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
 import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
+import org.mythtv.android.library.events.dvr.ProgramDetailsEvent;
+import org.mythtv.android.library.events.dvr.RequestRecordedProgramEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamInfo;
+import org.mythtv.android.library.persistence.domain.dvr.Program;
 import org.mythtv.android.library.persistence.repository.MythtvProvider;
 import org.mythtv.android.library.persistence.service.ContentPersistenceService;
+import org.mythtv.android.library.persistence.service.DvrPersistenceService;
+import org.mythtv.android.library.persistence.service.dvr.DvrPersistenceServiceEventHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +40,12 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
     private static final String TAG = ContentPersistenceServiceEventHandler.class.getSimpleName();
 
     Context mContext;
+    DvrPersistenceService mDvrPersistenceService;
 
     public ContentPersistenceServiceEventHandler( Context context ) {
 
         mContext = context;
-
+        mDvrPersistenceService = new DvrPersistenceServiceEventHandler( mContext );
     }
 
     @Override
@@ -156,6 +162,33 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
                 values.put( LiveStreamConstants.FIELD_CREATED_DATE, liveStream.getCreated().getMillis() );
                 values.put( LiveStreamConstants.FIELD_LAST_MODIFIED_DATE, liveStream.getLastModified().getMillis() );
 
+                String filename = liveStream.getSourceFile();
+                filename = filename.substring( filename.lastIndexOf( '/' ) + 1 );
+
+                RequestRecordedProgramEvent requestRecordedProgramEvent = new RequestRecordedProgramEvent();
+                requestRecordedProgramEvent.setFilename( filename );
+
+                ProgramDetailsEvent programDetailsEvent = mDvrPersistenceService.requestProgram( requestRecordedProgramEvent );
+                if( programDetailsEvent.isEntityFound() ) {
+
+                    Program program = Program.fromDetails( programDetailsEvent.getDetails() );
+                    if( null != program.getRecording().getRecordedId() ) {
+
+                        values.put( LiveStreamConstants.FIELD_RECORDED_ID, program.getRecording().getRecordedId() );
+
+                    }
+
+                    values.put( LiveStreamConstants.FIELD_CHAN_ID, program.getChannel().getChanId() );
+                    values.put( LiveStreamConstants.FIELD_START_TIME, program.getRecording().getStartTs().getMillis() );
+
+                } else {
+
+                    values.put( LiveStreamConstants.FIELD_RECORDED_ID, "" );
+                    values.put( LiveStreamConstants.FIELD_CHAN_ID, "" );
+                    values.put( LiveStreamConstants.FIELD_START_TIME, "" );
+
+                }
+
                 cursor = mContext.getContentResolver().query( LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
                 if( cursor.moveToFirst() ) {
 
@@ -218,8 +251,8 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
         LiveStreamInfo liveStream = null;
 
         String[] projection = null;
-        String selection = LiveStreamConstants.FIELD_LIVE_STREAM_ID + " = ?";
-        String[] selectionArgs = new String[] { String.valueOf( event.getKey() ) };
+        String selection = LiveStreamConstants.FIELD_CHAN_ID + " = ? AND " + LiveStreamConstants.FIELD_START_TIME + " = ?";
+        String[] selectionArgs = new String[] { String.valueOf( event.getChanId() ), String.valueOf( event.getStartTime().getMillis() ) };
 
         Cursor cursor = mContext.getContentResolver().query( LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
         while( cursor.moveToNext() ) {
@@ -245,7 +278,7 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
             liveStream.setSourceWidth( cursor.getInt( cursor.getColumnIndex( LiveStreamConstants.FIELD_SOURCE_WIDTH ) ) );
             liveStream.setSourceHeight( cursor.getInt( cursor.getColumnIndex( LiveStreamConstants.FIELD_SOURCE_HEIGHT ) ) );
             liveStream.setAudioOnlyBitrate( cursor.getInt( cursor.getColumnIndex( LiveStreamConstants.FIELD_AUDIO_ONLY_BITRATE ) ) );
-            liveStream.setCreated( new DateTime( cursor.getLong( cursor.getColumnIndex( LiveStreamConstants.FIELD_CREATED_DATE ) ) ) );
+            liveStream.setCreated( new DateTime(cursor.getLong( cursor.getColumnIndex( LiveStreamConstants.FIELD_CREATED_DATE ) ) ) );
             liveStream.setLastModified( new DateTime( cursor.getLong( cursor.getColumnIndex( LiveStreamConstants.FIELD_LAST_MODIFIED_DATE ) ) ) );
 
         }
@@ -253,10 +286,10 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
 
         if( null != liveStream ) {
 
-            return new LiveStreamDetailsEvent( liveStream.getId(), liveStream.toDetails() );
+            return new LiveStreamDetailsEvent( event.getChanId(), event.getStartTime(), liveStream.toDetails() );
         }
 
-        return LiveStreamDetailsEvent.notFound( event.getKey() );
+        return LiveStreamDetailsEvent.notFound( event.getChanId(), event.getStartTime() );
     }
 
     @Override
@@ -288,6 +321,22 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
         values.put( LiveStreamConstants.FIELD_AUDIO_ONLY_BITRATE, liveStream.getAudioOnlyBitrate() );
         values.put( LiveStreamConstants.FIELD_CREATED_DATE, liveStream.getCreated().getMillis() );
         values.put( LiveStreamConstants.FIELD_LAST_MODIFIED_DATE, liveStream.getLastModified().getMillis() );
+
+        if( null != event.getRecordedId() ) {
+            values.put( LiveStreamConstants.FIELD_RECORDED_ID, event.getRecordedId() );
+        }
+
+        if( null != event.getChanId() ) {
+            values.put( LiveStreamConstants.FIELD_CHAN_ID, event.getChanId() );
+        }
+
+        if( null != event.getStartTime() ) {
+            values.put( LiveStreamConstants.FIELD_START_TIME, event.getStartTime().getMillis() );
+        }
+
+        if( null != event.getVideoId() ) {
+            values.put( LiveStreamConstants.FIELD_VIDEO_ID, event.getVideoId() );
+        }
 
         mContext.getContentResolver().insert( LiveStreamConstants.CONTENT_URI, values );
 
@@ -373,6 +422,10 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
         values.put( LiveStreamConstants.FIELD_CREATED_DATE, liveStream.getCreated().getMillis() );
         values.put( LiveStreamConstants.FIELD_LAST_MODIFIED_DATE, liveStream.getLastModified().getMillis() );
         values.put( LiveStreamConstants.FIELD_VIDEO_ID, event.getVideoId() );
+
+        if( null != event.getVideoId() ) {
+            values.put( LiveStreamConstants.FIELD_VIDEO_ID, event.getVideoId() );
+        }
 
         mContext.getContentResolver().insert( LiveStreamConstants.CONTENT_URI, values );
 

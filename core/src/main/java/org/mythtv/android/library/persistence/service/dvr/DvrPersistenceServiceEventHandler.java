@@ -17,6 +17,7 @@ import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.DeleteProgramsEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
+import org.mythtv.android.library.events.dvr.ProgramDetailsEvent;
 import org.mythtv.android.library.events.dvr.ProgramRemovedEvent;
 import org.mythtv.android.library.events.dvr.ProgramsDeletedEvent;
 import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
@@ -24,6 +25,7 @@ import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.RequestRecordedProgramEvent;
 import org.mythtv.android.library.events.dvr.SearchRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.events.dvr.TitleInfoRemovedEvent;
@@ -470,6 +472,99 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
     }
 
     @Override
+    public ProgramDetailsEvent requestProgram( RequestRecordedProgramEvent event ) {
+
+        if( null == event.getRecordedId() && null == event.getChanId() && null == event.getStartTime() && null == event.getFilename() ) {
+
+            return ProgramDetailsEvent.notFound( event.getChanId(), event.getStartTime() );
+        }
+
+        Program program = null;
+
+        String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+
+        List<String> selectionArgs = new ArrayList<>();
+        selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
+
+        String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
+
+        if( null != event.getRecordedId() ) {
+
+            selection += " AND " + ProgramConstants.FIELD_RECORDING_RECORD_ID + " = ?";
+            selectionArgs.add( String.valueOf( event.getRecordedId() ) );
+
+        }
+
+        if( null != event.getChanId() && null != event.getStartTime() ) {
+
+            selection += " AND " + ProgramConstants.FIELD_CHANNEL_CHAN_ID + " = ? AND " + ProgramConstants.FIELD_RECORDING_START_TS + " = ?";
+            selectionArgs.add( String.valueOf( event.getChanId() ) );
+            selectionArgs.add( String.valueOf(event.getStartTime().getMillis()) );
+
+        }
+
+        if( null != event.getFilename() && !"".equals( event.getFilename() ) ) {
+
+            selection += " AND " + ProgramConstants.FIELD_PROGRAM_FILE_NAME + " = ?";
+            selectionArgs.add( event.getFilename() );
+
+        }
+
+        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
+        while( cursor.moveToNext() ) {
+
+            program = new Program();
+            program.setId( cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) ) );
+            program.setStartTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_START_TIME ) ) ) );
+            program.setEndTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_END_TIME ) ) ) );
+            program.setTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_TITLE ) ) );
+            program.setSubTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_SUB_TITLE ) ) );
+            program.setInetref( cursor.getString (cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_INETREF ) ) );
+            program.setDescription( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_DESCRIPTION ) ) );
+            program.setFileName( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_FILE_NAME ) ) );
+
+            ChannelInfo channel = new ChannelInfo();
+            channel.setChanId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_CHANNEL_CHAN_ID ) ) );
+            program.setChannel( channel );
+
+            RecordingInfo recording = new RecordingInfo();
+            recording.setRecordedId( cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORDED_ID ) ) );
+            recording.setStartTs( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_START_TS ) ) ) );
+            recording.setRecordId (cursor.getInt( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_RECORD_ID ) ) );
+            recording.setRecGroup( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_REC_GROUP ) ) );
+            recording.setStorageGroup( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_RECORDING_STORAGE_GROUP ) ) );
+            program.setRecording( recording );
+
+            String castMembers = cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_CAST_MEMBER_NAMES ) );
+            if( null != castMembers && !"".equals( castMembers ) ) {
+
+                List<CastMember> castMemberNames = new ArrayList<>();
+
+                StringTokenizer st = new StringTokenizer( castMembers, "|" );
+                while( st.hasMoreTokens() ) {
+
+                    CastMember member = new CastMember();
+                    member.setName( st.nextToken() );
+                    castMemberNames.add( member );
+
+                }
+                program.setCastMembers( castMemberNames );
+
+            }
+
+        }
+        cursor.close();
+
+        if( null != program ) {
+
+            return new ProgramDetailsEvent( program.getChannel().getChanId(), program.getRecording().getStartTs(), program.toDetails() );
+        }
+
+        return ProgramDetailsEvent.notFound( event.getChanId(), event.getStartTime() );
+    }
+
+    @Override
     public ProgramRemovedEvent removeProgram( RemoveProgramEvent event ) {
         Log.v( TAG, "removeProgram : enter" );
 
@@ -508,7 +603,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             titleInfo.setInetref( cursor.getString( cursor.getColumnIndex( TitleInfoConstants.FIELD_INETREF ) ) );
 
             titleInfos.add( titleInfo );
-            Log.v( TAG, "requestAllTitleInfos : cursor iteration, titleInfo=" + titleInfo );
+            Log.v(TAG, "requestAllTitleInfos : cursor iteration, titleInfo=" + titleInfo);
 
         }
         cursor.close();
@@ -523,7 +618,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         }
 
-        Log.v( TAG, "requestAllTitleInfos : exit" );
+        Log.v(TAG, "requestAllTitleInfos : exit");
         return new AllTitleInfosEvent( titleInfosDetails );
     }
 

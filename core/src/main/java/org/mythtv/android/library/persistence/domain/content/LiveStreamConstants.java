@@ -91,7 +91,7 @@ public class LiveStreamConstants extends AbstractBaseDatabase {
 
 
     // For recordings v0.28+
-    public static final String FIELD_RECORDED_ID = "recorded id";
+    public static final String FIELD_RECORDED_ID = "recorded_id";
     public static final String FIELD_RECORDED_ID_DATA_TYPE = "INTEGER";
 
     // For recordings v0.27-

@@ -1,5 +1,6 @@
 package org.mythtv.android.library.events.content;
 
+import org.joda.time.DateTime;
 import org.mythtv.android.library.events.RequestReadEvent;
 
 /**
@@ -7,16 +8,20 @@ import org.mythtv.android.library.events.RequestReadEvent;
  */
 public class RequestLiveStreamDetailsEvent extends RequestReadEvent {
 
-    private final Integer key;
+    private final Integer chanId;
+    private final DateTime startTime;
 
-    public RequestLiveStreamDetailsEvent( final Integer key ) {
+    public RequestLiveStreamDetailsEvent( final Integer chanId, final DateTime startTime ) {
 
-        this.key = key;
+        this.chanId = chanId;
+        this.startTime = startTime;
 
     }
 
-    public Integer getKey() {
-        return key;
+    public Integer getChanId() {
+        return chanId;
     }
+
+    public DateTime getStartTime() { return startTime; }
 
 }

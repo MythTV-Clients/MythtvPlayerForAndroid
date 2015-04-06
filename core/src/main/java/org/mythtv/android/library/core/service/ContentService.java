@@ -22,7 +22,7 @@ public interface ContentService {
 
     LiveStreamsUpdatedEvent updateLiveStreams( UpdateLiveStreamsEvent event );
 
-    LiveStreamDetailsEvent getLiveStream( RequestLiveStreamDetailsEvent event );
+    LiveStreamDetailsEvent requestLiveStream( RequestLiveStreamDetailsEvent event );
 
     LiveStreamAddedEvent addLiveStream( AddLiveStreamEvent event );
 

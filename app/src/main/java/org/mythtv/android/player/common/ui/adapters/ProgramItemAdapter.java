@@ -1,16 +1,19 @@
 package org.mythtv.android.player.common.ui.adapters;
 
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.library.events.content.LiveStreamDetailsEvent;
+import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
 import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
-import android.database.Cursor;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +35,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
     private boolean showTitle;
     private int previousPosition = 0;
 
-    public ProgramItemAdapter(List<Program> programs, @NonNull ProgramItemClickListener programItemClickListener, boolean showTitle) {
+    public ProgramItemAdapter( List<Program> programs, @NonNull ProgramItemClickListener programItemClickListener, boolean showTitle ) {
 
         this.programs = programs;
         this.programItemClickListener = programItemClickListener;
@@ -54,7 +57,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         final Program program = programs.get( position );
 
-        viewHolder.setFilename( program.getFileName() );
+        viewHolder.setKey( program.getChannel().getChanId(), program.getRecording().getStartTs() );
 
         String title = program.getTitle();
         String subTitle = program.getSubTitle();
@@ -126,7 +129,8 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         private final ProgressBar progress;
         private Handler progressHandler = new Handler();
 
-        private String filename;
+        private Integer chanId;
+        private DateTime startTime;
 
         public ViewHolder( View v ) {
             super( v );
@@ -165,14 +169,15 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         }
 
-        public void setFilename( String filename ) {
+        public void setKey( Integer chanId, DateTime startTime ) {
 
-            this.filename = filename;
+            this.chanId = chanId;
+            this.startTime = startTime;
 
             progress.setVisibility( View.GONE );
             readyToStream.setVisibility( View.GONE );
 
-            progressHandler.postDelayed( progressUpdateRunnable, 1000 );
+            progressHandler.post( progressUpdateRunnable );
 
         }
 
@@ -187,54 +192,62 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
             @Override
             public void run() {
 
-                final String[] projection = new String[] { LiveStreamConstants._ID, LiveStreamConstants.FIELD_PERCENT_COMPLETE, LiveStreamConstants.FIELD_FULL_URL, LiveStreamConstants.FIELD_RELATIVE_URL };
-                final String selection = LiveStreamConstants.FIELD_SOURCE_FILE + " like ?";
-                final String[] selectionArgs = new String[] { "%" + filename };
+                try {
 
-                Cursor cursor = MainApplication.getAppContext().getContentResolver().query( LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
-                if( cursor.moveToNext() ) {
+                    LiveStreamDetailsEvent event = MainApplication.getInstance().getContentService().requestLiveStream(new RequestLiveStreamDetailsEvent(chanId, startTime));
+                    if( event.isEntityFound() ) {
 
-                    int percent = cursor.getInt( cursor.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
-                    if( percent > 1 ) {
+                        LiveStreamInfo liveStream = LiveStreamInfo.fromDetails(event.getDetails());
+                        if( null != liveStream ) {
 
-                        progress.setIndeterminate( false );
-                        progress.setProgress( percent );
+                            int percent = liveStream.getPercentComplete();
+                            if( percent > 1 ) {
+
+                                progress.setIndeterminate( false );
+                                progress.setProgress( percent );
+
+                            }
+
+                            if( percent > 2 ) {
+
+                                readyToStream.setVisibility( View.VISIBLE );
+
+                            } else {
+
+                                readyToStream.setVisibility( View.INVISIBLE );
+
+                            }
+
+                            if( percent == 100 ) {
+
+                                progress.setVisibility( View.GONE );
+
+                            } else {
+
+                                progress.setVisibility( View.VISIBLE );
+
+                            }
+
+                            if( percent < 100 ) {
+
+                                progressHandler.postDelayed( this, 1000 );
+
+                            }
+
+                        } else {
+
+                            progress.setVisibility( View.GONE );
+                            readyToStream.setVisibility( View.INVISIBLE );
+
+                        }
 
                     }
 
-                    if( percent > 2 ) {
+                } catch( NullPointerException e ) {
 
-                        readyToStream.setVisibility( View.VISIBLE );
-
-                    } else {
-
-                        readyToStream.setVisibility( View.INVISIBLE );
-
-                    }
-
-                    if( percent == 100 ) {
-
-                        progress.setVisibility( View.GONE );
-
-                    } else {
-
-                        progress.setVisibility( View.VISIBLE );
-
-                    }
-
-                    if( percent < 100 ) {
-
-                        progressHandler.postDelayed( this, 1000 );
-
-                    }
-
-                } else {
-
-                    progress.setVisibility( View.GONE );
-                    readyToStream.setVisibility( View.INVISIBLE );
+                    Log.e( TAG, "progressUpdateRunnable : error", e );
 
                 }
-                cursor.close();
 
             }
 

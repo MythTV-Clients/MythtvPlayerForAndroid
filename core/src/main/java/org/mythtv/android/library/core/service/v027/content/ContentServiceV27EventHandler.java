@@ -99,32 +99,9 @@ public class ContentServiceV27EventHandler implements ContentService {
     }
 
     @Override
-    public LiveStreamDetailsEvent getLiveStream( RequestLiveStreamDetailsEvent event ) {
+    public LiveStreamDetailsEvent requestLiveStream( RequestLiveStreamDetailsEvent event ) {
 
-        ETagInfo eTagInfo = mMythTvApiContext.getEtag( LIVE_STREAM_REQ_ID, true );
-        try {
-            LiveStreamInfo liveStreamInfo = mMythTvApiContext.getContentService().getLiveStream(event.getKey(), eTagInfo, LIVE_STREAM_REQ_ID);
-            if( null != liveStreamInfo ) {
-
-                LiveStreamDetailsEvent details = new LiveStreamDetailsEvent( liveStreamInfo.getId(), LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
-                mContentPersistenceService.updateLiveStream( details );
-
-                return details;
-            }
-
-        } catch( RetrofitError e ) {
-            Log.w( TAG, "getLiveStream : error", e );
-
-            if( e.getResponse().getStatus() == 304 ) {
-
-                return LiveStreamDetailsEvent.notModified( event.getKey() );
-            } else if( e.getKind() == RetrofitError.Kind.NETWORK ) {
-                MainApplication.getInstance().disconnect();
-            }
-
-        }
-
-        return LiveStreamDetailsEvent.notFound( event.getKey() );
+        return mContentPersistenceService.requestLiveStream( event );
     }
 
     @Override
@@ -159,7 +136,7 @@ public class ContentServiceV27EventHandler implements ContentService {
             if( null != liveStreamInfo ) {
 
                 LiveStreamAddedEvent added = LiveStreamAddedEvent.recordingAdded(  event.getChanId(), event.getStartTime(), LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
-                mContentPersistenceService.addLiveStream( added );
+                mContentPersistenceService.addRecordingLiveStream( added );
 
                 return added;
             }
@@ -181,7 +158,7 @@ public class ContentServiceV27EventHandler implements ContentService {
             if( null != liveStreamInfo ) {
 
                 LiveStreamAddedEvent added = LiveStreamAddedEvent.recordingAdded( event.getId(), LiveStreamInfoHelper.toDetails( liveStreamInfo ) );
-                mContentPersistenceService.addLiveStream( added );
+                mContentPersistenceService.addVideoLiveStream( added );
 
                 return added;
             }

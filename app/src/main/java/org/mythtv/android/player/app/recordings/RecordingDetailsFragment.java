@@ -2,10 +2,8 @@ package org.mythtv.android.player.app.recordings;
 
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Loader;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -31,18 +29,18 @@ import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
-import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.player.common.ui.loaders.LiveStreamAsyncTaskLoader;
 import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
 import org.mythtv.android.player.app.player.RecordingPlayerActivity;
 import org.mythtv.android.R;
-//import FloatingActionButton;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class RecordingDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener { //}, FloatingActionButton.OnCheckedChangeListener  {
+public class RecordingDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<LiveStreamInfo>, View.OnClickListener {
 
     private static final String TAG = RecordingDetailsFragment.class.getSimpleName();
 
@@ -54,7 +52,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     TextView showName, episodeName, startTime, description;
     Button play, queueHls;
     ProgressBar progress;
-//    FloatingActionButton fab;
 
     Program mProgram;
 
@@ -65,19 +62,19 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     @Override
     public Loader onCreateLoader( int id, Bundle args ) {
 
-        String[] projection = new String[] { LiveStreamConstants._ID, LiveStreamConstants.FIELD_PERCENT_COMPLETE, LiveStreamConstants.FIELD_FULL_URL, LiveStreamConstants.FIELD_RELATIVE_URL };
-        String selection = LiveStreamConstants.FIELD_SOURCE_FILE + " like ?";
-        String[] selectionArgs = new String[] { "%" + mProgram.getFileName() };
+        LiveStreamAsyncTaskLoader loader = new LiveStreamAsyncTaskLoader( getActivity() );
+        loader.setChanId( mProgram.getChannel().getChanId() );
+        loader.setStartTime( mProgram.getRecording().getStartTs() );
 
-        return new CursorLoader( getActivity(), LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+        return loader;
     }
 
     @Override
-    public void onLoadFinished( Loader<Cursor> loader, Cursor data ) {
+    public void onLoadFinished( Loader<LiveStreamInfo> loader, LiveStreamInfo data ) {
 
-        if( null != data && data.moveToNext() ) {
+        if( null != data ) {
 
-            int percent = data.getInt( data.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
+            int percent = data.getPercentComplete();
             if( percent > 0 ) {
 
                 if( percent > 1 ) {
@@ -88,10 +85,10 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                 }
 
                 if( percent > 2 ) {
-                    fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
-//                    Log.v( TAG, "onLoaderReset : fullUrl=" + fullUrl );
-//                    fab.setVisibility( View.VISIBLE );
+
+                    fullUrl = data.getRelativeURL();
                     play.setVisibility( View.VISIBLE );
+
                 }
 
                 if( percent == 100 ) {
@@ -109,15 +106,16 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
             queueHls.setVisibility( View.INVISIBLE );
 
         } else {
+
             queueHls.setVisibility( View.VISIBLE );
-//            fab.setVisibility( View.GONE );
             play.setVisibility( View.GONE );
+
         }
 
     }
 
     @Override
-    public void onLoaderReset( Loader<Cursor> loader ) { }
+    public void onLoaderReset( Loader<LiveStreamInfo> loader ) { }
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
@@ -147,9 +145,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         play.setOnClickListener( this );
 
         progress = (ProgressBar) rootView.findViewById( R.id.recording_progress );
-
-//        fab = (FloatingActionButton) rootView.findViewById( R.id.recording_fab );
-//        fab.setOnCheckedChangeListener( this );
 
         return rootView;
     }
@@ -262,7 +257,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
                     }
                 });
-//        ImageUtils.updatePreviewImage( getActivity(), preview, url );
 
         if( null != mProgram.getInetref() && !"".equals( mProgram.getInetref() ) ) {
 
@@ -277,16 +271,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         getLoaderManager().initLoader( 0, getArguments(), this );
 
     }
-
-//    @Override
-//    public void onCheckedChanged( FloatingActionButton fabView, boolean isChecked ) {
-//
-//        Intent intent = new Intent( getActivity(), PlayerActivity.class );
-//        intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
-//        intent.putExtra( getResources().getString( R.string.should_start ), true );
-//        startActivity( intent );
-//
-//    }
 
     @Override
     public void onClick( View v ) {

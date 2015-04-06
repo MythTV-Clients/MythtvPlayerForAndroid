@@ -2,10 +2,8 @@ package org.mythtv.android.player.tv.recordings;
 
 import android.app.LoaderManager;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -31,16 +29,17 @@ import com.squareup.picasso.Target;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
-import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.player.common.ui.loaders.LiveStreamAsyncTaskLoader;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 import org.mythtv.android.player.tv.player.PlayerActivity;
 
 import java.io.IOException;
 import java.net.URI;
 
-public class RecordingDetailsFragment extends DetailsFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class RecordingDetailsFragment extends DetailsFragment implements LoaderManager.LoaderCallbacks<LiveStreamInfo> {
 
     private static final String TAG = RecordingDetailsFragment.class.getSimpleName();
 
@@ -68,32 +67,32 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
     public Loader onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
 
-        String[] projection = new String[] { LiveStreamConstants._ID, LiveStreamConstants.FIELD_PERCENT_COMPLETE, LiveStreamConstants.FIELD_FULL_URL, LiveStreamConstants.FIELD_RELATIVE_URL };
-        String selection = LiveStreamConstants.FIELD_SOURCE_FILE + " like ?";
-        String[] selectionArgs = new String[] { "%" + mProgram.getFileName() };
+        LiveStreamAsyncTaskLoader loader = new LiveStreamAsyncTaskLoader( getActivity() );
+        loader.setChanId( mProgram.getChannel().getChanId() );
+        loader.setStartTime( mProgram.getRecording().getStartTs() );
 
         Log.v( TAG, "onCreateLoader : exit" );
-        return new CursorLoader( getActivity(), LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+        return loader;
     }
 
     @Override
-    public void onLoadFinished( Loader<Cursor> loader, Cursor data ) {
+    public void onLoadFinished( Loader<LiveStreamInfo> loader, LiveStreamInfo data ) {
         Log.v( TAG, "onLoaderFinished : enter" );
 
-        if( null != data && data.moveToNext() ) {
+        if( null != data ) {
             Log.v( TAG, "onLoaderReset : cursor found live stream" );
 
             DetailsOverviewRow row = ( (DetailsOverviewRow) mRowsAdapter.get( 0 ) );
             row.removeAction( row.getActions().get( 0 ) );
 
-            int percent = data.getInt( data.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
+            int percent = data.getPercentComplete();
             if( percent > 0 ) {
                 Log.v( TAG, "onLoaderReset : updating percent complete" );
 
                 if( percent > 2 ) {
                     Log.v( TAG, "onLoaderReset : recording can be played" );
 
-                    fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
+                    fullUrl = data.getRelativeURL();
 
                     Action action = new Action( ACTION_WATCH, getResources().getString( R.string.watch_recording ), "HLS: " + String.valueOf( percent ) + "%" );
                     row.addAction( action );
@@ -125,7 +124,7 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
     }
 
     @Override
-    public void onLoaderReset( Loader<Cursor> loader ) {
+    public void onLoaderReset( Loader<LiveStreamInfo> loader ) {
         Log.v( TAG, "onLoaderReset : enter" );
 
         Log.v( TAG, "onLoaderReset : exit" );
