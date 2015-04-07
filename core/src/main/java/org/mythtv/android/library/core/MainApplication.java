@@ -33,6 +33,7 @@ import org.mythtv.services.api.MythTvApiContext;
 import org.mythtv.services.api.ServerVersionQuery;
 
 import java.io.IOException;
+import java.net.Authenticator;
 import java.util.concurrent.TimeUnit;
 
 import retrofit.RestAdapter;
@@ -214,7 +215,7 @@ public class MainApplication extends Application {
                 OkHttpClient okHttpClient = new OkHttpClient();
                 okHttpClient.setFollowRedirects( true );
 
-                mMythTvApiContext = MythTvApiContext.newBuilder().setOkHttpClient( okHttpClient ).setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).setLogLevel(RestAdapter.LogLevel.FULL).build();
+                mMythTvApiContext = MythTvApiContext.newBuilder().setOkHttpClient( okHttpClient ).setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).setLogLevel(RestAdapter.LogLevel.BASIC).build();
 
                 switch( mApiVersion ) {
 
