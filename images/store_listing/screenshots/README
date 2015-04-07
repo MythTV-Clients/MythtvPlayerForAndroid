@@ -15,10 +15,19 @@ For consistancy, the names should be:
 
     Watch_Recordings.jpg
 
+        WR_Title_All.jpg
         WR_Title.jpg
         WR_Episode.jpg
+        Player_recordings_portrait.jpg
+        Player_recordings_landscape.jpg
 
     Watch_Videos.jpg
         WV_Title.jpg
         WV_Episode.jpg
+        Player_videos_portrait.jpg
+        Player_videos_landscape.jpg
 
+In Gimp
+Menu -> Filters -> Blur -> Gaussian Blur
+H: 50.0
+V: 50.0
