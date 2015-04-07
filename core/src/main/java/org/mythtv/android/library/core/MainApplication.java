@@ -206,7 +206,7 @@ public class MainApplication extends Application {
         protected void onPostExecute( ApiVersion apiVersion ) {
             Log.v( TAG, "onPostExecute : enter" );
 
-            if( null != apiVersion ) {
+            if( null != apiVersion && !apiVersion.equals( ApiVersion.NotSupported ) ) {
                 Log.v( TAG, "onPostExecute : master backend connected" );
 
                 mApiVersion = apiVersion;
