@@ -196,6 +196,8 @@ public class MainApplication extends Application {
             } catch( IOException e ) {
                 Log.e( TAG, "error creating MythTvApiContext, could not reach '" + getMasterBackendUrl() + "'", e );
 
+                disconnect();
+
                 Log.v( TAG, "doInBackground : enter, not connected" );
                 return null;
             }
