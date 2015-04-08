@@ -19,14 +19,12 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class RecordingsActivity extends AbstractBaseActionBarActivity implements RecordingDataConsumer {
+public class RecordingsActivity extends AbstractBaseActionBarActivity {
 
     public static final String TITLE_INFO = "title_info";
 
     private RecordingsFragment mRecordingsFragment;
     TitleInfo mTitleInfo;
-
-//    ImageView mRecordingsBanner;
 
     @Override
     protected int getLayoutResource() {
@@ -49,7 +47,6 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
         super.onCreate( savedInstanceState );
 
         mRecordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentById( R.id.fragment_recordings );
-//        mRecordingsBanner = (ImageView) findViewById( R.id.recordings_banner );
 
         if( null != savedInstanceState && savedInstanceState.containsKey( TITLE_INFO ) ) {
 
@@ -64,9 +61,6 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
         if( null != mTitleInfo ) {
 
             getSupportActionBar().setTitle( mTitleInfo.getTitle() );
-
-//            String bannerUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + mTitleInfo.getInetref() + "&Type=Banner&Height=" + String.valueOf(getResources().getDimension(R.dimen.recordings_banner));
-//            ImageUtils.updatePreviewImage( this, mRecordingsBanner, bannerUrl );
 
         } else {
 
@@ -114,42 +108,7 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity implements
     }
 
     @Override
-    public void onSetPrograms( List<Program> programs ) {
-
-        mRecordingsFragment.setPrograms( ( null != mTitleInfo ? mTitleInfo.getTitle() : null ), ( null != mTitleInfo ? mTitleInfo.getInetref() : null ), programs );
-
-    }
-
-    @Override
-    public void onHandleError( String message ) {
-
-        Toast.makeText( this, message, Toast.LENGTH_LONG ).show();
-
-    }
-
-    @Override
     protected void updateData() {
-
-//        RecordingsDataFragment recordingsDataFragment = (RecordingsDataFragment) getFragmentManager().findFragmentByTag( RECORDINGS_DATA_FRAGMENT_TAG );
-//        if( null == recordingsDataFragment ) {
-//
-//            Bundle args = new Bundle();
-//            if( null != mTitleInfo ) {
-//                args.putString( RecordingsDataFragment.TITLE_INFO_TITLE, mTitleInfo.getTitle() );
-//            }
-//
-//            recordingsDataFragment = (RecordingsDataFragment) Fragment.instantiate( this, RecordingsDataFragment.class.getName(), args );
-//            recordingsDataFragment.setRetainInstance( true );
-//
-//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//            transaction.add( recordingsDataFragment, RECORDINGS_DATA_FRAGMENT_TAG );
-//            transaction.commit();
-//
-//        } else {
-//
-//            recordingsDataFragment.reset();
-//
-//        }
 
     }
 
