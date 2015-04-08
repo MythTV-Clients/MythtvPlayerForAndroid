@@ -49,7 +49,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     CardView cardView;
     RelativeLayout layout;
     ImageView preview, coverart;
-    TextView showName, episodeName, startTime, description;
+    TextView showName, episodeName, callsign, startTime, channelNumber, description;
     Button play, queueHls;
     ProgressBar progress;
 
@@ -135,7 +135,9 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         coverart = (ImageView) rootView.findViewById( R.id.recording_coverart );
         showName = (TextView) rootView.findViewById( R.id.recording_show_name );
         episodeName = (TextView) rootView.findViewById( R.id.recording_episode_name );
+        callsign = (TextView) rootView.findViewById( R.id.recording_episode_callsign );
         startTime = (TextView) rootView.findViewById( R.id.recording_start_time );
+        channelNumber = (TextView) rootView.findViewById( R.id.recording_episode_channel_number );
         description = (TextView) rootView.findViewById( R.id.recording_description );
 
         queueHls = (Button) rootView.findViewById( R.id.recording_queue_hls );
@@ -210,9 +212,11 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         mProgram = program;
 
         cardView.setRadius( 2.0f );
-        showName.setText( mProgram.getTitle() );
-        episodeName.setText( mProgram.getSubTitle() );
-        startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
+        showName.setText(mProgram.getTitle());
+        episodeName.setText(mProgram.getSubTitle());
+        callsign.setText( mProgram.getChannel().getCallSign() );
+        startTime.setText( mProgram.getStartTime().withZone(DateTimeZone.getDefault()).toString("yyyy-MM-dd hh:mm a") );
+        channelNumber.setText( mProgram.getChannel().getChanNum() );
         description.setText( mProgram.getDescription() );
 
         String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + mProgram.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
@@ -234,24 +238,28 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                         try {
 
                             layout.setBackgroundColor(palette.getDarkMutedColor( R.color.recording_card_default ) );
-                            showName.setTextColor(swatch.getTitleTextColor() );
+                            showName.setTextColor( swatch.getTitleTextColor() );
                             episodeName.setTextColor( swatch.getTitleTextColor() );
+                            callsign.setTextColor( swatch.getTitleTextColor() );
                             startTime.setTextColor( swatch.getTitleTextColor() );
+                            channelNumber.setTextColor( swatch.getTitleTextColor() );
                             description.setTextColor( swatch.getTitleTextColor() );
 
                             queueHls.setTextColor( swatch.getTitleTextColor() );
                             play.setTextColor( swatch.getTitleTextColor() );
 
-                        } catch( Exception  e ) {
+                        } catch( Exception e ) {
 
                             layout.setBackgroundColor( getActivity().getResources().getColor( R.color.primary_dark ) );
                             showName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                            episodeName.setTextColor( getActivity().getResources().getColor(R.color.white) );
-                            startTime.setTextColor( getActivity().getResources().getColor(R.color.white) );
-                            description.setTextColor( getActivity().getResources().getColor(R.color.white) );
+                            episodeName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                            callsign.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                            startTime.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                            channelNumber.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                            description.setTextColor( getActivity().getResources().getColor( R.color.white ) );
 
-                            queueHls.setTextColor( getActivity().getResources().getColor(R.color.white) );
-                            play.setTextColor( getActivity().getResources().getColor(R.color.white) );
+                            queueHls.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                            play.setTextColor( getActivity().getResources().getColor( R.color.white ) );
 
                         }
 
