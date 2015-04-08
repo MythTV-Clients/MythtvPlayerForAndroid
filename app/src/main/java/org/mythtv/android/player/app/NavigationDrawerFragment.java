@@ -3,6 +3,8 @@ package org.mythtv.android.player.app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -14,11 +16,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.player.app.settings.SettingsActivity;
 import org.mythtv.android.player.app.recordings.ShowsActivity;
 import org.mythtv.android.player.app.videos.VideosActivity;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
     private View containerView;
+    private TextView mythtvVersion;
 
     private int mSelectedItem;
 
@@ -69,11 +74,24 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
         View layout = inflater.inflate( R.layout.fragment_navigation_drawer, container, false );
+        mythtvVersion = (TextView) layout.findViewById( R.id.mythtv_version );
         recyclerView = (RecyclerView) layout.findViewById( R.id.drawer_list );
         adapter = new NavigationDrawerAdapter( getNavigationItems( getActivity() ) );
         adapter.setNavigationDrawerCallbacks( this );
         recyclerView.setAdapter( adapter );
         recyclerView.setLayoutManager( new LinearLayoutManager( getActivity() ) );
+
+        final PackageManager packageManager = getActivity().getPackageManager();
+        if (packageManager != null) {
+
+            String versionName = getActivity().getResources().getString( R.string.app_version );
+            try {
+                PackageInfo packageInfo = packageManager.getPackageInfo( getActivity().getPackageName(), 0 );
+                versionName = packageInfo.versionName;
+                mythtvVersion.setText( versionName );
+            } catch( PackageManager.NameNotFoundException e ) {
+            }
+        }
 
         selectItem( mSelectedItem );
 
