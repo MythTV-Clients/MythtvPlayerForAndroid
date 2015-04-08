@@ -7,17 +7,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.support.v7.widget.SearchView;
-import android.widget.Toast;
 
 import org.mythtv.android.R;
-import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.player.common.ui.data.TitleInfoDataConsumer;
 import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
 import org.mythtv.android.player.app.NavigationDrawerFragment;
 
 import java.util.List;
 
-public class ShowsActivity extends AbstractBaseActionBarActivity implements TitleInfoDataConsumer {
+public class ShowsActivity extends AbstractBaseActionBarActivity {
 
     private static final String TAG = ShowsActivity.class.getSimpleName();
 
@@ -76,20 +73,6 @@ public class ShowsActivity extends AbstractBaseActionBarActivity implements Titl
         searchView.setIconifiedByDefault( false );
 
         return super.onCreateOptionsMenu( menu );
-    }
-
-    @Override
-    public void setTitleInfos( List<TitleInfo> titleInfos ) {
-
-        mTitleInfosFragment.setTitleInfos( titleInfos );
-
-    }
-
-    @Override
-    public void onHandleError( String message ) {
-
-        Toast.makeText( this, message, Toast.LENGTH_LONG ).show();
-
     }
 
     @Override
