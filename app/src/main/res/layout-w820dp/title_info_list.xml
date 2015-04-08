@@ -9,7 +9,12 @@
         android:id="@+id/title_info_all_recordings_header"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:layout_margin="@dimen/outer_margin"
+        android:layout_marginTop="@dimen/margin"
+        android:layout_marginLeft="@dimen/outer_margin"
+        android:layout_marginStart="@dimen/outer_margin"
+        android:layout_marginRight="@dimen/outer_margin"
+        android:layout_marginEnd="@dimen/outer_margin"
+        android:layout_marginBottom="@dimen/margin"
         android:visibility="gone"
         tools:visibility="visible">
 
