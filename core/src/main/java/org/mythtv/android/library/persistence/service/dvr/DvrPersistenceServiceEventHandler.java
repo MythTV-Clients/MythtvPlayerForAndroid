@@ -250,7 +250,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 Program program = ProgramHelper.fromDetails( details );
                 Log.v( TAG, "updateRecordedPrograms : program=" + program );
 
-                if( null == program.getStartTime() ||
+                if( null == program.getStartTime() || null == program.getEndTime() ||
                         "LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ||
                         "Deleted".equalsIgnoreCase( program.getRecording().getRecGroup() ) ) {
                     continue;
@@ -521,13 +521,13 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         while( cursor.moveToNext() ) {
 
             program = new Program();
-            program.setStartTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_START_TIME ) ) ) );
-            program.setEndTime( new DateTime( cursor.getLong(cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_END_TIME ) ) ) );
-            program.setTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_TITLE ) ) );
-            program.setSubTitle( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_SUB_TITLE ) ) );
-            program.setInetref( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_INETREF ) ) );
-            program.setDescription( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_DESCRIPTION ) ) );
-            program.setFileName( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_FILE_NAME ) ) );
+            program.setStartTime( new DateTime( cursor.getLong( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_START_TIME ) ) ));
+            program.setEndTime(new DateTime(cursor.getLong(cursor.getColumnIndex(ProgramConstants.FIELD_PROGRAM_END_TIME ) )));
+            program.setTitle(cursor.getString(cursor.getColumnIndex(ProgramConstants.FIELD_PROGRAM_TITLE ) ) );
+            program.setSubTitle(cursor.getString(cursor.getColumnIndex(ProgramConstants.FIELD_PROGRAM_SUB_TITLE ) ));
+            program.setInetref(cursor.getString(cursor.getColumnIndex(ProgramConstants.FIELD_PROGRAM_INETREF ) ) );
+            program.setDescription(cursor.getString(cursor.getColumnIndex(ProgramConstants.FIELD_PROGRAM_DESCRIPTION ) ) );
+            program.setFileName(cursor.getString(cursor.getColumnIndex(ProgramConstants.FIELD_PROGRAM_FILE_NAME ) ) );
             program.setHostName( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_HOSTNAME ) ) );
 
             ChannelInfo channel = new ChannelInfo();
