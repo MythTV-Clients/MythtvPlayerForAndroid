@@ -297,7 +297,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
             case R.id.recording_queue_hls :
 
                 new AddRecordingLiveStreamAsyncTask().execute( mProgram );
-                queueHls.setVisibility(View.INVISIBLE);
+                queueHls.setVisibility( View.INVISIBLE );
+                progress.setVisibility( View.VISIBLE );
 
                 break;
 

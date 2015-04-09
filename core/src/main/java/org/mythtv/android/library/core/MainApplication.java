@@ -142,6 +142,8 @@ public class MainApplication extends Application {
         Log.v( TAG, "resetBackend : exit" );
     }
 
+    public ApiVersion getApiVersion() { return mApiVersion; }
+
     public MythTvApiContext getMythTvApiContext() {
         return mMythTvApiContext;
     }
