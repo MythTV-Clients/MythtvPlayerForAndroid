@@ -41,12 +41,12 @@ public class ShowsActivity extends AbstractBaseActionBarActivity {
 //
 //        }
 
-        super.onCreate(savedInstanceState);
+        super.onCreate( savedInstanceState );
 
         mTitleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentById( R.id.fragment_shows );
 
         mDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById( R.id.fragment_navigation_drawer );
-        mDrawerFragment.setUp( R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar );
+        mDrawerFragment.setUp( R.id.fragment_navigation_drawer, (DrawerLayout) findViewById( R.id.drawer_layout ), toolbar );
 
         setTitle( getResources().getString( R.string.drawer_item_watch_recordings ) );
 
@@ -77,6 +77,8 @@ public class ShowsActivity extends AbstractBaseActionBarActivity {
 
     @Override
     protected void updateData() {
+
+        mTitleInfosFragment.reload();
 
     }
 

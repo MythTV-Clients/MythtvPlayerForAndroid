@@ -31,9 +31,9 @@ public class VideoServiceV27EventHandler implements VideoService {
 
     VideoMetadataInfoList mVideoList;
 
-    public VideoServiceV27EventHandler( MythTvApiContext mythTvApiContext ) {
+    public VideoServiceV27EventHandler() {
 
-        mMythTvApiContext = (MythTvApi027Context) mythTvApiContext;
+        mMythTvApiContext = (MythTvApi027Context) MainApplication.getInstance().getMythTvApiContext();
 
     }
 

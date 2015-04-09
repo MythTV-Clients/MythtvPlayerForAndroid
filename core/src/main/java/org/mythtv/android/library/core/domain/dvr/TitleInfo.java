@@ -75,8 +75,8 @@ public class TitleInfo implements Serializable, Comparable<TitleInfo> {
 
         if( this == another ) return EQUAL;
 
-        String thisTitle = removeArticles( this.title );
-        String thatTitle = removeArticles( another.title );
+        String thisTitle = removeArticles( this.title.toUpperCase() );
+        String thatTitle = removeArticles( another.title.toUpperCase() );
 
         int comparison = thisTitle.compareTo( thatTitle );
         if( comparison != EQUAL ) return comparison;

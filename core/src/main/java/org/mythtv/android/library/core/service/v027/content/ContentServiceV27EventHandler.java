@@ -47,10 +47,10 @@ public class ContentServiceV27EventHandler implements ContentService {
 
     LiveStreamInfoList mLiveStreamInfoList;
 
-    public ContentServiceV27EventHandler( Context context, MythTvApiContext mythTvApiContext ) {
+    public ContentServiceV27EventHandler() {
 
-        mMythTvApiContext = (MythTvApi027Context) mythTvApiContext;
-        mContentPersistenceService = new ContentPersistenceServiceEventHandler( context );
+        mMythTvApiContext = (MythTvApi027Context) MainApplication.getInstance().getMythTvApiContext();
+        mContentPersistenceService = new ContentPersistenceServiceEventHandler( MainApplication.getInstance().getApplicationContext() );
 
     }
 

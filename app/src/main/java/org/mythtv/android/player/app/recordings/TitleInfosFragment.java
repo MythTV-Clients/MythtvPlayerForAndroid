@@ -115,12 +115,12 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
         Log.v( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
 
-        getLoaderManager().initLoader( 0, null, this ).forceLoad();
+        getLoaderManager().initLoader( 0, null, this );
 
         Log.v( TAG, "onActivityCreated : exit" );
     }
 
-    public void setTitleInfos( List<TitleInfo> titleInfos ) {
+    public void reload() {
         Log.v( TAG, "setTitleInfos : enter" );
 
         getLoaderManager().restartLoader( 0, null, this );

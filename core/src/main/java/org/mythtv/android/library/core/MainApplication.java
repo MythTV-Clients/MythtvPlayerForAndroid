@@ -225,20 +225,20 @@ public class MainApplication extends Application {
                     case v027:
                         Log.v( TAG, "onPostExecute : connected to v0.27 master backend" );
 
-                        mContentService = new ContentServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
+                        mContentService = new ContentServiceV27EventHandler();
                         mDvrService = new DvrServiceV27EventHandler();
-                        mMythService = new MythServiceV27EventHandler( MainApplication.this, mMythTvApiContext );
-                        mVideoService = new VideoServiceV27EventHandler( mMythTvApiContext );
+                        mMythService = new MythServiceV27EventHandler();
+                        mVideoService = new VideoServiceV27EventHandler();
 
                         break;
 
                     case v028:
                         Log.v( TAG, "onPostExecute : connected to v0.28 master backend" );
 
-                        mContentService = new ContentServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
+                        mContentService = new ContentServiceV28EventHandler();
                         mDvrService = new DvrServiceV28EventHandler();
-                        mMythService = new MythServiceV28EventHandler( MainApplication.this, mMythTvApiContext );
-                        mVideoService = new VideoServiceV28EventHandler( mMythTvApiContext );
+                        mMythService = new MythServiceV28EventHandler();
+                        mVideoService = new VideoServiceV28EventHandler();
 
                         break;
                 }

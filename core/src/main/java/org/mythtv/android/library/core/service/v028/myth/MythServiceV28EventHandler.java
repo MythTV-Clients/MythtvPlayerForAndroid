@@ -23,15 +23,13 @@ public class MythServiceV28EventHandler implements MythService {
 
     private static final String HOST_NAME_REQ_ID = "HOST_NAME_REQ_ID";
 
-    Context mContext;
     MythTvApi028Context mMythTvApiContext;
 
     String mHostName;
 
-    public MythServiceV28EventHandler( Context context, MythTvApiContext mythTvApiContext ) {
+    public MythServiceV28EventHandler() {
 
-        mContext = context;
-        mMythTvApiContext = (MythTvApi028Context) mythTvApiContext;
+        mMythTvApiContext = (MythTvApi028Context) MainApplication.getInstance().getMythTvApiContext();
 
     }
 
