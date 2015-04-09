@@ -175,7 +175,7 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
         DetailsOverviewRowPresenter dorPresenter = new DetailsOverviewRowPresenter( new RecordingDetailsDescriptionPresenter() );
 
         // set detail background and style
-        dorPresenter.setBackgroundColor( getResources().getColor( R.color.background_navigation_drawer ) );
+        dorPresenter.setBackgroundColor( getResources().getColor( R.color.primary_dark ) );
         dorPresenter.setStyleLarge( true );
         dorPresenter.setOnActionClickedListener( new OnActionClickedListener() {
 

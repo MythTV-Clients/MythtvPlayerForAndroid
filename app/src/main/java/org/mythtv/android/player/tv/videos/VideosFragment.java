@@ -162,9 +162,9 @@ public class VideosFragment extends BrowseFragment {
         setHeadersTransitionOnBackEnabled( true );
 
         // set fastLane (or headers) background color
-        setBrandColor( getResources().getColor( R.color.background_navigation_drawer ) );
+        setBrandColor( getResources().getColor( R.color.primary_dark ) );
         // set search icon color
-        setSearchAffordanceColor( getResources().getColor( R.color.search_opaque ) );
+        setSearchAffordanceColor( getResources().getColor( R.color.accent ) );
 
     }
 

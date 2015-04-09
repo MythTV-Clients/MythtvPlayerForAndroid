@@ -110,7 +110,7 @@ public class VideoDetailsFragment extends DetailsFragment {
             DetailsOverviewRowPresenter dorPresenter =
                     new DetailsOverviewRowPresenter(new VideoDetailsDescriptionPresenter());
             // set detail background and style
-            dorPresenter.setBackgroundColor(getResources().getColor(R.color.background_navigation_drawer));
+            dorPresenter.setBackgroundColor(getResources().getColor(R.color.primary_dark));
             dorPresenter.setStyleLarge(true);
             dorPresenter.setOnActionClickedListener(new OnActionClickedListener() {
                 @Override
