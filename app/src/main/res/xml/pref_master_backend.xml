@@ -20,6 +20,6 @@
         android:singleLine="true"
         android:maxLines="1"
         android:numeric="integer"
-        android:maxLength="4" />
+        android:maxLength="5" />
 
 </PreferenceScreen>
