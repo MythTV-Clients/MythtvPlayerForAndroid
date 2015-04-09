@@ -244,7 +244,7 @@ public class MainApplication extends Application {
                 mConnected = true;
 
                 new RefreshLiveStreamsTask().execute();
-                new RefreshTitleInfosTask( null ).execute();
+//                new RefreshTitleInfosTask( null ).execute();
                 new RefreshRecordedProgramsTask( null ).execute();
 
                 scheduleAlarms();
