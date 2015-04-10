@@ -248,9 +248,9 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             for( ProgramDetails details : event.getDetails() ) {
 
                 Program program = ProgramHelper.fromDetails( details );
-                Log.v( TAG, "updateRecordedPrograms : program=" + program );
+                Log.v(TAG, "updateRecordedPrograms : program=" + program);
 
-                if( null == program.getStartTime() || null == program.getEndTime() ||
+                if( null == program.getStartTime() || null == program.getEndTime() || null == program.getRecording().getStartTs() || null == program.getRecording().getEndTs() ||
                         "LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ||
                         "Deleted".equalsIgnoreCase( program.getRecording().getRecGroup() ) ) {
                     continue;

@@ -9,8 +9,8 @@ android {
         applicationId "org.mythtv.android"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 8
-        versionName "1.1.5"
+        versionCode 9
+        versionName "1.1.6"
         archivesBaseName = applicationId + "-" + versionName
     }
 
