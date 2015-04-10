@@ -99,12 +99,12 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
         Log.i( TAG, "onActivityCreated : exit" );
     }
 
-    public void setPrograms( List<Program> programs ) {
-        Log.i( TAG, "setPrograms : enter" );
+    public void reload() {
+        Log.i( TAG, "reload : enter" );
 
         getLoaderManager().restartLoader( 0, null, this );
 
-        Log.i( TAG, "setPrograms : exit" );
+        Log.i( TAG, "reload : exit" );
     }
 
     public void setupUi( List<Program> programs ) {
