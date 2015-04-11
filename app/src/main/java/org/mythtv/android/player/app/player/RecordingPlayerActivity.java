@@ -10,10 +10,13 @@ import android.widget.VideoView;
 
 import org.joda.time.DateTimeZone;
 import org.joda.time.Minutes;
+import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.CastMember;
 import org.mythtv.android.library.core.domain.dvr.Program;
+
+import java.util.Locale;
 
 /**
  * Created by dmfrey on 4/4/15.
@@ -75,8 +78,8 @@ public class RecordingPlayerActivity extends Activity {
             showName.setText( mProgram.getTitle() );
             episodeName.setText( mProgram.getSubTitle() );
             duration.setText( Minutes.minutesBetween( mProgram.getStartTime(), mProgram.getEndTime() ).getMinutes() + " mins" );
-            startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString("yyyy-MM-dd hh:mm a") );
-            endTime.setText( mProgram.getEndTime().withZone( DateTimeZone.getDefault() ).toString("yyyy-MM-dd hh:mm a"));
+            startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "-S", Locale.getDefault() ) ) );
+            endTime.setText( mProgram.getEndTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "-S", Locale.getDefault() ) ) );
             description.setText(mProgram.getDescription());
 
             if( null != mProgram.getCastMembers() && !mProgram.getCastMembers().isEmpty() ) {

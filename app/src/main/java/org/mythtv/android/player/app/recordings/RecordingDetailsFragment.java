@@ -28,6 +28,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
@@ -36,6 +37,8 @@ import org.mythtv.android.player.common.ui.loaders.LiveStreamAsyncTaskLoader;
 import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
 import org.mythtv.android.player.app.player.RecordingPlayerActivity;
 import org.mythtv.android.R;
+
+import java.util.Locale;
 
 /**
  * Created by dmfrey on 12/8/14.
@@ -215,7 +218,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         showName.setText(mProgram.getTitle());
         episodeName.setText(mProgram.getSubTitle());
         callsign.setText( mProgram.getChannel().getCallSign() );
-        startTime.setText( mProgram.getStartTime().withZone(DateTimeZone.getDefault()).toString("yyyy-MM-dd hh:mm a") );
+        startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
         channelNumber.setText( mProgram.getChannel().getChanNum() );
         description.setText( mProgram.getDescription() );
 

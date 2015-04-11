@@ -2,6 +2,7 @@ package org.mythtv.android.player.common.ui.adapters;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by dmfrey on 11/29/14.
@@ -81,7 +83,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
             viewHolder.setSubTitleVisibility( View.GONE );
 
         }
-        viewHolder.setDate( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
+        viewHolder.setDate( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
             @Override
