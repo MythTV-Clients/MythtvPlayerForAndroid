@@ -37,11 +37,15 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
     private boolean showTitle;
     private int previousPosition = 0;
 
+    private boolean useInternalPlayer;
+
     public ProgramItemAdapter( List<Program> programs, @NonNull ProgramItemClickListener programItemClickListener, boolean showTitle ) {
 
         this.programs = programs;
         this.programItemClickListener = programItemClickListener;
         this.showTitle = showTitle;
+
+        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
 
     }
 
@@ -50,7 +54,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.program_list_item, viewGroup, false );
 
-        ViewHolder vh = new ViewHolder( v );
+        ViewHolder vh = new ViewHolder( v, useInternalPlayer );
         return vh;
     }
 
@@ -134,7 +138,9 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         private Integer chanId;
         private DateTime startTime;
 
-        public ViewHolder( View v ) {
+        private boolean useInternalPlayer;
+
+        public ViewHolder( View v, boolean useInternalPlayer ) {
             super( v );
 
             this.parent = v;
@@ -144,6 +150,8 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
             date = (TextView) parent.findViewById( R.id.program_item_date );
             readyToStream = (TextView) parent.findViewById( R.id.program_item_stream_ready );
             progress = (ProgressBar) parent.findViewById( R.id.program_item_progress );
+
+            this.useInternalPlayer = useInternalPlayer;
 
         }
 
@@ -155,7 +163,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         public void setSubTitle( CharSequence text ) {
 
-            subTitle.setText( text );
+            subTitle.setText(text);
 
         }
 
@@ -167,7 +175,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         public void setDate( CharSequence text ) {
 
-            date.setText( text );
+            date.setText(text);
 
         }
 
@@ -179,7 +187,11 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
             progress.setVisibility( View.GONE );
             readyToStream.setVisibility( View.GONE );
 
-            progressHandler.post( progressUpdateRunnable );
+            if( useInternalPlayer ) {
+
+                progressHandler.post( progressUpdateRunnable );
+
+            }
 
         }
 

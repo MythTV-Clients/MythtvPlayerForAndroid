@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -16,6 +17,8 @@ import org.mythtv.android.R;
  */
 public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
 
+    private static final String TAG = RecordingDetailsActivity.class.getSimpleName();
+
     private RecordingDetailsFragment mRecordingDetailsFragment;
     Program mProgram;
 
@@ -26,21 +29,37 @@ public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
+        Log.v( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
-        if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( RecordingDetailsFragment.PROGRAM_KEY ) ) {
-            mProgram = (Program) getIntent().getSerializableExtra( RecordingDetailsFragment.PROGRAM_KEY );
+        if( null != savedInstanceState ) {
+            Log.v( TAG, "onCreate : program loaded from savedInstanceState" );
+
+            mProgram = (Program) savedInstanceState.getSerializable( RecordingDetailsFragment.PROGRAM_KEY );
+
+        } else {
+
+            if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( RecordingDetailsFragment.PROGRAM_KEY ) ) {
+                Log.v( TAG, "onCreate : program loaded from intent" );
+
+                mProgram = (Program) getIntent().getSerializableExtra( RecordingDetailsFragment.PROGRAM_KEY );
+
+            }
+
         }
 
         mRecordingDetailsFragment = (RecordingDetailsFragment) getFragmentManager().findFragmentById( R.id.fragment_recording_details );
 
+        Log.v( TAG, "onCreate : exit" );
     }
 
     @Override
     protected void onResume() {
+        Log.v( TAG, "onResume : enter" );
         super.onResume();
 
         if( null != mProgram ) {
+            Log.v( TAG, "onResume : sending program to fragment" );
 
             mRecordingDetailsFragment.setProgram( mProgram );
 
@@ -50,24 +69,30 @@ public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
 
         }
 
+        Log.v( TAG, "onResume : exit" );
     }
 
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
-        super.onSaveInstanceState(outState);
+        Log.v( TAG, "onSaveInstanceState : enter" );
+        super.onSaveInstanceState( outState );
 
         outState.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, mProgram );
 
+        Log.v( TAG, "onSaveInstanceState : exit" );
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        super.onRestoreInstanceState(savedInstanceState);
+        Log.v( TAG, "onRestoreInstanceState : enter" );
+        super.onRestoreInstanceState( savedInstanceState );
 
         if( savedInstanceState.containsKey( RecordingDetailsFragment.PROGRAM_KEY ) ) {
+            Log.v( TAG, "onRestoreInstanceState : program loaded from savedInstanceState" );
             mProgram = (Program) savedInstanceState.getSerializable( RecordingDetailsFragment.PROGRAM_KEY );
         }
 
+        Log.v( TAG, "onRestoreInstanceState : exit" );
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.mythtv.android.player.app.recordings;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +43,8 @@ public class ShowsActivity extends AbstractBaseActionBarActivity {
 //        }
 
         super.onCreate( savedInstanceState );
+
+        PreferenceManager.setDefaultValues( this, R.xml.preferences, false );
 
         mTitleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentById( R.id.fragment_shows );
 

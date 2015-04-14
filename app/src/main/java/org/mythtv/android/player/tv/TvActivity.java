@@ -48,6 +48,8 @@ public class TvActivity extends Activity {
         Log.d( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
+        PreferenceManager.setDefaultValues( this, R.xml.preferences, false );
+
         setContentView( R.layout.activity_tv );
 
 //        final ArrayAdapter adapter = new ArrayAdapter( this, android.R.layout.simple_list_item_1, list );

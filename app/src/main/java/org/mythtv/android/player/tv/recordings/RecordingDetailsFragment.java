@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BackgroundManager;
@@ -34,7 +35,7 @@ import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
 import org.mythtv.android.player.common.ui.loaders.LiveStreamAsyncTaskLoader;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
-import org.mythtv.android.player.tv.player.PlayerActivity;
+import org.mythtv.android.player.tv.player.RecordingPlayerActivity;
 
 import java.io.IOException;
 import java.net.URI;
@@ -63,6 +64,8 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
     private Target mBackgroundTarget;
     private DisplayMetrics mMetrics;
 
+    private boolean useInternalPlayer;
+
     @Override
     public Loader onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
@@ -77,7 +80,7 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 
     @Override
     public void onLoadFinished( Loader<LiveStreamInfo> loader, LiveStreamInfo data ) {
-        Log.v( TAG, "onLoaderFinished : enter" );
+        Log.v(TAG, "onLoaderFinished : enter");
 
         if( null != data ) {
             Log.v( TAG, "onLoaderReset : cursor found live stream" );
@@ -132,8 +135,10 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
-        Log.i( TAG, "onCreate : enter" );
+        Log.i(TAG, "onCreate : enter");
         super.onCreate( savedInstanceState );
+
+        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
 
         BackgroundManager backgroundManager = BackgroundManager.getInstance( getActivity() );
         backgroundManager.attach( getActivity().getWindow() );
@@ -146,8 +151,8 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 
         mProgram = (Program) getActivity().getIntent().getSerializableExtra( PROGRAM_KEY );
 
-        buildDetails();
-//        new DetailRowBuilderTask().execute();
+//        buildDetails();
+        new DetailRowBuilderTask().execute();
 
         setOnItemClickedListener( getDefaultItemClickedListener() );
 //        updateBackground(mProgram.getBackgroundImageURI());
@@ -169,7 +174,15 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 //        } catch( IOException e ) {
 //        }
 
-        row.addAction( new Action( ACTION_QUEUE, getResources().getString( R.string.queue_hls ) ) );
+        if( useInternalPlayer ) {
+
+            row.addAction( new Action( ACTION_QUEUE, getResources().getString( R.string.queue_hls ) ) );
+
+        } else {
+
+            row.addAction( new Action( ACTION_WATCH, getResources().getString( R.string.watch_recording ) ) );
+
+        }
 
         ClassPresenterSelector ps = new ClassPresenterSelector();
         DetailsOverviewRowPresenter dorPresenter = new DetailsOverviewRowPresenter( new RecordingDetailsDescriptionPresenter() );
@@ -185,14 +198,29 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 
                 if( action.getId() == ACTION_WATCH ) {
 
-                    Intent intent = new Intent( getActivity(), PlayerActivity.class );
-                    intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
-                    intent.putExtra( getResources().getString( R.string.should_start ), true );
-                    startActivity( intent );
+                    if( useInternalPlayer ) {
+
+                        Intent intent = new Intent( getActivity(), RecordingPlayerActivity.class );
+                        intent.putExtra( RecordingPlayerActivity.FULL_URL_TAG, fullUrl );
+                        intent.putExtra( getResources().getString(R.string.should_start ), true );
+                        startActivity( intent );
+
+                    } else {
+
+                        String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mProgram.getFileName();
+                        Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
+
+                        final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
+                        externalPlayer.setDataAndType( Uri.parse(externalPlayerUrl), "video/*" );
+                        startActivity( externalPlayer );
+
+                    }
 
                 } else if( action.getId() == ACTION_QUEUE ) {
 
                     new AddRecordingLiveStreamAsyncTask().execute( mProgram );
+                    action.setId( ACTION_QUEUED );
+                    action.setLabel1("Please Wait...");
 
                 } else if( action.getId() == ACTION_QUEUED ) {
 
@@ -228,7 +256,11 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 
         setAdapter( mRowsAdapter );
 
-        getLoaderManager().initLoader( 0, null, RecordingDetailsFragment.this );
+        if( useInternalPlayer ) {
+
+            getLoaderManager().initLoader( 0, null, RecordingDetailsFragment.this );
+
+        }
 
     }
 
@@ -238,24 +270,31 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 
         @Override
         protected DetailsOverviewRow doInBackground( Void... args ) {
-            Log.v( TAG, "doInBackground : enter" );
+            Log.v(TAG, "doInBackground : enter");
 
             DetailsOverviewRow row = new DetailsOverviewRow( mProgram );
             try {
                 Bitmap poster = Picasso.with(getActivity())
                         .load( MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + mProgram.getInetref() + "&Width=" + DETAIL_THUMB_WIDTH )
                         .resize( dpToPx( DETAIL_THUMB_WIDTH, getActivity().getApplicationContext() ),
-                                dpToPx( DETAIL_THUMB_HEIGHT, getActivity().getApplicationContext() ) )
+                                 dpToPx( DETAIL_THUMB_HEIGHT, getActivity().getApplicationContext() ) )
                         .centerCrop()
                         .get();
                 row.setImageBitmap( getActivity(), poster );
             } catch( IOException e ) {
             }
 
-//            row.addAction( new Action( ACTION_WATCH, getResources().getString( R.string.watch_recording ) ) );
-            row.addAction( new Action( ACTION_QUEUE, getResources().getString( R.string.queue_hls ) ) );
+            if( useInternalPlayer ) {
 
-            Log.v( TAG, "doInBackground : exit" );
+                row.addAction( new Action( ACTION_QUEUE, getResources().getString( R.string.queue_hls ) ) );
+
+            } else {
+
+                row.addAction( new Action( ACTION_WATCH, getResources().getString( R.string.watch_recording ) ) );
+
+            }
+
+            Log.v(TAG, "doInBackground : exit");
             return row;
         }
 
@@ -268,42 +307,57 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 
             // set detail background and style
             dorPresenter.setBackgroundColor( getResources().getColor( R.color.background_navigation_drawer ) );
-            dorPresenter.setStyleLarge( true );
-            dorPresenter.setOnActionClickedListener( new OnActionClickedListener() {
+            dorPresenter.setStyleLarge(true);
+            dorPresenter.setOnActionClickedListener(new OnActionClickedListener() {
 
                 @Override
-                public void onActionClicked( Action action ) {
-                    Log.v( TAG, "onActionClicked : action=" + action.toString() );
+                public void onActionClicked(Action action) {
+                    Log.v(TAG, "onActionClicked : action=" + action.toString());
 
-                    if( action.getId() == ACTION_WATCH ) {
+                    if (action.getId() == ACTION_WATCH) {
 
-//                        Intent intent = new Intent( getActivity(), PlayerActivity.class );
-//                        intent.putExtra( getResources().getString( R.string.recording ), mProgram);
-//                        intent.putExtra( getResources().getString( R.string.should_start ), true );
-//                        startActivity( intent );
+                        if (useInternalPlayer) {
 
-                    } else if( action.getId() == ACTION_QUEUE ) {
+                            Intent intent = new Intent(getActivity(), RecordingPlayerActivity.class);
+                            intent.putExtra(RecordingPlayerActivity.FULL_URL_TAG, fullUrl);
+                            intent.putExtra(getResources().getString(R.string.should_start), true);
+                            startActivity(intent);
 
-                        new AddRecordingLiveStreamAsyncTask().execute( mProgram );
+                        } else {
 
-                    } else if( action.getId() == ACTION_QUEUED ) {
+                            String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mProgram.getFileName();
+                            Log.i(TAG, "externalPlayerUrl=" + externalPlayerUrl);
 
-                        Toast.makeText( getActivity(), getResources().getString( R.string.queued_notice ), Toast.LENGTH_SHORT ).show();
+                            final Intent externalPlayer = new Intent(Intent.ACTION_VIEW);
+                            externalPlayer.setDataAndType(Uri.parse(externalPlayerUrl), "video/*");
+                            startActivity(externalPlayer);
+
+                        }
+
+                    } else if (action.getId() == ACTION_QUEUE) {
+
+                        new AddRecordingLiveStreamAsyncTask().execute(mProgram);
+                        action.setId(ACTION_QUEUED);
+                        action.setLabel1("Please Wait...");
+
+                    } else if (action.getId() == ACTION_QUEUED) {
+
+                        Toast.makeText(getActivity(), getResources().getString(R.string.queued_notice), Toast.LENGTH_SHORT).show();
 
                     } else {
 
-                        Toast.makeText( getActivity(), action.toString(), Toast.LENGTH_SHORT ).show();
+                        Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
 
                     }
 
                 }
             });
 
-            ps.addClassPresenter( DetailsOverviewRow.class, dorPresenter );
+            ps.addClassPresenter(DetailsOverviewRow.class, dorPresenter);
             ps.addClassPresenter( ListRow.class, new ListRowPresenter() );
 
-            ArrayObjectAdapter adapter = new ArrayObjectAdapter( ps );
-            adapter.add( detailRow );
+            mRowsAdapter = new ArrayObjectAdapter( ps );
+            mRowsAdapter.add( detailRow );
 
 //            String subcategories[] = {
 //                    getString(R.string.related_movies)
@@ -318,9 +372,13 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 //            HeaderItem header = new HeaderItem(0, subcategories[0], null);
 //            adapter.add(new ListRow(header, listRowAdapter));
 
-            setAdapter( adapter );
+            setAdapter( mRowsAdapter );
 
-            getLoaderManager().initLoader( 0, null, RecordingDetailsFragment.this );
+            if( useInternalPlayer ) {
+
+                getLoaderManager().initLoader(0, null, RecordingDetailsFragment.this);
+
+            }
 
             Log.v( TAG, "onPostExecute : exit" );
         }

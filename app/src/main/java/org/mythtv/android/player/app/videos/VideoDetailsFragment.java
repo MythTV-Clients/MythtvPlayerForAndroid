@@ -23,17 +23,17 @@ import android.widget.TextView;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
+import org.mythtv.android.library.core.utils.AddVideoLiveStreamAsyncTask;
 import org.mythtv.android.library.events.content.AddVideoLiveStreamEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.player.app.player.VideoPlayerActivity;
 import org.mythtv.android.player.common.ui.utils.ImageUtils;
 import org.mythtv.android.R;
-//import FloatingActionButton;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class VideoDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener { //, FloatingActionButton.OnCheckedChangeListener {
+public class VideoDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     private static final String TAG = VideoDetailsFragment.class.getSimpleName();
 
@@ -42,13 +42,13 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
     ImageView coverart;
     TextView description, percentComplete;
     Button play, queueHls;
-//    FloatingActionButton fab;
 
     Video mVideo;
 
     int finalWidth, finalHeight;
 
     String fullUrl;
+    boolean useInternalPlayer, useExternalPlayer;
 
     @Override
     public Loader onCreateLoader( int id, Bundle args ) {
@@ -63,26 +63,35 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoadFinished( Loader<Cursor> loader, Cursor data ) {
 
-        if( null != data && data.moveToNext() ) {
+        if( !useInternalPlayer || useExternalPlayer ) {
 
-            int percent = data.getInt( data.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
-            if( percent > 0 ) {
-
-                percentComplete.setText( "HLS: " + String.valueOf( percent ) + "%" );
-
-                if( percent > 2 ) {
-                    fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
-//                    fab.setVisibility( View.VISIBLE );
-                    play.setVisibility( View.VISIBLE );
-                }
-            }
-
-            queueHls.setVisibility( View.INVISIBLE );
+            queueHls.setVisibility( View.GONE );
+            play.setVisibility( View.VISIBLE );
 
         } else {
-            queueHls.setVisibility( View.VISIBLE );
-//            fab.setVisibility( View.GONE );
-            play.setVisibility( View.GONE );
+
+            if( null != data && data.moveToNext() ) {
+
+                int percent = data.getInt( data.getColumnIndex(LiveStreamConstants.FIELD_PERCENT_COMPLETE));
+                if (percent > 0) {
+
+                    percentComplete.setText("HLS: " + String.valueOf(percent) + "%");
+
+                    if (percent > 2) {
+                        fullUrl = data.getString(data.getColumnIndex(LiveStreamConstants.FIELD_RELATIVE_URL));
+                        play.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                queueHls.setVisibility(View.INVISIBLE);
+
+            } else {
+
+                queueHls.setVisibility(View.VISIBLE);
+                play.setVisibility(View.GONE);
+
+            }
+
         }
 
     }
@@ -94,7 +103,10 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-        setHasOptionsMenu( true );
+        setHasOptionsMenu(true);
+
+        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
+        useExternalPlayer = MainApplication.getInstance().isExternalPlayerVideoOverrideEnabled();
 
     }
 
@@ -111,9 +123,6 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
         play = (Button) rootView.findViewById( R.id.video_play );
         play.setOnClickListener( this );
-
-//        fab = (FloatingActionButton) rootView.findViewById( R.id.video_fab );
-//        fab.setOnCheckedChangeListener( this );
 
         return rootView;
     }
@@ -150,14 +159,10 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
         switch( item.getItemId() ) {
 
-            case R.id.play_external :
+            case R.id.menu_settings :
 
-                String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mVideo.getFileName();
-                Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
-
-                final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
-                externalPlayer.setDataAndType( Uri.parse(externalPlayerUrl), "video/*" );
-                startActivity( externalPlayer );
+                final Intent settings = new Intent( getActivity(), VideoDetailsSettingsActivity.class );
+                startActivity( settings );
 
                 return true;
 
@@ -179,18 +184,6 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
     }
 
-//    @Override
-//    public void onCheckedChanged( FloatingActionButton fabView, boolean isChecked ) {
-//        Log.d(TAG, "onCheckedChanged : enter");
-//
-//        Intent intent = new Intent( getActivity(), PlayerActivity.class );
-//        intent.putExtra( PlayerActivity.FULL_URL_TAG, fullUrl );
-//        intent.putExtra( getResources().getString( R.string.should_start ), true );
-//        startActivity( intent );
-//
-//        Log.d( TAG, "onCheckedChanged : exit" );
-//    }
-
     @Override
     public void onClick( View v ) {
 
@@ -198,36 +191,34 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
             case R.id.video_play :
 
-                Intent intent = new Intent( getActivity(), VideoPlayerActivity.class );
-                intent.putExtra( VideoPlayerActivity.FULL_URL_TAG, fullUrl );
-                intent.putExtra( VideoPlayerActivity.VIDEO_TAG, mVideo );
-                startActivity( intent );
+                if( useInternalPlayer && !useExternalPlayer ) {
+
+                    Intent intent = new Intent(getActivity(), VideoPlayerActivity.class);
+                    intent.putExtra(VideoPlayerActivity.FULL_URL_TAG, fullUrl);
+                    intent.putExtra(VideoPlayerActivity.VIDEO_TAG, mVideo);
+                    startActivity(intent);
+
+                } else {
+
+                    String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mVideo.getFileName();
+                    Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
+
+                    final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
+                    externalPlayer.setDataAndType( Uri.parse(externalPlayerUrl), "video/*" );
+                    startActivity( externalPlayer );
+
+                }
 
                 break;
 
             case R.id.video_queue_hls :
 
-                new AddVideoLiveStreamAsyncTask().execute();
+                new AddVideoLiveStreamAsyncTask().execute( mVideo );
                 queueHls.setVisibility( View.INVISIBLE );
                 percentComplete.setText( "Queued..." );
 
                 break;
 
-        }
-
-    }
-
-    private class AddVideoLiveStreamAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private String TAG = AddVideoLiveStreamAsyncTask.class.getSimpleName();
-
-        @Override
-        protected Void doInBackground( Void... params ) {
-            Log.d( TAG, "doInBackground : adding video hls" );
-
-            MainApplication.getInstance().getContentService().addVideoLiveStream( new AddVideoLiveStreamEvent( mVideo.getId(), null, 1280, 720, null, null, null ) );
-
-            return null;
         }
 
     }

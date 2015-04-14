@@ -23,8 +23,18 @@ public class VideoDetailsActivity extends AbstractBaseActionBarActivity {
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-        if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( VideoDetailsFragment.VIDEO_KEY ) ) {
-            mVideo = (Video) getIntent().getSerializableExtra( VideoDetailsFragment.VIDEO_KEY );
+        if( null != savedInstanceState ) {
+
+            mVideo = (Video) savedInstanceState.getSerializable( VideoDetailsFragment.VIDEO_KEY );
+
+        } else {
+
+            if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( VideoDetailsFragment.VIDEO_KEY ) ) {
+
+                mVideo = (Video) getIntent().getSerializableExtra(VideoDetailsFragment.VIDEO_KEY);
+
+            }
+
         }
 
         mVideoDetailsFragment = (VideoDetailsFragment) getFragmentManager().findFragmentById( R.id.fragment_video_details );
@@ -51,7 +61,9 @@ public class VideoDetailsActivity extends AbstractBaseActionBarActivity {
         super.onRestoreInstanceState( savedInstanceState );
 
         if( savedInstanceState.containsKey( VideoDetailsFragment.VIDEO_KEY ) ) {
+
             mVideo = (Video) savedInstanceState.getSerializable( VideoDetailsFragment.VIDEO_KEY );
+
         }
 
     }

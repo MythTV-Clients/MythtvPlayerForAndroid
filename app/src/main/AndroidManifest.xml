@@ -62,7 +62,8 @@
 
         <activity
             android:name=".player.app.recordings.RecordingDetailsActivity"
-            android:parentActivityName=".player.app.recordings.RecordingsActivity" >
+            android:launchMode="singleTop"
+            android:parentActivityName=".player.app.recordings.RecordingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -70,6 +71,16 @@
 
             <meta-data android:name="android.app.default_searchable"
                 android:value=".player.app.search.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".player.app.recordings.RecordingDetailsSettingsActivity"
+            android:parentActivityName=".player.app.recordings.RecordingDetailsActivity" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".player.app.recordings.RecordingDetailsActivity" />
 
         </activity>
 
@@ -85,6 +96,7 @@
 
         <activity
             android:name=".player.app.videos.VideoDetailsActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".player.app.videos.VideosActivity" >
 
             <meta-data
@@ -93,6 +105,16 @@
 
             <meta-data android:name="android.app.default_searchable"
                 android:value=".player.app.search.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".player.app.videos.VideoDetailsSettingsActivity"
+            android:parentActivityName=".player.app.videos.VideoDetailsSettingsActivity" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".player.app.videos.VideoDetailsSettingsActivity" />
 
         </activity>
 
@@ -187,7 +209,12 @@
         </activity>
 
         <activity
-            android:name=".player.tv.player.PlayerActivity"
+            android:name=".player.tv.player.RecordingPlayerActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <activity
+            android:name=".player.tv.player.VideoPlayerActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 

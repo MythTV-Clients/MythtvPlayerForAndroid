@@ -23,14 +23,15 @@ import android.widget.VideoView;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.utils.Utils;
-//import VideoDetailsActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PlayerActivity extends Activity {
+//import VideoDetailsActivity;
 
-    private static final String TAG = PlayerActivity.class.getSimpleName();
+public class VideoPlayerActivity extends Activity {
+
+    private static final String TAG = VideoPlayerActivity.class.getSimpleName();
 
     public static final String FULL_URL_TAG = "full_url";
 
@@ -267,13 +268,13 @@ public class PlayerActivity extends Activity {
 //                public void run() {
 //
 //                    if( null != mSelectedProgram ) {
-//                        Intent intent = new Intent( PlayerActivity.this, RecordingDetailsActivity.class );
+//                        Intent intent = new Intent( RecordingPlayerActivity.this, RecordingDetailsActivity.class );
 //                        intent.putExtra( getResources().getString( R.string.recording ), mSelectedProgram );
 //                        startActivity(intent);
 //                    }
 //
 //                    if( null != mSelectedVideo ) {
-//                        Intent intent = new Intent( PlayerActivity.this, VideoDetailsActivity.class );
+//                        Intent intent = new Intent( RecordingPlayerActivity.this, VideoDetailsActivity.class );
 //                        intent.putExtra( getResources().getString( R.string.video ), mSelectedVideo );
 //                        startActivity( intent );
 //                    }
@@ -341,7 +342,7 @@ public class PlayerActivity extends Activity {
 //                mControllersTimer = new Timer();
 //                mControllersTimer.schedule(new BackToDetailTask(), HIDE_CONTROLLER_TIME);
 
-                PlayerActivity.this.finish();
+                VideoPlayerActivity.this.finish();
             }
         });
     }

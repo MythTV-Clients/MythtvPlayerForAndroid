@@ -16,7 +16,7 @@ public class AddRecordingLiveStreamAsyncTask extends AsyncTask<Program, Void, Vo
 
         Program program = params[ 0 ];
 
-        MainApplication.getInstance().getContentService().addLiveStream( new AddLiveStreamEvent( program.getRecording().getStorageGroup(), program.getFileName(), program.getHostName(), 0, 1280, 720, null, null, null ) );
+        MainApplication.getInstance().getContentService().addLiveStream( new AddLiveStreamEvent( program.getRecording().getStorageGroup(), program.getFileName(), program.getHostName(), 0, MainApplication.getInstance().getVideoWidth(), MainApplication.getInstance().getVideoHeight(), MainApplication.getInstance().getVideoBitrate(), MainApplication.getInstance().getAudioBitrate(), null ) );
 
         return null;
     }
