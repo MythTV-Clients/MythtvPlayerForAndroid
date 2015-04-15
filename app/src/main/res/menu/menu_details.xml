@@ -2,8 +2,8 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/play_external"
-        android:title="@string/launch_external_player"
+    <item android:id="@+id/menu_settings"
+        android:title="@string/action_settings"
         app:showAsAction="never" />
 
 </menu>

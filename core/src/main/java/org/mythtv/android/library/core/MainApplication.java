@@ -42,9 +42,18 @@ import retrofit.RestAdapter;
  */
 public class MainApplication extends Application {
 
+    private static final String TAG = MainApplication.class.getSimpleName();
+
     public static final String KEY_PREF_BACKEND_URL = "backend_url";
     public static final String KEY_PREF_BACKEND_PORT = "backend_port";
-    private static final String TAG = MainApplication.class.getSimpleName();
+
+    public static final String KEY_PREF_INTERNAL_PLAYER = "internal_player";
+    public static final String KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO = "external_player_override_video";
+    public static final String KEY_PREF_HLS_SETTINGS = "pref_hls_settings";
+    public static final String KEY_PREF_HLS_VIDEO_WIDTH = "hls_video_width";
+    public static final String KEY_PREF_HLS_VIDEO_HEIGHT = "hls_video_height";
+    public static final String KEY_PREF_HLS_VIDEO_BITRATE = "hls_video_bitrate";
+    public static final String KEY_PREF_HLS_AUDIO_BITRATE = "hls_audio_bitrate";
 
     public static final String ACTION_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_CONNECTED";
     public static final String ACTION_NOT_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_NOT_CONNECTED";
@@ -69,6 +78,8 @@ public class MainApplication extends Application {
     private PendingIntent mRefreshTitleInfosPendingIntent;
     private PendingIntent mRefreshRecordedProgramsPendingIntent;
 
+    SharedPreferences mSharedPref;
+
     public static MainApplication getInstance() {
         return sInstance;
     }
@@ -80,6 +91,8 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences( MainApplication.this );
 
         sInstance = this;
 
@@ -112,15 +125,15 @@ public class MainApplication extends Application {
         Intent refreshLiveStreamIntent = new Intent( this, RefreshLiveStreamsReceiver.class );
         mRefreshLiveStreamPendingIntent = PendingIntent.getBroadcast( this, 0, refreshLiveStreamIntent, 0 );
 
-        Intent refreshTitleInfosIntent = new Intent( MainApplication.this, RefreshTitleInfosReceiver.class );
-        mRefreshTitleInfosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshTitleInfosIntent, 0 );
+//        Intent refreshTitleInfosIntent = new Intent( MainApplication.this, RefreshTitleInfosReceiver.class );
+//        mRefreshTitleInfosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshTitleInfosIntent, 0 );
 
         Intent refreshRecordedProgramsIntent = new Intent( MainApplication.this, RefreshRecordedProgramsReceiver.class );
         mRefreshRecordedProgramsPendingIntent = PendingIntent.getBroadcast( this, 0, refreshRecordedProgramsIntent, 0 );
 
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent );
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent);
 //        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshTitleInfosPendingIntent );
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent );
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent);
 
     }
 
@@ -166,6 +179,48 @@ public class MainApplication extends Application {
 
     public String getMasterBackendUrl() {
         return "http://" + mBackendUrl + ":" + mBackendPort + "/";
+    }
+
+    public boolean isInternalPlayerEnabled() {
+
+        boolean useInternalPlayer = mSharedPref.getBoolean( KEY_PREF_INTERNAL_PLAYER, true );
+
+        return useInternalPlayer;
+    }
+
+    public boolean isExternalPlayerVideoOverrideEnabled() {
+
+        boolean useExternalPlayerForVideo = mSharedPref.getBoolean( KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, true );
+
+        return useExternalPlayerForVideo;
+    }
+
+    public int getVideoWidth() {
+
+        String width = mSharedPref.getString( KEY_PREF_HLS_VIDEO_WIDTH, "0" );
+
+        return Integer.parseInt( width );
+    }
+
+    public int getVideoHeight() {
+
+        String height = mSharedPref.getString( KEY_PREF_HLS_VIDEO_HEIGHT, "0" );
+
+        return Integer.parseInt( height );
+    }
+
+    public int getVideoBitrate() {
+
+        String bitrate = mSharedPref.getString( KEY_PREF_HLS_VIDEO_BITRATE, "800000" );
+
+        return Integer.parseInt( bitrate );
+    }
+
+    public int getAudioBitrate() {
+
+        String bitrate = mSharedPref.getString( KEY_PREF_HLS_AUDIO_BITRATE, "64000");
+
+        return Integer.parseInt( bitrate );
     }
 
     public String getMasterBackendHostName() { return mBackendHostname; }

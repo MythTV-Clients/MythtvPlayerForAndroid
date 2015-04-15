@@ -70,4 +70,26 @@
     <string name="queued_notice">HLS Transcode in progress, please wait.</string>
     <string name="watch_video">Watch video</string>
 
+    <string name="pref_backend_title">Master Backend</string>
+    <string name="pref_hls_title">HLS Transcode Options</string>
+    <string name="pref_hls_video_width_title">Width</string>
+    <string name="pref_hls_video_width_default">0</string>
+    <string name="pref_hls_video_height_title">Height</string>
+    <string name="pref_hls_video_height_default">0</string>
+    <string name="pref_hls_video_bitrate_title">Bitrate</string>
+    <string name="pref_hls_video_bitrate_default">800000</string>
+    <string name="pref_hls_audio_bitrate_title">Audio Bitrate</string>
+    <string name="pref_hls_audio_bitrate_default">64000</string>
+    <string name="pref_default_player">Default Player</string>
+    <string name="pref_internal_player">Use Internal Player</string>
+    <string name="pref_external_player_override_video">Override External Player for Videos</string>
+    <string name="pref_internal_player_summary_on">Use MythTV Player Internal Player</string>
+    <string name="pref_internal_player_summary_off">Playback will be handled by an External Player</string>
+    <string name="pref_external_player_override_video_summary_on">Video will be played in an External Player</string>
+    <string name="pref_external_player_override_video_summary_off">Video will be played by the Internal Player</string>
+    <string name="pref_hls_video_width_title_summary">HLS transcode video width</string>
+    <string name="pref_hls_video_height_title_summary">HLS transcode video height</string>
+    <string name="pref_hls_video_bitrate_title_summary">HLS transcode video bitrate</string>
+    <string name="pref_hls_audio_bitrate_title_summary">HLS transcode audio bitrate</string>
+
 </resources>

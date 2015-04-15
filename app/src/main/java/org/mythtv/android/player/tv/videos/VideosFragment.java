@@ -35,7 +35,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.service.VideoServiceHelper;
-import org.mythtv.android.player.app.settings.SettingsActivity;
+import org.mythtv.android.player.tv.settings.SettingsActivity;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 
 import java.net.URI;

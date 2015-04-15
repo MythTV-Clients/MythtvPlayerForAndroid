@@ -61,6 +61,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     int finalWidth, finalHeight;
 
     String fullUrl;
+    boolean useInternalPlayer;
 
     @Override
     public Loader onCreateLoader( int id, Bundle args ) {
@@ -75,43 +76,52 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     @Override
     public void onLoadFinished( Loader<LiveStreamInfo> loader, LiveStreamInfo data ) {
 
-        if( null != data ) {
+        if( !useInternalPlayer ) {
 
-            int percent = data.getPercentComplete();
-            if( percent > 0 ) {
-
-                if( percent > 1 ) {
-
-                    progress.setIndeterminate( false );
-                    progress.setProgress( percent );
-
-                }
-
-                if( percent > 2 ) {
-
-                    fullUrl = data.getRelativeURL();
-                    play.setVisibility( View.VISIBLE );
-
-                }
-
-                if( percent == 100 ) {
-
-                    progress.setVisibility( View.GONE );
-
-                } else {
-
-                    progress.setVisibility( View.VISIBLE );
-
-                }
-
-            }
-
-            queueHls.setVisibility( View.INVISIBLE );
+            queueHls.setVisibility( View.GONE );
+            play.setVisibility( View.VISIBLE );
 
         } else {
 
-            queueHls.setVisibility( View.VISIBLE );
-            play.setVisibility( View.GONE );
+            if( null != data ) {
+
+                int percent = data.getPercentComplete();
+                if( percent > 0 ) {
+
+                    if( percent > 1 ) {
+
+                        progress.setIndeterminate( false );
+                        progress.setProgress( percent );
+
+                    }
+
+                    if( percent > 2 ) {
+
+                        fullUrl = data.getRelativeURL();
+                        play.setVisibility( View.VISIBLE );
+
+                    }
+
+                    if( percent == 100 ) {
+
+                        progress.setVisibility( View.GONE );
+
+                    } else {
+
+                        progress.setVisibility( View.VISIBLE );
+
+                    }
+
+                }
+
+                queueHls.setVisibility( View.INVISIBLE );
+
+            } else {
+
+                queueHls.setVisibility( View.VISIBLE );
+                play.setVisibility( View.GONE );
+
+            }
 
         }
 
@@ -122,14 +132,17 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
+        Log.v( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
         setHasOptionsMenu( true );
 
+        Log.v( TAG, "onCreate : exit" );
     }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
+        Log.v( TAG, "onCreateView : enter" );
 
         View rootView = inflater.inflate( R.layout.fragment_recording_details, container, false );
         cardView = (CardView) rootView.findViewById( R.id.recording_card );
@@ -151,12 +164,14 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         progress = (ProgressBar) rootView.findViewById( R.id.recording_progress );
 
+        Log.v( TAG, "onCreateView : exit" );
         return rootView;
     }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
-        super.onActivityCreated(savedInstanceState);
+        Log.v( TAG, "onActivityCreated : enter" );
+        super.onActivityCreated( savedInstanceState );
 
         ViewTreeObserver vto = preview.getViewTreeObserver();
         vto.addOnPreDrawListener( new ViewTreeObserver.OnPreDrawListener() {
@@ -171,14 +186,19 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         });
 
+        Log.v( TAG, "onActivityCreated : exit" );
     }
 
     @Override
     public void onResume() {
+        Log.v( TAG, "onResume : enter" );
         super.onResume();
 
-        getLoaderManager().restartLoader( 0, getArguments(), this );
+        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
 
+//        getLoaderManager().restartLoader( 0, getArguments(), this );
+
+        Log.v( TAG, "onResume : exit" );
     }
 
     @Override
@@ -194,14 +214,10 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         switch( item.getItemId() ) {
 
-            case R.id.play_external :
+            case R.id.menu_settings :
 
-                String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mProgram.getFileName();
-                Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
-
-                final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
-                externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
-                startActivity( externalPlayer );
+                final Intent settings = new Intent( getActivity(), RecordingDetailsSettingsActivity.class );
+                startActivity( settings );
 
                 return true;
 
@@ -211,6 +227,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     }
 
     public void setProgram( Program program ) {
+        Log.v( TAG, "setProgram : enter" );
 
         mProgram = program;
 
@@ -281,6 +298,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         getLoaderManager().initLoader( 0, getArguments(), this );
 
+        Log.v( TAG, "setProgram : exit" );
     }
 
     @Override
@@ -290,10 +308,23 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
             case R.id.recording_play :
 
-                Intent intent = new Intent( getActivity(), RecordingPlayerActivity.class );
-                intent.putExtra( RecordingPlayerActivity.FULL_URL_TAG, fullUrl );
-                intent.putExtra( RecordingPlayerActivity.PROGRAM_TAG, mProgram );
-                startActivity( intent );
+                if( useInternalPlayer ) {
+
+                    Intent intent = new Intent( getActivity(), RecordingPlayerActivity.class );
+                    intent.putExtra( RecordingPlayerActivity.FULL_URL_TAG, fullUrl );
+                    intent.putExtra( RecordingPlayerActivity.PROGRAM_TAG, mProgram );
+                    startActivity( intent );
+
+                } else {
+
+                    String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mProgram.getFileName();
+                    Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
+
+                    final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
+                    externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
+                    startActivity( externalPlayer );
+
+                }
 
                 break;
 
