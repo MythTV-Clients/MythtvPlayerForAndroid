@@ -56,6 +56,7 @@ public class MythtvProvider extends ContentProvider {
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME, VideoConstants.ALL );
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/#",  VideoConstants.SINGLE );
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/fts", VideoConstants.ALL_FTS );
+        URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/id/#", VideoConstants.SINGLE_ID );
 
     }
 
@@ -103,6 +104,7 @@ public class MythtvProvider extends ContentProvider {
                 return VideoConstants.CONTENT_TYPE;
 
             case VideoConstants.SINGLE :
+            case VideoConstants.SINGLE_ID :
                 return VideoConstants.CONTENT_ITEM_TYPE;
 
             default :
@@ -248,7 +250,7 @@ public class MythtvProvider extends ContentProvider {
 
                 cursor = db.query( VideoConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
 
-                cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
 
                 return cursor;
 
@@ -269,6 +271,17 @@ public class MythtvProvider extends ContentProvider {
                 builder.setTables( VideoConstants.TABLE_NAME );
 
                 cursor = builder.query( db, null, selection, selectionArgs, null, null, null );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case VideoConstants.SINGLE_ID :
+//                Log.v( TAG, "query : querying for single video" );
+
+                selection = VideoConstants.FIELD_VIDEO_ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
+
+                cursor = db.query( VideoConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
 
                 cursor.setNotificationUri( getContext().getContentResolver(), uri );
 

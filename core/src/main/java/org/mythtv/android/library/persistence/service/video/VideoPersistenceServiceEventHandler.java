@@ -121,31 +121,33 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
     public VideosUpdatedEvent updateVideos( UpdateVideosEvent event ) {
         Log.v(TAG, "updateVideos : enter");
 
-        String[] projection = new String[] { "rowid as " + VideoConstants._ID, VideoConstants.FIELD_VIDEO_ID };
-        String selection = null;
-        String[] selectionArgs = null;
-
-        Map<Integer, Long> videoIds = new HashMap<>();
-        Cursor cursor = mContext.getContentResolver().query( VideoConstants.CONTENT_URI, projection, selection, selectionArgs, null );
-        while( cursor.moveToNext() ) {
-
-            videoIds.put( cursor.getInt(cursor.getColumnIndex(VideoConstants.FIELD_VIDEO_ID)), cursor.getLong( cursor.getColumnIndex( VideoConstants._ID ) ) );
-
-        }
-        cursor.close();
-
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
+
+            String[] projection = new String[] { "rowid as " + VideoConstants._ID, VideoConstants.FIELD_VIDEO_ID };
+            String selection = null;
+            String[] selectionArgs = null;
+
+            Map<Integer, Long> videoIds = new HashMap<>();
+            Cursor cursor = mContext.getContentResolver().query( VideoConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+            while( cursor.moveToNext() ) {
+
+                videoIds.put( cursor.getInt( cursor.getColumnIndex( VideoConstants.FIELD_VIDEO_ID ) ), cursor.getLong( cursor.getColumnIndex( VideoConstants._ID ) ) );
+
+            }
+            cursor.close();
 
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
             projection = new String[] { "rowid as " + VideoConstants._ID };
+//            selection = VideoConstants.FIELD_VIDEO_ID + " = ?";
+//            selectionArgs = new String[] { String.valueOf( video.getId() ) };
 
             ContentValues values;
 
             for( VideoDetails details : event.getDetails() ) {
 
                 Video video = Video.fromDetails( details );
-                Log.v( TAG, "updateVideos : video=" + video );
+//                Log.v( TAG, "updateVideos : video=" + video );
 
                 if( null == video.getId() ||
                         ( null == video.getTitle() || "".equals( video.getTitle() ) ) ||
@@ -159,9 +161,6 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
                 if( videoIds.containsKey( video.getId() ) ) {
                     videoIds.remove( video.getId() );
                 }
-
-                selection = VideoConstants.FIELD_VIDEO_ID + " = ?";
-                selectionArgs = new String[] { String.valueOf( video.getId() ) };
 
                 values = new ContentValues();
                 values.put( VideoConstants.FIELD_VIDEO_ID, video.getId() );
@@ -239,14 +238,14 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
                 }
 
-                cursor = mContext.getContentResolver().query( VideoConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+                cursor = mContext.getContentResolver().query( Uri.withAppendedPath( VideoConstants.CONTENT_URI, "/id/" + video.getId() ), projection, selection, selectionArgs, null );
                 if( cursor.moveToFirst() ) {
 
                     Long id = cursor.getLong( cursor.getColumnIndex( VideoConstants._ID ) );
                     Log.v( TAG, "updateVideos : updating existing video - rowid=" + id );
                     ops.add(
                             ContentProviderOperation
-                                    .newUpdate( ContentUris.withAppendedId(VideoConstants.CONTENT_URI, id) )
+                                    .newUpdate( ContentUris.withAppendedId( VideoConstants.CONTENT_URI, id ) )
                                     .withValues( values )
                                     .build()
                     );

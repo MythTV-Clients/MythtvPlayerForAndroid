@@ -14,12 +14,16 @@ public class VideosUpdatedEvent extends UpdatedEvent {
 
     public VideosUpdatedEvent( final List<VideoDetails> details ) {
 
-        this.details = Collections.unmodifiableList( details );
-
         if( null != details ) {
+
+            this.details = Collections.unmodifiableList( details );
             entityFound = !details.isEmpty();
+
         } else {
+
+            this.details = null;
             entityFound = false;
+
         }
 
     }

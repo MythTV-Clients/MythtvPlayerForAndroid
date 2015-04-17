@@ -18,6 +18,7 @@ public class VideoConstants extends AbstractBaseDatabase {
     public static final int ALL		    			= 300;
     public static final int SINGLE    				= 301;
     public static final int ALL_FTS		    		= 302;
+    public static final int SINGLE_ID  				= 303;
 
     public static final String CREATE_TABLE, DROP_TABLE;
 

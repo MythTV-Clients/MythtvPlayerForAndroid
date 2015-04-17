@@ -75,9 +75,9 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
     @Override
     public int getItemCount() {
-        Log.v( TAG, "getItemCount : enter" );
+//        Log.v( TAG, "getItemCount : enter" );
 
-        Log.v( TAG, "getItemCount : exit" );
+//        Log.v( TAG, "getItemCount : exit" );
         return videos.size();
     }
 
