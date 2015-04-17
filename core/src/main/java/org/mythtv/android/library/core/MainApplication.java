@@ -75,8 +75,9 @@ public class MainApplication extends Application {
 
     private AlarmManager mAlarmManager;
     private PendingIntent mRefreshLiveStreamPendingIntent;
-    private PendingIntent mRefreshTitleInfosPendingIntent;
+//    private PendingIntent mRefreshTitleInfosPendingIntent;
     private PendingIntent mRefreshRecordedProgramsPendingIntent;
+    private PendingIntent mRefreshVideosPendingIntent;
 
     SharedPreferences mSharedPref;
 
@@ -131,9 +132,13 @@ public class MainApplication extends Application {
         Intent refreshRecordedProgramsIntent = new Intent( MainApplication.this, RefreshRecordedProgramsReceiver.class );
         mRefreshRecordedProgramsPendingIntent = PendingIntent.getBroadcast( this, 0, refreshRecordedProgramsIntent, 0 );
 
-        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent);
+        Intent refreshVideosIntent = new Intent( MainApplication.this, RefreshVideosReceiver.class );
+        mRefreshVideosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshVideosIntent, 0 );
+
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent );
 //        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshTitleInfosPendingIntent );
-        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent);
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent );
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 240000, 3600000, mRefreshVideosPendingIntent );
 
     }
 

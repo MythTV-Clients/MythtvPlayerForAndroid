@@ -1,11 +1,11 @@
 package org.mythtv.android.library.persistence.domain.video;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.library.core.domain.dvr.ArtworkInfo;
-import org.mythtv.android.library.core.domain.dvr.CastMember;
 import org.mythtv.android.library.events.dvr.ArtworkInfoDetails;
 import org.mythtv.android.library.events.dvr.CastMemberDetails;
 import org.mythtv.android.library.events.video.VideoDetails;
+import org.mythtv.android.library.persistence.domain.dvr.ArtworkInfo;
+import org.mythtv.android.library.persistence.domain.dvr.CastMember;
 
 import java.io.Serializable;
 import java.util.ArrayList;

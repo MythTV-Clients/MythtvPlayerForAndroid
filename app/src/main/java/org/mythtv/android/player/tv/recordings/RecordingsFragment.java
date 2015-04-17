@@ -33,6 +33,7 @@ import com.squareup.picasso.Target;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
 import org.mythtv.android.player.common.ui.loaders.ProgramsAsyncTaskLoader;
 import org.mythtv.android.player.tv.settings.SettingsActivity;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
@@ -48,7 +49,7 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 
 
-public class RecordingsFragment extends BrowseFragment implements LoaderManager.LoaderCallbacks<List<Program>> {
+public class RecordingsFragment extends BrowseFragment implements LoaderManager.LoaderCallbacks<List<Program>>, RefreshRecordedProgramsTask.OnRefreshRecordedProgramTaskListener {
 
     private static final String TAG = RecordingsFragment.class.getSimpleName();
 
@@ -75,6 +76,10 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
         if( !programs.isEmpty() ) {
 
             setupUi( programs );
+
+        } else {
+
+            new RefreshRecordedProgramsTask( this ).execute();
 
         }
 
@@ -296,6 +301,13 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
         }
         mBackgroundTimer = new Timer();
         mBackgroundTimer.schedule(new UpdateBackgroundTask(), 300);
+    }
+
+    @Override
+    public void onRefreshComplete() {
+
+        reload();
+
     }
 
     private class UpdateBackgroundTask extends TimerTask {

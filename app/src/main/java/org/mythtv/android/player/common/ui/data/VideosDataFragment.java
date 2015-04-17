@@ -15,7 +15,9 @@ import org.mythtv.android.library.core.domain.video.VideoDirectory;
 import org.mythtv.android.library.core.utils.TreeNode;
 import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.RequestAllVideosEvent;
+import org.mythtv.android.library.events.video.UpdateVideosEvent;
 import org.mythtv.android.library.events.video.VideoDetails;
+import org.mythtv.android.library.events.video.VideosUpdatedEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,24 +94,24 @@ public class VideosDataFragment extends Fragment {
 
     }
 
-    private class VideosLoaderAsyncTask extends AsyncTask<Void, Void, AllVideosEvent> {
+    private class VideosLoaderAsyncTask extends AsyncTask<Void, Void, VideosUpdatedEvent> {
 
         private String TAG = VideosLoaderAsyncTask.class.getSimpleName();
 
         @Override
-        protected AllVideosEvent doInBackground( Void... params ) {
+        protected VideosUpdatedEvent doInBackground( Void... params ) {
 
             try {
-                AllVideosEvent event = MainApplication.getInstance().getVideoService().getVideoList(new RequestAllVideosEvent(null, null, false, null, null));
 
-                return event;
+                return MainApplication.getInstance().getVideoService().updateVideos( new UpdateVideosEvent( null, null, false, null, null ) );
+
             } catch( NullPointerException e ) { }
 
             return null;
         }
 
         @Override
-        protected void onPostExecute( AllVideosEvent event ) {
+        protected void onPostExecute( VideosUpdatedEvent event ) {
 
             if( null != event && event.isEntityFound() ) {
 

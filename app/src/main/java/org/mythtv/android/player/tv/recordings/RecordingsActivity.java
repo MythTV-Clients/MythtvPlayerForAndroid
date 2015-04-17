@@ -12,7 +12,6 @@ import org.mythtv.android.player.tv.search.SearchableActivity;
 public class RecordingsActivity extends Activity {
 
     private static final String TAG = RecordingsActivity.class.getSimpleName();
-    private static final String RECORDINGS_DATA_FRAGMENT_TAG = RecordingsDataFragment.class.getCanonicalName();
 
     private RecordingsFragment mRecordingsFragment;
     String mTitle = null;

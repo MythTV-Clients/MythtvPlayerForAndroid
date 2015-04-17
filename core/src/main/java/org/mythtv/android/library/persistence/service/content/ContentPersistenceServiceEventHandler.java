@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.events.content.AllLiveStreamsEvent;
 import org.mythtv.android.library.events.content.LiveStreamAddedEvent;
 import org.mythtv.android.library.events.content.LiveStreamDetails;
@@ -42,10 +43,10 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
     Context mContext;
     DvrPersistenceService mDvrPersistenceService;
 
-    public ContentPersistenceServiceEventHandler( Context context ) {
+    public ContentPersistenceServiceEventHandler() {
 
-        mContext = context;
-        mDvrPersistenceService = new DvrPersistenceServiceEventHandler( mContext );
+        mContext = MainApplication.getInstance().getApplicationContext();
+        mDvrPersistenceService = new DvrPersistenceServiceEventHandler();
     }
 
     @Override

@@ -223,6 +223,7 @@
         <receiver android:name=".library.core.RefreshLiveStreamsReceiver" />
         <receiver android:name=".library.core.RefreshTitleInfosReceiver" />
         <receiver android:name=".library.core.RefreshRecordedProgramsReceiver" />
+        <receiver android:name=".library.core.RefreshVideosReceiver" />
         <receiver android:name=".library.core.NetworkConnectionBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

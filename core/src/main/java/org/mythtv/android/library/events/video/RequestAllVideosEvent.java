@@ -7,40 +7,16 @@ import org.mythtv.android.library.events.RequestReadEvent;
  */
 public class RequestAllVideosEvent extends RequestReadEvent {
 
-    private final String folder;
-    private final String sort;
-    private final Boolean descending;
-    private final Integer startIndex;
-    private final Integer count;
+    private final Integer id;
 
-    public RequestAllVideosEvent( final String folder, final String sort, final Boolean descending, final Integer startIndex, final Integer count ) {
+    public RequestAllVideosEvent( final Integer id ) {
 
-        this.folder = folder;
-        this.sort = sort;
-        this.descending = descending;
-        this.startIndex = startIndex;
-        this.count = count;
+        this.id = id;
 
     }
 
-    public String getFolder() {
-        return folder;
-    }
-
-    public String getSort() {
-        return sort;
-    }
-
-    public Boolean getDescending() {
-        return descending;
-    }
-
-    public Integer getStartIndex() {
-        return startIndex;
-    }
-
-    public Integer getCount() {
-        return count;
+    public Integer getId() {
+        return id;
     }
 
 }

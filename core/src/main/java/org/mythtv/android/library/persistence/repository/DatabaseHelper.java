@@ -5,9 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
+import org.mythtv.android.library.persistence.domain.video.VideoConstants;
 
 /**
  * Created by dmfrey on 1/25/15.
@@ -17,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "mythtvdb";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
     public DatabaseHelper( Context context ) {
         super( context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -42,18 +44,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate( SQLiteDatabase db ) {
         Log.i( TAG, "onCreate : enter" );
 
-        dropTables( db );
+        dropTables(db);
 
-        createTableLiveStreams( db );
-        createTableTitleInfos( db );
-        createTablePrograms( db );
+        createTableLiveStreams(db);
+        createTableTitleInfos(db);
+        createTablePrograms(db);
+        createTableVideos(db);
 
         Log.i( TAG, "onCreate : exit" );
     }
 
     @Override
     public void onUpgrade( SQLiteDatabase db, int oldVersion, int newVersion ) {
-        Log.i( TAG, "onUpgrade : enter" );
+        Log.i(TAG, "onUpgrade : enter");
 
         if( oldVersion < DATABASE_VERSION ) {
             Log.i( TAG, "onUpgrade : upgrading to db version " + DATABASE_VERSION );
@@ -85,6 +88,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.v( TAG, "dropTable : dropPrograms=" + dropPrograms );
         }
         db.execSQL( dropPrograms );
+
+        String dropVideos = VideoConstants.DROP_TABLE;
+        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
+            Log.v( TAG, "dropTable : dropVideos=" + dropVideos );
+        }
+        db.execSQL( dropVideos );
 
         Log.v( TAG, "dropTables : exit" );
     }
@@ -123,6 +132,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL( sql );
 
         Log.v( TAG, "createTablePrograms : exit" );
+    }
+
+    private void createTableVideos( SQLiteDatabase db ) {
+        Log.v( TAG, "createTableVideos : enter" );
+
+        String sql = VideoConstants.CREATE_TABLE;
+        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
+            Log.v( TAG, "createTableVideos : sql=" + sql );
+        }
+        db.execSQL( sql );
+
+        Log.v( TAG, "createTableVideos : exit" );
     }
 
 }

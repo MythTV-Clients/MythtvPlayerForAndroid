@@ -15,37 +15,26 @@ public class VideosActivity extends Activity {
 
     private static final String TAG = VideosActivity.class.getSimpleName();
 
+    private VideosFragment mVideosFragment;
+
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         Log.i( TAG, "onCreate : enter" );
 
-        if( MainApplication.getInstance().isConnected() ) {
-            Log.d(TAG, "onCreate : backend already connected");
-
-            MainApplication.getInstance().resetBackend();
-
-        } else {
-            Log.d( TAG, "onCreate : backend NOT connected" );
-
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            String backendUrlPref = sharedPref.getString( MainApplication.KEY_PREF_BACKEND_URL, "" );
-
-            if( "".equals( backendUrlPref ) || getResources().getString( R.string.pref_backend_url ).equals( backendUrlPref ) ) {
-                Log.d( TAG, "onCreate : backend not set, show settings" );
-
-                Intent prefs = new Intent( this, SettingsActivity.class );
-                startActivity( prefs );
-            } else {
-
-                MainApplication.getInstance().resetBackend();
-
-            }
-
-        }
-
         setContentView( R.layout.activity_tv_videos );
 
+        mVideosFragment = (VideosFragment) getFragmentManager().findFragmentById( R.id.videos_browse_fragment );
+
+        update();
+
     }
+
+    public void update() {
+
+        mVideosFragment.reload();
+
+    }
+
 
 }

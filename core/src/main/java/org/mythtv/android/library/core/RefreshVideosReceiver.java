@@ -7,22 +7,23 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
+import org.mythtv.android.library.events.video.UpdateVideosEvent;
 
 /**
  * Created by dmfrey on 1/26/15.
  */
-public class RefreshRecordedProgramsReceiver extends BroadcastReceiver {
+public class RefreshVideosReceiver extends BroadcastReceiver {
 
-    private final String TAG = RefreshRecordedProgramsReceiver.class.getSimpleName();
+    private final String TAG = RefreshVideosReceiver.class.getSimpleName();
 
     @Override
     public void onReceive( Context context, Intent intent ) {
 
-        new RefreshRecordedProgramsTask().execute();
+        new RefreshVideosTask().execute();
 
     }
 
-    private class RefreshRecordedProgramsTask extends AsyncTask<Void, Void, Void> {
+    private class RefreshVideosTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground( Void... params ) {
@@ -32,7 +33,7 @@ public class RefreshRecordedProgramsReceiver extends BroadcastReceiver {
 
                 if( MainApplication.getInstance().isConnected() ) {
 
-                    MainApplication.getInstance().getDvrService().updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null, null, null, null ) );
+                    MainApplication.getInstance().getVideoService().updateVideos( new UpdateVideosEvent( null, null, false, null, null ) );
 
                 }
 

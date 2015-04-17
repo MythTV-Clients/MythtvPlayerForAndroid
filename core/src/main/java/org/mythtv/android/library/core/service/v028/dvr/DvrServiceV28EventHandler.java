@@ -1,9 +1,7 @@
 package org.mythtv.android.library.core.service.v028.dvr;
 
-import android.content.Context;
 import android.util.Log;
 
-import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.events.DeleteEvent;
@@ -55,7 +53,7 @@ public class DvrServiceV28EventHandler implements DvrService {
     public DvrServiceV28EventHandler() {
 
         mMythTvApiContext = (MythTvApi028Context) MainApplication.getInstance().getMythTvApiContext();
-        mDvrPersistenceService = new DvrPersistenceServiceEventHandler( MainApplication.getInstance().getApplicationContext() );
+        mDvrPersistenceService = new DvrPersistenceServiceEventHandler();
 
     }
 

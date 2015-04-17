@@ -9,7 +9,9 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.RequestAllVideosEvent;
+import org.mythtv.android.library.events.video.UpdateVideosEvent;
 import org.mythtv.android.library.events.video.VideoDetails;
+import org.mythtv.android.library.events.video.VideosUpdatedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,16 +99,16 @@ public class VideoServiceHelper {
         return value;
     }
 
-    private class VideosLoaderAsyncTask extends AsyncTask<Void, Void, AllVideosEvent> {
+    private class VideosLoaderAsyncTask extends AsyncTask<Void, Void, VideosUpdatedEvent> {
 
         @Override
-        protected AllVideosEvent doInBackground( Void... params ) {
+        protected VideosUpdatedEvent doInBackground( Void... params ) {
 
-            return MainApplication.getInstance().getVideoService().getVideoList( new RequestAllVideosEvent( null, null, false, null, null ) );
+            return MainApplication.getInstance().getVideoService().updateVideos( new UpdateVideosEvent( null, null, false, null, null ) );
         }
 
         @Override
-        protected void onPostExecute( AllVideosEvent event ) {
+        protected void onPostExecute( VideosUpdatedEvent event ) {
             Log.i( TAG, "onPostExecute : enter" );
 
             if( event.isEntityFound() ) {
