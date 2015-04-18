@@ -90,7 +90,7 @@ public class VideoDetailsFragment extends DetailsFragment implements LoaderManag
 
                 if (percent > 2) {
 
-                    fullUrl = data.getString(data.getColumnIndex(LiveStreamConstants.FIELD_RELATIVE_URL));
+                    fullUrl = data.getString(data.getColumnIndex(LiveStreamConstants.FIELD_FULL_URL));
 
                     Action action = new Action( ACTION_WATCH, getResources().getString( R.string.watch_recording ), "HLS: " + String.valueOf( percent ) + "%" );
                     row.addAction( action );
@@ -204,7 +204,7 @@ public class VideoDetailsFragment extends DetailsFragment implements LoaderManag
 
                         } else {
 
-                            String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mVideo.getFileName();
+                            String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mVideo.getFilePath();
                             Log.i(TAG, "externalPlayerUrl=" + externalPlayerUrl);
 
                             final Intent externalPlayer = new Intent(Intent.ACTION_VIEW);

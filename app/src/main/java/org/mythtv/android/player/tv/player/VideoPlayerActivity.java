@@ -103,9 +103,7 @@ public class VideoPlayerActivity extends Activity {
             int startPosition = b.getInt(getResources().getString(R.string.start_position), 0);
 
             Log.i( TAG, "startVideoPlayerHls : mFileUrl=" + mFileUrl );
-            String url = MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring( 1 );
-            Log.i( TAG, "startVideoPlayerHls : url=" + url );
-            mVideoView.setVideoURI( Uri.parse( url ) );
+            mVideoView.setVideoURI( Uri.parse( mFileUrl ) );
 
             if (mShouldStartPlayback) {
                 mPlaybackState = PlaybackState.PLAYING;

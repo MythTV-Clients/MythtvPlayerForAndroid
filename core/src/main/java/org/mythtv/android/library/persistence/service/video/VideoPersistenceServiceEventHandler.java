@@ -323,7 +323,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         Video video = null;
 
-        String[] projection = new String[]{ "rowid as " + VideoConstants._ID, VideoConstants.FIELD_VIDEO_ID, VideoConstants.FIELD_VIDEO_TITLE, VideoConstants.FIELD_VIDEO_TAGLINE, VideoConstants.FIELD_VIDEO_SUB_TITLE, VideoConstants.FIELD_VIDEO_INETREF, VideoConstants.FIELD_VIDEO_DESCRIPTION, VideoConstants.FIELD_VIDEO_FILENAME, VideoConstants.FIELD_VIDEO_HOSTNAME, VideoConstants.FIELD_VIDEO_COLLECTIONREF, VideoConstants.FIELD_CAST_MEMBER_NAMES };
+        String[] projection = new String[]{ "rowid as " + VideoConstants._ID, VideoConstants.FIELD_VIDEO_ID, VideoConstants.FIELD_VIDEO_TITLE, VideoConstants.FIELD_VIDEO_TAGLINE, VideoConstants.FIELD_VIDEO_SUB_TITLE, VideoConstants.FIELD_VIDEO_INETREF, VideoConstants.FIELD_VIDEO_DESCRIPTION, VideoConstants.FIELD_VIDEO_FILEPATH, VideoConstants.FIELD_VIDEO_FILENAME, VideoConstants.FIELD_VIDEO_HOSTNAME, VideoConstants.FIELD_VIDEO_COLLECTIONREF, VideoConstants.FIELD_CAST_MEMBER_NAMES };
         String selection = null;
 
         List<String> selectionArgs = new ArrayList<>();
@@ -469,7 +469,8 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
             video.setContentType( cursor.getString(cursor.getColumnIndex( VideoConstants.FIELD_VIDEO_CONTENT_TYPE ) ) );
         }
 
-        video.setFileName(cursor.getString(cursor.getColumnIndex(VideoConstants.FIELD_VIDEO_FILENAME)));
+        video.setFilePath( cursor.getString( cursor.getColumnIndex( VideoConstants.FIELD_VIDEO_FILEPATH ) ) );
+        video.setFileName( cursor.getString( cursor.getColumnIndex( VideoConstants.FIELD_VIDEO_FILENAME ) ) );
 
         if( cursor.getColumnIndex( VideoConstants.FIELD_VIDEO_HASH ) != -1 ) {
             video.setHash( cursor.getString( cursor.getColumnIndex( VideoConstants.FIELD_VIDEO_HASH ) ) );

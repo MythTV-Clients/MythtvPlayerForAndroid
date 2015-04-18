@@ -78,7 +78,7 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
                     percentComplete.setText("HLS: " + String.valueOf(percent) + "%");
 
                     if (percent > 2) {
-                        fullUrl = data.getString(data.getColumnIndex(LiveStreamConstants.FIELD_RELATIVE_URL));
+                        fullUrl = data.getString(data.getColumnIndex( LiveStreamConstants.FIELD_FULL_URL ) );
                         play.setVisibility(View.VISIBLE);
                     }
                 }
@@ -200,7 +200,7 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
                 } else {
 
-                    String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mVideo.getFileName();
+                    String externalPlayerUrl = MainApplication.getInstance().getMasterBackendUrl() + "Content/GetFile?FileName=" + mVideo.getFilePath();
                     Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
 
                     final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
