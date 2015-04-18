@@ -25,18 +25,18 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
     private VideoItemClickListener videoItemClickListener;
     private int previousPosition = 0;
 
-    public VideoItemAdapter(List<Video> videos, @NonNull VideoItemClickListener videoItemClickListener) {
-        Log.v( TAG, "initialize : enter" );
+    public VideoItemAdapter( List<Video> videos, @NonNull VideoItemClickListener videoItemClickListener ) {
+//        Log.v( TAG, "initialize : enter" );
 
         this.videos = videos;
         this.videoItemClickListener = videoItemClickListener;
 
-        Log.v( TAG, "initialize : exit" );
+//        Log.v( TAG, "initialize : exit" );
     }
 
     @Override
     public ViewHolder onCreateViewHolder( ViewGroup viewGroup, int position ) {
-        Log.v( TAG, "onCreateViewHolder : enter" );
+//        Log.v( TAG, "onCreateViewHolder : enter" );
 
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.video_list_item, viewGroup, false );
 
@@ -46,7 +46,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
     @Override
     public void onBindViewHolder( ViewHolder viewHolder, int position ) {
-        Log.v( TAG, "onBindViewHolder : enter" );
+//        Log.v( TAG, "onBindViewHolder : enter" );
 
         final Video video = videos.get( position );
         viewHolder.setTitle( video.getTitle() );
@@ -70,7 +70,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 //        }
         previousPosition = position;
 
-        Log.v( TAG, "onBindViewHolder : exit" );
+//        Log.v( TAG, "onBindViewHolder : exit" );
     }
 
     @Override
@@ -90,12 +90,12 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
         public ViewHolder( View v ) {
             super( v );
-            Log.v( TAG, "initialize : enter" );
+//            Log.v( TAG, "initialize : enter" );
 
             this.parent = v;
             title = (TextView) parent.findViewById( R.id.video_item_title );
 
-            Log.v( TAG, "initialize : exit" );
+//            Log.v( TAG, "initialize : exit" );
         }
 
         public void setTitle( CharSequence text ) {

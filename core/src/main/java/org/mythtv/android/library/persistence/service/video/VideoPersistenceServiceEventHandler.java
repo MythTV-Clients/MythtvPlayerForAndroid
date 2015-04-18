@@ -10,6 +10,7 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.utils.Utils;
 import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.DeleteVideoEvent;
 import org.mythtv.android.library.events.video.DeleteVideosEvent;
@@ -162,8 +163,12 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
                     videoIds.remove( video.getId() );
                 }
 
+                String filename = video.getFileName();
+                filename = filename.substring( filename.lastIndexOf( '/' ) + 1 );
+
                 values = new ContentValues();
                 values.put( VideoConstants.FIELD_VIDEO_ID, video.getId() );
+                values.put( VideoConstants.FIELD_VIDEO_TITLE_SORT, Utils.removeArticles(video.getTitle().toUpperCase()) );
                 values.put( VideoConstants.FIELD_VIDEO_TITLE, video.getTitle() );
                 values.put( VideoConstants.FIELD_VIDEO_SUB_TITLE, ( null != video.getSubTitle() ? video.getSubTitle() : "" ) );
                 values.put( VideoConstants.FIELD_VIDEO_TAGLINE, ( null != video.getTagline() ? video.getTagline() : "" ) );
@@ -186,7 +191,8 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
                 values.put( VideoConstants.FIELD_VIDEO_WATCHED, null != video.isWatched() ? ( video.isWatched() ? 1 : 0 ) : 0 );
                 values.put( VideoConstants.FIELD_VIDEO_PROCESSED, null != video.isProcessed() ? ( video.isProcessed() ? 1 : 0 ) : 0 );
                 values.put( VideoConstants.FIELD_VIDEO_CONTENT_TYPE, ( null != video.getContentType() ? video.getContentType() : "" ) );
-                values.put( VideoConstants.FIELD_VIDEO_FILENAME, video.getFileName() );
+                values.put( VideoConstants.FIELD_VIDEO_FILEPATH, video.getFileName() );
+                values.put( VideoConstants.FIELD_VIDEO_FILENAME, filename );
                 values.put( VideoConstants.FIELD_VIDEO_HASH, ( null != video.getHash() ? video.getHash() : "" ) );
                 values.put( VideoConstants.FIELD_VIDEO_HOSTNAME, video.getHostName() );
                 values.put( VideoConstants.FIELD_VIDEO_COVERART, ( null != video.getCoverart() ? video.getCoverart() : "" ) );
@@ -307,8 +313,10 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
     @Override
     public VideoDetailsEvent requestVideo( RequestVideoEvent event ) {
+        Log.d( TAG, "requestVideo : enter" );
 
-        if( null == event.getId() ) {
+        if( null == event.getId() && ( null == event.getFilename() || "".equals( event.getFilename() ) ) ) {
+            Log.w( TAG, "requestVideo : exit, event is not valid" );
 
             return VideoDetailsEvent.notFound( event.getId() );
         }
@@ -316,26 +324,41 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
         Video video = null;
 
         String[] projection = new String[]{ "rowid as " + VideoConstants._ID, VideoConstants.FIELD_VIDEO_ID, VideoConstants.FIELD_VIDEO_TITLE, VideoConstants.FIELD_VIDEO_TAGLINE, VideoConstants.FIELD_VIDEO_SUB_TITLE, VideoConstants.FIELD_VIDEO_INETREF, VideoConstants.FIELD_VIDEO_DESCRIPTION, VideoConstants.FIELD_VIDEO_FILENAME, VideoConstants.FIELD_VIDEO_HOSTNAME, VideoConstants.FIELD_VIDEO_COLLECTIONREF, VideoConstants.FIELD_CAST_MEMBER_NAMES };
-        String selection = VideoConstants.FIELD_VIDEO_ID + " = ?";
+        String selection = null;
 
         List<String> selectionArgs = new ArrayList<>();
-        selectionArgs.add(String.valueOf(event.getId()));
+
+        if( null != event.getId() ) {
+
+            selection = VideoConstants.FIELD_VIDEO_ID + " = ?";
+            selectionArgs.add( String.valueOf( event.getId() ) );
+
+        }
+
+        if( null != event.getFilename() && !"".equals( event.getFilename() ) ) {
+
+            selection = VideoConstants.FIELD_VIDEO_FILENAME + " = ?";
+            selectionArgs.add( event.getFilename() );
+
+        }
 
         String sort = null;
 
         Cursor cursor = mContext.getContentResolver().query( VideoConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
         while( cursor.moveToNext() ) {
 
-            video = convertCursorToVideo(cursor);
+            video = convertCursorToVideo( cursor );
 
         }
         cursor.close();
 
         if( null != video ) {
 
+            Log.d( TAG, "requestVideo : exit" );
             return new VideoDetailsEvent( video.getId(), video.toDetails() );
         }
 
+        Log.d( TAG, "requestVideo : exit, not found" );
         return VideoDetailsEvent.notFound( event.getId() );
     }
 

@@ -11,6 +11,7 @@ import android.util.Log;
 import org.joda.time.DateTime;
 import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.utils.Utils;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.DeleteProgramsEvent;
@@ -128,7 +129,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath( ProgramConstants.CONTENT_URI, "/fts" ), projection, selection, selectionArgs, sort );
         while( cursor.moveToNext() ) {
 
-            programs.add( convertCursorToProgram( cursor ) );
+            programs.add(convertCursorToProgram(cursor));
 
         }
         cursor.close();
@@ -199,7 +200,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 values.put( ProgramConstants.FIELD_PROGRAM_TYPE, ProgramConstants.ProgramType.RECORDED.name() );
                 values.put( ProgramConstants.FIELD_PROGRAM_START_TIME, program.getStartTime().getMillis() );
                 values.put( ProgramConstants.FIELD_PROGRAM_END_TIME, program.getEndTime().getMillis() );
-                values.put( ProgramConstants.FIELD_PROGRAM_TITLE_SORT, removeArticles(program.getTitle()).toUpperCase() );
+                values.put( ProgramConstants.FIELD_PROGRAM_TITLE_SORT, Utils.removeArticles( program.getTitle() ).toUpperCase() );
                 values.put( ProgramConstants.FIELD_PROGRAM_TITLE, program.getTitle() );
                 values.put( ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ( null == program.getSubTitle() ? "" : program.getSubTitle() ) );
                 values.put( ProgramConstants.FIELD_PROGRAM_CATEGORY, ( null == program.getCategory() ? "" : program.getCategory() ) );
@@ -340,7 +341,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         }
 
-        Log.w( TAG, "updateRecordedPrograms : exit, programs not updated" );
+        Log.w(TAG, "updateRecordedPrograms : exit, programs not updated");
         return ProgramsUpdatedEvent.notUpdated();
     }
 
@@ -449,7 +450,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         }
 
-        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
+        Cursor cursor = mContext.getContentResolver().query(ProgramConstants.CONTENT_URI, projection, selection, selectionArgs.toArray(new String[selectionArgs.size()]), sort);
         while( cursor.moveToNext() ) {
 
             program = convertCursorToProgram( cursor );
@@ -462,7 +463,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             return new ProgramDetailsEvent( program.getChannel().getChanId(), program.getRecording().getStartTs(), program.toDetails() );
         }
 
-        return ProgramDetailsEvent.notFound( event.getChanId(), event.getStartTime() );
+        return ProgramDetailsEvent.notFound(event.getChanId(), event.getStartTime());
     }
 
     @Override
@@ -532,7 +533,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         Map<String, Long> titleInfoIds = new HashMap<>();
 
-        Cursor cursor = mContext.getContentResolver().query( TitleInfoConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+        Cursor cursor = mContext.getContentResolver().query(TitleInfoConstants.CONTENT_URI, projection, selection, selectionArgs, null);
         while( cursor.moveToNext() ) {
 
             titleInfoIds.put( cursor.getString( cursor.getColumnIndex( TitleInfoConstants.FIELD_TITLE ) ), cursor.getLong( cursor.getColumnIndex( TitleInfoConstants._ID ) ) );
@@ -560,7 +561,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 values = new ContentValues();
                 values.put( TitleInfoConstants.FIELD_TITLE, titleInfo.getTitle() );
                 values.put( TitleInfoConstants.FIELD_INETREF, titleInfo.getInetref() );
-                values.put( TitleInfoConstants.FIELD_TITLE_SORT, removeArticles( titleInfo.getTitle() ).toUpperCase() );
+                values.put( TitleInfoConstants.FIELD_TITLE_SORT, Utils.removeArticles( titleInfo.getTitle() ).toUpperCase() );
 
                 if( titleInfo.getTitle().equals( MainApplication.getInstance().getResources().getString( R.string.all_recordings ) ) ) {
 
@@ -644,25 +645,6 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         Log.v( TAG, "removeTitleInfo : error, title info not deleted" );
         return TitleInfoRemovedEvent.deletionFailed(event.getKey());
-    }
-
-    private String removeArticles( String value ) {
-
-        String ret = value;
-
-        if( value.toLowerCase().startsWith( "the " ) ) {
-            ret = ret.substring( "the ".length() );
-        }
-
-        if( value.toLowerCase().startsWith("an ") ) {
-            ret = ret.substring( "an ".length() );
-        }
-
-        if( value.toLowerCase().startsWith( "a " ) ) {
-            ret = ret.substring( "a ".length() );
-        }
-
-        return ret;
     }
 
     private class ProgramKey {

@@ -25,6 +25,9 @@ public class VideoConstants extends AbstractBaseDatabase {
     public static final String FIELD_VIDEO_ID = "id";
     public static final String FIELD_VIDEO_ID_DATA_TYPE = "INTEGER";
 
+    public static final String FIELD_VIDEO_TITLE_SORT = "title_sort";
+    public static final String FIELD_VIDEO_TITLE_SORT_DATA_TYPE = "TEXT";
+
     public static final String FIELD_VIDEO_TITLE = "title";
     public static final String FIELD_VIDEO_TITLE_DATA_TYPE = "TEXT";
 
@@ -91,6 +94,9 @@ public class VideoConstants extends AbstractBaseDatabase {
     public static final String FIELD_VIDEO_CONTENT_TYPE = "content_type";
     public static final String FIELD_VIDEO_CONTENT_TYPE_DATA_TYPE = "TEXT";
 
+    public static final String FIELD_VIDEO_FILEPATH = "filepath";
+    public static final String FIELD_VIDEO_FILEPATH_DATA_TYPE = "TEXT";
+
     public static final String FIELD_VIDEO_FILENAME = "filename";
     public static final String FIELD_VIDEO_FILENAME_DATA_TYPE = "TEXT";
 
@@ -130,7 +136,8 @@ public class VideoConstants extends AbstractBaseDatabase {
         StringBuilder createTable = new StringBuilder();
 
         createTable.append( "CREATE VIRTUAL TABLE " + TABLE_NAME + " using fts3 (" );
-        createTable.append( FIELD_VIDEO_ID ).append( " " ).append( FIELD_VIDEO_ID_DATA_TYPE ).append( ", " );
+        createTable.append( FIELD_VIDEO_ID ).append( " " ).append( FIELD_VIDEO_ID_DATA_TYPE ).append(", ");
+        createTable.append( FIELD_VIDEO_TITLE_SORT ).append( " " ).append( FIELD_VIDEO_TITLE_SORT_DATA_TYPE ).append(", ");
         createTable.append( FIELD_VIDEO_TITLE ).append( " " ).append( FIELD_VIDEO_TITLE_DATA_TYPE ).append(", ");
         createTable.append( FIELD_VIDEO_SUB_TITLE ).append( " " ).append( FIELD_VIDEO_SUB_TITLE_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_VIDEO_TAGLINE ).append( " " ).append( FIELD_VIDEO_TAGLINE_DATA_TYPE ).append( ", " );
@@ -153,6 +160,7 @@ public class VideoConstants extends AbstractBaseDatabase {
         createTable.append( FIELD_VIDEO_WATCHED ).append( " " ).append( FIELD_VIDEO_WATCHED_DATA_TYPE ).append(", ");
         createTable.append( FIELD_VIDEO_PROCESSED ).append( " " ).append( FIELD_VIDEO_PROCESSED_DATA_TYPE ).append(", ");
         createTable.append( FIELD_VIDEO_CONTENT_TYPE ).append( " " ).append( FIELD_VIDEO_CONTENT_TYPE_DATA_TYPE ).append( ", " );
+        createTable.append( FIELD_VIDEO_FILEPATH ).append( " " ).append( FIELD_VIDEO_FILEPATH_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_VIDEO_FILENAME ).append( " " ).append( FIELD_VIDEO_FILENAME_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_VIDEO_HASH ).append( " " ).append( FIELD_VIDEO_HASH_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_VIDEO_HOSTNAME ).append( " " ).append( FIELD_VIDEO_HOSTNAME_DATA_TYPE ).append( ", " );

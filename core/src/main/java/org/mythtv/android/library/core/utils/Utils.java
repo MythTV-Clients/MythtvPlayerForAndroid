@@ -21,6 +21,25 @@ public class Utils {
     private Utils() {
     }
 
+    public static String removeArticles( String value ) {
+
+        String ret = value;
+
+        if( value.toLowerCase().startsWith( "the " ) ) {
+            ret = ret.substring( "the ".length() );
+        }
+
+        if( value.toLowerCase().startsWith("an ") ) {
+            ret = ret.substring( "an ".length() );
+        }
+
+        if( value.toLowerCase().startsWith( "a " ) ) {
+            ret = ret.substring( "a ".length() );
+        }
+
+        return ret;
+    }
+
     /**
      * Returns the screen/display size
      *

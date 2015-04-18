@@ -7,14 +7,31 @@ import org.mythtv.android.library.events.RequestReadEvent;
  */
 public class RequestVideoEvent extends RequestReadEvent {
 
-    private final Integer id;
+    private Integer id;
+    private String filename;
 
-    public RequestVideoEvent( final Integer id ) {
+    public RequestVideoEvent() { }
+
+    public Integer getId() {
+
+        return id;
+    }
+
+    public void setId( Integer id ) {
 
         this.id = id;
 
     }
 
-    public Integer getId() { return id; }
+    public String getFilename() {
+
+        return filename;
+    }
+
+    public void setFilename( String filename ) {
+
+        this.filename = filename;
+
+    }
 
 }
