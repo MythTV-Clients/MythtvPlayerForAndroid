@@ -1,26 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="175dp"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/margin"
-    android:layout_marginBottom="@dimen/margin">
+    android:layout_margin="@dimen/margin">
 
     <RelativeLayout
         android:id="@+id/video_item"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin"
+        android:layout_marginBottom="@dimen/margin"
         android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/video_item_coverart"
+            android:layout_width="175dp"
+            android:layout_height="175dp" />
 
         <TextView
             android:id="@+id/video_item_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/video_item_coverart"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:transitionName="@string/video_transition"
-            android:text="test title" />
+            tools:text="test title" />
+
+        <TextView
+            android:id="@+id/video_item_tagline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/video_item_title"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            tools:text="test tagline" />
 
     </RelativeLayout>
 

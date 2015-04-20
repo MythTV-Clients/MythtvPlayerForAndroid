@@ -6,15 +6,10 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.widget.Toast;
 
-import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.player.common.ui.data.RecordingDataConsumer;
 import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
 import org.mythtv.android.R;
-
-import java.util.List;
 
 /**
  * Created by dmfrey on 12/8/14.
@@ -46,7 +41,7 @@ public class RecordingsActivity extends AbstractBaseActionBarActivity {
 
         super.onCreate( savedInstanceState );
 
-        mRecordingsFragment = (RecordingsFragment) getFragmentManager().findFragmentById( R.id.fragment_recordings );
+        mRecordingsFragment = (RecordingsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_recordings );
 
         if( null != savedInstanceState && savedInstanceState.containsKey( TITLE_INFO ) ) {
 

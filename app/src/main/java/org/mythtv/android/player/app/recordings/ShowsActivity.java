@@ -13,8 +13,6 @@ import org.mythtv.android.R;
 import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
 import org.mythtv.android.player.app.NavigationDrawerFragment;
 
-import java.util.List;
-
 public class ShowsActivity extends AbstractBaseActionBarActivity {
 
     private static final String TAG = ShowsActivity.class.getSimpleName();
@@ -46,7 +44,7 @@ public class ShowsActivity extends AbstractBaseActionBarActivity {
 
         PreferenceManager.setDefaultValues( this, R.xml.preferences, false );
 
-        mTitleInfosFragment = (TitleInfosFragment) getFragmentManager().findFragmentById( R.id.fragment_shows );
+        mTitleInfosFragment = (TitleInfosFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_shows );
 
         mDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById( R.id.fragment_navigation_drawer );
         mDrawerFragment.setUp( R.id.fragment_navigation_drawer, (DrawerLayout) findViewById( R.id.drawer_layout ), toolbar );

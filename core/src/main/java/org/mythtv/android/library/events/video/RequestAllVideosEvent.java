@@ -7,16 +7,16 @@ import org.mythtv.android.library.events.RequestReadEvent;
  */
 public class RequestAllVideosEvent extends RequestReadEvent {
 
-    private final Integer id;
+    private final String contentType;
 
-    public RequestAllVideosEvent( final Integer id ) {
+    public RequestAllVideosEvent( final String contentType ) {
 
-        this.id = id;
+        this.contentType = contentType;
 
     }
 
-    public Integer getId() {
-        return id;
+    public String getContentType() {
+        return contentType;
     }
 
 }

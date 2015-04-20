@@ -1,6 +1,6 @@
-package org.mythtv.android.player.common.ui.loaders;
+package org.mythtv.android.player.app.loaders;
 
-import android.content.AsyncTaskLoader;
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -10,52 +10,61 @@ import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
-import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
+import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by dmfrey on 3/10/15.
  */
-public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
+public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> {
 
-    private static final String TAG = ProgramsAsyncTaskLoader.class.getSimpleName();
+    private static final String TAG = TitleInfosAsyncTaskLoader.class.getSimpleName();
 
-    private ProgramsContentProviderObserver mObserver;
-    private List<Program> mPrograms;
+    private TitleInfosObserver mObserver;
+    private List<TitleInfo> mTitleInfos;
 
-    private String title;
-    private String inetref;
-
-    public ProgramsAsyncTaskLoader( Context context ) {
+    public TitleInfosAsyncTaskLoader( Context context ) {
         super( context );
 
     }
 
     @Override
-    public List<Program> loadInBackground() {
+    public List<TitleInfo> loadInBackground() {
         Log.v( TAG, "loadInBackground : enter" );
 
-        List<Program> programs = new ArrayList<>();
+        List<TitleInfo> titleInfos = new ArrayList<>();
 
         try {
 
-            if( MainApplication.getInstance().isConnected() ) {
+            if( ( (MainApplication) getContext().getApplicationContext() ).isConnected() ) {
 
-                AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title, inetref ) );
+                AllProgramsEvent event = ( (MainApplication) getContext().getApplicationContext() ).getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( null, null ) );
                 if( event.isEntityFound() ) {
-                    Log.v( TAG, "loadInBackground : programs loaded from db" );
+                    Log.v( TAG, "loadInBackground : titleInfos loaded from db" );
 
                     for( ProgramDetails details : event.getDetails() ) {
-                        Log.v( TAG, "loadInBackground : program iteration" );
+                        Log.v( TAG, "loadInBackground : titleInfo iteration" );
 
-                        programs.add( Program.fromDetails( details ) );
+                        Program program = Program.fromDetails( details );
+
+                        TitleInfo titleInfo = new TitleInfo();
+                        titleInfo.setTitle( program.getTitle() );
+                        titleInfo.setInetref( program.getInetref() );
+
+                        if( !titleInfos.contains( titleInfo ) ) {
+                            titleInfos.add( titleInfo );
+                        }
 
                     }
+
+                    Collections.sort( titleInfos );
 
                 }
 
@@ -72,25 +81,15 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
         }
 
         Log.v( TAG, "loadInBackground : exit" );
-        return programs;
-    }
-
-    public void setTitle( String title ) {
-
-        this.title = title;
-
-    }
-
-    public void setInetref( String inetref ) {
-
-        this.inetref = inetref;
-
+        return titleInfos;
     }
 
     @Override
-    public void deliverResult( List<Program> data ) {
+    public void deliverResult( List<TitleInfo> data ) {
+        Log.v( TAG, "deliverResult : enter" );
 
         if( isReset() ) {
+            Log.v( TAG, "deliverResult : isReset" );
 
             // The Loader has been reset; ignore the result and invalidate the data.
             releaseResources( data );
@@ -100,10 +99,11 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
         // Hold a reference to the old data so it doesn't get garbage collected.
         // We must protect it until the new data has been delivered.
-        List<Program> oldData = mPrograms;
-        mPrograms = data;
+        List<TitleInfo> oldData = mTitleInfos;
+        mTitleInfos = data;
 
         if( isStarted() ) {
+            Log.v( TAG, "deliverResult : isStarted" );
 
             // If the Loader is in a started state, deliver the results to the
             // client. The superclass method does this for us.
@@ -112,6 +112,7 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
         // Invalidate the old data as we don't need it any more.
         if( oldData != null && oldData != data ) {
+            Log.v( TAG, "deliverResult : oldDate != null && oldData != data" );
 
             releaseResources( oldData );
 
@@ -121,23 +122,24 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
     @Override
     protected void onStartLoading() {
+        Log.v( TAG, "onStartLoading : enter" );
 
-        if( null != mPrograms ) {
+        if( null != mTitleInfos ) {
 
             // Deliver any previously loaded data immediately.
-            deliverResult( mPrograms );
+            deliverResult( mTitleInfos );
 
         }
 
         // Begin monitoring the underlying data source.
         if( null == mObserver ) {
 
-            mObserver = new ProgramsContentProviderObserver( mHandler, this );
-            getContext().getContentResolver().registerContentObserver( ProgramConstants.CONTENT_URI, true, mObserver );
+            mObserver = new TitleInfosObserver( mHandler, this );
+            getContext().getContentResolver().registerContentObserver( TitleInfoConstants.CONTENT_URI, true, mObserver );
 
         }
 
-        if( takeContentChanged() || null == mPrograms ) {
+        if( takeContentChanged() || null == mTitleInfos ) {
 
             // When the observer detects a change, it should call onContentChanged()
             // on the Loader, which will cause the next call to takeContentChanged()
@@ -147,10 +149,12 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
         }
 
+        Log.v( TAG, "onStartLoading : exit" );
     }
 
     @Override
     protected void onStopLoading() {
+        Log.v( TAG, "onStopLoading : enter" );
 
         // The Loader is in a stopped state, so we should attempt to cancel the
         // current load (if there is one).
@@ -160,19 +164,22 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
         // should still monitor the data source for changes so that the Loader
         // will know to force a new load if it is ever started again.
 
+        Log.v( TAG, "onStopLoading : exit" );
     }
 
     @Override
     protected void onReset() {
+        Log.v( TAG, "onReset : enter" );
 
         // Ensure the loader has been stopped.
         onStopLoading();
 
         // At this point we can release the resources associated with 'mData'.
-        if( null != mPrograms ) {
+        if( null != mTitleInfos ) {
+            Log.v( TAG, "onReset : null != mTitleInfos" );
 
-            releaseResources( mPrograms );
-            mPrograms = null;
+            releaseResources( mTitleInfos );
+            mTitleInfos = null;
 
         }
 
@@ -184,10 +191,12 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
         }
 
+        Log.v(TAG, "onReset : exit");
     }
 
     @Override
-    public void onCanceled( List<Program> data ) {
+    public void onCanceled( List<TitleInfo> data ) {
+        Log.v( TAG, "onCanceled : enter" );
 
         // Attempt to cancel the current asynchronous load.
         super.onCanceled( data );
@@ -196,12 +205,17 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
         // associated with 'data'.
         releaseResources( data );
 
+        Log.v( TAG, "onCanceled : exit" );
     }
 
-    private void releaseResources( List<Program> data ) {
+    private void releaseResources( List<TitleInfo> data ) {
+        Log.v( TAG, "releaseResources : enter" );
+
         // For a simple List, there is nothing to do. For something like a Cursor, we
         // would close it in this method. All resources associated with the Loader
         // should be released here.
+
+        Log.v( TAG, "releaseResources : exit" );
     }
 
     private final Handler mHandler = new Handler() {
@@ -210,20 +224,19 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
         public void handleMessage( Message msg ) {
             super.handleMessage( msg );
 
-            Log.v( TAG, "handleMessage : Programs changed" );
+            Log.v( TAG, "handleMessage : TitleInfos changed" );
         }
 
     };
 
-    private class ProgramsContentProviderObserver extends ContentObserver {
+    private class TitleInfosObserver extends ContentObserver {
 
-        private ProgramsAsyncTaskLoader mLoader;
+        private TitleInfosAsyncTaskLoader mLoader;
 
-        public ProgramsContentProviderObserver( Handler handler, ProgramsAsyncTaskLoader loader ) {
+        public TitleInfosObserver( Handler handler, TitleInfosAsyncTaskLoader loader ) {
             super( handler );
 
             mLoader = loader;
-
         }
 
         @Override

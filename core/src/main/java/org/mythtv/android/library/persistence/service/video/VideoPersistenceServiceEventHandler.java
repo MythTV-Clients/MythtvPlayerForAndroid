@@ -58,13 +58,25 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         String[] projection = null;
         String selection = VideoConstants.FIELD_VIDEO_VISIBLE + " = 1 ";
-
         List<String> selectionArgs = new ArrayList<>();
+
+        if( null != event.getContentType() && !"".equals( event.getContentType() ) ) {
+            Log.v( TAG, "requestAllVideos : adding contentType '" + event.getContentType() + "'" );
+
+            selection += " AND " + VideoConstants.FIELD_VIDEO_CONTENT_TYPE + " = ?";
+            selectionArgs.add( event.getContentType() );
+
+        }
+        Log.v( TAG, "requestAllVideos : selection=" + selection );
+        for( String selectionArg : selectionArgs.toArray( new String[ selectionArgs.size() ] ) ) {
+            Log.v( TAG, "requestAllVideos : selectionArg=" + selectionArg );
+        }
 
         String sort = VideoConstants.FIELD_VIDEO_COLLECTIONREF + ", " + VideoConstants.FIELD_VIDEO_TITLE;
 
-        Cursor cursor = mContext.getContentResolver().query( VideoConstants.CONTENT_URI, projection, selection, null /* selectionArgs.toArray( new String[ selectionArgs.size() ] ) */, sort );
+        Cursor cursor = mContext.getContentResolver().query( VideoConstants.CONTENT_URI, projection, selection, selectionArgs.isEmpty() ? null : selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
         while( cursor.moveToNext() ) {
+            Log.v( TAG, "requestAllVideos : video iteration" );
 
             videos.add( convertCursorToVideo( cursor ) );
 
@@ -73,6 +85,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         List<VideoDetails> details = new ArrayList<>();
         if( !videos.isEmpty() ) {
+            Log.v( TAG, "requestAllVideos : videos loaded from db " + videos.size() );
 
             for( Video video : videos ) {
 
@@ -82,6 +95,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         }
 
+        Log.v( TAG, "requestAllVideos : exit" );
         return new AllVideosEvent( details );
     }
 

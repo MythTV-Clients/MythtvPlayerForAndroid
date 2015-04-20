@@ -33,7 +33,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
-import org.mythtv.android.player.common.ui.loaders.LiveStreamAsyncTaskLoader;
+import org.mythtv.android.player.tv.loaders.LiveStreamAsyncTaskLoader;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 import org.mythtv.android.player.tv.player.RecordingPlayerActivity;
 

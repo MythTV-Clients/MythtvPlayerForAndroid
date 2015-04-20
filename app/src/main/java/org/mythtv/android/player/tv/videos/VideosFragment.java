@@ -1,10 +1,7 @@
 package org.mythtv.android.player.tv.videos;
 
 import android.app.LoaderManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.Loader;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -36,10 +33,8 @@ import com.squareup.picasso.Target;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.core.service.VideoServiceHelper;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
-import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
-import org.mythtv.android.player.common.ui.loaders.VideosAsyncTaskLoader;
+import org.mythtv.android.player.tv.loaders.VideosAsyncTaskLoader;
 import org.mythtv.android.player.tv.settings.SettingsActivity;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 

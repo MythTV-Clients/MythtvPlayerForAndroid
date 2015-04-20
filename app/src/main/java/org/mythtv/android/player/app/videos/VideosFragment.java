@@ -1,13 +1,13 @@
 package org.mythtv.android.player.app.videos;
 
-import android.app.LoaderManager;
+import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,13 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
 import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.player.app.AbstractBaseFragment;
-import org.mythtv.android.player.common.ui.loaders.VideosAsyncTaskLoader;
+import org.mythtv.android.player.app.loaders.VideosMoviesAsyncTaskLoader;
 
 import java.util.List;
 
@@ -36,15 +35,22 @@ public class VideosFragment extends AbstractBaseFragment implements LoaderManage
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
     VideoItemAdapter mAdapter;
-    LinearLayoutManager mLayoutManager;
+    GridLayoutManager mLayoutManager;
     TextView mEmpty;
+
+    public static VideosFragment getInstance() {
+
+        VideosFragment fragment = new VideosFragment();
+
+        return fragment;
+    }
 
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
 
         Log.v( TAG, "onCreateLoader : exit" );
-        return new VideosAsyncTaskLoader( getActivity() );
+        return new VideosMoviesAsyncTaskLoader( getActivity() );
     }
 
     @Override
@@ -86,7 +92,7 @@ public class VideosFragment extends AbstractBaseFragment implements LoaderManage
         mSwipeRefreshLayout.setOnRefreshListener( this );
 
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
-        mLayoutManager = new LinearLayoutManager( getActivity() );
+        mLayoutManager = new GridLayoutManager( getActivity(), 2 );
         mRecyclerView.setLayoutManager(mLayoutManager);
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
@@ -96,11 +102,21 @@ public class VideosFragment extends AbstractBaseFragment implements LoaderManage
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
         Log.v( TAG, "onActivityCreated : enter" );
-        super.onActivityCreated(savedInstanceState);
+        super.onActivityCreated( savedInstanceState );
 
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader( 0, null, this );
 
         Log.v( TAG, "onActivityCreated : exit" );
+    }
+
+    @Override
+    public void onResume() {
+        Log.v( TAG, "resume : enter" );
+        super.onResume();
+
+        getLoaderManager().restartLoader( 0, null, this );
+
+        Log.v( TAG, "resume : exit" );
     }
 
     public void reload() {
@@ -122,7 +138,7 @@ public class VideosFragment extends AbstractBaseFragment implements LoaderManage
         if( Build.VERSION.SDK_INT >= 16 ) {
 
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null );
-            startActivity( videoDetails, options.toBundle() );
+            getActivity().startActivity(videoDetails, options.toBundle());
 
         } else {
 

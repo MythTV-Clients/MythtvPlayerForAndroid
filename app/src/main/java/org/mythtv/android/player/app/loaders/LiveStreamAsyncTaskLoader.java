@@ -1,6 +1,6 @@
-package org.mythtv.android.player.common.ui.loaders;
+package org.mythtv.android.player.app.loaders;
 
-import android.content.AsyncTaskLoader;
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -8,66 +8,45 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import org.joda.time.DateTime;
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.library.events.dvr.AllProgramsEvent;
-import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
-import org.mythtv.android.library.events.dvr.ProgramDetails;
-import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
-import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
-import org.mythtv.android.library.events.dvr.TitleInfoDetails;
-import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
+import org.mythtv.android.library.events.content.LiveStreamDetailsEvent;
+import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
+import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 
 /**
- * Created by dmfrey on 3/10/15.
+ * Created by dmfrey on 4/5/15.
  */
-public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> {
+public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
 
-    private static final String TAG = TitleInfosAsyncTaskLoader.class.getSimpleName();
+    private static final String TAG = LiveStreamAsyncTaskLoader.class.getSimpleName();
 
-    private TitleInfosObserver mObserver;
-    private List<TitleInfo> mTitleInfos;
+    private LiveStreamContentProviderObserver mObserver;
+    private LiveStreamInfo mLiveStream;
 
-    public TitleInfosAsyncTaskLoader( Context context ) {
+    private int chanId;
+    private DateTime startTime;
+
+    public LiveStreamAsyncTaskLoader( Context context ) {
         super( context );
 
     }
 
     @Override
-    public List<TitleInfo> loadInBackground() {
-        Log.v( TAG, "loadInBackground : enter" );
+    public LiveStreamInfo loadInBackground() {
 
-        List<TitleInfo> titleInfos = new ArrayList<>();
+        LiveStreamInfo liveStreamInfo = null;
 
         try {
 
-            if( ( (MainApplication) getContext().getApplicationContext() ).isConnected() ) {
+            if( MainApplication.getInstance().isConnected() ) {
 
-                AllProgramsEvent event = ( (MainApplication) getContext().getApplicationContext() ).getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( null, null ) );
+                LiveStreamDetailsEvent event = MainApplication.getInstance().getContentService().requestLiveStream( new RequestLiveStreamDetailsEvent( chanId, startTime ) );
                 if( event.isEntityFound() ) {
-                    Log.v( TAG, "loadInBackground : titleInfos loaded from db" );
+                    Log.v( TAG, "loadInBackground : liveStream loaded from db" );
 
-                    for( ProgramDetails details : event.getDetails() ) {
-                        Log.v( TAG, "loadInBackground : titleInfo iteration" );
-
-                        Program program = Program.fromDetails( details );
-
-                        TitleInfo titleInfo = new TitleInfo();
-                        titleInfo.setTitle( program.getTitle() );
-                        titleInfo.setInetref( program.getInetref() );
-
-                        if( !titleInfos.contains( titleInfo ) ) {
-                            titleInfos.add( titleInfo );
-                        }
-
-                    }
-
-                    Collections.sort( titleInfos );
+                    liveStreamInfo = LiveStreamInfo.fromDetails( event.getDetails() );
 
                 }
 
@@ -84,15 +63,25 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
         }
 
         Log.v( TAG, "loadInBackground : exit" );
-        return titleInfos;
+        return liveStreamInfo;
+    }
+
+    public void setChanId( int chanId ) {
+
+        this.chanId = chanId;
+
+    }
+
+    public void setStartTime( DateTime startTime ) {
+
+        this.startTime = startTime;
+
     }
 
     @Override
-    public void deliverResult( List<TitleInfo> data ) {
-        Log.v( TAG, "deliverResult : enter" );
+    public void deliverResult( LiveStreamInfo data ) {
 
         if( isReset() ) {
-            Log.v( TAG, "deliverResult : isReset" );
 
             // The Loader has been reset; ignore the result and invalidate the data.
             releaseResources( data );
@@ -102,11 +91,10 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
         // Hold a reference to the old data so it doesn't get garbage collected.
         // We must protect it until the new data has been delivered.
-        List<TitleInfo> oldData = mTitleInfos;
-        mTitleInfos = data;
+        LiveStreamInfo oldData = mLiveStream;
+        mLiveStream = data;
 
         if( isStarted() ) {
-            Log.v( TAG, "deliverResult : isStarted" );
 
             // If the Loader is in a started state, deliver the results to the
             // client. The superclass method does this for us.
@@ -115,7 +103,6 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
         // Invalidate the old data as we don't need it any more.
         if( oldData != null && oldData != data ) {
-            Log.v( TAG, "deliverResult : oldDate != null && oldData != data" );
 
             releaseResources( oldData );
 
@@ -125,24 +112,23 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
     @Override
     protected void onStartLoading() {
-        Log.v( TAG, "onStartLoading : enter" );
 
-        if( null != mTitleInfos ) {
+        if( null != mLiveStream ) {
 
             // Deliver any previously loaded data immediately.
-            deliverResult( mTitleInfos );
+            deliverResult( mLiveStream );
 
         }
 
         // Begin monitoring the underlying data source.
         if( null == mObserver ) {
 
-            mObserver = new TitleInfosObserver( mHandler, this );
-            getContext().getContentResolver().registerContentObserver( TitleInfoConstants.CONTENT_URI, true, mObserver );
+            mObserver = new LiveStreamContentProviderObserver( mHandler, this );
+            getContext().getContentResolver().registerContentObserver( LiveStreamConstants.CONTENT_URI, true, mObserver );
 
         }
 
-        if( takeContentChanged() || null == mTitleInfos ) {
+        if( takeContentChanged() || null == mLiveStream ) {
 
             // When the observer detects a change, it should call onContentChanged()
             // on the Loader, which will cause the next call to takeContentChanged()
@@ -152,12 +138,10 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
         }
 
-        Log.v( TAG, "onStartLoading : exit" );
     }
 
     @Override
     protected void onStopLoading() {
-        Log.v( TAG, "onStopLoading : enter" );
 
         // The Loader is in a stopped state, so we should attempt to cancel the
         // current load (if there is one).
@@ -167,22 +151,19 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
         // should still monitor the data source for changes so that the Loader
         // will know to force a new load if it is ever started again.
 
-        Log.v( TAG, "onStopLoading : exit" );
     }
 
     @Override
     protected void onReset() {
-        Log.v( TAG, "onReset : enter" );
 
         // Ensure the loader has been stopped.
         onStopLoading();
 
         // At this point we can release the resources associated with 'mData'.
-        if( null != mTitleInfos ) {
-            Log.v( TAG, "onReset : null != mTitleInfos" );
+        if( null != mLiveStream ) {
 
-            releaseResources( mTitleInfos );
-            mTitleInfos = null;
+            releaseResources( mLiveStream );
+            mLiveStream = null;
 
         }
 
@@ -194,12 +175,10 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
         }
 
-        Log.v(TAG, "onReset : exit");
     }
 
     @Override
-    public void onCanceled( List<TitleInfo> data ) {
-        Log.v( TAG, "onCanceled : enter" );
+    public void onCanceled( LiveStreamInfo data ) {
 
         // Attempt to cancel the current asynchronous load.
         super.onCanceled( data );
@@ -208,17 +187,12 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
         // associated with 'data'.
         releaseResources( data );
 
-        Log.v( TAG, "onCanceled : exit" );
     }
 
-    private void releaseResources( List<TitleInfo> data ) {
-        Log.v( TAG, "releaseResources : enter" );
-
+    private void releaseResources( LiveStreamInfo data ) {
         // For a simple List, there is nothing to do. For something like a Cursor, we
         // would close it in this method. All resources associated with the Loader
         // should be released here.
-
-        Log.v( TAG, "releaseResources : exit" );
     }
 
     private final Handler mHandler = new Handler() {
@@ -227,19 +201,20 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
         public void handleMessage( Message msg ) {
             super.handleMessage( msg );
 
-            Log.v( TAG, "handleMessage : TitleInfos changed" );
+            Log.v( TAG, "handleMessage : LiveStream changed" );
         }
 
     };
 
-    private class TitleInfosObserver extends ContentObserver {
+    private class LiveStreamContentProviderObserver extends ContentObserver {
 
-        private TitleInfosAsyncTaskLoader mLoader;
+        private LiveStreamAsyncTaskLoader mLoader;
 
-        public TitleInfosObserver( Handler handler, TitleInfosAsyncTaskLoader loader ) {
+        public LiveStreamContentProviderObserver( Handler handler, LiveStreamAsyncTaskLoader loader ) {
             super( handler );
 
             mLoader = loader;
+
         }
 
         @Override

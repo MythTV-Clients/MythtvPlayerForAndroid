@@ -1,54 +1,61 @@
-package org.mythtv.android.player.common.ui.loaders;
+package org.mythtv.android.player.tv.loaders;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.content.AsyncTaskLoader;
 import android.util.Log;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
-import org.mythtv.android.library.events.content.LiveStreamDetailsEvent;
-import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
-import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
+import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.events.dvr.AllProgramsEvent;
+import org.mythtv.android.library.events.dvr.ProgramDetails;
+import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
+import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dmfrey on 4/5/15.
+ * Created by dmfrey on 3/10/15.
  */
-public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
+public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
-    private static final String TAG = LiveStreamAsyncTaskLoader.class.getSimpleName();
+    private static final String TAG = ProgramsAsyncTaskLoader.class.getSimpleName();
 
-    private LiveStreamContentProviderObserver mObserver;
-    private LiveStreamInfo mLiveStream;
+    private ProgramsContentProviderObserver mObserver;
+    private List<Program> mPrograms;
 
-    private int chanId;
-    private DateTime startTime;
+    private String title;
+    private String inetref;
 
-    public LiveStreamAsyncTaskLoader( Context context ) {
+    public ProgramsAsyncTaskLoader(Context context) {
         super( context );
 
     }
 
     @Override
-    public LiveStreamInfo loadInBackground() {
+    public List<Program> loadInBackground() {
+        Log.v( TAG, "loadInBackground : enter" );
 
-        LiveStreamInfo liveStreamInfo = null;
+        List<Program> programs = new ArrayList<>();
 
         try {
 
             if( MainApplication.getInstance().isConnected() ) {
 
-                LiveStreamDetailsEvent event = MainApplication.getInstance().getContentService().requestLiveStream( new RequestLiveStreamDetailsEvent( chanId, startTime ) );
+                AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title, inetref ) );
                 if( event.isEntityFound() ) {
-                    Log.v( TAG, "loadInBackground : liveStream loaded from db" );
+                    Log.v( TAG, "loadInBackground : programs loaded from db" );
 
-                    liveStreamInfo = LiveStreamInfo.fromDetails( event.getDetails() );
+                    for( ProgramDetails details : event.getDetails() ) {
+                        Log.v( TAG, "loadInBackground : program iteration" );
+
+                        programs.add( Program.fromDetails( details ) );
+
+                    }
 
                 }
 
@@ -65,23 +72,23 @@ public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
         }
 
         Log.v( TAG, "loadInBackground : exit" );
-        return liveStreamInfo;
+        return programs;
     }
 
-    public void setChanId( int chanId ) {
+    public void setTitle( String title ) {
 
-        this.chanId = chanId;
+        this.title = title;
 
     }
 
-    public void setStartTime( DateTime startTime ) {
+    public void setInetref( String inetref ) {
 
-        this.startTime = startTime;
+        this.inetref = inetref;
 
     }
 
     @Override
-    public void deliverResult( LiveStreamInfo data ) {
+    public void deliverResult( List<Program> data ) {
 
         if( isReset() ) {
 
@@ -93,8 +100,8 @@ public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
 
         // Hold a reference to the old data so it doesn't get garbage collected.
         // We must protect it until the new data has been delivered.
-        LiveStreamInfo oldData = mLiveStream;
-        mLiveStream = data;
+        List<Program> oldData = mPrograms;
+        mPrograms = data;
 
         if( isStarted() ) {
 
@@ -115,22 +122,22 @@ public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
     @Override
     protected void onStartLoading() {
 
-        if( null != mLiveStream ) {
+        if( null != mPrograms ) {
 
             // Deliver any previously loaded data immediately.
-            deliverResult( mLiveStream );
+            deliverResult( mPrograms );
 
         }
 
         // Begin monitoring the underlying data source.
         if( null == mObserver ) {
 
-            mObserver = new LiveStreamContentProviderObserver( mHandler, this );
-            getContext().getContentResolver().registerContentObserver( LiveStreamConstants.CONTENT_URI, true, mObserver );
+            mObserver = new ProgramsContentProviderObserver( mHandler, this );
+            getContext().getContentResolver().registerContentObserver( ProgramConstants.CONTENT_URI, true, mObserver );
 
         }
 
-        if( takeContentChanged() || null == mLiveStream ) {
+        if( takeContentChanged() || null == mPrograms ) {
 
             // When the observer detects a change, it should call onContentChanged()
             // on the Loader, which will cause the next call to takeContentChanged()
@@ -162,10 +169,10 @@ public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
         onStopLoading();
 
         // At this point we can release the resources associated with 'mData'.
-        if( null != mLiveStream ) {
+        if( null != mPrograms ) {
 
-            releaseResources( mLiveStream );
-            mLiveStream = null;
+            releaseResources( mPrograms );
+            mPrograms = null;
 
         }
 
@@ -180,7 +187,7 @@ public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
     }
 
     @Override
-    public void onCanceled( LiveStreamInfo data ) {
+    public void onCanceled( List<Program> data ) {
 
         // Attempt to cancel the current asynchronous load.
         super.onCanceled( data );
@@ -191,7 +198,7 @@ public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
 
     }
 
-    private void releaseResources( LiveStreamInfo data ) {
+    private void releaseResources( List<Program> data ) {
         // For a simple List, there is nothing to do. For something like a Cursor, we
         // would close it in this method. All resources associated with the Loader
         // should be released here.
@@ -203,16 +210,16 @@ public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
         public void handleMessage( Message msg ) {
             super.handleMessage( msg );
 
-            Log.v( TAG, "handleMessage : LiveStream changed" );
+            Log.v( TAG, "handleMessage : Programs changed" );
         }
 
     };
 
-    private class LiveStreamContentProviderObserver extends ContentObserver {
+    private class ProgramsContentProviderObserver extends ContentObserver {
 
-        private LiveStreamAsyncTaskLoader mLoader;
+        private ProgramsAsyncTaskLoader mLoader;
 
-        public LiveStreamContentProviderObserver( Handler handler, LiveStreamAsyncTaskLoader loader ) {
+        public ProgramsContentProviderObserver( Handler handler, ProgramsAsyncTaskLoader loader ) {
             super( handler );
 
             mLoader = loader;

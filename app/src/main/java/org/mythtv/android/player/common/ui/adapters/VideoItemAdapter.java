@@ -6,9 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.mythtv.android.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
@@ -50,6 +54,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
         final Video video = videos.get( position );
         viewHolder.setTitle( video.getTitle() );
+        viewHolder.setTagline( video.getTagline() );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -70,6 +75,13 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 //        }
         previousPosition = position;
 
+        String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + video.getId() + "&Width=175";
+        Picasso.with( MainApplication.getInstance() )
+                .load( previewUrl )
+//                .fit().centerCrop()
+                .into( viewHolder.coverart );
+
+
 //        Log.v( TAG, "onBindViewHolder : exit" );
     }
 
@@ -86,14 +98,18 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
         private static String TAG = ViewHolder.class.getSimpleName();
 
         private final View parent;
+        private final ImageView coverart;
         private final TextView title;
+        private final TextView tagline;
 
         public ViewHolder( View v ) {
             super( v );
 //            Log.v( TAG, "initialize : enter" );
 
             this.parent = v;
+            coverart = (ImageView) parent.findViewById( R.id.video_item_coverart );
             title = (TextView) parent.findViewById( R.id.video_item_title );
+            tagline = (TextView) parent.findViewById( R.id.video_item_tagline );
 
 //            Log.v( TAG, "initialize : exit" );
         }
@@ -101,6 +117,12 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
         public void setTitle( CharSequence text ) {
 
             title.setText( text );
+
+        }
+
+        public void setTagline( CharSequence text ) {
+
+            tagline.setText( text );
 
         }
 

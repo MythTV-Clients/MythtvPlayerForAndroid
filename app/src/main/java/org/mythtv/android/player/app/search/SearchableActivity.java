@@ -30,7 +30,7 @@ public class SearchableActivity extends AbstractBaseActionBarActivity {
         Log.v( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
-        mSearchableRecordingsFragment = (SearchableRecordingsFragment) getFragmentManager().findFragmentById( R.id.fragment_search );
+        mSearchableRecordingsFragment = (SearchableRecordingsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_search );
 
         getSupportActionBar().setTitle( getResources().getString( R.string.search_results ) );
 

@@ -34,7 +34,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
-import org.mythtv.android.player.common.ui.loaders.ProgramsAsyncTaskLoader;
+import org.mythtv.android.player.tv.loaders.ProgramsAsyncTaskLoader;
 import org.mythtv.android.player.tv.settings.SettingsActivity;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 import org.mythtv.android.player.tv.search.SearchableActivity;

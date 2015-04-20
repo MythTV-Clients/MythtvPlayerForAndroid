@@ -48,7 +48,7 @@ public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
 
         }
 
-        mRecordingDetailsFragment = (RecordingDetailsFragment) getFragmentManager().findFragmentById( R.id.fragment_recording_details );
+        mRecordingDetailsFragment = (RecordingDetailsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_recording_details );
 
         Log.v( TAG, "onCreate : exit" );
     }
