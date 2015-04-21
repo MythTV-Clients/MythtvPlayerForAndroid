@@ -190,18 +190,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     }
 
     @Override
-    public void onResume() {
-        Log.v( TAG, "onResume : enter" );
-        super.onResume();
-
-        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
-
-//        getLoaderManager().restartLoader( 0, getArguments(), this );
-
-        Log.v( TAG, "onResume : exit" );
-    }
-
-    @Override
     public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
 
         inflater.inflate( R.menu.menu_details, menu );
@@ -228,6 +216,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
     public void setProgram( Program program ) {
         Log.v( TAG, "setProgram : enter" );
+
+        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
 
         mProgram = program;
 

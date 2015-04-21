@@ -105,9 +105,6 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
 
         setHasOptionsMenu(true);
 
-        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
-        useExternalPlayer = MainApplication.getInstance().isExternalPlayerVideoOverrideEnabled();
-
     }
 
     @Override
@@ -172,6 +169,9 @@ public class VideoDetailsFragment extends Fragment implements LoaderManager.Load
     }
 
     public void setVideo( Video video ) {
+
+        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
+        useExternalPlayer = MainApplication.getInstance().isExternalPlayerVideoOverrideEnabled();
 
         mVideo = video;
 

@@ -1,6 +1,7 @@
 package org.mythtv.android.player.app.videos;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
@@ -38,6 +39,13 @@ public class VideoDetailsActivity extends AbstractBaseActionBarActivity {
         }
 
         mVideoDetailsFragment = (VideoDetailsFragment) getFragmentManager().findFragmentById( R.id.fragment_video_details );
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         if( null != mVideo ) {
 
             mVideoDetailsFragment.setVideo( mVideo );
