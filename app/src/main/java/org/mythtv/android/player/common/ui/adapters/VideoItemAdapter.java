@@ -55,6 +55,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
         final Video video = videos.get( position );
         viewHolder.setTitle( video.getTitle() );
         viewHolder.setTagline( video.getTagline() );
+        viewHolder.setRating( video.getCertification() );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -101,6 +102,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
         private final ImageView coverart;
         private final TextView title;
         private final TextView tagline;
+        private final TextView rating;
 
         public ViewHolder( View v ) {
             super( v );
@@ -110,6 +112,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
             coverart = (ImageView) parent.findViewById( R.id.video_item_coverart );
             title = (TextView) parent.findViewById( R.id.video_item_title );
             tagline = (TextView) parent.findViewById( R.id.video_item_tagline );
+            rating = (TextView) parent.findViewById( R.id.video_item_rating );
 
 //            Log.v( TAG, "initialize : exit" );
         }
@@ -123,6 +126,12 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
         public void setTagline( CharSequence text ) {
 
             tagline.setText( text );
+
+        }
+
+        public void setRating( CharSequence text ) {
+
+            rating.setText( text );
 
         }
 

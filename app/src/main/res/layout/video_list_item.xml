@@ -35,7 +35,7 @@
 
         <TextView
             android:id="@+id/video_item_tagline"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/video_item_title"
             android:layout_marginLeft="@dimen/margin"
@@ -46,6 +46,21 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             tools:text="test tagline" />
+
+        <TextView
+            android:id="@+id/video_item_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:gravity="end"
+            android:background="@drawable/border_background"
+            android:padding="2dp"
+            tools:text="PG-13" />
 
     </RelativeLayout>
 
