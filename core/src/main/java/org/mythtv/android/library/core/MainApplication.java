@@ -16,17 +16,16 @@ import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.core.service.MythService;
 import org.mythtv.android.library.core.service.VideoService;
+import org.mythtv.android.library.core.service.VideoServiceEventHandler;
 import org.mythtv.android.library.core.service.v027.content.ContentServiceV27EventHandler;
 import org.mythtv.android.library.core.service.v027.dvr.DvrServiceV27EventHandler;
 import org.mythtv.android.library.core.service.v027.myth.MythServiceV27EventHandler;
-import org.mythtv.android.library.core.service.v027.video.VideoServiceV27EventHandler;
+import org.mythtv.android.library.core.service.v027.video.VideoServiceV27ApiEventHandler;
 import org.mythtv.android.library.core.service.v028.content.ContentServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.myth.MythServiceV28EventHandler;
-import org.mythtv.android.library.core.service.v028.video.VideoServiceV28EventHandler;
+import org.mythtv.android.library.core.service.v028.video.VideoServiceV28ApiEventHandler;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
-import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
-import org.mythtv.android.library.events.content.RequestAllLiveStreamsEvent;
 import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
@@ -72,10 +71,10 @@ public class MainApplication extends Application {
     private DvrService mDvrService;
     private MythService mMythService;
     private VideoService mVideoService;
+    private VideoService mVideoApiService;
 
     private AlarmManager mAlarmManager;
     private PendingIntent mRefreshLiveStreamPendingIntent;
-//    private PendingIntent mRefreshTitleInfosPendingIntent;
     private PendingIntent mRefreshRecordedProgramsPendingIntent;
     private PendingIntent mRefreshVideosPendingIntent;
 
@@ -115,7 +114,7 @@ public class MainApplication extends Application {
         cancelAlarms();
 
         Intent connectedIntent = new Intent( ACTION_NOT_CONNECTED );
-        sendBroadcast(connectedIntent);
+        sendBroadcast( connectedIntent );
 
     }
 
@@ -126,9 +125,6 @@ public class MainApplication extends Application {
         Intent refreshLiveStreamIntent = new Intent( this, RefreshLiveStreamsReceiver.class );
         mRefreshLiveStreamPendingIntent = PendingIntent.getBroadcast( this, 0, refreshLiveStreamIntent, 0 );
 
-//        Intent refreshTitleInfosIntent = new Intent( MainApplication.this, RefreshTitleInfosReceiver.class );
-//        mRefreshTitleInfosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshTitleInfosIntent, 0 );
-
         Intent refreshRecordedProgramsIntent = new Intent( MainApplication.this, RefreshRecordedProgramsReceiver.class );
         mRefreshRecordedProgramsPendingIntent = PendingIntent.getBroadcast( this, 0, refreshRecordedProgramsIntent, 0 );
 
@@ -136,7 +132,6 @@ public class MainApplication extends Application {
         mRefreshVideosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshVideosIntent, 0 );
 
         mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent );
-//        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshTitleInfosPendingIntent );
         mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent );
         mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 240000, 3600000, mRefreshVideosPendingIntent );
 
@@ -178,6 +173,10 @@ public class MainApplication extends Application {
 
     public VideoService getVideoService() {
         return mVideoService;
+    }
+
+    public VideoService getVideoApiService() {
+        return mVideoApiService;
     }
 
     public boolean isConnected() { return mConnected; }
@@ -232,6 +231,7 @@ public class MainApplication extends Application {
 
     private void initializeApi() {
 
+        mVideoService = new VideoServiceEventHandler();
         new ServerVersionAsyncTask().execute();
 
     }
@@ -288,7 +288,7 @@ public class MainApplication extends Application {
                         mContentService = new ContentServiceV27EventHandler();
                         mDvrService = new DvrServiceV27EventHandler();
                         mMythService = new MythServiceV27EventHandler();
-                        mVideoService = new VideoServiceV27EventHandler();
+                        mVideoApiService = new VideoServiceV27ApiEventHandler();
 
                         break;
 
@@ -298,7 +298,7 @@ public class MainApplication extends Application {
                         mContentService = new ContentServiceV28EventHandler();
                         mDvrService = new DvrServiceV28EventHandler();
                         mMythService = new MythServiceV28EventHandler();
-                        mVideoService = new VideoServiceV28EventHandler();
+                        mVideoApiService = new VideoServiceV28ApiEventHandler();
 
                         break;
                 }
@@ -306,7 +306,6 @@ public class MainApplication extends Application {
                 mConnected = true;
 
                 new RefreshLiveStreamsTask().execute();
-//                new RefreshTitleInfosTask( null ).execute();
                 new RefreshRecordedProgramsTask( null ).execute();
 
                 scheduleAlarms();

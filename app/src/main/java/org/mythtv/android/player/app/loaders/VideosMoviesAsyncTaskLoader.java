@@ -39,36 +39,19 @@ public class VideosMoviesAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
         List<Video> videos = new ArrayList<>();
 
-        try {
+        AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( "MOVIE" ) );
+        if( event.isEntityFound() ) {
+            Log.v( TAG, "loadInBackground : videos loaded from db" );
 
-            if( ( (MainApplication) getContext().getApplicationContext() ).isConnected() ) {
+            for( VideoDetails details : event.getDetails() ) {
+                 Log.v( TAG, "loadInBackground : video iteration" );
 
-                AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( "MOVIE" ) );
-                if( event.isEntityFound() ) {
-                    Log.v( TAG, "loadInBackground : videos loaded from db" );
-
-                    for( VideoDetails details : event.getDetails() ) {
-                        Log.v( TAG, "loadInBackground : video iteration" );
-
-                        Video video = Video.fromDetails( details );
-
-                        videos.add( video );
-
-                    }
-
-//                    Collections.sort( videos );
-
-                }
-
-            } else {
-
-                Log.w( TAG, "loadInBackground : MasterBackend NOT Connected!!" );
+                 Video video = Video.fromDetails( details );
+                 videos.add( video );
 
             }
 
-        } catch( NullPointerException e ) {
-
-            Log.e( TAG, "loadInBackground : error", e );
+//            Collections.sort( videos );
 
         }
 

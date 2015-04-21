@@ -104,7 +104,7 @@ public class VideoServiceHelper {
         @Override
         protected VideosUpdatedEvent doInBackground( Void... params ) {
 
-            return MainApplication.getInstance().getVideoService().updateVideos( new UpdateVideosEvent( null, null, false, null, null ) );
+            return MainApplication.getInstance().getVideoApiService().updateVideos( new UpdateVideosEvent( null, null, false, null, null ) );
         }
 
         @Override

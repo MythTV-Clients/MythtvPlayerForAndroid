@@ -38,7 +38,7 @@ public class RefreshVideosTask extends AsyncTask<Void, Void, Void> {
 
         if( MainApplication.getInstance().isConnected() ) {
 
-            MainApplication.getInstance().getVideoService().updateVideos( new UpdateVideosEvent( null, null,false, null, null ) );
+            MainApplication.getInstance().getVideoApiService().updateVideos( new UpdateVideosEvent( null, null,false, null, null ) );
 
         }
 

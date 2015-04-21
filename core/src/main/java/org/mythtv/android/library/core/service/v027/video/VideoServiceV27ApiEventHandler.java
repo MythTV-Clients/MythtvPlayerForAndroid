@@ -1,4 +1,4 @@
-package org.mythtv.android.library.core.service.v028.video;
+package org.mythtv.android.library.core.service.v027.video;
 
 import android.util.Log;
 
@@ -19,9 +19,9 @@ import org.mythtv.android.library.events.video.VideosUpdatedEvent;
 import org.mythtv.android.library.persistence.service.VideoPersistenceService;
 import org.mythtv.android.library.persistence.service.video.VideoPersistenceServiceEventHandler;
 import org.mythtv.services.api.ETagInfo;
-import org.mythtv.services.api.MythTvApi028Context;
-import org.mythtv.services.api.v028.beans.VideoMetadataInfo;
-import org.mythtv.services.api.v028.beans.VideoMetadataInfoList;
+import org.mythtv.services.api.MythTvApi027Context;
+import org.mythtv.services.api.v027.beans.VideoMetadataInfo;
+import org.mythtv.services.api.v027.beans.VideoMetadataInfoList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,18 +31,18 @@ import retrofit.RetrofitError;
 /**
  * Created by dmfrey on 11/24/14.
  */
-public class VideoServiceV28EventHandler implements VideoService {
+public class VideoServiceV27ApiEventHandler implements VideoService {
 
-    private static final String TAG = VideoServiceV28EventHandler.class.getSimpleName();
+    private static final String TAG = VideoServiceV27ApiEventHandler.class.getSimpleName();
 
     private static final String VIDEO_LIST_REQ_ID = "VIDOE_LIST_REQ_ID";
 
-    MythTvApi028Context mMythTvApiContext;
+    MythTvApi027Context mMythTvApiContext;
     VideoPersistenceService mVideoPersistenceService;
 
-    public VideoServiceV28EventHandler() {
+    public VideoServiceV27ApiEventHandler() {
 
-        mMythTvApiContext = (MythTvApi028Context) MainApplication.getInstance().getMythTvApiContext();
+        mMythTvApiContext = (MythTvApi027Context) MainApplication.getInstance().getMythTvApiContext();
         mVideoPersistenceService = new VideoPersistenceServiceEventHandler();
 
     }
@@ -66,7 +66,7 @@ public class VideoServiceV28EventHandler implements VideoService {
 
         try {
 
-            VideoMetadataInfoList mVideoList = mMythTvApiContext.getVideoService().getVideoList( event.getFolder(), event.getSort(), event.getDescending(), event.getStartIndex(), event.getCount(), eTagInfo, VIDEO_LIST_REQ_ID );
+            VideoMetadataInfoList mVideoList = mMythTvApiContext.getVideoService().getVideoList( event.getDescending(), event.getStartIndex(), event.getCount(), eTagInfo, VIDEO_LIST_REQ_ID );
             if( null != mVideoList ) {
 
                 List<VideoDetails> videoDetails = new ArrayList<>();

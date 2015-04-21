@@ -33,7 +33,7 @@ public class RefreshVideosReceiver extends BroadcastReceiver {
 
                 if( MainApplication.getInstance().isConnected() ) {
 
-                    MainApplication.getInstance().getVideoService().updateVideos( new UpdateVideosEvent( null, null, false, null, null ) );
+                    MainApplication.getInstance().getVideoApiService().updateVideos( new UpdateVideosEvent( null, null, false, null, null ) );
 
                 }
 
