@@ -37,7 +37,7 @@ public class RefreshTitleInfosTask extends AsyncTask<Void, Void, Void> {
 
         if( MainApplication.getInstance().isConnected() ) {
 
-            MainApplication.getInstance().getDvrService().updateTitleInfos( new UpdateTitleInfosEvent() );
+            MainApplication.getInstance().getDvrApiService().updateTitleInfos( new UpdateTitleInfosEvent() );
 
         }
 

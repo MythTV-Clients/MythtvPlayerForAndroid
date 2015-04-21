@@ -32,7 +32,7 @@ public class RefreshRecordedProgramsReceiver extends BroadcastReceiver {
 
                 if( MainApplication.getInstance().isConnected() ) {
 
-                    MainApplication.getInstance().getDvrService().updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null, null, null, null ) );
+                    MainApplication.getInstance().getDvrApiService().updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null, null, null, null ) );
 
                 }
 

@@ -38,9 +38,9 @@ import retrofit.RetrofitError;
 /**
  * Created by dmfrey on 11/13/14.
  */
-public class DvrServiceV27EventHandler implements DvrService {
+public class DvrServiceV27ApiEventHandler implements DvrService {
 
-    private static final String TAG = DvrServiceV27EventHandler.class.getSimpleName();
+    private static final String TAG = DvrServiceV27ApiEventHandler.class.getSimpleName();
 
     private static final String RECORDED_LIST_REQ_ID = "RECORDED_LIST_REQ_ID";
     private static final String TITLE_INFO_LIST_REQ_ID = "TITLE_INFO_LIST_REQ_ID";
@@ -48,7 +48,7 @@ public class DvrServiceV27EventHandler implements DvrService {
     MythTvApi027Context mMythTvApiContext;
     DvrPersistenceService mDvrPersistenceService;
 
-    public DvrServiceV27EventHandler() {
+    public DvrServiceV27ApiEventHandler() {
 
         mMythTvApiContext = (MythTvApi027Context) MainApplication.getInstance().getMythTvApiContext();
         mDvrPersistenceService = new DvrPersistenceServiceEventHandler();
@@ -127,8 +127,6 @@ public class DvrServiceV27EventHandler implements DvrService {
 
             TitleInfoList titleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
             if( null != titleInfoList ) {
-
-//                titleInfoDetails.add( new TitleInfoDetails( MainApplication.getInstance().getApplicationContext().getResources().getString( R.string.all_recordings ), "-1" ) );
 
                 for( TitleInfo titleInfo : titleInfoList.getTitleInfos() ) {
                     titleInfoDetails.add( TitleInfoHelper.toDetails( titleInfo ) );
