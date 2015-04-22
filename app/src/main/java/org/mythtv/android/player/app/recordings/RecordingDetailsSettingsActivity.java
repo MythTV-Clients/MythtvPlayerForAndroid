@@ -1,15 +1,11 @@
 package org.mythtv.android.player.app.recordings;
 
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.widget.DrawerLayout;
-import android.view.MenuItem;
 
 import org.mythtv.android.R;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
-import org.mythtv.android.player.app.NavigationDrawerFragment;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 
-public class RecordingDetailsSettingsActivity extends AbstractBaseActionBarActivity {
+public class RecordingDetailsSettingsActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = RecordingDetailsSettingsActivity.class.getSimpleName();
 

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
@@ -15,9 +15,9 @@ import org.mythtv.android.library.core.MainApplication;
 /**
  * Created by dmfrey on 12/10/14.
  */
-public abstract class AbstractBaseActionBarActivity extends ActionBarActivity {
+public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity {
 
-    private static final String TAG = AbstractBaseActionBarActivity.class.getSimpleName();
+    private static final String TAG = AbstractBaseAppCompatActivity.class.getSimpleName();
 
     protected Toolbar toolbar;
 
@@ -81,7 +81,7 @@ public abstract class AbstractBaseActionBarActivity extends ActionBarActivity {
 
             if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
 
-                Toast.makeText( AbstractBaseActionBarActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
+                Toast.makeText( AbstractBaseAppCompatActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
 
             }
 

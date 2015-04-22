@@ -8,13 +8,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.R;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class RecordingsActivity extends AbstractBaseActionBarActivity {
+public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
     public static final String TITLE_INFO = "title_info";
 

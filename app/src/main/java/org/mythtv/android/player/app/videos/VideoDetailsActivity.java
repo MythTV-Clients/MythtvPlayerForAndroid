@@ -1,16 +1,15 @@
 package org.mythtv.android.player.app.videos;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.R;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class VideoDetailsActivity extends AbstractBaseActionBarActivity {
+public class VideoDetailsActivity extends AbstractBaseAppCompatActivity {
 
     private VideoDetailsFragment mVideoDetailsFragment;
     Video mVideo;

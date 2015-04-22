@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 
 import org.mythtv.android.R;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.player.app.NavigationDrawerFragment;
 
-public class SettingsActivity extends AbstractBaseActionBarActivity {
+public class SettingsActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
 

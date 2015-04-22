@@ -134,7 +134,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
     @Override
     public VideosUpdatedEvent updateVideos( UpdateVideosEvent event ) {
-        Log.v(TAG, "updateVideos : enter");
+//        Log.v(TAG, "updateVideos : enter");
 
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
 
@@ -262,7 +262,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
                 if( cursor.moveToFirst() ) {
 
                     Long id = cursor.getLong( cursor.getColumnIndex( VideoConstants._ID ) );
-                    Log.v( TAG, "updateVideos : updating existing video - rowid=" + id );
+//                    Log.v( TAG, "updateVideos : updating existing video - rowid=" + id );
                     ops.add(
                             ContentProviderOperation
                                     .newUpdate( ContentUris.withAppendedId( VideoConstants.CONTENT_URI, id ) )
@@ -271,7 +271,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
                     );
 
                 } else {
-                    Log.v( TAG, "updateVideos : adding new video" );
+//                    Log.v( TAG, "updateVideos : adding new video" );
 
                     ops.add(
                             ContentProviderOperation
@@ -288,7 +288,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
             if( !videoIds.isEmpty() ) {
 
                 for( Long videoId : videoIds.values() ) {
-                    Log.v( TAG, "updateVideos : deleting stale video" );
+//                    Log.v( TAG, "updateVideos : deleting stale video" );
 
                     ops.add(
                             ContentProviderOperation
@@ -304,7 +304,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
                 mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
 
-                Log.v( TAG, "updateVideos : exit" );
+//                Log.v( TAG, "updateVideos : exit" );
                 return new VideosUpdatedEvent( event.getDetails() );
 
             } catch( Exception e ) {
@@ -315,7 +315,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         }
 
-        Log.w( TAG, "updateVideos : exit, videos not updated" );
+//        Log.w( TAG, "updateVideos : exit, videos not updated" );
         return VideosUpdatedEvent.notUpdated();
     }
 

@@ -9,12 +9,12 @@ import android.view.MenuItem;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.persistence.repository.MythtvSearchSuggestionProvider;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 
 /**
  * Created by dmfrey on 3/14/15.
  */
-public class SearchableActivity extends AbstractBaseActionBarActivity {
+public class SearchableActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = SearchableActivity.class.getSimpleName();
 

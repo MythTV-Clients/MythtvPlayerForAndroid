@@ -21,8 +21,10 @@ import android.support.v17.leanback.widget.DetailsOverviewRowPresenter;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.OnItemClickedListener;
+import android.support.v17.leanback.widget.OnItemViewClickedListener;
+import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
+import android.support.v17.leanback.widget.RowPresenter;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -141,7 +143,7 @@ public class VideoDetailsFragment extends DetailsFragment implements LoaderManag
         mVideo = (Video) getActivity().getIntent().getSerializableExtra( VIDEO );
         new DetailRowBuilderTask().execute(mVideo);
 
-        setOnItemClickedListener( getDefaultItemClickedListener() );
+        setOnItemViewClickedListener(getDefaultItemViewClickedListener());
 //        updateBackground(selectedProgram.getBackgroundImageURI());
 
     }
@@ -262,18 +264,23 @@ public class VideoDetailsFragment extends DetailsFragment implements LoaderManag
 
     }
 
-    protected OnItemClickedListener getDefaultItemClickedListener() {
-        return new OnItemClickedListener() {
+    protected OnItemViewClickedListener getDefaultItemViewClickedListener() {
+        return new OnItemViewClickedListener() {
+
             @Override
-            public void onItemClicked(Object item, Row row) {
-                if (item instanceof Video) {
+            public void onItemClicked( Presenter.ViewHolder viewHolder, Object item, RowPresenter.ViewHolder viewHolder1, Row row ) {
+
+                if( item instanceof Video ) {
                     Video video = (Video) item;
-                    Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
+                    Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
                     intent.putExtra( VIDEO, video );
-                    startActivity(intent);
+                    startActivity( intent );
                 }
+
             }
+
         };
+
     }
 
     protected void updateBackground(URI uri) {

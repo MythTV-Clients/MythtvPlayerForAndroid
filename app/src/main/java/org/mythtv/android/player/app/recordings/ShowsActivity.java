@@ -10,10 +10,10 @@ import android.view.MenuInflater;
 import android.support.v7.widget.SearchView;
 
 import org.mythtv.android.R;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.player.app.NavigationDrawerFragment;
 
-public class ShowsActivity extends AbstractBaseActionBarActivity {
+public class ShowsActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = ShowsActivity.class.getSimpleName();
 

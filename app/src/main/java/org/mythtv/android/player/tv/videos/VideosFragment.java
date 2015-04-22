@@ -13,8 +13,7 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnItemClickedListener;
-import android.support.v17.leanback.widget.OnItemSelectedListener;
+import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
@@ -169,13 +168,13 @@ public class VideosFragment extends BrowseFragment implements LoaderManager.Load
 
         setAdapter( mRowsAdapter );
 
-        Log.d( TAG, "setupUi : exit" );
+        Log.d(TAG, "setupUi : exit");
     }
 
     private void prepareBackgroundManager() {
 
         BackgroundManager backgroundManager = BackgroundManager.getInstance(getActivity());
-        backgroundManager.attach( getActivity().getWindow() );
+        backgroundManager.attach(getActivity().getWindow());
         mBackgroundTarget = new PicassoBackgroundManagerTarget( backgroundManager );
 
         mDefaultBackground = getResources().getDrawable( R.drawable.default_background );
@@ -192,52 +191,37 @@ public class VideosFragment extends BrowseFragment implements LoaderManager.Load
         setTitle(getString(R.string.videos_browse_title)); // Badge, when set, takes precedent
         // over title
         setHeadersState( HEADERS_ENABLED );
-        setHeadersTransitionOnBackEnabled( true );
+        setHeadersTransitionOnBackEnabled(true);
 
         // set fastLane (or headers) background color
-        setBrandColor( getResources().getColor( R.color.primary_dark ) );
+        setBrandColor(getResources().getColor(R.color.primary_dark));
         // set search icon color
         setSearchAffordanceColor(getResources().getColor(R.color.accent));
 
     }
 
     private void setupEventListeners() {
-        setOnItemSelectedListener(getDefaultItemSelectedListener());
-        setOnItemClickedListener(getDefaultItemClickedListener());
-        setOnItemViewSelectedListener(getDefaultItemViewSelectedListener());
-        setOnSearchClickedListener(new View.OnClickListener() {
+        setOnItemViewClickedListener( getDefaultItemViewClickedListener() );
+        setOnItemViewSelectedListener( getDefaultItemViewSelectedListener() );
+        setOnSearchClickedListener( new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG).show();
             }
+
         });
+
     }
 
-    protected OnItemSelectedListener getDefaultItemSelectedListener() {
-        return new OnItemSelectedListener() {
+    protected OnItemViewClickedListener getDefaultItemViewClickedListener() {
+        return new OnItemViewClickedListener() {
+
             @Override
-            public void onItemSelected(Object item, Row row) {
+            public void onItemClicked( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
+
                 if( item instanceof Video ) {
-                    String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + ((Video) item).getId();
-                    try {
-                        mBackgroundURI = new URI( url );
-                        updateBackground( mBackgroundURI );
-                    } catch (URISyntaxException e) {
-                        Log.e( TAG, "error parsing url", e );
-                    }
 
-                    startBackgroundTimer();
-
-                }
-            }
-        };
-    }
-
-    protected OnItemClickedListener getDefaultItemClickedListener() {
-        return new OnItemClickedListener() {
-            @Override
-            public void onItemClicked(Object item, Row row) {
-                if( item instanceof Video ) {
                     Video video = (Video) item;
                     Log.d( TAG, "Video: " + item.toString() );
                     Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );

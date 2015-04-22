@@ -9,11 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import org.mythtv.android.R;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.player.app.NavigationDrawerFragment;
 import org.mythtv.android.player.common.ui.views.SlidingTabLayout;
 
-public class VideosActivity extends AbstractBaseActionBarActivity {
+public class VideosActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = VideosActivity.class.getSimpleName();
 
