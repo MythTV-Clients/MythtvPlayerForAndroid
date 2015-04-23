@@ -29,7 +29,7 @@
         <!-- fragment
             android:id="@+id/fragment_videos"
             android:layout_below="@id/toolbar"
-            android:name="org.mythtv.android.player.app.videos.VideosFragment"
+            android:name="org.mythtv.android.player.app.videos.VideosMoviesFragmentagment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/video_list" / -->

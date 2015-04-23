@@ -17,7 +17,7 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = VideosActivity.class.getSimpleName();
 
-//    private VideosFragment mVideosFragment;
+//    private VideosMoviesFragment mVideosFragment;
     private NavigationDrawerFragment mDrawerFragment;
 
     private SlidingTabLayout mTabs;
@@ -32,7 +32,7 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-//        mVideosFragment = (VideosFragment) getFragmentManager().findFragmentById( R.id.fragment_videos );
+//        mVideosFragment = (VideosMoviesFragment) getFragmentManager().findFragmentById( R.id.fragment_videos );
 
         mDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById( R.id.fragment_navigation_drawer );
         mDrawerFragment.setUp( R.id.fragment_navigation_drawer, (DrawerLayout) findViewById( R.id.drawer_layout ), toolbar );
@@ -78,11 +78,11 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
 
                 case 0:
 
-                    return Fragment.instantiate( VideosActivity.this, VideosFragment.class.getName(), null );
+                    return Fragment.instantiate( VideosActivity.this, VideosMoviesFragment.class.getName(), null );
 
                 case 1 :
 
-                    return MyFragment.getInstance();
+                    return Fragment.instantiate(VideosActivity.this, VideosTvsFragment.class.getName(), null);
 
             }
 

@@ -1,11 +1,11 @@
 package org.mythtv.android.player.app.loaders;
 
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
@@ -21,15 +21,21 @@ import java.util.List;
 /**
  * Created by dmfrey on 3/10/15.
  */
-public class VideosTvsAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
+public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
-    private static final String TAG = VideosTvsAsyncTaskLoader.class.getSimpleName();
+    private static final String TAG = VideosAsyncTaskLoader.class.getSimpleName();
+
+    public enum Type { MOVIE, TELEVISION }
 
     private VideosObserver mObserver;
     private List<Video> mVideos;
 
-    public VideosTvsAsyncTaskLoader(Context context) {
+    private Type type;
+
+    public VideosAsyncTaskLoader(Context context, Type type) {
         super( context );
+
+        this.type = type;
 
     }
 
@@ -39,15 +45,15 @@ public class VideosTvsAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
         List<Video> videos = new ArrayList<>();
 
-        AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( "TELEVISION" ) );
+        AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( type.name() ) );
         if( event.isEntityFound() ) {
             Log.v( TAG, "loadInBackground : videos loaded from db" );
 
             for( VideoDetails details : event.getDetails() ) {
-//                Log.v( TAG, "loadInBackground : video iteration" );
+                 Log.v( TAG, "loadInBackground : video iteration" );
 
-                Video video = Video.fromDetails( details );
-                videos.add( video );
+                 Video video = Video.fromDetails( details );
+                 videos.add( video );
 
             }
 
@@ -206,9 +212,9 @@ public class VideosTvsAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
     private class VideosObserver extends ContentObserver {
 
-        private VideosTvsAsyncTaskLoader mLoader;
+        private VideosAsyncTaskLoader mLoader;
 
-        public VideosObserver( Handler handler, VideosTvsAsyncTaskLoader loader ) {
+        public VideosObserver( Handler handler, VideosAsyncTaskLoader loader ) {
             super( handler );
 
             mLoader = loader;

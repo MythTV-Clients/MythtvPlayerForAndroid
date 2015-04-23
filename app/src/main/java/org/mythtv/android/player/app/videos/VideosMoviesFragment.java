@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,16 +20,17 @@ import org.mythtv.android.library.core.utils.RefreshVideosTask;
 import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.player.app.AbstractBaseFragment;
-import org.mythtv.android.player.app.loaders.VideosMoviesAsyncTaskLoader;
+import org.mythtv.android.player.app.loaders.VideosAsyncTaskLoader;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class VideosFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {
+public class VideosMoviesFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {
 
-    private static final String TAG = VideosFragment.class.getSimpleName();
+    private static final String TAG = VideosMoviesFragment.class.getSimpleName();
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
@@ -38,9 +38,9 @@ public class VideosFragment extends AbstractBaseFragment implements LoaderManage
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
 
-    public static VideosFragment getInstance() {
+    public static VideosMoviesFragment getInstance() {
 
-        VideosFragment fragment = new VideosFragment();
+        VideosMoviesFragment fragment = new VideosMoviesFragment();
 
         return fragment;
     }
@@ -50,7 +50,7 @@ public class VideosFragment extends AbstractBaseFragment implements LoaderManage
         Log.v( TAG, "onCreateLoader : enter" );
 
         Log.v( TAG, "onCreateLoader : exit" );
-        return new VideosMoviesAsyncTaskLoader( getActivity() );
+        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.MOVIE );
     }
 
     @Override
@@ -59,6 +59,8 @@ public class VideosFragment extends AbstractBaseFragment implements LoaderManage
 
         if( !videos.isEmpty() ) {
             Log.v( TAG, "onLoadFinished : loaded titleInfos from db" );
+
+            Collections.sort( videos );
 
             mAdapter = new VideoItemAdapter( videos, this );
             mRecyclerView.setAdapter( mAdapter );
