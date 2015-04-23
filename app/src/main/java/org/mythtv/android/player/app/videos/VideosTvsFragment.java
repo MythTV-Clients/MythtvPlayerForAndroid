@@ -53,7 +53,7 @@ public class VideosTvsFragment extends AbstractBaseFragment implements LoaderMan
         Log.v( TAG, "onCreateLoader : enter" );
 
         Log.v( TAG, "onCreateLoader : exit" );
-        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION );
+        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, null, null );
     }
 
     @Override
@@ -154,7 +154,7 @@ public class VideosTvsFragment extends AbstractBaseFragment implements LoaderMan
         Bundle args = new Bundle();
         args.putSerializable( VideoDetailsFragment.VIDEO_KEY, video );
 
-        Intent videoDetails = new Intent( getActivity(), VideoDetailsActivity.class );
+        Intent videoDetails = new Intent( getActivity(), TvSeasonsActivity.class );
         videoDetails.putExtras( args );
 
         if( Build.VERSION.SDK_INT >= 16 ) {

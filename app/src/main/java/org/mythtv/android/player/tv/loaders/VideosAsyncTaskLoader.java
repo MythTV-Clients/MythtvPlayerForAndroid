@@ -43,7 +43,7 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
             if( ( (MainApplication) getContext().getApplicationContext() ).isConnected() ) {
 
-                AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( null ) );
+                AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( null, null, null ) );
                 if( event.isEntityFound() ) {
 //                    Log.v( TAG, "loadInBackground : videos loaded from db" );
 

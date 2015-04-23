@@ -67,6 +67,22 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
             selectionArgs.add( event.getContentType() );
 
         }
+
+        if( null != event.getTitle() && !"".equals( event.getTitle() ) ) {
+            Log.v( TAG, "requestAllVideos : adding title '" + event.getTitle() + "'" );
+
+            selection += " AND " + VideoConstants.FIELD_VIDEO_TITLE + " = ?";
+            selectionArgs.add( event.getTitle() );
+
+        }
+
+        if( null != event.getSeason() ) {
+            Log.v( TAG, "requestAllVideos : adding season '" + event.getSeason() + "'" );
+
+            selection += " AND " + VideoConstants.FIELD_VIDEO_SEASON + " = " + event.getSeason();
+
+        }
+
         Log.v( TAG, "requestAllVideos : selection=" + selection );
         for( String selectionArg : selectionArgs.toArray( new String[ selectionArgs.size() ] ) ) {
             Log.v( TAG, "requestAllVideos : selectionArg=" + selectionArg );

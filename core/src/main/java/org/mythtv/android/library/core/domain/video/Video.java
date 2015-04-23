@@ -551,23 +551,23 @@ public class Video implements Serializable, Comparable<Video> {
         int comparison = thisTitle.compareTo(thatTitle);
         if( comparison != EQUAL ) return comparison;
 
-        String thisInetref = ( null != inetref ? inetref : "" );
-        String thatInetref = ( null != another.inetref ? another.inetref : "" );
-
-        comparison = thisInetref.compareTo( thatInetref );
-        if( comparison != EQUAL ) return comparison;
-
-        String thisSubTitle = ( null != subTitle ? subTitle : "" );
-        String thatSubTitle = ( null != another.subTitle ? another.subTitle : "" );
-
-        comparison = thisSubTitle.compareTo( thatSubTitle );
-        if( comparison != EQUAL ) return comparison;
-
-        String thisTagline = ( null != tagline ? tagline : "" );
-        String thatTagline = ( null != another.tagline ? another.tagline : "" );
-
-        comparison = thisTagline.compareTo( thatTagline );
-        if( comparison != EQUAL ) return comparison;
+//        String thisInetref = ( null != inetref ? inetref : "" );
+//        String thatInetref = ( null != another.inetref ? another.inetref : "" );
+//
+//        comparison = thisInetref.compareTo( thatInetref );
+//        if( comparison != EQUAL ) return comparison;
+//
+//        String thisSubTitle = ( null != subTitle ? subTitle : "" );
+//        String thatSubTitle = ( null != another.subTitle ? another.subTitle : "" );
+//
+//        comparison = thisSubTitle.compareTo( thatSubTitle );
+//        if( comparison != EQUAL ) return comparison;
+//
+//        String thisTagline = ( null != tagline ? tagline : "" );
+//        String thatTagline = ( null != another.tagline ? another.tagline : "" );
+//
+//        comparison = thisTagline.compareTo( thatTagline );
+//        if( comparison != EQUAL ) return comparison;
 
         if( season > another.season ) {
             return AFTER;
@@ -577,7 +577,7 @@ public class Video implements Serializable, Comparable<Video> {
 
         if( episode > another.episode ) {
             return AFTER;
-        } else if( episode > another.episode ) {
+        } else if( episode < another.episode ) {
             return BEFORE;
         }
 

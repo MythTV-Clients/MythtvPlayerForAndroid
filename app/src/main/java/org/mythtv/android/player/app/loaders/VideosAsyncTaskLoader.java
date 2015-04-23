@@ -31,11 +31,15 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
     private List<Video> mVideos;
 
     private Type type;
+    private String title;
+    private Integer season;
 
-    public VideosAsyncTaskLoader(Context context, Type type) {
+    public VideosAsyncTaskLoader( Context context, Type type, String title, Integer season ) {
         super( context );
 
         this.type = type;
+        this.title = title;
+        this.season = season;
 
     }
 
@@ -45,7 +49,7 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
         List<Video> videos = new ArrayList<>();
 
-        AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( type.name() ) );
+        AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( type.name(), title, season ) );
         if( event.isEntityFound() ) {
             Log.v( TAG, "loadInBackground : videos loaded from db" );
 

@@ -1,12 +1,11 @@
 package org.mythtv.android.player.app.videos;
 
-import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.support.v4.content.Loader;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,12 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.core.utils.RefreshVideosTask;
-import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
 import org.mythtv.android.R;
+import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 import org.mythtv.android.player.app.loaders.VideosAsyncTaskLoader;
+import org.mythtv.android.player.common.ui.adapters.VideoTvItemAdapter;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,50 +26,43 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class VideosMoviesFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {
+public class TvSeasonsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoTvItemAdapter.VideoItemClickListener {
 
-    private static final String TAG = VideosMoviesFragment.class.getSimpleName();
+    private static final String TAG = TvSeasonsFragment.class.getSimpleName();
 
-    SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
-    VideoItemAdapter mAdapter;
+    VideoTvItemAdapter mAdapter;
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
-
-    public static VideosMoviesFragment getInstance() {
-
-        VideosMoviesFragment fragment = new VideosMoviesFragment();
-
-        return fragment;
-    }
+    Video mShow;
 
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
 
-        Log.v( TAG, "onCreateLoader : exit" );
-        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.MOVIE, null, null );
+        Log.v(TAG, "onCreateLoader : exit");
+        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, mShow.getTitle(), mShow.getSeason() );
     }
 
     @Override
     public void onLoadFinished( Loader<List<Video>> loader, List<Video> videos ) {
-        Log.v( TAG, "onLoadFinished : enter" );
+        Log.v(TAG, "onLoadFinished : enter");
 
         if( !videos.isEmpty() ) {
-            Log.v( TAG, "onLoadFinished : loaded titleInfos from db" );
+            Log.v( TAG, "onLoadFinished : loaded videos from db" );
 
             Collections.sort( videos );
 
-            mAdapter = new VideoItemAdapter( videos, this );
+            mAdapter = new VideoTvItemAdapter( videos, this );
             mRecyclerView.setAdapter( mAdapter );
 
             mRecyclerView.setVisibility( View.VISIBLE );
-            mEmpty.setVisibility(View.GONE);
+            mEmpty.setVisibility( View.GONE );
 
         } else {
 
             mRecyclerView.setVisibility( View.GONE );
-            mEmpty.setVisibility(View.VISIBLE);
+            mEmpty.setVisibility( View.VISIBLE );
 
         }
 
@@ -88,43 +79,21 @@ public class VideosMoviesFragment extends AbstractBaseFragment implements Loader
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
-        View view = inflater.inflate( R.layout.video_list, container, false );
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
-        mSwipeRefreshLayout.setOnRefreshListener( this );
+        View view = inflater.inflate( R.layout.video_tv_list, container, false );
 
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mLayoutManager = new GridLayoutManager( getActivity(), 2 );
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(mLayoutManager );
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;
     }
 
-    @Override
-    public void onActivityCreated( Bundle savedInstanceState ) {
-        Log.v( TAG, "onActivityCreated : enter" );
-        super.onActivityCreated( savedInstanceState );
-
-        getLoaderManager().initLoader( 0, null, this );
-
-        Log.v( TAG, "onActivityCreated : exit" );
-    }
-
-    @Override
-    public void onResume() {
-        Log.v( TAG, "resume : enter" );
-        super.onResume();
-
-        getLoaderManager().restartLoader( 0, null, this );
-
-        Log.v( TAG, "resume : exit" );
-    }
-
-    public void reload() {
+    public void setShow( Video show ) {
         Log.v( TAG, "reload : enter" );
 
-        getLoaderManager().restartLoader( 0, null, this );
+        mShow = show;
+        getLoaderManager().initLoader(0, null, this );
 
         Log.v(TAG, "videos : exit");
     }
@@ -165,22 +134,5 @@ public class VideosMoviesFragment extends AbstractBaseFragment implements Loader
 //        mEmpty.setVisibility(View.VISIBLE);
 
     }
-
-    @Override
-    public void onRefresh() {
-
-        new RefreshVideosTask( this ).execute();
-
-    }
-
-    @Override
-    public void onRefreshComplete() {
-
-        if( mSwipeRefreshLayout.isRefreshing() ) {
-            mSwipeRefreshLayout.setRefreshing( false );
-        }
-
-    }
-
 
 }
