@@ -51,10 +51,10 @@ public class VideoTvItemAdapter extends RecyclerView.Adapter<VideoTvItemAdapter.
 //        Log.v( TAG, "onBindViewHolder : enter" );
 
         final Video video = videos.get( position );
-        viewHolder.setTitle( MainApplication.getInstance().getApplicationContext().getResources().getString( R.string.season ) + " " + video.getSeason() );
+        viewHolder.setTitle( video.getSubTitle() );
         viewHolder.setTagline( MainApplication.getInstance().getApplicationContext().getResources().getString( R.string.episode ) + " " + video.getEpisode() );
-        viewHolder.setRating( video.getCertification() );
-        viewHolder.setOnClickListener( new View.OnClickListener() {
+        viewHolder.setRating(video.getCertification());
+        viewHolder.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick( View v ) {

@@ -34,27 +34,32 @@ public class TvSeasonsFragment extends AbstractBaseFragment implements LoaderMan
     VideoTvItemAdapter mAdapter;
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
-    Video mShow;
+
+    String mTitle;
+    Integer mSeason;
 
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
 
+        Log.v( TAG, "onCreateLoader : mTitle=" + mTitle + ", mSeason=" + mSeason );
+
         Log.v(TAG, "onCreateLoader : exit");
-        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, mShow.getTitle(), mShow.getSeason() );
+        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, mTitle, mSeason );
     }
 
     @Override
     public void onLoadFinished( Loader<List<Video>> loader, List<Video> videos ) {
-        Log.v(TAG, "onLoadFinished : enter");
+        Log.v( TAG, "onLoadFinished : enter" );
 
         if( !videos.isEmpty() ) {
-            Log.v( TAG, "onLoadFinished : loaded videos from db" );
+            Log.v(TAG, "onLoadFinished : loaded videos from db");
 
-            Collections.sort( videos );
+            Collections.sort(videos);
 
-            mAdapter = new VideoTvItemAdapter( videos, this );
-            mRecyclerView.setAdapter( mAdapter );
+            VideoTvItemAdapter adapter = new VideoTvItemAdapter( videos, this );
+            mRecyclerView.setAdapter( adapter );
+            adapter.notifyDataSetChanged();
 
             mRecyclerView.setVisibility( View.VISIBLE );
             mEmpty.setVisibility( View.GONE );
@@ -72,7 +77,7 @@ public class TvSeasonsFragment extends AbstractBaseFragment implements LoaderMan
     @Override
     public void onLoaderReset( Loader<List<Video>> loader ) {
 
-        mRecyclerView.setAdapter( null );
+        mRecyclerView.setAdapter(null);
 
     }
 
@@ -89,13 +94,14 @@ public class TvSeasonsFragment extends AbstractBaseFragment implements LoaderMan
         return view;
     }
 
-    public void setShow( Video show ) {
-        Log.v( TAG, "reload : enter" );
+    public void setShow( String title, Integer season ) {
+        Log.v( TAG, "setShow : enter" );
 
-        mShow = show;
-        getLoaderManager().initLoader(0, null, this );
+        mTitle = title;
+        mSeason = season;
+        getLoaderManager().restartLoader( 0, null, this );
 
-        Log.v(TAG, "videos : exit");
+        Log.v( TAG, "setShow : exit" );
     }
 
     public void videoItemClicked( View v, Video video ) {
