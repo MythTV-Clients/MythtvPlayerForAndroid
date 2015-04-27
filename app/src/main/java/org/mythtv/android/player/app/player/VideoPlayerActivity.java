@@ -50,14 +50,14 @@ public class VideoPlayerActivity extends Activity {
             URL url = new URL( MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring( 1 ) );
             URI uri = new URI( url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef() );
             fileUri = Uri.parse(uri.toString());
+            Log.v( TAG, "onCreate : fileUrl=" + fileUri.toString() );
 
-        } catch( MalformedURLException | URISyntaxException e ) {
+        } catch( MalformedURLException | URISyntaxException | NullPointerException e ) {
             Log.v( TAG, "onCreate : error parsing mFileUrl=" + mFileUrl );
         }
-        Log.v( TAG, "onCreate : fileUrl=" + fileUri.toString() );
 
         mVideoView =  (VideoView) findViewById( R.id.videoView );
-        mVideoView.setVideoURI(fileUri);
+        mVideoView.setVideoURI( fileUri );
 
         MediaController mMediaController = new MediaController( this );
         mMediaController.setAnchorView( mVideoView );

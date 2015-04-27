@@ -111,13 +111,13 @@ public class RecordingPlayerActivity extends Activity {
                 URL url = new URL( MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring( 1 ) );
                 URI uri = new URI( url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef() );
                 fileUri = Uri.parse( uri.toString() );
+                Log.v(TAG, "startVideoPlayerHls : fileUrl=" + fileUri.toString());
 
-            } catch( MalformedURLException | URISyntaxException e ) {
-                Log.v( TAG, "onCreate : error parsing mFileUrl=" + mFileUrl );
+            } catch( MalformedURLException | URISyntaxException | NullPointerException e ) {
+                Log.v( TAG, "onCreate : error parsing mFileUrl=" + mFileUrl, e );
             }
-            Log.v(TAG, "startVideoPlayerHls : fileUrl=" + fileUri.toString());
 
-            mVideoView.setVideoURI( fileUri );
+            mVideoView.setVideoURI(fileUri);
 
             if (mShouldStartPlayback) {
                 mPlaybackState = PlaybackState.PLAYING;
