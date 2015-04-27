@@ -25,6 +25,10 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.utils.Utils;
 //import MovieDetailsActivity;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -101,10 +105,19 @@ public class RecordingPlayerActivity extends Activity {
             mShouldStartPlayback = b.getBoolean(getResources().getString(R.string.should_start));
             int startPosition = b.getInt(getResources().getString(R.string.start_position), 0);
 
-            Log.i( TAG, "startVideoPlayerHls : mFileUrl=" + mFileUrl );
-            String url = MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring( 1 );
-            Log.i( TAG, "startVideoPlayerHls : url=" + url );
-            mVideoView.setVideoURI( Uri.parse( url ) );
+            Uri fileUri = null;
+            try {
+
+                URL url = new URL( MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring( 1 ) );
+                URI uri = new URI( url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef() );
+                fileUri = Uri.parse( uri.toString() );
+
+            } catch( MalformedURLException | URISyntaxException e ) {
+                Log.v( TAG, "onCreate : error parsing mFileUrl=" + mFileUrl );
+            }
+            Log.v(TAG, "startVideoPlayerHls : fileUrl=" + fileUri.toString());
+
+            mVideoView.setVideoURI( fileUri );
 
             if (mShouldStartPlayback) {
                 mPlaybackState = PlaybackState.PLAYING;

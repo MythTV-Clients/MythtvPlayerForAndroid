@@ -1,6 +1,7 @@
 package org.mythtv.android.player.app.player;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.MediaController;
@@ -16,6 +17,12 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.CastMember;
 import org.mythtv.android.library.core.domain.dvr.Program;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Locale;
 
 /**
@@ -40,18 +47,29 @@ public class RecordingPlayerActivity extends Activity {
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         Log.v( TAG, "onCreate : enter" );
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        setContentView( R.layout.activity_app_recording_player);
+        setContentView(R.layout.activity_app_recording_player);
 
-        mFileUrl = getIntent().getStringExtra( FULL_URL_TAG );
+        mFileUrl = getIntent().getStringExtra(FULL_URL_TAG);
+        Uri fileUri = null;
+        try {
+
+            URL url = new URL( MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring( 1 ) );
+            URI uri = new URI( url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef() );
+            fileUri = Uri.parse( uri.toString() );
+
+        } catch( MalformedURLException | URISyntaxException e ) {
+            Log.v( TAG, "onCreate : error parsing mFileUrl=" + mFileUrl );
+        }
+        Log.v( TAG, "onCreate : fileUrl=" + fileUri.toString() );
 
         mVideoView =  (VideoView) findViewById( R.id.videoView );
-        mVideoView.setVideoPath(MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring(1));
+        mVideoView.setVideoURI(fileUri);
 
         MediaController mMediaController = new MediaController( this );
         mMediaController.setAnchorView( mVideoView );
-        mVideoView.setMediaController(mMediaController);
+        mVideoView.setMediaController( mMediaController );
 
         mVideoView.start();
 

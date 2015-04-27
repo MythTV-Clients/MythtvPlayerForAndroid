@@ -95,7 +95,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
                     if( percent > 2 ) {
 
-                        fullUrl = data.getString( data.getColumnIndex(LiveStreamConstants.FIELD_FULL_URL ) );
+                        fullUrl = data.getString( data.getColumnIndex(LiveStreamConstants.FIELD_RELATIVE_URL ) );
                         play.setVisibility( View.VISIBLE );
 
                     }

@@ -1,12 +1,21 @@
 package org.mythtv.android.player.app.player;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 import org.mythtv.android.R;
+import org.mythtv.android.library.core.MainApplication;
+
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by dmfrey on 4/4/15.
@@ -35,9 +44,20 @@ public class VideoPlayerActivity extends Activity {
         setContentView( R.layout.activity_app_video_player);
 
         mFileUrl = getIntent().getStringExtra( FULL_URL_TAG );
+        Uri fileUri = null;
+        try {
+
+            URL url = new URL( MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring( 1 ) );
+            URI uri = new URI( url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef() );
+            fileUri = Uri.parse(uri.toString());
+
+        } catch( MalformedURLException | URISyntaxException e ) {
+            Log.v( TAG, "onCreate : error parsing mFileUrl=" + mFileUrl );
+        }
+        Log.v( TAG, "onCreate : fileUrl=" + fileUri.toString() );
 
         mVideoView =  (VideoView) findViewById( R.id.videoView );
-        mVideoView.setVideoPath( mFileUrl );
+        mVideoView.setVideoURI(fileUri);
 
         MediaController mMediaController = new MediaController( this );
         mMediaController.setAnchorView( mVideoView );

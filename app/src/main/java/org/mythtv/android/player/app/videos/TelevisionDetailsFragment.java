@@ -82,7 +82,7 @@ public class TelevisionDetailsFragment extends Fragment implements LoaderManager
 
             if( null != data && data.moveToNext() ) {
 
-                int percent = data.getInt( data.getColumnIndex(LiveStreamConstants.FIELD_PERCENT_COMPLETE));
+                int percent = data.getInt( data.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
                 if (percent > 0) {
 
                     if( percent > 1 ) {
@@ -94,7 +94,7 @@ public class TelevisionDetailsFragment extends Fragment implements LoaderManager
 
                     if( percent > 2 ) {
 
-                        fullUrl = data.getString( data.getColumnIndex(LiveStreamConstants.FIELD_FULL_URL ) );
+                        fullUrl = data.getString( data.getColumnIndex( LiveStreamConstants.FIELD_RELATIVE_URL ) );
                         play.setVisibility( View.VISIBLE );
 
                     }
