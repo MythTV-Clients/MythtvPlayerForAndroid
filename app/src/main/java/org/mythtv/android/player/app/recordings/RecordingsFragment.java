@@ -1,8 +1,8 @@
 package org.mythtv.android.player.app.recordings;
 
-import android.app.LoaderManager;
+import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +16,7 @@ import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
 import org.mythtv.android.player.common.ui.adapters.ProgramItemAdapter;
 import org.mythtv.android.R;
-import org.mythtv.android.player.common.ui.loaders.ProgramsAsyncTaskLoader;
+import org.mythtv.android.player.app.loaders.ProgramsAsyncTaskLoader;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 
 import java.util.List;

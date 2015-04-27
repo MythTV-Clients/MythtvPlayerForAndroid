@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.events.content.AllLiveStreamsEvent;
 import org.mythtv.android.library.events.content.LiveStreamAddedEvent;
 import org.mythtv.android.library.events.content.LiveStreamDetails;
@@ -19,13 +20,18 @@ import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
 import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetailsEvent;
 import org.mythtv.android.library.events.dvr.RequestRecordedProgramEvent;
+import org.mythtv.android.library.events.video.RequestVideoEvent;
+import org.mythtv.android.library.events.video.VideoDetailsEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.persistence.domain.dvr.Program;
+import org.mythtv.android.library.persistence.domain.video.Video;
 import org.mythtv.android.library.persistence.repository.MythtvProvider;
 import org.mythtv.android.library.persistence.service.ContentPersistenceService;
 import org.mythtv.android.library.persistence.service.DvrPersistenceService;
+import org.mythtv.android.library.persistence.service.VideoPersistenceService;
 import org.mythtv.android.library.persistence.service.dvr.DvrPersistenceServiceEventHandler;
+import org.mythtv.android.library.persistence.service.video.VideoPersistenceServiceEventHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,11 +47,14 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
 
     Context mContext;
     DvrPersistenceService mDvrPersistenceService;
+    VideoPersistenceService mVideoPersistenceService;
 
-    public ContentPersistenceServiceEventHandler( Context context ) {
+    public ContentPersistenceServiceEventHandler() {
 
-        mContext = context;
-        mDvrPersistenceService = new DvrPersistenceServiceEventHandler( mContext );
+        mContext = MainApplication.getInstance().getApplicationContext();
+        mDvrPersistenceService = new DvrPersistenceServiceEventHandler();
+        mVideoPersistenceService = new VideoPersistenceServiceEventHandler();
+
     }
 
     @Override
@@ -151,6 +160,7 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
                 values.put( LiveStreamConstants.FIELD_SEGMENT_COUNT, liveStream.getSegmentCount() );
                 values.put( LiveStreamConstants.FIELD_PERCENT_COMPLETE, liveStream.getPercentComplete() );
                 values.put( LiveStreamConstants.FIELD_RELATIVE_URL, liveStream.getRelativeURL() );
+                values.put( LiveStreamConstants.FIELD_FULL_URL, liveStream.getFullURL() );
                 values.put( LiveStreamConstants.FIELD_STATUS_STR, liveStream.getStatusStr() );
                 values.put( LiveStreamConstants.FIELD_STATUS_INT, liveStream.getStatusInt() );
                 values.put( LiveStreamConstants.FIELD_STATUS_MESSAGE, liveStream.getStatusMessage() );
@@ -168,6 +178,7 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
                 RequestRecordedProgramEvent requestRecordedProgramEvent = new RequestRecordedProgramEvent();
                 requestRecordedProgramEvent.setFilename( filename );
 
+                Log.d( TAG, "updateLiveStreams : looking up program, filename=" + filename );
                 ProgramDetailsEvent programDetailsEvent = mDvrPersistenceService.requestProgram( requestRecordedProgramEvent );
                 if( programDetailsEvent.isEntityFound() ) {
 
@@ -181,11 +192,33 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
                     values.put( LiveStreamConstants.FIELD_CHAN_ID, program.getChannel().getChanId() );
                     values.put( LiveStreamConstants.FIELD_START_TIME, program.getRecording().getStartTs().getMillis() );
 
-                } else {
+                    values.put( LiveStreamConstants.FIELD_VIDEO_ID, "" );
 
-                    values.put( LiveStreamConstants.FIELD_RECORDED_ID, "" );
-                    values.put( LiveStreamConstants.FIELD_CHAN_ID, "" );
-                    values.put( LiveStreamConstants.FIELD_START_TIME, "" );
+                } else {
+                    Log.d( TAG, "updateLiveStreams : program not found, looking up video, filename=" + filename );
+
+                    RequestVideoEvent requestVideoEvent = new RequestVideoEvent();
+                    requestVideoEvent.setFilename( filename );
+
+                    VideoDetailsEvent videoDetailsEvent = mVideoPersistenceService.requestVideo( requestVideoEvent );
+                    if( videoDetailsEvent.isEntityFound() ) {
+
+                        Video video = Video.fromDetails( videoDetailsEvent.getDetails() );
+                        values.put( LiveStreamConstants.FIELD_VIDEO_ID, video.getId() );
+
+                        values.put( LiveStreamConstants.FIELD_RECORDED_ID, "" );
+                        values.put( LiveStreamConstants.FIELD_CHAN_ID, "" );
+                        values.put( LiveStreamConstants.FIELD_START_TIME, "" );
+
+                    } else {
+                        Log.d( TAG, "updateLiveStreams : program and video not found" );
+
+                        values.put( LiveStreamConstants.FIELD_RECORDED_ID, "" );
+                        values.put( LiveStreamConstants.FIELD_CHAN_ID, "" );
+                        values.put( LiveStreamConstants.FIELD_START_TIME, "" );
+                        values.put( LiveStreamConstants.FIELD_VIDEO_ID, "" );
+
+                    }
 
                 }
 

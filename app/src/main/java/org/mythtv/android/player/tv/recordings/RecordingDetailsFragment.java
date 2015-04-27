@@ -19,8 +19,10 @@ import android.support.v17.leanback.widget.DetailsOverviewRowPresenter;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.OnItemClickedListener;
+import android.support.v17.leanback.widget.OnItemViewClickedListener;
+import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
+import android.support.v17.leanback.widget.RowPresenter;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
@@ -33,7 +35,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
-import org.mythtv.android.player.common.ui.loaders.LiveStreamAsyncTaskLoader;
+import org.mythtv.android.player.tv.loaders.LiveStreamAsyncTaskLoader;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 import org.mythtv.android.player.tv.player.RecordingPlayerActivity;
 
@@ -154,7 +156,7 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 //        buildDetails();
         new DetailRowBuilderTask().execute();
 
-        setOnItemClickedListener( getDefaultItemClickedListener() );
+        setOnItemViewClickedListener( getDefaultItemViewClickedListener() );
 //        updateBackground(mProgram.getBackgroundImageURI());
 
         Log.i( TAG, "onCreate : exit" );
@@ -385,10 +387,10 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 
     }
 
-    protected OnItemClickedListener getDefaultItemClickedListener() {
-        return new OnItemClickedListener() {
+    protected OnItemViewClickedListener getDefaultItemViewClickedListener() {
+        return new OnItemViewClickedListener() {
             @Override
-            public void onItemClicked(Object item, Row row) {
+            public void onItemClicked( Presenter.ViewHolder viewHolder, Object item, RowPresenter.ViewHolder viewHolder1, Row row ) {
 
 //            if( item instanceof Program ) {
 //
@@ -400,7 +402,9 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
 //            }
 
             }
+
         };
+
     }
 
     protected void updateBackground( URI uri ) {

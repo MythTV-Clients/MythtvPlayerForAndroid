@@ -13,7 +13,7 @@ import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
  */
 public class RefreshRecordedProgramsReceiver extends BroadcastReceiver {
 
-    private final String TAG = RefreshRecordedProgramsTask.class.getSimpleName();
+    private final String TAG = RefreshRecordedProgramsReceiver.class.getSimpleName();
 
     @Override
     public void onReceive( Context context, Intent intent ) {
@@ -32,7 +32,7 @@ public class RefreshRecordedProgramsReceiver extends BroadcastReceiver {
 
                 if( MainApplication.getInstance().isConnected() ) {
 
-                    MainApplication.getInstance().getDvrService().updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null, null, null, null ) );
+                    MainApplication.getInstance().getDvrApiService().updateRecordedPrograms( new UpdateRecordedProgramsEvent( true, 0, null, null, null, null ) );
 
                 }
 

@@ -17,6 +17,7 @@ import android.util.Log;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
+import org.mythtv.android.library.persistence.domain.video.VideoConstants;
 
 import java.util.ArrayList;
 
@@ -51,6 +52,11 @@ public class MythtvProvider extends ContentProvider {
         URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME, ProgramConstants.ALL );
         URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME + "/#",  ProgramConstants.SINGLE );
         URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME + "/fts", ProgramConstants.ALL_FTS );
+
+        URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME, VideoConstants.ALL );
+        URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/#",  VideoConstants.SINGLE );
+        URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/fts", VideoConstants.ALL_FTS );
+        URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/id/#", VideoConstants.SINGLE_ID );
 
     }
 
@@ -93,6 +99,14 @@ public class MythtvProvider extends ContentProvider {
             case ProgramConstants.SINGLE :
                 return ProgramConstants.CONTENT_ITEM_TYPE;
 
+            case VideoConstants.ALL :
+            case VideoConstants.ALL_FTS :
+                return VideoConstants.CONTENT_TYPE;
+
+            case VideoConstants.SINGLE :
+            case VideoConstants.SINGLE_ID :
+                return VideoConstants.CONTENT_ITEM_TYPE;
+
             default :
                 throw new IllegalArgumentException( "Unknown URI : " + uri );
 
@@ -107,6 +121,8 @@ public class MythtvProvider extends ContentProvider {
         db = mOpenHelper.getReadableDatabase();
 
         Cursor cursor = null;
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 
         switch( URI_MATCHER.match( uri ) ) {
 
@@ -221,10 +237,51 @@ public class MythtvProvider extends ContentProvider {
             case ProgramConstants.ALL_FTS :
 //                Log.v( TAG, "query : querying for all programs" );
 
-                SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
                 builder.setTables( ProgramConstants.TABLE_NAME );
 
                 cursor = builder.query( db, null, selection, selectionArgs, null, null, null );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case VideoConstants.ALL :
+//                Log.v( TAG, "query : querying for all videos" );
+
+                cursor = db.query( VideoConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case VideoConstants.SINGLE :
+//                Log.v( TAG, "query : querying for single video" );
+
+                selection = "rowid = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
+
+                cursor = db.query( VideoConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case VideoConstants.ALL_FTS :
+//                Log.v( TAG, "query : querying for all videos" );
+
+                builder.setTables( VideoConstants.TABLE_NAME );
+
+                cursor = builder.query( db, null, selection, selectionArgs, null, null, null );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case VideoConstants.SINGLE_ID :
+//                Log.v( TAG, "query : querying for single video" );
+
+                selection = VideoConstants.FIELD_VIDEO_ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
+
+                cursor = db.query( VideoConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
 
                 cursor.setNotificationUri( getContext().getContentResolver(), uri );
 
@@ -269,6 +326,15 @@ public class MythtvProvider extends ContentProvider {
 //                Log.v( TAG, "insert : inserting new program" );
 
                 newUri = ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, db.insertWithOnConflict( ProgramConstants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE ) );
+
+                getContext().getContentResolver().notifyChange( newUri, null );
+
+                return newUri;
+
+            case VideoConstants.ALL:
+//                Log.v( TAG, "insert : inserting new video" );
+
+                newUri = ContentUris.withAppendedId( VideoConstants.CONTENT_URI, db.insertWithOnConflict( VideoConstants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE ) );
 
                 getContext().getContentResolver().notifyChange( newUri, null );
 
@@ -395,6 +461,26 @@ public class MythtvProvider extends ContentProvider {
 
                 return deleted;
 
+            case VideoConstants.ALL:
+
+                deleted = db.delete( VideoConstants.TABLE_NAME, selection, selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return deleted;
+
+            case VideoConstants.SINGLE:
+
+                deleted = db.delete( VideoConstants.TABLE_NAME,
+                        "rowid ="
+                                + uri.getLastPathSegment()
+                                + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" )
+                        , selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return deleted;
+
             default:
                 throw new IllegalArgumentException( "Unknown URI " + uri );
 
@@ -508,6 +594,26 @@ public class MythtvProvider extends ContentProvider {
 
                 affected = db.update( ProgramConstants.TABLE_NAME, values,
                                 "rowid ="
+                                + uri.getLastPathSegment()
+                                + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" ),
+                        selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return affected;
+
+            case VideoConstants.ALL:
+
+                affected = db.update( VideoConstants.TABLE_NAME, values, selection, selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return affected;
+
+            case VideoConstants.SINGLE:
+
+                affected = db.update( VideoConstants.TABLE_NAME, values,
+                        "rowid ="
                                 + uri.getLastPathSegment()
                                 + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" ),
                         selectionArgs );

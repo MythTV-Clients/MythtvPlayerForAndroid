@@ -13,8 +13,7 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnItemClickedListener;
-import android.support.v17.leanback.widget.OnItemSelectedListener;
+import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
@@ -33,7 +32,8 @@ import com.squareup.picasso.Target;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.player.common.ui.loaders.ProgramsAsyncTaskLoader;
+import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
+import org.mythtv.android.player.tv.loaders.ProgramsAsyncTaskLoader;
 import org.mythtv.android.player.tv.settings.SettingsActivity;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 import org.mythtv.android.player.tv.search.SearchableActivity;
@@ -48,7 +48,7 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 
 
-public class RecordingsFragment extends BrowseFragment implements LoaderManager.LoaderCallbacks<List<Program>> {
+public class RecordingsFragment extends BrowseFragment implements LoaderManager.LoaderCallbacks<List<Program>>, RefreshRecordedProgramsTask.OnRefreshRecordedProgramTaskListener {
 
     private static final String TAG = RecordingsFragment.class.getSimpleName();
 
@@ -75,6 +75,10 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
         if( !programs.isEmpty() ) {
 
             setupUi( programs );
+
+        } else {
+
+            new RefreshRecordedProgramsTask( this ).execute();
 
         }
 
@@ -188,8 +192,8 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
     }
 
     private void setupEventListeners() {
-        setOnItemSelectedListener(getDefaultItemSelectedListener());
-        setOnItemClickedListener(getDefaultItemClickedListener());
+        setOnItemViewSelectedListener(getDefaultItemSelectedListener());
+        setOnItemViewClickedListener(getDefaultItemClickedListener());
         setOnItemViewSelectedListener( getDefaultItemViewSelectedListener() );
         setOnSearchClickedListener( new View.OnClickListener() {
 
@@ -202,11 +206,13 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
         });
     }
 
-    protected OnItemSelectedListener getDefaultItemSelectedListener() {
-        return new OnItemSelectedListener() {
+    protected OnItemViewSelectedListener getDefaultItemSelectedListener() {
+        return new OnItemViewSelectedListener() {
             @Override
-            public void onItemSelected(Object item, Row row) {
-                if (item instanceof Program) {
+            public void onItemSelected( Presenter.ViewHolder viewHolder, Object item, RowPresenter.ViewHolder viewHolder1, Row row ) {
+
+                if( item instanceof Program ) {
+
                     String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + ((Program) item).getInetref();
                     try {
                         mBackgroundURI = new URI( url );
@@ -214,16 +220,20 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
                     } catch (URISyntaxException e) {
                         Log.e( TAG, "error parsing url", e );
                     }
+
                     startBackgroundTimer();
                 }
+
             }
+
         };
     }
 
-    protected OnItemClickedListener getDefaultItemClickedListener() {
-        return new OnItemClickedListener() {
+    protected OnItemViewClickedListener getDefaultItemClickedListener() {
+        return new OnItemViewClickedListener() {
             @Override
-            public void onItemClicked(Object item, Row row) {
+            public void onItemClicked( Presenter.ViewHolder viewHolder, Object item, RowPresenter.ViewHolder viewHolder1, Row row ) {
+
                 if( item instanceof Program ) {
 
                     Program program = (Program) item;
@@ -241,8 +251,11 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
 
                     Toast.makeText( getActivity(), (String) item, Toast.LENGTH_SHORT ).show();
                 }
+
             }
+
         };
+
     }
 
     protected OnItemViewSelectedListener getDefaultItemViewSelectedListener() {
@@ -296,6 +309,13 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
         }
         mBackgroundTimer = new Timer();
         mBackgroundTimer.schedule(new UpdateBackgroundTask(), 300);
+    }
+
+    @Override
+    public void onRefreshComplete() {
+
+        reload();
+
     }
 
     private class UpdateBackgroundTask extends TimerTask {

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="watch_videos_tabs">
+        <item>Movies</item>
+        <item>TV</item>
+    </string-array>
+
     <string-array name="pref_hls_video_width_entries">
         <item>Auto</item>
         <item>288</item>

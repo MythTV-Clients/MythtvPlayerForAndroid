@@ -34,6 +34,7 @@ public class VideoDetails {
     private Boolean watched;
     private Boolean processed;
     private String contentType;
+    private String filePath;
     private String fileName;
     private String hash;
     private String hostName;
@@ -366,6 +367,10 @@ public class VideoDetails {
     public void setContentType( String contentType ) {
         this.contentType = contentType;
     }
+
+    public String getFilePath() { return filePath; }
+
+    public void setFilePath( String filePath ) { this.filePath = filePath; }
 
     /**
      * @return the fileName

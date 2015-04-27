@@ -1,8 +1,8 @@
 package org.mythtv.android.player.app.search;
 
-import android.app.LoaderManager;
+import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +15,7 @@ import android.widget.TextView;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.player.common.ui.adapters.SearchResultItemAdapter;
-import org.mythtv.android.player.common.ui.loaders.SearchProgramsAsyncTaskLoader;
+import org.mythtv.android.player.app.loaders.SearchProgramsAsyncTaskLoader;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 import org.mythtv.android.player.app.recordings.RecordingDetailsActivity;
 import org.mythtv.android.player.app.recordings.RecordingDetailsFragment;

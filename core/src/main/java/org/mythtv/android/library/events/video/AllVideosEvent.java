@@ -15,7 +15,7 @@ public class AllVideosEvent extends ReadEvent {
     public AllVideosEvent( final List<VideoDetails> details ) {
 
         this.details = Collections.unmodifiableList( details );
-
+        this.entityFound = !this.details.isEmpty();
     }
 
     public List<VideoDetails> getDetails() {

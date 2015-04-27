@@ -2,6 +2,7 @@ package org.mythtv.android.library.events.dvr;
 
 import org.mythtv.android.library.events.UpdatedEvent;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,14 +12,19 @@ public class ProgramsUpdatedEvent extends UpdatedEvent {
 
     private final List<ProgramDetails> details;
 
-    public ProgramsUpdatedEvent(final List<ProgramDetails> details) {
+    public ProgramsUpdatedEvent( final List<ProgramDetails> details ) {
 
-        this.details = details;
 
         if( null != details ) {
+
+            this.details = Collections.unmodifiableList( details );
             entityFound = !details.isEmpty();
+
         } else {
+
+            this.details = null;
             entityFound = false;
+
         }
 
     }

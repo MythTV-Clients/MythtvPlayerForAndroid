@@ -1,11 +1,11 @@
 package org.mythtv.android.library.persistence.domain.video;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.library.core.domain.dvr.ArtworkInfo;
-import org.mythtv.android.library.core.domain.dvr.CastMember;
 import org.mythtv.android.library.events.dvr.ArtworkInfoDetails;
 import org.mythtv.android.library.events.dvr.CastMemberDetails;
 import org.mythtv.android.library.events.video.VideoDetails;
+import org.mythtv.android.library.persistence.domain.dvr.ArtworkInfo;
+import org.mythtv.android.library.persistence.domain.dvr.CastMember;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,6 +39,7 @@ public class Video implements Serializable {
     private Boolean watched;
     private Boolean processed;
     private String contentType;
+    private String filePath;
     private String fileName;
     private String hash;
     private String hostName;
@@ -372,6 +373,10 @@ public class Video implements Serializable {
         this.contentType = contentType;
     }
 
+    public String getFilePath() { return filePath; }
+
+    public void setFilePath( String filePath ) { this.filePath = filePath; }
+
     /**
      * @return the fileName
      */
@@ -565,6 +570,7 @@ public class Video implements Serializable {
         details.setWatched( watched );
         details.setProcessed( processed );
         details.setContentType( contentType );
+        details.setFilePath( filePath );
         details.setFileName( fileName );
         details.setHash( hash );
         details.setHostName( hostName );
@@ -619,6 +625,7 @@ public class Video implements Serializable {
         video.setWatched( details.isWatched() );
         video.setProcessed( details.isProcessed() );
         video.setContentType( details.getContentType() );
+        video.setFilePath( details.getFilePath() );
         video.setFileName( details.getFileName() );
         video.setHash( details.getHash() );
         video.setHostName( details.getHostName() );

@@ -95,13 +95,42 @@
         </activity>
 
         <activity
-            android:name=".player.app.videos.VideoDetailsActivity"
+            android:name=".player.app.videos.MovieDetailsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".player.app.videos.VideosActivity" >
+            android:parentActivityName=".player.app.videos.VideosActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".player.app.videos.VideosActivity" />
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.app.search.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".player.app.videos.TelevisionSeasonsActivity"
+            android:label="@string/drawer_item_watch_videos"
+            android:launchMode="singleTop"
+            android:parentActivityName=".player.app.videos.VideosActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".player.app.videos.VideosActivity" />
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".player.app.search.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".player.app.videos.TelevisionDetailsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".player.app.videos.TelevisionSeasonsActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".player.app.videos.TelevisionSeasonsActivity" />
 
             <meta-data android:name="android.app.default_searchable"
                 android:value=".player.app.search.SearchableActivity" />
@@ -223,6 +252,7 @@
         <receiver android:name=".library.core.RefreshLiveStreamsReceiver" />
         <receiver android:name=".library.core.RefreshTitleInfosReceiver" />
         <receiver android:name=".library.core.RefreshRecordedProgramsReceiver" />
+        <receiver android:name=".library.core.RefreshVideosReceiver" />
         <receiver android:name=".library.core.NetworkConnectionBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

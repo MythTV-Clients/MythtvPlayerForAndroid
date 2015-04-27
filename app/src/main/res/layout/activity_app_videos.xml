@@ -6,23 +6,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar"/>
 
-        <fragment
+        <org.mythtv.android.player.common.ui.views.SlidingTabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- fragment
             android:id="@+id/fragment_videos"
             android:layout_below="@id/toolbar"
-            android:name="org.mythtv.android.player.app.videos.VideosFragment"
+            android:name="org.mythtv.android.player.app.videos.VideosMoviesFragmentagment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout="@layout/video_list" />
+            tools:layout="@layout/video_list" / -->
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <fragment
         android:id="@+id/fragment_navigation_drawer"

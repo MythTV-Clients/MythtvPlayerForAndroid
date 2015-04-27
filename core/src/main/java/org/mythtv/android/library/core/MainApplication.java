@@ -14,19 +14,19 @@ import com.squareup.okhttp.OkHttpClient;
 
 import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.service.DvrService;
+import org.mythtv.android.library.core.service.DvrServiceEventHandler;
 import org.mythtv.android.library.core.service.MythService;
 import org.mythtv.android.library.core.service.VideoService;
+import org.mythtv.android.library.core.service.VideoServiceEventHandler;
 import org.mythtv.android.library.core.service.v027.content.ContentServiceV27EventHandler;
-import org.mythtv.android.library.core.service.v027.dvr.DvrServiceV27EventHandler;
+import org.mythtv.android.library.core.service.v027.dvr.DvrServiceV27ApiEventHandler;
 import org.mythtv.android.library.core.service.v027.myth.MythServiceV27EventHandler;
-import org.mythtv.android.library.core.service.v027.video.VideoServiceV27EventHandler;
+import org.mythtv.android.library.core.service.v027.video.VideoServiceV27ApiEventHandler;
 import org.mythtv.android.library.core.service.v028.content.ContentServiceV28EventHandler;
-import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28EventHandler;
+import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28ApiEventHandler;
 import org.mythtv.android.library.core.service.v028.myth.MythServiceV28EventHandler;
-import org.mythtv.android.library.core.service.v028.video.VideoServiceV28EventHandler;
+import org.mythtv.android.library.core.service.v028.video.VideoServiceV28ApiEventHandler;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
-import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
-import org.mythtv.android.library.events.content.RequestAllLiveStreamsEvent;
 import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
@@ -70,13 +70,15 @@ public class MainApplication extends Application {
 
     private ContentService mContentService;
     private DvrService mDvrService;
+    private DvrService mDvrApiService;
     private MythService mMythService;
     private VideoService mVideoService;
+    private VideoService mVideoApiService;
 
     private AlarmManager mAlarmManager;
     private PendingIntent mRefreshLiveStreamPendingIntent;
-    private PendingIntent mRefreshTitleInfosPendingIntent;
     private PendingIntent mRefreshRecordedProgramsPendingIntent;
+    private PendingIntent mRefreshVideosPendingIntent;
 
     SharedPreferences mSharedPref;
 
@@ -114,7 +116,7 @@ public class MainApplication extends Application {
         cancelAlarms();
 
         Intent connectedIntent = new Intent( ACTION_NOT_CONNECTED );
-        sendBroadcast(connectedIntent);
+        sendBroadcast( connectedIntent );
 
     }
 
@@ -125,15 +127,15 @@ public class MainApplication extends Application {
         Intent refreshLiveStreamIntent = new Intent( this, RefreshLiveStreamsReceiver.class );
         mRefreshLiveStreamPendingIntent = PendingIntent.getBroadcast( this, 0, refreshLiveStreamIntent, 0 );
 
-//        Intent refreshTitleInfosIntent = new Intent( MainApplication.this, RefreshTitleInfosReceiver.class );
-//        mRefreshTitleInfosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshTitleInfosIntent, 0 );
-
         Intent refreshRecordedProgramsIntent = new Intent( MainApplication.this, RefreshRecordedProgramsReceiver.class );
         mRefreshRecordedProgramsPendingIntent = PendingIntent.getBroadcast( this, 0, refreshRecordedProgramsIntent, 0 );
 
-        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent);
-//        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshTitleInfosPendingIntent );
+        Intent refreshVideosIntent = new Intent( MainApplication.this, RefreshVideosReceiver.class );
+        mRefreshVideosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshVideosIntent, 0 );
+
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent );
         mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent);
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 240000, 3600000, mRefreshVideosPendingIntent);
 
     }
 
@@ -169,10 +171,18 @@ public class MainApplication extends Application {
         return mDvrService;
     }
 
+    public DvrService getDvrApiService() {
+        return mDvrApiService;
+    }
+
     public MythService getMythService() { return mMythService; }
 
     public VideoService getVideoService() {
         return mVideoService;
+    }
+
+    public VideoService getVideoApiService() {
+        return mVideoApiService;
     }
 
     public boolean isConnected() { return mConnected; }
@@ -227,6 +237,8 @@ public class MainApplication extends Application {
 
     private void initializeApi() {
 
+        mDvrService = new DvrServiceEventHandler();
+        mVideoService = new VideoServiceEventHandler();
         new ServerVersionAsyncTask().execute();
 
     }
@@ -281,9 +293,9 @@ public class MainApplication extends Application {
                         Log.v( TAG, "onPostExecute : connected to v0.27 master backend" );
 
                         mContentService = new ContentServiceV27EventHandler();
-                        mDvrService = new DvrServiceV27EventHandler();
+                        mDvrApiService = new DvrServiceV27ApiEventHandler();
                         mMythService = new MythServiceV27EventHandler();
-                        mVideoService = new VideoServiceV27EventHandler();
+                        mVideoApiService = new VideoServiceV27ApiEventHandler();
 
                         break;
 
@@ -291,9 +303,9 @@ public class MainApplication extends Application {
                         Log.v( TAG, "onPostExecute : connected to v0.28 master backend" );
 
                         mContentService = new ContentServiceV28EventHandler();
-                        mDvrService = new DvrServiceV28EventHandler();
+                        mDvrApiService = new DvrServiceV28ApiEventHandler();
                         mMythService = new MythServiceV28EventHandler();
-                        mVideoService = new VideoServiceV28EventHandler();
+                        mVideoApiService = new VideoServiceV28ApiEventHandler();
 
                         break;
                 }
@@ -301,7 +313,6 @@ public class MainApplication extends Application {
                 mConnected = true;
 
                 new RefreshLiveStreamsTask().execute();
-//                new RefreshTitleInfosTask( null ).execute();
                 new RefreshRecordedProgramsTask( null ).execute();
 
                 scheduleAlarms();

@@ -4,16 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.MediaController;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.VideoView;
 
-import org.joda.time.DateTimeZone;
-import org.joda.time.Minutes;
 import org.mythtv.android.R;
-import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.domain.dvr.CastMember;
-import org.mythtv.android.library.core.domain.dvr.Program;
 
 /**
  * Created by dmfrey on 4/4/15.
@@ -44,7 +37,7 @@ public class VideoPlayerActivity extends Activity {
         mFileUrl = getIntent().getStringExtra( FULL_URL_TAG );
 
         mVideoView =  (VideoView) findViewById( R.id.videoView );
-        mVideoView.setVideoPath(MainApplication.getInstance().getMasterBackendUrl() + mFileUrl.substring(1));
+        mVideoView.setVideoPath( mFileUrl );
 
         MediaController mMediaController = new MediaController( this );
         mMediaController.setAnchorView( mVideoView );

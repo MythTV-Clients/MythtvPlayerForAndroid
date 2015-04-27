@@ -3,9 +3,9 @@ package org.mythtv.android.player.app.videos;
 import android.os.Bundle;
 
 import org.mythtv.android.R;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 
-public class VideoDetailsSettingsActivity extends AbstractBaseActionBarActivity {
+public class VideoDetailsSettingsActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = VideoDetailsSettingsActivity.class.getSimpleName();
 

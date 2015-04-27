@@ -6,9 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.mythtv.android.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
@@ -25,18 +29,18 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
     private VideoItemClickListener videoItemClickListener;
     private int previousPosition = 0;
 
-    public VideoItemAdapter(List<Video> videos, @NonNull VideoItemClickListener videoItemClickListener) {
-        Log.v( TAG, "initialize : enter" );
+    public VideoItemAdapter( List<Video> videos, @NonNull VideoItemClickListener videoItemClickListener ) {
+//        Log.v( TAG, "initialize : enter" );
 
         this.videos = videos;
         this.videoItemClickListener = videoItemClickListener;
 
-        Log.v( TAG, "initialize : exit" );
+//        Log.v( TAG, "initialize : exit" );
     }
 
     @Override
     public ViewHolder onCreateViewHolder( ViewGroup viewGroup, int position ) {
-        Log.v( TAG, "onCreateViewHolder : enter" );
+//        Log.v( TAG, "onCreateViewHolder : enter" );
 
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.video_list_item, viewGroup, false );
 
@@ -46,10 +50,12 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
     @Override
     public void onBindViewHolder( ViewHolder viewHolder, int position ) {
-        Log.v( TAG, "onBindViewHolder : enter" );
+//        Log.v( TAG, "onBindViewHolder : enter" );
 
         final Video video = videos.get( position );
         viewHolder.setTitle( video.getTitle() );
+        viewHolder.setTagline( video.getTagline() );
+        viewHolder.setRating( video.getCertification() );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -70,14 +76,21 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 //        }
         previousPosition = position;
 
-        Log.v( TAG, "onBindViewHolder : exit" );
+        String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + video.getId() + "&Width=175";
+        Picasso.with( MainApplication.getInstance() )
+                .load( previewUrl )
+//                .fit().centerCrop()
+                .into( viewHolder.coverart );
+
+
+//        Log.v( TAG, "onBindViewHolder : exit" );
     }
 
     @Override
     public int getItemCount() {
-        Log.v( TAG, "getItemCount : enter" );
+//        Log.v( TAG, "getItemCount : enter" );
 
-        Log.v( TAG, "getItemCount : exit" );
+//        Log.v( TAG, "getItemCount : exit" );
         return videos.size();
     }
 
@@ -86,21 +99,39 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
         private static String TAG = ViewHolder.class.getSimpleName();
 
         private final View parent;
+        private final ImageView coverart;
         private final TextView title;
+        private final TextView tagline;
+        private final TextView rating;
 
         public ViewHolder( View v ) {
             super( v );
-            Log.v( TAG, "initialize : enter" );
+//            Log.v( TAG, "initialize : enter" );
 
             this.parent = v;
+            coverart = (ImageView) parent.findViewById( R.id.video_item_coverart );
             title = (TextView) parent.findViewById( R.id.video_item_title );
+            tagline = (TextView) parent.findViewById( R.id.video_item_tagline );
+            rating = (TextView) parent.findViewById( R.id.video_item_rating );
 
-            Log.v( TAG, "initialize : exit" );
+//            Log.v( TAG, "initialize : exit" );
         }
 
         public void setTitle( CharSequence text ) {
 
             title.setText( text );
+
+        }
+
+        public void setTagline( CharSequence text ) {
+
+            tagline.setText( text );
+
+        }
+
+        public void setRating( CharSequence text ) {
+
+            rating.setText( text );
 
         }
 

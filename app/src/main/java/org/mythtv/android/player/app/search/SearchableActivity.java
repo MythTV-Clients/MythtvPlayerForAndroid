@@ -9,12 +9,12 @@ import android.view.MenuItem;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.persistence.repository.MythtvSearchSuggestionProvider;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 
 /**
  * Created by dmfrey on 3/14/15.
  */
-public class SearchableActivity extends AbstractBaseActionBarActivity {
+public class SearchableActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = SearchableActivity.class.getSimpleName();
 
@@ -30,7 +30,7 @@ public class SearchableActivity extends AbstractBaseActionBarActivity {
         Log.v( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
-        mSearchableRecordingsFragment = (SearchableRecordingsFragment) getFragmentManager().findFragmentById( R.id.fragment_search );
+        mSearchableRecordingsFragment = (SearchableRecordingsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_search );
 
         getSupportActionBar().setTitle( getResources().getString( R.string.search_results ) );
 

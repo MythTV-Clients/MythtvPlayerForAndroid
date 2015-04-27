@@ -1,5 +1,6 @@
 package org.mythtv.android.library.core.domain.dvr;
 
+import org.mythtv.android.library.core.utils.Utils;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 
 import java.io.Serializable;
@@ -75,8 +76,8 @@ public class TitleInfo implements Serializable, Comparable<TitleInfo> {
 
         if( this == another ) return EQUAL;
 
-        String thisTitle = removeArticles( this.title.toUpperCase() );
-        String thatTitle = removeArticles( another.title.toUpperCase() );
+        String thisTitle = Utils.removeArticles( this.title.toUpperCase() );
+        String thatTitle = Utils.removeArticles( another.title.toUpperCase() );
 
         int comparison = thisTitle.compareTo( thatTitle );
         if( comparison != EQUAL ) return comparison;
@@ -110,30 +111,6 @@ public class TitleInfo implements Serializable, Comparable<TitleInfo> {
         titleInfo.setInetref( details.getInetref() );
 
         return titleInfo;
-    }
-
-    private String removeArticles( String value ) {
-
-        if( null == value ) {
-
-            return value;
-        }
-
-        String ret = value;
-
-        if( value.toLowerCase().startsWith( "the " ) ) {
-            ret = ret.substring( "the ".length() );
-        }
-
-        if( value.toLowerCase().startsWith("an ") ) {
-            ret = ret.substring( "an ".length() );
-        }
-
-        if( value.toLowerCase().startsWith( "a " ) ) {
-            ret = ret.substring( "a ".length() );
-        }
-
-        return ret;
     }
 
 }

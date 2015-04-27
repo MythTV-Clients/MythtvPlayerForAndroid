@@ -1,8 +1,8 @@
 package org.mythtv.android.player.app.recordings;
 
-import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.Loader;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -33,7 +33,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.AddRecordingLiveStreamAsyncTask;
-import org.mythtv.android.player.common.ui.loaders.LiveStreamAsyncTaskLoader;
+import org.mythtv.android.player.app.loaders.LiveStreamAsyncTaskLoader;
 import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
 import org.mythtv.android.player.app.player.RecordingPlayerActivity;
 import org.mythtv.android.R;
@@ -190,18 +190,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     }
 
     @Override
-    public void onResume() {
-        Log.v( TAG, "onResume : enter" );
-        super.onResume();
-
-        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
-
-//        getLoaderManager().restartLoader( 0, getArguments(), this );
-
-        Log.v( TAG, "onResume : exit" );
-    }
-
-    @Override
     public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
 
         inflater.inflate( R.menu.menu_details, menu );
@@ -229,6 +217,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     public void setProgram( Program program ) {
         Log.v( TAG, "setProgram : enter" );
 
+        useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
+
         mProgram = program;
 
         cardView.setRadius( 2.0f );
@@ -250,6 +240,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
                     @Override
                     public void onSuccess() {
+
+                        preview.setVisibility( View.VISIBLE );
 
                         Bitmap bitmap = ( (BitmapDrawable) preview.getDrawable() ).getBitmap(); // Ew!
                         Palette palette = PaletteTransformation.getPalette(bitmap);
@@ -284,6 +276,26 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                         }
 
                     }
+
+                    @Override
+                    public void onError() {
+                        super.onError();
+
+                        preview.setVisibility( View.GONE );
+
+                        layout.setBackgroundColor( getActivity().getResources().getColor( R.color.primary_dark ) );
+                        showName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        episodeName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        callsign.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        startTime.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        channelNumber.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        description.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+
+                        queueHls.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        play.setTextColor(getActivity().getResources().getColor(R.color.white));
+
+                    }
+
                 });
 
         if( null != mProgram.getInetref() && !"".equals( mProgram.getInetref() ) ) {

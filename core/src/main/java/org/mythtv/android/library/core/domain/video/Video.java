@@ -3,6 +3,7 @@ package org.mythtv.android.library.core.domain.video;
 import org.joda.time.DateTime;
 import org.mythtv.android.library.core.domain.dvr.ArtworkInfo;
 import org.mythtv.android.library.core.domain.dvr.CastMember;
+import org.mythtv.android.library.core.utils.Utils;
 import org.mythtv.android.library.events.dvr.ArtworkInfoDetails;
 import org.mythtv.android.library.events.dvr.CastMemberDetails;
 import org.mythtv.android.library.events.video.VideoDetails;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by dmfrey on 11/24/14.
  */
-public class Video implements Serializable {
+public class Video implements Serializable, Comparable<Video> {
 
     private Integer id;
     private String title;
@@ -39,6 +40,7 @@ public class Video implements Serializable {
     private Boolean watched;
     private Boolean processed;
     private String contentType;
+    private String filePath;
     private String fileName;
     private String hash;
     private String hostName;
@@ -372,6 +374,10 @@ public class Video implements Serializable {
         this.contentType = contentType;
     }
 
+    public String getFilePath() { return filePath; }
+
+    public void setFilePath( String filePath ) { this.filePath = filePath; }
+
     /**
      * @return the fileName
      */
@@ -501,6 +507,86 @@ public class Video implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Video video = (Video) o;
+
+        if (!id.equals(video.id)) return false;
+        if (!title.equals(video.title)) return false;
+        if (subTitle != null ? !subTitle.equals(video.subTitle) : video.subTitle != null)
+            return false;
+        if (tagline != null ? !tagline.equals(video.tagline) : video.tagline != null) return false;
+        if (inetref != null ? !inetref.equals(video.inetref) : video.inetref != null) return false;
+        if (season != null ? !season.equals(video.season) : video.season != null) return false;
+        return !(episode != null ? !episode.equals(video.episode) : video.episode != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + (subTitle != null ? subTitle.hashCode() : 0);
+        result = 31 * result + (tagline != null ? tagline.hashCode() : 0);
+        result = 31 * result + (inetref != null ? inetref.hashCode() : 0);
+        result = 31 * result + (season != null ? season.hashCode() : 0);
+        result = 31 * result + (episode != null ? episode.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public int compareTo( Video another ) {
+
+        final int BEFORE = -1;
+        final int EQUAL = 0;
+        final int AFTER = 1;
+
+        if( this == another ) return EQUAL;
+
+        String thisTitle = Utils.removeArticles( this.title.toUpperCase() );
+        String thatTitle = Utils.removeArticles( another.title.toUpperCase() );
+
+        int comparison = thisTitle.compareTo(thatTitle);
+        if( comparison != EQUAL ) return comparison;
+
+//        String thisInetref = ( null != inetref ? inetref : "" );
+//        String thatInetref = ( null != another.inetref ? another.inetref : "" );
+//
+//        comparison = thisInetref.compareTo( thatInetref );
+//        if( comparison != EQUAL ) return comparison;
+//
+//        String thisSubTitle = ( null != subTitle ? subTitle : "" );
+//        String thatSubTitle = ( null != another.subTitle ? another.subTitle : "" );
+//
+//        comparison = thisSubTitle.compareTo( thatSubTitle );
+//        if( comparison != EQUAL ) return comparison;
+//
+//        String thisTagline = ( null != tagline ? tagline : "" );
+//        String thatTagline = ( null != another.tagline ? another.tagline : "" );
+//
+//        comparison = thisTagline.compareTo( thatTagline );
+//        if( comparison != EQUAL ) return comparison;
+
+        if( season > another.season ) {
+            return AFTER;
+        } else if( season < another.season ) {
+            return BEFORE;
+        }
+
+        if( episode > another.episode ) {
+            return AFTER;
+        } else if( episode < another.episode ) {
+            return BEFORE;
+        }
+
+        assert this.equals( another ) : "compareTo inconsistent with equals.";
+
+        return EQUAL;
+    }
+
+    @Override
     public String toString() {
         return "Video{" +
                 "id=" + id +
@@ -565,6 +651,7 @@ public class Video implements Serializable {
         details.setWatched( watched );
         details.setProcessed( processed );
         details.setContentType( contentType );
+        details.setFilePath( filePath );
         details.setFileName( fileName );
         details.setHash( hash );
         details.setHostName( hostName );
@@ -619,6 +706,7 @@ public class Video implements Serializable {
         video.setWatched( details.isWatched() );
         video.setProcessed( details.isProcessed() );
         video.setContentType( details.getContentType() );
+        video.setFilePath( details.getFilePath() );
         video.setFileName( details.getFileName() );
         video.setHash( details.getHash() );
         video.setHostName( details.getHostName() );

@@ -23,7 +23,7 @@ import android.widget.VideoView;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.utils.Utils;
-//import VideoDetailsActivity;
+//import MovieDetailsActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -273,7 +273,7 @@ public class RecordingPlayerActivity extends Activity {
 //                    }
 //
 //                    if( null != mSelectedVideo ) {
-//                        Intent intent = new Intent( RecordingPlayerActivity.this, VideoDetailsActivity.class );
+//                        Intent intent = new Intent( RecordingPlayerActivity.this, MovieDetailsActivity.class );
 //                        intent.putExtra( getResources().getString( R.string.video ), mSelectedVideo );
 //                        startActivity( intent );
 //                    }

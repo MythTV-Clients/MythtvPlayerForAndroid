@@ -1,8 +1,8 @@
 package org.mythtv.android.player.app.recordings;
 
-import android.app.LoaderManager;
+import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -23,7 +23,7 @@ import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.player.common.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.R;
-import org.mythtv.android.player.common.ui.loaders.TitleInfosAsyncTaskLoader;
+import org.mythtv.android.player.app.loaders.TitleInfosAsyncTaskLoader;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 
 import java.util.List;
@@ -139,7 +139,7 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
         if( Build.VERSION.SDK_INT >= 16 ) {
 
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null );
-            startActivity( recordings, options.toBundle() );
+            getActivity().startActivity(recordings, options.toBundle());
 
         } else {
 

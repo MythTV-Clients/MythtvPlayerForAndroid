@@ -1,9 +1,8 @@
 package org.mythtv.android.player.tv.videos;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.Loader;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,8 +13,7 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnItemClickedListener;
-import android.support.v17.leanback.widget.OnItemSelectedListener;
+import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
@@ -34,18 +32,21 @@ import com.squareup.picasso.Target;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.core.service.VideoServiceHelper;
+import org.mythtv.android.library.core.utils.RefreshVideosTask;
+import org.mythtv.android.player.tv.loaders.VideosAsyncTaskLoader;
 import org.mythtv.android.player.tv.settings.SettingsActivity;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
-public class VideosFragment extends BrowseFragment {
+public class VideosFragment extends BrowseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, RefreshVideosTask.OnRefreshVideosTaskListener {
 
     private static final String TAG = VideosFragment.class.getSimpleName();
 
@@ -58,70 +59,101 @@ public class VideosFragment extends BrowseFragment {
     private URI mBackgroundURI;
     VideoCardPresenter mVideoCardPresenter;
 
-    VideoServiceHelper mVideoServiceHelper;
-
     BrowseFragment mBrowseFragment;
 
-    private VideoLoaderCompleteReceiver mVideoLoaderCompleteReceiver = new VideoLoaderCompleteReceiver();
-    private BackendConnectedBroadcastReceiver mBackendConnectedBroadcastReceiver = new BackendConnectedBroadcastReceiver();
+    @Override
+    public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
+        Log.v( TAG, "onCreateLoader : enter" );
+
+        Log.v( TAG, "onCreateLoader : exit" );
+        return new VideosAsyncTaskLoader( getActivity() );
+    }
+
+    @Override
+    public void onLoadFinished( Loader<List<Video>> loader, List<Video> videos ) {
+        Log.v( TAG, "onLoadFinished : enter" );
+
+        if( !videos.isEmpty() ) {
+            Log.v( TAG, "onLoadFinished : loaded videos from db" );
+
+            setupUi( videos );
+
+        } else {
+
+            new RefreshVideosTask( this ).execute();
+        }
+
+        Log.v( TAG, "onLoadFinished : exit" );
+    }
+
+    @Override
+    public void onLoaderReset( Loader<List<Video>> loader ) {
+
+    }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
-        super.onActivityCreated( savedInstanceState );
-        Log.i( TAG, "onActivityCreated : enter" );
+        super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated : enter");
+
+        prepareBackgroundManager();
+        setupUIElements();
+        setupEventListeners();
+
+        getLoaderManager().initLoader(0, null, this);
 
         Log.i( TAG, "onActivityCreated : exit" );
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i( TAG, "onResume : enter" );
+    public void reload() {
+        Log.i(TAG, "reload : enter");
 
-        IntentFilter videoLoaderCompleteIntentFilter = new IntentFilter( VideoServiceHelper.ACTION_COMPLETE );
-        getActivity().registerReceiver( mVideoLoaderCompleteReceiver, videoLoaderCompleteIntentFilter );
+        getLoaderManager().restartLoader(0, null, this);
 
-        IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
-        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
-        getActivity().registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
-
-        Log.i( TAG, "onResume : exit" );
+        Log.i( TAG, "reload : exit" );
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i( TAG, "onPause : enter" );
+    private void setupUi( List<Video> videos ) {
+        Log.d( TAG, "setupUi : enter" );
 
-        if( null != mVideoLoaderCompleteReceiver ) {
-            getActivity().unregisterReceiver( mVideoLoaderCompleteReceiver );
+        Map<String, String> categoryMap = new TreeMap<>();
+        Map<String, List<Video>> videoMap = new TreeMap<>();
+
+        for( Video video : videos ) {
+
+            String cleanedTitle = cleanArticles( video.getTitle() );
+            String category = cleanedTitle.substring( 0, 1 ).toUpperCase();
+//            Log.i( TAG, "prepareVideos : category=" + category + ", cleanedTitle=" + cleanedTitle );
+            if( !videoMap.containsKey( category ) ) {
+//                Log.i( TAG, "prepareVideos : added video to new category" );
+
+                List<Video> categoryVideos = new ArrayList<>();
+                categoryVideos.add( video );
+                videoMap.put(category, categoryVideos);
+
+                categoryMap.put( category, category );
+
+            } else {
+//                Log.i( TAG, "prepareVideos : added video to existing category" );
+
+                videoMap.get(category).add( video );
+
+            }
+
         }
-
-        if( null != mBackendConnectedBroadcastReceiver ) {
-            getActivity().unregisterReceiver( mBackendConnectedBroadcastReceiver );
-        }
-
-        Log.i( TAG, "onPause : exit" );
-    }
-
-    private void loadRows() {
-        Log.d( TAG, "loadRows : enter" );
-
-        Map<String, String> categories = mVideoServiceHelper.getCategories();
-        Map<String, List<Video>> videos = mVideoServiceHelper.getVideos();
 
         mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
         mVideoCardPresenter = new VideoCardPresenter();
 
         int i = 0;
-        for( String category : categories.keySet() ) {
+        for( String category : categoryMap.keySet() ) {
 
             ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( mVideoCardPresenter );
-            for( Video video : videos.get( category ) ) {
+            for( Video video : videoMap.get( category ) ) {
                 listRowAdapter.add( video );
             }
 
-            HeaderItem header = new HeaderItem( i, categories.get( category ) );
+            HeaderItem header = new HeaderItem( i, categoryMap.get( category ) );
             mRowsAdapter.add(new ListRow( header, listRowAdapter ) );
 
             i++;
@@ -136,19 +168,19 @@ public class VideosFragment extends BrowseFragment {
 
         setAdapter( mRowsAdapter );
 
-        Log.d( TAG, "loadRows : exit" );
+        Log.d(TAG, "setupUi : exit");
     }
 
     private void prepareBackgroundManager() {
 
         BackgroundManager backgroundManager = BackgroundManager.getInstance(getActivity());
-        backgroundManager.attach( getActivity().getWindow() );
+        backgroundManager.attach(getActivity().getWindow());
         mBackgroundTarget = new PicassoBackgroundManagerTarget( backgroundManager );
 
         mDefaultBackground = getResources().getDrawable( R.drawable.default_background );
 
         mMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics( mMetrics );
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
 
     }
 
@@ -159,57 +191,42 @@ public class VideosFragment extends BrowseFragment {
         setTitle(getString(R.string.videos_browse_title)); // Badge, when set, takes precedent
         // over title
         setHeadersState( HEADERS_ENABLED );
-        setHeadersTransitionOnBackEnabled( true );
+        setHeadersTransitionOnBackEnabled(true);
 
         // set fastLane (or headers) background color
-        setBrandColor( getResources().getColor( R.color.primary_dark ) );
+        setBrandColor(getResources().getColor(R.color.primary_dark));
         // set search icon color
-        setSearchAffordanceColor( getResources().getColor( R.color.accent ) );
+        setSearchAffordanceColor(getResources().getColor(R.color.accent));
 
     }
 
     private void setupEventListeners() {
-        setOnItemSelectedListener( getDefaultItemSelectedListener() );
-        setOnItemClickedListener( getDefaultItemClickedListener() );
+        setOnItemViewClickedListener( getDefaultItemViewClickedListener() );
         setOnItemViewSelectedListener( getDefaultItemViewSelectedListener() );
-        setOnSearchClickedListener(new View.OnClickListener() {
+        setOnSearchClickedListener( new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Toast.makeText( getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG ).show();
+                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG).show();
             }
+
         });
+
     }
 
-    protected OnItemSelectedListener getDefaultItemSelectedListener() {
-        return new OnItemSelectedListener() {
+    protected OnItemViewClickedListener getDefaultItemViewClickedListener() {
+        return new OnItemViewClickedListener() {
+
             @Override
-            public void onItemSelected(Object item, Row row) {
+            public void onItemClicked( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
+
                 if( item instanceof Video ) {
-                    String url = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + ((Video) item).getId();
-                    try {
-                        mBackgroundURI = new URI( url );
-                        updateBackground( mBackgroundURI );
-                    } catch (URISyntaxException e) {
-                        Log.e( TAG, "error parsing url", e );
-                    }
 
-                    startBackgroundTimer();
-
-                }
-            }
-        };
-    }
-
-    protected OnItemClickedListener getDefaultItemClickedListener() {
-        return new OnItemClickedListener() {
-            @Override
-            public void onItemClicked(Object item, Row row) {
-                if( item instanceof Video ) {
                     Video video = (Video) item;
                     Log.d( TAG, "Video: " + item.toString() );
                     Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
                     intent.putExtra( getString( R.string.video ), video );
-                    startActivity( intent );
+                    startActivity(intent);
 
                 } else if (item instanceof String) {
 
@@ -268,7 +285,7 @@ public class VideosFragment extends BrowseFragment {
 
     protected void updateBackground( Drawable drawable ) {
 
-        BackgroundManager.getInstance(getActivity()).setDrawable( drawable );
+        BackgroundManager.getInstance(getActivity()).setDrawable(drawable);
 
     }
 
@@ -285,7 +302,36 @@ public class VideosFragment extends BrowseFragment {
         }
 
         mBackgroundTimer = new Timer();
-        mBackgroundTimer.schedule( new UpdateBackgroundTask(), 300 );
+        mBackgroundTimer.schedule(new UpdateBackgroundTask(), 300);
+    }
+
+    @Override
+    public void onRefreshComplete() {
+
+        reload();
+
+    }
+
+    private String cleanArticles( String value ) {
+
+        if( null == value || "".equals( value ) ) {
+            return value;
+        }
+
+        String upper = value.toUpperCase();
+        if( upper.startsWith( "THE " ) ) {
+            value = value.substring( "THE ".length() );
+        }
+
+        if( upper.startsWith( "AN " ) ) {
+            value = value.substring( "AN ".length() );
+        }
+
+        if( upper.startsWith( "A " ) ) {
+            value = value.substring( "A ".length() );
+        }
+
+        return value;
     }
 
     private class UpdateBackgroundTask extends TimerTask {
@@ -328,52 +374,6 @@ public class VideosFragment extends BrowseFragment {
         @Override
         public void onUnbindViewHolder( ViewHolder viewHolder ) {
         }
-    }
-
-    private class VideoLoaderCompleteReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive( Context context, Intent intent ) {
-
-            // when we receive a syc complete action reset the loader so it can refresh the content
-            if( intent.getAction().equals( VideoServiceHelper.ACTION_COMPLETE ) ) {
-                loadRows();
-            }
-
-        }
-
-    }
-
-    private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
-
-        private final String TAG = BackendConnectedBroadcastReceiver.class.getSimpleName();
-
-        @Override
-        public void onReceive( Context context, Intent intent ) {
-            Log.d( TAG, "onReceive : enter" );
-
-            if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
-                Log.v(TAG, "onReceive : backend is connected");
-
-                mVideoServiceHelper = new VideoServiceHelper( getActivity().getApplicationContext() );
-
-                prepareBackgroundManager();
-
-                setupUIElements();
-
-                setupEventListeners();
-
-            }
-
-            if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
-                Log.v( TAG, "onReceive : backend is NOT connected" );
-
-                Toast.makeText( getActivity(), "Backend not connected", Toast.LENGTH_SHORT ).show();
-            }
-
-            Log.d( TAG, "onReceive : exit" );
-        }
-
     }
 
 }

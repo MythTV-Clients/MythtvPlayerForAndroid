@@ -9,13 +9,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
-import org.mythtv.android.player.app.AbstractBaseActionBarActivity;
+import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.R;
 
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
+public class RecordingDetailsActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = RecordingDetailsActivity.class.getSimpleName();
 
@@ -48,7 +48,7 @@ public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
 
         }
 
-        mRecordingDetailsFragment = (RecordingDetailsFragment) getFragmentManager().findFragmentById( R.id.fragment_recording_details );
+        mRecordingDetailsFragment = (RecordingDetailsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_recording_details );
 
         Log.v( TAG, "onCreate : exit" );
     }
@@ -63,8 +63,6 @@ public class RecordingDetailsActivity extends AbstractBaseActionBarActivity {
 
             mRecordingDetailsFragment.setProgram( mProgram );
 
-            //getSupportActionBar().setTitle( mProgram.getTitle() );
-            //getSupportActionBar().setSubtitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : "" );
             getSupportActionBar().setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
 
         }

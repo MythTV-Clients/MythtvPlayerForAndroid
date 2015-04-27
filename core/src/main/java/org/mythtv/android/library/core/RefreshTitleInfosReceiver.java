@@ -33,7 +33,7 @@ public class RefreshTitleInfosReceiver extends BroadcastReceiver {
 
                 if( MainApplication.getInstance().isConnected() ) {
 
-                    MainApplication.getInstance().getDvrService().updateTitleInfos( new UpdateTitleInfosEvent() );
+                    MainApplication.getInstance().getDvrApiService().updateTitleInfos( new UpdateTitleInfosEvent() );
 
                 }
 

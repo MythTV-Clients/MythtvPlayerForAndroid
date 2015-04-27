@@ -40,7 +40,7 @@ public class RefreshRecordedProgramsTask extends AsyncTask<String, Void, Void> {
             title = params[ 0 ];
         }
 
-        MainApplication.getInstance().getDvrService().updateRecordedPrograms(new UpdateRecordedProgramsEvent(true, 0, null, title, null, null));
+        MainApplication.getInstance().getDvrApiService().updateRecordedPrograms(new UpdateRecordedProgramsEvent(true, 0, null, title, null, null));
 
         Log.v( TAG, "doInBackground : exit" );
         return null;

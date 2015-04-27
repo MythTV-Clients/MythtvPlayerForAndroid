@@ -1,6 +1,5 @@
 package org.mythtv.android.library.core.service.v027.content;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
@@ -23,7 +22,6 @@ import org.mythtv.android.library.persistence.service.content.ContentPersistence
 import org.mythtv.services.api.Bool;
 import org.mythtv.services.api.ETagInfo;
 import org.mythtv.services.api.MythTvApi027Context;
-import org.mythtv.services.api.MythTvApiContext;
 import org.mythtv.services.api.v027.beans.LiveStreamInfo;
 import org.mythtv.services.api.v027.beans.LiveStreamInfoList;
 
@@ -50,7 +48,7 @@ public class ContentServiceV27EventHandler implements ContentService {
     public ContentServiceV27EventHandler() {
 
         mMythTvApiContext = (MythTvApi027Context) MainApplication.getInstance().getMythTvApiContext();
-        mContentPersistenceService = new ContentPersistenceServiceEventHandler( MainApplication.getInstance().getApplicationContext() );
+        mContentPersistenceService = new ContentPersistenceServiceEventHandler();
 
     }
 

@@ -91,5 +91,9 @@
     <string name="pref_hls_video_height_title_summary">HLS transcode video height</string>
     <string name="pref_hls_video_bitrate_title_summary">HLS transcode video bitrate</string>
     <string name="pref_hls_audio_bitrate_title_summary">HLS transcode audio bitrate</string>
+    <string name="season">Season:</string>
+    <string name="episode">Episode:</string>
+    <string name="play_button">Play</string>
+    <string name="queue_button">Queue HLS</string>
 
 </resources>
