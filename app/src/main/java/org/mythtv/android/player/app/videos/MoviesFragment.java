@@ -28,9 +28,9 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class VideosMoviesFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {
+public class MoviesFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {
 
-    private static final String TAG = VideosMoviesFragment.class.getSimpleName();
+    private static final String TAG = MoviesFragment.class.getSimpleName();
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
@@ -38,9 +38,9 @@ public class VideosMoviesFragment extends AbstractBaseFragment implements Loader
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
 
-    public static VideosMoviesFragment getInstance() {
+    public static MoviesFragment getInstance() {
 
-        VideosMoviesFragment fragment = new VideosMoviesFragment();
+        MoviesFragment fragment = new MoviesFragment();
 
         return fragment;
     }
@@ -132,9 +132,9 @@ public class VideosMoviesFragment extends AbstractBaseFragment implements Loader
     public void videoItemClicked( View v, Video video ) {
 
         Bundle args = new Bundle();
-        args.putSerializable( VideoDetailsFragment.VIDEO_KEY, video );
+        args.putSerializable( MovieDetailsFragment.VIDEO_KEY, video );
 
-        Intent videoDetails = new Intent( getActivity(), VideoDetailsActivity.class );
+        Intent videoDetails = new Intent( getActivity(), MovieDetailsActivity.class );
         videoDetails.putExtras( args );
 
         if( Build.VERSION.SDK_INT >= 16 ) {

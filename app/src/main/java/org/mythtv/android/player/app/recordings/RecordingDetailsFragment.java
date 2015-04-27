@@ -241,6 +241,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                     @Override
                     public void onSuccess() {
 
+                        preview.setVisibility( View.VISIBLE );
+
                         Bitmap bitmap = ( (BitmapDrawable) preview.getDrawable() ).getBitmap(); // Ew!
                         Palette palette = PaletteTransformation.getPalette(bitmap);
                         Palette.Swatch swatch = palette.getDarkMutedSwatch();
@@ -274,6 +276,26 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                         }
 
                     }
+
+                    @Override
+                    public void onError() {
+                        super.onError();
+
+                        preview.setVisibility( View.GONE );
+
+                        layout.setBackgroundColor( getActivity().getResources().getColor( R.color.primary_dark ) );
+                        showName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        episodeName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        callsign.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        startTime.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        channelNumber.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        description.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+
+                        queueHls.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+                        play.setTextColor(getActivity().getResources().getColor(R.color.white));
+
+                    }
+
                 });
 
         if( null != mProgram.getInetref() && !"".equals( mProgram.getInetref() ) ) {

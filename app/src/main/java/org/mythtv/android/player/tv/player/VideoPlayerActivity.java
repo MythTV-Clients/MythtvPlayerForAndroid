@@ -27,7 +27,7 @@ import org.mythtv.android.library.core.utils.Utils;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//import VideoDetailsActivity;
+//import MovieDetailsActivity;
 
 public class VideoPlayerActivity extends Activity {
 
@@ -272,7 +272,7 @@ public class VideoPlayerActivity extends Activity {
 //                    }
 //
 //                    if( null != mSelectedVideo ) {
-//                        Intent intent = new Intent( RecordingPlayerActivity.this, VideoDetailsActivity.class );
+//                        Intent intent = new Intent( RecordingPlayerActivity.this, MovieDetailsActivity.class );
 //                        intent.putExtra( getResources().getString( R.string.video ), mSelectedVideo );
 //                        startActivity( intent );
 //                    }

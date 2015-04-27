@@ -1,9 +1,6 @@
 package org.mythtv.android.player.app.videos;
 
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,13 +22,13 @@ import java.util.List;
 /**
  * Created by dmfrey on 4/22/15.
  */
-public class TvSeasonsActivity extends AbstractBaseAppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String VIDEO_KEY = "video";
     public static final String SELECTED_SEASON = "selected_season";
     public static final String SELECTED_POSITION = "selected_position";
 
-    private TvSeasonsFragment mTvSeasonsFragment;
+    private TelevisionSeasonsFragment mTelevisionSeasonsFragment;
 
     private Video mVideo;
     private Spinner mSeasonSpinner;
@@ -49,7 +46,7 @@ public class TvSeasonsActivity extends AbstractBaseAppCompatActivity implements 
         super.onCreate( savedInstanceState );
 
         mSeasonSpinner = (Spinner) findViewById( R.id.season_spinner );
-        mTvSeasonsFragment = (TvSeasonsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_tv_seasons );
+        mTelevisionSeasonsFragment = (TelevisionSeasonsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_tv_seasons );
 
         if( null != savedInstanceState ) {
 
@@ -69,7 +66,7 @@ public class TvSeasonsActivity extends AbstractBaseAppCompatActivity implements 
 
             getSupportActionBar().setTitle( mVideo.getTitle() );
 
-            mTvSeasonsFragment.setShow( mVideo.getTitle(), mSelectedSeason );
+            mTelevisionSeasonsFragment.setShow( mVideo.getTitle(), mSelectedSeason );
 
         }
 
@@ -124,7 +121,7 @@ public class TvSeasonsActivity extends AbstractBaseAppCompatActivity implements 
 
             mSelectedPosition = position;
             mSelectedSeason = mSeasons.get( position );
-            mTvSeasonsFragment.setShow( mVideo.getTitle(), mSelectedSeason );
+            mTelevisionSeasonsFragment.setShow( mVideo.getTitle(), mSelectedSeason );
 
         }
 

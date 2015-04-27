@@ -73,11 +73,11 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
 
                 case 0:
 
-                    return Fragment.instantiate( VideosActivity.this, VideosMoviesFragment.class.getName(), null );
+                    return Fragment.instantiate( VideosActivity.this, MoviesFragment.class.getName(), null );
 
                 case 1 :
 
-                    return Fragment.instantiate(VideosActivity.this, VideosTvsFragment.class.getName(), null);
+                    return Fragment.instantiate(VideosActivity.this, TelevisionFragment.class.getName(), null);
 
             }
 

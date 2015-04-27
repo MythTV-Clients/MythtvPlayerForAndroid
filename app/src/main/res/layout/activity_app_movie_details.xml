@@ -20,7 +20,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/primary"
                 android:paddingTop="@dimen/app_bar_top_padding"
-                android:transitionName="@string/video_transition"
                 android:title="@string/app_name"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
@@ -28,10 +27,10 @@
             <fragment
                 android:id="@+id/fragment_video_details"
                 android:layout_below="@id/toolbar"
-                android:name="org.mythtv.android.player.app.videos.VideoDetailsFragment"
+                android:name="org.mythtv.android.player.app.videos.MovieDetailsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:layout="@layout/fragment_video_details" />
+                tools:layout="@layout/fragment_movie_details" />
 
         </RelativeLayout>
 

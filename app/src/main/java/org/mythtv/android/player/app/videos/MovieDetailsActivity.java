@@ -9,14 +9,14 @@ import org.mythtv.android.R;
 /**
  * Created by dmfrey on 12/8/14.
  */
-public class VideoDetailsActivity extends AbstractBaseAppCompatActivity {
+public class MovieDetailsActivity extends AbstractBaseAppCompatActivity {
 
-    private VideoDetailsFragment mVideoDetailsFragment;
+    private MovieDetailsFragment mMovieDetailsFragment;
     Video mVideo;
 
     @Override
     protected int getLayoutResource() {
-        return R.layout.activity_app_video_details;
+        return R.layout.activity_app_movie_details;
     }
 
     @Override
@@ -25,19 +25,19 @@ public class VideoDetailsActivity extends AbstractBaseAppCompatActivity {
 
         if( null != savedInstanceState ) {
 
-            mVideo = (Video) savedInstanceState.getSerializable( VideoDetailsFragment.VIDEO_KEY );
+            mVideo = (Video) savedInstanceState.getSerializable( MovieDetailsFragment.VIDEO_KEY );
 
         } else {
 
-            if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( VideoDetailsFragment.VIDEO_KEY ) ) {
+            if( null != getIntent().getExtras() && getIntent().getExtras().containsKey( MovieDetailsFragment.VIDEO_KEY ) ) {
 
-                mVideo = (Video) getIntent().getSerializableExtra(VideoDetailsFragment.VIDEO_KEY);
+                mVideo = (Video) getIntent().getSerializableExtra(MovieDetailsFragment.VIDEO_KEY);
 
             }
 
         }
 
-        mVideoDetailsFragment = (VideoDetailsFragment) getFragmentManager().findFragmentById( R.id.fragment_video_details );
+        mMovieDetailsFragment = (MovieDetailsFragment) getFragmentManager().findFragmentById( R.id.fragment_video_details );
 
     }
 
@@ -47,7 +47,7 @@ public class VideoDetailsActivity extends AbstractBaseAppCompatActivity {
 
         if( null != mVideo ) {
 
-            mVideoDetailsFragment.setVideo( mVideo );
+            mMovieDetailsFragment.setVideo( mVideo );
 
             getSupportActionBar().setTitle( mVideo.getTitle() );
 
@@ -59,7 +59,7 @@ public class VideoDetailsActivity extends AbstractBaseAppCompatActivity {
     protected void onSaveInstanceState( Bundle outState ) {
         super.onSaveInstanceState( outState );
 
-        outState.putSerializable( VideoDetailsFragment.VIDEO_KEY, mVideo );
+        outState.putSerializable( MovieDetailsFragment.VIDEO_KEY, mVideo );
 
     }
 
@@ -67,9 +67,9 @@ public class VideoDetailsActivity extends AbstractBaseAppCompatActivity {
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
         super.onRestoreInstanceState( savedInstanceState );
 
-        if( savedInstanceState.containsKey( VideoDetailsFragment.VIDEO_KEY ) ) {
+        if( savedInstanceState.containsKey( MovieDetailsFragment.VIDEO_KEY ) ) {
 
-            mVideo = (Video) savedInstanceState.getSerializable( VideoDetailsFragment.VIDEO_KEY );
+            mVideo = (Video) savedInstanceState.getSerializable( MovieDetailsFragment.VIDEO_KEY );
 
         }
 

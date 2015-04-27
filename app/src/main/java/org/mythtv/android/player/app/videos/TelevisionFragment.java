@@ -31,9 +31,9 @@ import java.util.Map;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class VideosTvsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {
+public class TelevisionFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {
 
-    private static final String TAG = VideosTvsFragment.class.getSimpleName();
+    private static final String TAG = TelevisionFragment.class.getSimpleName();
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
@@ -41,9 +41,9 @@ public class VideosTvsFragment extends AbstractBaseFragment implements LoaderMan
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
 
-    public static VideosTvsFragment getInstance() {
+    public static TelevisionFragment getInstance() {
 
-        VideosTvsFragment fragment = new VideosTvsFragment();
+        TelevisionFragment fragment = new TelevisionFragment();
 
         return fragment;
     }
@@ -152,9 +152,9 @@ public class VideosTvsFragment extends AbstractBaseFragment implements LoaderMan
     public void videoItemClicked( View v, Video video ) {
 
         Bundle args = new Bundle();
-        args.putSerializable( VideoDetailsFragment.VIDEO_KEY, video );
+        args.putSerializable( MovieDetailsFragment.VIDEO_KEY, video );
 
-        Intent videoDetails = new Intent( getActivity(), TvSeasonsActivity.class );
+        Intent videoDetails = new Intent( getActivity(), TelevisionSeasonsActivity.class );
         videoDetails.putExtras( args );
 
         if( Build.VERSION.SDK_INT >= 16 ) {

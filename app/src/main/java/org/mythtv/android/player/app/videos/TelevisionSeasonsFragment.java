@@ -26,9 +26,9 @@ import java.util.List;
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class TvSeasonsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoTvItemAdapter.VideoItemClickListener {
+public class TelevisionSeasonsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoTvItemAdapter.VideoItemClickListener {
 
-    private static final String TAG = TvSeasonsFragment.class.getSimpleName();
+    private static final String TAG = TelevisionSeasonsFragment.class.getSimpleName();
 
     RecyclerView mRecyclerView;
     VideoTvItemAdapter mAdapter;
@@ -107,15 +107,15 @@ public class TvSeasonsFragment extends AbstractBaseFragment implements LoaderMan
     public void videoItemClicked( View v, Video video ) {
 
         Bundle args = new Bundle();
-        args.putSerializable( VideoDetailsFragment.VIDEO_KEY, video );
+        args.putSerializable( TelevisionDetailsFragment.VIDEO_KEY, video );
 
-        Intent videoDetails = new Intent( getActivity(), VideoDetailsActivity.class );
+        Intent videoDetails = new Intent( getActivity(), TelevisionDetailsActivity.class );
         videoDetails.putExtras( args );
 
         if( Build.VERSION.SDK_INT >= 16 ) {
 
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null );
-            getActivity().startActivity(videoDetails, options.toBundle());
+            getActivity().startActivity( videoDetails, options.toBundle() );
 
         } else {
 
