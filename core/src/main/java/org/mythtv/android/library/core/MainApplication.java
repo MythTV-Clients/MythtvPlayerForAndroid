@@ -27,6 +27,7 @@ import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28ApiEventHan
 import org.mythtv.android.library.core.service.v028.myth.MythServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.video.VideoServiceV28ApiEventHandler;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
+import org.mythtv.android.library.core.utils.RefreshVideosTask;
 import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 import org.mythtv.services.api.ApiVersion;
 import org.mythtv.services.api.MythTvApiContext;
@@ -312,8 +313,9 @@ public class MainApplication extends Application {
 
                 mConnected = true;
 
-                new RefreshLiveStreamsTask().execute();
                 new RefreshRecordedProgramsTask( null ).execute();
+                new RefreshVideosTask( null ).execute();
+                new RefreshLiveStreamsTask().execute();
 
                 scheduleAlarms();
 
