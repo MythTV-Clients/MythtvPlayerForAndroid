@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "mythtvdb";
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 16;
 
     public DatabaseHelper( Context context ) {
         super( context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -34,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.i( TAG, "onOpen : turn on foreign keys" );
 
             db.execSQL( "PRAGMA foreign_keys = ON;" );
+            db.execSQL( "PRAGMA encoding = \"UTF-8\";" );
 
         }
 

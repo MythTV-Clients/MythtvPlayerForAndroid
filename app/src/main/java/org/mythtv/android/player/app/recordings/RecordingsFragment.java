@@ -45,7 +45,7 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
 
         if( args.containsKey( PROGRAM_TITLE_KEY ) ) {
 
-            loader.setTitle(args.getString(PROGRAM_TITLE_KEY));
+            loader.setTitle( args.getString( PROGRAM_TITLE_KEY ) );
 
         }
 
@@ -91,17 +91,17 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
         return view;
     }
 
-    public void setPrograms( String title, String inetref, List<Program> programs ) {
+    public void setPrograms( String title, String inetref ) {
 
         mShowTitle = ( null == title );
         mTitle = title;
         mInetref = inetref;
 
         Bundle args = new Bundle();
-        if( null != title ) {
+        if( null != title && !"".equals( title ) ) {
             args.putString( PROGRAM_TITLE_KEY, title );
         }
-        if( null != inetref ) {
+        if( null != inetref && !"".equals( inetref ) ) {
             args.putString( PROGRAM_INETREF_KEY, inetref );
         }
 

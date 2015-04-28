@@ -63,7 +63,7 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
         }
 
-        mRecordingsFragment.setPrograms( ( null != mTitleInfo ? mTitleInfo.getTitle() : null ), ( null != mTitleInfo ? mTitleInfo.getInetref() : null ), null );
+        mRecordingsFragment.setPrograms( ( null != mTitleInfo ? mTitleInfo.getTitle() : null ), ( null != mTitleInfo ? mTitleInfo.getInetref() : null ) );
 
     }
 
