@@ -19,18 +19,30 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.mythtv.android.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
+import org.mythtv.android.library.core.domain.video.Video;
+import org.mythtv.android.library.events.dvr.AllProgramsEvent;
+import org.mythtv.android.library.events.dvr.ProgramDetails;
+import org.mythtv.android.library.events.dvr.SearchRecordedProgramsEvent;
+import org.mythtv.android.library.events.video.AllVideosEvent;
+import org.mythtv.android.library.events.video.SearchVideosEvent;
+import org.mythtv.android.library.events.video.VideoDetails;
 import org.mythtv.android.player.tv.loaders.SearchProgramsAsyncTaskLoader;
 import org.mythtv.android.player.tv.recordings.RecordingCardPresenter;
 import org.mythtv.android.player.tv.recordings.RecordingDetailsActivity;
 import org.mythtv.android.player.tv.recordings.RecordingDetailsFragment;
+import org.mythtv.android.player.tv.videos.VideoCardPresenter;
+import org.mythtv.android.player.tv.videos.VideoDetailsActivity;
+import org.mythtv.android.player.tv.videos.VideoDetailsFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by dmfrey on 3/20/15.
  */
-public class SearchableFragment extends SearchFragment implements LoaderManager.LoaderCallbacks<List<Program>>, SearchFragment.SearchResultProvider {
+public class SearchableFragment extends SearchFragment implements /* LoaderManager.LoaderCallbacks<List<Program>>,*/ SearchFragment.SearchResultProvider {
 
     private static final String TAG = SearchableFragment.class.getSimpleName();
 
@@ -41,35 +53,35 @@ public class SearchableFragment extends SearchFragment implements LoaderManager.
     private Handler mHandler = new Handler();
     private String mQuery;
 
-    @Override
-    public Loader<List<Program>> onCreateLoader( int id, Bundle args ) {
-
-        SearchProgramsAsyncTaskLoader loader = new SearchProgramsAsyncTaskLoader( getActivity() );
-        loader.setQuery( args.getString( QUERY_KEY ) );
-
-        return loader;
-    }
-
-    @Override
-    public void onLoadFinished( Loader<List<Program>> loader, List<Program> programs ) {
-
-        if( !programs.isEmpty() ) {
-
-            ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( new RecordingCardPresenter() );
-            for( Program program : programs ) {
-                Log.v( TAG, "onLoaderFinished : program=" + program );
-
-                listRowAdapter.add( program );
-            }
-            HeaderItem header = new HeaderItem( 0, getResources().getString( R.string.search_results ) + " '" + mQuery + "'" );
-            mRowsAdapter.add( new ListRow( header, listRowAdapter ) );
-
-        }
-
-    }
-
-    @Override
-    public void onLoaderReset( Loader<List<Program>> loader ) { }
+//    @Override
+//    public Loader<List<Program>> onCreateLoader( int id, Bundle args ) {
+//
+//        SearchProgramsAsyncTaskLoader loader = new SearchProgramsAsyncTaskLoader( getActivity() );
+//        loader.setQuery( args.getString( QUERY_KEY ) );
+//
+//        return loader;
+//    }
+//
+//    @Override
+//    public void onLoadFinished( Loader<List<Program>> loader, List<Program> programs ) {
+//
+//        if( !programs.isEmpty() ) {
+//
+//            ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( new RecordingCardPresenter() );
+//            for( Program program : programs ) {
+//                Log.v( TAG, "onLoaderFinished : program=" + program );
+//
+//                listRowAdapter.add( program );
+//            }
+//            HeaderItem header = new HeaderItem( 0, getResources().getString( R.string.search_results ) + " '" + mQuery + "'" );
+//            mRowsAdapter.add( new ListRow( header, listRowAdapter ) );
+//
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onLoaderReset( Loader<List<Program>> loader ) { }
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
@@ -108,12 +120,42 @@ public class SearchableFragment extends SearchFragment implements LoaderManager.
         mQuery = query;
         mRowsAdapter.clear();
 
-        Bundle args = new Bundle();
-        if( null != query ) {
-            args.putString( QUERY_KEY, query );
+//        Bundle args = new Bundle();
+//        if( null != query ) {
+//            args.putString( QUERY_KEY, query );
+//        }
+
+//        getLoaderManager().restartLoader( 0, args, this );
+
+        ArrayObjectAdapter programRowAdapter = new ArrayObjectAdapter( new RecordingCardPresenter() );
+        AllProgramsEvent programsEvent = MainApplication.getInstance().getDvrService().searchRecordedPrograms(new SearchRecordedProgramsEvent(query));
+        if( programsEvent.isEntityFound() ) {
+
+            for( ProgramDetails details : programsEvent.getDetails() ) {
+
+                Program program = Program.fromDetails( details );
+                programRowAdapter.add( program );
+
+            }
+            HeaderItem header = new HeaderItem( 0, getResources().getString( R.string.recording ) + " " + getResources().getString( R.string.search_results ) + " '" + mQuery + "'" );
+            mRowsAdapter.add( new ListRow( header, programRowAdapter ) );
+
         }
 
-        getLoaderManager().restartLoader( 0, args, this );
+        ArrayObjectAdapter videoRowAdapter = new ArrayObjectAdapter( new VideoCardPresenter() );
+        AllVideosEvent videosEvent = MainApplication.getInstance().getVideoService().searchVideos( new SearchVideosEvent( query ) );
+        if( videosEvent.isEntityFound() ) {
+
+            for( VideoDetails details : videosEvent.getDetails() ) {
+
+                Video video = Video.fromDetails( details );
+                videoRowAdapter.add( video );
+
+            }
+            HeaderItem header = new HeaderItem( 1, getResources().getString( R.string.video ) + " " + getResources().getString( R.string.search_results ) + " '" + mQuery + "'" );
+            mRowsAdapter.add( new ListRow( header, videoRowAdapter ) );
+
+        }
 
 
     }
@@ -130,11 +172,27 @@ public class SearchableFragment extends SearchFragment implements LoaderManager.
 
                 Intent intent = new Intent( getActivity(), RecordingDetailsActivity.class );
                 intent.putExtra( RecordingDetailsFragment.PROGRAM_KEY, program );
-                startActivity(intent);
+                startActivity( intent );
 
             } else {
 
-                Toast.makeText( getActivity(), ( (String) item ), Toast.LENGTH_SHORT ).show();
+                Video video = (Video) item;
+
+                if( "MOVIE".equals( video.getContentType() ) ) {
+                    Log.d( TAG, "Video: " + video.toString() );
+
+                    Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
+                    intent.putExtra( VideoDetailsFragment.VIDEO, video );
+                    startActivity( intent );
+
+                } else {
+                    Log.d( TAG, "Video: " + video.toString() );
+
+                    Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
+                    intent.putExtra( VideoDetailsFragment.VIDEO, video );
+                    startActivity( intent );
+
+                }
 
             }
 

@@ -57,7 +57,7 @@ public class VideoDetailsFragment extends DetailsFragment implements LoaderManag
 
     private static final int NUM_COLS = 10;
 
-    private static final String VIDEO = "Video";
+    public static final String VIDEO = "Video";
 
     private ArrayObjectAdapter mRowsAdapter;
     private Video mVideo;

@@ -34,6 +34,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
 import org.mythtv.android.player.tv.loaders.VideosAsyncTaskLoader;
+import org.mythtv.android.player.tv.search.SearchableActivity;
 import org.mythtv.android.player.tv.settings.SettingsActivity;
 import org.mythtv.android.player.tv.PicassoBackgroundManagerTarget;
 
@@ -206,8 +207,11 @@ public class VideosFragment extends BrowseFragment implements LoaderManager.Load
         setOnSearchClickedListener( new View.OnClickListener() {
 
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG).show();
+            public void onClick( View view ) {
+
+                Intent intent = new Intent( getActivity(), SearchableActivity.class );
+                startActivity( intent );
+
             }
 
         });
