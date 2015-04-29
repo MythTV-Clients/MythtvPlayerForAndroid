@@ -1,6 +1,11 @@
 package org.mythtv.android.player.app.videos;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -85,9 +90,9 @@ public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity imp
 
         outState.putSerializable( VIDEO_KEY, mVideo );
         outState.putInt(SELECTED_SEASON, mSelectedSeason);
-        outState.putInt( SELECTED_POSITION, mSelectedPosition );
+        outState.putInt(SELECTED_POSITION, mSelectedPosition);
 
-        super.onSaveInstanceState( outState );
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -112,6 +117,21 @@ public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity imp
 
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu( Menu menu ) {
+
+        // Inflate the options menu from XML
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate( R.menu.main, menu );
+
+        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
+        SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+
+        return super.onCreateOptionsMenu( menu );
     }
 
     @Override
