@@ -96,7 +96,7 @@ public class DvrServiceV28ApiEventHandler implements DvrService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "updateRecordedPrograms : error", e );
+            //Log.w( TAG, "updateRecordedPrograms : error", e );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
@@ -148,7 +148,7 @@ public class DvrServiceV28ApiEventHandler implements DvrService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "updateTitleInfos : error", e );
+            //Log.w( TAG, "updateTitleInfos : error", e );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();

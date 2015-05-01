@@ -286,7 +286,7 @@ public class MainApplication extends Application {
                 OkHttpClient okHttpClient = new OkHttpClient();
                 okHttpClient.setFollowRedirects( true );
 
-                mMythTvApiContext = MythTvApiContext.newBuilder().setOkHttpClient( okHttpClient ).setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).setLogLevel(RestAdapter.LogLevel.FULL).build();
+                mMythTvApiContext = MythTvApiContext.newBuilder().setOkHttpClient( okHttpClient ).setHostName( mBackendUrl ).setPort( mBackendPort ).setVersion( mApiVersion ).setLogLevel(RestAdapter.LogLevel.NONE).build();
 
                 switch( mApiVersion ) {
 

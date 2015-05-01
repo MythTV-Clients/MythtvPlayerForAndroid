@@ -83,12 +83,11 @@ public class ContentServiceV28EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "getLiveStreamInfoList : error", e );
+            //Log.w( TAG, "updateLiveStreams : error", e );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
 
                 MainApplication.getInstance().disconnect();
-
             }
 
         }
@@ -118,7 +117,7 @@ public class ContentServiceV28EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "addLiveStream : error", e );
+            //Log.w( TAG, "addLiveStream : error", e );
         }
 
         return LiveStreamAddedEvent.notAdded();
@@ -140,7 +139,7 @@ public class ContentServiceV28EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "addRecordingLiveStream : error", e );
+            //Log.w( TAG, "addRecordingLiveStream : error", e );
         }
 
         return LiveStreamAddedEvent.notAdded();
@@ -162,7 +161,7 @@ public class ContentServiceV28EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "addVideoLiveStream : error", e );
+            //Log.w( TAG, "addVideoLiveStream : error", e );
         }
 
         return LiveStreamAddedEvent.notAdded();
@@ -184,7 +183,7 @@ public class ContentServiceV28EventHandler implements ContentService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "removeLiveStream : error", e );
+            //Log.w( TAG, "removeLiveStream : error", e );
 
             LiveStreamRemovedEvent removed = new LiveStreamRemovedEvent( event.getKey() );
             mContentPersistenceService.removeLiveStream( removed );

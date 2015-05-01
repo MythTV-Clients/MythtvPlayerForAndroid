@@ -181,7 +181,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             for( ProgramDetails details : event.getDetails() ) {
 
                 Program program = ProgramHelper.fromDetails( details );
-                Log.v(TAG, "updateRecordedPrograms : program=" + program);
+                //Log.v(TAG, "updateRecordedPrograms : program=" + program);
 
                 if( null == program.getStartTime() || null == program.getEndTime() || null == program.getRecording().getStartTs() || null == program.getRecording().getEndTs() ||
                         "LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ||
@@ -288,7 +288,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 if( cursor.moveToFirst() ) {
 
                     Long id = cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) );
-                    Log.v( TAG, "updateRecordedPrograms : updating existing program - rowid=" + id );
+                    //Log.v( TAG, "updateRecordedPrograms : updating existing program - rowid=" + id );
                     ops.add(
                             ContentProviderOperation
                                     .newUpdate( ContentUris.withAppendedId( ProgramConstants.CONTENT_URI, id ) )
@@ -362,7 +362,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             for( ProgramDetails details : event.getDetails() ) {
 
                 Program program = ProgramHelper.fromDetails( details );
-                Log.v( TAG, "deleteRecordedPrograms : program=" + program );
+                //Log.v( TAG, "deleteRecordedPrograms : program=" + program );
 
                 Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
                 if( cursor.moveToFirst() ) {
@@ -505,7 +505,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             titleInfo.setInetref( cursor.getString( cursor.getColumnIndex( TitleInfoConstants.FIELD_INETREF ) ) );
 
             titleInfos.add( titleInfo );
-            Log.v(TAG, "requestAllTitleInfos : cursor iteration, titleInfo=" + titleInfo);
+            //Log.v(TAG, "requestAllTitleInfos : cursor iteration, titleInfo=" + titleInfo);
 
         }
         cursor.close();
