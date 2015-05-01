@@ -27,6 +27,7 @@ import org.mythtv.android.library.core.service.v028.dvr.DvrServiceV28ApiEventHan
 import org.mythtv.android.library.core.service.v028.myth.MythServiceV28EventHandler;
 import org.mythtv.android.library.core.service.v028.video.VideoServiceV28ApiEventHandler;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
+import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
 import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 import org.mythtv.services.api.ApiVersion;
@@ -78,6 +79,7 @@ public class MainApplication extends Application {
 
     private AlarmManager mAlarmManager;
     private PendingIntent mRefreshLiveStreamPendingIntent;
+    private PendingIntent mRefreshTitleInfosPendingIntent;
     private PendingIntent mRefreshRecordedProgramsPendingIntent;
     private PendingIntent mRefreshVideosPendingIntent;
 
@@ -128,15 +130,19 @@ public class MainApplication extends Application {
         Intent refreshLiveStreamIntent = new Intent( this, RefreshLiveStreamsReceiver.class );
         mRefreshLiveStreamPendingIntent = PendingIntent.getBroadcast( this, 0, refreshLiveStreamIntent, 0 );
 
+        Intent refreshTitleInfosIntent = new Intent( MainApplication.this, RefreshTitleInfosReceiver.class );
+        mRefreshTitleInfosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshTitleInfosIntent, 0 );
+
         Intent refreshRecordedProgramsIntent = new Intent( MainApplication.this, RefreshRecordedProgramsReceiver.class );
         mRefreshRecordedProgramsPendingIntent = PendingIntent.getBroadcast( this, 0, refreshRecordedProgramsIntent, 0 );
 
         Intent refreshVideosIntent = new Intent( MainApplication.this, RefreshVideosReceiver.class );
         mRefreshVideosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshVideosIntent, 0 );
 
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshLiveStreamPendingIntent );
-        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent);
-        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 240000, 3600000, mRefreshVideosPendingIntent);
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshTitleInfosPendingIntent );
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent );
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 240000, 3600000, mRefreshVideosPendingIntent );
+        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 300000, mRefreshLiveStreamPendingIntent );
 
     }
 
@@ -145,6 +151,9 @@ public class MainApplication extends Application {
         if( mAlarmManager != null ) {
             Log.v( TAG, "onPause : cancelling live stream refresh" );
 
+            mAlarmManager.cancel( mRefreshTitleInfosPendingIntent );
+            mAlarmManager.cancel( mRefreshRecordedProgramsPendingIntent );
+            mAlarmManager.cancel( mRefreshVideosPendingIntent );
             mAlarmManager.cancel( mRefreshLiveStreamPendingIntent );
         }
 
@@ -313,6 +322,7 @@ public class MainApplication extends Application {
 
                 mConnected = true;
 
+                new RefreshTitleInfosTask( null ).execute();
                 new RefreshRecordedProgramsTask( null ).execute();
                 new RefreshVideosTask( null ).execute();
                 new RefreshLiveStreamsTask().execute();

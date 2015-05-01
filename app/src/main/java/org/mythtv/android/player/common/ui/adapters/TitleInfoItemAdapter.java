@@ -15,6 +15,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,13 +23,12 @@ import java.util.List;
  */
 public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdapter.ViewHolder> {
 
-    private List<TitleInfo> titleInfos;
+    private List<TitleInfo> titleInfos = new ArrayList<>();
     private TitleInfoItemClickListener titleInfoItemClickListener;
     private int previousPosition = 0;
 
-    public TitleInfoItemAdapter( List<TitleInfo> titleInfos, @NonNull TitleInfoItemClickListener titleInfoItemClickListener ) {
+    public TitleInfoItemAdapter( @NonNull TitleInfoItemClickListener titleInfoItemClickListener ) {
 
-        this.titleInfos = titleInfos;
         this.titleInfoItemClickListener = titleInfoItemClickListener;
 
     }
@@ -90,6 +90,10 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
     public int getItemCount() {
 
         return titleInfos.size();
+    }
+
+    public List<TitleInfo> getTitleInfos() {
+        return titleInfos;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

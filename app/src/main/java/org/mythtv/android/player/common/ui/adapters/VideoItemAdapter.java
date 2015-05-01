@@ -16,6 +16,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,14 +26,13 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
     private final String TAG = VideoItemAdapter.class.getSimpleName();
 
-    private List<Video> videos;
+    private List<Video> videos = new ArrayList<>();
     private VideoItemClickListener videoItemClickListener;
     private int previousPosition = 0;
 
-    public VideoItemAdapter( List<Video> videos, @NonNull VideoItemClickListener videoItemClickListener ) {
+    public VideoItemAdapter( @NonNull VideoItemClickListener videoItemClickListener ) {
 //        Log.v( TAG, "initialize : enter" );
 
-        this.videos = videos;
         this.videoItemClickListener = videoItemClickListener;
 
 //        Log.v( TAG, "initialize : exit" );
@@ -92,6 +92,10 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
 //        Log.v( TAG, "getItemCount : exit" );
         return videos.size();
+    }
+
+    public List<Video> getVideos() {
+        return videos;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

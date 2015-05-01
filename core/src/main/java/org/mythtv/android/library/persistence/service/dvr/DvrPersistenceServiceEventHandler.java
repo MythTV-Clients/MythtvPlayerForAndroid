@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.utils.Utils;
+import org.mythtv.android.library.events.dvr.AllProgramsCountEvent;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.DeleteProgramsEvent;
@@ -22,6 +23,7 @@ import org.mythtv.android.library.events.dvr.ProgramsDeletedEvent;
 import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
 import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
+import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsCountEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.RequestRecordedProgramEvent;
@@ -113,6 +115,21 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         }
 
         return new AllProgramsEvent( details );
+    }
+
+    @Override
+    public AllProgramsCountEvent requestAllRecordedProgramsCount(RequestAllRecordedProgramsCountEvent event) {
+
+        int count = -1;
+        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, new String[] { "count(*) AS count" }, null, null, null );
+        while( cursor.moveToNext() ) {
+
+            count = cursor.getInt( 0 );
+
+        }
+        cursor.close();
+
+        return new AllProgramsCountEvent( count );
     }
 
     @Override

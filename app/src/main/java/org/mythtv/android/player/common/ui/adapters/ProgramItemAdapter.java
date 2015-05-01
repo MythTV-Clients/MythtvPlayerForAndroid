@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,16 +33,15 @@ import java.util.Locale;
  */
 public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.ViewHolder> {
 
-    private List<Program> programs;
+    private List<Program> programs = new ArrayList<>();
     private ProgramItemClickListener programItemClickListener;
     private boolean showTitle;
     private int previousPosition = 0;
 
     private boolean useInternalPlayer;
 
-    public ProgramItemAdapter( List<Program> programs, @NonNull ProgramItemClickListener programItemClickListener, boolean showTitle ) {
+    public ProgramItemAdapter( @NonNull ProgramItemClickListener programItemClickListener, boolean showTitle ) {
 
-        this.programs = programs;
         this.programItemClickListener = programItemClickListener;
         this.showTitle = showTitle;
 
@@ -120,6 +120,11 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
     public int getItemCount() {
 
         return programs.size();
+    }
+
+    public List<Program> getPrograms() {
+
+        return programs;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

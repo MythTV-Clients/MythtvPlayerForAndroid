@@ -16,6 +16,7 @@ import org.mythtv.android.library.events.video.VideoDetails;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -61,7 +62,7 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
             }
 
-//            Collections.sort( videos );
+            Collections.sort( videos );
 
         }
 

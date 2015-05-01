@@ -38,13 +38,6 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
 
-    public static MoviesFragment getInstance() {
-
-        MoviesFragment fragment = new MoviesFragment();
-
-        return fragment;
-    }
-
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
@@ -60,18 +53,16 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
         if( !videos.isEmpty() ) {
             Log.v( TAG, "onLoadFinished : loaded titleInfos from db" );
 
-            Collections.sort( videos );
-
-            mAdapter = new VideoItemAdapter( videos, this );
-            mRecyclerView.setAdapter( mAdapter );
+            mAdapter.getVideos().addAll( videos );
+            mAdapter.notifyDataSetChanged();
 
             mRecyclerView.setVisibility( View.VISIBLE );
-            mEmpty.setVisibility(View.GONE);
+            mEmpty.setVisibility( View.GONE );
 
         } else {
 
             mRecyclerView.setVisibility( View.GONE );
-            mEmpty.setVisibility(View.VISIBLE);
+            mEmpty.setVisibility( View.VISIBLE );
 
         }
 
@@ -93,9 +84,13 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
         mSwipeRefreshLayout.setOnRefreshListener( this );
 
+        mAdapter = new VideoItemAdapter( this );
+
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
+        mRecyclerView.setAdapter( mAdapter );
+
         mLayoutManager = new GridLayoutManager( getActivity(), 2 );
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager( mLayoutManager );
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;

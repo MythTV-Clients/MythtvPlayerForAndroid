@@ -12,8 +12,11 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
+import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
+import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 import java.util.ArrayList;
@@ -45,18 +48,14 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
             if( ( (MainApplication) getContext().getApplicationContext() ).isConnected() ) {
 
-                AllProgramsEvent event = ( (MainApplication) getContext().getApplicationContext() ).getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( null, null ) );
+                AllTitleInfosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getDvrService().requestAllTitleInfos( new RequestAllTitleInfosEvent() );
                 if( event.isEntityFound() ) {
                     Log.v( TAG, "loadInBackground : titleInfos loaded from db" );
 
-                    for( ProgramDetails details : event.getDetails() ) {
+                    for( TitleInfoDetails details : event.getDetails() ) {
                         Log.v( TAG, "loadInBackground : titleInfo iteration" );
 
-                        Program program = Program.fromDetails( details );
-
-                        TitleInfo titleInfo = new TitleInfo();
-                        titleInfo.setTitle( program.getTitle() );
-                        titleInfo.setInetref( program.getInetref() );
+                        TitleInfo titleInfo = TitleInfo.fromDetails( details );
 
                         if( !titleInfos.contains( titleInfo ) ) {
                             titleInfos.add( titleInfo );

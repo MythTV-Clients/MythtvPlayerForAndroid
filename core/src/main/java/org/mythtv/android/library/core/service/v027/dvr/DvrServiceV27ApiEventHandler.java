@@ -6,6 +6,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.events.DeleteEvent;
 import org.mythtv.android.library.events.DeletedEvent;
+import org.mythtv.android.library.events.dvr.AllProgramsCountEvent;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
@@ -13,6 +14,7 @@ import org.mythtv.android.library.events.dvr.ProgramRemovedEvent;
 import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
 import org.mythtv.android.library.events.dvr.RemoveProgramEvent;
 import org.mythtv.android.library.events.dvr.RemoveTitleInfoEvent;
+import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsCountEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.SearchRecordedProgramsEvent;
@@ -59,6 +61,12 @@ public class DvrServiceV27ApiEventHandler implements DvrService {
     public AllProgramsEvent requestAllRecordedPrograms( RequestAllRecordedProgramsEvent event ) {
 
         return mDvrPersistenceService.requestAllRecordedPrograms( event );
+    }
+
+    @Override
+    public AllProgramsCountEvent requestAllRecordedProgramsCount( RequestAllRecordedProgramsCountEvent event ) {
+
+        return mDvrPersistenceService.requestAllRecordedProgramsCount(event);
     }
 
     @Override

@@ -63,8 +63,8 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
 
         if( !programs.isEmpty() ) {
 
-            mAdapter = new ProgramItemAdapter( programs, this, mShowTitle );
-            mRecyclerView.setAdapter( mAdapter );
+            mAdapter.getPrograms().addAll( programs );
+            mAdapter.notifyDataSetChanged();
 
         }
 
@@ -72,6 +72,8 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
 
     @Override
     public void onLoaderReset( Loader<List<Program>> loader ) {
+
+        mRecyclerView.setAdapter( null );
 
     }
 
@@ -84,6 +86,7 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
         mSwipeRefreshLayout.setOnRefreshListener( this );
 
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
+
         mLayoutManager = new LinearLayoutManager( getActivity() );
         mRecyclerView.setLayoutManager( mLayoutManager );
         mEmpty = (TextView) view.findViewById( R.id.empty );
@@ -96,6 +99,9 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
         mShowTitle = ( null == title );
         mTitle = title;
         mInetref = inetref;
+
+        mAdapter = new ProgramItemAdapter( this, mShowTitle );
+        mRecyclerView.setAdapter( mAdapter );
 
         Bundle args = new Bundle();
         if( null != title && !"".equals( title ) ) {

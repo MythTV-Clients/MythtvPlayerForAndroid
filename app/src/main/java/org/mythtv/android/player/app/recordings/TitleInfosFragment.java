@@ -19,7 +19,9 @@ import android.widget.TextView;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
+import org.mythtv.android.library.events.dvr.AllProgramsCountEvent;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
+import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsCountEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.player.common.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.R;
@@ -55,13 +57,17 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
         Log.v( TAG, "onLoadFinished : enter" );
 
         if( !titleInfos.isEmpty() ) {
-            Log.v( TAG, "onLoadFinished : loaded titleInfos from db" );
+            Log.v(TAG, "onLoadFinished : loaded titleInfos from db");
 
-            mAdapter = new TitleInfoItemAdapter( titleInfos, this );
-            mRecyclerView.setAdapter( mAdapter );
+            mAdapter.getTitleInfos().addAll( titleInfos );
+            mAdapter.notifyDataSetChanged();
 
-            AllProgramsEvent programs = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( null, null ) );
-            mAllRecordingsCount.setText( String.valueOf( programs.getDetails().size() ) );
+            AllProgramsCountEvent countEvent = MainApplication.getInstance().getDvrService().requestAllRecordedProgramsCount( new RequestAllRecordedProgramsCountEvent() );
+            if( countEvent.isEntityFound() ) {
+
+                mAllRecordingsCount.setText( String.valueOf( countEvent.getCount() ) );
+
+            }
 
             mHeader.setVisibility( View.VISIBLE );
         }
@@ -83,9 +89,13 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
         View view = inflater.inflate( R.layout.title_info_list, container, false );
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
-        mSwipeRefreshLayout.setOnRefreshListener( this );
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mAdapter = new TitleInfoItemAdapter( this );
 
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
+        mRecyclerView.setAdapter( mAdapter );
+
         mLayoutManager = new LinearLayoutManager( getActivity() );
         mRecyclerView.setLayoutManager( mLayoutManager );
         mAllRecordings = (TextView) view.findViewById( R.id.title_info_all_recordings );

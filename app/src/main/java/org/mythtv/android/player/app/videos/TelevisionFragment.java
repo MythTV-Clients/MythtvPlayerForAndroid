@@ -80,18 +80,19 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
                 shows.add( video );
 
             }
+
             Collections.sort( shows );
 
-            mAdapter = new VideoItemAdapter( shows, this );
-            mRecyclerView.setAdapter( mAdapter );
+            mAdapter.getVideos().addAll( shows );
+            mAdapter.notifyDataSetChanged();
 
             mRecyclerView.setVisibility( View.VISIBLE );
-            mEmpty.setVisibility(View.GONE);
+            mEmpty.setVisibility( View.GONE );
 
         } else {
 
             mRecyclerView.setVisibility( View.GONE );
-            mEmpty.setVisibility(View.VISIBLE);
+            mEmpty.setVisibility( View.VISIBLE );
 
         }
 
@@ -113,9 +114,13 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
         mSwipeRefreshLayout.setOnRefreshListener( this );
 
+        mAdapter = new VideoItemAdapter( this );
+
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
+        mRecyclerView.setAdapter( mAdapter );
+
         mLayoutManager = new GridLayoutManager( getActivity(), 2 );
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager( mLayoutManager );
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;
@@ -126,7 +131,7 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
         Log.v( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
 
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader( 0, null, this );
 
         Log.v( TAG, "onActivityCreated : exit" );
     }
