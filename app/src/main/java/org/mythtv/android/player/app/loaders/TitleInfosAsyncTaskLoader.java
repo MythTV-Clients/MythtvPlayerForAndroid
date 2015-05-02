@@ -33,6 +33,8 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
     private TitleInfosObserver mObserver;
     private List<TitleInfo> mTitleInfos;
 
+    int limit = 5;
+
     public TitleInfosAsyncTaskLoader( Context context ) {
         super( context );
 
@@ -48,7 +50,7 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
             if( ( (MainApplication) getContext().getApplicationContext() ).isConnected() ) {
 
-                AllTitleInfosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getDvrService().requestAllTitleInfos( new RequestAllTitleInfosEvent() );
+                AllTitleInfosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getDvrService().requestAllTitleInfos( new RequestAllTitleInfosEvent( limit, null ) );
                 if( event.isEntityFound() ) {
                     Log.v( TAG, "loadInBackground : titleInfos loaded from db" );
 
