@@ -55,6 +55,9 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
     private static final String TAG = TitleInfosFragment.class.getSimpleName();
 
+    private static final String LIMIT_KEY = "limit";
+    private static final String OFFSET_KEY = "offset";
+
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
     TitleInfoItemAdapter mAdapter;
@@ -62,12 +65,14 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     RelativeLayout mHeader;
     TextView mAllRecordings, mAllRecordingsCount, mEmpty;
 
+    int limit = 5, offset = -1;
+
     @Override
     public Loader<List<TitleInfo>> onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
 
         Log.v( TAG, "onCreateLoader : exit" );
-        return new TitleInfosAsyncTaskLoader( getActivity() );
+        return new TitleInfosAsyncTaskLoader( getActivity(), limit, offset );
     }
 
     @Override
