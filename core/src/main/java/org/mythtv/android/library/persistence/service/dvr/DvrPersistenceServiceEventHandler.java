@@ -533,13 +533,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         if( null != event.getLimit() ) {
 
-            if( null == selection ) {
-
-                selection = " ";
-
-            }
-
-            selection += "LIMIT " + event.getLimit();
+            sort += " LIMIT " + event.getLimit();
 
             if( null != event.getOffset() ) {
 
