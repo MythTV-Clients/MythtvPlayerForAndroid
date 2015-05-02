@@ -88,7 +88,7 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 //        }
         previousPosition = position;
 
-        if( !"-1".equals( titleInfo.getInetref() ) ) {
+        if( null != titleInfo.getInetref() && !"".equals( titleInfo.getInetref() ) ) {
 
             String coverartUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + titleInfo.getInetref() + "&Type=coverart&Width=150";
             Picasso.with(MainApplication.getInstance())
