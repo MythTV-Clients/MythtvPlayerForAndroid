@@ -86,7 +86,7 @@ public class VideoServiceV28ApiEventHandler implements VideoService {
             }
 
         } catch( RetrofitError e ) {
-            Log.w( TAG, "updateVideos : error", e );
+            //Log.w( TAG, "updateVideos : error", e );
 
             if( e.getKind() == RetrofitError.Kind.NETWORK ) {
                 MainApplication.getInstance().disconnect();
