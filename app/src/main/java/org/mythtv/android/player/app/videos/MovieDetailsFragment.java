@@ -84,14 +84,10 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             if( null != data && data.moveToNext() ) {
 
                 int percent = data.getInt( data.getColumnIndex(LiveStreamConstants.FIELD_PERCENT_COMPLETE));
-                if (percent > 0) {
+                if( percent > 0 ) {
 
-                    if( percent > 1 ) {
-
-                        progress.setIndeterminate( false );
-                        progress.setProgress(percent);
-
-                    }
+                    progress.setIndeterminate( false );
+                    progress.setProgress(percent);
 
                     if( percent > 2 ) {
 
@@ -112,7 +108,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
                 }
 
-                queueHls.setVisibility( View.INVISIBLE );
+                queueHls.setVisibility( View.GONE );
 
             } else {
 

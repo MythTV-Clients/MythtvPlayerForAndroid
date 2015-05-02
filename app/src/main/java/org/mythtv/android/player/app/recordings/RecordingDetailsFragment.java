@@ -88,12 +88,8 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                 int percent = data.getPercentComplete();
                 if( percent > 0 ) {
 
-                    if( percent > 1 ) {
-
-                        progress.setIndeterminate( false );
-                        progress.setProgress( percent );
-
-                    }
+                    progress.setIndeterminate( false );
+                    progress.setProgress( percent );
 
                     if( percent > 2 ) {
 
@@ -114,7 +110,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
                 }
 
-                queueHls.setVisibility( View.INVISIBLE );
+                queueHls.setVisibility( View.GONE );
 
             } else {
 

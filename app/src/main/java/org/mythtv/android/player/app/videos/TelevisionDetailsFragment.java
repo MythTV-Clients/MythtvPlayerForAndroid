@@ -85,12 +85,8 @@ public class TelevisionDetailsFragment extends Fragment implements LoaderManager
                 int percent = data.getInt( data.getColumnIndex( LiveStreamConstants.FIELD_PERCENT_COMPLETE ) );
                 if (percent > 0) {
 
-                    if( percent > 1 ) {
-
-                        progress.setIndeterminate( false );
-                        progress.setProgress(percent);
-
-                    }
+                    progress.setIndeterminate( false );
+                    progress.setProgress(percent);
 
                     if( percent > 2 ) {
 
