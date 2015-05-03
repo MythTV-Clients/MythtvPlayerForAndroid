@@ -41,6 +41,7 @@ import org.mythtv.android.library.events.dvr.AllProgramsCountEvent;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsCountEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
+import org.mythtv.android.player.app.listeners.EndlessScrollListener;
 import org.mythtv.android.player.common.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.player.app.loaders.TitleInfosAsyncTaskLoader;
@@ -65,14 +66,14 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     RelativeLayout mHeader;
     TextView mAllRecordings, mAllRecordingsCount, mEmpty;
 
-    int limit = 5, offset = -1;
+    int mLimit = 5, mOffset = -1;
 
     @Override
     public Loader<List<TitleInfo>> onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
 
         Log.v( TAG, "onCreateLoader : exit" );
-        return new TitleInfosAsyncTaskLoader( getActivity(), limit, offset );
+        return new TitleInfosAsyncTaskLoader( getActivity(), mLimit, mOffset );
     }
 
     @Override
@@ -82,8 +83,19 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
         if( !titleInfos.isEmpty() ) {
             Log.v(TAG, "onLoadFinished : loaded titleInfos from db");
 
-            mAdapter.getTitleInfos().addAll( titleInfos );
-            mAdapter.notifyDataSetChanged();
+            boolean notify = false;
+            for( TitleInfo titleInfo : titleInfos ) {
+
+                if( !mAdapter.getTitleInfos().contains( titleInfo ) ) {
+                    mAdapter.getTitleInfos().add( titleInfo );
+                    notify = true;
+                }
+
+            }
+
+            if( notify ) {
+                mAdapter.notifyDataSetChanged();
+            }
 
             AllProgramsCountEvent countEvent = MainApplication.getInstance().getDvrService().requestAllRecordedProgramsCount( new RequestAllRecordedProgramsCountEvent() );
             if( countEvent.isEntityFound() ) {
@@ -116,11 +128,24 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
         mAdapter = new TitleInfoItemAdapter( this );
 
+        mLayoutManager = new LinearLayoutManager( getActivity() );
+
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mRecyclerView.setAdapter( mAdapter );
-
-        mLayoutManager = new LinearLayoutManager( getActivity() );
         mRecyclerView.setLayoutManager( mLayoutManager );
+        mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
+
+            @Override
+            public void onLoadMore( int page ) {
+
+                mOffset = ( page - 1 ) * mLimit;
+
+                getLoaderManager().restartLoader( 0, null, TitleInfosFragment.this );
+
+            }
+
+        });
+
         mAllRecordings = (TextView) view.findViewById( R.id.title_info_all_recordings );
         mAllRecordingsCount = (TextView) view.findViewById( R.id.title_info_all_recordings_count );
         mEmpty = (TextView) view.findViewById( R.id.empty );
@@ -150,13 +175,13 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
         getLoaderManager().initLoader( 0, null, this );
 
-        Log.v( TAG, "onActivityCreated : exit" );
+        Log.v( TAG, "onActivityCreated : exit");
     }
 
     public void reload() {
-        Log.v( TAG, "setTitleInfos : enter" );
+        Log.v(TAG, "setTitleInfos : enter");
 
-        getLoaderManager().restartLoader( 0, null, this );
+//        getLoaderManager().restartLoader( 0, null, this);
 
         Log.v( TAG, "setTitleInfos : exit" );
     }
