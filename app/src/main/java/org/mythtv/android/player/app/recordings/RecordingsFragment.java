@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
+import org.mythtv.android.player.app.listeners.EndlessScrollListener;
 import org.mythtv.android.player.common.ui.adapters.ProgramItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.player.app.loaders.ProgramsAsyncTaskLoader;
@@ -53,27 +54,15 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
     LinearLayoutManager mLayoutManager;
     TextView mEmpty;
     boolean mShowTitle = false;
-    String mTitle;
-    String mInetref;
+    String mTitle = null;
+    String mInetref = null;
+
+    int mLimit = 5, mOffset = -1;
 
     @Override
     public Loader<List<Program>> onCreateLoader( int id, Bundle args ) {
 
-        ProgramsAsyncTaskLoader loader = new ProgramsAsyncTaskLoader( getActivity() );
-
-        if( args.containsKey( PROGRAM_TITLE_KEY ) ) {
-
-            loader.setTitle( args.getString( PROGRAM_TITLE_KEY ) );
-
-        }
-
-        if( args.containsKey( PROGRAM_INETREF_KEY ) ) {
-
-            loader.setInetref( args.getString( PROGRAM_INETREF_KEY ) );
-
-        }
-
-        return loader;
+        return new ProgramsAsyncTaskLoader( getActivity(), mTitle, mInetref, mLimit, mOffset );
     }
 
     @Override
@@ -81,8 +70,23 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
 
         if( !programs.isEmpty() ) {
 
-            mAdapter.getPrograms().addAll( programs );
-            mAdapter.notifyDataSetChanged();
+            boolean notify = false;
+            for( Program program : programs ) {
+
+                if( !mAdapter.getPrograms().contains( program ) ) {
+
+                    mAdapter.getPrograms().add( program );
+                    notify = true;
+
+                }
+
+            }
+
+            if( notify ) {
+
+                mAdapter.notifyDataSetChanged();
+
+            }
 
         }
 
@@ -103,10 +107,26 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
         mSwipeRefreshLayout.setOnRefreshListener( this );
 
-        mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
+        mAdapter = new ProgramItemAdapter( this );
 
         mLayoutManager = new LinearLayoutManager( getActivity() );
+
+        mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
+        mRecyclerView.setAdapter( mAdapter );
         mRecyclerView.setLayoutManager( mLayoutManager );
+        mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
+
+            @Override
+            public void onLoadMore( int page ) {
+
+                mOffset = ( page - 1 ) * mLimit;
+
+                getLoaderManager().restartLoader( 0, null, RecordingsFragment.this );
+
+            }
+
+        });
+
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;
@@ -118,18 +138,9 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
         mTitle = title;
         mInetref = inetref;
 
-        mAdapter = new ProgramItemAdapter( this, mShowTitle );
-        mRecyclerView.setAdapter( mAdapter );
+        mAdapter.setShowTitle( mShowTitle );
 
-        Bundle args = new Bundle();
-        if( null != title && !"".equals( title ) ) {
-            args.putString( PROGRAM_TITLE_KEY, title );
-        }
-        if( null != inetref && !"".equals( inetref ) ) {
-            args.putString( PROGRAM_INETREF_KEY, inetref );
-        }
-
-        getLoaderManager().initLoader( 0, args, this );
+        getLoaderManager().initLoader( 0, null, this );
 
     }
 
@@ -139,7 +150,7 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
         args.putSerializable( RecordingDetailsFragment.PROGRAM_KEY, program );
 
         Intent recordingDetails = new Intent( getActivity(), RecordingDetailsActivity.class );
-        recordingDetails.putExtras(args);
+        recordingDetails.putExtras( args );
         startActivity( recordingDetails );
 
 //        String transitionName = getString( R.string.recording_transition );

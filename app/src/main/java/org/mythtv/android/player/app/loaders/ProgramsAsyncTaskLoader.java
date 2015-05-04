@@ -24,7 +24,6 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
@@ -49,60 +48,36 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
     private String title;
     private String inetref;
 
-    public ProgramsAsyncTaskLoader( Context context ) {
+    int limit, offset;
+
+    public ProgramsAsyncTaskLoader( Context context, String title, String interef, int limit, int offset ) {
         super( context );
+
+        this.title = title;
+        this.inetref = interef;
+
+        this.limit = limit;
+        this.offset = offset;
 
     }
 
     @Override
     public List<Program> loadInBackground() {
-        Log.v( TAG, "loadInBackground : enter" );
 
         List<Program> programs = new ArrayList<>();
 
-        try {
+        AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title, inetref, limit, offset ) );
+        if( event.isEntityFound() ) {
 
-            if( MainApplication.getInstance().isConnected() ) {
+            for( ProgramDetails details : event.getDetails() ) {
 
-                AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title, inetref ) );
-                if( event.isEntityFound() ) {
-                    Log.v( TAG, "loadInBackground : programs loaded from db" );
-
-                    for( ProgramDetails details : event.getDetails() ) {
-                        Log.v( TAG, "loadInBackground : program iteration" );
-
-                        programs.add( Program.fromDetails( details ) );
-
-                    }
-
-                }
-
-            } else {
-
-                Log.w( TAG, "loadInBackground : MasterBackend NOT Connected!!" );
+                 programs.add( Program.fromDetails( details ) );
 
             }
 
-        } catch( NullPointerException e ) {
-
-            Log.e( TAG, "loadInBackground : error", e );
-
         }
 
-        Log.v( TAG, "loadInBackground : exit" );
         return programs;
-    }
-
-    public void setTitle( String title ) {
-
-        this.title = title;
-
-    }
-
-    public void setInetref( String inetref ) {
-
-        this.inetref = inetref;
-
     }
 
     @Override
@@ -217,9 +192,11 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
     }
 
     private void releaseResources( List<Program> data ) {
+
         // For a simple List, there is nothing to do. For something like a Cursor, we
         // would close it in this method. All resources associated with the Loader
         // should be released here.
+
     }
 
     private final Handler mHandler = new Handler() {
@@ -228,7 +205,6 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
         public void handleMessage( Message msg ) {
             super.handleMessage( msg );
 
-            Log.v( TAG, "handleMessage : Programs changed" );
         }
 
     };

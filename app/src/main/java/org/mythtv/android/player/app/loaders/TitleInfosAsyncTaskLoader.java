@@ -24,21 +24,15 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
-import org.mythtv.android.library.events.dvr.ProgramDetails;
-import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -63,55 +57,27 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
     @Override
     public List<TitleInfo> loadInBackground() {
-        Log.v( TAG, "loadInBackground : enter" );
 
         List<TitleInfo> titleInfos = new ArrayList<>();
 
-        try {
+        AllTitleInfosEvent event = MainApplication.getInstance().getDvrService().requestAllTitleInfos( new RequestAllTitleInfosEvent( limit, offset ) );
+        if( event.isEntityFound() ) {
 
-            if( ( (MainApplication) getContext().getApplicationContext() ).isConnected() ) {
+            for( TitleInfoDetails details : event.getDetails() ) {
 
-                AllTitleInfosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getDvrService().requestAllTitleInfos( new RequestAllTitleInfosEvent( limit, offset ) );
-                if( event.isEntityFound() ) {
-                    Log.v( TAG, "loadInBackground : titleInfos loaded from db" );
-
-                    for( TitleInfoDetails details : event.getDetails() ) {
-                        Log.v( TAG, "loadInBackground : titleInfo iteration" );
-
-                        TitleInfo titleInfo = TitleInfo.fromDetails( details );
-
-                        if( !titleInfos.contains( titleInfo ) ) {
-                            titleInfos.add( titleInfo );
-                        }
-
-                    }
-
-                    Collections.sort( titleInfos );
-
-                }
-
-            } else {
-
-                Log.w( TAG, "loadInBackground : MasterBackend NOT Connected!!" );
+                 titleInfos.add( TitleInfo.fromDetails( details ) );
 
             }
 
-        } catch( NullPointerException e ) {
-
-            Log.e( TAG, "loadInBackground : error", e );
-
         }
 
-        Log.v( TAG, "loadInBackground : exit" );
         return titleInfos;
     }
 
     @Override
     public void deliverResult( List<TitleInfo> data ) {
-        Log.v( TAG, "deliverResult : enter" );
 
         if( isReset() ) {
-            Log.v( TAG, "deliverResult : isReset" );
 
             // The Loader has been reset; ignore the result and invalidate the data.
             releaseResources( data );
@@ -125,7 +91,6 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
         mTitleInfos = data;
 
         if( isStarted() ) {
-            Log.v( TAG, "deliverResult : isStarted" );
 
             // If the Loader is in a started state, deliver the results to the
             // client. The superclass method does this for us.
@@ -134,7 +99,6 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
         // Invalidate the old data as we don't need it any more.
         if( oldData != null && oldData != data ) {
-            Log.v( TAG, "deliverResult : oldDate != null && oldData != data" );
 
             releaseResources( oldData );
 
@@ -144,7 +108,6 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
     @Override
     protected void onStartLoading() {
-        Log.v( TAG, "onStartLoading : enter" );
 
         if( null != mTitleInfos ) {
 
@@ -171,12 +134,10 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
         }
 
-        Log.v( TAG, "onStartLoading : exit" );
     }
 
     @Override
     protected void onStopLoading() {
-        Log.v( TAG, "onStopLoading : enter" );
 
         // The Loader is in a stopped state, so we should attempt to cancel the
         // current load (if there is one).
@@ -186,19 +147,16 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
         // should still monitor the data source for changes so that the Loader
         // will know to force a new load if it is ever started again.
 
-        Log.v( TAG, "onStopLoading : exit" );
     }
 
     @Override
     protected void onReset() {
-        Log.v( TAG, "onReset : enter" );
 
         // Ensure the loader has been stopped.
         onStopLoading();
 
         // At this point we can release the resources associated with 'mData'.
         if( null != mTitleInfos ) {
-            Log.v( TAG, "onReset : null != mTitleInfos" );
 
             releaseResources( mTitleInfos );
             mTitleInfos = null;
@@ -213,12 +171,10 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
         }
 
-        Log.v(TAG, "onReset : exit");
     }
 
     @Override
     public void onCanceled( List<TitleInfo> data ) {
-        Log.v( TAG, "onCanceled : enter" );
 
         // Attempt to cancel the current asynchronous load.
         super.onCanceled( data );
@@ -227,17 +183,14 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
         // associated with 'data'.
         releaseResources( data );
 
-        Log.v( TAG, "onCanceled : exit" );
     }
 
     private void releaseResources( List<TitleInfo> data ) {
-        Log.v( TAG, "releaseResources : enter" );
 
         // For a simple List, there is nothing to do. For something like a Cursor, we
         // would close it in this method. All resources associated with the Loader
         // should be released here.
 
-        Log.v( TAG, "releaseResources : exit" );
     }
 
     private final Handler mHandler = new Handler() {
@@ -246,7 +199,6 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
         public void handleMessage( Message msg ) {
             super.handleMessage( msg );
 
-            Log.v( TAG, "handleMessage : TitleInfos changed" );
         }
 
     };
@@ -259,6 +211,7 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
             super( handler );
 
             mLoader = loader;
+
         }
 
         @Override

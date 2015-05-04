@@ -168,6 +168,22 @@ public class RecordingInfo implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RecordingInfo that = (RecordingInfo) o;
+
+        return startTs.equals(that.startTs);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return startTs.hashCode();
+    }
+
+    @Override
     public String toString() {
         return "RecordingInfo{" +
                 "recordedId=" + recordedId +

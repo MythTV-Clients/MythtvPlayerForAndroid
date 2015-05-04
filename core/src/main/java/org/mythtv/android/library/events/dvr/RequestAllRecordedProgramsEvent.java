@@ -27,16 +27,39 @@ public class RequestAllRecordedProgramsEvent extends RequestReadEvent {
 
     private final String title;
     private final String inetref;
+    private final Integer limit;
+    private final Integer offset;
 
     public RequestAllRecordedProgramsEvent( final String title, final String inetref ) {
 
         this.title = title;
         this.inetref = inetref;
+        this.limit = null;
+        this.offset = null;
+
+    }
+
+    public RequestAllRecordedProgramsEvent( final String title, final String inetref, final Integer limit, final Integer offset ) {
+
+        this.title = title;
+        this.inetref = inetref;
+        this.limit = limit;
+        this.offset = offset;
 
     }
 
     public String getTitle() { return title; }
 
     public String getInetref() { return inetref; }
+
+    public Integer getLimit() {
+
+        return limit;
+    }
+
+    public Integer getOffset() {
+
+        return offset;
+    }
 
 }

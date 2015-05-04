@@ -58,10 +58,9 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
     private boolean useInternalPlayer;
 
-    public ProgramItemAdapter( @NonNull ProgramItemClickListener programItemClickListener, boolean showTitle ) {
+    public ProgramItemAdapter( @NonNull ProgramItemClickListener programItemClickListener ) {
 
         this.programItemClickListener = programItemClickListener;
-        this.showTitle = showTitle;
 
         useInternalPlayer = MainApplication.getInstance().isInternalPlayerEnabled();
 
@@ -138,6 +137,12 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
     public int getItemCount() {
 
         return programs.size();
+    }
+
+    public void setShowTitle( boolean showTitle ) {
+
+        this.showTitle = showTitle;
+
     }
 
     public List<Program> getPrograms() {

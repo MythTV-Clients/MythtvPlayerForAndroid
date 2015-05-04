@@ -299,6 +299,25 @@ public class Program implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Program program = (Program) o;
+
+        if (!channel.equals(program.channel)) return false;
+        return recording.equals(program.recording);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = channel.hashCode();
+        result = 31 * result + recording.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Program{" +
                 "id=" + id +

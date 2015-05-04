@@ -113,6 +113,18 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         }
 
+        if( null != event.getLimit() ) {
+
+            sort += " LIMIT " + event.getLimit();
+
+            if( null != event.getOffset() && -1 != event.getOffset() ) {
+
+                sort += "," + event.getOffset();
+
+            }
+
+        }
+
         Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
         while( cursor.moveToNext() ) {
 

@@ -27,7 +27,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +37,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.core.utils.RefreshTitleInfosTask;
 import org.mythtv.android.library.events.dvr.AllProgramsCountEvent;
-import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsCountEvent;
-import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.player.app.listeners.EndlessScrollListener;
 import org.mythtv.android.player.common.ui.adapters.TitleInfoItemAdapter;
 import org.mythtv.android.R;
@@ -56,9 +53,6 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
     private static final String TAG = TitleInfosFragment.class.getSimpleName();
 
-    private static final String LIMIT_KEY = "limit";
-    private static final String OFFSET_KEY = "offset";
-
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
     TitleInfoItemAdapter mAdapter;
@@ -70,31 +64,31 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
     @Override
     public Loader<List<TitleInfo>> onCreateLoader( int id, Bundle args ) {
-        Log.v( TAG, "onCreateLoader : enter" );
 
-        Log.v( TAG, "onCreateLoader : exit" );
         return new TitleInfosAsyncTaskLoader( getActivity(), mLimit, mOffset );
     }
 
     @Override
     public void onLoadFinished( Loader<List<TitleInfo>> loader, List<TitleInfo> titleInfos ) {
-        Log.v( TAG, "onLoadFinished : enter" );
 
         if( !titleInfos.isEmpty() ) {
-            Log.v(TAG, "onLoadFinished : loaded titleInfos from db");
 
             boolean notify = false;
             for( TitleInfo titleInfo : titleInfos ) {
 
                 if( !mAdapter.getTitleInfos().contains( titleInfo ) ) {
+
                     mAdapter.getTitleInfos().add( titleInfo );
                     notify = true;
+
                 }
 
             }
 
             if( notify ) {
+
                 mAdapter.notifyDataSetChanged();
+
             }
 
             AllProgramsCountEvent countEvent = MainApplication.getInstance().getDvrService().requestAllRecordedProgramsCount( new RequestAllRecordedProgramsCountEvent() );
@@ -105,9 +99,9 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
             }
 
             mHeader.setVisibility( View.VISIBLE );
+
         }
 
-        Log.v( TAG, "onLoadFinished : exit" );
     }
 
     @Override
@@ -119,12 +113,11 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.v( TAG, "onCreateView : enter" );
 
         View view = inflater.inflate( R.layout.title_info_list, container, false );
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener( this );
 
         mAdapter = new TitleInfoItemAdapter( this );
 
@@ -164,26 +157,21 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
         });
 
-        Log.v( TAG, "onCreateView : exit" );
         return view;
     }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
-        Log.v( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
 
         getLoaderManager().initLoader( 0, null, this );
 
-        Log.v( TAG, "onActivityCreated : exit");
     }
 
     public void reload() {
-        Log.v(TAG, "setTitleInfos : enter");
 
 //        getLoaderManager().restartLoader( 0, null, this);
 
-        Log.v( TAG, "setTitleInfos : exit" );
     }
 
     public void titleInfoItemClicked( View v, TitleInfo titleInfo ) {
@@ -236,7 +224,9 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     public void onRefreshComplete() {
 
         if( mSwipeRefreshLayout.isRefreshing() ) {
+
             mSwipeRefreshLayout.setRefreshing( false );
+
         }
 
     }

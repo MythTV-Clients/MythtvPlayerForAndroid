@@ -224,6 +224,22 @@ public class ChannelInfo implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ChannelInfo that = (ChannelInfo) o;
+
+        return chanId.equals(that.chanId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return chanId.hashCode();
+    }
+
+    @Override
     public String toString() {
         return "ChannelInfo{" +
                 "chanId=" + chanId +

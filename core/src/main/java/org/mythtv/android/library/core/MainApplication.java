@@ -119,6 +119,9 @@ public class MainApplication extends Application {
 
         sInstance = this;
 
+        mDvrService = new DvrServiceEventHandler();
+        mVideoService = new VideoServiceEventHandler();
+
     }
 
     @Override
@@ -265,8 +268,6 @@ public class MainApplication extends Application {
 
     private void initializeApi() {
 
-        mDvrService = new DvrServiceEventHandler();
-        mVideoService = new VideoServiceEventHandler();
         new ServerVersionAsyncTask().execute();
 
     }
