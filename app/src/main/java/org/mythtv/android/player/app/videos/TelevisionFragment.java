@@ -59,19 +59,12 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
 
-    public static TelevisionFragment getInstance() {
-
-        TelevisionFragment fragment = new TelevisionFragment();
-
-        return fragment;
-    }
-
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
 
         Log.v( TAG, "onCreateLoader : exit" );
-        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, null, null );
+        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, null, null, -1, -1 );
     }
 
     @Override
@@ -220,7 +213,9 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
     public void onRefreshComplete() {
 
         if( mSwipeRefreshLayout.isRefreshing() ) {
+
             mSwipeRefreshLayout.setRefreshing( false );
+
         }
 
     }

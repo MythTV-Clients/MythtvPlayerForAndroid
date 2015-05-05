@@ -24,7 +24,6 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
@@ -34,7 +33,6 @@ import org.mythtv.android.library.events.video.VideoDetails;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -53,47 +51,43 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
     private String title;
     private Integer season;
 
-    public VideosAsyncTaskLoader( Context context, Type type, String title, Integer season ) {
+    int limit, offset;
+
+    public VideosAsyncTaskLoader( Context context, Type type, String title, Integer season, int limit, int offset ) {
         super( context );
 
         this.type = type;
         this.title = title;
         this.season = season;
+        this.limit = limit;
+        this.offset = offset;
 
     }
 
     @Override
     public List<Video> loadInBackground() {
-        Log.v( TAG, "loadInBackground : enter" );
 
         List<Video> videos = new ArrayList<>();
 
-        AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( type.name(), title, season ) );
+        AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( type.name(), title, season, limit, offset ) );
         if( event.isEntityFound() ) {
-            Log.v( TAG, "loadInBackground : videos loaded from db" );
 
             for( VideoDetails details : event.getDetails() ) {
-                 Log.v( TAG, "loadInBackground : video iteration" );
 
                  Video video = Video.fromDetails( details );
                  videos.add( video );
 
             }
 
-            Collections.sort( videos );
-
         }
 
-        Log.v( TAG, "loadInBackground : exit" );
         return videos;
     }
 
     @Override
     public void deliverResult( List<Video> data ) {
-        Log.v( TAG, "deliverResult : enter" );
 
         if( isReset() ) {
-            Log.v( TAG, "deliverResult : isReset" );
 
             // The Loader has been reset; ignore the result and invalidate the data.
             releaseResources( data );
@@ -107,7 +101,6 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
         mVideos = data;
 
         if( isStarted() ) {
-            Log.v( TAG, "deliverResult : isStarted" );
 
             // If the Loader is in a started state, deliver the results to the
             // client. The superclass method does this for us.
@@ -116,7 +109,6 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
         // Invalidate the old data as we don't need it any more.
         if( oldData != null && oldData != data ) {
-            Log.v( TAG, "deliverResult : oldDate != null && oldData != data" );
 
             releaseResources( oldData );
 
@@ -126,7 +118,6 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
     @Override
     protected void onStartLoading() {
-        Log.v( TAG, "onStartLoading : enter" );
 
         if( null != mVideos ) {
 
@@ -153,12 +144,10 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
         }
 
-        Log.v( TAG, "onStartLoading : exit" );
     }
 
     @Override
     protected void onStopLoading() {
-        Log.v( TAG, "onStopLoading : enter" );
 
         // The Loader is in a stopped state, so we should attempt to cancel the
         // current load (if there is one).
@@ -168,19 +157,16 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
         // should still monitor the data source for changes so that the Loader
         // will know to force a new load if it is ever started again.
 
-        Log.v( TAG, "onStopLoading : exit" );
     }
 
     @Override
     protected void onReset() {
-        Log.v( TAG, "onReset : enter" );
 
         // Ensure the loader has been stopped.
         onStopLoading();
 
         // At this point we can release the resources associated with 'mData'.
         if( null != mVideos ) {
-            Log.v( TAG, "onReset : null != mVideos" );
 
             releaseResources( mVideos );
             mVideos = null;
@@ -195,12 +181,10 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
         }
 
-        Log.v(TAG, "onReset : exit");
     }
 
     @Override
     public void onCanceled( List<Video> data ) {
-        Log.v( TAG, "onCanceled : enter" );
 
         // Attempt to cancel the current asynchronous load.
         super.onCanceled( data );
@@ -209,17 +193,14 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
         // associated with 'data'.
         releaseResources( data );
 
-        Log.v( TAG, "onCanceled : exit" );
     }
 
     private void releaseResources( List<Video> data ) {
-        Log.v( TAG, "releaseResources : enter" );
 
         // For a simple List, there is nothing to do. For something like a Cursor, we
         // would close it in this method. All resources associated with the Loader
         // should be released here.
 
-        Log.v( TAG, "releaseResources : exit" );
     }
 
     private final Handler mHandler = new Handler() {
@@ -228,7 +209,6 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
         public void handleMessage( Message msg ) {
             super.handleMessage( msg );
 
-            Log.v( TAG, "handleMessage : Videos changed" );
         }
 
     };
@@ -241,6 +221,7 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
             super( handler );
 
             mLoader = loader;
+
         }
 
         @Override

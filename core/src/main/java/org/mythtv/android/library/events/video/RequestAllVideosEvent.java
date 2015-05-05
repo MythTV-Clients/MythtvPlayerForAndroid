@@ -28,12 +28,26 @@ public class RequestAllVideosEvent extends RequestReadEvent {
     private final String contentType;
     private final String title;
     private final Integer season;
+    private final Integer limit;
+    private final Integer offset;
 
     public RequestAllVideosEvent( final String contentType, final String title, final Integer season ) {
 
         this.contentType = contentType;
         this.title = title;
         this.season = season;
+        this.limit = null;
+        this.offset = null;
+
+    }
+
+    public RequestAllVideosEvent( final String contentType, final String title, final Integer season, final Integer limit, final Integer offset ) {
+
+        this.contentType = contentType;
+        this.title = title;
+        this.season = season;
+        this.limit = limit;
+        this.offset = offset;
 
     }
 
@@ -46,5 +60,13 @@ public class RequestAllVideosEvent extends RequestReadEvent {
     }
 
     public Integer getSeason() { return season; }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
 
 }

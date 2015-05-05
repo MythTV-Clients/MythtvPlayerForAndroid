@@ -106,7 +106,19 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
             Log.v( TAG, "requestAllVideos : selectionArg=" + selectionArg );
         }
 
-        String sort = VideoConstants.FIELD_VIDEO_COLLECTIONREF + ", " + VideoConstants.FIELD_VIDEO_TITLE;
+        String sort = VideoConstants.FIELD_VIDEO_COLLECTIONREF + ", " + VideoConstants.FIELD_VIDEO_TITLE_SORT;
+
+        if( null != event.getLimit() && -1 != event.getLimit() ) {
+
+            sort += " LIMIT " + event.getLimit();
+
+            if( null != event.getOffset() && -1 != event.getOffset() ) {
+
+                sort += "," + event.getOffset();
+
+            }
+
+        }
 
         Cursor cursor = mContext.getContentResolver().query( VideoConstants.CONTENT_URI, projection, selection, selectionArgs.isEmpty() ? null : selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
         while( cursor.moveToNext() ) {

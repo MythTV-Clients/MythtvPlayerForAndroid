@@ -27,7 +27,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +34,12 @@ import android.widget.TextView;
 
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
+import org.mythtv.android.player.app.listeners.EndlessScrollListener;
 import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
 import org.mythtv.android.R;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 import org.mythtv.android.player.app.loaders.VideosAsyncTaskLoader;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -56,23 +55,36 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
 
+    int mLimit = 5, mOffset = -1;
+
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
-        Log.v( TAG, "onCreateLoader : enter" );
 
-        Log.v( TAG, "onCreateLoader : exit" );
-        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.MOVIE, null, null );
+        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.MOVIE, null, null, mLimit, mOffset );
     }
 
     @Override
     public void onLoadFinished( Loader<List<Video>> loader, List<Video> videos ) {
-        Log.v( TAG, "onLoadFinished : enter" );
 
         if( !videos.isEmpty() ) {
-            Log.v( TAG, "onLoadFinished : loaded titleInfos from db" );
 
-            mAdapter.getVideos().addAll( videos );
-            mAdapter.notifyDataSetChanged();
+            boolean notify = false;
+            for( Video video : videos ) {
+
+                if( !mAdapter.getVideos().contains( video ) ) {
+
+                    mAdapter.getVideos().add( video );
+                    notify = true;
+
+                }
+
+            }
+
+            if( notify ) {
+
+                mAdapter.notifyDataSetChanged();
+
+            }
 
             mRecyclerView.setVisibility( View.VISIBLE );
             mEmpty.setVisibility( View.GONE );
@@ -84,7 +96,6 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
 
         }
 
-        Log.v(TAG, "onLoadFinished : exit");
     }
 
     @Override
@@ -104,11 +115,24 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
 
         mAdapter = new VideoItemAdapter( this );
 
+        mLayoutManager = new GridLayoutManager( getActivity(), 2 );
+
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mRecyclerView.setAdapter( mAdapter );
-
-        mLayoutManager = new GridLayoutManager( getActivity(), 2 );
         mRecyclerView.setLayoutManager( mLayoutManager );
+        mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
+
+            @Override
+            public void onLoadMore( int page ) {
+
+                mOffset = ( page - 1 ) * mLimit;
+
+                getLoaderManager().restartLoader( 0, null, MoviesFragment.this );
+
+            }
+
+        });
+
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;
@@ -116,30 +140,24 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
-        Log.v( TAG, "onActivityCreated : enter" );
-        super.onActivityCreated( savedInstanceState );
+        super.onActivityCreated(savedInstanceState);
 
-        getLoaderManager().initLoader( 0, null, this );
+        getLoaderManager().initLoader(0, null, this);
 
-        Log.v( TAG, "onActivityCreated : exit" );
     }
 
     @Override
     public void onResume() {
-        Log.v( TAG, "resume : enter" );
         super.onResume();
 
-        getLoaderManager().restartLoader( 0, null, this );
+//        getLoaderManager().restartLoader( 0, null, this );
 
-        Log.v( TAG, "resume : exit" );
     }
 
     public void reload() {
-        Log.v( TAG, "reload : enter" );
 
-        getLoaderManager().restartLoader( 0, null, this );
+//        getLoaderManager().restartLoader( 0, null, this );
 
-        Log.v(TAG, "videos : exit");
     }
 
     public void videoItemClicked( View v, Video video ) {
@@ -190,10 +208,11 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
     public void onRefreshComplete() {
 
         if( mSwipeRefreshLayout.isRefreshing() ) {
+
             mSwipeRefreshLayout.setRefreshing( false );
+
         }
 
     }
-
 
 }

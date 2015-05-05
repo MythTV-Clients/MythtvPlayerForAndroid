@@ -63,7 +63,7 @@ public class TelevisionSeasonsFragment extends AbstractBaseFragment implements L
         Log.v( TAG, "onCreateLoader : mTitle=" + mTitle + ", mSeason=" + mSeason );
 
         Log.v(TAG, "onCreateLoader : exit");
-        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, mTitle, mSeason );
+        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, mTitle, mSeason, -1, -1 );
     }
 
     @Override
@@ -73,7 +73,7 @@ public class TelevisionSeasonsFragment extends AbstractBaseFragment implements L
         if( !videos.isEmpty() ) {
             Log.v(TAG, "onLoadFinished : loaded videos from db");
 
-            Collections.sort(videos);
+            Collections.sort( videos );
 
             VideoTvItemAdapter adapter = new VideoTvItemAdapter( videos, this );
             mRecyclerView.setAdapter( adapter );
@@ -106,7 +106,7 @@ public class TelevisionSeasonsFragment extends AbstractBaseFragment implements L
 
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mLayoutManager = new GridLayoutManager( getActivity(), 2 );
-        mRecyclerView.setLayoutManager(mLayoutManager );
+        mRecyclerView.setLayoutManager( mLayoutManager );
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;
