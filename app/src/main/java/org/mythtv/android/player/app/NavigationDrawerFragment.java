@@ -261,7 +261,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
             case 2 :
 
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                if( !mUserLearnedDrawer ) {
+                    mUserLearnedDrawer = true;
+                    saveToPreferences( getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "" );
+                }
+
+                startActivity( new Intent( getActivity(), SettingsActivity.class ) );
 
                 break;
 
