@@ -37,7 +37,9 @@ import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
 import org.mythtv.android.player.app.AbstractBaseFragment;
+import org.mythtv.android.player.app.listeners.EndlessScrollListener;
 import org.mythtv.android.player.app.loaders.VideosAsyncTaskLoader;
+import org.mythtv.android.player.app.loaders.VideosTvSeriesAsyncTaskLoader;
 import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
 
 import java.util.ArrayList;
@@ -59,12 +61,14 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
 
+    int mLimit = 5, mOffset = -1;
+
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
 
-        Log.v( TAG, "onCreateLoader : exit" );
-        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, null, null, -1, -1 );
+        Log.v(TAG, "onCreateLoader : exit");
+        return new VideosTvSeriesAsyncTaskLoader( getActivity(), VideosTvSeriesAsyncTaskLoader.Type.TELEVISION, null, null, mLimit, mOffset );
     }
 
     @Override
@@ -74,36 +78,35 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
         if( !videos.isEmpty() ) {
             Log.v( TAG, "onLoadFinished : loaded titleInfos from db" );
 
-            Map<String, Video> showMap = new HashMap<>();
+            boolean notify = false;
             for( Video video : videos ) {
 
-                if( !showMap.containsKey( video.getTitle() ) ) {
+                if( !mAdapter.getVideos().contains( video ) ) {
 
-                    showMap.put( video.getTitle(), video );
+                    mAdapter.getVideos().add(video);
+                    notify = true;
 
                 }
 
             }
 
-            List<Video> shows = new ArrayList<>();
-            for( Video video : showMap.values() ) {
+            if( notify ) {
 
-                shows.add( video );
+                mAdapter.notifyDataSetChanged();
 
             }
-
-            Collections.sort( shows );
-
-            mAdapter.getVideos().addAll( shows );
-            mAdapter.notifyDataSetChanged();
 
             mRecyclerView.setVisibility( View.VISIBLE );
             mEmpty.setVisibility( View.GONE );
 
         } else {
 
-            mRecyclerView.setVisibility( View.GONE );
-            mEmpty.setVisibility( View.VISIBLE );
+            if( mAdapter.getVideos().isEmpty() ) {
+
+                mRecyclerView.setVisibility( View.GONE );
+                mEmpty.setVisibility( View.VISIBLE );
+
+            }
 
         }
 
@@ -127,11 +130,24 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
 
         mAdapter = new VideoItemAdapter( this );
 
+        mLayoutManager = new GridLayoutManager( getActivity(), 2 );
+
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mRecyclerView.setAdapter( mAdapter );
-
-        mLayoutManager = new GridLayoutManager( getActivity(), 2 );
         mRecyclerView.setLayoutManager( mLayoutManager );
+        mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
+
+            @Override
+            public void onLoadMore( int page ) {
+
+                mOffset = ( page - 1 ) * mLimit;
+
+                getLoaderManager().restartLoader( 0, null, TelevisionFragment.this );
+
+            }
+
+        });
+
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;
@@ -142,7 +158,7 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
         Log.v( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
 
-        getLoaderManager().initLoader( 0, null, this );
+        getLoaderManager().initLoader(0, null, this);
 
         Log.v( TAG, "onActivityCreated : exit" );
     }
@@ -152,7 +168,7 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
         Log.v( TAG, "resume : enter" );
         super.onResume();
 
-        getLoaderManager().restartLoader( 0, null, this );
+//        getLoaderManager().restartLoader( 0, null, this );
 
         Log.v( TAG, "resume : exit" );
     }

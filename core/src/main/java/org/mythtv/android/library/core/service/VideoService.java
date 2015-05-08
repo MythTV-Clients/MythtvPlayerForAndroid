@@ -37,6 +37,10 @@ public interface VideoService {
 
     AllVideosEvent requestAllVideos( RequestAllVideosEvent event );
 
+    AllVideosEvent requestAllVideoTvTitles( RequestAllVideosEvent event );
+
+    AllVideosEvent requestAllVideoTvTitleSeasons( RequestAllVideosEvent event );
+
     AllVideosEvent searchVideos( SearchVideosEvent event );
 
     VideosUpdatedEvent updateVideos( UpdateVideosEvent event );

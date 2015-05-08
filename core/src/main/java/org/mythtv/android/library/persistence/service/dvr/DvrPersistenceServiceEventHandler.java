@@ -113,17 +113,19 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         }
 
-        if( null != event.getLimit() ) {
+        String limit = " ";
+        if( null != event.getLimit() && -1 != event.getLimit() ) {
 
-            sort += " LIMIT " + event.getLimit();
+            limit = " LIMIT " + event.getLimit();
 
             if( null != event.getOffset() && -1 != event.getOffset() ) {
 
-                sort += "," + event.getOffset();
+                limit = " LIMIT " + event.getOffset() + "," + event.getLimit();
 
             }
 
         }
+        sort += limit;
 
         Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
         while( cursor.moveToNext() ) {
@@ -148,7 +150,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
     }
 
     @Override
-    public AllProgramsCountEvent requestAllRecordedProgramsCount(RequestAllRecordedProgramsCountEvent event) {
+    public AllProgramsCountEvent requestAllRecordedProgramsCount( RequestAllRecordedProgramsCountEvent event ) {
 
         int count = -1;
         Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, new String[] { "count(*) AS count" }, null, null, null );
@@ -543,17 +545,19 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         String[] selectionArgs = null;
         String sort = TitleInfoConstants.FIELD_SORT + ", " + TitleInfoConstants.FIELD_TITLE_SORT;
 
-        if( null != event.getLimit() ) {
+        String limit = " ";
+        if( null != event.getLimit() && -1 != event.getLimit() ) {
 
-            sort += " LIMIT " + event.getLimit();
+            limit = " LIMIT " + event.getLimit();
 
             if( null != event.getOffset() && -1 != event.getOffset() ) {
 
-                sort += "," + event.getOffset();
+                limit = " LIMIT " + event.getOffset() + "," + event.getLimit();
 
             }
 
         }
+        sort += limit;
 
         Cursor cursor = mContext.getContentResolver().query( TitleInfoConstants.CONTENT_URI, projection, selection, selectionArgs, sort );
         while( cursor.moveToNext() ) {

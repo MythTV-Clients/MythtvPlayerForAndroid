@@ -91,8 +91,12 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
 
         } else {
 
-            mRecyclerView.setVisibility( View.GONE );
-            mEmpty.setVisibility( View.VISIBLE );
+            if( mAdapter.getVideos().isEmpty() ) {
+
+                mRecyclerView.setVisibility(View.GONE);
+                mEmpty.setVisibility(View.VISIBLE);
+
+            }
 
         }
 

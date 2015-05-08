@@ -52,6 +52,7 @@
     <string name="failed">Playback failed</string>
 
     <string name="not_connected">Master Backend connection failed!.\nCheck your network connection or the master backend settings.</string>
+    <string name="empty">There are no items to display.</string>
 
     <string name="title_info_transition">title_info_transition</string>
     <string name="recording_transition">recording_transition</string>

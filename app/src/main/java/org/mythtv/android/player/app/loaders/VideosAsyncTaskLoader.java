@@ -24,6 +24,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
@@ -42,7 +43,7 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
     private static final String TAG = VideosAsyncTaskLoader.class.getSimpleName();
 
-    public enum Type { MOVIE, TELEVISION }
+    public enum Type { MOVIE, TELEVISION, HOMEVIDEO, ADULT, MUSICVIDEO }
 
     private VideosObserver mObserver;
     private List<Video> mVideos;
@@ -66,10 +67,10 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
     @Override
     public List<Video> loadInBackground() {
-
+        Log.v( TAG, "loadInBackground : type=" + type + ", title=" + title + ", season=" + season + ", limit=" + limit + ", offset=" + offset );
         List<Video> videos = new ArrayList<>();
 
-        AllVideosEvent event = ( (MainApplication) getContext().getApplicationContext() ).getVideoService().requestAllVideos( new RequestAllVideosEvent( type.name(), title, season, limit, offset ) );
+        AllVideosEvent event = MainApplication.getInstance().getVideoService().requestAllVideos( new RequestAllVideosEvent( type.name(), title, season, limit, offset ) );
         if( event.isEntityFound() ) {
 
             for( VideoDetails details : event.getDetails() ) {

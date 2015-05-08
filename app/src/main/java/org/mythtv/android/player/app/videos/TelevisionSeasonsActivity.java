@@ -22,6 +22,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -46,6 +47,8 @@ import java.util.List;
  * Created by dmfrey on 4/22/15.
  */
 public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    private static final String TAG = TelevisionSeasonsActivity.class.getSimpleName();
 
     public static final String VIDEO_KEY = "video";
     public static final String SELECTED_SEASON = "selected_season";
@@ -89,7 +92,7 @@ public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity imp
 
             getSupportActionBar().setTitle( mVideo.getTitle() );
 
-            mTelevisionSeasonsFragment.setShow( mVideo.getTitle(), mSelectedSeason );
+//            mTelevisionSeasonsFragment.setShow( mVideo.getTitle(), mSelectedSeason );
 
         }
 
@@ -107,15 +110,15 @@ public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity imp
     protected void onSaveInstanceState( Bundle outState ) {
 
         outState.putSerializable( VIDEO_KEY, mVideo );
-        outState.putInt(SELECTED_SEASON, mSelectedSeason);
-        outState.putInt(SELECTED_POSITION, mSelectedPosition);
+        outState.putInt( SELECTED_SEASON, mSelectedSeason );
+        outState.putInt( SELECTED_POSITION, mSelectedPosition );
 
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        super.onRestoreInstanceState(savedInstanceState);
+        super.onRestoreInstanceState( savedInstanceState );
 
         if( savedInstanceState.containsKey( VIDEO_KEY ) ) {
 
@@ -177,7 +180,7 @@ public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity imp
 
     private void loadSeasons() {
 
-        AllVideosEvent event = MainApplication.getInstance().getVideoService().requestAllVideos( new RequestAllVideosEvent( VideosAsyncTaskLoader.Type.TELEVISION.name(), mVideo.getTitle(), null ) );
+        AllVideosEvent event = MainApplication.getInstance().getVideoService().requestAllVideoTvTitleSeasons( new RequestAllVideosEvent( VideosAsyncTaskLoader.Type.TELEVISION.name(), mVideo.getTitle(), null ) );
         if( event.isEntityFound() ) {
 
             List<Video> videos = new ArrayList<>();
@@ -190,21 +193,21 @@ public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity imp
 
             mSeasons = new ArrayList<>();
             for( Video video : videos ) {
+                if( !mSeasons.contains( video.getSeason() ) && null != video.getSeason() ) {
 
-                if( !mSeasons.contains( video.getSeason() ) ) {
                     mSeasons.add( video.getSeason() );
+
                 }
 
             }
 
             String seasonLabel = getResources().getString( R.string.season );
 
-            Collections.sort( mSeasons );
             String[] seasonLabels = new String[ mSeasons.size() ];
             int index = 0;
             for( Integer season : mSeasons ) {
 
-                seasonLabels[ index ] = seasonLabel + " " + season;
+                seasonLabels[ index ] = seasonLabel + " " + ( season == 0 ? "Specials" : season );
 
                 index++;
 
@@ -218,6 +221,7 @@ public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity imp
             mSeasonSpinner.setVisibility( View.VISIBLE );
 
             mSeasonSpinner.setSelection( mSelectedPosition );
+
         } else {
 
             mSeasonSpinner.setVisibility( View.GONE );

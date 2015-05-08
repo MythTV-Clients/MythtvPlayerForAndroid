@@ -35,6 +35,7 @@ import android.widget.TextView;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.app.AbstractBaseFragment;
+import org.mythtv.android.player.app.listeners.EndlessScrollListener;
 import org.mythtv.android.player.app.loaders.VideosAsyncTaskLoader;
 import org.mythtv.android.player.common.ui.adapters.VideoTvItemAdapter;
 
@@ -55,15 +56,16 @@ public class TelevisionSeasonsFragment extends AbstractBaseFragment implements L
 
     String mTitle;
     Integer mSeason;
+    int mLimit = 5, mOffset = -1, count = 0;
 
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
         Log.v( TAG, "onCreateLoader : enter" );
 
-        Log.v( TAG, "onCreateLoader : mTitle=" + mTitle + ", mSeason=" + mSeason );
+        Log.v( TAG, "onCreateLoader : mTitle=" + mTitle + ", mSeason=" + mSeason + ", limit=" + mLimit + ", mOffset=" + mOffset );
 
         Log.v(TAG, "onCreateLoader : exit");
-        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, mTitle, mSeason, -1, -1 );
+        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.TELEVISION, mTitle, mSeason, mLimit, mOffset );
     }
 
     @Override
@@ -71,21 +73,37 @@ public class TelevisionSeasonsFragment extends AbstractBaseFragment implements L
         Log.v( TAG, "onLoadFinished : enter" );
 
         if( !videos.isEmpty() ) {
-            Log.v(TAG, "onLoadFinished : loaded videos from db");
+            Log.v( TAG, "onLoadFinished : loaded videos from db" );
 
-            Collections.sort( videos );
+            boolean notify = false;
+            for( Video video : videos ) {
 
-            VideoTvItemAdapter adapter = new VideoTvItemAdapter( videos, this );
-            mRecyclerView.setAdapter( adapter );
-            adapter.notifyDataSetChanged();
+                if( !mAdapter.getVideos().contains( video ) ) {
+
+                    mAdapter.getVideos().add( video );
+                    notify = true;
+                    count++;
+
+                }
+
+            }
+            if( notify ) {
+
+                mAdapter.notifyDataSetChanged();
+
+            }
 
             mRecyclerView.setVisibility( View.VISIBLE );
             mEmpty.setVisibility( View.GONE );
 
         } else {
 
-            mRecyclerView.setVisibility( View.GONE );
-            mEmpty.setVisibility( View.VISIBLE );
+            if( mAdapter.getVideos().isEmpty() ) {
+
+                mRecyclerView.setVisibility( View.GONE );
+                mEmpty.setVisibility( View.VISIBLE );
+
+            }
 
         }
 
@@ -95,7 +113,7 @@ public class TelevisionSeasonsFragment extends AbstractBaseFragment implements L
     @Override
     public void onLoaderReset( Loader<List<Video>> loader ) {
 
-        mRecyclerView.setAdapter(null);
+        mRecyclerView.setAdapter( null );
 
     }
 
@@ -104,19 +122,47 @@ public class TelevisionSeasonsFragment extends AbstractBaseFragment implements L
 
         View view = inflater.inflate( R.layout.video_tv_list, container, false );
 
-        mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mLayoutManager = new GridLayoutManager( getActivity(), 2 );
-        mRecyclerView.setLayoutManager( mLayoutManager );
+
+        mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;
     }
 
     public void setShow( String title, Integer season ) {
-        Log.v( TAG, "setShow : enter" );
+        Log.v(TAG, "setShow : enter");
+
+        mAdapter = new VideoTvItemAdapter( this );
+
+        mRecyclerView.setAdapter( mAdapter );
+        mRecyclerView.addOnScrollListener(new EndlessScrollListener(mLayoutManager) {
+
+            @Override
+            public void onLoadMore(int page) {
+                Log.v(TAG, "onLoadMore : page=" + page + ", count=" + count);
+
+                if (count < mLimit) {
+
+                    Log.v(TAG, "onLoadMore : exit, don't reload");
+                    return;
+                }
+
+                mOffset = (page - 1) * mLimit;
+
+                getLoaderManager().restartLoader(0, null, TelevisionSeasonsFragment.this);
+
+                Log.v(TAG, "onLoadMore : exit");
+            }
+
+        });
 
         mTitle = title;
         mSeason = season;
+        mOffset = -1;
+
         getLoaderManager().restartLoader( 0, null, this );
 
         Log.v( TAG, "setShow : exit" );

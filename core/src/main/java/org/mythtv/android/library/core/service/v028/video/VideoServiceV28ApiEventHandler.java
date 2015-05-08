@@ -72,6 +72,18 @@ public class VideoServiceV28ApiEventHandler implements VideoService {
     }
 
     @Override
+    public AllVideosEvent requestAllVideoTvTitles( RequestAllVideosEvent event ) {
+
+        return mVideoPersistenceService.requestAllVideoTvTitles( event );
+    }
+
+    @Override
+    public AllVideosEvent requestAllVideoTvTitleSeasons( RequestAllVideosEvent event ) {
+
+        return mVideoPersistenceService.requestAllVideoTvTitleSeasons(event);
+    }
+
+    @Override
     public AllVideosEvent searchVideos( SearchVideosEvent event ) {
 
         return mVideoPersistenceService.searchVideos( event );
