@@ -23,6 +23,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -35,6 +36,9 @@ import org.mythtv.android.R;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.player.app.NavigationDrawerFragment;
 import org.mythtv.android.player.common.ui.views.SlidingTabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideosActivity extends AbstractBaseAppCompatActivity {
 
@@ -74,6 +78,24 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+
+        if( mPager.getCurrentItem() == 0 ) {
+
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+
+        } else {
+
+            // Otherwise, select the previous step.
+            mPager.setCurrentItem( mPager.getCurrentItem() - 1 );
+
+        }
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu( Menu menu ) {
 
         // Inflate the options menu from XML
@@ -93,33 +115,28 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
 
     }
 
-    class VideosFragmentPagerAdapter extends FragmentPagerAdapter {
+    class VideosFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
         String[] tabs;
-        
+        List<Fragment> fragments = new ArrayList<>();
+
         public VideosFragmentPagerAdapter( FragmentManager fm ) {
             super( fm );
 
             tabs = getResources().getStringArray( R.array.watch_videos_tabs );
+            fragments.add( Fragment.instantiate( VideosActivity.this, MoviesFragment.class.getName(), null ) );
+            fragments.add( Fragment.instantiate( VideosActivity.this, TelevisionFragment.class.getName(), null ) );
+            fragments.add( Fragment.instantiate( VideosActivity.this, HomeMoviesFragment.class.getName(), null ) );
+            fragments.add( Fragment.instantiate( VideosActivity.this, MusicVideosFragment.class.getName(), null ) );
+            fragments.add( Fragment.instantiate( VideosActivity.this, AdultFragment.class.getName(), null ) );
+
         }
 
         @Override
         public Fragment getItem( int position ) {
             Log.v( TAG, "getItem : position=" + position );
 
-            switch ( position ) {
-
-                case 0:
-
-                    return Fragment.instantiate( VideosActivity.this, MoviesFragment.class.getName(), null );
-
-                case 1 :
-
-                    return Fragment.instantiate(VideosActivity.this, TelevisionFragment.class.getName(), null);
-
-            }
-
-            throw new IllegalArgumentException( "position " + position + " not implemented" );
+            return fragments.get( position );
         }
 
         @Override
@@ -131,7 +148,7 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
         @Override
         public int getCount() {
 
-            return 2;
+            return 5;
         }
 
     }

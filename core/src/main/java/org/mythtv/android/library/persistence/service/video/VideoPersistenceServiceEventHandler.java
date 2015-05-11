@@ -23,7 +23,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
@@ -45,7 +44,6 @@ import org.mythtv.android.library.events.video.VideosUpdatedEvent;
 import org.mythtv.android.library.persistence.domain.dvr.CastMember;
 import org.mythtv.android.library.persistence.domain.video.Video;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
-import org.mythtv.android.library.persistence.repository.DatabaseHelper;
 import org.mythtv.android.library.persistence.repository.MythtvProvider;
 import org.mythtv.android.library.persistence.service.VideoPersistenceService;
 
@@ -63,13 +61,10 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
     private static final String TAG = VideoPersistenceServiceEventHandler.class.getSimpleName();
     
     Context mContext;
-    DatabaseHelper mOpenHelper;
-    SQLiteDatabase db;
 
     public VideoPersistenceServiceEventHandler() {
 
         mContext = MainApplication.getInstance().getApplicationContext();
-        mOpenHelper = new DatabaseHelper( mContext );
 
     }
 
@@ -157,30 +152,26 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
     @Override
     public AllVideosEvent requestAllVideoTvTitles( RequestAllVideosEvent event ) {
 
-        db = mOpenHelper.getReadableDatabase();
-
         List<Video> videos = new ArrayList<>();
 
-        boolean distinct = true;
         String[] projection = null;
         String selection = VideoConstants.FIELD_VIDEO_VISIBLE + " = 1 AND " + VideoConstants.FIELD_VIDEO_CONTENT_TYPE + " = ?";
         String[] selectionArgs = new String[] { "TELEVISION" };
-        String groupBy = VideoConstants.FIELD_VIDEO_TITLE;
-        String having = null;
         String sort = VideoConstants.FIELD_VIDEO_TITLE_SORT + ", " + VideoConstants.FIELD_VIDEO_SEASON + ", " + VideoConstants.FIELD_VIDEO_EPISODE;
 
         String limits = null;
         if( null != event.getLimit() && -1 != event.getLimit() ) {
 
-            limits = String.valueOf( event.getLimit() );
+            limits = " LIMIT " + event.getLimit();
 
             if( null != event.getOffset() && -1 != event.getOffset() ) {
-                limits = event.getOffset() + "," + event.getLimit();
+                limits = " LIMIT " + event.getOffset() + "," + event.getLimit();
             }
 
+            sort += limits;
         }
 
-        Cursor cursor = db.query( distinct, VideoConstants.TABLE_NAME, projection, selection, selectionArgs, groupBy, having, sort, limits );
+        Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath( VideoConstants.CONTENT_URI,  "/Television/Titles" ), projection, selection, selectionArgs, sort );
         while( cursor.moveToNext() ) {
 
             Video video = convertCursorToVideo( cursor );
@@ -188,7 +179,6 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         }
         cursor.close();
-        db.close();
 
         List<VideoDetails> details = new ArrayList<>();
         if( !videos.isEmpty() ) {
@@ -207,21 +197,16 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
     @Override
     public AllVideosEvent requestAllVideoTvTitleSeasons( RequestAllVideosEvent event ) {
 
-        db = mOpenHelper.getReadableDatabase();
-
         List<Video> videos = new ArrayList<>();
 
-        boolean distinct = true;
         String[] projection = null;
         String selection = VideoConstants.FIELD_VIDEO_VISIBLE + " = 1 AND " + VideoConstants.FIELD_VIDEO_CONTENT_TYPE + " = ? AND " + VideoConstants.FIELD_VIDEO_TITLE + " = ?";
         String[] selectionArgs = new String[] { "TELEVISION", event.getTitle() };
-        String groupBy = VideoConstants.FIELD_VIDEO_TITLE + ", " + VideoConstants.FIELD_VIDEO_SEASON;
-        String having = null;
         String sort = VideoConstants.FIELD_VIDEO_TITLE_SORT + ", " + VideoConstants.FIELD_VIDEO_SEASON + ", " + VideoConstants.FIELD_VIDEO_EPISODE;
 
         String limits = null;
 
-        Cursor cursor = db.query( distinct, VideoConstants.TABLE_NAME, projection, selection, selectionArgs, groupBy, having, sort, limits );
+        Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath( VideoConstants.CONTENT_URI, "/Television/Titles/Season" ), projection, selection, selectionArgs, sort );
         while( cursor.moveToNext() ) {
 
             Video video = convertCursorToVideo( cursor );
@@ -229,7 +214,6 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         }
         cursor.close();
-        db.close();
 
         List<VideoDetails> details = new ArrayList<>();
         if( !videos.isEmpty() ) {

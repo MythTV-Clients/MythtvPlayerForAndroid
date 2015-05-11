@@ -55,28 +55,27 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
 
     private static final String TAG = TelevisionFragment.class.getSimpleName();
 
+    private static final int DEFAULT_LIMIT = 5;
+    private static final int DEFAULT_OFFSET = -1;
+
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
     VideoItemAdapter mAdapter;
     GridLayoutManager mLayoutManager;
     TextView mEmpty;
 
-    int mLimit = 5, mOffset = -1;
+    int mLimit = DEFAULT_LIMIT, mOffset = DEFAULT_OFFSET;
 
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
-        Log.v( TAG, "onCreateLoader : enter" );
 
-        Log.v(TAG, "onCreateLoader : exit");
         return new VideosTvSeriesAsyncTaskLoader( getActivity(), VideosTvSeriesAsyncTaskLoader.Type.TELEVISION, null, null, mLimit, mOffset );
     }
 
     @Override
     public void onLoadFinished( Loader<List<Video>> loader, List<Video> videos ) {
-        Log.v( TAG, "onLoadFinished : enter" );
 
         if( !videos.isEmpty() ) {
-            Log.v( TAG, "onLoadFinished : loaded titleInfos from db" );
 
             boolean notify = false;
             for( Video video : videos ) {
@@ -110,7 +109,6 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
 
         }
 
-        Log.v(TAG, "onLoadFinished : exit");
     }
 
     @Override
@@ -135,18 +133,6 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
         mRecyclerView.setAdapter( mAdapter );
         mRecyclerView.setLayoutManager( mLayoutManager );
-        mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
-
-            @Override
-            public void onLoadMore( int page ) {
-
-                mOffset = ( page - 1 ) * mLimit;
-
-                getLoaderManager().restartLoader( 0, null, TelevisionFragment.this );
-
-            }
-
-        });
 
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
@@ -155,30 +141,39 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
-        Log.v( TAG, "onActivityCreated : enter" );
-        super.onActivityCreated( savedInstanceState );
+        super.onActivityCreated(savedInstanceState);
 
-        getLoaderManager().initLoader(0, null, this);
 
-        Log.v( TAG, "onActivityCreated : exit" );
     }
 
     @Override
-    public void onResume() {
-        Log.v( TAG, "resume : enter" );
-        super.onResume();
+    public void onViewStateRestored( Bundle savedInstanceState ) {
+        super.onViewStateRestored( savedInstanceState );
 
-//        getLoaderManager().restartLoader( 0, null, this );
+        mLimit = DEFAULT_LIMIT;
+        mOffset = DEFAULT_OFFSET;
 
-        Log.v( TAG, "resume : exit" );
+        getLoaderManager().initLoader( 1, null, this );
+
+        mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
+
+            @Override
+            public void onLoadMore( int page ) {
+
+                mOffset = ( page - 1 ) * mLimit;
+
+                getLoaderManager().restartLoader( 1, null, TelevisionFragment.this );
+
+            }
+
+        });
+
     }
 
     public void reload() {
-        Log.v( TAG, "reload : enter" );
 
-        getLoaderManager().restartLoader( 0, null, this );
+        getLoaderManager().restartLoader( 1, null, this );
 
-        Log.v(TAG, "videos : exit");
     }
 
     public void videoItemClicked( View v, Video video ) {
@@ -205,16 +200,10 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
     @Override
     public void connected() {
 
-//        mRecyclerView.setVisibility( View.VISIBLE );
-//        mEmpty.setVisibility(View.GONE);
-
     }
 
     @Override
     public void notConnected() {
-
-//        mRecyclerView.setVisibility( View.GONE );
-//        mEmpty.setVisibility(View.VISIBLE);
 
     }
 
@@ -235,6 +224,5 @@ public class TelevisionFragment extends AbstractBaseFragment implements LoaderMa
         }
 
     }
-
 
 }

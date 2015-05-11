@@ -18,12 +18,12 @@
 
 package org.mythtv.android.player.app.videos;
 
-import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.support.v4.content.Loader;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,22 +32,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
-import org.mythtv.android.player.app.listeners.EndlessScrollListener;
-import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
-import org.mythtv.android.R;
 import org.mythtv.android.player.app.AbstractBaseFragment;
+import org.mythtv.android.player.app.listeners.EndlessScrollListener;
 import org.mythtv.android.player.app.loaders.VideosAsyncTaskLoader;
+import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
 
 import java.util.List;
 
 /**
  * Created by dmfrey on 12/3/14.
  */
-public class MoviesFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {
+public class AdultFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {
 
-    private static final String TAG = MoviesFragment.class.getSimpleName();
+    private static final String TAG = AdultFragment.class.getSimpleName();
 
     private static final int DEFAULT_LIMIT = 5;
     private static final int DEFAULT_OFFSET = -1;
@@ -63,7 +63,7 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
     @Override
     public Loader<List<Video>> onCreateLoader( int id, Bundle args ) {
 
-        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.MOVIE, null, null, mLimit, mOffset );
+        return new VideosAsyncTaskLoader( getActivity(), VideosAsyncTaskLoader.Type.ADULT, null, null, mLimit, mOffset );
     }
 
     @Override
@@ -96,8 +96,8 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
 
             if( mAdapter.getVideos().isEmpty() ) {
 
-                mRecyclerView.setVisibility( View.GONE );
-                mEmpty.setVisibility( View.VISIBLE );
+                mRecyclerView.setVisibility(View.GONE);
+                mEmpty.setVisibility(View.VISIBLE);
 
             }
 
@@ -146,7 +146,7 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
         mLimit = DEFAULT_LIMIT;
         mOffset = DEFAULT_OFFSET;
 
-        getLoaderManager().initLoader( 0, null, this );
+        getLoaderManager().initLoader( 4, null, this );
 
         mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
 
@@ -155,7 +155,7 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
 
                 mOffset = ( page - 1 ) * mLimit;
 
-                getLoaderManager().restartLoader( 0, null, MoviesFragment.this );
+                getLoaderManager().restartLoader( 4, null, AdultFragment.this );
 
             }
 

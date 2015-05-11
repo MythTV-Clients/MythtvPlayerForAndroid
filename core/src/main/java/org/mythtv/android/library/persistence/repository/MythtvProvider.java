@@ -75,6 +75,8 @@ public class MythtvProvider extends ContentProvider {
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/#",  VideoConstants.SINGLE );
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/fts", VideoConstants.ALL_FTS );
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/id/#", VideoConstants.SINGLE_ID );
+        URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/Television/Titles", VideoConstants.ALL_TV_TITLES );
+        URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/Television/Titles/Season", VideoConstants.ALL_TV_SEASON );
 
     }
 
@@ -119,6 +121,8 @@ public class MythtvProvider extends ContentProvider {
 
             case VideoConstants.ALL :
             case VideoConstants.ALL_FTS :
+            case VideoConstants.ALL_TV_TITLES :
+            case VideoConstants.ALL_TV_SEASON :
                 return VideoConstants.CONTENT_TYPE;
 
             case VideoConstants.SINGLE :
@@ -300,6 +304,24 @@ public class MythtvProvider extends ContentProvider {
                 selection = VideoConstants.FIELD_VIDEO_ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
 
                 cursor = db.query( VideoConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case VideoConstants.ALL_TV_TITLES :
+//                Log.v( TAG, "query : querying for all videos" );
+
+                cursor = db.query( true, VideoConstants.TABLE_NAME, projection, selection, selectionArgs, VideoConstants.FIELD_VIDEO_TITLE, null, sortOrder, null );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case VideoConstants.ALL_TV_SEASON :
+//                Log.v( TAG, "query : querying for all videos" );
+
+                cursor = db.query( true, VideoConstants.TABLE_NAME, projection, selection, selectionArgs, VideoConstants.FIELD_VIDEO_TITLE + ", " + VideoConstants.FIELD_VIDEO_SEASON, null, sortOrder, null );
 
                 cursor.setNotificationUri( getContext().getContentResolver(), uri );
 
