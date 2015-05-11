@@ -74,6 +74,7 @@ public class MainApplication extends Application {
     public static final String KEY_PREF_HLS_VIDEO_HEIGHT = "hls_video_height";
     public static final String KEY_PREF_HLS_VIDEO_BITRATE = "hls_video_bitrate";
     public static final String KEY_PREF_HLS_AUDIO_BITRATE = "hls_audio_bitrate";
+    public static final String KEY_PREF_SHOW_ADULT_TAB = "show_adult_tab";
 
     public static final String ACTION_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_CONNECTED";
     public static final String ACTION_NOT_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_NOT_CONNECTED";
@@ -160,10 +161,10 @@ public class MainApplication extends Application {
         Intent refreshVideosIntent = new Intent( MainApplication.this, RefreshVideosReceiver.class );
         mRefreshVideosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshVideosIntent, 0 );
 
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshTitleInfosPendingIntent );
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshTitleInfosPendingIntent);
         mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent );
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 240000, 3600000, mRefreshVideosPendingIntent );
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis(), 300000, mRefreshLiveStreamPendingIntent );
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 240000, 3600000, mRefreshVideosPendingIntent);
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 300000, mRefreshLiveStreamPendingIntent);
 
     }
 
@@ -238,7 +239,7 @@ public class MainApplication extends Application {
 
     public int getVideoWidth() {
 
-        String width = mSharedPref.getString( KEY_PREF_HLS_VIDEO_WIDTH, "0" );
+        String width = mSharedPref.getString(KEY_PREF_HLS_VIDEO_WIDTH, "0");
 
         return Integer.parseInt( width );
     }
@@ -262,6 +263,13 @@ public class MainApplication extends Application {
         String bitrate = mSharedPref.getString( KEY_PREF_HLS_AUDIO_BITRATE, "64000");
 
         return Integer.parseInt( bitrate );
+    }
+
+    public boolean showAdultTab() {
+
+        boolean showAdultTab = mSharedPref.getBoolean( KEY_PREF_SHOW_ADULT_TAB, false );
+
+        return showAdultTab;
     }
 
     public String getMasterBackendHostName() { return mBackendHostname; }

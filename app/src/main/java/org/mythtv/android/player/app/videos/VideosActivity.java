@@ -33,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import org.mythtv.android.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.player.app.NavigationDrawerFragment;
 import org.mythtv.android.player.common.ui.views.SlidingTabLayout;
@@ -56,16 +57,12 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
         mDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById( R.id.fragment_navigation_drawer );
         mDrawerFragment.setUp( R.id.fragment_navigation_drawer, (DrawerLayout) findViewById( R.id.drawer_layout ), toolbar );
 
         mPager = (ViewPager) findViewById( R.id.pager );
-        mPager.setAdapter( new VideosFragmentPagerAdapter( getSupportFragmentManager() ) );
-
-        mTabs = (SlidingTabLayout) findViewById( R.id.tabs );
-        mTabs.setViewPager( mPager );
 
     }
 
@@ -73,7 +70,11 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        mDrawerFragment.setSelectItem(1);
+        mPager.setAdapter( new VideosFragmentPagerAdapter( getSupportFragmentManager() ) );
+        mTabs = (SlidingTabLayout) findViewById( R.id.tabs );
+        mTabs.setViewPager( mPager );
+
+        mDrawerFragment.setSelectItem( 1 );
 
     }
 
@@ -120,16 +121,26 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
         String[] tabs;
         List<Fragment> fragments = new ArrayList<>();
 
+        boolean showAdultTab = false;
+
         public VideosFragmentPagerAdapter( FragmentManager fm ) {
             super( fm );
+
+            showAdultTab = MainApplication.getInstance().showAdultTab();
 
             tabs = getResources().getStringArray( R.array.watch_videos_tabs );
             fragments.add( Fragment.instantiate( VideosActivity.this, MoviesFragment.class.getName(), null ) );
             fragments.add( Fragment.instantiate( VideosActivity.this, TelevisionFragment.class.getName(), null ) );
             fragments.add( Fragment.instantiate( VideosActivity.this, HomeMoviesFragment.class.getName(), null ) );
             fragments.add( Fragment.instantiate( VideosActivity.this, MusicVideosFragment.class.getName(), null ) );
-            fragments.add( Fragment.instantiate( VideosActivity.this, AdultFragment.class.getName(), null ) );
 
+            if( showAdultTab ) {
+
+                fragments.add(Fragment.instantiate( VideosActivity.this, AdultFragment.class.getName(), null ) );
+
+            }
+
+            notifyDataSetChanged();
         }
 
         @Override
@@ -148,7 +159,12 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
         @Override
         public int getCount() {
 
-            return 5;
+            if( showAdultTab ) {
+
+                return 5;
+            }
+
+            return 4;
         }
 
     }

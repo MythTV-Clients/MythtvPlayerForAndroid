@@ -105,4 +105,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/pref_watch_videos"
+        android:key="pref_watch_videos">
+
+        <SwitchPreference
+            android:title="@string/pref_show_adult_tab"
+            android:key="show_adult_tab"
+            android:defaultValue="false"
+            android:summaryOn="@string/pref_show_adult_tab_summary_on"
+            android:summaryOff="@string/pref_show_adult_tab_summary_off" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
