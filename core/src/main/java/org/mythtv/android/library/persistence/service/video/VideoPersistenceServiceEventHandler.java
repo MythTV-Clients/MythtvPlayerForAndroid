@@ -109,7 +109,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         }
 
-        if( MainApplication.getInstance().restrictRatings() && !event.getContentType().equals( "TELEVISION" ) ) {
+        if( MainApplication.getInstance().restrictRatings() && !MainApplication.getInstance().restrictedRatings().isEmpty() && !event.getContentType().equals( "TELEVISION" ) ) {
 
             String ratingSelection = " AND (";
             List<String> restrictedRatings = MainApplication.getInstance().restrictedRatings();
