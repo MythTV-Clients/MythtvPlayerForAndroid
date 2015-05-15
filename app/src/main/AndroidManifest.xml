@@ -185,6 +185,17 @@
         </activity>
 
         <activity
+            android:name=".player.app.settings.VideoSettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".player.app.settings.SettingsActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".player.app.settings.SettingsActivity" />
+
+        </activity>
+
+        <activity
             android:name=".player.app.player.RecordingPlayerActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 

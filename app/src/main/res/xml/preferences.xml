@@ -106,6 +106,22 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/video_preferences"
+        android:key="pref_video_preferences">
+
+        <PreferenceScreen
+            android:title="@string/video_preferences"
+            android:summary="@string/video_preferences_summary">
+
+            <intent
+                android:targetPackage="org.mythtv.android"
+                android:targetClass="org.mythtv.android.player.app.settings.VideoSettingsActivity" />
+
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <!-- PreferenceCategory
         android:title="@string/pref_watch_videos"
         android:key="pref_watch_videos">
 
@@ -116,6 +132,6 @@
             android:summaryOn="@string/pref_show_adult_tab_summary_on"
             android:summaryOff="@string/pref_show_adult_tab_summary_off" />
 
-    </PreferenceCategory>
+    </PreferenceCategory -->
 
 </PreferenceScreen>

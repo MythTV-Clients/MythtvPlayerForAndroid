@@ -53,6 +53,8 @@ import org.mythtv.services.api.MythTvApiContext;
 import org.mythtv.services.api.ServerVersionQuery;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import retrofit.RestAdapter;
@@ -75,6 +77,14 @@ public class MainApplication extends Application {
     public static final String KEY_PREF_HLS_VIDEO_BITRATE = "hls_video_bitrate";
     public static final String KEY_PREF_HLS_AUDIO_BITRATE = "hls_audio_bitrate";
     public static final String KEY_PREF_SHOW_ADULT_TAB = "show_adult_tab";
+
+    public static final String KEY_PREF_RESTRICT_CONTENT_TYPES = "restrict_content_types";
+    public static final String KEY_PREF_RATING_NR = "rating_nr";
+    public static final String KEY_PREF_RATING_G = "rating_g";
+    public static final String KEY_PREF_RATING_PG = "rating_pg";
+    public static final String KEY_PREF_RATING_PG13 = "rating_pg13";
+    public static final String KEY_PREF_RATING_R = "rating_r";
+    public static final String KEY_PREF_RATING_NC17 = "rating_nc17";
 
     public static final String ACTION_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_CONNECTED";
     public static final String ACTION_NOT_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_NOT_CONNECTED";
@@ -267,9 +277,53 @@ public class MainApplication extends Application {
 
     public boolean showAdultTab() {
 
-        boolean showAdultTab = mSharedPref.getBoolean( KEY_PREF_SHOW_ADULT_TAB, false );
+        boolean showAdultTab = mSharedPref.getBoolean(KEY_PREF_SHOW_ADULT_TAB, false);
 
         return showAdultTab;
+    }
+
+    public boolean restrictRatings() {
+
+        boolean restrictRatings = mSharedPref.getBoolean( KEY_PREF_RESTRICT_CONTENT_TYPES, false );
+
+        return restrictRatings;
+    }
+
+    public List<String> restrictedRatings() {
+
+        List<String> restrictedRatings = new ArrayList();
+
+        boolean nr = mSharedPref.getBoolean( KEY_PREF_RATING_NR, false );
+        if( nr ) {
+            restrictedRatings.add( "NR" );
+        }
+
+        boolean g = mSharedPref.getBoolean( KEY_PREF_RATING_G, false );
+        if( g ) {
+            restrictedRatings.add( "G" );
+        }
+
+        boolean pg = mSharedPref.getBoolean( KEY_PREF_RATING_PG, false );
+        if( pg ) {
+            restrictedRatings.add( "PG" );
+        }
+
+        boolean pg13 = mSharedPref.getBoolean( KEY_PREF_RATING_PG13, false );
+        if( pg13 ) {
+            restrictedRatings.add( "PG-13" );
+        }
+
+        boolean r = mSharedPref.getBoolean( KEY_PREF_RATING_R, false );
+        if( r ) {
+            restrictedRatings.add( "R" );
+        }
+
+        boolean nc17 = mSharedPref.getBoolean( KEY_PREF_RATING_NC17, false );
+        if( nc17 ) {
+            restrictedRatings.add( "NC-17" );
+        }
+
+        return restrictedRatings;
     }
 
     public String getMasterBackendHostName() { return mBackendHostname; }

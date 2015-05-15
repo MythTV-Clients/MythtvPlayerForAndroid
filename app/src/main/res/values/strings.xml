@@ -110,7 +110,7 @@
     <string name="pref_hls_video_height_title_summary">HLS transcode video height</string>
     <string name="pref_hls_video_bitrate_title_summary">HLS transcode video bitrate</string>
     <string name="pref_hls_audio_bitrate_title_summary">HLS transcode audio bitrate</string>
-    <string name="pref_watch_videos">Watch Video Preferences</string>
+    <string name="pref_watch_videos">Video Preferences</string>
     <string name="season">Season:</string>
     <string name="episode">Episode:</string>
     <string name="play_button">Play</string>
@@ -118,5 +118,24 @@
     <string name="pref_show_adult_tab">Show Adult tab in Watch Videos</string>
     <string name="pref_show_adult_tab_summary_on">Adult tab will be shown</string>
     <string name="pref_show_adult_tab_summary_off">Adult tab will not be shown</string>
+    <string name="pref_restrict_content_types">Restrict Videos by Rating</string>
+    <string name="pref_restrict_content_types_summary_on">Videos for selected types will be shown</string>
+    <string name="pref_restrict_content_types_summary_off">Show All Videos</string>
+    <string name="pref_rating_g">G – General Audiences</string>
+    <string name="pref_rating_nr">NR - Not Rated</string>
+    <string name="pref_rating_pg">PG – Parental Guidance Suggested</string>
+    <string name="pref_rating_pg13">PG-13 – Parents Strongly Cautioned</string>
+    <string name="pref_rating_r">R – Restricted</string>
+    <string name="pref_rating_nc17">NC-17 – Adults Only</string>
+    <string name="pref_rating_nr_summary">This film is not rated.</string>
+    <string name="pref_rating_g_summary">All ages admitted. Nothing that would offend parents for viewing by children.</string>
+    <string name="pref_rating_pg_summary">Some material may not be suitable for children. Parents urged to give \"parental guidance\". May contain some material parents might not like for their young children.</string>
+    <string name="pref_rating_pg13_summary">Some material may be inappropriate for children under 13. Parents are urged to be cautious. Some material may be inappropriate for pre-teenagers.</string>
+    <string name="pref_rating_r_summary">Under 17 requires accompanying parent or adult guardian. Contains some adult material. Parents are urged to learn more about the film before taking their young children with them.</string>
+    <string name="pref_rating_nc17_summary">No One 17 and Under Admitted. Clearly adult. Children are not admitted.</string>
+    <string name="pref_content_ratings">Video Content Ratings</string>
+    <string name="pref_video_display_preferences">Video Display Preferences</string>
+    <string name="video_preferences">Video Settings</string>
+    <string name="video_preferences_summary">Modify Videos Display and Filters</string>
 
 </resources>

@@ -102,6 +102,24 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         }
 
+        if( MainApplication.getInstance().restrictRatings() && !event.getContentType().equals( "TELEVISION" ) ) {
+
+            String ratingSelection = " AND (";
+            List<String> restrictedRatings = MainApplication.getInstance().restrictedRatings();
+            for( String rating : restrictedRatings ) {
+
+                if( ratingSelection.length() > 6 && restrictedRatings.size() > 1 ) {
+                    ratingSelection += " OR ";
+                }
+
+                ratingSelection += VideoConstants.FIELD_VIDEO_CERTIFICATION + " = ?";
+                selectionArgs.add( rating );
+            }
+            ratingSelection += ") ";
+            selection += ratingSelection;
+
+        }
+
         Log.v( TAG, "requestAllVideos : selection=" + selection );
         for( String selectionArg : selectionArgs.toArray( new String[ selectionArgs.size() ] ) ) {
             Log.v( TAG, "requestAllVideos : selectionArg=" + selectionArg );
