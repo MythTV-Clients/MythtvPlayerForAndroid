@@ -78,6 +78,9 @@ public class MainApplication extends Application {
     public static final String KEY_PREF_HLS_AUDIO_BITRATE = "hls_audio_bitrate";
     public static final String KEY_PREF_SHOW_ADULT_TAB = "show_adult_tab";
 
+    public static final String KEY_PREF_ENABLE_PARENTAL_CONTROLS = "enable_parental_controls";
+    public static final String KEY_PREF_PARENTAL_CONTROL_LEVEL = "parental_control_level";
+
     public static final String KEY_PREF_RESTRICT_CONTENT_TYPES = "restrict_content_types";
     public static final String KEY_PREF_RATING_NR = "rating_nr";
     public static final String KEY_PREF_RATING_G = "rating_g";
@@ -280,6 +283,20 @@ public class MainApplication extends Application {
         boolean showAdultTab = mSharedPref.getBoolean(KEY_PREF_SHOW_ADULT_TAB, false);
 
         return showAdultTab;
+    }
+
+    public boolean enableParentalControls() {
+
+        boolean enableParentalControls = mSharedPref.getBoolean( KEY_PREF_ENABLE_PARENTAL_CONTROLS, false );
+
+        return enableParentalControls;
+    }
+
+    public int getParentalControlLevel() {
+
+        String level = mSharedPref.getString( KEY_PREF_PARENTAL_CONTROL_LEVEL, "4" );
+
+        return Integer.parseInt( level );
     }
 
     public boolean restrictRatings() {

@@ -102,6 +102,13 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         }
 
+        if( MainApplication.getInstance().enableParentalControls() ) {
+
+            int parentalControlLevel = MainApplication.getInstance().getParentalControlLevel();
+            selection += " AND " + VideoConstants.FIELD_VIDEO_PARENTAL_LEVEL + " <= " + parentalControlLevel;
+
+        }
+
         if( MainApplication.getInstance().restrictRatings() && !event.getContentType().equals( "TELEVISION" ) ) {
 
             String ratingSelection = " AND (";

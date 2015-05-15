@@ -137,5 +137,10 @@
     <string name="pref_video_display_preferences">Video Display Preferences</string>
     <string name="video_preferences">Video Settings</string>
     <string name="video_preferences_summary">Modify Videos Display and Filters</string>
+    <string name="pref_parental_controls">Parental Controls</string>
+    <string name="pref_enable_parental_controls">Enable Parental Controls</string>
+    <string name="pref_enable_parental_controls_summary_on">Parental Controls are enabled</string>
+    <string name="pref_enable_parental_controls_summary_off">Parental Controls are disabled</string>
+    <string name="pref_parental_control_level">Select Parental Control level</string>
 
 </resources>

@@ -33,6 +33,27 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/pref_parental_controls"
+        android:key="pref_parental_controls">
+
+        <SwitchPreference
+            android:title="@string/pref_enable_parental_controls"
+            android:key="enable_parental_controls"
+            android:defaultValue="false"
+            android:summaryOn="@string/pref_enable_parental_controls_summary_on"
+            android:summaryOff="@string/pref_enable_parental_controls_summary_off" />
+
+        <ListPreference
+            android:title="@string/pref_parental_control_level"
+            android:key="parental_control_level"
+            android:defaultValue="4"
+            android:dependency="enable_parental_controls"
+            android:entries="@array/parental_control_level_entries"
+            android:entryValues="@array/parental_control_level_values" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/pref_content_ratings"
         android:key="pref_content_ratings">
 

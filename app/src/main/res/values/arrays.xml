@@ -115,4 +115,18 @@
         <item>192000</item>
     </string-array>
 
+    <string-array name="parental_control_level_entries">
+        <item>Level 1</item>
+        <item>Level 2</item>
+        <item>Level 3</item>
+        <item>Level 4</item>
+    </string-array>
+
+    <string-array name="parental_control_level_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
 </resources>
