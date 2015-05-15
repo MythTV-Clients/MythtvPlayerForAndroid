@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ MythTV Player An application for Android users to play MythTV Recordings and Videos
+  ~ Copyright (c) 2015. Daniel Frey
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="app_version">in gradle eingestellt</string>
+
+    <string name="all_recordings">Alle Aufnahmen</string>
+    <string name="all_videos">Alle Videos</string>
+
+    <string name="connecting">Anschließen an Master Backend</string>
+    <string name="connecting_failed">Anschließen an Master Backend fehlgeschlagen</string>
+
+    <string name="error">Fehler</string>
+    <string name="ok">Ok</string>
+    <string name="pause">Pause</string>
+    <string name="play">Spielen</string>
+    <string name="loading">Wird geladen…</string>
+    <string name="no_video_found">Kein Video gefunden wurde</string>
+    <string name="video">Video</string>
+    <string name="oops">Hoppla</string>
+
+    <string name="failed">Wiedergabe fehlgeschlagen</string>
+
+    <string name="not_connected">Master Backend Verbindung fehlgeschlagen!. \nÜberprüfen Ihre Netzwerkverbindung oder der Master Backend Einstellungen.</string>
+    <string name="empty">Es sind keine Artikel angezeigt werden.</string>
+
+    <string name="drawer_open">Öffnen Navigation Schublade</string>
+    <string name="drawer_close">Schließen Navigation Schublade</string>
+
+    <string name="drawer_item_watch_recordings">Uhren Aufnahmen</string>
+    <string name="drawer_item_watch_videos">Uhren Videos</string>
+    <string name="drawer_item_preferences">Einstellungen</string>
+
+    <string name="hello_world">Hallo Welt!</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="launch_external_player">Einführung Externe Spieler</string>
+
+    <string name="browse_title"><![CDATA[Videos]]></string>
+    <string name="about_app">Über DemoCast Spieler</string>
+    <string name="version">Version: %1$s</string>
+    <string name="popular_header">Beliebte Videos</string>
+    <string name="personal_settings">Persönliche Einstellungen</string>
+    <string name="queue_hls">Queue HLS</string>
+    <string name="queued">HLS Warteschlange</string>
+
+    <string name="pref_hls_title">HLS Transcode Optionen</string>
+    <string name="pref_hls_video_bitrate_title">Bitrate</string>
+    <string name="pref_hls_audio_bitrate_title">Audio Bitrate</string>
+    <string name="pref_default_player">Standard-Player</string>
+    <string name="pref_external_player_override_video"> Externer Player für Videos</string>
+    <string name="pref_external_player_override_video_summary_on">Videos werden von einem externen Player wiedergegeben werden</string>
+    <string name="pref_external_player_override_video_summary_off">Videos werden von der Internal Player wiedergegeben werden</string>
+    <string name="pref_hls_video_height_title_summary">HLS transcode video height</string>
+    <string name="pref_hls_video_bitrate_title_summary">HLS transcode Video Bitrate</string>
+    <string name="pref_hls_audio_bitrate_title_summary">HLS transcode Audio Bitrate</string>
+    <string name="season">Saison:</string>
+    <string name="episode">Episode:</string>
+    <string name="play_button">Spielen</string>
+    <string name="pref_rating_nr">NR – nicht Bewertet</string>
+    <string name="pref_rating_pg">PG – Altersbeschränkung</string>
+    <string name="pref_rating_pg13">PG-13 – Eltern ausdrücklich darauf hingewiesen</string>
+    <string name="pref_rating_r">R – eingeschränkt</string>
+    <string name="pref_content_ratings">Video Content Bewertungen</string>
+    <string name="pref_enable_parental_controls">Aktivieren Sie die Kindersicherung</string>
+    <string name="pref_enable_parental_controls_summary_on">Kindersicherung aktiviert sind</string>
+    <string name="pref_enable_parental_controls_summary_off">Kindersicherung deaktiviert</string>
+    <string name="play_pause_description">Wiedergabe Pause Taste</string>
+    <string name="pref_backend_url">Hostnamen oder die IP-Adresse</string>
+    <string name="pref_backend_port_description">Der Port des Master Backend</string>
+    <string name="pref_backend_url_description"> Der Hostname oder die IP-Adresse des Master Backend</string>
+    <string name="pref_backend_url_title"> Master Backend Adresse</string>
+    <string name="pref_description_social_recommendations"> Empfehlungen für die Menschen auf Ihre Nachricht Geschichte basierte Contact</string>
+    <string name="pref_header_data_sync">Data &amp; synchronisieren</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_header_notifications">Benachrichtigungen</string>
+    <string name="pref_hls_video_height_title"> Höhe</string>
+    <string name="pref_hls_video_width_title">Breite</string>
+    <string name="pref_hls_video_width_title_summary"> HLS transcode Video Breite</string>
+    <string name="pref_internal_player"> interne Spieler</string>
+    <string name="pref_internal_player_summary_off">Die Wiedergabe wird durch einen externen Player behandelt werden</string>
+    <string name="pref_internal_player_summary_on">Die Wiedergabe wird durch die Interne Spieler behandelt werden</string>
+    <string name="pref_parental_control_level">Wählen höchsten Kindersicherungsstufe angezeigt</string>
+    <string name="pref_parental_controls"> Kindersicherung</string>
+    <string name="pref_rating_g">G – Generalaudienzen</string>
+    <string name="pref_rating_g_summary"> Alle Altersgruppen zugelassen. Nichts, was die Eltern für das Betrachten von Kindern verstoßen würde.</string>
+    <string name="pref_rating_nc17">NC-17 – Nur Erwachsene</string>
+    <string name="pref_rating_nc17_summary"> Niemand unter 17 Jahren zugelassen. Klar Erwachsenen. Kinder sind nicht zugelassen.</string>
+    <string name="pref_rating_nr_summary">Dieser Film wird nicht bewertet.</string>
+    <string name="pref_rating_pg13_summary">Einiges Material Mai ungeeignet für Kinder unter 13 Jahren Eltern werden dringend gebeten, vorsichtig zu sein. Einiges Material Mai ungeeignet für Pre-Teenager zu sein.</string>
+    <string name="pref_rating_pg_summary"> Einige Material darf nicht für Kinder geeignet. Eltern aufgefordert, \"elterliche Führung \" geben. Können einige Eltern Material enthalten könnten nicht wie für ihre kleinen Kinder.</string>
+    <string name="pref_rating_r_summary">Unter 17 begleitenden Elternteils oder Erwachsenen Guardian. Enthält etwas Material für Erwachsene. Die Eltern werden aufgefordert, mehr über den Film, bevor sie ihre Kinder mit ihnen zu lernen.</string>
+    <string name="pref_restrict_content_types">Nur anzeigen Ausgewählte Video Bewertungen</string>
+    <string name="pref_restrict_content_types_summary_off">Alle Videos anzeigen</string>
+    <string name="pref_restrict_content_types_summary_on"> Videos für alle Arten unter ausgewählt wird angezeigt</string>
+    <string name="pref_ringtone_silent">Still</string>
+    <string name="pref_show_adult_tab"> Registerkarte anzeigen Adult in Videos anschauen</string>
+    <string name="pref_show_adult_tab_summary_off"> Registerkarte Erwachsene werden nicht angezeigt</string>
+    <string name="pref_show_adult_tab_summary_on"> Registerkarte Adult angezeigt</string>
+    <string name="pref_title_add_friends_to_messages">Freunde In den Nachrichten</string>
+    <string name="pref_title_new_message_notifications">Neue Nachricht Benachrichtigungen</string>
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_title_social_recommendations"> Sozial Empfehlungen ermöglichen</string>
+    <string name="pref_title_sync_frequency"> Sync Frequenz</string>
+    <string name="pref_title_system_sync_settings">System Synchronisierungseinstellungen</string>
+    <string name="pref_title_vibrate">Vibrieren</string>
+    <string name="pref_video_display_preferences"> Einstellungen Video Display</string>
+    <string name="pref_watch_videos">Video Einstellungen</string>
+    <string name="preferences">PREFERENCES</string>
+    <string name="queue_button">Queue HLS</string>
+    <string name="queued_notice">HLS Transcode läuft, bitte warten.</string>
+    <string name="ready_to_stream">Bereit zum Streamen</string>
+    <string name="recording">Aufzeichnung</string>
+    <string name="related_movies">Ähnliche Videos</string>
+    <string name="search_hint">Show, Film, Schauspieler, Persönlichkeit, Kanal</string>
+    <string name="search_results"> Suchergebnisse</string>
+    <string name="search_title">Suche</string>
+    <string name="should_start" translatable="false"></string>
+    <string name="start_position" translatable="false"></string>
+    <string name="stop">Stoppen</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="title_activity_videos" translatable="false"></string>
+    <string name="title_info_transition" translatable="false"></string>
+    <string name="video_error_media_load_timeout">Medienladezeitüberschreitung</string>
+    <string name="video_error_server_unaccessible"> Media-Server nicht erreichbar</string>
+    <string name="video_error_unknown_error">Fehler beim Video zu laden</string>
+    <string name="video_preferences"> Video-Einstellungen</string>
+    <string name="video_preferences_summary">Ändern Sie Videos anzeigen und Filter</string>
+    <string name="watch_recording">Uhr-Folge</string>
+    <string name="watch_video">Watch video</string>
+    <string name="grid_view">Grid View</string>
+
+</resources>
