@@ -44,15 +44,14 @@
     <string name="drawer_open">Öffnen Navigation Schublade</string>
     <string name="drawer_close">Schließen Navigation Schublade</string>
 
-    <string name="drawer_item_watch_recordings">Uhren Aufnahmen</string>
-    <string name="drawer_item_watch_videos">Uhren Videos</string>
+    <string name="drawer_item_watch_recordings">Aufnahmen Ansehen </string>
+    <string name="drawer_item_watch_videos">Videos Ansehen</string>
     <string name="drawer_item_preferences">Einstellungen</string>
 
     <string name="hello_world">Hallo Welt!</string>
     <string name="action_settings">Einstellungen</string>
     <string name="launch_external_player">Einführung Externe Spieler</string>
 
-    <string name="browse_title"><![CDATA[Videos]]></string>
     <string name="about_app">Über DemoCast Spieler</string>
     <string name="version">Version: %1$s</string>
     <string name="popular_header">Beliebte Videos</string>
@@ -73,10 +72,10 @@
     <string name="season">Saison:</string>
     <string name="episode">Episode:</string>
     <string name="play_button">Spielen</string>
-    <string name="pref_rating_nr">NR – nicht Bewertet</string>
+    <string name="pref_rating_nr">NR – Nicht Bewertet</string>
     <string name="pref_rating_pg">PG – Altersbeschränkung</string>
     <string name="pref_rating_pg13">PG-13 – Eltern ausdrücklich darauf hingewiesen</string>
-    <string name="pref_rating_r">R – eingeschränkt</string>
+    <string name="pref_rating_r">R – Eingeschränkt</string>
     <string name="pref_content_ratings">Video Content Bewertungen</string>
     <string name="pref_enable_parental_controls">Aktivieren Sie die Kindersicherung</string>
     <string name="pref_enable_parental_controls_summary_on">Kindersicherung aktiviert sind</string>
@@ -93,7 +92,7 @@
     <string name="pref_hls_video_height_title"> Höhe</string>
     <string name="pref_hls_video_width_title">Breite</string>
     <string name="pref_hls_video_width_title_summary"> HLS transcode Video Breite</string>
-    <string name="pref_internal_player"> interne Spieler</string>
+    <string name="pref_internal_player">Interne Spieler</string>
     <string name="pref_internal_player_summary_off">Die Wiedergabe wird durch einen externen Player behandelt werden</string>
     <string name="pref_internal_player_summary_on">Die Wiedergabe wird durch die Interne Spieler behandelt werden</string>
     <string name="pref_parental_control_level">Wählen höchsten Kindersicherungsstufe angezeigt</string>
@@ -138,8 +137,9 @@
     <string name="video_error_unknown_error">Fehler beim Video zu laden</string>
     <string name="video_preferences"> Video-Einstellungen</string>
     <string name="video_preferences_summary">Ändern Sie Videos anzeigen und Filter</string>
-    <string name="watch_recording">Uhr-Folge</string>
-    <string name="watch_video">Watch video</string>
+    <string name="watch_recording">Folge Ansehen</string>
+    <string name="watch_video">Videos Ansehen</string>
     <string name="grid_view">Grid View</string>
+    <string name="browse_title" translatable="false"></string>
 
 </resources>
