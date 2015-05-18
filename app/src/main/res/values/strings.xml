@@ -90,6 +90,14 @@
     <string name="watch_video">Watch video</string>
 
     <string name="pref_backend_title" translatable="false">Master Backend</string>
+    <string name="pref_backend_url_title">Master Backend Address</string>
+    <string name="pref_backend_url_description">The hostname or ip address of the master backend</string>
+    <string name="pref_backend_url">hostname or ip address</string>
+
+    <string name="pref_backend_port_title" translatable="false">Master Backend Port</string>
+    <string name="pref_backend_port_description">The port of the master backend</string>
+    <string name="pref_backend_port" translatable="false">6544</string>
+
     <string name="pref_hls_title">HLS Transcode Options</string>
     <string name="pref_hls_video_width_title">Width</string>
     <string name="pref_hls_video_width_default" translatable="false">0</string>
@@ -142,5 +150,6 @@
     <string name="pref_enable_parental_controls_summary_on">Parental Controls are enabled</string>
     <string name="pref_enable_parental_controls_summary_off">Parental Controls are disabled</string>
     <string name="pref_parental_control_level">Select highest Parental Control level displayed</string>
+    <string name="title_activity_settings">Settings</string>
 
 </resources>
