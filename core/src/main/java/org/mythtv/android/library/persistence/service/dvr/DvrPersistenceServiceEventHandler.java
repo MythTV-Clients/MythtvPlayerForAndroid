@@ -27,7 +27,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.library.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.utils.Utils;
 import org.mythtv.android.library.events.dvr.AllProgramsCountEvent;
@@ -111,6 +110,11 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 selectionArgs.add( "" );
             }
 
+        }
+
+        if( null != event.getRecordingGroup() && !"".equals( event.getRecordingGroup() )  ) {
+            selection += " AND " + ProgramConstants.FIELD_RECORDING_REC_GROUP + " = ?";
+            selectionArgs.add( event.getRecordingGroup() );
         }
 
         String limit = " ";
@@ -215,7 +219,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         Map<String, Long> programIds = new HashMap<String, Long>();
         Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
         while( cursor.moveToNext() ) {
-            programIds.put( cursor.getString( cursor.getColumnIndex( ProgramConstants.FIELD_PROGRAM_FILE_NAME ) ), cursor.getLong( cursor.getColumnIndex( ProgramConstants._ID ) ) );
+            programIds.put(cursor.getString(cursor.getColumnIndex(ProgramConstants.FIELD_PROGRAM_FILE_NAME)), cursor.getLong(cursor.getColumnIndex(ProgramConstants._ID)));
         }
         cursor.close();
 
@@ -455,7 +459,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         }
 
-        Log.v( TAG, "deleteRecordedPrograms : error, delete failed" );
+        Log.v(TAG, "deleteRecordedPrograms : error, delete failed");
         return ProgramsDeletedEvent.deletionFailed();
     }
 
@@ -531,6 +535,76 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         Log.v( TAG, "removeProgram : error, program not deleted" );
         return ProgramRemovedEvent.deletionFailed(event.getKey());
+    }
+
+    @Override
+    public AllProgramsEvent requestAllRecordingGroups( RequestAllRecordedProgramsEvent event ) {
+
+        List<Program> programs = new ArrayList<>();
+
+        String[] projection = new String[] { "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_CHANNEL_CALLSIGN, ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_STATUS, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_PROGRAM_HOSTNAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+
+        List<String> selectionArgs = new ArrayList<>();
+        selectionArgs.add(ProgramConstants.ProgramType.RECORDED.name());
+
+        String sort = ProgramConstants.FIELD_RECORDING_REC_GROUP;
+
+        Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath( ProgramConstants.CONTENT_URI, "/recording_groups" ), projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
+        while( cursor.moveToNext() ) {
+
+            programs.add( convertCursorToProgram( cursor ) );
+
+        }
+        cursor.close();
+
+        List<ProgramDetails> details = new ArrayList<>();
+        if( !programs.isEmpty() ) {
+
+            for( Program program : programs ) {
+
+                details.add( program.toDetails() );
+
+            }
+
+        }
+
+        return new AllProgramsEvent( details );
+    }
+
+    @Override
+    public AllProgramsEvent requestAllTitles( RequestAllRecordedProgramsEvent event ) {
+
+        List<Program> programs = new ArrayList<>();
+
+        String[] projection = new String[] { "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_CHANNEL_CALLSIGN, ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_STATUS, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_PROGRAM_HOSTNAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+
+        List<String> selectionArgs = new ArrayList<>();
+        selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
+
+        String sort = ProgramConstants.FIELD_PROGRAM_TITLE_SORT;
+
+        Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath( ProgramConstants.CONTENT_URI, "/titles" ), projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
+        while( cursor.moveToNext() ) {
+
+            programs.add( convertCursorToProgram( cursor ) );
+
+        }
+        cursor.close();
+
+        List<ProgramDetails> details = new ArrayList<>();
+        if( !programs.isEmpty() ) {
+
+            for( Program program : programs ) {
+
+                details.add( program.toDetails() );
+
+            }
+
+        }
+
+        return new AllProgramsEvent( details );
     }
 
     @Override
@@ -626,7 +700,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
                 values.put( TitleInfoConstants.FIELD_INETREF, titleInfo.getInetref() );
                 values.put( TitleInfoConstants.FIELD_TITLE_SORT, Utils.removeArticles( titleInfo.getTitle() ).toUpperCase() );
 
-                if( titleInfo.getTitle().equals( MainApplication.getInstance().getResources().getString( R.string.all_recordings ) ) ) {
+                if( titleInfo.getTitle().equals( "All Recordings" ) ) {
 
                     values.put( TitleInfoConstants.FIELD_SORT, 0 );
 

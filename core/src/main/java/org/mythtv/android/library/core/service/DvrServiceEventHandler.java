@@ -61,25 +61,37 @@ public class DvrServiceEventHandler implements DvrService {
     @Override
     public AllProgramsCountEvent requestAllRecordedProgramsCount( RequestAllRecordedProgramsCountEvent event ) {
 
-        return mDvrPersistenceService.requestAllRecordedProgramsCount( event );
+        return mDvrPersistenceService.requestAllRecordedProgramsCount(event);
     }
 
     @Override
     public AllProgramsEvent searchRecordedPrograms( SearchRecordedProgramsEvent event ) {
 
-        return mDvrPersistenceService.searchRecordedPrograms( event );
+        return mDvrPersistenceService.searchRecordedPrograms(event);
     }
 
     @Override
     public ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event ) {
 
-        return MainApplication.getInstance().getDvrApiService().updateRecordedPrograms( event );
+        return MainApplication.getInstance().getDvrApiService().updateRecordedPrograms(event);
     }
 
     @Override
     public ProgramRemovedEvent removeProgram( RemoveProgramEvent event ) {
 
-        return mDvrPersistenceService.removeProgram( event );
+        return mDvrPersistenceService.removeProgram(event);
+    }
+
+    @Override
+    public AllProgramsEvent requestAllRecordingGroups( RequestAllRecordedProgramsEvent event ) {
+
+        return mDvrPersistenceService.requestAllRecordingGroups(event);
+    }
+
+    @Override
+    public AllProgramsEvent requestAllTitles( RequestAllRecordedProgramsEvent event ) {
+
+        return mDvrPersistenceService.requestAllTitles( event );
     }
 
     @Override

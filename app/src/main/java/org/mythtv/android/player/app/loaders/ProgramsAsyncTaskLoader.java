@@ -66,7 +66,14 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
         List<Program> programs = new ArrayList<>();
 
-        AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title, inetref, limit, offset ) );
+        String recordingGroup = null;
+        if( MainApplication.getInstance().enableDefaultRecordingGroup() ) {
+
+            recordingGroup = MainApplication.getInstance().defaultRecordingGroup();
+
+        }
+
+        AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title, inetref, recordingGroup, limit, offset ) );
         if( event.isEntityFound() ) {
 
             for( ProgramDetails details : event.getDetails() ) {

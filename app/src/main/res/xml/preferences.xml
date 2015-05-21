@@ -106,6 +106,22 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/recording_preferences"
+        android:key="pref_recording_preferences">
+
+        <PreferenceScreen
+            android:title="@string/recording_preferences"
+            android:summary="@string/recording_preferences_summary">
+
+            <intent
+                android:targetPackage="org.mythtv.android"
+                android:targetClass="org.mythtv.android.player.app.settings.RecordingSettingsActivity" />
+
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/video_preferences"
         android:key="pref_video_preferences">
 
@@ -120,18 +136,5 @@
         </PreferenceScreen>
 
     </PreferenceCategory>
-
-    <!-- PreferenceCategory
-        android:title="@string/pref_watch_videos"
-        android:key="pref_watch_videos">
-
-        <SwitchPreference
-            android:title="@string/pref_show_adult_tab"
-            android:key="show_adult_tab"
-            android:defaultValue="false"
-            android:summaryOn="@string/pref_show_adult_tab_summary_on"
-            android:summaryOff="@string/pref_show_adult_tab_summary_off" />
-
-    </PreferenceCategory -->
 
 </PreferenceScreen>

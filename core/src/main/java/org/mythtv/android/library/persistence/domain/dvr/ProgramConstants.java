@@ -38,6 +38,8 @@ public class ProgramConstants extends AbstractBaseDatabase {
     public static final int ALL		    			= 210;
     public static final int SINGLE    				= 211;
     public static final int ALL_FTS		    		= 212;
+    public static final int ALL_RECORDING_GROUPS	= 250;
+    public static final int ALL_TITLES	            = 251;
 
     public static final String CREATE_TABLE, DROP_TABLE;
 

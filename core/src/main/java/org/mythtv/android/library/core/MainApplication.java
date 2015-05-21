@@ -78,6 +78,9 @@ public class MainApplication extends Application {
     public static final String KEY_PREF_HLS_AUDIO_BITRATE = "hls_audio_bitrate";
     public static final String KEY_PREF_SHOW_ADULT_TAB = "show_adult_tab";
 
+    public static final String KEY_PREF_ENABLE_DEFAULT_RECORDING_GROUP = "enable_default_recording_group";
+    public static final String KEY_PREF_DEFAULT_RECORDING_GROUP = "default_recording_group";
+
     public static final String KEY_PREF_ENABLE_PARENTAL_CONTROLS = "enable_parental_controls";
     public static final String KEY_PREF_PARENTAL_CONTROL_LEVEL = "parental_control_level";
 
@@ -283,6 +286,20 @@ public class MainApplication extends Application {
         boolean showAdultTab = mSharedPref.getBoolean(KEY_PREF_SHOW_ADULT_TAB, false);
 
         return showAdultTab;
+    }
+
+    public boolean enableDefaultRecordingGroup() {
+
+        boolean enableDefaultRecordingGroup = mSharedPref.getBoolean( KEY_PREF_ENABLE_DEFAULT_RECORDING_GROUP, false );
+
+        return enableDefaultRecordingGroup;
+    }
+
+    public String defaultRecordingGroup() {
+
+        String defaultRecordingGroup = mSharedPref.getString( KEY_PREF_DEFAULT_RECORDING_GROUP, "Default" );
+
+        return defaultRecordingGroup;
     }
 
     public boolean enableParentalControls() {

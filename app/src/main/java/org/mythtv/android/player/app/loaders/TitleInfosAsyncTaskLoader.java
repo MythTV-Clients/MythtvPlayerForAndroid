@@ -26,8 +26,12 @@ import android.os.Handler;
 import android.os.Message;
 
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
+import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
+import org.mythtv.android.library.events.dvr.ProgramDetails;
+import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
@@ -60,12 +64,20 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
         List<TitleInfo> titleInfos = new ArrayList<>();
 
-        AllTitleInfosEvent event = MainApplication.getInstance().getDvrService().requestAllTitleInfos( new RequestAllTitleInfosEvent( limit, offset ) );
+        String recordingGroup = null;
+        if( MainApplication.getInstance().enableDefaultRecordingGroup() ) {
+
+            recordingGroup = MainApplication.getInstance().defaultRecordingGroup();
+
+        }
+
+        AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllTitles( new RequestAllRecordedProgramsEvent( null, null, recordingGroup, limit, offset ) );
         if( event.isEntityFound() ) {
 
-            for( TitleInfoDetails details : event.getDetails() ) {
+            for( ProgramDetails details : event.getDetails() ) {
 
-                 titleInfos.add( TitleInfo.fromDetails( details ) );
+                Program program = Program.fromDetails( details );
+                titleInfos.add( new TitleInfo( program.getId(), program.getTitle(), program.getInetref() ) );
 
             }
 

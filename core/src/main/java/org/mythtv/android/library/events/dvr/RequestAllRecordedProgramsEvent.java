@@ -27,22 +27,25 @@ public class RequestAllRecordedProgramsEvent extends RequestReadEvent {
 
     private final String title;
     private final String inetref;
+    private final String recordingGroup;
     private final Integer limit;
     private final Integer offset;
 
-    public RequestAllRecordedProgramsEvent( final String title, final String inetref ) {
+    public RequestAllRecordedProgramsEvent( final String title, final String inetref, final String recordingGroup ) {
 
         this.title = title;
         this.inetref = inetref;
+        this.recordingGroup = recordingGroup;
         this.limit = null;
         this.offset = null;
 
     }
 
-    public RequestAllRecordedProgramsEvent( final String title, final String inetref, final Integer limit, final Integer offset ) {
+    public RequestAllRecordedProgramsEvent( final String title, final String inetref, final String recordingGroup, final Integer limit, final Integer offset ) {
 
         this.title = title;
         this.inetref = inetref;
+        this.recordingGroup = recordingGroup;
         this.limit = limit;
         this.offset = offset;
 
@@ -51,6 +54,8 @@ public class RequestAllRecordedProgramsEvent extends RequestReadEvent {
     public String getTitle() { return title; }
 
     public String getInetref() { return inetref; }
+
+    public String getRecordingGroup() { return recordingGroup; }
 
     public Integer getLimit() {
 

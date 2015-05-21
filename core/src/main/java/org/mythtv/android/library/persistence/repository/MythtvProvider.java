@@ -70,6 +70,8 @@ public class MythtvProvider extends ContentProvider {
         URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME, ProgramConstants.ALL );
         URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME + "/#",  ProgramConstants.SINGLE );
         URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME + "/fts", ProgramConstants.ALL_FTS );
+        URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME + "/recording_groups", ProgramConstants.ALL_RECORDING_GROUPS );
+        URI_MATCHER.addURI( AUTHORITY, ProgramConstants.TABLE_NAME + "/titles", ProgramConstants.ALL_TITLES );
 
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME, VideoConstants.ALL );
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/#",  VideoConstants.SINGLE );
@@ -114,6 +116,8 @@ public class MythtvProvider extends ContentProvider {
 
             case ProgramConstants.ALL :
             case ProgramConstants.ALL_FTS :
+            case ProgramConstants.ALL_RECORDING_GROUPS :
+            case ProgramConstants.ALL_TITLES :
                 return ProgramConstants.CONTENT_TYPE;
 
             case ProgramConstants.SINGLE :
@@ -262,6 +266,24 @@ public class MythtvProvider extends ContentProvider {
                 builder.setTables( ProgramConstants.TABLE_NAME );
 
                 cursor = builder.query( db, null, selection, selectionArgs, null, null, null );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case ProgramConstants.ALL_RECORDING_GROUPS :
+//                Log.v( TAG, "query : querying for all programs" );
+
+                cursor = db.query( true, ProgramConstants.TABLE_NAME, projection, selection, selectionArgs, ProgramConstants.FIELD_RECORDING_REC_GROUP, null, sortOrder, null );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case ProgramConstants.ALL_TITLES :
+//                Log.v( TAG, "query : querying for all programs" );
+
+                cursor = db.query( true, ProgramConstants.TABLE_NAME, projection, selection, selectionArgs, ProgramConstants.FIELD_PROGRAM_TITLE + ", " + ProgramConstants.FIELD_PROGRAM_INETREF, null, sortOrder, null );
 
                 cursor.setNotificationUri( getContext().getContentResolver(), uri );
 

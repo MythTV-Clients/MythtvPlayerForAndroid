@@ -64,7 +64,14 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
             if( MainApplication.getInstance().isConnected() ) {
 
-                AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title, inetref ) );
+                String recordingGroup = null;
+                if( MainApplication.getInstance().enableDefaultRecordingGroup() ) {
+
+                    recordingGroup = MainApplication.getInstance().defaultRecordingGroup();
+
+                }
+
+                AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllRecordedPrograms( new RequestAllRecordedProgramsEvent( title, inetref, recordingGroup ) );
                 if( event.isEntityFound() ) {
                     Log.v( TAG, "loadInBackground : programs loaded from db" );
 

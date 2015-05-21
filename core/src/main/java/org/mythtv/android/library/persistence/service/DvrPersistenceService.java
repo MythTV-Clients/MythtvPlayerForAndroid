@@ -58,6 +58,10 @@ public interface DvrPersistenceService {
 
     ProgramRemovedEvent removeProgram( RemoveProgramEvent event );
 
+    AllProgramsEvent requestAllRecordingGroups( RequestAllRecordedProgramsEvent event );
+
+    AllProgramsEvent requestAllTitles( RequestAllRecordedProgramsEvent event );
+
     AllTitleInfosEvent requestAllTitleInfos( RequestAllTitleInfosEvent event );
 
     TitleInfosUpdatedEvent updateTitleInfos( UpdateTitleInfosEvent event );
