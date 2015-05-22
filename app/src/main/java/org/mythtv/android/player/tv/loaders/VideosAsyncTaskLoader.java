@@ -228,7 +228,7 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
         Log.v( TAG, "releaseResources : exit" );
     }
 
-    private final Handler mHandler = new Handler() {
+    private static final Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage( Message msg ) {

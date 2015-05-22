@@ -55,7 +55,8 @@
             android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            tools:text="10" />
+            tools:text="10"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 

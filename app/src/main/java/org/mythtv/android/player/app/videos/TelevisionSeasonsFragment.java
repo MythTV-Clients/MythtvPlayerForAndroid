@@ -39,7 +39,6 @@ import org.mythtv.android.player.app.listeners.EndlessScrollListener;
 import org.mythtv.android.player.app.loaders.VideosAsyncTaskLoader;
 import org.mythtv.android.player.common.ui.adapters.VideoTvItemAdapter;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

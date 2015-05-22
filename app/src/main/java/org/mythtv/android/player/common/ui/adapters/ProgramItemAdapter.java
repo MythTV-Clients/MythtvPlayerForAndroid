@@ -27,7 +27,6 @@ import org.mythtv.android.library.core.domain.content.LiveStreamInfo;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.events.content.LiveStreamDetailsEvent;
 import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
-import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -71,8 +70,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.program_list_item, viewGroup, false );
 
-        ViewHolder vh = new ViewHolder( v, useInternalPlayer );
-        return vh;
+        return new ViewHolder( v, useInternalPlayer );
     }
 
     @Override

@@ -60,8 +60,7 @@ public class VideoTvItemAdapter extends RecyclerView.Adapter<VideoTvItemAdapter.
 
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.video_list_item, viewGroup, false );
 
-        ViewHolder vh = new ViewHolder( v );
-        return vh;
+        return new ViewHolder( v );
     }
 
     @Override

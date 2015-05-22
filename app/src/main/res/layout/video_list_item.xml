@@ -48,7 +48,6 @@
             android:singleLine="true"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:transitionName="@string/video_transition"
             tools:text="test title" />
 
         <TextView
@@ -78,7 +77,8 @@
             android:gravity="end"
             android:background="@drawable/border_background"
             android:padding="2dp"
-            tools:text="PG-13" />
+            tools:text="PG-13"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 

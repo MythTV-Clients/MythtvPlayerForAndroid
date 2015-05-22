@@ -31,7 +31,6 @@ import com.squareup.picasso.Picasso;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
-import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +55,7 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.title_info_list_item, viewGroup, false );
 
-        ViewHolder vh = new ViewHolder( v );
-        return vh;
+        return new ViewHolder( v );
     }
 
     @Override

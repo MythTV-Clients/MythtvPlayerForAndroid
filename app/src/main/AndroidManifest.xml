@@ -305,12 +305,13 @@
             android:name=".library.persistence.repository.MythtvProvider"
             android:authorities="org.mythtv.android.provider"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:syncable="false" />
 
         <provider
             android:name=".library.persistence.repository.MythtvSearchSuggestionProvider"
-            android:authorities="org.mythtv.android.library.persistence.repository.MythtvSearchSuggestionProvider" />
+            android:authorities="org.mythtv.android.library.persistence.repository.MythtvSearchSuggestionProvider"
+            android:exported="false" />
 
     </application>
 

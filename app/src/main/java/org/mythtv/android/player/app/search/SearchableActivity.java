@@ -47,7 +47,6 @@ import org.mythtv.android.player.app.videos.MovieDetailsFragment;
 import org.mythtv.android.player.app.videos.TelevisionDetailsActivity;
 import org.mythtv.android.player.app.videos.TelevisionDetailsFragment;
 import org.mythtv.android.player.common.ui.adapters.SearchResultItemAdapter;
-import org.mythtv.android.player.tv.videos.VideoDetailsFragment;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -49,13 +49,13 @@ public class ChannelInfoHelper {
         details.setChanFilters( channelInfo.getChanFilters() );
         details.setSourceId( channelInfo.getSourceId() );
         details.setInputId( channelInfo.getInputId() );
-        details.setCommFree( channelInfo.getCommFree() == 0 ? false : true );
+        details.setCommFree( channelInfo.getCommFree() != 0 );
         details.setUseEIT( channelInfo.isUseEIT() );
         details.setVisible( channelInfo.isVisible() );
         details.setxMLTVID( channelInfo.getXMLTVID() );
         details.setDefaultAuth( channelInfo.getDefaultAuth() );
 
-        List<ProgramDetails> programDetails = new ArrayList<ProgramDetails>();
+        List<ProgramDetails> programDetails = new ArrayList<>();
         if( null != channelInfo.getPrograms() &&  channelInfo.getPrograms().length > 0 ) {
             for( Program program : channelInfo.getPrograms() ) {
                 programDetails.add( ProgramHelper.toDetails( program ) );
@@ -90,7 +90,7 @@ public class ChannelInfoHelper {
         channelInfo.setXMLTVID( details.getxMLTVID() );
         channelInfo.setDefaultAuth( details.getDefaultAuth() );
 
-        List<Program> programs = new ArrayList<Program>();
+        List<Program> programs = new ArrayList<>();
         if( null != details.getPrograms() && !details.getPrograms().isEmpty() ) {
             for( ProgramDetails detail : details.getPrograms() ) {
                 programs.add( ProgramHelper.fromDetails( detail ) );

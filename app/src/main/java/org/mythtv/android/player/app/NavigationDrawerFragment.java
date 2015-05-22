@@ -40,7 +40,6 @@ import org.mythtv.android.R;
 import org.mythtv.android.player.app.settings.SettingsActivity;
 import org.mythtv.android.player.app.recordings.ShowsActivity;
 import org.mythtv.android.player.app.videos.VideosActivity;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

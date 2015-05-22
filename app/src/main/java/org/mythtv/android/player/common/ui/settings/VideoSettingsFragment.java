@@ -22,11 +22,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
 import android.util.Log;
 
 import org.mythtv.android.R;
-import org.mythtv.android.library.core.MainApplication;
 
 /**
  * Created by dmfrey on 4/7/15.

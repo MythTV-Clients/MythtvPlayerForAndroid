@@ -28,12 +28,10 @@ import android.widget.VideoView;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 /**
  * Created by dmfrey on 4/4/15.

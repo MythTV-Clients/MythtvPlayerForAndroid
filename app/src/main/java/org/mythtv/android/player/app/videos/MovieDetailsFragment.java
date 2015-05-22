@@ -53,7 +53,6 @@ import org.mythtv.android.library.core.utils.AddVideoLiveStreamAsyncTask;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 import org.mythtv.android.player.app.player.VideoPlayerActivity;
 import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
-import org.mythtv.android.player.common.ui.utils.ImageUtils;
 import org.mythtv.android.R;
 
 /**

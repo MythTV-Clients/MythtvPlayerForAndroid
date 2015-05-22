@@ -22,8 +22,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:background="@color/primary">
+    android:paddingRight="16dp">
 
     <ImageView
         android:id="@+id/nav_drawer_logo"

@@ -45,7 +45,6 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -130,9 +129,6 @@ public class VideoDetailsFragment extends DetailsFragment implements LoaderManag
             }
 
             setAdapter( mRowsAdapter );
-
-        } else {
-
 
         }
 

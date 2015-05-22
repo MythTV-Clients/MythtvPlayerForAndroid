@@ -69,7 +69,7 @@ public class ProgramHelper {
             details.setRecording( RecordingInfoHelper.toDetails( program.getRecording() ) );
         }
 
-        List<ArtworkInfoDetails> artworkInfoDetails = new ArrayList<ArtworkInfoDetails>();
+        List<ArtworkInfoDetails> artworkInfoDetails = new ArrayList<>();
         if( null != program.getArtworkInfos() && null != program.getArtworkInfos() && program.getArtworkInfos().size() > 0 ) {
             for( ArtworkInfo artworkInfo : program.getArtworkInfos() ) {
                 artworkInfoDetails.add( ArtworkInfoHelper.toDetails( artworkInfo ) );
@@ -77,7 +77,7 @@ public class ProgramHelper {
         }
         details.setArtworkInfos( artworkInfoDetails );
 
-        List<CastMemberDetails> castMemberDetails = new ArrayList<CastMemberDetails>();
+        List<CastMemberDetails> castMemberDetails = new ArrayList<>();
         if( null != program.getCastMembers() && null != program.getCastMembers() && program.getCastMembers().size() > 0 ) {
             for( CastMember castMember : program.getCastMembers() ) {
                 castMemberDetails.add( CastMemberHelper.toDetails( castMember ) );
@@ -123,7 +123,7 @@ public class ProgramHelper {
             program.setRecording( RecordingInfoHelper.fromDetails( details.getRecording() ) );
         }
 
-        List<ArtworkInfo> artworkInfos = new ArrayList<ArtworkInfo>();
+        List<ArtworkInfo> artworkInfos = new ArrayList<>();
         if( null != details.getArtworkInfos() && !details.getArtworkInfos().isEmpty() ) {
             for( ArtworkInfoDetails detail : details.getArtworkInfos() ) {
                 artworkInfos.add( ArtworkInfoHelper.fromDetails( detail ) );
@@ -132,7 +132,7 @@ public class ProgramHelper {
 
         program.setArtworkInfos( artworkInfos );
 
-        List<CastMember> castMembers = new ArrayList<CastMember>();
+        List<CastMember> castMembers = new ArrayList<>();
         if( null != details.getCastMembers() && !details.getCastMembers().isEmpty() ) {
             for( CastMemberDetails detail : details.getCastMembers() ) {
                 castMembers.add( CastMemberHelper.fromDetails(detail) );

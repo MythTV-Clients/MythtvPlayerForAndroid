@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.mythtv.android.library.events.content.RequestAllLiveStreamsEvent;
 import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 
 /**

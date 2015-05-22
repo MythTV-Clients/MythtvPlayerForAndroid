@@ -70,7 +70,7 @@ public class VideoHelper {
         details.setScreenshot( video.getScreenshot() );
         details.setTrailer( video.getTrailer() );
 
-        List<ArtworkInfoDetails> artworkInfoDetails = new ArrayList<ArtworkInfoDetails>();
+        List<ArtworkInfoDetails> artworkInfoDetails = new ArrayList<>();
         if( null != video.getArtwork() && null != video.getArtwork().getArtworkInfos() && video.getArtwork().getArtworkInfos().length > 0 ) {
             for( ArtworkInfo artworkInfo : video.getArtwork().getArtworkInfos() ) {
                 artworkInfoDetails.add( ArtworkInfoHelper.toDetails(artworkInfo) );
@@ -78,7 +78,7 @@ public class VideoHelper {
         }
         details.setArtworkInfos( artworkInfoDetails );
 
-        List<CastMemberDetails> castMemberDetails = new ArrayList<CastMemberDetails>();
+        List<CastMemberDetails> castMemberDetails = new ArrayList<>();
         if( null != video.getCast() && null != video.getCast().getCastMembers() && video.getCast().getCastMembers().length > 0 ) {
             for( CastMember castMember : video.getCast().getCastMembers() ) {
                 castMemberDetails.add(CastMemberHelper.toDetails(castMember) );

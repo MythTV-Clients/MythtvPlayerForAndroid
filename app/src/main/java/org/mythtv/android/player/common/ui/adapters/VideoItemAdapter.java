@@ -20,7 +20,6 @@ package org.mythtv.android.player.common.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,6 @@ import com.squareup.picasso.Picasso;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.player.common.ui.animation.AnimationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +60,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.video_list_item, viewGroup, false );
 
-        ViewHolder vh = new ViewHolder( v );
-        return vh;
+        return new ViewHolder( v );
     }
 
     @Override

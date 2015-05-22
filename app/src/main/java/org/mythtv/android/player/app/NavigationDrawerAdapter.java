@@ -211,7 +211,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
 
     }
 
-    private final Handler mHandler = new Handler() {
+    private static final Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage( Message msg ) {

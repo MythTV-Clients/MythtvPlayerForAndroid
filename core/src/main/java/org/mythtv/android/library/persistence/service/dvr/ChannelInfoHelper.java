@@ -55,7 +55,7 @@ public class ChannelInfoHelper {
         details.setxMLTVID( channelInfo.getxMLTVID() );
         details.setDefaultAuth( channelInfo.getDefaultAuth() );
 
-        List<ProgramDetails> programDetails = new ArrayList<ProgramDetails>();
+        List<ProgramDetails> programDetails = new ArrayList<>();
         if( null != channelInfo.getPrograms() &&  channelInfo.getPrograms().size() > 0 ) {
             for( Program program : channelInfo.getPrograms() ) {
                 programDetails.add( ProgramHelper.toDetails(program) );
@@ -90,7 +90,7 @@ public class ChannelInfoHelper {
         channelInfo.setxMLTVID(details.getxMLTVID());
         channelInfo.setDefaultAuth( details.getDefaultAuth() );
 
-        List<Program> programs = new ArrayList<Program>();
+        List<Program> programs = new ArrayList<>();
         if( null != details.getPrograms() && !details.getPrograms().isEmpty() ) {
             for( ProgramDetails detail : details.getPrograms() ) {
                 programs.add( ProgramHelper.fromDetails(detail) );

@@ -24,16 +24,14 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
-import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
-import org.mythtv.android.library.events.dvr.RequestAllTitleInfosEvent;
-import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 
 import java.util.ArrayList;
@@ -68,7 +66,7 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
         if( MainApplication.getInstance().enableDefaultRecordingGroup() ) {
 
             recordingGroup = MainApplication.getInstance().defaultRecordingGroup();
-
+            Log.i( TAG, "loadInBack : recordingGroup=" + recordingGroup );
         }
 
         AllProgramsEvent event = MainApplication.getInstance().getDvrService().requestAllTitles( new RequestAllRecordedProgramsEvent( null, null, recordingGroup, limit, offset ) );
@@ -77,6 +75,7 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
             for( ProgramDetails details : event.getDetails() ) {
 
                 Program program = Program.fromDetails( details );
+                Log.i( TAG, "loadInBack : program=" + program );
                 titleInfos.add( new TitleInfo( program.getId(), program.getTitle(), program.getInetref() ) );
 
             }
@@ -205,7 +204,7 @@ public class TitleInfosAsyncTaskLoader extends AsyncTaskLoader<List<TitleInfo>> 
 
     }
 
-    private final Handler mHandler = new Handler() {
+    private static final Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage( Message msg ) {

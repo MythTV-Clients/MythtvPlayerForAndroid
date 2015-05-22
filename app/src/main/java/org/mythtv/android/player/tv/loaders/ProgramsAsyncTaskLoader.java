@@ -229,7 +229,7 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
         // should be released here.
     }
 
-    private final Handler mHandler = new Handler() {
+    private static final Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage( Message msg ) {

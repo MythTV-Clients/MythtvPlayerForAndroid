@@ -369,7 +369,7 @@ public class Program implements Serializable {
             details.setRecording( recording.toDetails() );
         }
 
-        List<ArtworkInfoDetails> artworkInfoDetails = new ArrayList<ArtworkInfoDetails>();
+        List<ArtworkInfoDetails> artworkInfoDetails = new ArrayList<>();
         if( null != artworkInfos && !artworkInfos.isEmpty() ) {
             for( ArtworkInfo artworkInfo : artworkInfos ) {
                 artworkInfoDetails.add( artworkInfo.toDetails() );
@@ -377,7 +377,7 @@ public class Program implements Serializable {
         }
         details.setArtworkInfos( artworkInfoDetails );
 
-        List<CastMemberDetails> castMemberDetails = new ArrayList<CastMemberDetails>();
+        List<CastMemberDetails> castMemberDetails = new ArrayList<>();
         if( null != castMembers && !castMembers.isEmpty() ) {
             for( CastMember castMember : castMembers ) {
                 castMemberDetails.add( castMember.toDetails() );
@@ -425,7 +425,7 @@ public class Program implements Serializable {
             program.setRecording( RecordingInfo.fromDetails( details.getRecording() ) );
         }
 
-        List<ArtworkInfo> artworkInfos = new ArrayList<ArtworkInfo>();
+        List<ArtworkInfo> artworkInfos = new ArrayList<>();
         if( null != details.getArtworkInfos() && !details.getArtworkInfos().isEmpty() ) {
             for( ArtworkInfoDetails detail : details.getArtworkInfos() ) {
                 artworkInfos.add( ArtworkInfo.fromDetails( detail ) );
@@ -433,7 +433,7 @@ public class Program implements Serializable {
         }
         program.setArtworkInfos( artworkInfos );
 
-        List<CastMember> castMembers = new ArrayList<CastMember>();
+        List<CastMember> castMembers = new ArrayList<>();
         if( null != details.getCastMembers() && !details.getCastMembers().isEmpty() ) {
             for( CastMemberDetails detail : details.getCastMembers() ) {
                 castMembers.add( CastMember.fromDetails( detail ) );

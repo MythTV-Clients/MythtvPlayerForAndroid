@@ -91,7 +91,13 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
             }
 
-            AllProgramsCountEvent countEvent = MainApplication.getInstance().getDvrService().requestAllRecordedProgramsCount( new RequestAllRecordedProgramsCountEvent() );
+            String recordingGroup = null;
+            if( MainApplication.getInstance().enableDefaultRecordingGroup() ) {
+
+                recordingGroup = MainApplication.getInstance().defaultRecordingGroup();
+            }
+
+            AllProgramsCountEvent countEvent = MainApplication.getInstance().getDvrService().requestAllRecordedProgramsCount( new RequestAllRecordedProgramsCountEvent( recordingGroup ) );
             if( countEvent.isEntityFound() ) {
 
                 mAllRecordingsCount.setText( String.valueOf( countEvent.getCount() ) );
@@ -162,7 +168,7 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
-        super.onActivityCreated( savedInstanceState );
+        super.onActivityCreated(savedInstanceState);
 
         getLoaderManager().initLoader( 0, null, this );
 
@@ -170,7 +176,10 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
     public void reload() {
 
-//        getLoaderManager().restartLoader( 0, null, this);
+        mAdapter.getTitleInfos().clear();
+        mAdapter.notifyDataSetChanged();
+
+        getLoaderManager().restartLoader( 0, null, this);
 
     }
 

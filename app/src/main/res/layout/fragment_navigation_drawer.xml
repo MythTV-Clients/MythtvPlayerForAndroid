@@ -67,7 +67,8 @@
             android:layout_alignParentRight="true"
             android:text="@string/app_version"
             android:textSize="18sp"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 

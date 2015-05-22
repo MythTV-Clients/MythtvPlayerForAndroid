@@ -22,7 +22,6 @@ import org.mythtv.android.library.events.dvr.AllProgramsCountEvent;
 import org.mythtv.android.library.events.dvr.AllProgramsEvent;
 import org.mythtv.android.library.events.dvr.AllTitleInfosEvent;
 import org.mythtv.android.library.events.dvr.DeleteProgramsEvent;
-import org.mythtv.android.library.events.dvr.ProgramDetails;
 import org.mythtv.android.library.events.dvr.ProgramDetailsEvent;
 import org.mythtv.android.library.events.dvr.ProgramRemovedEvent;
 import org.mythtv.android.library.events.dvr.ProgramsDeletedEvent;

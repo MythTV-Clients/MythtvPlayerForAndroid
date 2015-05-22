@@ -33,8 +33,8 @@ public class AllProgramsEvent extends ReadEvent {
 
     private final List<ProgramDetails> details;
 
-    private Map<String, List<ProgramDetails>> mPrograms = new TreeMap<String, List<ProgramDetails>>();
-    private Map<String, String> mCategories = new TreeMap<String, String>();
+    private Map<String, List<ProgramDetails>> mPrograms = new TreeMap<>();
+    private Map<String, String> mCategories = new TreeMap<>();
     private Map<ProgramDetails, Long> deleted;
 
     public AllProgramsEvent( final List<ProgramDetails> details ) {
@@ -75,7 +75,7 @@ public class AllProgramsEvent extends ReadEvent {
             String cleanedTitle = program.getTitle();
             if( !mPrograms.containsKey( cleanedTitle ) ) {
 
-                List<ProgramDetails> categoryPrograms = new ArrayList<ProgramDetails>();
+                List<ProgramDetails> categoryPrograms = new ArrayList<>();
                 categoryPrograms.add( program );
                 mPrograms.put( cleanedTitle, categoryPrograms );
 

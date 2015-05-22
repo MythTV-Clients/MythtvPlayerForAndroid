@@ -385,7 +385,7 @@ public class RecordingPlayerActivity extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         int currentPos = 0;
-        int delta = (int) (mDuration / SCRUB_SEGMENT_DIVISOR);
+        int delta = (mDuration / SCRUB_SEGMENT_DIVISOR);
         if (delta < MIN_SCRUB_TIME)
             delta = MIN_SCRUB_TIME;
 

@@ -70,7 +70,7 @@ public class VideoCardPresenter extends Presenter {
 
         protected void updateCardViewImage( String uri ) {
             Picasso.with( mContext )
-                    .load( uri.toString() )
+                    .load( uri )
                     .resize( CARD_WIDTH, CARD_HEIGHT )
                     .centerCrop()
                     .error( mDefaultCardImage )

@@ -241,16 +241,12 @@ public class MainApplication extends Application {
 
     public boolean isInternalPlayerEnabled() {
 
-        boolean useInternalPlayer = mSharedPref.getBoolean( KEY_PREF_INTERNAL_PLAYER, true );
-
-        return useInternalPlayer;
+        return mSharedPref.getBoolean( KEY_PREF_INTERNAL_PLAYER, true );
     }
 
     public boolean isExternalPlayerVideoOverrideEnabled() {
 
-        boolean useExternalPlayerForVideo = mSharedPref.getBoolean( KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, true );
-
-        return useExternalPlayerForVideo;
+        return mSharedPref.getBoolean( KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, true );
     }
 
     public int getVideoWidth() {
@@ -283,30 +279,22 @@ public class MainApplication extends Application {
 
     public boolean showAdultTab() {
 
-        boolean showAdultTab = mSharedPref.getBoolean(KEY_PREF_SHOW_ADULT_TAB, false);
-
-        return showAdultTab;
+        return mSharedPref.getBoolean(KEY_PREF_SHOW_ADULT_TAB, false);
     }
 
     public boolean enableDefaultRecordingGroup() {
 
-        boolean enableDefaultRecordingGroup = mSharedPref.getBoolean( KEY_PREF_ENABLE_DEFAULT_RECORDING_GROUP, false );
-
-        return enableDefaultRecordingGroup;
+        return mSharedPref.getBoolean( KEY_PREF_ENABLE_DEFAULT_RECORDING_GROUP, false );
     }
 
     public String defaultRecordingGroup() {
 
-        String defaultRecordingGroup = mSharedPref.getString( KEY_PREF_DEFAULT_RECORDING_GROUP, "Default" );
-
-        return defaultRecordingGroup;
+        return mSharedPref.getString( KEY_PREF_DEFAULT_RECORDING_GROUP, "Default" );
     }
 
     public boolean enableParentalControls() {
 
-        boolean enableParentalControls = mSharedPref.getBoolean( KEY_PREF_ENABLE_PARENTAL_CONTROLS, false );
-
-        return enableParentalControls;
+        return mSharedPref.getBoolean( KEY_PREF_ENABLE_PARENTAL_CONTROLS, false );
     }
 
     public int getParentalControlLevel() {
@@ -318,14 +306,12 @@ public class MainApplication extends Application {
 
     public boolean restrictRatings() {
 
-        boolean restrictRatings = mSharedPref.getBoolean( KEY_PREF_RESTRICT_CONTENT_TYPES, false );
-
-        return restrictRatings;
+        return mSharedPref.getBoolean( KEY_PREF_RESTRICT_CONTENT_TYPES, false );
     }
 
     public List<String> restrictedRatings() {
 
-        List<String> restrictedRatings = new ArrayList();
+        List<String> restrictedRatings = new ArrayList<>();
 
         boolean nr = mSharedPref.getBoolean( KEY_PREF_RATING_NR, false );
         if( nr ) {

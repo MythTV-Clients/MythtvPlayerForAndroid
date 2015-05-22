@@ -18,10 +18,7 @@
 
 package org.mythtv.android.library.core.service;
 
-import android.util.Log;
-
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.service.v028.video.VideoHelper;
 import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.DeleteVideoEvent;
 import org.mythtv.android.library.events.video.DeleteVideosEvent;
@@ -30,21 +27,11 @@ import org.mythtv.android.library.events.video.RequestVideoEvent;
 import org.mythtv.android.library.events.video.SearchVideosEvent;
 import org.mythtv.android.library.events.video.UpdateVideosEvent;
 import org.mythtv.android.library.events.video.VideoDeletedEvent;
-import org.mythtv.android.library.events.video.VideoDetails;
 import org.mythtv.android.library.events.video.VideoDetailsEvent;
 import org.mythtv.android.library.events.video.VideosDeletedEvent;
 import org.mythtv.android.library.events.video.VideosUpdatedEvent;
 import org.mythtv.android.library.persistence.service.VideoPersistenceService;
 import org.mythtv.android.library.persistence.service.video.VideoPersistenceServiceEventHandler;
-import org.mythtv.services.api.ETagInfo;
-import org.mythtv.services.api.MythTvApi028Context;
-import org.mythtv.services.api.v028.beans.VideoMetadataInfo;
-import org.mythtv.services.api.v028.beans.VideoMetadataInfoList;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit.RetrofitError;
 
 /**
  * Created by dmfrey on 11/24/14.

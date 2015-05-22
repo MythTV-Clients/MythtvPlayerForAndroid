@@ -132,15 +132,15 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
     public void setupUi( List<Program> programs ) {
         Log.i( TAG, "setupUi : enter" );
 
-        Map<String, String> categoryMap = new TreeMap<String, String>();
-        Map<String, List<Program>> programMap = new TreeMap<String, List<Program>>();
+        Map<String, String> categoryMap = new TreeMap<>();
+        Map<String, List<Program>> programMap = new TreeMap<>();
 
         for( Program program : programs ) {
 
             String cleanedTitle = program.getTitle(); //cleanArticles( program.getTitle() );
             if( !programMap.containsKey( cleanedTitle ) ) {
 
-                List<Program> categoryPrograms = new ArrayList<Program>();
+                List<Program> categoryPrograms = new ArrayList<>();
                 categoryPrograms.add( program );
                 programMap.put( cleanedTitle, categoryPrograms );
 

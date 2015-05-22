@@ -106,8 +106,6 @@ public class TitleInfo implements Serializable, Comparable<TitleInfo> {
         comparison = thisInetref.compareTo( thatInetref );
         if( comparison != EQUAL ) return comparison;
 
-        assert this.equals( another ) : "compareTo inconsistent with equals.";
-
         return EQUAL;
     }
 

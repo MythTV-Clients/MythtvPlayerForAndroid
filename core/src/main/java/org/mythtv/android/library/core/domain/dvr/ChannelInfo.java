@@ -290,7 +290,7 @@ public class ChannelInfo implements Serializable {
         details.setxMLTVID( xMLTVID );
         details.setDefaultAuth( defaultAuth );
 
-        List<ProgramDetails> programDetails = new ArrayList<ProgramDetails>();
+        List<ProgramDetails> programDetails = new ArrayList<>();
         if( null != programs && !programs.isEmpty() ) {
             for( Program program : programs ) {
                 programDetails.add( program.toDetails() );
@@ -325,7 +325,7 @@ public class ChannelInfo implements Serializable {
         channelInfo.setxMLTVID( details.getxMLTVID() );
         channelInfo.setDefaultAuth( details.getDefaultAuth() );
 
-        List<Program> programs = new ArrayList<Program>();
+        List<Program> programs = new ArrayList<>();
         if( null != details.getPrograms() && !details.getPrograms().isEmpty() ) {
             for( ProgramDetails detail : details.getPrograms() ) {
                 programs.add( Program.fromDetails( detail ) );

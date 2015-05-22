@@ -25,4 +25,20 @@ import org.mythtv.android.library.events.RequestReadEvent;
  */
 public class RequestAllRecordedProgramsCountEvent extends RequestReadEvent {
 
+    private final String recordingGroup;
+
+    public RequestAllRecordedProgramsCountEvent() {
+
+        this.recordingGroup = null;
+
+    }
+
+    public RequestAllRecordedProgramsCountEvent( final String recordingGroup ) {
+
+        this.recordingGroup = recordingGroup;
+
+    }
+
+    public String getRecordingGroup() { return recordingGroup; }
+
 }

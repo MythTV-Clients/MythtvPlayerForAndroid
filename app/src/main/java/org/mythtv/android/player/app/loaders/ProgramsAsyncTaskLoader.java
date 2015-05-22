@@ -206,7 +206,7 @@ public class ProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {
 
     }
 
-    private final Handler mHandler = new Handler() {
+    private static final Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage( Message msg ) {

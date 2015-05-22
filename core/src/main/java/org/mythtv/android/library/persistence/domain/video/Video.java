@@ -598,7 +598,7 @@ public class Video implements Serializable {
         details.setScreenshot( screenshot );
         details.setTrailer( trailer );
 
-        List<ArtworkInfoDetails> artworkInfoDetails = new ArrayList<ArtworkInfoDetails>();
+        List<ArtworkInfoDetails> artworkInfoDetails = new ArrayList<>();
         if( null != artworkInfos && !artworkInfos.isEmpty() ) {
             for( ArtworkInfo artworkInfo : artworkInfos ) {
                 artworkInfoDetails.add( artworkInfo.toDetails() );
@@ -606,7 +606,7 @@ public class Video implements Serializable {
         }
         details.setArtworkInfos( artworkInfoDetails );
 
-        List<CastMemberDetails> castMemberDetails = new ArrayList<CastMemberDetails>();
+        List<CastMemberDetails> castMemberDetails = new ArrayList<>();
         if( null != castMembers && !castMembers.isEmpty() ) {
             for( CastMember castMember : castMembers ) {
                 castMemberDetails.add( castMember.toDetails() );
@@ -653,7 +653,7 @@ public class Video implements Serializable {
         video.setScreenshot( details.getScreenshot() );
         video.setTrailer(details.getTrailer());
 
-        List<ArtworkInfo> artworkInfos = new ArrayList<ArtworkInfo>();
+        List<ArtworkInfo> artworkInfos = new ArrayList<>();
         if( null != details.getArtworkInfos() && !details.getArtworkInfos().isEmpty() ) {
             for( ArtworkInfoDetails artworkInfoDetails : details.getArtworkInfos() ) {
                 artworkInfos.add( ArtworkInfo.fromDetails(artworkInfoDetails) );
@@ -661,7 +661,7 @@ public class Video implements Serializable {
         }
         video.setArtworkInfos(artworkInfos);
 
-        List<CastMember> castMembers = new ArrayList<CastMember>();
+        List<CastMember> castMembers = new ArrayList<>();
         if( null != details.getCastMembers() && !details.getCastMembers().isEmpty() ) {
             for( CastMemberDetails castMemberDetails : details.getCastMembers() ) {
                 castMembers.add( CastMember.fromDetails(castMemberDetails) );

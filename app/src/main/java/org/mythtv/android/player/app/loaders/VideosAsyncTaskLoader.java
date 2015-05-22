@@ -204,7 +204,7 @@ public class VideosAsyncTaskLoader extends AsyncTaskLoader<List<Video>> {
 
     }
 
-    private final Handler mHandler = new Handler() {
+    private static final Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage( Message msg ) {

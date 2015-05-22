@@ -18,8 +18,6 @@
 
 package org.mythtv.android.library.core.service.v027.content;
 
-import android.util.Log;
-
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.events.content.AddLiveStreamEvent;

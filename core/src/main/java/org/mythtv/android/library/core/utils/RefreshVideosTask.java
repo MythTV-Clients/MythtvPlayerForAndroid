@@ -22,7 +22,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 import org.mythtv.android.library.events.video.UpdateVideosEvent;
 
 /**

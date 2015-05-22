@@ -27,7 +27,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,15 +37,10 @@ import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
 import org.mythtv.android.player.app.AbstractBaseFragment;
 import org.mythtv.android.player.app.listeners.EndlessScrollListener;
-import org.mythtv.android.player.app.loaders.VideosAsyncTaskLoader;
 import org.mythtv.android.player.app.loaders.VideosTvSeriesAsyncTaskLoader;
 import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by dmfrey on 12/3/14.

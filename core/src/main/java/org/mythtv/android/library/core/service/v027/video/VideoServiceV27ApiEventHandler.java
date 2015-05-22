@@ -18,8 +18,6 @@
 
 package org.mythtv.android.library.core.service.v027.video;
 
-import android.util.Log;
-
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.service.VideoService;
 import org.mythtv.android.library.events.video.AllVideosEvent;

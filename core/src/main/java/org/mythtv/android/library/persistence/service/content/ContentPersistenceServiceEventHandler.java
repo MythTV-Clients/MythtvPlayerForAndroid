@@ -138,7 +138,7 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
         String selection = null;
         String[] selectionArgs = null;
 
-        Map<Integer, Long> liveStreamIds = new HashMap<Integer, Long>();
+        Map<Integer, Long> liveStreamIds = new HashMap<>();
 
         Cursor cursor = mContext.getContentResolver().query( LiveStreamConstants.CONTENT_URI, projection, selection, selectionArgs, null );
         while( cursor.moveToNext() ) {
@@ -150,7 +150,7 @@ public class ContentPersistenceServiceEventHandler implements ContentPersistence
 
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
 
-            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+            ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
             selection = LiveStreamConstants.FIELD_LIVE_STREAM_ID + " = ?";
 

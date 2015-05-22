@@ -18,8 +18,6 @@
 
 package org.mythtv.android.library.core.service.v028.dvr;
 
-import android.util.Log;
-
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.events.DeleteEvent;
@@ -104,7 +102,7 @@ public class DvrServiceV28ApiEventHandler implements DvrService {
             ProgramList programList = mMythTvApiContext.getDvrService().getRecordedList( event.getDescending(), event.getStartIndex(), event.getCount(), event.getTitleRegEx(), event.getRecGroup(), event.getStorageGroup(), eTagInfo, RECORDED_LIST_REQ_ID );
             if( null != programList ) {
 
-                List<ProgramDetails> programDetails = new ArrayList<ProgramDetails>();
+                List<ProgramDetails> programDetails = new ArrayList<>();
 
                 for( Program program : programList.getPrograms() ) {
 
@@ -163,7 +161,7 @@ public class DvrServiceV28ApiEventHandler implements DvrService {
         ETagInfo eTagInfo = mMythTvApiContext.getEtag( TITLE_INFO_LIST_REQ_ID, true );
         try {
 
-            List<TitleInfoDetails> titleInfoDetails = new ArrayList<TitleInfoDetails>();
+            List<TitleInfoDetails> titleInfoDetails = new ArrayList<>();
 
             TitleInfoList titleInfoList = mMythTvApiContext.getDvrService().getTitleInfoList( eTagInfo, RECORDED_LIST_REQ_ID );
             if( null != titleInfoList ) {

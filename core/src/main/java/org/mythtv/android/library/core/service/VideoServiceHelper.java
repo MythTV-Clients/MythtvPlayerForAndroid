@@ -25,8 +25,6 @@ import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
-import org.mythtv.android.library.events.video.AllVideosEvent;
-import org.mythtv.android.library.events.video.RequestAllVideosEvent;
 import org.mythtv.android.library.events.video.UpdateVideosEvent;
 import org.mythtv.android.library.events.video.VideoDetails;
 import org.mythtv.android.library.events.video.VideosUpdatedEvent;
@@ -47,10 +45,10 @@ public class VideoServiceHelper {
 
     private final Context mContext;
 
-    private Map<String, List<Video>> mVideos = new TreeMap<String, List<Video>>();
-    private Map<String, String> mCategories = new TreeMap<String, String>();
+    private Map<String, List<Video>> mVideos = new TreeMap<>();
+    private Map<String, String> mCategories = new TreeMap<>();
 
-    private List<Video> videos = new ArrayList<Video>();
+    private List<Video> videos = new ArrayList<>();
 
     public VideoServiceHelper( final Context context ) {
 
@@ -78,7 +76,7 @@ public class VideoServiceHelper {
             if( !mVideos.containsKey( category ) ) {
 //                Log.i( TAG, "prepareVideos : added video to new category" );
 
-                List<Video> categoryVideos = new ArrayList<Video>();
+                List<Video> categoryVideos = new ArrayList<>();
                 categoryVideos.add( video );
                 mVideos.put( category, categoryVideos );
 

@@ -156,8 +156,18 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
     @Override
     public AllProgramsCountEvent requestAllRecordedProgramsCount( RequestAllRecordedProgramsCountEvent event ) {
 
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+
+        List<String> selectionArgs = new ArrayList<>();
+        selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
+
+        if( null != event.getRecordingGroup() && !"".equals( event.getRecordingGroup() )  ) {
+            selection += " AND " + ProgramConstants.FIELD_RECORDING_REC_GROUP + " = ?";
+            selectionArgs.add( event.getRecordingGroup() );
+        }
+
         int count = -1;
-        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, new String[] { "count(*) AS count" }, null, null, null );
+        Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, new String[] { "count(*) AS count" }, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), null );
         while( cursor.moveToNext() ) {
 
             count = cursor.getInt( 0 );
@@ -216,7 +226,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         }
 
-        Map<String, Long> programIds = new HashMap<String, Long>();
+        Map<String, Long> programIds = new HashMap<>();
         Cursor cursor = mContext.getContentResolver().query( ProgramConstants.CONTENT_URI, projection, selection, selectionArgs, null );
         while( cursor.moveToNext() ) {
             programIds.put(cursor.getString(cursor.getColumnIndex(ProgramConstants.FIELD_PROGRAM_FILE_NAME)), cursor.getLong(cursor.getColumnIndex(ProgramConstants._ID)));
@@ -225,7 +235,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
 
-            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+            ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
             projection = new String[] { "rowid as " + ProgramConstants._ID };
 
@@ -408,7 +418,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
 
-            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+            ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
             ContentValues values;
 
@@ -583,6 +593,11 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         List<String> selectionArgs = new ArrayList<>();
         selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
 
+        if( null != event.getRecordingGroup() && !"".equals( event.getRecordingGroup() )  ) {
+            selection += " AND " + ProgramConstants.FIELD_RECORDING_REC_GROUP + " = ?";
+            selectionArgs.add( event.getRecordingGroup() );
+        }
+
         String sort = ProgramConstants.FIELD_PROGRAM_TITLE_SORT;
 
         Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath( ProgramConstants.CONTENT_URI, "/titles" ), projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
@@ -680,7 +695,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
         if( null != event.getDetails() && !event.getDetails().isEmpty() ) {
 
-            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+            ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
             selection = TitleInfoConstants.FIELD_TITLE + " = ? AND " + TitleInfoConstants.FIELD_INETREF + " = ?";
 
@@ -812,9 +827,8 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
             ProgramKey that = (ProgramKey) o;
 
             if (chanId != that.chanId) return false;
-            if (startTs != that.startTs) return false;
 
-            return true;
+            return startTs == that.startTs;
         }
 
         @Override

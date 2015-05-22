@@ -21,8 +21,6 @@ package org.mythtv.android.player.app.loaders;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -36,7 +34,6 @@ import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.RequestAllVideosEvent;
 import org.mythtv.android.library.events.video.VideoDetails;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
-import org.mythtv.android.library.persistence.repository.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -209,7 +206,7 @@ public class VideosTvSeriesAsyncTaskLoader extends AsyncTaskLoader<List<Video>> 
 
     }
 
-    private final Handler mHandler = new Handler() {
+    private static final Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage( Message msg ) {

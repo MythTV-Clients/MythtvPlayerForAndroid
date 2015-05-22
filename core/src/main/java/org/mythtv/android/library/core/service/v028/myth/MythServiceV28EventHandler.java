@@ -18,7 +18,6 @@
 
 package org.mythtv.android.library.core.service.v028.myth;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
@@ -28,7 +27,6 @@ import org.mythtv.android.library.events.myth.HostNameDetailsEvent;
 import org.mythtv.android.library.events.myth.RequestHostNameEvent;
 import org.mythtv.services.api.ETagInfo;
 import org.mythtv.services.api.MythTvApi028Context;
-import org.mythtv.services.api.MythTvApiContext;
 
 import retrofit.RetrofitError;
 

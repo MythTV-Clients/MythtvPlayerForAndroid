@@ -213,7 +213,7 @@ public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {
         // should be released here.
     }
 
-    private final Handler mHandler = new Handler() {
+    private static final Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage( Message msg ) {

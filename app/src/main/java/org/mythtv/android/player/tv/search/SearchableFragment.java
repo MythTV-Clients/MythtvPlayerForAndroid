@@ -18,9 +18,7 @@
 
 package org.mythtv.android.player.tv.search;
 
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.SearchFragment;
@@ -34,7 +32,6 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
@@ -46,16 +43,12 @@ import org.mythtv.android.library.events.dvr.SearchRecordedProgramsEvent;
 import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.SearchVideosEvent;
 import org.mythtv.android.library.events.video.VideoDetails;
-import org.mythtv.android.player.tv.loaders.SearchProgramsAsyncTaskLoader;
 import org.mythtv.android.player.tv.recordings.RecordingCardPresenter;
 import org.mythtv.android.player.tv.recordings.RecordingDetailsActivity;
 import org.mythtv.android.player.tv.recordings.RecordingDetailsFragment;
 import org.mythtv.android.player.tv.videos.VideoCardPresenter;
 import org.mythtv.android.player.tv.videos.VideoDetailsActivity;
 import org.mythtv.android.player.tv.videos.VideoDetailsFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by dmfrey on 3/20/15.

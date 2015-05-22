@@ -18,7 +18,6 @@
   -->
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/videos_browse_fragment"
     android:name="org.mythtv.android.player.tv.videos.VideosFragment"
