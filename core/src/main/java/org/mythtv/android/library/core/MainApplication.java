@@ -251,7 +251,7 @@ public class MainApplication extends Application {
 
     public int getVideoWidth() {
 
-        String width = mSharedPref.getString(KEY_PREF_HLS_VIDEO_WIDTH, "0");
+        String width = mSharedPref.getString( KEY_PREF_HLS_VIDEO_WIDTH, "0" );
 
         return Integer.parseInt( width );
     }
@@ -279,7 +279,7 @@ public class MainApplication extends Application {
 
     public boolean showAdultTab() {
 
-        return mSharedPref.getBoolean(KEY_PREF_SHOW_ADULT_TAB, false);
+        return mSharedPref.getBoolean( KEY_PREF_SHOW_ADULT_TAB, false );
     }
 
     public boolean enableDefaultRecordingGroup() {
@@ -373,7 +373,7 @@ public class MainApplication extends Application {
                 Log.v( TAG, "doInBackground : exit" );
                 return ServerVersionQuery.getMythVersion( getMasterBackendUrl(), 1000, TimeUnit.MILLISECONDS );
 
-            } catch( IOException e ) {
+            } catch( IOException | NullPointerException e ) {
                 Log.e( TAG, "error creating MythTvApiContext, could not reach '" + getMasterBackendUrl() + "'", e );
 
                 disconnect();
