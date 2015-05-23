@@ -88,7 +88,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         List<Program> programs = new ArrayList<>();
 
         String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_CHANNEL_CALLSIGN, ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_STATUS, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_PROGRAM_HOSTNAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " != -2";
 
         List<String> selectionArgs = new ArrayList<>();
         selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
@@ -156,7 +156,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
     @Override
     public AllProgramsCountEvent requestAllRecordedProgramsCount( RequestAllRecordedProgramsCountEvent event ) {
 
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " != -2";
 
         List<String> selectionArgs = new ArrayList<>();
         selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
@@ -185,7 +185,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         List<Program> programs = new ArrayList<>();
 
         String[] projection = new String[]{ ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_CHANNEL_CALLSIGN, ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_STATUS, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_PROGRAM_HOSTNAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
-        String selection = ProgramConstants.TABLE_NAME + " MATCH ? AND " + ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String selection = ProgramConstants.TABLE_NAME + " MATCH ? AND " + ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " != -2";
         List<String> selectionArgs = new ArrayList<>();
         selectionArgs.add( event.getQuery() + "*" );
         selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
@@ -224,12 +224,12 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         Log.v( TAG, "updateRecordedPrograms : enter" );
 
         String[] projection = new String[] { "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME };
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " != -2";
         String[] selectionArgs = new String[] { "RECORDED" };
 
         if( null != event.getTitleRegEx() && !"".equals( event.getTitleRegEx() ) ) {
 
-            selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_PROGRAM_TITLE + " = ?";
+            selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_PROGRAM_TITLE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " != -2";
             selectionArgs = new String[] { "RECORDED", event.getTitleRegEx() };
 
         }
@@ -492,7 +492,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         Program program = null;
 
         String[] projection = new String[]{ "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_CHANNEL_CALLSIGN, ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_STATUS, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_PROGRAM_HOSTNAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " != -2";
 
         List<String> selectionArgs = new ArrayList<>();
         selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
@@ -561,7 +561,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         List<Program> programs = new ArrayList<>();
 
         String[] projection = new String[] { "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_CHANNEL_CALLSIGN, ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_STATUS, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_PROGRAM_HOSTNAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " != -2";
 
         List<String> selectionArgs = new ArrayList<>();
         selectionArgs.add(ProgramConstants.ProgramType.RECORDED.name());
@@ -596,7 +596,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         List<Program> programs = new ArrayList<>();
 
         String[] projection = new String[] { "rowid as " + ProgramConstants._ID, ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_CHANNEL_CALLSIGN, ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_STATUS, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_PROGRAM_HOSTNAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
-        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        String selection = ProgramConstants.FIELD_PROGRAM_TYPE + " = ? AND " + ProgramConstants.FIELD_RECORDING_STATUS + " != -2";
 
         List<String> selectionArgs = new ArrayList<>();
         selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
