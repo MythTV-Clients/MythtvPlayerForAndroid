@@ -262,10 +262,37 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         String[] projection = null;
         String selection = VideoConstants.TABLE_NAME + " MATCH ?";
-        String[] selectionArgs = new String[] { event.getQuery() + "*" };
+        List<String> selectionArgs = new ArrayList<>();
+        selectionArgs.add( event.getQuery() + "*" );
+
+        if( MainApplication.getInstance().enableParentalControls() ) {
+
+            int parentalControlLevel = MainApplication.getInstance().getParentalControlLevel();
+            selection += " AND " + VideoConstants.FIELD_VIDEO_PARENTAL_LEVEL + " <= " + parentalControlLevel;
+
+        }
+
+        if( MainApplication.getInstance().restrictRatings() && !MainApplication.getInstance().restrictedRatings().isEmpty() ) {
+
+            String ratingSelection = " AND (";
+            List<String> restrictedRatings = MainApplication.getInstance().restrictedRatings();
+            for( String rating : restrictedRatings ) {
+
+                if( ratingSelection.length() > 6 && restrictedRatings.size() > 1 ) {
+                    ratingSelection += " OR ";
+                }
+
+                ratingSelection += VideoConstants.FIELD_VIDEO_CERTIFICATION + " = ?";
+                selectionArgs.add( rating );
+            }
+            ratingSelection += ") ";
+            selection += ratingSelection;
+
+        }
+
         String sort = VideoConstants.FIELD_VIDEO_COLLECTIONREF + ", " + VideoConstants.FIELD_VIDEO_TITLE;
 
-        Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath(VideoConstants.CONTENT_URI, "/fts"), projection, selection, selectionArgs, sort );
+        Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath(VideoConstants.CONTENT_URI, "/fts" ), projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
         while( cursor.moveToNext() ) {
 
             videos.add( convertCursorToVideo( cursor ) );

@@ -59,34 +59,26 @@ public class SearchProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>
 
         List<Program> programs = new ArrayList<>();
 
-        try {
+        String recordingGroup = null;
+        if( MainApplication.getInstance().enableDefaultRecordingGroup() ) {
 
-            if( MainApplication.getInstance().isConnected() ) {
+            recordingGroup = MainApplication.getInstance().defaultRecordingGroup();
 
-                AllProgramsEvent event = MainApplication.getInstance().getDvrService().searchRecordedPrograms( new SearchRecordedProgramsEvent( query ) );
-                if( event.isEntityFound() ) {
-                    Log.v( TAG, "loadInBackground : programs loaded from db" );
+        }
 
-                    for( ProgramDetails details : event.getDetails() ) {
-                        Log.v( TAG, "loadInBackground : program iteration" );
+        AllProgramsEvent event = MainApplication.getInstance().getDvrService().searchRecordedPrograms( new SearchRecordedProgramsEvent( query, recordingGroup ) );
+        if( event.isEntityFound() ) {
+            Log.v( TAG, "loadInBackground : programs loaded from db" );
 
-                        programs.add( Program.fromDetails( details ) );
+            for( ProgramDetails details : event.getDetails() ) {
+                 Log.v( TAG, "loadInBackground : program iteration" );
 
-                    }
-
-                }
-
-            } else {
-
-                Log.w( TAG, "loadInBackground : MasterBackend NOT Connected!!" );
+                 programs.add( Program.fromDetails( details ) );
 
             }
 
-        } catch( NullPointerException e ) {
-
-            Log.e( TAG, "loadInBackground : error", e );
-
         }
+
 
         Log.v( TAG, "loadInBackground : exit" );
         return programs;

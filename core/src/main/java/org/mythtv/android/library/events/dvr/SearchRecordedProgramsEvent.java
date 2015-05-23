@@ -26,13 +26,24 @@ import org.mythtv.android.library.events.RequestReadEvent;
 public class SearchRecordedProgramsEvent extends RequestReadEvent {
 
     private final String query;
+    private final String recordingGroup;
 
     public SearchRecordedProgramsEvent( final String query ) {
 
         this.query = query;
+        this.recordingGroup = null;
+
+    }
+
+    public SearchRecordedProgramsEvent( final String query, final String recordingGroup ) {
+
+        this.query = query;
+        this.recordingGroup = recordingGroup;
 
     }
 
     public String getQuery() { return query; }
 
+    public String getRecordingGroup() { return recordingGroup; }
+    
 }

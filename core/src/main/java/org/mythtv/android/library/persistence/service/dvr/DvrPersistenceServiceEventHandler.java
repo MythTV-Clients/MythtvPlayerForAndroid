@@ -185,14 +185,22 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
         List<Program> programs = new ArrayList<>();
 
         String[] projection = new String[]{ ProgramConstants.FIELD_PROGRAM_START_TIME, ProgramConstants.FIELD_PROGRAM_END_TIME, ProgramConstants.FIELD_PROGRAM_TITLE, ProgramConstants.FIELD_PROGRAM_SUB_TITLE, ProgramConstants.FIELD_PROGRAM_INETREF, ProgramConstants.FIELD_PROGRAM_DESCRIPTION, ProgramConstants.FIELD_CHANNEL_CHAN_ID, ProgramConstants.FIELD_CHANNEL_CALLSIGN, ProgramConstants.FIELD_CHANNEL_CHAN_NUM, ProgramConstants.FIELD_RECORDING_RECORDED_ID, ProgramConstants.FIELD_RECORDING_STATUS, ProgramConstants.FIELD_RECORDING_START_TS, ProgramConstants.FIELD_RECORDING_RECORD_ID, ProgramConstants.FIELD_PROGRAM_FILE_NAME, ProgramConstants.FIELD_PROGRAM_HOSTNAME, ProgramConstants.FIELD_RECORDING_REC_GROUP, ProgramConstants.FIELD_RECORDING_STORAGE_GROUP, ProgramConstants.FIELD_CAST_MEMBER_NAMES };
-        String selection = ProgramConstants.TABLE_NAME + " MATCH ?";
-        String[] selectionArgs = new String[] { event.getQuery() + "*" };
+        String selection = ProgramConstants.TABLE_NAME + " MATCH ? AND " + ProgramConstants.FIELD_PROGRAM_TYPE + " = ?";
+        List<String> selectionArgs = new ArrayList<>();
+        selectionArgs.add( event.getQuery() + "*" );
+        selectionArgs.add( ProgramConstants.ProgramType.RECORDED.name() );
+
+        if( null != event.getRecordingGroup() && !"".equals( event.getRecordingGroup() )  ) {
+            selection += " AND " + ProgramConstants.FIELD_RECORDING_REC_GROUP + " = ?";
+            selectionArgs.add( event.getRecordingGroup() );
+        }
+
         String sort = ProgramConstants.FIELD_PROGRAM_END_TIME + " desc";
 
-        Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath( ProgramConstants.CONTENT_URI, "/fts" ), projection, selection, selectionArgs, sort );
+        Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath( ProgramConstants.CONTENT_URI, "/fts" ), projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
         while( cursor.moveToNext() ) {
 
-            programs.add(convertCursorToProgram(cursor));
+            programs.add( convertCursorToProgram( cursor ) );
 
         }
         cursor.close();

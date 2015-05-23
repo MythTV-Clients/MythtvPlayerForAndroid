@@ -138,8 +138,15 @@ public class SearchableFragment extends SearchFragment implements /* LoaderManag
 
 //        getLoaderManager().restartLoader( 0, args, this );
 
+        String recordingGroup = null;
+        if( MainApplication.getInstance().enableDefaultRecordingGroup() ) {
+
+            recordingGroup = MainApplication.getInstance().defaultRecordingGroup();
+
+        }
+
         ArrayObjectAdapter programRowAdapter = new ArrayObjectAdapter( new RecordingCardPresenter() );
-        AllProgramsEvent programsEvent = MainApplication.getInstance().getDvrService().searchRecordedPrograms(new SearchRecordedProgramsEvent(query));
+        AllProgramsEvent programsEvent = MainApplication.getInstance().getDvrService().searchRecordedPrograms( new SearchRecordedProgramsEvent( query, recordingGroup ) );
         if( programsEvent.isEntityFound() ) {
 
             for( ProgramDetails details : programsEvent.getDetails() ) {

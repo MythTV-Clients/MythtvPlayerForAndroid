@@ -87,8 +87,15 @@ public class SearchableActivity extends AbstractBaseAppCompatActivity implements
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions( this, MythtvSearchSuggestionProvider.AUTHORITY, MythtvSearchSuggestionProvider.MODE );
             suggestions.saveRecentQuery( query, null );
 
+            String recordingGroup = null;
+            if( MainApplication.getInstance().enableDefaultRecordingGroup() ) {
+
+                recordingGroup = MainApplication.getInstance().defaultRecordingGroup();
+
+            }
+
             List<Object> items = new ArrayList<>();
-            AllProgramsEvent programsEvent = MainApplication.getInstance().getDvrService().searchRecordedPrograms( new SearchRecordedProgramsEvent( query ) );
+            AllProgramsEvent programsEvent = MainApplication.getInstance().getDvrService().searchRecordedPrograms( new SearchRecordedProgramsEvent( query, recordingGroup ) );
             if( programsEvent.isEntityFound() ) {
 
                 for( ProgramDetails details : programsEvent.getDetails() ) {
