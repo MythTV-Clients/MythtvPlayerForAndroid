@@ -128,5 +128,12 @@
     <string name="watch_recording">Folge Ansehen</string>
     <string name="watch_video">Videos Ansehen</string>
     <string name="grid_view">Grid View</string>
+    <string name="recording_preferences">Aufnahmeeinstellungen</string>
+    <string name="recording_preferences_summary"> Ändern Aufnahme Anzeige und Filter</string>
+    <string name="pref_set_default_recording_group"> Aufnahme Gruppeneinstellungen</string>
+    <string name="pref_default_recording_group"> Auswählen Standard Aufnahme-Gruppe</string>
+    <string name="pref_default_recording_group_summary_off">Keine Standard Aufnahme-Gruppe festgelegt ist</string>
+    <string name="pref_default_recording_group_summary_on"> Nur Aufnahmen im gewählten Aufnahmegruppe wird angezeigt</string>
+    <string name="pref_enable_default_recording_group">Ermöglichen Default Aufnahme-Gruppe</string>
 
 </resources>
