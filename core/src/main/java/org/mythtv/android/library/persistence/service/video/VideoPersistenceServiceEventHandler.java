@@ -290,6 +290,13 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         }
 
+        if( !MainApplication.getInstance().showAdultTab() ) {
+
+            selection += " AND " + VideoConstants.FIELD_VIDEO_CONTENT_TYPE + " != ?";
+            selectionArgs.add( "ADULT" );
+
+        }
+
         String sort = VideoConstants.FIELD_VIDEO_COLLECTIONREF + ", " + VideoConstants.FIELD_VIDEO_TITLE;
 
         Cursor cursor = mContext.getContentResolver().query( Uri.withAppendedPath(VideoConstants.CONTENT_URI, "/fts" ), projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
