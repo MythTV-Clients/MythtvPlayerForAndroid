@@ -66,24 +66,4 @@ public class RecordingDetailsActivity extends Activity {
         Log.d( TAG, "onCreate : exit" );
     }
 
-//    @Override
-//    protected void onResume() {
-//        Log.d( TAG, "onResume : enter" );
-//        super.onResume();
-//
-//        MainApplication.getInstance().scheduleAlarms();
-//
-//        Log.d( TAG, "onResume : exit" );
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        Log.d( TAG, "onPause : enter" );
-//        super.onPause();
-//
-//        MainApplication.getInstance().cancelAlarms();
-//
-//        Log.d( TAG, "onPause : exit" );
-//    }
-
 }
