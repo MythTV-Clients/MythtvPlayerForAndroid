@@ -41,13 +41,7 @@
 
     </RelativeLayout>
 
-    <fragment
-        android:id="@+id/fragment_navigation_drawer"
-        android:name="org.mythtv.android.player.app.NavigationDrawerFragment"
-        android:layout_width="@dimen/nav_drawer_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:layout="@layout/fragment_navigation_drawer"
-        tools:layout="@layout/fragment_navigation_drawer" />
+    <include
+        layout="@layout/navigation_view" />
 
 </android.support.v4.widget.DrawerLayout>

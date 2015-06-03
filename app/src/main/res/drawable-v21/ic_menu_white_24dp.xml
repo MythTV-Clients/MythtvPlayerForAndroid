@@ -17,25 +17,19 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:width="24dp"
+    android:height="24dp">
 
-    <group android:checkableBehavior="single">
+    <group android:name="navigation_drawer_watch_recordings">
 
-        <item
-            android:id="@+id/navigation_item_watch_recordings"
-            android:icon="@drawable/navigation_drawer_watch_recordings"
-            android:title="@string/drawer_item_watch_recordings" />
-
-        <item
-            android:id="@+id/navigation_item_watch_videos"
-            android:icon="@drawable/navigation_drawer_watch_videos"
-            android:title="@string/drawer_item_watch_videos" />
-
-        <item
-            android:id="@+id/navigation_item_watch_settings"
-            android:icon="@drawable/navigation_drawer_settings"
-            android:title="@string/drawer_item_preferences" />
+        <path
+            android:name="ic_menu"
+            android:fillColor="#FFFFFF"
+            android:pathData="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
 
     </group>
 
-</menu>
+</vector>

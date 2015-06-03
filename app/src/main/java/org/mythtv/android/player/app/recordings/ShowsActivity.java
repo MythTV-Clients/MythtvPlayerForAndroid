@@ -22,21 +22,18 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.support.v7.widget.SearchView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
-import org.mythtv.android.player.app.NavigationDrawerFragment;
 
 public class ShowsActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = ShowsActivity.class.getSimpleName();
 
     private TitleInfosFragment mTitleInfosFragment;
-    private NavigationDrawerFragment mDrawerFragment;
 
     @Override
     protected int getLayoutResource() {
@@ -64,18 +61,14 @@ public class ShowsActivity extends AbstractBaseAppCompatActivity {
 
         mTitleInfosFragment = (TitleInfosFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_shows );
 
-        mDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById( R.id.fragment_navigation_drawer );
-        mDrawerFragment.setUp( R.id.fragment_navigation_drawer, (DrawerLayout) findViewById( R.id.drawer_layout ), toolbar );
-
-        setTitle( getResources().getString( R.string.drawer_item_watch_recordings ) );
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        mDrawerFragment.setSelectItem( 0 );
+        setTitle( getResources().getString( R.string.drawer_item_watch_recordings ) );
+        super.setNavigationMenuItemChecked( 0 );
 
     }
 
