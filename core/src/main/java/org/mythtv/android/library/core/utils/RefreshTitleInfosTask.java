@@ -22,18 +22,19 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.mythtv.android.library.core.MainApplication;
+import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
 import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 
 /**
  * Created by dmfrey on 3/14/15.
  */
-public class RefreshTitleInfosTask extends AsyncTask<Void, Void, Void> {
+public class RefreshTitleInfosTask extends AsyncTask<Void, Void, TitleInfosUpdatedEvent> {
 
     private final String TAG = RefreshTitleInfosTask.class.getSimpleName();
 
     public interface OnRefreshRecordedProgramTaskListener {
 
-        public void onRefreshComplete();
+        public void onRefreshComplete( boolean updated );
 
     }
 
@@ -50,29 +51,30 @@ public class RefreshTitleInfosTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground( Void... params ) {
+    protected TitleInfosUpdatedEvent doInBackground( Void... params ) {
         Log.v(TAG, "doInBackground : enter");
 
         if( MainApplication.getInstance().isConnected() ) {
 
-            MainApplication.getInstance().getDvrApiService().updateTitleInfos( new UpdateTitleInfosEvent() );
+            TitleInfosUpdatedEvent updated = MainApplication.getInstance().getDvrApiService().updateTitleInfos( new UpdateTitleInfosEvent() );
 
+            return updated;
         }
 
         Log.v( TAG, "doInBackground : exit" );
-        return null;
+        return TitleInfosUpdatedEvent.notUpdated();
     }
 
     @Override
-    protected void onPostExecute( Void aVoid ) {
+    protected void onPostExecute( TitleInfosUpdatedEvent event ) {
 
         if( null != mListener ) {
 
-            mListener.onRefreshComplete();
+            mListener.onRefreshComplete( event.isEntityFound() );
 
         }
 
-        super.onPostExecute( aVoid );
+        super.onPostExecute( event );
 
     }
 

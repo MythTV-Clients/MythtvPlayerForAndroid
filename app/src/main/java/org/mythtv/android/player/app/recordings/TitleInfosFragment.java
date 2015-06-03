@@ -18,6 +18,7 @@
 
 package org.mythtv.android.player.app.recordings;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.support.v4.content.Loader;
@@ -61,6 +62,8 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     TextView mAllRecordings, mAllRecordingsCount, mEmpty;
 
     int mLimit = 5, mOffset = -1;
+
+    View parentView;
 
     @Override
     public Loader<List<TitleInfo>> onCreateLoader( int id, Bundle args ) {
@@ -120,16 +123,16 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
-        View view = inflater.inflate( R.layout.title_info_list, container, false );
+        parentView = inflater.inflate( R.layout.title_info_list, container, false );
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
+        mSwipeRefreshLayout = (SwipeRefreshLayout) parentView.findViewById( R.id.swipe_refresh_layout );
         mSwipeRefreshLayout.setOnRefreshListener( this );
 
         mAdapter = new TitleInfoItemAdapter( this );
 
         mLayoutManager = new LinearLayoutManager( getActivity() );
 
-        mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
+        mRecyclerView = (RecyclerView) parentView.findViewById( R.id.list );
         mRecyclerView.setAdapter( mAdapter );
         mRecyclerView.setLayoutManager( mLayoutManager );
         mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
@@ -145,11 +148,11 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
         });
 
-        mAllRecordings = (TextView) view.findViewById( R.id.title_info_all_recordings );
-        mAllRecordingsCount = (TextView) view.findViewById( R.id.title_info_all_recordings_count );
-        mEmpty = (TextView) view.findViewById( R.id.empty );
+        mAllRecordings = (TextView) parentView.findViewById( R.id.title_info_all_recordings );
+        mAllRecordingsCount = (TextView) parentView.findViewById( R.id.title_info_all_recordings_count );
+        mEmpty = (TextView) parentView.findViewById( R.id.empty );
 
-        mHeader = (RelativeLayout) view.findViewById( R.id.title_info_all_recordings_header );
+        mHeader = (RelativeLayout) parentView.findViewById( R.id.title_info_all_recordings_header );
         mHeader.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -163,7 +166,7 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
         });
 
-        return view;
+        return parentView;
     }
 
     @Override
@@ -230,11 +233,19 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
     }
 
     @Override
-    public void onRefreshComplete() {
+    public void onRefreshComplete( boolean updated ) {
 
         if( mSwipeRefreshLayout.isRefreshing() ) {
 
             mSwipeRefreshLayout.setRefreshing( false );
+
+        }
+
+        if( updated ) {
+
+            Snackbar
+                    .make( parentView, R.string.recorded_programs_updated, Snackbar.LENGTH_LONG )
+                    .show(); // Don’t forget to show!
 
         }
 

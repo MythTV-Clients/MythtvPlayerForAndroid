@@ -330,7 +330,7 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
     }
 
     @Override
-    public void onRefreshComplete() {
+    public void onRefreshComplete( boolean updated ) {
 
         reload();
 

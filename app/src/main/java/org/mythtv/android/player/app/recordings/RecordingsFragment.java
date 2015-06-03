@@ -18,6 +18,7 @@
 
 package org.mythtv.android.player.app.recordings;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.support.v4.content.Loader;
@@ -58,6 +59,8 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
     String mInetref = null;
 
     int mLimit = 5, mOffset = -1;
+
+    View parentView;
 
     @Override
     public Loader<List<Program>> onCreateLoader( int id, Bundle args ) {
@@ -102,16 +105,16 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
-        View view = inflater.inflate( R.layout.program_list, container, false );
+        parentView = inflater.inflate( R.layout.program_list, container, false );
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById( R.id.swipe_refresh_layout );
+        mSwipeRefreshLayout = (SwipeRefreshLayout) parentView.findViewById( R.id.swipe_refresh_layout );
         mSwipeRefreshLayout.setOnRefreshListener( this );
 
         mAdapter = new ProgramItemAdapter( this );
 
         mLayoutManager = new LinearLayoutManager( getActivity() );
 
-        mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
+        mRecyclerView = (RecyclerView) parentView.findViewById( R.id.list );
         mRecyclerView.setAdapter( mAdapter );
         mRecyclerView.setLayoutManager( mLayoutManager );
         mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
@@ -127,9 +130,9 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
 
         });
 
-        mEmpty = (TextView) view.findViewById( R.id.empty );
+        mEmpty = (TextView) parentView.findViewById( R.id.empty );
 
-        return view;
+        return parentView;
     }
 
     public void setPrograms( String title, String inetref ) {
@@ -187,11 +190,19 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
     }
 
     @Override
-    public void onRefreshComplete() {
+    public void onRefreshComplete( boolean updated ) {
 
         if( mSwipeRefreshLayout.isRefreshing() ) {
 
             mSwipeRefreshLayout.setRefreshing( false );
+
+        }
+
+        if( updated ) {
+
+            Snackbar
+                    .make( parentView, R.string.recorded_programs_updated, Snackbar.LENGTH_LONG )
+                    .show(); // Don’t forget to show!
 
         }
 

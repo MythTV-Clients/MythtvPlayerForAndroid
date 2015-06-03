@@ -73,7 +73,7 @@ public class DvrServiceEventHandler implements DvrService {
     @Override
     public ProgramsUpdatedEvent updateRecordedPrograms( UpdateRecordedProgramsEvent event ) {
 
-        return MainApplication.getInstance().getDvrApiService().updateRecordedPrograms(event);
+        return MainApplication.getInstance().getDvrApiService().updateRecordedPrograms( event );
     }
 
     @Override
