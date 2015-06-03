@@ -20,6 +20,7 @@ package org.mythtv.android.player.app.videos;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -33,7 +34,6 @@ import android.view.MenuInflater;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
-import org.mythtv.android.player.common.ui.views.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = VideosActivity.class.getSimpleName();
 
-    private SlidingTabLayout mTabs;
+    private TabLayout mTabLayout;
     private ViewPager mPager;
 
     @Override
@@ -55,6 +55,8 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mPager = (ViewPager) findViewById( R.id.pager );
+        mTabLayout = (TabLayout) findViewById( R.id.tabs );
+        mTabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
 
     }
 
@@ -63,8 +65,8 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
         super.onResume();
 
         mPager.setAdapter( new VideosFragmentPagerAdapter( getSupportFragmentManager() ) );
-        mTabs = (SlidingTabLayout) findViewById( R.id.tabs );
-        mTabs.setViewPager( mPager );
+        mTabLayout.setupWithViewPager( mPager );
+        mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
 
         super.setNavigationMenuItemChecked( 1 );
 
