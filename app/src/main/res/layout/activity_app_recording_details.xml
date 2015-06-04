@@ -32,12 +32,12 @@
             android:layout_height="wrap_content">
 
             <include
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbar_layout"
                 layout="@layout/toolbar"/>
 
             <fragment
                 android:id="@+id/fragment_recording_details"
-                android:layout_below="@id/toolbar"
+                android:layout_below="@id/toolbar_layout"
                 android:name="org.mythtv.android.player.app.recordings.RecordingDetailsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
