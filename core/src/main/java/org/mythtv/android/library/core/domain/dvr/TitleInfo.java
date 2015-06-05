@@ -86,6 +86,15 @@ public class TitleInfo implements Serializable, Comparable<TitleInfo> {
     }
 
     @Override
+    public String toString() {
+        return "TitleInfo{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", inetref='" + inetref + '\'' +
+                '}';
+    }
+
+    @Override
     public int compareTo( TitleInfo another ) {
 
         final int BEFORE = -1;

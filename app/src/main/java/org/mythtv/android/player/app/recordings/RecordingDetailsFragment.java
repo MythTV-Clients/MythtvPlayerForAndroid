@@ -69,7 +69,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
     CardView cardView;
     RelativeLayout layout;
-    ImageView preview, coverart;
+    ImageView coverart;
     TextView showName, episodeName, callsign, startTime, channelNumber, description;
     Button play, queueHls;
     ProgressBar progress;
@@ -161,7 +161,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         View rootView = inflater.inflate( R.layout.fragment_recording_details, container, false );
         cardView = (CardView) rootView.findViewById( R.id.recording_card );
         layout = (RelativeLayout) rootView.findViewById( R.id.recording_layout );
-        preview = (ImageView) rootView.findViewById( R.id.recording_preview );
         coverart = (ImageView) rootView.findViewById( R.id.recording_coverart );
         showName = (TextView) rootView.findViewById( R.id.recording_show_name );
         episodeName = (TextView) rootView.findViewById( R.id.recording_episode_name );
@@ -187,13 +186,13 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         Log.v( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
 
-        ViewTreeObserver vto = preview.getViewTreeObserver();
+        ViewTreeObserver vto = coverart.getViewTreeObserver();
         vto.addOnPreDrawListener( new ViewTreeObserver.OnPreDrawListener() {
 
             public boolean onPreDraw() {
 
-                finalWidth = preview.getMeasuredWidth();
-                finalHeight = preview.getMeasuredHeight();
+                finalWidth = coverart.getMeasuredWidth();
+                finalHeight = coverart.getMeasuredHeight();
 
                 return true;
             }
@@ -243,21 +242,23 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
         channelNumber.setText( mProgram.getChannel().getChanNum() );
         description.setText( mProgram.getDescription() );
 
-        String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + mProgram.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        if( null != mProgram.getInetref() && !"".equals( mProgram.getInetref() ) ) {
 
-        final PaletteTransformation paletteTransformation = PaletteTransformation.getInstance();
-        Picasso.with( getActivity() )
-                .load( previewUrl )
+            final String coverartUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + mProgram.getInetref() + "&Type=coverart&Width=150";
+
+            final PaletteTransformation paletteTransformation = PaletteTransformation.getInstance();
+            Picasso.with( getActivity() )
+                .load( coverartUrl )
                 .fit().centerCrop()
                 .transform( paletteTransformation )
-                .into( preview, new Callback.EmptyCallback() {
+                .into( coverart, new Callback.EmptyCallback() {
 
                     @Override
                     public void onSuccess() {
 
-                        preview.setVisibility( View.VISIBLE );
+                        coverart.setVisibility(View.VISIBLE);
 
-                        Bitmap bitmap = ( (BitmapDrawable) preview.getDrawable() ).getBitmap(); // Ew!
+                        Bitmap bitmap = ( (BitmapDrawable) coverart.getDrawable() ).getBitmap(); // Ew!
                         Palette palette = PaletteTransformation.getPalette(bitmap);
                         Palette.Swatch swatch = palette.getDarkMutedSwatch();
 
@@ -295,7 +296,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                     public void onError() {
                         super.onError();
 
-                        preview.setVisibility( View.GONE );
+                        coverart.setVisibility(View.GONE);
 
                         layout.setBackgroundColor( getActivity().getResources().getColor( R.color.primary_dark ) );
                         showName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
@@ -311,14 +312,6 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                     }
 
                 });
-
-        if( null != mProgram.getInetref() && !"".equals( mProgram.getInetref() ) ) {
-
-            String coverartUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + mProgram.getInetref() + "&Type=coverart&Width=150";
-            Picasso.with( getActivity() )
-                    .load(coverartUrl)
-                    .fit().centerCrop()
-                    .into( coverart );
 
         }
 

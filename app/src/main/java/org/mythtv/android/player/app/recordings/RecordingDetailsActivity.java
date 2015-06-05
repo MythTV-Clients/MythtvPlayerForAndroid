@@ -21,11 +21,17 @@ package org.mythtv.android.player.app.recordings;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
+import org.joda.time.DateTimeZone;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.R;
@@ -37,6 +43,7 @@ public class RecordingDetailsActivity extends AbstractBaseAppCompatActivity {
 
     private static final String TAG = RecordingDetailsActivity.class.getSimpleName();
 
+    private CollapsingToolbarLayout mCollapsingToolbar;
     private RecordingDetailsFragment mRecordingDetailsFragment;
     Program mProgram;
 
@@ -49,6 +56,8 @@ public class RecordingDetailsActivity extends AbstractBaseAppCompatActivity {
     protected void onCreate( Bundle savedInstanceState ) {
         Log.v( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
+
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById( R.id.collapsing_toolbar );
 
         if( null != savedInstanceState ) {
             Log.v( TAG, "onCreate : program loaded from savedInstanceState" );
@@ -81,7 +90,10 @@ public class RecordingDetailsActivity extends AbstractBaseAppCompatActivity {
 
             mRecordingDetailsFragment.setProgram( mProgram );
 
-            getSupportActionBar().setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
+            //getSupportActionBar().setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
+            mCollapsingToolbar.setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
+
+            loadBackdrop();
 
         }
 
@@ -128,6 +140,18 @@ public class RecordingDetailsActivity extends AbstractBaseAppCompatActivity {
 
     @Override
     protected void updateData() {
+
+    }
+
+    private void loadBackdrop() {
+
+        String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgram.getChannel().getChanId() + "&StartTime=" + mProgram.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
+        final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
+        Picasso.with( this )
+                .load( previewUrl )
+                .fit().centerCrop()
+                .into( imageView );
 
     }
 

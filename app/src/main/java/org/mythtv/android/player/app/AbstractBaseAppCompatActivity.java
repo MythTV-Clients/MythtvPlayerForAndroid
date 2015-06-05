@@ -65,11 +65,20 @@ public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity im
         setContentView( getLayoutResource() );
 
         navigationView = (NavigationView) findViewById( R.id.navigation_view );
+
+        toolbar = (Toolbar) findViewById( R.id.toolbar );
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         if( null != navigationView ) {
             navigationView.setNavigationItemSelectedListener( this );
         }
 
-        toolbar = (Toolbar) findViewById( R.id.toolbar );
         if( toolbar != null ) {
             setSupportActionBar( toolbar );
 
@@ -85,14 +94,6 @@ public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity im
             }
 
         }
-
-        drawerLayout = (DrawerLayout) findViewById( R.id.drawer_layout );
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
         backendConnectedIntentFilter.addAction(MainApplication.ACTION_NOT_CONNECTED);

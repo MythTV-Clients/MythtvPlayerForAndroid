@@ -135,6 +135,14 @@ public class RecordingsFragment extends AbstractBaseFragment implements LoaderMa
         return parentView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getLoaderManager().restartLoader( 0, null, this );
+
+    }
+
     public void setPrograms( String title, String inetref ) {
 
         mShowTitle = ( null == title );

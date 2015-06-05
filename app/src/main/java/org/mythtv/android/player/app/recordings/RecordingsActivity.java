@@ -21,10 +21,16 @@ package org.mythtv.android.player.app.recordings;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.R;
@@ -33,6 +39,8 @@ import org.mythtv.android.R;
  * Created by dmfrey on 12/8/14.
  */
 public class RecordingsActivity extends AbstractBaseAppCompatActivity {
+
+    private static final String TAG = RecordingsActivity.class.getSimpleName();
 
     public static final String TITLE_INFO = "title_info";
 
@@ -71,13 +79,24 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
             mTitleInfo = (TitleInfo) getIntent().getSerializableExtra( TITLE_INFO );
         }
 
-        if( null != mTitleInfo ) {
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById( R.id.collapsing_toolbar );
 
-            getSupportActionBar().setTitle( mTitleInfo.getTitle() );
+        if( null != mTitleInfo ) {
+            Log.i( TAG, "mTitleInfo=" + mTitleInfo.toString() );
+
+            //getSupportActionBar().setTitle( mTitleInfo.getTitle() );
+            collapsingToolbar.setTitle( mTitleInfo.getTitle() );
+
+            if( null != mTitleInfo.getInetref() && !"".equals( mTitleInfo.getInetref() ) ) {
+
+                loadBackdrop( mTitleInfo.getInetref() );
+
+            }
 
         } else {
 
-            getSupportActionBar().setTitle( getResources().getString( R.string.all_recordings ) );
+            //getSupportActionBar().setTitle( getResources().getString( R.string.all_recordings ) );
+            collapsingToolbar.setTitle( getResources().getString( R.string.all_recordings ) );
 
         }
 
@@ -113,7 +132,7 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
         inflater.inflate( R.menu.main, menu );
 
         SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
-        SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
+        SearchView searchView = (SearchView) menu.findItem( R.id.search_action ).getActionView();
         searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
         searchView.setIconifiedByDefault( false );
 
@@ -122,6 +141,19 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
     @Override
     protected void updateData() {
+
+    }
+
+    private void loadBackdrop( String inetref ) {
+        Log.i( TAG, "loadBackdrop : inetref=" + inetref );
+
+        String bannerUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + inetref + "&Type=banner";
+        Log.i( TAG, "loadBackdrop : bannerUrl=" + bannerUrl );
+        final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
+        Picasso.with( this )
+                .load( bannerUrl )
+                .fit().centerCrop()
+                .into( imageView );
 
     }
 

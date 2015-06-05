@@ -88,7 +88,7 @@ public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity imp
 
         if( null != mVideo ) {
 
-            getSupportActionBar().setTitle( mVideo.getTitle() );
+            setTitle( mVideo.getTitle() );
 
 //            mTelevisionSeasonsFragment.setShow( mVideo.getTitle(), mSelectedSeason );
 

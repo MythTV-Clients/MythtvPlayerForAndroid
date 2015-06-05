@@ -76,7 +76,7 @@ public class SearchableActivity extends AbstractBaseAppCompatActivity implements
         mLayoutManager = new LinearLayoutManager( this );
         mRecyclerView.setLayoutManager( mLayoutManager );
 
-        getSupportActionBar().setTitle( getResources().getString( R.string.search_results ) );
+        setTitle( getResources().getString( R.string.search_results ) );
 
         Intent intent = getIntent();
         if( Intent.ACTION_SEARCH.equals( intent.getAction() ) ) {

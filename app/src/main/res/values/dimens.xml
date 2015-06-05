@@ -40,5 +40,6 @@
 
     <dimen name="outer_margin">16dp</dimen>
     <dimen name="margin">8dp</dimen>
+    <dimen name="detail_backdrop_height">256dp</dimen>
 
 </resources>
