@@ -48,23 +48,30 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <Spinner
-            android:id="@+id/season_spinner"
-            android:layout_below="@id/toolbar_layout"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin"
-            android:layout_marginBottom="@dimen/margin"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:paddingTop="?attr/actionBarSize">
 
-        <fragment
-            android:id="@+id/fragment_tv_seasons"
-            android:layout_below="@id/season_spinner"
-            android:name="org.mythtv.android.player.app.videos.TelevisionSeasonsFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/video_list"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            <Spinner
+                android:id="@+id/season_spinner"
+                android:layout_below="@id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+            <fragment
+                android:id="@+id/fragment_tv_seasons"
+                android:layout_below="@id/season_spinner"
+                android:name="org.mythtv.android.player.app.videos.TelevisionSeasonsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout="@layout/video_list"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 
