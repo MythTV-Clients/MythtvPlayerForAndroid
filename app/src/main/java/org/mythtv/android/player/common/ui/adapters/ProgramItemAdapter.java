@@ -103,6 +103,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         }
         viewHolder.setDate( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
+        viewHolder.setEpisode( program.getSeason() + "x" + program.getEpisode() );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -157,6 +158,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
         private final TextView title;
         private final TextView subTitle;
         private final TextView date;
+        private final TextView episode;
         private final TextView readyToStream;
         private final ProgressBar progress;
         private Handler progressHandler = new Handler();
@@ -174,6 +176,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
             title = (TextView) parent.findViewById( R.id.program_item_title );
             subTitle = (TextView) parent.findViewById( R.id.program_item_sub_title );
             date = (TextView) parent.findViewById( R.id.program_item_date );
+            episode = (TextView) parent.findViewById( R.id.program_item_episode );
             readyToStream = (TextView) parent.findViewById( R.id.program_item_stream_ready );
             progress = (ProgressBar) parent.findViewById( R.id.program_item_progress );
 
@@ -189,7 +192,7 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         public void setSubTitle( CharSequence text ) {
 
-            subTitle.setText(text);
+            subTitle.setText( text );
 
         }
 
@@ -201,7 +204,13 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 
         public void setDate( CharSequence text ) {
 
-            date.setText(text);
+            date.setText( text );
+
+        }
+
+        public void setEpisode( CharSequence text ) {
+
+            episode.setText(text);
 
         }
 

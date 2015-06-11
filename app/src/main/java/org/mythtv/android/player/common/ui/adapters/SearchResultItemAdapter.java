@@ -127,9 +127,10 @@ public class SearchResultItemAdapter extends RecyclerView.Adapter<SearchResultIt
 
         }
 
-        viewHolder.setTitle(title);
-        viewHolder.setSubTitle(subTitle);
+        viewHolder.setTitle( title );
+        viewHolder.setSubTitle( subTitle );
         viewHolder.setDate( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( "yyyy-MM-dd hh:mm a" ) );
+        viewHolder.setEpisode( program.getSeason() + "x" + program.getEpisode() );
         viewHolder.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -178,7 +179,7 @@ public class SearchResultItemAdapter extends RecyclerView.Adapter<SearchResultIt
 
         viewHolder.setTitle( title );
         viewHolder.setSubTitle(subTitle);
-        viewHolder.setSeason(season);
+        viewHolder.setSeason( season );
         viewHolder.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -220,6 +221,7 @@ public class SearchResultItemAdapter extends RecyclerView.Adapter<SearchResultIt
         private final TextView title;
         private final TextView subTitle;
         private final TextView date;
+        private final TextView episode;
 
         public ProgramViewHolder( View v ) {
             super( v );
@@ -229,6 +231,7 @@ public class SearchResultItemAdapter extends RecyclerView.Adapter<SearchResultIt
             title = (TextView) parent.findViewById( R.id.program_item_title );
             subTitle = (TextView) parent.findViewById( R.id.program_item_sub_title );
             date = (TextView) parent.findViewById( R.id.program_item_date );
+            episode = (TextView) parent.findViewById( R.id.program_item_episode );
 
         }
 
@@ -240,7 +243,7 @@ public class SearchResultItemAdapter extends RecyclerView.Adapter<SearchResultIt
 
         public void setSubTitle( CharSequence text ) {
 
-            subTitle.setText(text);
+            subTitle.setText( text );
 
         }
 
@@ -253,6 +256,12 @@ public class SearchResultItemAdapter extends RecyclerView.Adapter<SearchResultIt
         public void setDate( CharSequence text ) {
 
             date.setText( text );
+
+        }
+
+        public void setEpisode( CharSequence text ) {
+
+            episode.setText( text );
 
         }
 

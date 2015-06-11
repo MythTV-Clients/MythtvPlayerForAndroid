@@ -48,16 +48,23 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
-            android:layout_below="@id/toolbar_layout"
-            android:scrollbars="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin"
-            android:paddingLeft="@dimen/outer_margin"
-            android:paddingRight="@dimen/outer_margin"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="wrap_content"
+            android:paddingTop="?attr/actionBarSize">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_below="@id/toolbar_layout"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin"
+                android:paddingLeft="@dimen/outer_margin"
+                android:paddingRight="@dimen/outer_margin"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 

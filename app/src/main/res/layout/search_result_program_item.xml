@@ -68,12 +68,21 @@
             android:id="@+id/program_item_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/program_item_sub_title"
             android:layout_toRightOf="@+id/program_item_preview"
             android:layout_toEndOf="@+id/program_item_preview"
             tools:text="test date" />
+
+        <TextView
+            android:id="@+id/program_item_episode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:layout_below="@+id/program_item_date"
+            android:layout_toRightOf="@+id/program_item_preview"
+            android:layout_toEndOf="@+id/program_item_preview"
+            tools:text="test episode" />
 
     </RelativeLayout>
 
