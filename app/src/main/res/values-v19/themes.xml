@@ -21,7 +21,7 @@
 
     <style name="AppTheme" parent="AppTheme.Base">
 
-        <item name="android:windowTranslucentStatus">true</item>
+        <!-- item name="android:windowTranslucentStatus">true</item -->
 
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
