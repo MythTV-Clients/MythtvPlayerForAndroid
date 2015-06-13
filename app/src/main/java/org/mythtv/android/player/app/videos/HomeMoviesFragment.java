@@ -177,7 +177,7 @@ public class HomeMoviesFragment extends AbstractBaseFragment implements LoaderMa
 
         if( Build.VERSION.SDK_INT >= 16 ) {
 
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null );
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null, null );
             getActivity().startActivity(videoDetails, options.toBundle());
 
         } else {

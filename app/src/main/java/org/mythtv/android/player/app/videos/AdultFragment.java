@@ -177,7 +177,7 @@ public class AdultFragment extends AbstractBaseFragment implements LoaderManager
 
         if( Build.VERSION.SDK_INT >= 16 ) {
 
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null );
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null, null );
             getActivity().startActivity(videoDetails, options.toBundle());
 
         } else {
