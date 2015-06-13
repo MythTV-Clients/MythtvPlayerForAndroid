@@ -21,12 +21,17 @@ apply plugin: 'com.android.library'
 
 android {
 
+    def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
+    def applicationTag  = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
+
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
+        buildConfigField "String", "APPLICATION_SHA1", '"' + applicationSHA1 + '"'
+        buildConfigField "String", "APPLICATION_TAG",  '"' + applicationTag  + '"'
     }
 
     packagingOptions {

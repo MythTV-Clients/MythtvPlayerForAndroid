@@ -30,6 +30,7 @@ import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 
+import org.mythtv.android.library.BuildConfig;
 import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.core.service.DvrServiceEventHandler;
@@ -131,6 +132,8 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Log.d( TAG, "Current tag: " + BuildConfig.APPLICATION_TAG + ", commit: " + BuildConfig.APPLICATION_SHA1 );
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences( MainApplication.this );
 
