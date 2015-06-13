@@ -178,7 +178,7 @@ public class VideoDetailsFragment extends DetailsFragment implements LoaderManag
                         .centerCrop()
                         .get();
                 row.setImageBitmap( getActivity(), poster );
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
 
             if( useInternalPlayer && !useExternalPlayer  ) {

@@ -301,7 +301,7 @@ public class RecordingDetailsFragment extends DetailsFragment implements LoaderM
                         .centerCrop()
                         .get();
                 row.setImageBitmap( getActivity(), poster );
-            } catch( IOException e ) {
+            } catch( IOException ignored) {
             }
 
             if( useInternalPlayer ) {

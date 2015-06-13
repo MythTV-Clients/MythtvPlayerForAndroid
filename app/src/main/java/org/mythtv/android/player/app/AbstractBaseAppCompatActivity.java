@@ -115,7 +115,7 @@ public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity im
                     PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
                     versionName = packageInfo.versionName;
                     mythtvVersion.setText(versionName);
-                } catch (PackageManager.NameNotFoundException e) {
+                } catch (PackageManager.NameNotFoundException ignored) {
                 }
             }
         }

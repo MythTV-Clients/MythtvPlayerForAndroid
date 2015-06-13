@@ -70,7 +70,7 @@ public class ProgramHelper {
         }
 
         List<ArtworkInfoDetails> artworkInfoDetails = new ArrayList<>();
-        if( null != program.getArtworkInfos() && null != program.getArtworkInfos() && program.getArtworkInfos().size() > 0 ) {
+        if( null != program.getArtworkInfos() && !program.getArtworkInfos().isEmpty() && program.getArtworkInfos().size() > 0 ) {
             for( ArtworkInfo artworkInfo : program.getArtworkInfos() ) {
                 artworkInfoDetails.add( ArtworkInfoHelper.toDetails( artworkInfo ) );
             }
@@ -78,7 +78,7 @@ public class ProgramHelper {
         details.setArtworkInfos( artworkInfoDetails );
 
         List<CastMemberDetails> castMemberDetails = new ArrayList<>();
-        if( null != program.getCastMembers() && null != program.getCastMembers() && program.getCastMembers().size() > 0 ) {
+        if( null != program.getCastMembers() && !program.getCastMembers().isEmpty() && program.getCastMembers().size() > 0 ) {
             for( CastMember castMember : program.getCastMembers() ) {
                 castMemberDetails.add( CastMemberHelper.toDetails( castMember ) );
             }
