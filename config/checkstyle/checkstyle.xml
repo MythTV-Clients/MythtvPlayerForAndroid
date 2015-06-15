@@ -194,7 +194,7 @@
 
     </module>
 
-    <module name="SuppressionFilter"></module>
+    <module name="SuppressionFilter"/>
 
     <!-- Enable suppression comments -->
     <module name="SuppressionCommentFilter">

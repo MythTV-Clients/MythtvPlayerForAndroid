@@ -17,6 +17,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<!--suppress XmlUnboundNsPrefix -->
 <lint>
     <!-- Disable this given check in this project -->
     <issue id="InvalidPackage" severity="ignore" />
