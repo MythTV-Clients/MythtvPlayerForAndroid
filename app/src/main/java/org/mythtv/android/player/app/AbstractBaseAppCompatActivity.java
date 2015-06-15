@@ -26,7 +26,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -39,7 +38,6 @@ import android.widget.Toast;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
-import org.mythtv.android.library.core.utils.RefreshRecordedProgramsTask;
 import org.mythtv.android.player.app.recordings.ShowsActivity;
 import org.mythtv.android.player.app.settings.SettingsActivity;
 import org.mythtv.android.player.app.videos.VideosActivity;

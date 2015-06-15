@@ -18,8 +18,6 @@
 
 package org.mythtv.android.player.app.settings;
 
-import android.os.Bundle;
-
 import org.mythtv.android.R;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 
