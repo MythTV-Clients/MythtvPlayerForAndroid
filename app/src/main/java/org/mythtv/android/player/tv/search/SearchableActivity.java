@@ -33,7 +33,6 @@ public class SearchableActivity extends Activity {
 
     private static final int REQUEST_SPEECH = 1;
     private SearchableFragment mSearchableFragment;
-    private SpeechRecognitionCallback mSpeechRecognitionCallback;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -43,7 +42,7 @@ public class SearchableActivity extends Activity {
 
         mSearchableFragment = (SearchableFragment) getFragmentManager().findFragmentById( R.id.search_fragment );
 
-        mSpeechRecognitionCallback = new SpeechRecognitionCallback() {
+        SpeechRecognitionCallback mSpeechRecognitionCallback = new SpeechRecognitionCallback() {
 
             @Override
             public void recognizeSpeech() {

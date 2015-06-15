@@ -46,7 +46,6 @@ public class VideoPlayerActivity extends Activity {
 
     private VideoView mVideoView;
     private MediaController mMediaController;
-    private String mFileUrl;
 
 //    private RelativeLayout details;
 //    private TextView showName, episodeName, duration, startTime, endTime, description, castMembers;
@@ -59,7 +58,7 @@ public class VideoPlayerActivity extends Activity {
 
         setContentView( R.layout.activity_app_video_player);
 
-        mFileUrl = getIntent().getStringExtra( FULL_URL_TAG );
+        String mFileUrl = getIntent().getStringExtra( FULL_URL_TAG );
         Uri fileUri = null;
         try {
 

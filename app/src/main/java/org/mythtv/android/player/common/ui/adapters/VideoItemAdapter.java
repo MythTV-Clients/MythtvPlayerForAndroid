@@ -44,7 +44,6 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 
     private List<Video> videos = new ArrayList<>();
     private VideoItemClickListener videoItemClickListener;
-    private int previousPosition = 0;
 
     public VideoItemAdapter( @NonNull VideoItemClickListener videoItemClickListener ) {
 //        Log.v( TAG, "initialize : enter" );
@@ -89,7 +88,7 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 //            AnimationUtils.animate( viewHolder, false );
 //
 //        }
-        previousPosition = position;
+        int previousPosition = position;
 
         String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + video.getId() + "&Width=175";
         Picasso.with( MainApplication.getInstance() )

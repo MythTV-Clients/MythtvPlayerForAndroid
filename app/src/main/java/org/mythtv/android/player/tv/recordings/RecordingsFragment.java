@@ -70,7 +70,6 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
 
     private static final String TAG = RecordingsFragment.class.getSimpleName();
 
-    private ArrayObjectAdapter mRowsAdapter;
     private Drawable mDefaultBackground;
     private Target mBackgroundTarget;
     private DisplayMetrics mMetrics;
@@ -154,7 +153,7 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
 
         }
 
-        mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
+        ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
         mRecordingCardPresenter = new RecordingCardPresenter();
 
         int i = 0;
@@ -166,7 +165,7 @@ public class RecordingsFragment extends BrowseFragment implements LoaderManager.
             }
 
             HeaderItem header = new HeaderItem( i, categoryMap.get( category ) );
-            mRowsAdapter.add(new ListRow( header, listRowAdapter ) );
+            mRowsAdapter.add( new ListRow( header, listRowAdapter ) );
 
             i++;
         }

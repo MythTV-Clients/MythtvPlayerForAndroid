@@ -54,11 +54,6 @@ public class RecordingPlayerActivity extends Activity {
 
     private VideoView mVideoView;
     private MediaController mMediaController;
-    private String mFileUrl;
-
-    private RelativeLayout details;
-    private TextView showName, episodeName, duration, startTime, endTime, description, castMembers;
-    private Program mProgram;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -67,7 +62,7 @@ public class RecordingPlayerActivity extends Activity {
 
         setContentView(R.layout.activity_app_recording_player);
 
-        mFileUrl = getIntent().getStringExtra(FULL_URL_TAG);
+        String mFileUrl = getIntent().getStringExtra( FULL_URL_TAG );
         Uri fileUri = null;
         try {
 
@@ -96,25 +91,25 @@ public class RecordingPlayerActivity extends Activity {
             mVideoView.seekTo( position);
         }
 
-        details = (RelativeLayout) findViewById( R.id.player_details );
+        RelativeLayout details = (RelativeLayout) findViewById( R.id.player_details );
         if( null != details ) {
 
-            showName = (TextView) findViewById( R.id.player_show_name );
-            episodeName = (TextView) findViewById( R.id.player_episode_name );
-            duration = (TextView) findViewById( R.id.player_duration );
-            startTime = (TextView) findViewById( R.id.player_start_time );
-            endTime = (TextView) findViewById( R.id.player_end_time );
-            description = (TextView) findViewById( R.id.player_description );
-            castMembers = (TextView) findViewById( R.id.player_cast );
+            TextView showName = (TextView) findViewById( R.id.player_show_name );
+            TextView episodeName = (TextView) findViewById( R.id.player_episode_name );
+            TextView duration = (TextView) findViewById( R.id.player_duration );
+            TextView startTime = (TextView) findViewById( R.id.player_start_time );
+            TextView endTime = (TextView) findViewById( R.id.player_end_time );
+            TextView description = (TextView) findViewById( R.id.player_description );
+            TextView castMembers = (TextView) findViewById( R.id.player_cast );
 
-            mProgram = (Program) getIntent().getSerializableExtra(PROGRAM_TAG);
+            Program mProgram = (Program) getIntent().getSerializableExtra( PROGRAM_TAG );
 
             showName.setText( mProgram.getTitle() );
             episodeName.setText( mProgram.getSubTitle() );
             duration.setText( Minutes.minutesBetween( mProgram.getStartTime(), mProgram.getEndTime() ).getMinutes() + " mins" );
             startTime.setText( mProgram.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "-S", Locale.getDefault() ) ) );
             endTime.setText( mProgram.getEndTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "-S", Locale.getDefault() ) ) );
-            description.setText(mProgram.getDescription());
+            description.setText( mProgram.getDescription() );
 
             if( null != mProgram.getCastMembers() && !mProgram.getCastMembers().isEmpty() ) {
 

@@ -75,13 +75,11 @@ public class RecordingPlayerActivity extends Activity {
     private ImageView mPlayPause;
     private ProgressBar mLoading;
     private View mControllers;
-    private View mContainer;
     private Timer mSeekbarTimer;
     private Timer mControllersTimer;
     private Timer mGetLiveStreamTimer;
     private PlaybackState mPlaybackState;
     private final Handler mHandler = new Handler();
-    private boolean mShouldStartPlayback;
     private boolean mControlersVisible;
     private int mDuration;
     private DisplayMetrics mMetrics;
@@ -120,7 +118,7 @@ public class RecordingPlayerActivity extends Activity {
 
         Bundle b = getIntent().getExtras();
         if (null != b) {
-            mShouldStartPlayback = b.getBoolean(getResources().getString(R.string.should_start));
+            boolean mShouldStartPlayback = b.getBoolean( getResources().getString( R.string.should_start ) );
             int startPosition = b.getInt(getResources().getString(R.string.start_position), 0);
 
             Uri fileUri = null;
@@ -465,7 +463,7 @@ public class RecordingPlayerActivity extends Activity {
         mPlayPause = (ImageView) findViewById( R.id.playpause );
         mLoading = (ProgressBar) findViewById( R.id.progressBar );
         mControllers = findViewById( R.id.controllers );
-        mContainer = findViewById( R.id.container );
+        View mContainer = findViewById( R.id.container );
 
         mVideoView.setOnClickListener( mPlayPauseHandler );
         mSeekbar.setOnSeekBarChangeListener( mSeekBarChangedHandler );

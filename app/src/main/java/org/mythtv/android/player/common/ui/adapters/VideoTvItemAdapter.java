@@ -44,7 +44,6 @@ public class VideoTvItemAdapter extends RecyclerView.Adapter<VideoTvItemAdapter.
 
     private List<Video> videos = new ArrayList<>();
     private VideoItemClickListener videoItemClickListener;
-    private int previousPosition = 0;
 
     public VideoTvItemAdapter( @NonNull VideoItemClickListener videoItemClickListener ) {
 //        Log.v( TAG, "initialize : enter" );
@@ -89,7 +88,7 @@ public class VideoTvItemAdapter extends RecyclerView.Adapter<VideoTvItemAdapter.
 //            AnimationUtils.animate( viewHolder, false );
 //
 //        }
-        previousPosition = position;
+        int previousPosition = position;
 
         String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + video.getId() + "&Width=175";
         Picasso.with( MainApplication.getInstance() )

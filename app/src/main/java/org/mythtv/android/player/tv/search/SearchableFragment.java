@@ -62,7 +62,6 @@ public class SearchableFragment extends SearchFragment implements /* LoaderManag
 
     private ArrayObjectAdapter mRowsAdapter;
     private Handler mHandler = new Handler();
-    private String mQuery;
 
 //    @Override
 //    public Loader<List<Program>> onCreateLoader( int id, Bundle args ) {
@@ -128,7 +127,7 @@ public class SearchableFragment extends SearchFragment implements /* LoaderManag
 
     private void query( String query ) {
 
-        mQuery = query;
+        String mQuery = query;
         mRowsAdapter.clear();
 
 //        Bundle args = new Bundle();

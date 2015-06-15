@@ -81,7 +81,7 @@ public class Utils {
      * @param errorString
      */
 
-    public static final void showErrorDialog(Context context, String errorString) {
+    public static void showErrorDialog( Context context, String errorString ) {
         new AlertDialog.Builder(context).setTitle(R.string.error)
                 .setMessage(errorString)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

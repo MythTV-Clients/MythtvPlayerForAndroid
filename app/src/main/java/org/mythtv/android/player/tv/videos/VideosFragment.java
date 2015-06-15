@@ -69,7 +69,6 @@ public class VideosFragment extends BrowseFragment implements LoaderManager.Load
 
     private static final String TAG = VideosFragment.class.getSimpleName();
 
-    private ArrayObjectAdapter mRowsAdapter;
     private Drawable mDefaultBackground;
     private Target mBackgroundTarget;
     private DisplayMetrics mMetrics;
@@ -161,7 +160,7 @@ public class VideosFragment extends BrowseFragment implements LoaderManager.Load
 
         }
 
-        mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
+        ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
         mVideoCardPresenter = new VideoCardPresenter();
 
         int i = 0;
@@ -173,7 +172,7 @@ public class VideosFragment extends BrowseFragment implements LoaderManager.Load
             }
 
             HeaderItem header = new HeaderItem( i, categoryMap.get( category ) );
-            mRowsAdapter.add(new ListRow( header, listRowAdapter ) );
+            mRowsAdapter.add( new ListRow( header, listRowAdapter ) );
 
             i++;
         }

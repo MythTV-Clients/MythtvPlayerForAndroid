@@ -44,7 +44,6 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
     public static final String TITLE_INFO = "title_info";
 
-    private RecordingsFragment mRecordingsFragment;
     TitleInfo mTitleInfo;
 
     @Override
@@ -67,7 +66,7 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
         super.onCreate( savedInstanceState );
 
-        mRecordingsFragment = (RecordingsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_recordings );
+        RecordingsFragment mRecordingsFragment = (RecordingsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_recordings );
 
         if( null != savedInstanceState && savedInstanceState.containsKey( TITLE_INFO ) ) {
 

@@ -42,7 +42,6 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 
     private List<TitleInfo> titleInfos = new ArrayList<>();
     private TitleInfoItemClickListener titleInfoItemClickListener;
-    private int previousPosition = 0;
 
     public TitleInfoItemAdapter( @NonNull TitleInfoItemClickListener titleInfoItemClickListener ) {
 
@@ -84,7 +83,7 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 //            AnimationUtils.animate( viewHolder, false );
 //
 //        }
-        previousPosition = position;
+        int previousPosition = position;
 
         if( null != titleInfo.getInetref() && !"".equals( titleInfo.getInetref() ) ) {
 
