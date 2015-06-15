@@ -88,7 +88,6 @@ public class VideoItemAdapter extends RecyclerView.Adapter<VideoItemAdapter.View
 //            AnimationUtils.animate( viewHolder, false );
 //
 //        }
-        int previousPosition = position;
 
         String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + video.getId() + "&Width=175";
         Picasso.with( MainApplication.getInstance() )

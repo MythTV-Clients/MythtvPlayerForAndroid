@@ -56,9 +56,8 @@ public class RefreshTitleInfosTask extends AsyncTask<Void, Void, TitleInfosUpdat
 
         if( MainApplication.getInstance().isConnected() ) {
 
-            TitleInfosUpdatedEvent updated = MainApplication.getInstance().getDvrApiService().updateTitleInfos( new UpdateTitleInfosEvent() );
+            return MainApplication.getInstance().getDvrApiService().updateTitleInfos( new UpdateTitleInfosEvent() );
 
-            return updated;
         }
 
         Log.v( TAG, "doInBackground : exit" );

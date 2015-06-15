@@ -121,7 +121,6 @@ public class ProgramItemAdapter extends RecyclerView.Adapter<ProgramItemAdapter.
 //            AnimationUtils.animate(viewHolder, false);
 //
 //        }
-        int previousPosition = position;
 
         String previewUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + program.getChannel().getChanId() + "&StartTime=" + program.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         Picasso.with( MainApplication.getInstance() )

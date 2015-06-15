@@ -83,7 +83,6 @@ public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdap
 //            AnimationUtils.animate( viewHolder, false );
 //
 //        }
-        int previousPosition = position;
 
         if( null != titleInfo.getInetref() && !"".equals( titleInfo.getInetref() ) ) {
 
