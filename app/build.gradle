@@ -33,7 +33,7 @@ android {
     }
 
     if( project.hasProperty( "MythtvPlayer.properties" )
-            && new File( project.property( "MythtvPlayer.properties" ) ).exists() ) {
+        && rootProject.file('MythtvPlayer.properties').exists() ) {
 
         Properties props = new Properties()
         props.load( new FileInputStream( file( project.property( "MythtvPlayer.properties" ) ) ) )
@@ -53,6 +53,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile( 'proguard-android.txt' ), 'proguard-rules.pro'
             if( project.hasProperty( "MythtvPlayer.properties" ) )
+                //noinspection GroovyAssignabilityCheck
                 signingConfig signingConfigs.release
         }
     }
