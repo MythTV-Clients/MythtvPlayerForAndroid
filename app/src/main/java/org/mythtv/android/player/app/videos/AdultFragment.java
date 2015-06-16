@@ -174,17 +174,18 @@ public class AdultFragment extends AbstractBaseFragment implements LoaderManager
 
         Intent videoDetails = new Intent( getActivity(), MovieDetailsActivity.class );
         videoDetails.putExtras( args );
+        startActivity( videoDetails );
 
-        if( Build.VERSION.SDK_INT >= 16 ) {
-
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null, null );
-            getActivity().startActivity(videoDetails, options.toBundle());
-
-        } else {
-
-            startActivity( videoDetails );
-
-        }
+//        if( Build.VERSION.SDK_INT >= 16 ) {
+//
+//            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null, null );
+//            getActivity().startActivity(videoDetails, options.toBundle());
+//
+//        } else {
+//
+//            startActivity( videoDetails );
+//
+//        }
 
     }
 
