@@ -22,7 +22,7 @@ import org.mythtv.android.library.events.DeletedEvent;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 3/18/15.
  */
 public class ProgramsDeletedEvent extends DeletedEvent {

@@ -28,7 +28,7 @@ import org.mythtv.services.api.v027.beans.VideoMetadataInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 11/24/14.
  */
 public class VideoHelper {

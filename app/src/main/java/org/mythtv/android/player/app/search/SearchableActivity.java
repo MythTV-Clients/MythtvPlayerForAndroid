@@ -51,7 +51,7 @@ import org.mythtv.android.player.common.ui.adapters.SearchResultItemAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 3/14/15.
  */
 public class SearchableActivity extends AbstractBaseAppCompatActivity implements SearchResultItemAdapter.ItemClickListener {

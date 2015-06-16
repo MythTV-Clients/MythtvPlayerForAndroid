@@ -44,7 +44,7 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 
-/**
+/*
  * Created by dmfrey on 11/24/14.
  */
 public class VideoServiceV28ApiEventHandler implements VideoService {

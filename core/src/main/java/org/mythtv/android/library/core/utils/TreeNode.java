@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 2/18/15.
  */
 public class TreeNode<T> implements Iterable<TreeNode<T>> {

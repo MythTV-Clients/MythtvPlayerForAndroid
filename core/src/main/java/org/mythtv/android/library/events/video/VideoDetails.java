@@ -24,7 +24,7 @@ import org.mythtv.android.library.events.dvr.CastMemberDetails;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 11/24/14.
  */
 public class VideoDetails {

@@ -20,7 +20,7 @@ package org.mythtv.android.library.core.domain.video;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 2/18/15.
  */
 public class VideoDirectory {

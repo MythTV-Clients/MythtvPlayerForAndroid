@@ -55,7 +55,7 @@ import org.mythtv.android.player.app.player.VideoPlayerActivity;
 import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
 import org.mythtv.android.R;
 
-/**
+/*
  * Created by dmfrey on 12/8/14.
  */
 public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {

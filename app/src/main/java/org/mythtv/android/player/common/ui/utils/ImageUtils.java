@@ -23,7 +23,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-/**
+/*
  * Created by dmfrey on 2/13/15.
  */
 public class ImageUtils {

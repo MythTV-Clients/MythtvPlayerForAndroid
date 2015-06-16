@@ -46,7 +46,7 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 
-/**
+/*
  * Created by dmfrey on 11/18/14.
  */
 public class ContentServiceV28EventHandler implements ContentService {

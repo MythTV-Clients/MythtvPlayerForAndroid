@@ -26,7 +26,7 @@ import android.util.Log;
 
 import org.mythtv.android.library.events.video.UpdateVideosEvent;
 
-/**
+/*
  * Created by dmfrey on 1/26/15.
  */
 public class RefreshVideosReceiver extends BroadcastReceiver {

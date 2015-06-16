@@ -22,7 +22,7 @@ import org.joda.time.DateTime;
 
 import java.io.Serializable;
 
-/**
+/*
  * Created by dmfrey on 11/18/14.
  */
 public class LiveStreamDetails implements Serializable {

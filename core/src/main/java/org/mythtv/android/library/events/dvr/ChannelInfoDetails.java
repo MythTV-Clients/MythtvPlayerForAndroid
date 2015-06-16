@@ -20,7 +20,7 @@ package org.mythtv.android.library.events.dvr;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 11/12/14.
  */
 public class ChannelInfoDetails {

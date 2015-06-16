@@ -21,7 +21,7 @@ package org.mythtv.android.library.core.service.v027.content;
 import org.mythtv.android.library.events.content.LiveStreamDetails;
 import org.mythtv.services.api.v027.beans.LiveStreamInfo;
 
-/**
+/*
  * Created by dmfrey on 11/18/14.
  */
 public class LiveStreamInfoHelper {

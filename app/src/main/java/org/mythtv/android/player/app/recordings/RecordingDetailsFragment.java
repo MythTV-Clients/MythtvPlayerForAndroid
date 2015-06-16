@@ -58,7 +58,7 @@ import org.mythtv.android.R;
 
 import java.util.Locale;
 
-/**
+/*
  * Created by dmfrey on 12/8/14.
  */
 public class RecordingDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<LiveStreamInfo>, View.OnClickListener {

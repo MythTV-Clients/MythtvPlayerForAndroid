@@ -26,7 +26,7 @@ import android.util.Log;
 
 import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 
-/**
+/*
  * Created by dmfrey on 1/26/15.
  */
 public class RefreshTitleInfosReceiver extends BroadcastReceiver {

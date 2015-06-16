@@ -29,7 +29,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 11/24/14.
  */
 public class Video implements Serializable {

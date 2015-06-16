@@ -21,7 +21,7 @@ package org.mythtv.android.library.core.service.v028.dvr;
 import org.mythtv.android.library.events.dvr.ArtworkInfoDetails;
 import org.mythtv.services.api.v028.beans.ArtworkInfo;
 
-/**
+/*
  * Created by dmfrey on 11/15/14.
  */
 public class ArtworkInfoHelper {

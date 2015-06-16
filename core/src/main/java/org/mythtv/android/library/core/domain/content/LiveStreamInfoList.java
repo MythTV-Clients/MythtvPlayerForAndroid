@@ -18,7 +18,7 @@
 
 package org.mythtv.android.library.core.domain.content;
 
-/**
+/*
  * Created by dmfrey on 1/25/15.
  */
 public class LiveStreamInfoList {

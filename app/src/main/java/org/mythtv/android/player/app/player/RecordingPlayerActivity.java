@@ -41,7 +41,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Locale;
 
-/**
+/*
  * Created by dmfrey on 4/4/15.
  */
 public class RecordingPlayerActivity extends Activity {

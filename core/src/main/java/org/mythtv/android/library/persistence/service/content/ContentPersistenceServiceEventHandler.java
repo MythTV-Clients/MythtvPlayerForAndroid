@@ -56,7 +56,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
+/*
  * Created by dmfrey on 1/25/15.
  */
 public class ContentPersistenceServiceEventHandler implements ContentPersistenceService {

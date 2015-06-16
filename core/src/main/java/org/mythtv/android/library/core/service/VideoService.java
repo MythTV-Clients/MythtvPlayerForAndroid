@@ -30,7 +30,7 @@ import org.mythtv.android.library.events.video.VideoDetailsEvent;
 import org.mythtv.android.library.events.video.VideosDeletedEvent;
 import org.mythtv.android.library.events.video.VideosUpdatedEvent;
 
-/**
+/*
  * Created by dmfrey on 11/24/14.
  */
 public interface VideoService {

@@ -30,7 +30,7 @@ import org.mythtv.services.api.MythTvApi028Context;
 
 import retrofit.RetrofitError;
 
-/**
+/*
  * Created by dmfrey on 1/31/15.
  */
 public class MythServiceV28EventHandler implements MythService {

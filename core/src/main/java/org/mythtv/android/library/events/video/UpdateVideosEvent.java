@@ -22,7 +22,7 @@ import org.mythtv.android.library.events.UpdateEvent;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 4/16/15.
  */
 public class UpdateVideosEvent extends UpdateEvent {

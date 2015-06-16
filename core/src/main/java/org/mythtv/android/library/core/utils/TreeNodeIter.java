@@ -20,7 +20,7 @@ package org.mythtv.android.library.core.utils;
 
 import java.util.Iterator;
 
-/**
+/*
  * Created by dmfrey on 2/18/15.
  */
 public class TreeNodeIter<T> implements Iterator<TreeNode<T>> {

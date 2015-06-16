@@ -20,7 +20,7 @@ package org.mythtv.android.library.persistence.domain.dvr;
 
 import org.mythtv.android.library.events.dvr.TitleInfoDetails;
 
-/**
+/*
  * Created by dmfrey on 12/7/14.
  */
 public class TitleInfo {

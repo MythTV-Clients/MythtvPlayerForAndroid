@@ -47,7 +47,7 @@ import org.mythtv.android.player.app.AbstractBaseFragment;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 12/3/14.
  */
 public class TitleInfosFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<TitleInfo>>, TitleInfoItemAdapter.TitleInfoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshTitleInfosTask.OnRefreshRecordedProgramTaskListener {

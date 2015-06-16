@@ -28,7 +28,7 @@ import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
 
-/**
+/*
  * Created by dmfrey on 1/25/15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {

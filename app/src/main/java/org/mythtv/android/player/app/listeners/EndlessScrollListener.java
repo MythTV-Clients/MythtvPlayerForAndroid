@@ -21,7 +21,7 @@ package org.mythtv.android.player.app.listeners;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-/**
+/*
  * Created by dmfrey on 5/3/15.
  */
 public abstract class EndlessScrollListener extends RecyclerView.OnScrollListener {

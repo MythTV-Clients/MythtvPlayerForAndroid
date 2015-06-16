@@ -34,7 +34,7 @@ import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
 import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
 import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 
-/**
+/*
  * Created by dmfrey on 11/13/14.
  */
 public interface DvrService extends Disconnect {

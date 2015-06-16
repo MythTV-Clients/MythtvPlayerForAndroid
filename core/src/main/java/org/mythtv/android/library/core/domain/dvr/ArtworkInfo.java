@@ -22,7 +22,7 @@ import org.mythtv.android.library.events.dvr.ArtworkInfoDetails;
 
 import java.io.Serializable;
 
-/**
+/*
  * Created by dmfrey on 11/12/14.
  */
 public class ArtworkInfo implements Serializable {

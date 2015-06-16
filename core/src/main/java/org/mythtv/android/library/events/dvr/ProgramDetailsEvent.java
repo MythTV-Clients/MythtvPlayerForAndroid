@@ -21,7 +21,7 @@ package org.mythtv.android.library.events.dvr;
 import org.joda.time.DateTime;
 import org.mythtv.android.library.events.ReadEvent;
 
-/**
+/*
  * Created by dmfrey on 4/5/15.
  */
 public class ProgramDetailsEvent extends ReadEvent {

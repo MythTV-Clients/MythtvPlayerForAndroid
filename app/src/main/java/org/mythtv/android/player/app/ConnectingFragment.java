@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import org.mythtv.android.R;
 
-/**
+/*
  * Created by dmfrey on 12/11/14.
  */
 public class ConnectingFragment extends Fragment {

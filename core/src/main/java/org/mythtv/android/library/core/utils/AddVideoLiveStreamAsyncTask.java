@@ -24,7 +24,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.events.content.AddVideoLiveStreamEvent;
 
-/**
+/*
  * Created by dmfrey on 4/14/15.
  */
 public class AddVideoLiveStreamAsyncTask extends AsyncTask<Video, Void, Void> {

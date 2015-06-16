@@ -53,7 +53,7 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 
-/**
+/*
  * Created by dmfrey on 11/13/14.
  */
 public class DvrServiceV27ApiEventHandler implements DvrService {

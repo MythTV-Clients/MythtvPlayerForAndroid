@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
 
 import retrofit.RestAdapter;
 
-/**
+/*
  * Created by dmfrey on 11/15/14.
  */
 public class MainApplication extends Application {

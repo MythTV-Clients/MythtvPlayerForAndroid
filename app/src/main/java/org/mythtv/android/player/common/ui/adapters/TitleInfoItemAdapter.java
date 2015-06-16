@@ -35,7 +35,7 @@ import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 11/29/14.
  */
 public class TitleInfoItemAdapter extends RecyclerView.Adapter<TitleInfoItemAdapter.ViewHolder> {

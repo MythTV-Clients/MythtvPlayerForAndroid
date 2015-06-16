@@ -20,7 +20,7 @@ package org.mythtv.android.library.persistence.repository;
 
 import android.content.SearchRecentSuggestionsProvider;
 
-/**
+/*
  * Created by dmfrey on 3/15/15.
  */
 public class MythtvSearchSuggestionProvider extends SearchRecentSuggestionsProvider {

@@ -20,7 +20,7 @@ package org.mythtv.android.library.events.myth;
 
 import org.mythtv.android.library.events.ReadEvent;
 
-/**
+/*
  * Created by dmfrey on 1/31/15.
  */
 public class HostNameDetailsEvent extends ReadEvent {

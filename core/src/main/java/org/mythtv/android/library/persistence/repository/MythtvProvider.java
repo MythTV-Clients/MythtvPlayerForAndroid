@@ -39,7 +39,7 @@ import org.mythtv.android.library.persistence.domain.video.VideoConstants;
 
 import java.util.ArrayList;
 
-/**
+/*
  * Created by dmfrey on 1/25/15.
  */
 public class MythtvProvider extends ContentProvider {

@@ -23,7 +23,7 @@ import org.mythtv.android.library.events.content.LiveStreamDetails;
 
 import java.io.Serializable;
 
-/**
+/*
  * Created by dmfrey on 11/18/14.
  */
 public class LiveStreamInfo implements Serializable {

@@ -36,7 +36,7 @@ import org.mythtv.android.library.core.domain.video.Video;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 11/29/14.
  */
 public class SearchResultItemAdapter extends RecyclerView.Adapter<SearchResultItemAdapter.ViewHolder> {

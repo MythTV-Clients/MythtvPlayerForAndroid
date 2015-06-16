@@ -39,7 +39,7 @@ import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 import org.mythtv.android.library.persistence.service.DvrPersistenceService;
 import org.mythtv.android.library.persistence.service.dvr.DvrPersistenceServiceEventHandler;
 
-/**
+/*
  * Created by dmfrey on 11/13/14.
  */
 public class DvrServiceEventHandler implements DvrService {

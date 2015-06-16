@@ -41,7 +41,7 @@ import org.mythtv.android.player.app.loaders.VideosAsyncTaskLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 4/22/15.
  */
 public class TelevisionSeasonsActivity extends AbstractBaseAppCompatActivity implements AdapterView.OnItemSelectedListener {

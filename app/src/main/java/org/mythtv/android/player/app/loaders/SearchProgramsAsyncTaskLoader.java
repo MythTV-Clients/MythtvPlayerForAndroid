@@ -36,7 +36,7 @@ import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 3/10/15.
  */
 public class SearchProgramsAsyncTaskLoader extends AsyncTaskLoader<List<Program>> {

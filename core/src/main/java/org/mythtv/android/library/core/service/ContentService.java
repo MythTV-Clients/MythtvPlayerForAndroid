@@ -31,7 +31,7 @@ import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
 import org.mythtv.android.library.events.content.RequestAllLiveStreamsEvent;
 import org.mythtv.android.library.events.content.UpdateLiveStreamsEvent;
 
-/**
+/*
  * Created by dmfrey on 11/18/14.
  */
 public interface ContentService {

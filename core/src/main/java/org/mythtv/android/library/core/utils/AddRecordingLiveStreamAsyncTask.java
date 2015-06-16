@@ -24,7 +24,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.library.events.content.AddLiveStreamEvent;
 
-/**
+/*
  * Created by dmfrey on 3/1/15.
  */
 public class AddRecordingLiveStreamAsyncTask extends AsyncTask<Program, Void, Void> {

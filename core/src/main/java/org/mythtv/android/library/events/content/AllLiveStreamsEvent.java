@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
+/*
  * Created by dmfrey on 11/12/14.
  */
 public class AllLiveStreamsEvent extends ReadEvent {

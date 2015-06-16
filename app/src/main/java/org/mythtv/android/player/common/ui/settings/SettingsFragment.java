@@ -28,7 +28,7 @@ import android.util.Log;
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 
-/**
+/*
  * Created by dmfrey on 4/7/15.
  */
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {

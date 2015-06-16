@@ -18,7 +18,7 @@
 
 package org.mythtv.android.library.events.dvr;
 
-/**
+/*
  * Created by dmfrey on 11/12/14.
  */
 public class ArtworkInfoDetails {

@@ -33,7 +33,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-/**
+/*
  * Created by dmfrey on 4/4/15.
  */
 public class VideoPlayerActivity extends Activity {

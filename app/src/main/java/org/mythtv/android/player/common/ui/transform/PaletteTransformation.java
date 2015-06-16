@@ -26,7 +26,7 @@ import com.squareup.picasso.Transformation;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-/**
+/*
  * Created by dmfrey on 3/12/15.
  */
 public final class PaletteTransformation implements Transformation {

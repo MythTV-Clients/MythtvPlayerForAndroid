@@ -24,7 +24,7 @@ import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 
 import org.mythtv.android.R;
 
-/**
+/*
  * Created by dmfrey on 3/20/15.
  */
 public class SearchableActivity extends Activity {

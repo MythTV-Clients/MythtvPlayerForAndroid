@@ -22,7 +22,7 @@ import org.mythtv.android.library.events.dvr.CastMemberDetails;
 
 import java.io.Serializable;
 
-/**
+/*
  * Created by dmfrey on 11/12/14.
  */
 public class CastMember implements Serializable {

@@ -25,7 +25,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-/**
+/*
  * Created by dmfrey on 2/19/15.
  */
 public class NetworkConnectionBroadcastReceiver extends BroadcastReceiver {

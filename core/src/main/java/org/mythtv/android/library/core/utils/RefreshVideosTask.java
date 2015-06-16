@@ -24,7 +24,7 @@ import android.util.Log;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.events.video.UpdateVideosEvent;
 
-/**
+/*
  * Created by dmfrey on 3/14/15.
  */
 public class RefreshVideosTask extends AsyncTask<Void, Void, Void> {

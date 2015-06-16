@@ -20,7 +20,7 @@ package org.mythtv.android.library.events.dvr;
 
 import org.mythtv.android.library.events.DeletedEvent;
 
-/**
+/*
  * Created by dmfrey on 11/18/14.
  */
 public class TitleInfoRemovedEvent extends DeletedEvent {

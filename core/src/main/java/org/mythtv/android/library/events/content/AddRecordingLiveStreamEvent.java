@@ -21,7 +21,7 @@ package org.mythtv.android.library.events.content;
 import org.joda.time.DateTime;
 import org.mythtv.android.library.events.CreateEvent;
 
-/**
+/*
  * Created by dmfrey on 11/18/14.
  */
 public class AddRecordingLiveStreamEvent extends CreateEvent {

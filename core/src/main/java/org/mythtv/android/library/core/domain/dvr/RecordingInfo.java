@@ -23,7 +23,7 @@ import org.mythtv.android.library.events.dvr.RecordingInfoDetails;
 
 import java.io.Serializable;
 
-/**
+/*
  * Created by dmfrey on 11/12/14.
  */
 public class RecordingInfo implements Serializable {

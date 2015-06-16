@@ -21,7 +21,7 @@ package org.mythtv.android.library.persistence.service.dvr;
 import org.mythtv.android.library.events.dvr.RecordingInfoDetails;
 import org.mythtv.android.library.persistence.domain.dvr.RecordingInfo;
 
-/**
+/*
  * Created by dmfrey on 11/15/14.
  */
 public class RecordingInfoHelper {

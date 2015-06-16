@@ -28,7 +28,7 @@ import org.mythtv.android.library.persistence.domain.dvr.Program;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 11/15/14.
  */
 public class ProgramHelper {

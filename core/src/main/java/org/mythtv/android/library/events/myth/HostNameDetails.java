@@ -18,7 +18,7 @@
 
 package org.mythtv.android.library.events.myth;
 
-/**
+/*
  * Created by dmfrey on 1/31/15.
  */
 public class HostNameDetails {

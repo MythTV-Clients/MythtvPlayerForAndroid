@@ -26,7 +26,7 @@ import android.content.IntentFilter;
 
 import org.mythtv.android.library.core.MainApplication;
 
-/**
+/*
  * Created by dmfrey on 2/19/15.
  */
 public abstract class AbstractBaseFragment extends Fragment {

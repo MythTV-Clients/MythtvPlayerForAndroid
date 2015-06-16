@@ -55,7 +55,7 @@ import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants
 import org.mythtv.android.player.app.player.VideoPlayerActivity;
 import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
 
-/**
+/*
  * Created by dmfrey on 12/8/14.
  */
 public class TelevisionDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {

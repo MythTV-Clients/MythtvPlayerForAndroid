@@ -42,7 +42,7 @@ import org.mythtv.android.player.app.recordings.ShowsActivity;
 import org.mythtv.android.player.app.settings.SettingsActivity;
 import org.mythtv.android.player.app.videos.VideosActivity;
 
-/**
+/*
  * Created by dmfrey on 12/10/14.
  */
 public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

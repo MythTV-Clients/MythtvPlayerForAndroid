@@ -50,7 +50,7 @@ import org.mythtv.android.player.tv.videos.VideoCardPresenter;
 import org.mythtv.android.player.tv.videos.VideoDetailsActivity;
 import org.mythtv.android.player.tv.videos.VideoDetailsFragment;
 
-/**
+/*
  * Created by dmfrey on 3/20/15.
  */
 public class SearchableFragment extends SearchFragment implements /* LoaderManager.LoaderCallbacks<List<Program>>,*/ SearchFragment.SearchResultProvider {

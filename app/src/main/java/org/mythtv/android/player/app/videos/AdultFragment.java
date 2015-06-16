@@ -42,7 +42,7 @@ import org.mythtv.android.player.common.ui.adapters.VideoItemAdapter;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 12/3/14.
  */
 public class AdultFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoItemAdapter.VideoItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshVideosTask.OnRefreshVideosTaskListener {

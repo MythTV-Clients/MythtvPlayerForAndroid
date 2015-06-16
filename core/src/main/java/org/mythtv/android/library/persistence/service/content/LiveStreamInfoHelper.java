@@ -21,7 +21,7 @@ package org.mythtv.android.library.persistence.service.content;
 import org.mythtv.android.library.events.content.LiveStreamDetails;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamInfo;
 
-/**
+/*
  * Created by dmfrey on 11/18/14.
  */
 public class LiveStreamInfoHelper {

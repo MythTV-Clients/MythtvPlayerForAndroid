@@ -20,7 +20,7 @@ package org.mythtv.android.library.persistence.domain;
 
 import android.provider.BaseColumns;
 
-/**
+/*
  * Created by dmfrey on 1/25/15.
  */
 public abstract class AbstractBaseDatabase implements BaseColumns {

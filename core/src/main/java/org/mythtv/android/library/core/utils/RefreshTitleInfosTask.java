@@ -25,7 +25,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.events.dvr.TitleInfosUpdatedEvent;
 import org.mythtv.android.library.events.dvr.UpdateTitleInfosEvent;
 
-/**
+/*
  * Created by dmfrey on 3/14/15.
  */
 public class RefreshTitleInfosTask extends AsyncTask<Void, Void, TitleInfosUpdatedEvent> {

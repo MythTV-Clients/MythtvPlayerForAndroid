@@ -36,7 +36,7 @@ import org.mythtv.android.library.core.domain.dvr.Program;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.R;
 
-/**
+/*
  * Created by dmfrey on 12/8/14.
  */
 public class RecordingDetailsActivity extends AbstractBaseAppCompatActivity {

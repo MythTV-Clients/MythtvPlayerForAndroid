@@ -22,7 +22,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.support.v7.widget.RecyclerView;
 
-/**
+/*
  * Created by dmfrey on 3/9/15.
  */
 public class AnimationUtils {

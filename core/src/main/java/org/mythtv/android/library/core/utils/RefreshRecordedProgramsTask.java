@@ -25,7 +25,7 @@ import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.events.dvr.ProgramsUpdatedEvent;
 import org.mythtv.android.library.events.dvr.UpdateRecordedProgramsEvent;
 
-/**
+/*
  * Created by dmfrey on 3/14/15.
  */
 public class RefreshRecordedProgramsTask extends AsyncTask<String, Void, ProgramsUpdatedEvent> {

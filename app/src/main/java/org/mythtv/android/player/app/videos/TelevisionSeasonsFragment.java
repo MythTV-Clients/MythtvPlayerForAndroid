@@ -41,7 +41,7 @@ import org.mythtv.android.player.common.ui.adapters.VideoTvItemAdapter;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 12/3/14.
  */
 public class TelevisionSeasonsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Video>>, VideoTvItemAdapter.VideoItemClickListener {

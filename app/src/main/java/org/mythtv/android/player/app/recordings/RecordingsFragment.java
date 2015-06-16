@@ -41,7 +41,7 @@ import org.mythtv.android.player.app.AbstractBaseFragment;
 
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 12/3/14.
  */
 public class RecordingsFragment extends AbstractBaseFragment implements LoaderManager.LoaderCallbacks<List<Program>>, ProgramItemAdapter.ProgramItemClickListener, SwipeRefreshLayout.OnRefreshListener, RefreshRecordedProgramsTask.OnRefreshRecordedProgramTaskListener {

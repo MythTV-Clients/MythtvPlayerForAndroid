@@ -18,7 +18,7 @@
 
 package org.mythtv.android.library.events.dvr;
 
-/**
+/*
  * Created by dmfrey on 12/7/14.
  */
 public class TitleInfoDetails {

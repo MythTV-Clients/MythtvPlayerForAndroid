@@ -33,7 +33,7 @@ import org.mythtv.android.library.events.video.VideosUpdatedEvent;
 import org.mythtv.android.library.persistence.service.VideoPersistenceService;
 import org.mythtv.android.library.persistence.service.video.VideoPersistenceServiceEventHandler;
 
-/**
+/*
  * Created by dmfrey on 11/24/14.
  */
 public class VideoServiceEventHandler implements VideoService {

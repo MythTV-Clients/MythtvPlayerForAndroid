@@ -29,7 +29,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 
-/**
+/*
  * Created by dmfrey on 12/8/14.
  */
 public class TelevisionDetailsActivity extends AbstractBaseAppCompatActivity {

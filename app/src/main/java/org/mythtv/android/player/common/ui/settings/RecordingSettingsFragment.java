@@ -38,7 +38,7 @@ import org.mythtv.android.library.events.dvr.RequestAllRecordedProgramsEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 4/7/15.
  */
 public class RecordingSettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {

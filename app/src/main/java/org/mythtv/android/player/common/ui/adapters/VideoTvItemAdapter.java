@@ -35,7 +35,7 @@ import org.mythtv.android.library.core.domain.video.Video;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by dmfrey on 11/29/14.
  */
 public class VideoTvItemAdapter extends RecyclerView.Adapter<VideoTvItemAdapter.ViewHolder> {

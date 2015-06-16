@@ -21,7 +21,7 @@ package org.mythtv.android.library.persistence.service.dvr;
 import org.mythtv.android.library.events.dvr.CastMemberDetails;
 import org.mythtv.android.library.persistence.domain.dvr.CastMember;
 
-/**
+/*
  * Created by dmfrey on 11/15/14.
  */
 public class CastMemberHelper {

@@ -33,7 +33,7 @@ import org.mythtv.android.library.events.content.LiveStreamDetailsEvent;
 import org.mythtv.android.library.events.content.RequestLiveStreamDetailsEvent;
 import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants;
 
-/**
+/*
  * Created by dmfrey on 4/5/15.
  */
 public class LiveStreamAsyncTaskLoader extends AsyncTaskLoader<LiveStreamInfo> {

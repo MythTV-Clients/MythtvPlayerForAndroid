@@ -23,7 +23,7 @@ import android.net.Uri;
 import org.mythtv.android.library.persistence.domain.AbstractBaseDatabase;
 import org.mythtv.android.library.persistence.repository.MythtvProvider;
 
-/**
+/*
  * Created by dmfrey on 1/25/15.
  */
 public class ArtworkInfoConstants extends AbstractBaseDatabase {

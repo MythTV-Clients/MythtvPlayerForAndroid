@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import org.mythtv.android.library.R;
 
-/**
+/*
  * A collection of utility methods, all static.
  */
 public class Utils {
