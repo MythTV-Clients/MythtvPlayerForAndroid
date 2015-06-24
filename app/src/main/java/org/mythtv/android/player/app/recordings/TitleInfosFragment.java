@@ -193,17 +193,18 @@ public class TitleInfosFragment extends AbstractBaseFragment implements LoaderMa
 
         Intent recordings = new Intent( getActivity(), RecordingsActivity.class );
         recordings.putExtras( args );
+        startActivity( recordings );
 
-        if( Build.VERSION.SDK_INT >= 16 ) {
-
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null, null );
-            getActivity().startActivity(recordings, options.toBundle());
-
-        } else {
-
-            startActivity( recordings );
-
-        }
+//        if( Build.VERSION.SDK_INT >= 16 ) {
+//
+//            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( getActivity(), null, null );
+//            getActivity().startActivity(recordings, options.toBundle());
+//
+//        } else {
+//
+//            startActivity( recordings );
+//
+//        }
 
     }
 
