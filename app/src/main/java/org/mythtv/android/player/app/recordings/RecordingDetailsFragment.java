@@ -18,6 +18,7 @@
 
 package org.mythtv.android.player.app.recordings;
 
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -55,6 +56,7 @@ import org.mythtv.android.player.app.loaders.LiveStreamAsyncTaskLoader;
 import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
 import org.mythtv.android.player.app.player.RecordingPlayerActivity;
 import org.mythtv.android.R;
+import org.mythtv.android.player.common.ui.utils.ImageUtils;
 
 import java.util.Locale;
 
@@ -251,44 +253,53 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                 .load( coverartUrl )
                 .fit().centerCrop()
                 .transform( paletteTransformation )
-                .into( coverart, new Callback.EmptyCallback() {
+                .into(coverart, new Callback.EmptyCallback() {
 
                     @Override
                     public void onSuccess() {
 
-                        coverart.setVisibility(View.VISIBLE);
+                        coverart.setVisibility( View.VISIBLE );
 
-                        Bitmap bitmap = ( (BitmapDrawable) coverart.getDrawable() ).getBitmap(); // Ew!
-                        Palette palette = PaletteTransformation.getPalette(bitmap);
-                        Palette.Swatch swatch = palette.getDarkMutedSwatch();
-
-                        try {
-
-                            layout.setBackgroundColor(palette.getDarkMutedColor( R.color.recording_card_default ) );
-                            showName.setTextColor( swatch.getTitleTextColor() );
-                            episodeName.setTextColor( swatch.getTitleTextColor() );
-                            callsign.setTextColor( swatch.getTitleTextColor() );
-                            startTime.setTextColor( swatch.getTitleTextColor() );
-                            channelNumber.setTextColor( swatch.getTitleTextColor() );
-                            description.setTextColor( swatch.getTitleTextColor() );
-
-                            queueHls.setTextColor( swatch.getTitleTextColor() );
-                            play.setTextColor( swatch.getTitleTextColor() );
-
-                        } catch( Exception e ) {
-
-                            layout.setBackgroundColor( getActivity().getResources().getColor( R.color.primary_dark ) );
-                            showName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                            episodeName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                            callsign.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                            startTime.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                            channelNumber.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                            description.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-
-                            queueHls.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                            play.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-
-                        }
+//                        Bitmap bitmap = ( (BitmapDrawable) coverart.getDrawable() ).getBitmap(); // Ew!
+//                        Palette palette = PaletteTransformation.getPalette( bitmap );
+//                        Palette.Swatch swatch = palette.getDarkMutedSwatch();
+//
+//                        try {
+//
+//                            if( Color.WHITE == swatch.getTitleTextColor() ) {
+//
+//                                layout.setBackgroundColor( getActivity().getResources().getColor( R.color.primary_dark ) );
+//
+//                            } else {
+//
+//                                layout.setBackgroundColor( palette.getDarkMutedColor( R.color.recording_card_default ) );
+//
+//                            }
+//
+//                            showName.setTextColor( swatch.getTitleTextColor() );
+//                            episodeName.setTextColor( swatch.getTitleTextColor() );
+//                            callsign.setTextColor( swatch.getTitleTextColor() );
+//                            startTime.setTextColor( swatch.getTitleTextColor() );
+//                            channelNumber.setTextColor( swatch.getTitleTextColor() );
+//                            description.setTextColor( swatch.getTitleTextColor() );
+//
+//                            queueHls.setTextColor( swatch.getTitleTextColor() );
+//                            play.setTextColor( swatch.getTitleTextColor() );
+//
+//                        } catch( Exception e ) {
+//
+//                            layout.setBackgroundColor( getActivity().getResources().getColor( R.color.primary_dark ) );
+//                            showName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+//                            episodeName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+//                            callsign.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+//                            startTime.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+//                            channelNumber.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+//                            description.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+//
+//                            queueHls.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+//                            play.setTextColor( getActivity().getResources().getColor( R.color.white ) );
+//
+//                        }
 
                     }
 
@@ -296,18 +307,18 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
                     public void onError() {
                         super.onError();
 
-                        coverart.setVisibility(View.GONE);
+                        coverart.setVisibility( View.GONE );
 
-                        layout.setBackgroundColor( getActivity().getResources().getColor( R.color.primary_dark ) );
-                        showName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                        episodeName.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                        callsign.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                        startTime.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                        channelNumber.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                        description.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-
-                        queueHls.setTextColor( getActivity().getResources().getColor( R.color.white ) );
-                        play.setTextColor(getActivity().getResources().getColor(R.color.white));
+//                        layout.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_dark));
+//                        showName.setTextColor(getActivity().getResources().getColor(R.color.white));
+//                        episodeName.setTextColor(getActivity().getResources().getColor(R.color.white));
+//                        callsign.setTextColor(getActivity().getResources().getColor(R.color.white));
+//                        startTime.setTextColor(getActivity().getResources().getColor(R.color.white));
+//                        channelNumber.setTextColor(getActivity().getResources().getColor(R.color.white));
+//                        description.setTextColor(getActivity().getResources().getColor(R.color.white));
+//
+//                        queueHls.setTextColor(getActivity().getResources().getColor(R.color.white));
+//                        play.setTextColor(getActivity().getResources().getColor(R.color.white));
 
                     }
 

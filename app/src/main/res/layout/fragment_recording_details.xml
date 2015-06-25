@@ -39,8 +39,7 @@
             android:id="@+id/recording_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:background="@color/primary_dark">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/recording_info_layout"
@@ -64,7 +63,6 @@
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
                     android:layout_toRightOf="@+id/recording_coverart"
                     android:layout_toEndOf="@+id/recording_coverart"
                     tools:text="Show Name" />
@@ -74,7 +72,6 @@
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
                     android:ellipsize="end"
                     android:layout_below="@+id/recording_show_name"
                     android:layout_toRightOf="@+id/recording_coverart"
@@ -86,7 +83,6 @@
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
                     android:layout_below="@+id/recording_show_name"
                     android:layout_toRightOf="@+id/recording_episode_name"
                     android:layout_toEndOf="@+id/recording_episode_name"
@@ -100,7 +96,6 @@
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
                     android:layout_below="@+id/recording_episode_name"
                     android:layout_toRightOf="@+id/recording_coverart"
                     android:layout_toEndOf="@+id/recording_coverart"
@@ -111,7 +106,6 @@
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
                     android:layout_below="@+id/recording_episode_name"
                     android:layout_toRightOf="@+id/recording_start_time"
                     android:layout_toEndOf="@+id/recording_start_time"
@@ -144,7 +138,6 @@
                 android:layout_margin="@dimen/margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
                 android:layout_below="@id/recording_info_layout"
                 tools:text="Episode Description" />
 
@@ -157,7 +150,6 @@
                 android:layout_below="@id/recording_description"
                 android:layout_alignParentBottom="true"
                 style="?android:attr/borderlessButtonStyle"
-                android:textColor="@android:color/white"
                 android:visibility="gone"
                 tools:text="Play"/>
 
@@ -169,7 +161,6 @@
                 android:text="@string/queue_button"
                 android:layout_below="@id/recording_description"
                 android:layout_alignParentBottom="true"
-                android:textColor="@android:color/white"
                 style="?android:attr/borderlessButtonStyle"/>
 
         </RelativeLayout>
