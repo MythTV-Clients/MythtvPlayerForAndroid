@@ -305,8 +305,7 @@ public class Program implements Serializable {
 
         Program program = (Program) o;
 
-        if (!channel.equals(program.channel)) return false;
-        return recording.equals(program.recording);
+        return channel.equals(program.channel) && recording.equals(program.recording);
 
     }
 

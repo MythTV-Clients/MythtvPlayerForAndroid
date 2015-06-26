@@ -89,8 +89,8 @@ public class RecordingPlayerActivity extends Activity {
     /*
      * List of various states that we can be in
      */
-    public static enum PlaybackState {
-        PLAYING, PAUSED, BUFFERING, IDLE;
+    public enum PlaybackState {
+        PLAYING, PAUSED, BUFFERING, IDLE
     }
 
     @Override

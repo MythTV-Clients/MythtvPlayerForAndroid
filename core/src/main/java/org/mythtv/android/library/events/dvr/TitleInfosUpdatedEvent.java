@@ -33,11 +33,7 @@ public class TitleInfosUpdatedEvent extends UpdatedEvent {
 
         this.details = details;
 
-        if( null != details ) {
-            entityFound = !details.isEmpty();
-        } else {
-            entityFound = false;
-        }
+        entityFound = null != details && !details.isEmpty();
 
     }
 

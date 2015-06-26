@@ -34,7 +34,7 @@ public class RefreshTitleInfosTask extends AsyncTask<Void, Void, TitleInfosUpdat
 
     public interface OnRefreshRecordedProgramTaskListener {
 
-        public void onRefreshComplete( boolean updated );
+        void onRefreshComplete(boolean updated);
 
     }
 

@@ -34,7 +34,7 @@ public class RefreshRecordedProgramsTask extends AsyncTask<String, Void, Program
 
     public interface OnRefreshRecordedProgramTaskListener {
 
-        public void onRefreshComplete( boolean updated );
+        void onRefreshComplete(boolean updated);
 
     }
 

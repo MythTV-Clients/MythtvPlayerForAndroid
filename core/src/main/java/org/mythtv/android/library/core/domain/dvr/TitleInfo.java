@@ -73,8 +73,7 @@ public class TitleInfo implements Serializable, Comparable<TitleInfo> {
 
         TitleInfo titleInfo = (TitleInfo) o;
 
-        if (!title.equals(titleInfo.title)) return false;
-        return !(inetref != null ? !inetref.equals(titleInfo.inetref) : titleInfo.inetref != null);
+        return title.equals(titleInfo.title) && !(inetref != null ? !inetref.equals(titleInfo.inetref) : titleInfo.inetref != null);
 
     }
 

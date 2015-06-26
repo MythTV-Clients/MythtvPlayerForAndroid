@@ -28,7 +28,7 @@ import org.mythtv.android.library.persistence.repository.MythtvProvider;
  */
 public class ProgramConstants extends AbstractBaseDatabase {
 
-    public static enum ProgramType { RECORDED, UPCOMING }
+    public enum ProgramType { RECORDED, UPCOMING }
 
     public static final String TABLE_NAME = "programs";
 

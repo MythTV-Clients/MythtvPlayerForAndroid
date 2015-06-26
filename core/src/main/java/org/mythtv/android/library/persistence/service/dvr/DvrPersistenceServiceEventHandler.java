@@ -834,9 +834,8 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
             ProgramKey that = (ProgramKey) o;
 
-            if (chanId != that.chanId) return false;
+            return chanId == that.chanId && startTs == that.startTs;
 
-            return startTs == that.startTs;
         }
 
         @Override

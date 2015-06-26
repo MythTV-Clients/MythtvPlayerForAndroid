@@ -537,8 +537,7 @@ public class Video implements Serializable, Comparable<Video> {
             return false;
         if (tagline != null ? !tagline.equals(video.tagline) : video.tagline != null) return false;
         if (inetref != null ? !inetref.equals(video.inetref) : video.inetref != null) return false;
-        if (season != null ? !season.equals(video.season) : video.season != null) return false;
-        return !(episode != null ? !episode.equals(video.episode) : video.episode != null);
+        return !(season != null ? !season.equals(video.season) : video.season != null) && !(episode != null ? !episode.equals(video.episode) : video.episode != null);
 
     }
 
