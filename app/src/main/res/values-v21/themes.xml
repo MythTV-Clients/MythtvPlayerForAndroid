@@ -21,27 +21,8 @@
 
     <style name="AppTheme" parent="AppTheme.Base">
 
-        <item name="android:windowTranslucentStatus">true</item>
-
-        <item name="android:colorPrimary">@color/primary</item>
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:colorAccent">@color/accent</item>
-        <item name="android:colorControlHighlight">@color/primary_light</item>
-
-        <item name="android:textColorPrimary">@color/primary_text</item>
-        <item name="android:textColorSecondary">@color/secondary_text</item>
-
-        <!-- enable window content transitions -->
-        <item name="android:windowContentTransitions">true</item>
-        <!-- item name="android:windowTransitionBackgroundFadeDuration">5000</item -->
-
-        <!-- specify enter and exit transitions -->
-        <!-- item name="android:windowEnterTransition">@android:transition/explode</item>
-        <item name="android:windowExitTransition">@android:transition/explode</item -->
-
-        <!-- specify shared element transitions -->
-        <!-- item name="android:windowSharedElementEnterTransition">@transition/change_image_transform</item>
-        <item name="android:windowSharedElementExitTransition">@transition/change_image_transform</item -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
 
         <item name="android:dropDownItemStyle">@style/myDropDownItemStyle</item>
 
