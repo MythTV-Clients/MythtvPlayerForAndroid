@@ -90,8 +90,15 @@ public class RecordingDetailsActivity extends AbstractBaseAppCompatActivity {
 
             mRecordingDetailsFragment.setProgram( mProgram );
 
-            //getSupportActionBar().setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
-            mCollapsingToolbar.setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
+            if( null != mCollapsingToolbar ) {
+
+                mCollapsingToolbar.setTitle( ( null != mProgram.getSubTitle() && !"".equals( mProgram.getSubTitle() ) ) ? mProgram.getSubTitle() : mProgram.getTitle() );
+
+            } else {
+
+                getSupportActionBar().setTitle((null != mProgram.getSubTitle() && !"".equals(mProgram.getSubTitle())) ? mProgram.getSubTitle() : mProgram.getTitle());
+
+            }
 
             loadBackdrop();
 

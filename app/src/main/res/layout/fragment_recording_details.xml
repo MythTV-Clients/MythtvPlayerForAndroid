@@ -21,21 +21,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recording_details"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".recordings.RecordingDetailsFragment">
 
     <android.support.v7.widget.CardView
         android:id="@+id/recording_card"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:layout_marginTop="@dimen/outer_margin"
-        android:layout_marginLeft="@dimen/outer_margin"
-        android:layout_marginBottom="@dimen/outer_margin"
-        android:layout_marginRight="@dimen/outer_margin">
+        android:layout_marginTop="@dimen/margin"
+        android:layout_marginLeft="@dimen/margin"
+        android:layout_marginBottom="@dimen/margin"
+        android:layout_marginRight="@dimen/margin">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/recording_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -138,7 +138,6 @@
                 android:layout_margin="@dimen/margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recording_info_layout"
                 tools:text="Episode Description" />
 
             <Button
@@ -147,7 +146,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/play_button"
-                android:layout_below="@id/recording_description"
                 android:layout_alignParentBottom="true"
                 style="?android:attr/borderlessButtonStyle"
                 android:visibility="gone"
@@ -159,11 +157,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/queue_button"
-                android:layout_below="@id/recording_description"
                 android:layout_alignParentBottom="true"
                 style="?android:attr/borderlessButtonStyle"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 

@@ -70,7 +70,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
     public static final String PROGRAM_KEY = "program";
 
     CardView cardView;
-    RelativeLayout layout;
+//    RelativeLayout layout;
     ImageView coverart;
     TextView showName, episodeName, callsign, startTime, channelNumber, description;
     Button play, queueHls;
@@ -162,7 +162,7 @@ public class RecordingDetailsFragment extends Fragment implements LoaderManager.
 
         View rootView = inflater.inflate( R.layout.fragment_recording_details, container, false );
         cardView = (CardView) rootView.findViewById( R.id.recording_card );
-        layout = (RelativeLayout) rootView.findViewById( R.id.recording_layout );
+//        layout = (RelativeLayout) rootView.findViewById( R.id.recording_layout );
         coverart = (ImageView) rootView.findViewById( R.id.recording_coverart );
         showName = (TextView) rootView.findViewById( R.id.recording_show_name );
         episodeName = (TextView) rootView.findViewById( R.id.recording_episode_name );
