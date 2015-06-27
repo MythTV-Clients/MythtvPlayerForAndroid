@@ -157,7 +157,6 @@
                 android:layout_below="@id/recording_description"
                 android:layout_alignParentBottom="true"
                 style="?android:attr/borderlessButtonStyle"
-                android:textColor="@android:color/white"
                 android:visibility="gone" />
 
             <Button
