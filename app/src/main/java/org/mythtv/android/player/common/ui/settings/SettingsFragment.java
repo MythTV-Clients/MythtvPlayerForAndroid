@@ -21,9 +21,14 @@ package org.mythtv.android.player.common.ui.settings;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
@@ -35,6 +40,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
+    private EditTextPreference mBackendUrl;
+
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         Log.v( TAG, "onCreate : enter" );
@@ -43,6 +50,47 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         addPreferencesFromResource( R.xml.preferences );
 
         Log.v( TAG, "onCreate : exit" );
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        mBackendUrl = (EditTextPreference) getPreferenceManager().findPreference( MainApplication.KEY_PREF_BACKEND_URL );
+        mBackendUrl.setOnPreferenceChangeListener( new Preference.OnPreferenceChangeListener() {
+
+            @Override
+            public boolean onPreferenceChange( Preference preference, Object newValue ) {
+
+                String backendUrl = ( (String) newValue ).toLowerCase();
+
+//                boolean isIPv6 = backendUrl.matches("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))" );
+//                if( isIPv6 ) {
+//                    Log.i( TAG, "onPreferenceChange : validated IPv6" );
+//
+//                    return true;
+//                }
+
+                boolean isIPv4 = backendUrl.matches( "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}" );
+                if( isIPv4 ) {
+                    Log.i( TAG, "onPreferenceChange : validated IPv4" );
+
+                    return true;
+                }
+
+                boolean isFQDN = backendUrl.matches( "(?=^.{1,253}$)(^(((?!-)[a-zA-Z0-9-]{1,63}(?<!-))|((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\\.)+[a-zA-Z]{2,63})$)" );
+                if( isFQDN ) {
+                    Log.i( TAG, "onPreferenceChange : validated FQDN" );
+
+                    return true;
+                }
+
+                Log.i( TAG, "onPreferenceChange : validation failed!" );
+                return false;
+            }
+
+        });
+
+        return super.onCreateView( inflater, container, savedInstanceState );
     }
 
     @Override
