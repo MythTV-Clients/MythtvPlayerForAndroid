@@ -27,6 +27,7 @@ import android.view.MenuInflater;
 import android.support.v7.widget.SearchView;
 
 import org.mythtv.android.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 
 public class ShowsActivity extends AbstractBaseAppCompatActivity {
@@ -69,6 +70,8 @@ public class ShowsActivity extends AbstractBaseAppCompatActivity {
 
         setTitle( getResources().getString( R.string.drawer_item_watch_recordings ) );
         super.setNavigationMenuItemChecked( 0 );
+
+        MainApplication.getInstance().setLastActivity( MainApplication.SHOWS_ACTIVITY_INTENT_FILTER );
 
     }
 

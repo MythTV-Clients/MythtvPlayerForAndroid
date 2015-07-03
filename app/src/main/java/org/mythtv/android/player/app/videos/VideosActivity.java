@@ -70,6 +70,8 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
 
         super.setNavigationMenuItemChecked( 1 );
 
+        MainApplication.getInstance().setLastActivity( MainApplication.VIDEOS_ACTIVITY_INTENT_FILTER );
+
     }
 
     @Override

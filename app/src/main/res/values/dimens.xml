@@ -21,7 +21,7 @@
 
     <dimen name="nav_drawer_width">320dp</dimen>
     <dimen name="app_bar_top_padding">0dp</dimen>
-    <dimen name="drawer_margin_top">24dp</dimen>
+    <dimen name="drawer_margin_top">48dp</dimen>
 
     <dimen name="fab_elevation">8dp</dimen>
     <dimen name="fab_press_translation_z">9dp</dimen>

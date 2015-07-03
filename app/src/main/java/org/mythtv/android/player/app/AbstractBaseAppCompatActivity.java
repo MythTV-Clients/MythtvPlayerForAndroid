@@ -162,7 +162,7 @@ public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity im
             case R.id.navigation_item_watch_recordings :
 
                 Intent shows = new Intent( this, ShowsActivity.class );
-                shows.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+                shows.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                 startActivity( shows );
 
                 return true;
@@ -170,7 +170,7 @@ public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity im
             case R.id.navigation_item_watch_videos :
 
                 Intent videos = new Intent( this, VideosActivity.class );
-                videos.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+                videos.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                 startActivity( videos );
 
                 return true;

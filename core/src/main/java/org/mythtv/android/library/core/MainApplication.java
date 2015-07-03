@@ -67,6 +67,11 @@ public class MainApplication extends Application {
 
     private static final String TAG = MainApplication.class.getSimpleName();
 
+    public static final String SHOWS_ACTIVITY_INTENT_FILTER = "org.mythtv.app.SHOWS_ACTIVITY";
+    public static final String VIDEOS_ACTIVITY_INTENT_FILTER = "org.mythtv.app.VIDEOS_ACTIVITY";
+    public static final String SETTINGS_ACTIVITY_INTENT_FILTER = "org.mythtv.app.SETTINGS_ACTIVITY";
+
+    public static final String KEY_PREF_LAST_ACTIVITY = "last_activity";
     public static final String KEY_PREF_BACKEND_URL = "backend_url";
     public static final String KEY_PREF_BACKEND_PORT = "backend_port";
 
@@ -240,6 +245,22 @@ public class MainApplication extends Application {
 
     public String getMasterBackendUrl() {
         return "http://" + mBackendUrl + ":" + mBackendPort + "/";
+    }
+
+    public String getLastActivity() {
+
+        return mSharedPref.getString( KEY_PREF_LAST_ACTIVITY, SHOWS_ACTIVITY_INTENT_FILTER );
+    }
+
+    public void setLastActivity( String value ) {
+
+        mSharedPref.edit().putString( KEY_PREF_LAST_ACTIVITY, value ).apply();
+
+    }
+
+    public String getBackendUrl() {
+
+        return mSharedPref.getString( KEY_PREF_BACKEND_URL, null );
     }
 
     public boolean isInternalPlayerEnabled() {
