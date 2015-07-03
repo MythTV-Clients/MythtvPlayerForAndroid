@@ -23,7 +23,7 @@
         android:title="@string/pref_video_display_preferences"
         android:key="pref_watch_videos">
 
-        <SwitchPreference
+        <CheckBoxPreference
             android:title="@string/pref_show_adult_tab"
             android:key="show_adult_tab"
             android:defaultValue="false"
@@ -36,7 +36,7 @@
         android:title="@string/pref_parental_controls"
         android:key="pref_parental_controls">
 
-        <SwitchPreference
+        <CheckBoxPreference
             android:title="@string/pref_enable_parental_controls"
             android:key="enable_parental_controls"
             android:defaultValue="false"
@@ -57,7 +57,7 @@
         android:title="@string/pref_content_ratings"
         android:key="pref_content_ratings">
 
-        <SwitchPreference
+        <CheckBoxPreference
             android:title="@string/pref_restrict_content_types"
             android:key="restrict_content_types"
             android:defaultValue="false"

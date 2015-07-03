@@ -18,8 +18,6 @@
 
 package org.mythtv.android.player.common.ui.settings;
 
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
@@ -29,7 +27,7 @@ import org.mythtv.android.R;
 /*
  * Created by dmfrey on 4/7/15.
  */
-public class VideoSettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+public class VideoSettingsFragment extends PreferenceFragment {
 
     private static final String TAG = VideoSettingsFragment.class.getSimpleName();
 
@@ -41,27 +39,6 @@ public class VideoSettingsFragment extends PreferenceFragment implements OnShare
         addPreferencesFromResource( R.xml.preferences_videos );
 
         Log.v( TAG, "onCreate : exit" );
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener( this );
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener( this );
-
-    }
-
-    @Override
-    public void onSharedPreferenceChanged( SharedPreferences sharedPreferences, String key ) {
-
     }
 
 }

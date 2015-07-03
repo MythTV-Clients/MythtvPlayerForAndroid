@@ -21,6 +21,7 @@ package org.mythtv.android.player.common.ui.settings;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -41,6 +42,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
     private EditTextPreference mBackendUrl;
+    private CheckBoxPreference internalPlayer;
+    private SwitchPreference externalPlayerOverride;
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
@@ -90,6 +93,25 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         });
 
+        externalPlayerOverride = (SwitchPreference) getPreferenceManager().findPreference( MainApplication.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
+        internalPlayer = (CheckBoxPreference) getPreferenceManager().findPreference( MainApplication.KEY_PREF_INTERNAL_PLAYER );
+        internalPlayer.setOnPreferenceChangeListener( new Preference.OnPreferenceChangeListener() {
+
+            @Override
+            public boolean onPreferenceChange( Preference preference, Object newValue ) {
+            Log.i( TAG, "onPreferenceChanged : " + MainApplication.KEY_PREF_INTERNAL_PLAYER + " value=" + (boolean) newValue );
+
+                if( !( (boolean) newValue ) ) {
+
+                    externalPlayerOverride.setChecked( false );
+
+                }
+
+                return true;
+            }
+
+        });
+
         return super.onCreateView( inflater, container, savedInstanceState );
     }
 
@@ -112,15 +134,25 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     @Override
     public void onSharedPreferenceChanged( SharedPreferences sharedPreferences, String key ) {
 
-        MainApplication.getInstance().resetBackend();
+        if( key.equals( MainApplication.KEY_PREF_BACKEND_URL ) || key.equals( MainApplication.KEY_PREF_BACKEND_PORT ) ) {
 
-        boolean internalVideoEnabled = sharedPreferences.getBoolean( MainApplication.KEY_PREF_INTERNAL_PLAYER, true );
-        if( !internalVideoEnabled ) {
-
-            SwitchPreference external = (SwitchPreference) getPreferenceManager().findPreference( MainApplication.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
-            external.setChecked( false );
+            MainApplication.getInstance().resetBackend();
 
         }
+
+//        if( key.equals( MainApplication.KEY_PREF_INTERNAL_PLAYER ) ) {
+//            Log.i( TAG, "onSharedPreferenceChanged : key=" + key + ", value=" + sharedPreferences.getBoolean( MainApplication.KEY_PREF_INTERNAL_PLAYER, true ) );
+//            Log.i( TAG, "onSharedPreferenceChanged : key=" + MainApplication.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO + ", value=" + sharedPreferences.getBoolean( MainApplication.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, true ) );
+//
+//            boolean internalVideoEnabled = sharedPreferences.getBoolean( MainApplication.KEY_PREF_INTERNAL_PLAYER, true );
+//            if( !internalVideoEnabled ) {
+//
+//                SwitchPreference external = (SwitchPreference) getPreferenceManager().findPreference( MainApplication.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
+//                external.setChecked(false);
+//
+//            }
+//
+//        }
 
     }
 

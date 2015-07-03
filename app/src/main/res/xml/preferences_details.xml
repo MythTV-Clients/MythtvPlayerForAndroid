@@ -22,7 +22,7 @@
         android:title="@string/pref_default_player"
         android:key="pref_default_player">
 
-        <SwitchPreference
+        <CheckBoxPreference
             android:title="@string/pref_internal_player"
             android:key="internal_player"
             android:defaultValue="true"
