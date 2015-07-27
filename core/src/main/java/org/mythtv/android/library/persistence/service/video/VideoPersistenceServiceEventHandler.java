@@ -44,6 +44,7 @@ import org.mythtv.android.library.events.video.VideosUpdatedEvent;
 import org.mythtv.android.library.persistence.domain.dvr.CastMember;
 import org.mythtv.android.library.persistence.domain.video.Video;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
+import org.mythtv.android.library.persistence.domain.video.VideoDirConstants;
 import org.mythtv.android.library.persistence.repository.MythtvProvider;
 import org.mythtv.android.library.persistence.service.VideoPersistenceService;
 
@@ -263,7 +264,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
         String[] projection = null;
         String selection = VideoConstants.TABLE_NAME + " MATCH ?";
         List<String> selectionArgs = new ArrayList<>();
-        selectionArgs.add( event.getQuery() + "*" );
+        selectionArgs.add(event.getQuery() + "*");
 
         if( MainApplication.getInstance().enableParentalControls() ) {
 
@@ -366,8 +367,16 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
                     videoIds.remove( video.getId() );
                 }
 
+                String parentPath = "";
                 String filename = video.getFileName();
-                filename = filename.substring( filename.lastIndexOf( '/' ) + 1 );
+                if( filename.indexOf( '/' ) != -1 ) {
+
+                    parentPath = filename.substring( 0, filename.lastIndexOf( '/' ) + 1 );
+                    filename = filename.substring( filename.lastIndexOf( '/' ) + 1 );
+
+                }
+
+                updateVideoDirs( video.getFileName() );
 
                 values = new ContentValues();
                 values.put( VideoConstants.FIELD_VIDEO_ID, video.getId() );
@@ -394,6 +403,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
                 values.put( VideoConstants.FIELD_VIDEO_WATCHED, null != video.isWatched() ? ( video.isWatched() ? 1 : 0 ) : 0 );
                 values.put( VideoConstants.FIELD_VIDEO_PROCESSED, null != video.isProcessed() ? ( video.isProcessed() ? 1 : 0 ) : 0 );
                 values.put( VideoConstants.FIELD_VIDEO_CONTENT_TYPE, ( null != video.getContentType() ? video.getContentType() : "" ) );
+                values.put( VideoConstants.FIELD_VIDEO_PARENT_PATH, parentPath );
                 values.put( VideoConstants.FIELD_VIDEO_FILEPATH, video.getFileName() );
                 values.put( VideoConstants.FIELD_VIDEO_FILENAME, filename );
                 values.put( VideoConstants.FIELD_VIDEO_HASH, ( null != video.getHash() ? video.getHash() : "" ) );
@@ -526,7 +536,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         Video video = null;
 
-        String[] projection = new String[]{ "rowid as " + VideoConstants._ID, VideoConstants.FIELD_VIDEO_ID, VideoConstants.FIELD_VIDEO_TITLE, VideoConstants.FIELD_VIDEO_TAGLINE, VideoConstants.FIELD_VIDEO_SUB_TITLE, VideoConstants.FIELD_VIDEO_INETREF, VideoConstants.FIELD_VIDEO_DESCRIPTION, VideoConstants.FIELD_VIDEO_FILEPATH, VideoConstants.FIELD_VIDEO_FILENAME, VideoConstants.FIELD_VIDEO_HOSTNAME, VideoConstants.FIELD_VIDEO_COLLECTIONREF, VideoConstants.FIELD_CAST_MEMBER_NAMES };
+        String[] projection = new String[] { "rowid as " + VideoConstants._ID, VideoConstants.FIELD_VIDEO_ID, VideoConstants.FIELD_VIDEO_TITLE, VideoConstants.FIELD_VIDEO_TAGLINE, VideoConstants.FIELD_VIDEO_SUB_TITLE, VideoConstants.FIELD_VIDEO_INETREF, VideoConstants.FIELD_VIDEO_DESCRIPTION, VideoConstants.FIELD_VIDEO_FILEPATH, VideoConstants.FIELD_VIDEO_FILENAME, VideoConstants.FIELD_VIDEO_HOSTNAME, VideoConstants.FIELD_VIDEO_COLLECTIONREF, VideoConstants.FIELD_CAST_MEMBER_NAMES };
         String selection = null;
 
         List<String> selectionArgs = new ArrayList<>();
@@ -574,12 +584,12 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
         int deleted = mContext.getContentResolver().delete( VideoConstants.CONTENT_URI, selection, selectionArgs );
         if( deleted == 1 ) {
 
-            Log.v( TAG, "deleteVideo : exit" );
+            Log.v(TAG, "deleteVideo : exit");
             return new VideoDeletedEvent( event.getId() );
         }
 
-        Log.v( TAG, "deleteVideo : error, video not deleted" );
-        return VideoDeletedEvent.deletionFailed( event.getId() );
+        Log.v(TAG, "deleteVideo : error, video not deleted");
+        return VideoDeletedEvent.deletionFailed(event.getId());
     }
 
     private Video convertCursorToVideo( Cursor cursor ) {
@@ -719,6 +729,79 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
         }
 
         return video;
+    }
+
+    private void updateVideoDirs( String path ) {
+//        Log.v( TAG, "updateVideoDirs : enter - path=" + path );
+
+        ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+
+        Cursor cursor = null;
+        ContentValues values = null;
+
+        if( path.contains( "/" ) ) {
+
+            path = path.substring( 0, path.lastIndexOf( '/' ) );
+
+            StringTokenizer st = new StringTokenizer( path, "/" );
+            String parent = "";
+            String currentPath = "";
+
+            while( st.hasMoreTokens() ) {
+
+                String name = st.nextToken();
+                currentPath += name + "/";
+//                Log.v( TAG, "updateVideoDirs : updating existing video dir - currentPath=" + currentPath );
+
+                values = new ContentValues();
+                values.put( VideoDirConstants.FIELD_VIDEO_DIR_PATH, currentPath );
+                values.put( VideoDirConstants.FIELD_VIDEO_DIR_NAME, name );
+                values.put( VideoDirConstants.FIELD_VIDEO_DIR_PARENT, parent );
+
+                cursor = mContext.getContentResolver().query( VideoDirConstants.CONTENT_URI, null, VideoDirConstants.FIELD_VIDEO_DIR_PATH + " = ?", new String[] { currentPath }, null );
+                if( cursor.moveToFirst() ) {
+
+                    Long id = cursor.getLong( cursor.getColumnIndex( VideoDirConstants._ID ) );
+//                    Log.v( TAG, "updateVideoDirs : updating existing video dir - id=" + id );
+                    ops.add(
+                            ContentProviderOperation
+                                    .newUpdate( ContentUris.withAppendedId( VideoDirConstants.CONTENT_URI, id ) )
+                                    .withValues( values )
+                                    .build()
+                    );
+
+                } else {
+//                    Log.v( TAG, "updateVideoDirs : adding new video dir" );
+
+                    ops.add(
+                            ContentProviderOperation
+                                    .newInsert( VideoDirConstants.CONTENT_URI )
+                                    .withValues( values )
+                                    .withYieldAllowed( true )
+                                    .build()
+                    );
+
+                }
+                cursor.close();
+
+                parent = currentPath;
+            }
+
+            try {
+
+                mContext.getContentResolver().applyBatch( MythtvProvider.AUTHORITY, ops );
+
+//                Log.v( TAG, "updateVideoDirs : exit" );
+
+            } catch( Exception e ) {
+
+                Log.e( TAG, "updateVideoDirs : error processing videos", e );
+
+            }
+
+        }
+
+//        Log.v( TAG, "updateVideoDirs : exit - path=" + path );
     }
 
 }

@@ -36,6 +36,7 @@ import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants
 import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
+import org.mythtv.android.library.persistence.domain.video.VideoDirConstants;
 
 import java.util.ArrayList;
 
@@ -79,6 +80,9 @@ public class MythtvProvider extends ContentProvider {
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/id/#", VideoConstants.SINGLE_ID );
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/Television/Titles", VideoConstants.ALL_TV_TITLES );
         URI_MATCHER.addURI( AUTHORITY, VideoConstants.TABLE_NAME + "/Television/Titles/Season", VideoConstants.ALL_TV_SEASON );
+
+        URI_MATCHER.addURI( AUTHORITY, VideoDirConstants.TABLE_NAME, VideoDirConstants.ALL );
+        URI_MATCHER.addURI( AUTHORITY, VideoDirConstants.TABLE_NAME + "/#",  VideoDirConstants.SINGLE );
 
     }
 
@@ -132,6 +136,12 @@ public class MythtvProvider extends ContentProvider {
             case VideoConstants.SINGLE :
             case VideoConstants.SINGLE_ID :
                 return VideoConstants.CONTENT_ITEM_TYPE;
+
+            case VideoDirConstants.ALL :
+                return VideoDirConstants.CONTENT_TYPE;
+
+            case VideoDirConstants.SINGLE :
+                return VideoDirConstants.CONTENT_ITEM_TYPE;
 
             default :
                 throw new IllegalArgumentException( "Unknown URI : " + uri );
@@ -349,6 +359,26 @@ public class MythtvProvider extends ContentProvider {
 
                 return cursor;
 
+            case VideoDirConstants.ALL :
+//                Log.v( TAG, "query : querying for all videos" );
+
+                cursor = db.query( VideoDirConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
+            case VideoDirConstants.SINGLE :
+//                Log.v( TAG, "query : querying for single video" );
+
+                selection = VideoDirConstants._ID + " = " + uri.getLastPathSegment() + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" );
+
+                cursor = db.query( VideoDirConstants.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
+                cursor.setNotificationUri( getContext().getContentResolver(), uri );
+
+                return cursor;
+
             default :
                 throw new IllegalArgumentException( "Unknown URI : " + uri );
 
@@ -397,6 +427,15 @@ public class MythtvProvider extends ContentProvider {
 //                Log.v( TAG, "insert : inserting new video" );
 
                 newUri = ContentUris.withAppendedId( VideoConstants.CONTENT_URI, db.insertWithOnConflict( VideoConstants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE ) );
+
+                getContext().getContentResolver().notifyChange( newUri, null );
+
+                return newUri;
+
+            case VideoDirConstants.ALL:
+//                Log.v( TAG, "insert : inserting new video dir" );
+
+                newUri = ContentUris.withAppendedId( VideoDirConstants.CONTENT_URI, db.insertWithOnConflict( VideoDirConstants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE ) );
 
                 getContext().getContentResolver().notifyChange( newUri, null );
 
@@ -543,6 +582,26 @@ public class MythtvProvider extends ContentProvider {
 
                 return deleted;
 
+            case VideoDirConstants.ALL:
+
+                deleted = db.delete( VideoDirConstants.TABLE_NAME, selection, selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return deleted;
+
+            case VideoDirConstants.SINGLE:
+
+                deleted = db.delete( VideoConstants.TABLE_NAME,
+                        VideoDirConstants._ID + " ="
+                                + uri.getLastPathSegment()
+                                + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" )
+                        , selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return deleted;
+
             default:
                 throw new IllegalArgumentException( "Unknown URI " + uri );
 
@@ -676,6 +735,26 @@ public class MythtvProvider extends ContentProvider {
 
                 affected = db.update( VideoConstants.TABLE_NAME, values,
                         "rowid ="
+                                + uri.getLastPathSegment()
+                                + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" ),
+                        selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return affected;
+
+            case VideoDirConstants.ALL:
+
+                affected = db.update( VideoDirConstants.TABLE_NAME, values, selection, selectionArgs );
+
+                getContext().getContentResolver().notifyChange( uri, null );
+
+                return affected;
+
+            case VideoDirConstants.SINGLE:
+
+                affected = db.update( VideoDirConstants.TABLE_NAME, values,
+                        VideoDirConstants._ID + " = "
                                 + uri.getLastPathSegment()
                                 + ( !TextUtils.isEmpty( selection ) ? " AND (" + selection + ")" : "" ),
                         selectionArgs );

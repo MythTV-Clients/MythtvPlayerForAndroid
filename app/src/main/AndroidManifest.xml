@@ -114,6 +114,20 @@
                 android:value=".player.app.search.SearchableActivity" />
         </activity>
         <activity
+            android:name=".player.app.videos.VideoDirActivity"
+            android:label="@string/drawer_item_watch_videos"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="org.mythtv.app.VIDEOS_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".player.app.search.SearchableActivity" />
+        </activity>
+        <activity
             android:name=".player.app.videos.MovieDetailsActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".player.app.videos.VideosActivity" >

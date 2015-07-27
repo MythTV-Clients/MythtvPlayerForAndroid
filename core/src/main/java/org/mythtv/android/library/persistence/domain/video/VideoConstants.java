@@ -114,6 +114,9 @@ public class VideoConstants extends AbstractBaseDatabase {
     public static final String FIELD_VIDEO_CONTENT_TYPE = "content_type";
     public static final String FIELD_VIDEO_CONTENT_TYPE_DATA_TYPE = "TEXT";
 
+    public static final String FIELD_VIDEO_PARENT_PATH = "parentpath";
+    public static final String FIELD_VIDEO_PARENT_PATH_DATA_TYPE = "TEXT";
+
     public static final String FIELD_VIDEO_FILEPATH = "filepath";
     public static final String FIELD_VIDEO_FILEPATH_DATA_TYPE = "TEXT";
 
@@ -180,6 +183,7 @@ public class VideoConstants extends AbstractBaseDatabase {
         createTable.append( FIELD_VIDEO_WATCHED ).append( " " ).append( FIELD_VIDEO_WATCHED_DATA_TYPE ).append(", ");
         createTable.append( FIELD_VIDEO_PROCESSED ).append( " " ).append( FIELD_VIDEO_PROCESSED_DATA_TYPE ).append(", ");
         createTable.append( FIELD_VIDEO_CONTENT_TYPE ).append( " " ).append( FIELD_VIDEO_CONTENT_TYPE_DATA_TYPE ).append( ", " );
+        createTable.append( FIELD_VIDEO_PARENT_PATH ).append( " " ).append( FIELD_VIDEO_PARENT_PATH_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_VIDEO_FILEPATH ).append( " " ).append( FIELD_VIDEO_FILEPATH_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_VIDEO_FILENAME ).append( " " ).append( FIELD_VIDEO_FILENAME_DATA_TYPE ).append( ", " );
         createTable.append( FIELD_VIDEO_HASH ).append( " " ).append( FIELD_VIDEO_HASH_DATA_TYPE ).append( ", " );

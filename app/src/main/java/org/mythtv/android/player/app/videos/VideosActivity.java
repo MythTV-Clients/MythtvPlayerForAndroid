@@ -132,7 +132,7 @@ public class VideosActivity extends AbstractBaseAppCompatActivity {
 
             if( showAdultTab ) {
 
-                fragments.add(Fragment.instantiate( VideosActivity.this, AdultFragment.class.getName(), null ) );
+                fragments.add( Fragment.instantiate( VideosActivity.this, AdultFragment.class.getName(), null ) );
 
             }
 

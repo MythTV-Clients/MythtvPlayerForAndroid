@@ -40,6 +40,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.player.app.recordings.ShowsActivity;
 import org.mythtv.android.player.app.settings.SettingsActivity;
+import org.mythtv.android.player.app.videos.VideoDirActivity;
 import org.mythtv.android.player.app.videos.VideosActivity;
 
 /*
@@ -169,7 +170,8 @@ public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity im
 
             case R.id.navigation_item_watch_videos :
 
-                Intent videos = new Intent( this, VideosActivity.class );
+//                Intent videos = new Intent( this, VideosActivity.class );
+                Intent videos = new Intent( this, VideoDirActivity.class );
                 videos.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                 startActivity( videos );
 

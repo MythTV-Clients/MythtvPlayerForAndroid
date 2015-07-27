@@ -159,5 +159,6 @@
     <string name="pref_default_recording_group_summary_off">No Default Recording Group is set</string>
     <string name="pref_default_recording_group">Select Default Recording Group</string>
     <string name="recorded_programs_updated">Recordings Updated!</string>
+    <string name="up">.. Up</string>
 
 </resources>

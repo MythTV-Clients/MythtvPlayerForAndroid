@@ -27,6 +27,7 @@ import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants
 import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
+import org.mythtv.android.library.persistence.domain.video.VideoDirConstants;
 
 /*
  * Created by dmfrey on 1/25/15.
@@ -36,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "mythtvdb";
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 18;
 
     public DatabaseHelper( Context context ) {
         super( context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -68,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createTableTitleInfos(db);
         createTablePrograms(db);
         createTableVideos(db);
+        createTableVideoDirs(db);
 
         Log.i( TAG, "onCreate : exit" );
     }
@@ -87,7 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void dropTables( SQLiteDatabase db ) {
-        Log.v( TAG, "dropTables : enter" );
+        Log.v(TAG, "dropTables : enter");
 
         String dropLiveStreams = LiveStreamConstants.DROP_TABLE;
         if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
@@ -112,6 +114,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.v( TAG, "dropTable : dropVideos=" + dropVideos );
         }
         db.execSQL( dropVideos );
+
+        String dropVideoDirs = VideoDirConstants.DROP_TABLE;
+        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
+            Log.v( TAG, "dropTable : dropVideoDirs=" + dropVideoDirs );
+        }
+        db.execSQL( dropVideoDirs );
 
         Log.v( TAG, "dropTables : exit" );
     }
@@ -162,6 +170,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL( sql );
 
         Log.v( TAG, "createTableVideos : exit" );
+    }
+
+    private void createTableVideoDirs( SQLiteDatabase db ) {
+        Log.v( TAG, "createTableVideoDirs : enter" );
+
+        String sql = VideoDirConstants.CREATE_TABLE;
+        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
+            Log.v( TAG, "createTableVideoDirs : sql=" + sql );
+        }
+        db.execSQL( sql );
+
+        Log.v( TAG, "createTableVideoDirs : exit" );
     }
 
 }
