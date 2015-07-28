@@ -101,6 +101,8 @@ public class MainApplication extends Application {
     public static final String ACTION_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_CONNECTED";
     public static final String ACTION_NOT_CONNECTED = "org.mythtv.androidtv.core.service.ACTION_NOT_CONNECTED";
 
+    public static final String KEY_PREF_VIDEO_VIEW = "grid";
+
     private static MainApplication sInstance;
 
     boolean mConnected = false;
@@ -186,7 +188,7 @@ public class MainApplication extends Application {
         mRefreshVideosPendingIntent = PendingIntent.getBroadcast( this, 0, refreshVideosIntent, 0 );
 
         mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 60000, mRefreshTitleInfosPendingIntent);
-        mAlarmManager.setInexactRepeating( AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent );
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 120000, 600000, mRefreshRecordedProgramsPendingIntent);
         mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis() + 240000, 3600000, mRefreshVideosPendingIntent);
         mAlarmManager.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 300000, mRefreshLiveStreamPendingIntent);
 
@@ -206,11 +208,11 @@ public class MainApplication extends Application {
     }
 
     public void resetBackend() {
-        Log.v( TAG, "resetBackend : enter" );
+        Log.v(TAG, "resetBackend : enter");
 
         initializeApi();
 
-        Log.v( TAG, "resetBackend : exit" );
+        Log.v(TAG, "resetBackend : exit");
     }
 
     public ApiVersion getApiVersion() { return mApiVersion; }
@@ -270,21 +272,21 @@ public class MainApplication extends Application {
 
     public boolean isExternalPlayerVideoOverrideEnabled() {
 
-        return mSharedPref.getBoolean( KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, true );
+        return mSharedPref.getBoolean(KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, true);
     }
 
     public int getVideoWidth() {
 
         String width = mSharedPref.getString( KEY_PREF_HLS_VIDEO_WIDTH, "0" );
 
-        return Integer.parseInt( width );
+        return Integer.parseInt(width);
     }
 
     public int getVideoHeight() {
 
         String height = mSharedPref.getString( KEY_PREF_HLS_VIDEO_HEIGHT, "0" );
 
-        return Integer.parseInt( height );
+        return Integer.parseInt(height);
     }
 
     public int getVideoBitrate() {
@@ -303,17 +305,17 @@ public class MainApplication extends Application {
 
     public boolean showAdultTab() {
 
-        return mSharedPref.getBoolean( KEY_PREF_SHOW_ADULT_TAB, false );
+        return mSharedPref.getBoolean(KEY_PREF_SHOW_ADULT_TAB, false);
     }
 
     public boolean enableDefaultRecordingGroup() {
 
-        return mSharedPref.getBoolean( KEY_PREF_ENABLE_DEFAULT_RECORDING_GROUP, false );
+        return mSharedPref.getBoolean(KEY_PREF_ENABLE_DEFAULT_RECORDING_GROUP, false);
     }
 
     public String defaultRecordingGroup() {
 
-        return mSharedPref.getString( KEY_PREF_DEFAULT_RECORDING_GROUP, "Default" );
+        return mSharedPref.getString(KEY_PREF_DEFAULT_RECORDING_GROUP, "Default");
     }
 
     public boolean enableParentalControls() {
@@ -325,7 +327,7 @@ public class MainApplication extends Application {
 
         String level = mSharedPref.getString( KEY_PREF_PARENTAL_CONTROL_LEVEL, "4" );
 
-        return Integer.parseInt( level );
+        return Integer.parseInt(level);
     }
 
     public boolean restrictRatings() {
@@ -368,6 +370,17 @@ public class MainApplication extends Application {
         }
 
         return restrictedRatings;
+    }
+
+    public String getVideoView() {
+
+        return mSharedPref.getString( KEY_PREF_VIDEO_VIEW, "grid" );
+    }
+
+    public void setVideoView( String value ) {
+
+        mSharedPref.edit().putString( KEY_PREF_VIDEO_VIEW, value ).apply();
+
     }
 
     public String getMasterBackendHostName() { return mBackendHostname; }

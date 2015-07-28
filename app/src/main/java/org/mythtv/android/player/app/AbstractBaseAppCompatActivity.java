@@ -59,9 +59,9 @@ public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity im
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        setContentView( getLayoutResource() );
+        setContentView(getLayoutResource());
 
         navigationView = (NavigationView) findViewById( R.id.navigation_view );
 
@@ -170,10 +170,20 @@ public abstract class AbstractBaseAppCompatActivity extends AppCompatActivity im
 
             case R.id.navigation_item_watch_videos :
 
-//                Intent videos = new Intent( this, VideosActivity.class );
-                Intent videos = new Intent( this, VideoDirActivity.class );
-                videos.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
-                startActivity( videos );
+                String videoView  = MainApplication.getInstance().getVideoView();
+                if( "grid".equals( videoView ) ) {
+
+                    Intent videos = new Intent( this, VideosActivity.class );
+                    videos.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                    startActivity( videos );
+
+                } else {
+
+                    Intent videos = new Intent( this, VideoDirActivity.class );
+                    videos.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                    startActivity( videos );
+
+                }
 
                 return true;
 

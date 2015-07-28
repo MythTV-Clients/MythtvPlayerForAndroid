@@ -10,6 +10,9 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.CastMember;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
@@ -153,6 +157,15 @@ public class VideoDirFragment extends AbstractBaseFragment implements LoaderMana
     }
 
     @Override
+    public void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
+
+        setRetainInstance(true);
+        setHasOptionsMenu(true);
+
+    }
+
+    @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
         View view = inflater.inflate( R.layout.video_dir_list, container, false );
@@ -184,8 +197,34 @@ public class VideoDirFragment extends AbstractBaseFragment implements LoaderMana
         mVideoList.setFastScrollEnabled(true);
 
         getLoaderManager().initLoader( VIDEO_DIR_LOADER_ID, null, this );
-        getLoaderManager().initLoader(VIDEO_LOADER_ID, null, this);
+        getLoaderManager().initLoader( VIDEO_LOADER_ID, null, this );
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
+        super.onCreateOptionsMenu( menu, inflater );
+
+        inflater.inflate(R.menu.menu_videos_module, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+
+        switch( item.getItemId() ) {
+
+            case R.id.action_view_videos :
+
+                MainApplication.getInstance().setVideoView( "grid" );
+
+                Intent videos = new Intent( getActivity(), VideosActivity.class );
+                videos.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                startActivity( videos );
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected( item );
     }
 
     @Override

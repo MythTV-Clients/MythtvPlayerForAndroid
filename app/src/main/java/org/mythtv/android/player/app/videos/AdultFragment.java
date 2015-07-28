@@ -28,11 +28,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.mythtv.android.R;
+import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.video.Video;
 import org.mythtv.android.library.core.utils.RefreshVideosTask;
 import org.mythtv.android.player.app.AbstractBaseFragment;
@@ -113,6 +117,13 @@ public class AdultFragment extends AbstractBaseFragment implements LoaderManager
     }
 
     @Override
+    public void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
+
+        setHasOptionsMenu( true );
+    }
+
+    @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
         View view = inflater.inflate( R.layout.video_list, container, false );
@@ -146,7 +157,7 @@ public class AdultFragment extends AbstractBaseFragment implements LoaderManager
         mLimit = DEFAULT_LIMIT;
         mOffset = DEFAULT_OFFSET;
 
-        getLoaderManager().initLoader( 4, null, this );
+        getLoaderManager().initLoader(4, null, this);
 
         mRecyclerView.addOnScrollListener( new EndlessScrollListener( mLayoutManager ) {
 
@@ -161,6 +172,33 @@ public class AdultFragment extends AbstractBaseFragment implements LoaderManager
 
         });
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
+        super.onCreateOptionsMenu( menu, inflater );
+
+        inflater.inflate( R.menu.menu_videos_list, menu );
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+
+        switch( item.getItemId() ) {
+
+            case R.id.action_view_videos :
+
+                MainApplication.getInstance().setVideoView( "list" );
+
+                Intent videos = new Intent( getActivity(), VideoDirActivity.class );
+                videos.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                startActivity( videos );
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected( item );
     }
 
     public void reload() {
