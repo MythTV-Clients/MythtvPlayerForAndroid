@@ -59,7 +59,7 @@ public class VideoDirFragment extends AbstractBaseFragment implements LoaderMana
 
         String[] projection = null;
         String selection = null;
-        String[] selectionArgs = null;
+        List<String> selectionArgs = new ArrayList<>();
 
         String parentPath = DEFAULT_PARENT_PATH;
 
@@ -95,18 +95,44 @@ public class VideoDirFragment extends AbstractBaseFragment implements LoaderMana
                 mPath.setText( parentPath );
 
                 selection = VideoDirConstants.FIELD_VIDEO_DIR_PARENT + " = ?";
-                selectionArgs = new String[] { parentPath };
+                selectionArgs.add( parentPath );
 
-                return new CursorLoader( getActivity(), VideoDirConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+                return new CursorLoader( getActivity(), VideoDirConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), null );
 
             case VIDEO_LOADER_ID :
                 Log.d( TAG, "onCreateLoader : loading videos" );
 
                 projection = new String[] { "rowid as " + VideoConstants._ID, VideoConstants.FIELD_VIDEO_ID, VideoConstants.FIELD_VIDEO_TITLE, VideoConstants.FIELD_VIDEO_TAGLINE, VideoConstants.FIELD_VIDEO_SUB_TITLE, VideoConstants.FIELD_VIDEO_INETREF, VideoConstants.FIELD_VIDEO_DESCRIPTION, VideoConstants.FIELD_VIDEO_FILEPATH, VideoConstants.FIELD_VIDEO_FILENAME, VideoConstants.FIELD_VIDEO_HOSTNAME, VideoConstants.FIELD_VIDEO_COLLECTIONREF, VideoConstants.FIELD_CAST_MEMBER_NAMES };
                 selection = VideoConstants.FIELD_VIDEO_PARENT_PATH + " = ?";
-                selectionArgs = new String[] { parentPath };
+                selectionArgs.add( parentPath );
 
-                return new CursorLoader( getActivity(), VideoConstants.CONTENT_URI, projection, selection, selectionArgs, null );
+                if( MainApplication.getInstance().enableParentalControls() ) {
+
+                    int parentalControlLevel = MainApplication.getInstance().getParentalControlLevel();
+                    selection += " AND " + VideoConstants.FIELD_VIDEO_PARENTAL_LEVEL + " <= " + parentalControlLevel;
+
+                }
+
+                if( MainApplication.getInstance().restrictRatings() && !MainApplication.getInstance().restrictedRatings().isEmpty() ) {
+
+                    String ratingSelection = " AND (";
+                    List<String> restrictedRatings = MainApplication.getInstance().restrictedRatings();
+                    for( String rating : restrictedRatings ) {
+
+                        if( ratingSelection.length() > 6 && restrictedRatings.size() > 1 ) {
+                            ratingSelection += " OR ";
+                        }
+
+                        ratingSelection += VideoConstants.FIELD_VIDEO_CERTIFICATION + " = ?";
+                        selectionArgs.add( rating );
+
+                    }
+                    ratingSelection += ") ";
+                    selection += ratingSelection;
+
+                }
+
+                return new CursorLoader( getActivity(), VideoConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), null );
 
             default :
 
