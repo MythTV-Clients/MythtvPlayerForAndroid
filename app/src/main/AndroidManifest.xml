@@ -118,7 +118,7 @@
             android:label="@string/drawer_item_watch_videos"
             android:launchMode="singleTask" >
             <intent-filter>
-                <action android:name="org.mythtv.app.VIDEOS_ACTIVITY" />
+                <action android:name="org.mythtv.app.VIDEOS_LIST_ACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

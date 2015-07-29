@@ -25,7 +25,7 @@ public class VideoDirActivity extends AbstractBaseAppCompatActivity {
 
         super.setNavigationMenuItemChecked( 1 );
 
-        MainApplication.getInstance().setLastActivity( MainApplication.VIDEOS_ACTIVITY_INTENT_FILTER );
+        MainApplication.getInstance().setLastActivity( MainApplication.VIDEOS_LIST_ACTIVITY_INTENT_FILTER );
 
         mFragment = (VideoDirFragment) getSupportFragmentManager().findFragmentById( R.id.video_dir_fragment );
 

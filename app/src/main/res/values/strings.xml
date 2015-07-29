@@ -63,6 +63,11 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
+    <string name="activity_watch_recordings">Watch Recordings</string>
+    <string name="activity_watch_videos_grid">Watch Videos Grid</string>
+    <string name="activity_watch_videos_list">Watch Videos List</string>
+    <string name="activity_preferences">Settings</string>
+
     <string name="drawer_item_watch_recordings">Watch Recordings</string>
     <string name="drawer_item_watch_videos">Watch Videos</string>
     <string name="drawer_item_preferences">Settings</string>

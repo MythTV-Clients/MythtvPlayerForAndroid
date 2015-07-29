@@ -69,6 +69,7 @@ public class MainApplication extends Application {
 
     public static final String SHOWS_ACTIVITY_INTENT_FILTER = "org.mythtv.app.SHOWS_ACTIVITY";
     public static final String VIDEOS_ACTIVITY_INTENT_FILTER = "org.mythtv.app.VIDEOS_ACTIVITY";
+    public static final String VIDEOS_LIST_ACTIVITY_INTENT_FILTER = "org.mythtv.app.VIDEOS_LIST_ACTIVITY";
     public static final String SETTINGS_ACTIVITY_INTENT_FILTER = "org.mythtv.app.SETTINGS_ACTIVITY";
 
     public static final String KEY_PREF_LAST_ACTIVITY = "last_activity";
