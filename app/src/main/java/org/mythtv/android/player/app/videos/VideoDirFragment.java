@@ -132,7 +132,7 @@ public class VideoDirFragment extends AbstractBaseFragment implements LoaderMana
 
                 }
 
-                return new CursorLoader( getActivity(), VideoConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), null );
+                return new CursorLoader( getActivity(), VideoConstants.CONTENT_URI, projection, selection, selectionArgs.toArray( new String[ selectionArgs.size() ] ), VideoConstants.FIELD_VIDEO_TITLE_SORT );
 
             default :
 
@@ -418,7 +418,7 @@ public class VideoDirFragment extends AbstractBaseFragment implements LoaderMana
             VideoItemViewHolder holder = (VideoItemViewHolder) view.getTag();
 
             holder.video = convertCursorToVideo( cursor );
-            holder.filename.setText( holder.video.getFileName() );
+            holder.filename.setText( holder.video.getTitle() );
 
         }
 
