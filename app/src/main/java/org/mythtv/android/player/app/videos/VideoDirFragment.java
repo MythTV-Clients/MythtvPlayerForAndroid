@@ -113,6 +113,13 @@ public class VideoDirFragment extends AbstractBaseFragment implements LoaderMana
 
                 }
 
+                if( !MainApplication.getInstance().showAdultTab() ) {
+
+                    selection += " AND " + VideoConstants.FIELD_VIDEO_CONTENT_TYPE + " != ?";
+                    selectionArgs.add( "ADULT" );
+
+                }
+
                 if( MainApplication.getInstance().restrictRatings() && !MainApplication.getInstance().restrictedRatings().isEmpty() ) {
 
                     String ratingSelection = " AND (";
