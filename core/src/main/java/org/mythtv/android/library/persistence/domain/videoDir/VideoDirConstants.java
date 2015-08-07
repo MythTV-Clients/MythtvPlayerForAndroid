@@ -1,4 +1,4 @@
-package org.mythtv.android.library.persistence.domain.video;
+package org.mythtv.android.library.persistence.domain.videoDir;
 
 import android.net.Uri;
 

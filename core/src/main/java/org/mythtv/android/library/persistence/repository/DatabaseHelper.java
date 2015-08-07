@@ -27,7 +27,7 @@ import org.mythtv.android.library.persistence.domain.content.LiveStreamConstants
 import org.mythtv.android.library.persistence.domain.dvr.ProgramConstants;
 import org.mythtv.android.library.persistence.domain.dvr.TitleInfoConstants;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
-import org.mythtv.android.library.persistence.domain.video.VideoDirConstants;
+import org.mythtv.android.library.persistence.domain.videoDir.VideoDirConstants;
 
 /*
  * Created by dmfrey on 1/25/15.

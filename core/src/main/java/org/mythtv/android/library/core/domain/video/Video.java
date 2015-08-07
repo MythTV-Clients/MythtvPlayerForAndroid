@@ -698,7 +698,7 @@ public class Video implements Serializable, Comparable<Video> {
     public static Video fromDetails( VideoDetails details ) {
 
         Video video = new Video();
-        video.setId( details.getId() );
+        video.setId( null != details.getId() ? details.getId() : null );
         video.setTitle( details.getTitle() );
         video.setSubTitle( details.getSubTitle() );
         video.setTagline( details.getTagline() );

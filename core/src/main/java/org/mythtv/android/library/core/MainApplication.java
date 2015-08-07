@@ -35,6 +35,8 @@ import org.mythtv.android.library.core.service.ContentService;
 import org.mythtv.android.library.core.service.DvrService;
 import org.mythtv.android.library.core.service.DvrServiceEventHandler;
 import org.mythtv.android.library.core.service.MythService;
+import org.mythtv.android.library.core.service.VideoDirService;
+import org.mythtv.android.library.core.service.VideoDirServiceEventHandler;
 import org.mythtv.android.library.core.service.VideoService;
 import org.mythtv.android.library.core.service.VideoServiceEventHandler;
 import org.mythtv.android.library.core.service.v027.content.ContentServiceV27EventHandler;
@@ -120,6 +122,7 @@ public class MainApplication extends Application {
     private MythService mMythService;
     private VideoService mVideoService;
     private VideoService mVideoApiService;
+    private VideoDirService mVideoDirService;
 
     private AlarmManager mAlarmManager;
     private PendingIntent mRefreshLiveStreamPendingIntent;
@@ -149,7 +152,7 @@ public class MainApplication extends Application {
 
         mDvrService = new DvrServiceEventHandler();
         mVideoService = new VideoServiceEventHandler();
-
+        mVideoDirService = new VideoDirServiceEventHandler();
     }
 
     @Override
@@ -242,6 +245,10 @@ public class MainApplication extends Application {
 
     public VideoService getVideoApiService() {
         return mVideoApiService;
+    }
+
+    public VideoDirService getVideoDirService() {
+        return mVideoDirService;
     }
 
     public boolean isConnected() { return mConnected; }

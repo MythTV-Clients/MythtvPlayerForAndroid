@@ -137,18 +137,12 @@ public class MoviesFragment extends AbstractBaseFragment implements LoaderManage
         mLayoutManager = new GridLayoutManager( getActivity(), 2 );
 
         mRecyclerView = (RecyclerView) view.findViewById( R.id.list );
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter( mAdapter );
+        mRecyclerView.setLayoutManager( mLayoutManager );
 
         mEmpty = (TextView) view.findViewById( R.id.empty );
 
         return view;
-    }
-
-    @Override
-    public void onActivityCreated( Bundle savedInstanceState ) {
-        super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override

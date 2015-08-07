@@ -33,6 +33,7 @@ import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.DeleteVideoEvent;
 import org.mythtv.android.library.events.video.DeleteVideosEvent;
 import org.mythtv.android.library.events.video.RequestAllVideosEvent;
+import org.mythtv.android.library.events.video.RequestAllVideosForParentEvent;
 import org.mythtv.android.library.events.video.RequestVideoEvent;
 import org.mythtv.android.library.events.video.SearchVideosEvent;
 import org.mythtv.android.library.events.video.UpdateVideosEvent;
@@ -44,7 +45,7 @@ import org.mythtv.android.library.events.video.VideosUpdatedEvent;
 import org.mythtv.android.library.persistence.domain.dvr.CastMember;
 import org.mythtv.android.library.persistence.domain.video.Video;
 import org.mythtv.android.library.persistence.domain.video.VideoConstants;
-import org.mythtv.android.library.persistence.domain.video.VideoDirConstants;
+import org.mythtv.android.library.persistence.domain.videoDir.VideoDirConstants;
 import org.mythtv.android.library.persistence.repository.MythtvProvider;
 import org.mythtv.android.library.persistence.service.VideoPersistenceService;
 
@@ -152,7 +153,7 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         Cursor cursor = mContext.getContentResolver().query( VideoConstants.CONTENT_URI, projection, selection, selectionArgs.isEmpty() ? null : selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
         while( cursor.moveToNext() ) {
-            Log.v( TAG, "requestAllVideos : video iteration" );
+//            Log.v( TAG, "requestAllVideos : video iteration" );
 
             videos.add( convertCursorToVideo( cursor ) );
 
@@ -252,6 +253,86 @@ public class VideoPersistenceServiceEventHandler implements VideoPersistenceServ
 
         }
 
+        return new AllVideosEvent( details );
+    }
+
+    @Override
+    public AllVideosEvent requestAllVideosForParent(RequestAllVideosForParentEvent event) {
+        Log.v( TAG, "requestAllVideosForParent : enter" );
+        Log.v( TAG, "requestAlrequestAllVideosForParentlVideos : parent=" + event.getParent() );
+
+        List<Video> videos = new ArrayList<>();
+
+        String[] projection = null;
+        String selection = VideoConstants.FIELD_VIDEO_VISIBLE + " = 1 ";
+        List<String> selectionArgs = new ArrayList<>();
+
+        if( null != event.getParent() ) {
+            Log.v( TAG, "requestAllVideosForParent : adding parent '" + event.getParent() + "'" );
+
+            selection += " AND " + VideoConstants.FIELD_VIDEO_PARENT_PATH + " = ?";
+            selectionArgs.add( event.getParent() );
+
+        } else {
+
+            selection += " AND " + VideoConstants.FIELD_VIDEO_PARENT_PATH + " IS NULL";
+
+        }
+
+        if( MainApplication.getInstance().enableParentalControls() ) {
+
+            int parentalControlLevel = MainApplication.getInstance().getParentalControlLevel();
+            selection += " AND " + VideoConstants.FIELD_VIDEO_PARENTAL_LEVEL + " <= " + parentalControlLevel;
+
+        }
+
+        if( MainApplication.getInstance().restrictRatings() && !MainApplication.getInstance().restrictedRatings().isEmpty() ) {
+
+            String ratingSelection = " AND (";
+            List<String> restrictedRatings = MainApplication.getInstance().restrictedRatings();
+            for( String rating : restrictedRatings ) {
+
+                if( ratingSelection.length() > 6 && restrictedRatings.size() > 1 ) {
+                    ratingSelection += " OR ";
+                }
+
+                ratingSelection += VideoConstants.FIELD_VIDEO_CERTIFICATION + " = ?";
+                selectionArgs.add( rating );
+            }
+            ratingSelection += ") ";
+            selection += ratingSelection;
+
+        }
+
+        Log.v( TAG, "requestAllVideosForParent : selection=" + selection );
+        for( String selectionArg : selectionArgs.toArray( new String[ selectionArgs.size() ] ) ) {
+            Log.v( TAG, "requestAllVideosForParent : selectionArg=" + selectionArg );
+        }
+
+        String sort = VideoConstants.FIELD_VIDEO_TITLE_SORT + ", " + VideoConstants.FIELD_VIDEO_SEASON + ", " + VideoConstants.FIELD_VIDEO_EPISODE;
+
+        Cursor cursor = mContext.getContentResolver().query( VideoConstants.CONTENT_URI, projection, selection, selectionArgs.isEmpty() ? null : selectionArgs.toArray( new String[ selectionArgs.size() ] ), sort );
+        while( cursor.moveToNext() ) {
+//            Log.v( TAG, "requestAllVideosForParent : video iteration" );
+
+            videos.add( convertCursorToVideo( cursor ) );
+
+        }
+        cursor.close();
+
+        List<VideoDetails> details = new ArrayList<>();
+        if( !videos.isEmpty() ) {
+            Log.v( TAG, "requestAllVideosForParent : videos loaded from db " + videos.size() );
+
+            for( Video video : videos ) {
+
+                details.add( video.toDetails() );
+
+            }
+
+        }
+
+        Log.v( TAG, "requestAllVideosForParent : exit" );
         return new AllVideosEvent( details );
     }
 

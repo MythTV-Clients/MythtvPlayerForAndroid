@@ -22,6 +22,7 @@ import org.mythtv.android.library.events.video.AllVideosEvent;
 import org.mythtv.android.library.events.video.DeleteVideosEvent;
 import org.mythtv.android.library.events.video.DeleteVideoEvent;
 import org.mythtv.android.library.events.video.RequestAllVideosEvent;
+import org.mythtv.android.library.events.video.RequestAllVideosForParentEvent;
 import org.mythtv.android.library.events.video.SearchVideosEvent;
 import org.mythtv.android.library.events.video.UpdateVideosEvent;
 import org.mythtv.android.library.events.video.VideoDetailsEvent;
@@ -40,6 +41,8 @@ public interface VideoPersistenceService {
     AllVideosEvent requestAllVideoTvTitles( RequestAllVideosEvent event );
 
     AllVideosEvent requestAllVideoTvTitleSeasons( RequestAllVideosEvent event );
+
+    AllVideosEvent requestAllVideosForParent( RequestAllVideosForParentEvent event );
 
     AllVideosEvent searchVideos( SearchVideosEvent event );
 
