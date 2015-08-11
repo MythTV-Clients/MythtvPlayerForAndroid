@@ -27,13 +27,34 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature
-        android:name="android.hardware.microphone"
-        android:required="false" />
-    <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
     <uses-feature
-        android:name="android.software.leanback"
+        android:name="android.hardware.faketouch"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.sensor"
         android:required="false" />
 
     <application
@@ -217,6 +238,7 @@
         <activity
             android:name=".player.tv.TvActivity"
             android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|navigation"
             android:theme="@style/Theme.Leanback" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

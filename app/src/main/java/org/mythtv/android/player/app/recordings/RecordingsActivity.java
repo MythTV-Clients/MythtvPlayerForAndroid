@@ -20,20 +20,31 @@ package org.mythtv.android.player.app.recordings;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.mythtv.android.library.core.MainApplication;
 import org.mythtv.android.library.core.domain.dvr.TitleInfo;
 import org.mythtv.android.player.app.AbstractBaseAppCompatActivity;
 import org.mythtv.android.R;
+import org.mythtv.android.player.common.ui.transform.PaletteTransformation;
+import org.mythtv.android.player.common.ui.utils.ToolbarColorizeHelper;
 
 /*
  * Created by dmfrey on 12/8/14.
@@ -44,6 +55,9 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
     public static final String TITLE_INFO = "title_info";
 
+    CollapsingToolbarLayout collapsingToolbar;
+    MenuItem mSearchMenuItem, mUpMenuItem;
+
     TitleInfo mTitleInfo;
 
     @Override
@@ -53,17 +67,6 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-
-//        if( Build.VERSION.SDK_INT >= 21 ) {
-//
-//            Slide slide = new Slide();
-//            slide.setDuration( 5000 );
-//            getWindow().setEnterTransition( slide );
-//
-//            getWindow().setReturnTransition( TransitionInflater.from( this ).inflateTransition( R.transition.transition_title ) );
-//
-//        }
-
         super.onCreate( savedInstanceState );
 
         RecordingsFragment mRecordingsFragment = (RecordingsFragment) getSupportFragmentManager().findFragmentById( R.id.fragment_recordings );
@@ -78,12 +81,11 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
             mTitleInfo = (TitleInfo) getIntent().getSerializableExtra( TITLE_INFO );
         }
 
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById( R.id.collapsing_toolbar );
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById( R.id.collapsing_toolbar );
 
         if( null != mTitleInfo ) {
             Log.i( TAG, "mTitleInfo=" + mTitleInfo.toString() );
 
-            //getSupportActionBar().setTitle( mTitleInfo.getTitle() );
             collapsingToolbar.setTitle( mTitleInfo.getTitle() );
 
             if( null != mTitleInfo.getInetref() && !"".equals( mTitleInfo.getInetref() ) ) {
@@ -94,12 +96,19 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
         } else {
 
-            //getSupportActionBar().setTitle( getResources().getString( R.string.all_recordings ) );
             collapsingToolbar.setTitle( getResources().getString( R.string.all_recordings ) );
 
         }
 
         mRecordingsFragment.setPrograms( ( null != mTitleInfo ? mTitleInfo.getTitle() : null ), ( null != mTitleInfo ? mTitleInfo.getInetref() : null ) );
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+//        ToolbarColorizeHelper.colorizeToolbar( toolbar, R.color.white, this );
 
     }
 
@@ -130,6 +139,9 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate( R.menu.main, menu );
 
+        mSearchMenuItem = menu.findItem( R.id.search_action );
+        mUpMenuItem = menu.findItem( android.R.id.home );
+
         SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
         SearchView searchView = (SearchView) menu.findItem( R.id.search_action ).getActionView();
         searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
@@ -146,13 +158,52 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
     private void loadBackdrop( String inetref ) {
         Log.i( TAG, "loadBackdrop : inetref=" + inetref );
 
-        String bannerUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + inetref + "&Type=banner";
-        Log.i( TAG, "loadBackdrop : bannerUrl=" + bannerUrl );
+        String bannerUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + inetref + "&Type=banner&height=256";
+        Log.i(TAG, "loadBackdrop : bannerUrl=" + bannerUrl);
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
+        final PaletteTransformation paletteTransformation = PaletteTransformation.getInstance();
         Picasso.with( this )
                 .load( bannerUrl )
                 .fit().centerCrop()
-                .into( imageView );
+                .transform( paletteTransformation )
+                .into(imageView, new Callback.EmptyCallback() {
+
+                    @Override
+                    public void onSuccess() {
+
+                        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap(); // Ew!
+                        Palette palette = PaletteTransformation.getPalette(bitmap);
+
+                        try {
+
+                            int color = palette.getLightVibrantColor( R.color.black );
+                            int backgroundColor = palette.getMutedColor( R.color.primary );
+                            int statusColor = palette.getDarkMutedColor( R.color.primary_dark );
+
+                            collapsingToolbar.setStatusBarScrimColor( statusColor );
+                            collapsingToolbar.setContentScrimColor(backgroundColor);
+                            collapsingToolbar.setCollapsedTitleTextColor(color);
+                            collapsingToolbar.setExpandedTitleColor( color );
+
+                            Drawable newSearchMenuItem = mSearchMenuItem.getIcon();
+                            newSearchMenuItem.mutate().setColorFilter( color, PorterDuff.Mode.SRC_IN );
+                            mSearchMenuItem.setIcon(newSearchMenuItem);
+
+                            Drawable newUpMenuItem = getResources().getDrawable( R.drawable.ic_arrow_back_white_24dp );
+                            newUpMenuItem.mutate().setColorFilter( color, PorterDuff.Mode.SRC_IN );
+                            getSupportActionBar().setHomeAsUpIndicator( newUpMenuItem );
+
+                        } catch( Exception e ) {
+                            Log.e( TAG, "error decoding palette from imageView", e );
+                        }
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+
+                });
 
     }
 

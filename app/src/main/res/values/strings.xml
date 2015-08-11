@@ -168,4 +168,6 @@
     <string name="action_video_module">Video Grid</string>
     <string name="action_video_list">View List</string>
 
+    <string name="accessibility_overflow">overflow accessibility</string>
+
 </resources>
