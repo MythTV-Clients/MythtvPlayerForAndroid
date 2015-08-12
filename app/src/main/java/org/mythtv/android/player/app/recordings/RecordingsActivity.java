@@ -117,7 +117,7 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
         outState.putSerializable(TITLE_INFO, mTitleInfo);
 
-        super.onSaveInstanceState( outState );
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
         SearchView searchView = (SearchView) menu.findItem( R.id.search_action ).getActionView();
         searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
-        searchView.setIconifiedByDefault( false );
+        searchView.setIconifiedByDefault(false);
 
         return super.onCreateOptionsMenu( menu );
     }
@@ -158,7 +158,7 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
     private void loadBackdrop( String inetref ) {
         Log.i( TAG, "loadBackdrop : inetref=" + inetref );
 
-        String bannerUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + inetref + "&Type=banner&height=256";
+        String bannerUrl = MainApplication.getInstance().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + inetref + "&Type=banner&Height=256";
         Log.i(TAG, "loadBackdrop : bannerUrl=" + bannerUrl);
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
         final PaletteTransformation paletteTransformation = PaletteTransformation.getInstance();
@@ -176,18 +176,17 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
                         try {
 
-                            int color = palette.getLightVibrantColor( R.color.black );
-                            int backgroundColor = palette.getMutedColor( R.color.primary );
-                            int statusColor = palette.getDarkMutedColor( R.color.primary_dark );
+                            int inverseColor = getComplementaryColor(palette.getVibrantColor(R.color.white));
+                            Log.i( TAG, "loadBackdrop : inverseColor=" + inverseColor + ", Color.WHITE=" + Color.WHITE + ", Color.BLACK=" + Color.BLACK + ", Color." + ( inverseColor > ( Color.BLACK / 2 ) ? "WHITE" : "BLACK" ) );
 
-                            collapsingToolbar.setStatusBarScrimColor( statusColor );
-                            collapsingToolbar.setContentScrimColor(backgroundColor);
-                            collapsingToolbar.setCollapsedTitleTextColor(color);
+                            int color = ( inverseColor > ( Color.BLACK / 2 ) ? Color.WHITE : Color.BLACK );
+
+                            collapsingToolbar.setCollapsedTitleTextColor( color );
                             collapsingToolbar.setExpandedTitleColor( color );
 
                             Drawable newSearchMenuItem = mSearchMenuItem.getIcon();
                             newSearchMenuItem.mutate().setColorFilter( color, PorterDuff.Mode.SRC_IN );
-                            mSearchMenuItem.setIcon(newSearchMenuItem);
+                            mSearchMenuItem.setIcon( newSearchMenuItem );
 
                             Drawable newUpMenuItem = getResources().getDrawable( R.drawable.ic_arrow_back_white_24dp );
                             newUpMenuItem.mutate().setColorFilter( color, PorterDuff.Mode.SRC_IN );
@@ -205,6 +204,16 @@ public class RecordingsActivity extends AbstractBaseAppCompatActivity {
 
                 });
 
+    }
+
+    public static int getComplementaryColor( int colorToInvert ) {
+
+        float[] hsv = new float[ 3 ];
+        Color.RGBToHSV( Color.red( colorToInvert ), Color.green( colorToInvert ), Color.blue( colorToInvert ), hsv );
+
+        hsv[ 0 ] = ( hsv[ 0 ] + 180 ) % 360;
+
+        return Color.HSVToColor( hsv );
     }
 
 }
