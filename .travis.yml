@@ -9,8 +9,8 @@ branches:
 
 android:
   components:
-    - build-tools-21.1.2
-    - android-21
+    - build-tools-23.0.1
+    - android-23
 
 script:
   ./gradlew build
