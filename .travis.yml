@@ -1,6 +1,12 @@
 language: android
 jdk: oraclejdk8
 
+# whitelist
+branches:
+  only:
+    - master
+    - clean_architecture
+
 android:
   components:
     - build-tools-23.0.1
