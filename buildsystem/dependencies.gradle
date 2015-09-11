@@ -43,7 +43,7 @@ ext {
   javaxAnnotationVersion = '10.0-b28'
   gsonVersion = '2.3'
   okHttpVersion = '2.3.0'
-  androidAnnotationsVersion = '23.0.0'
+  androidAnnotationsVersion = '23.0.1'
   picassoVersion = '2.5.2'
   mythtvServiceApiVersion = '2.0.4'
   jodaVersion = '2.8.2'
@@ -97,15 +97,15 @@ ext {
   ]
 
   dataDependencies = [
-      daggerCompiler:           "com.google.dagger:dagger-compiler:${daggerVersion}",
-      dagger:                   "com.google.dagger:dagger:${daggerVersion}",
-      okHttp:                   "com.squareup.okhttp:okhttp:${okHttpVersion}",
-      gson:                     "com.google.code.gson:gson:${gsonVersion}",
-      rxJava:                   "io.reactivex:rxjava:${rxJavaVersion}",
-      rxAndroid:                "io.reactivex:rxandroid:${rxAndroidVersion}",
-      javaxAnnotation:          "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
-      androidAnnotations:       "com.android.support:support-annotations:${androidAnnotationsVersion}",
-      mythtvServiceApi:         "org.mythtv.android:mythtv-service-api:${mythtvServiceApiVersion}"
+      daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
+      dagger:             "com.google.dagger:dagger:${daggerVersion}",
+      okHttp:             "com.squareup.okhttp:okhttp:${okHttpVersion}",
+      gson:               "com.google.code.gson:gson:${gsonVersion}",
+      rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
+      rxAndroid:          "io.reactivex:rxandroid:${rxAndroidVersion}",
+      javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
+      androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}",
+      mythtvServiceApi:   "org.mythtv.android:mythtv-service-api:${mythtvServiceApiVersion}"
   ]
 
   dataTestDependencies = [

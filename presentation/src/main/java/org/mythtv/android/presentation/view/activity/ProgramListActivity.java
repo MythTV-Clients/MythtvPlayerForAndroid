@@ -41,13 +41,19 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
     private static final String INTENT_EXTRA_PARAM_STORAGE_GROUP = "org.mythtv.android.INTENT_PARAM_STORAGE_GROUP";
     private static final String INSTANCE_STATE_PARAM_STORAGE_GROUP = "org.mythtv.android.STATE_PARAM_STORAGE_GROUP";
 
-    public static Intent getCallingIntent( Context context ) {
+    public static Intent getCallingIntent( Context context, String title ) {
 
         Intent callingIntent = new Intent( context, ProgramListActivity.class );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_DESCENDING, true );
 //        callingIntent.putExtra( INTENT_EXTRA_PARAM_START_INDEX, -1 );
 //        callingIntent.putExtra( INTENT_EXTRA_PARAM_COUNT, -1 );
-//        callingIntent.putExtra( INTENT_EXTRA_PARAM_TITLE_REG_EX, "" );
+
+        if( null != title ) {
+
+            callingIntent.putExtra( INTENT_EXTRA_PARAM_TITLE_REG_EX, title );
+
+        }
+
 //        callingIntent.putExtra( INTENT_EXTRA_PARAM_REC_GROUP, "" );
 //        callingIntent.putExtra( INTENT_EXTRA_PARAM_STORAGE_GROUP, "" );
 
@@ -60,12 +66,17 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
     private DvrComponent dvrComponent;
 
     @Override
+    public int getLayoutResource() {
+
+        return R.layout.activity_program_list;
+    }
+
+    @Override
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
 
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_program_list);
+        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
+        super.onCreate( savedInstanceState );
 
         this.initializeActivity(savedInstanceState);
         this.initializeInjector();
@@ -74,7 +85,7 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState( Bundle outState ) {
         Log.d( TAG, "onSaveInstanceState : enter" );
 
         if( null != outState ) {
@@ -82,7 +93,13 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
             outState.putBoolean( INSTANCE_STATE_PARAM_DESCENDING, this.descending );
 //            outState.putInt( INSTANCE_STATE_PARAM_START_INDEX, this.startIndex );
 //            outState.putInt( INSTANCE_STATE_PARAM_COUNT, this.count );
-//            outState.putString( INSTANCE_STATE_PARAM_TITLE_REG_EX, this.titleRegEx );
+
+            if( null != this.titleRegEx ) {
+
+                outState.putString( INSTANCE_STATE_PARAM_TITLE_REG_EX, this.titleRegEx );
+
+            }
+
 //            outState.putString( INSTANCE_STATE_PARAM_REC_GROUP, this.recGroup );
 //            outState.putString( INSTANCE_STATE_PARAM_STORAGE_GROUP, this.storageGroup );
 
@@ -101,12 +118,19 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
 
         if( null == savedInstanceState ) {
 
-            this.descending = getIntent().getBooleanExtra(INTENT_EXTRA_PARAM_DESCENDING, true );
-            addFragment(R.id.fl_fragment, ProgramListFragment.newInstance(this.descending, this.startIndex, this.count, this.titleRegEx, this.recGroup, this.storageGroup));
+            this.descending = getIntent().getBooleanExtra( INTENT_EXTRA_PARAM_DESCENDING, true  );
+            this.titleRegEx = getIntent().getStringExtra( INSTANCE_STATE_PARAM_TITLE_REG_EX );
+            addFragment(R.id.fl_fragment, ProgramListFragment.newInstance( this.descending, this.startIndex, this.count, this.titleRegEx, this.recGroup, this.storageGroup ) );
 
         } else {
 
-            this.descending = savedInstanceState.getBoolean(INSTANCE_STATE_PARAM_DESCENDING );
+            this.descending = savedInstanceState.getBoolean( INSTANCE_STATE_PARAM_DESCENDING );
+
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_TITLE_REG_EX ) ) {
+
+                this.titleRegEx = savedInstanceState.getString( INSTANCE_STATE_PARAM_TITLE_REG_EX );
+
+            }
 
         }
 

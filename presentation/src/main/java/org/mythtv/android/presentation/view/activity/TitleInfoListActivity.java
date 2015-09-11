@@ -35,14 +35,21 @@ public class TitleInfoListActivity extends BaseActivity implements HasComponent<
     private DvrComponent dvrComponent;
 
     @Override
+    public int getLayoutResource() {
+
+        return R.layout.activity_title_info_list;
+    }
+
+    @Override
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
 
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_title_info_list );
 
         this.initializeInjector();
+
+        setNavigationMenuItemChecked( 0 );
 
         Log.d( TAG, "onCreate : exit" );
     }
@@ -70,7 +77,7 @@ public class TitleInfoListActivity extends BaseActivity implements HasComponent<
     public void onTitleInfoClicked( TitleInfoModel titleInfoModel ) {
         Log.d( TAG, "onTitleInfoClicked : enter" );
 
-    //    navigator.navigateToProgram( this, programModel.getChannel().getChanId(), programModel.getRecording().getStartTs() );
+        navigator.navigateToPrograms( this, titleInfoModel.getTitle() );
 
         Log.d( TAG, "onTitleInfoClicked : exit" );
     }

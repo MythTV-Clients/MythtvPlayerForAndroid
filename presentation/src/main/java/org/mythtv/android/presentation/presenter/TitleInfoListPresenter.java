@@ -29,7 +29,7 @@ public class TitleInfoListPresenter extends DefaultSubscriber<List<TitleInfo>> i
     private final TitleInfoModelDataMapper titleInfoModelDataMapper;
 
     @Inject
-    public TitleInfoListPresenter(@Named("titleInfoList") UseCase getTitleInfoListUseCase, TitleInfoModelDataMapper titleInfoModelDataMapper) {
+    public TitleInfoListPresenter( @Named( "titleInfoList" ) UseCase getTitleInfoListUseCase, TitleInfoModelDataMapper titleInfoModelDataMapper ) {
 
         this.getTitleInfoListUseCase = getTitleInfoListUseCase;
         this.titleInfoModelDataMapper = titleInfoModelDataMapper;

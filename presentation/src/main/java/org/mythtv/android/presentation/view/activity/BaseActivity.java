@@ -2,9 +2,13 @@ package org.mythtv.android.presentation.view.activity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.AndroidApplication;
@@ -37,34 +42,22 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     @Inject
     Navigator navigator;
 
-    @Bind( R.id.navigation_view ) protected NavigationView navigationView;
+    @Nullable @Bind( R.id.navigation_view ) protected NavigationView navigationView;
     @Bind( R.id.toolbar ) protected Toolbar toolbar;
 
     @Bind( R.id.drawer_layout ) protected DrawerLayout drawerLayout;
 
+    @Nullable @Bind( R.id.mythtv_version ) protected TextView mythtvVersion;
+
+    public abstract int getLayoutResource();
+
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate(savedInstanceState);
+        super.onCreate( savedInstanceState );
 
-        this.getApplicationComponent().inject(this);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // TODO: Hack remove when android api is updated
-        CoordinatorLayout mainContent = (CoordinatorLayout) findViewById( R.id.main_content );
-        mainContent.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return true;
-            }
-
-        });
+        this.getApplicationComponent().inject( this );
+        setContentView( getLayoutResource() );
+        ButterKnife.bind( this );
 
         if( null != navigationView ) {
             navigationView.setNavigationItemSelectedListener( this );
@@ -86,6 +79,61 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
         }
 
+        if( null != mythtvVersion ) {
+            final PackageManager packageManager = getPackageManager();
+            if (packageManager != null) {
+
+                String versionName = getResources().getString( R.string.app_version );
+                try {
+
+                    PackageInfo packageInfo = packageManager.getPackageInfo( getPackageName(), 0 );
+                    versionName = packageInfo.versionName;
+                    mythtvVersion.setText( versionName );
+
+                } catch( PackageManager.NameNotFoundException ignored ) {
+                }
+
+            }
+
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // TODO: Hack remove when android api is updated
+        CoordinatorLayout mainContent = (CoordinatorLayout) findViewById( R.id.main_content );
+        mainContent.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                return true;
+            }
+
+        });
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+
+        switch( item.getItemId() ) {
+
+            case android.R.id.home:
+
+                if( null != navigationView ) {
+
+                    drawerLayout.openDrawer( GravityCompat.START );
+
+                    return true;
+                }
+
+        }
+
+        return super.onOptionsItemSelected( item );
     }
 
     @Override
@@ -133,6 +181,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         }
 
         return false;
+    }
+
+    public void setNavigationMenuItemChecked( int index ) {
+
+        navigationView.getMenu().getItem( index ).setChecked( true );
+
     }
 
     /**
