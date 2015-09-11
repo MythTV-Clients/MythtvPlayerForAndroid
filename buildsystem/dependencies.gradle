@@ -43,7 +43,7 @@ ext {
   javaxAnnotationVersion = '10.0-b28'
   gsonVersion = '2.3'
   okHttpVersion = '2.3.0'
-  androidAnnotationsVersion = '22.0.0'
+  androidAnnotationsVersion = '23.0.1'
   picassoVersion = '2.5.2'
   mythtvServiceApiVersion = '2.0.4'
   jodaVersion = '2.8.2'
