@@ -41,21 +41,40 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
     private static final String INTENT_EXTRA_PARAM_STORAGE_GROUP = "org.mythtv.android.INTENT_PARAM_STORAGE_GROUP";
     private static final String INSTANCE_STATE_PARAM_STORAGE_GROUP = "org.mythtv.android.STATE_PARAM_STORAGE_GROUP";
 
-    public static Intent getCallingIntent( Context context, String title ) {
+    public static Intent getCallingIntent( Context context, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup  ) {
 
         Intent callingIntent = new Intent( context, ProgramListActivity.class );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_DESCENDING, true );
-//        callingIntent.putExtra( INTENT_EXTRA_PARAM_START_INDEX, -1 );
-//        callingIntent.putExtra( INTENT_EXTRA_PARAM_COUNT, -1 );
+        callingIntent.putExtra( INTENT_EXTRA_PARAM_DESCENDING, descending );
 
-        if( null != title ) {
+        if( startIndex > -1 ) {
 
-            callingIntent.putExtra( INTENT_EXTRA_PARAM_TITLE_REG_EX, title );
+            callingIntent.putExtra( INTENT_EXTRA_PARAM_START_INDEX, startIndex );
 
         }
 
-//        callingIntent.putExtra( INTENT_EXTRA_PARAM_REC_GROUP, "" );
-//        callingIntent.putExtra( INTENT_EXTRA_PARAM_STORAGE_GROUP, "" );
+        if( count > -1 ) {
+
+            callingIntent.putExtra( INTENT_EXTRA_PARAM_COUNT, count );
+
+        }
+
+        if( null != titleRegEx ) {
+
+            callingIntent.putExtra( INTENT_EXTRA_PARAM_TITLE_REG_EX, titleRegEx );
+
+        }
+
+        if( null != recGroup && !"".equals( recGroup ) ) {
+
+            callingIntent.putExtra( INTENT_EXTRA_PARAM_REC_GROUP, recGroup );
+
+        }
+
+        if( null != storageGroup && !"".equals( storageGroup ) ) {
+
+            callingIntent.putExtra( INTENT_EXTRA_PARAM_STORAGE_GROUP, storageGroup );
+
+        }
 
         return callingIntent;
     }
@@ -78,7 +97,7 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
 
-        this.initializeActivity( savedInstanceState );
+        this.initializeActivity(savedInstanceState);
         this.initializeInjector();
 
         Log.d( TAG, "onCreate : exit" );
@@ -89,25 +108,45 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
         Log.d( TAG, "onSaveInstanceState : enter" );
 
         if( null != outState ) {
+            Log.d( TAG, "onSaveInstanceState : outState is not null" );
 
             outState.putBoolean( INSTANCE_STATE_PARAM_DESCENDING, this.descending );
-//            outState.putInt( INSTANCE_STATE_PARAM_START_INDEX, this.startIndex );
-//            outState.putInt( INSTANCE_STATE_PARAM_COUNT, this.count );
 
-            if( null != this.titleRegEx ) {
+            if( this.startIndex > -1 ) {
+
+                outState.putInt( INSTANCE_STATE_PARAM_START_INDEX, this.startIndex );
+
+            }
+
+            if( this.count > -1 ) {
+
+                outState.putInt( INSTANCE_STATE_PARAM_COUNT, this.count );
+
+            }
+
+            if( null != this.titleRegEx && !"".equals( titleRegEx ) ) {
 
                 outState.putString( INSTANCE_STATE_PARAM_TITLE_REG_EX, this.titleRegEx );
 
             }
 
-//            outState.putString( INSTANCE_STATE_PARAM_REC_GROUP, this.recGroup );
-//            outState.putString( INSTANCE_STATE_PARAM_STORAGE_GROUP, this.storageGroup );
+            if( null != this.recGroup && !"".equals( this.recGroup ) ) {
+
+                outState.putString( INSTANCE_STATE_PARAM_REC_GROUP, this.recGroup );
+
+            }
+
+            if( null != this.storageGroup && !"".equals( this.storageGroup ) ) {
+
+                outState.putString( INSTANCE_STATE_PARAM_STORAGE_GROUP, this.storageGroup );
+
+            }
 
         }
 
         super.onSaveInstanceState( outState );
 
-        Log.d(TAG, "onSaveInstanceState : exit");
+        Log.d( TAG, "onSaveInstanceState : exit" );
     }
 
     /**
@@ -119,8 +158,39 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
         if( null == savedInstanceState ) {
             Log.d( TAG, "initializeActivity : savedInstanceState == null" );
 
+            Bundle extras = getIntent().getExtras();
+
             this.descending = getIntent().getBooleanExtra( INTENT_EXTRA_PARAM_DESCENDING, true );
-            this.titleRegEx = getIntent().getStringExtra( INTENT_EXTRA_PARAM_TITLE_REG_EX );
+            if( extras.containsKey( INTENT_EXTRA_PARAM_START_INDEX ) ) {
+
+                this.startIndex = extras.getInt( INTENT_EXTRA_PARAM_START_INDEX );
+
+            }
+
+            if( extras.containsKey( INTENT_EXTRA_PARAM_COUNT ) ) {
+
+                this.count = extras.getInt( INTENT_EXTRA_PARAM_COUNT );
+
+            }
+
+            if( extras.containsKey( INTENT_EXTRA_PARAM_TITLE_REG_EX ) ) {
+
+                this.titleRegEx = extras.getString( INTENT_EXTRA_PARAM_TITLE_REG_EX );
+
+            }
+
+            if( extras.containsKey( INTENT_EXTRA_PARAM_REC_GROUP ) ) {
+
+                this.recGroup = extras.getString( INTENT_EXTRA_PARAM_REC_GROUP );
+
+            }
+
+            if( extras.containsKey( INTENT_EXTRA_PARAM_STORAGE_GROUP ) ) {
+
+                this.storageGroup = extras.getString( INTENT_EXTRA_PARAM_STORAGE_GROUP );
+
+            }
+
             Log.d( TAG, "initializeActivity : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup );
             addFragment( R.id.fl_fragment, ProgramListFragment.newInstance( this.descending, this.startIndex, this.count, this.titleRegEx, this.recGroup, this.storageGroup ) );
 
@@ -129,9 +199,33 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
 
             this.descending = savedInstanceState.getBoolean( INSTANCE_STATE_PARAM_DESCENDING );
 
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_START_INDEX ) ) {
+
+                this.startIndex = savedInstanceState.getInt( INSTANCE_STATE_PARAM_START_INDEX );
+
+            }
+
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_COUNT ) ) {
+
+                this.count = savedInstanceState.getInt( INSTANCE_STATE_PARAM_COUNT );
+
+            }
+
             if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_TITLE_REG_EX ) ) {
 
-                this.titleRegEx = savedInstanceState.getString( INSTANCE_STATE_PARAM_TITLE_REG_EX );
+                this.titleRegEx = savedInstanceState.getString(INSTANCE_STATE_PARAM_TITLE_REG_EX);
+
+            }
+
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_REC_GROUP ) ) {
+
+                this.recGroup = savedInstanceState.getString(INSTANCE_STATE_PARAM_REC_GROUP);
+
+            }
+
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_STORAGE_GROUP ) ) {
+
+                this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
 
             }
 

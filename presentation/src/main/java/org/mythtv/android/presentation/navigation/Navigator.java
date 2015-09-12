@@ -41,13 +41,13 @@ public class Navigator {
         Log.i( TAG, "navigateToTitleInfos : exit" );
     }
 
-    public void navigateToPrograms( Context context, String title ) {
+    public void navigateToPrograms( Context context, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
         Log.i( TAG, "navigateToPrograms : enter" );
 
         if( null != context ) {
-            Log.i( TAG, "navigateToPrograms : context != null, title=" + title );
+            Log.i( TAG, "navigateToPrograms : context != null" );
 
-            Intent intentToLaunch = ProgramListActivity.getCallingIntent( context, title );
+            Intent intentToLaunch = ProgramListActivity.getCallingIntent( context, descending, startIndex, count, titleRegEx, recGroup, storageGroup );
             context.startActivity( intentToLaunch );
 
         }

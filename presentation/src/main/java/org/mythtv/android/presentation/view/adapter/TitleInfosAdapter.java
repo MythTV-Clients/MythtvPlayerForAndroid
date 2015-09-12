@@ -1,6 +1,8 @@
 package org.mythtv.android.presentation.view.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +14,10 @@ import android.widget.TextView;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.TitleInfoModel;
+import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,6 +41,7 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
 
     }
 
+    private Context context;
     private List<TitleInfoModel> titleInfosCollection;
     private final LayoutInflater layoutInflater;
 
@@ -45,7 +50,8 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
     public TitleInfosAdapter( Context context, Collection<TitleInfoModel> titleInfosCollection ) {
         Log.d( TAG, "initialize : enter" );
 
-        this.validateTitleInfosCollection(titleInfosCollection);
+        this.context = context;
+        this.validateTitleInfosCollection( titleInfosCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         this.titleInfosCollection = (List<TitleInfoModel>) titleInfosCollection;
 
@@ -76,13 +82,17 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
         Log.d( TAG, "onBindViewHolder : enter" );
 
         final TitleInfoModel titleInfoModel = this.titleInfosCollection.get( position );
+        if( null != titleInfoModel.getInetref() && !"".equals( titleInfoModel.getInetref() ) ) {
+
+            holder.imageViewCoverart.setImageUrl( getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + titleInfoModel.getInetref() + "&Type=banner&Height=90" );
+
+        }
         holder.textViewTitle.setText( titleInfoModel.getTitle() );
         holder.textViewCount.setText( String.valueOf( titleInfoModel.getCount() ) );
-        holder.textViewInetref.setText( titleInfoModel.getInetref() );
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != TitleInfosAdapter.this.onItemClickListener) {
+                if( null != TitleInfosAdapter.this.onItemClickListener ) {
 
                     TitleInfosAdapter.this.onItemClickListener.onTitleInfoItemClicked( titleInfoModel );
 
@@ -104,7 +114,7 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
     public void setTitleInfosCollection( Collection<TitleInfoModel> titleInfosCollection ) {
         Log.d( TAG, "setTitleInfosCollection : enter" );
 
-        this.validateTitleInfosCollection( titleInfosCollection );
+        this.validateTitleInfosCollection(titleInfosCollection);
         this.titleInfosCollection = (List<TitleInfoModel>) titleInfosCollection;
         this.notifyDataSetChanged();
 
@@ -120,7 +130,7 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
     }
 
     private void validateTitleInfosCollection( Collection<TitleInfoModel> titleInfosCollection ) {
-        Log.d( TAG, "validateTitleInfosCollection : enter" );
+        Log.d(TAG, "validateTitleInfosCollection : enter");
 
         if( null == titleInfosCollection ) {
             Log.w( TAG, "validateTitleInfosCollection : titleInfosCollection is null" );
@@ -134,16 +144,13 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
     static class TitleInfoViewHolder extends RecyclerView.ViewHolder {
 
         @Bind( R.id.title_info_item_coverart )
-        ImageView imageViewCoverart;
+        AutoLoadImageView imageViewCoverart;
 
         @Bind( R.id.title_info_item_title )
         TextView textViewTitle;
 
         @Bind( R.id.title_info_item_count )
         TextView textViewCount;
-
-        @Bind( R.id.title_info_item_inetref )
-        TextView textViewInetref;
 
         public TitleInfoViewHolder( View itemView ) {
             super( itemView );
@@ -152,6 +159,23 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
 
         }
 
+    }
+
+    private String getMasterBackendUrl() {
+
+        String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+
+        String masterBackend = "http://" + host + ":" + port;
+
+        return masterBackend;
+    }
+
+    public String getFromPreferences( Context context, String key ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        return sharedPreferences.getString( key, "" );
     }
 
 }
