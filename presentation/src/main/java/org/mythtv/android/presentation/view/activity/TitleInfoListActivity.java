@@ -77,6 +77,7 @@ public class TitleInfoListActivity extends BaseActivity implements HasComponent<
     public void onTitleInfoClicked( TitleInfoModel titleInfoModel ) {
         Log.d( TAG, "onTitleInfoClicked : enter" );
 
+        Log.d( TAG, "onTitleInfoClicked : titleInfoModel=" + titleInfoModel );
         navigator.navigateToPrograms( this, titleInfoModel.getTitle() );
 
         Log.d( TAG, "onTitleInfoClicked : exit" );

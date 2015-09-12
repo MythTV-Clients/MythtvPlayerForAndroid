@@ -17,7 +17,9 @@ import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.domain.SettingsKeys;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import rx.Observable;
@@ -67,7 +69,7 @@ public class DvrApiImpl implements DvrApi {
                         if( null != responseRecordedProgramEntities ) {
                             Log.i( TAG, "titleInfoEntityList.call : retrieved title info entities" );
 
-                            subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoListEntity( responseRecordedProgramEntities ) );
+                            subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoListEntity(responseRecordedProgramEntities) );
                             subscriber.onCompleted();
 
                         } else {
@@ -112,7 +114,7 @@ public class DvrApiImpl implements DvrApi {
 
                     try {
 
-                        String responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
+                        String responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi(descending, startIndex, count, titleRegEx, recGroup, storageGroup);
                         if( null != responseRecordedProgramEntities ) {
                             Log.i( TAG, "recordedProgramEntityList.call : retrieved program entities" );
 
@@ -150,36 +152,36 @@ public class DvrApiImpl implements DvrApi {
     @Override
     public Observable<ProgramEntity> recordedProgramById( int chanId, DateTime startTime ) {
 
-        return Observable.create( new Observable.OnSubscribe<ProgramEntity>() {
+        return Observable.create(new Observable.OnSubscribe<ProgramEntity>() {
 
             @Override
-            public void call( Subscriber<? super ProgramEntity> subscriber ) {
+            public void call(Subscriber<? super ProgramEntity> subscriber) {
 
-                if( isThereInternetConnection() ) {
+                if (isThereInternetConnection()) {
 
                     try {
 
                         String responseProgramDetails = getRecordedProgramDetailsFromApi(chanId, startTime);
-                        if( null != responseProgramDetails ) {
+                        if (null != responseProgramDetails) {
 
-                            subscriber.onNext( programEntityJsonMapper.transformProgramEntity(responseProgramDetails) );
+                            subscriber.onNext(programEntityJsonMapper.transformProgramEntity(responseProgramDetails));
                             subscriber.onCompleted();
 
                         } else {
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            subscriber.onError(new NetworkConnectionException());
 
                         }
 
-                    } catch( Exception e ) {
+                    } catch (Exception e) {
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        subscriber.onError(new NetworkConnectionException(e.getCause()));
 
                     }
 
                 } else {
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    subscriber.onError(new NetworkConnectionException());
 
                 }
 
@@ -218,9 +220,15 @@ public class DvrApiImpl implements DvrApi {
 
         if( null != titleRegEx && !"".equals( titleRegEx ) ) {
 
-            sb.append( "&" );
-            sb.append( String.format( TITLE_REG_EX_QS, titleRegEx ) );
+            try {
 
+                sb.append( "&" );
+                sb.append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( titleRegEx, "UTF-8" ) ) );
+
+            } catch( UnsupportedEncodingException e ) {
+
+                Log.e( TAG, "getRecordedProgramEntitiesFromApi : error", e );
+            }
         }
 
         if( null != recGroup && !"".equals( recGroup ) ) {

@@ -83,3 +83,4 @@ dependencies {
   androidTestCompile presentationTestDependencies.testingSupportLib
 }
 
+apply from: '../buildsystem/jacoco.gradle'

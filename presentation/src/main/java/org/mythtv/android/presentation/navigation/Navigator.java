@@ -45,7 +45,7 @@ public class Navigator {
         Log.i( TAG, "navigateToPrograms : enter" );
 
         if( null != context ) {
-            Log.i( TAG, "navigateToPrograms : context != null" );
+            Log.i( TAG, "navigateToPrograms : context != null, title=" + title );
 
             Intent intentToLaunch = ProgramListActivity.getCallingIntent( context, title );
             context.startActivity( intentToLaunch );

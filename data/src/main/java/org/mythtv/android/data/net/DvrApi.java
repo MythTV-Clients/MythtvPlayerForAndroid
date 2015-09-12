@@ -15,7 +15,7 @@ public interface DvrApi {
 
     String TITLE_INFO_LIST_URL = "/Dvr/GetTitleInfoList";
 
-    String RECORDED_LIST_BASE_URL = "/Dvr/GetRecordedList?Descending=true";
+    String RECORDED_LIST_BASE_URL = "/Dvr/GetRecordedList";
     String RECORDED_BASE_URL = "/Dvr/GetRecorded&ChanId=%s&StartTime=%s";
 
     String DESCENDING_QS = "Descending=%s";

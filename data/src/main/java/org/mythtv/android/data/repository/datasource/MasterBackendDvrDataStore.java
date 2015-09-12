@@ -1,5 +1,7 @@
 package org.mythtv.android.data.repository.datasource;
 
+import android.util.Log;
+
 import org.joda.time.DateTime;
 import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.entity.ProgramEntity;
@@ -15,6 +17,8 @@ import rx.functions.Action1;
  * Created by dmfrey on 8/27/15.
  */
 public class MasterBackendDvrDataStore implements DvrDataStore {
+
+    private static final String TAG = MasterBackendDvrDataStore.class.getSimpleName();
 
     private final DvrApi api;
     private final ProgramCache recordedProgramCache;
@@ -35,13 +39,19 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
 
     @Override
     public Observable<List<TitleInfoEntity>> titleInfoEntityList() {
+        Log.d( TAG, "titleInfoEntityList : enter" );
 
+        Log.d( TAG, "titleInfoEntityList : exit" );
         return this.api.titleInfoEntityList();
     }
 
     @Override
     public Observable<List<ProgramEntity>> recordedProgramEntityList( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
+        Log.d( TAG, "recordedProgramEntityList : enter" );
 
+        Log.d( TAG, "recordedProgramEntityList : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup );
+
+        Log.d( TAG, "recordedProgramEntityList : exit" );
         return this.api.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
     }
 

@@ -78,10 +78,10 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
 
-        this.initializeActivity(savedInstanceState);
+        this.initializeActivity( savedInstanceState );
         this.initializeInjector();
 
-        Log.d(TAG, "onCreate : exit");
+        Log.d( TAG, "onCreate : exit" );
     }
 
     @Override
@@ -117,12 +117,15 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
         Log.d( TAG, "initializeActivity : enter" );
 
         if( null == savedInstanceState ) {
+            Log.d( TAG, "initializeActivity : savedInstanceState == null" );
 
-            this.descending = getIntent().getBooleanExtra( INTENT_EXTRA_PARAM_DESCENDING, true  );
-            this.titleRegEx = getIntent().getStringExtra( INSTANCE_STATE_PARAM_TITLE_REG_EX );
-            addFragment(R.id.fl_fragment, ProgramListFragment.newInstance( this.descending, this.startIndex, this.count, this.titleRegEx, this.recGroup, this.storageGroup ) );
+            this.descending = getIntent().getBooleanExtra( INTENT_EXTRA_PARAM_DESCENDING, true );
+            this.titleRegEx = getIntent().getStringExtra( INTENT_EXTRA_PARAM_TITLE_REG_EX );
+            Log.d( TAG, "initializeActivity : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup );
+            addFragment( R.id.fl_fragment, ProgramListFragment.newInstance( this.descending, this.startIndex, this.count, this.titleRegEx, this.recGroup, this.storageGroup ) );
 
         } else {
+            Log.d( TAG, "initializeActivity : savedInstanceState != null" );
 
             this.descending = savedInstanceState.getBoolean( INSTANCE_STATE_PARAM_DESCENDING );
 
