@@ -76,6 +76,7 @@ ext {
         rxAndroid:          "io.reactivex:rxandroid:${rxAndroidVersion}",
         javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
         picasso:            "com.squareup.picasso:picasso:${picassoVersion}",
+        lombok:             "org.projectlombok:lombok:${lombokVersion}",
         androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}"
     ]
 
