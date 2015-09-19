@@ -65,7 +65,7 @@ public class ProgramEntity {
     private String programId;
 
     @SerializedName( "Stars" )
-    private Double stars;
+    private double stars;
 
     @SerializedName( "FileSize" )
     private long fileSize;
@@ -210,11 +210,11 @@ public class ProgramEntity {
         this.programId = programId;
     }
 
-    public Double getStars() {
+    public double getStars() {
         return stars;
     }
 
-    public void setStars(Double stars) {
+    public void setStars(double stars) {
         this.stars = stars;
     }
 

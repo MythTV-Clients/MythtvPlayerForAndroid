@@ -10,7 +10,9 @@ public class RepositoryErrorBundle implements ErrorBundle {
     private final Exception exception;
 
     public RepositoryErrorBundle( Exception exception ) {
+
         this.exception = exception;
+
     }
 
     @Override

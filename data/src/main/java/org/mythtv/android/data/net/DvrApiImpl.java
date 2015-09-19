@@ -69,7 +69,7 @@ public class DvrApiImpl implements DvrApi {
                         if( null != responseRecordedProgramEntities ) {
                             Log.i( TAG, "titleInfoEntityList.call : retrieved title info entities" );
 
-                            subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoListEntity(responseRecordedProgramEntities) );
+                            subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( responseRecordedProgramEntities ) );
                             subscriber.onCompleted();
 
                         } else {
@@ -114,11 +114,11 @@ public class DvrApiImpl implements DvrApi {
 
                     try {
 
-                        String responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi(descending, startIndex, count, titleRegEx, recGroup, storageGroup);
+                        String responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
                         if( null != responseRecordedProgramEntities ) {
                             Log.i( TAG, "recordedProgramEntityList.call : retrieved program entities" );
 
-                            subscriber.onNext( programEntityJsonMapper.transformProgramListEntity(responseRecordedProgramEntities) );
+                            subscriber.onNext( programEntityJsonMapper.transformProgramEntityCollection( responseRecordedProgramEntities ) );
                             subscriber.onCompleted();
 
                         } else {

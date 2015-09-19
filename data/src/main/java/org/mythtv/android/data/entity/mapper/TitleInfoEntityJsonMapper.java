@@ -53,7 +53,7 @@ public class TitleInfoEntityJsonMapper {
 
     }
 
-    public List<TitleInfoEntity> transformTitleInfoListEntity( String titleInfoListJsonResponse ) throws JsonSyntaxException {
+    public List<TitleInfoEntity> transformTitleInfoEntityCollection( String titleInfoListJsonResponse ) throws JsonSyntaxException {
 
         try {
 

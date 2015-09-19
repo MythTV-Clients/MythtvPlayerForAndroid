@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.ProgramListEntity;
+import org.mythtv.android.data.entity.ProgramWrapperEntity;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
 
@@ -50,10 +51,10 @@ public class ProgramEntityJsonMapper {
 
         try {
 
-            Type programEntityType = new TypeToken<ProgramEntity>() {}.getType();
-            ProgramEntity programEntity = this.gson.fromJson( programJsonResponse, programEntityType );
+            Type programWrapperEntityType = new TypeToken<ProgramWrapperEntity>() {}.getType();
+            ProgramWrapperEntity programWrapperEntity = this.gson.fromJson( programJsonResponse, programWrapperEntityType );
 
-            return programEntity;
+            return programWrapperEntity.getProgram();
 
         } catch( JsonSyntaxException jsonException ) {
 
@@ -62,12 +63,12 @@ public class ProgramEntityJsonMapper {
 
     }
 
-    public List<ProgramEntity> transformProgramListEntity( String programListJsonResponse ) throws JsonSyntaxException {
+    public List<ProgramEntity> transformProgramEntityCollection( String programListJsonResponse ) throws JsonSyntaxException {
 
         try {
 
             Type programListEntityType = new TypeToken<ProgramListEntity>() {}.getType();
-            ProgramListEntity programListEntity = gson.fromJson( programListJsonResponse, programListEntityType );
+            ProgramListEntity programListEntity = this.gson.fromJson( programListJsonResponse, programListEntityType );
 
             return Arrays.asList( programListEntity.getPrograms().getPrograms() );
 
