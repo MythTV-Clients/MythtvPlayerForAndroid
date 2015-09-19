@@ -1,7 +1,6 @@
 package org.mythtv.android.data;
 
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 /**
@@ -10,4 +9,5 @@ import org.robolectric.annotation.Config;
  */
 @RunWith( CustomGradleTestRunner.class )
 @Config( constants = BuildConfig.class, application = ApplicationStub.class )
-public abstract class ApplicationTestCase {}
+public abstract class ApplicationTestCase {
+}

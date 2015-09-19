@@ -10,21 +10,25 @@ import static org.mockito.Mockito.verify;
 
 public class RepositoryErrorBundleTest extends ApplicationTestCase {
 
-  private RepositoryErrorBundle repositoryErrorBundle;
+    private RepositoryErrorBundle repositoryErrorBundle;
 
-  @Mock
-  private Exception mockException;
+    @Mock
+    private Exception mockException;
 
-  @Before
-  public void setUp() {
-    MockitoAnnotations.initMocks(this);
-    repositoryErrorBundle = new RepositoryErrorBundle(mockException);
-  }
+    @Before
+    public void setUp() {
 
-  @Test
-  public void testGetErrorMessageInteraction() {
-    repositoryErrorBundle.getErrorMessage();
+        MockitoAnnotations.initMocks( this );
+        repositoryErrorBundle = new RepositoryErrorBundle( mockException );
 
-    verify(mockException).getMessage();
-  }
+    }
+
+    @Test
+    public void testGetErrorMessageInteraction() {
+
+        repositoryErrorBundle.getErrorMessage();
+
+        verify( mockException ).getMessage();
+    }
+
 }
