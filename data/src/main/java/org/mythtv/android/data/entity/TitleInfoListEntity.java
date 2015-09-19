@@ -2,33 +2,15 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import lombok.Data;
+
 /**
  * Created by dmfrey on 8/27/15.
  */
+@Data
 public class TitleInfoListEntity {
 
     @SerializedName( "TitleInfoList" )
     private TitleInfosEntity titleInfos;
-
-    public TitleInfoListEntity() {
-    }
-
-    public TitleInfosEntity getTitleInfos() {
-
-        return titleInfos;
-    }
-
-    public void setTitleInfos( TitleInfosEntity titleInfos ) {
-
-        this.titleInfos = titleInfos;
-
-    }
-
-    @Override
-    public String toString() {
-        return "TitleInfoListEntity{" +
-                "titleInfos=" + titleInfos +
-                '}';
-    }
 
 }

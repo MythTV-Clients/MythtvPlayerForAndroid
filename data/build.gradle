@@ -1,14 +1,17 @@
 buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath 'me.tatarka:gradle-retrolambda:3.1.0'
-  }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.1.0'
+    }
+
 }
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 apply plugin: 'com.android.library'
@@ -16,70 +19,81 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-  def globalConfiguration = rootProject.extensions.getByName("ext")
 
-  compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
-  buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
+    def globalConfiguration = rootProject.extensions.getByName("ext")
 
-  defaultConfig {
-    minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
-    targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
-    versionCode globalConfiguration.getAt("androidVersionCode")
-  }
+    compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
+    buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
 
-  buildTypes {
-    debug {
-      //runProguard true
-      proguardFiles 'proguard-rules.txt'
-      testCoverageEnabled = true
+    defaultConfig {
+        minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
+        targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
+        versionCode globalConfiguration.getAt("androidVersionCode")
     }
-    release {
-      //runProguard false
-      proguardFiles 'proguard-rules.txt'
-      testCoverageEnabled = false
+
+    buildTypes {
+
+        debug {
+            //runProguard true
+            proguardFiles 'proguard-rules.txt'
+            testCoverageEnabled = true
+        }
+
+        release {
+            //runProguard false
+            proguardFiles 'proguard-rules.txt'
+            testCoverageEnabled = false
+        }
+
     }
-  }
 
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
+    compileOptions {
 
-  packagingOptions {
-    exclude 'LICENSE.txt'
-    exclude 'META-INF/DEPENDENCIES'
-    exclude 'META-INF/ASL2.0'
-    exclude 'META-INF/NOTICE'
-    exclude 'META-INF/LICENSE'
-  }
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
 
-  lintOptions {
-    quiet true
-    abortOnError false
-    ignoreWarnings true
-    disable 'InvalidPackage'  // Some libraries have issues with this
-    disable 'OldTargetApi'    // Due to Robolectric that modifies the manifest when running tests
-  }
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+        disable 'InvalidPackage'  // Some libraries have issues with this
+        disable 'OldTargetApi'    // Due to Robolectric that modifies the manifest when running tests
+    }
+
 }
 
 dependencies {
-  def dataDependencies = rootProject.ext.dataDependencies
-  def testDependencies = rootProject.ext.dataTestDependencies
 
-  compile project(':domain')
-  apt dataDependencies.daggerCompiler
-  provided dataDependencies.javaxAnnotation
-  compile dataDependencies.dagger
-  compile dataDependencies.okHttp
-  compile dataDependencies.gson
-  compile dataDependencies.rxJava
-  compile dataDependencies.rxAndroid
-  compile dataDependencies.androidAnnotations
+    def dataDependencies = rootProject.ext.dataDependencies
+    def testDependencies = rootProject.ext.dataTestDependencies
 
-  testCompile testDependencies.junit
-  testCompile testDependencies.assertj
-  testCompile testDependencies.mockito
-  testCompile testDependencies.robolectric
+    compile project(':domain')
+    apt dataDependencies.daggerCompiler
+    provided dataDependencies.javaxAnnotation
+    provided dataDependencies.lombok
+    apt dataDependencies.lombok
+    compile dataDependencies.dagger
+    compile dataDependencies.okHttp
+    compile dataDependencies.gson
+    compile dataDependencies.rxJava
+    compile dataDependencies.rxAndroid
+    compile dataDependencies.androidAnnotations
+
+    testCompile testDependencies.junit
+    testCompile testDependencies.assertj
+    testCompile testDependencies.mockito
+    testCompile testDependencies.robolectric
+
 }
 
 apply from: '../buildsystem/jacoco.gradle'

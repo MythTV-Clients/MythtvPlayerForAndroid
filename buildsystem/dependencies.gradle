@@ -17,101 +17,108 @@
  */
 
 allprojects {
-  repositories {
-    jcenter()
-  }
+
+    repositories {
+        jcenter()
+    }
+
 }
 
 ext {
-  //Android
-  androidBuildToolsVersion = "23.0.1"
-  androidMinSdkVersion = 14
-  androidTargetSdkVersion = 23
-  androidCompileSdkVersion = 23
 
-  //Libraries
-  daggerVersion = '2.0'
-  butterKnifeVersion = '7.0.1'
-  appCompatVersion = '23.0.1'
-  recyclerViewVersion = '23.0.1'
-  designVersion = '23.0.1'
-  cardViewVersion = '23.0.1'
-  leanbackVersion = '23.0.1'
-  paletteVersion = '23.0.1'
-  rxJavaVersion = '1.0.12'
-  rxAndroidVersion = '0.24.0'
-  javaxAnnotationVersion = '10.0-b28'
-  gsonVersion = '2.3'
-  okHttpVersion = '2.3.0'
-  androidAnnotationsVersion = '23.0.1'
-  picassoVersion = '2.5.2'
-  mythtvServiceApiVersion = '2.0.4'
-  jodaVersion = '2.8.2'
+    //Android
+    androidBuildToolsVersion = "23.0.1"
+    androidMinSdkVersion = 14
+    androidTargetSdkVersion = 23
+    androidCompileSdkVersion = 23
 
-  //Testing
-  robolectricVersion = '3.0'
-  jUnitVersion = '4.12'
-  assertJVersion = '1.7.1'
-  mockitoVersion = '1.9.5'
-  dexmakerVersion = '1.0'
-  espressoVersion = '2.0'
-  testingSupportLibVersion = '0.1'
+    //Libraries
+    daggerVersion = '2.0'
+    butterKnifeVersion = '7.0.1'
+    appCompatVersion = '23.0.1'
+    recyclerViewVersion = '23.0.1'
+    designVersion = '23.0.1'
+    cardViewVersion = '23.0.1'
+    leanbackVersion = '23.0.1'
+    paletteVersion = '23.0.1'
+    rxJavaVersion = '1.0.12'
+    rxAndroidVersion = '0.24.0'
+    javaxAnnotationVersion = '10.0-b28'
+    gsonVersion = '2.3'
+    okHttpVersion = '2.3.0'
+    androidAnnotationsVersion = '23.0.1'
+    picassoVersion = '2.5.2'
+    mythtvServiceApiVersion = '2.0.4'
+    jodaVersion = '2.8.2'
+    lombokVersion = '1.16.6'
+
+    //Testing
+    robolectricVersion = '3.0'
+    jUnitVersion = '4.12'
+    assertJVersion = '1.7.1'
+    mockitoVersion = '1.9.5'
+    dexmakerVersion = '1.0'
+    espressoVersion = '2.0'
+    testingSupportLibVersion = '0.1'
 
 
-  presentationDependencies = [
-      daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
-      dagger:             "com.google.dagger:dagger:${daggerVersion}",
-      butterKnife:        "com.jakewharton:butterknife:${butterKnifeVersion}",
-      appCompat:          "com.android.support:appcompat-v7:${appCompatVersion}",
-      recyclerView:       "com.android.support:recyclerview-v7:${recyclerViewVersion}",
-      design:             "com.android.support:design:${designVersion}",
-      cardView:           "com.android.support:cardview-v7:${cardViewVersion}",
-      leanback:           "com.android.support:leanback-v7:${leanbackVersion}",
-      palette:            "com.android.support:palette-v7:${paletteVersion}",
-      rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
-      rxAndroid:          "io.reactivex:rxandroid:${rxAndroidVersion}",
-      javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
-      picasso:            "com.squareup.picasso:picasso:${picassoVersion}",
-      androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}"
-  ]
+    presentationDependencies = [
+        daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
+        dagger:             "com.google.dagger:dagger:${daggerVersion}",
+        butterKnife:        "com.jakewharton:butterknife:${butterKnifeVersion}",
+        appCompat:          "com.android.support:appcompat-v7:${appCompatVersion}",
+        recyclerView:       "com.android.support:recyclerview-v7:${recyclerViewVersion}",
+        design:             "com.android.support:design:${designVersion}",
+        cardView:           "com.android.support:cardview-v7:${cardViewVersion}",
+        leanback:           "com.android.support:leanback-v7:${leanbackVersion}",
+        palette:            "com.android.support:palette-v7:${paletteVersion}",
+        rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
+        rxAndroid:          "io.reactivex:rxandroid:${rxAndroidVersion}",
+        javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
+        picasso:            "com.squareup.picasso:picasso:${picassoVersion}",
+        androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}"
+    ]
 
-  presentationTestDependencies = [
-      mockito:            "org.mockito:mockito-core:${mockitoVersion}",
-      dexmaker:           "com.google.dexmaker:dexmaker:${dexmakerVersion}",
-      dexmakerMockito:    "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
-      espresso:           "com.android.support.test.espresso:espresso-core:${espressoVersion}",
-      testingSupportLib:  "com.android.support.test:testing-support-lib:${testingSupportLibVersion}",
-  ]
+    presentationTestDependencies = [
+        mockito:            "org.mockito:mockito-core:${mockitoVersion}",
+        dexmaker:           "com.google.dexmaker:dexmaker:${dexmakerVersion}",
+        dexmakerMockito:    "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
+        espresso:           "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+        testingSupportLib:  "com.android.support.test:testing-support-lib:${testingSupportLibVersion}",
+    ]
 
-  domainDependencies = [
-      daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
-      dagger:             "com.google.dagger:dagger:${daggerVersion}",
-      javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
-      rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
-      joda:               "joda-time:joda-time:${jodaVersion}"
-  ]
+    domainDependencies = [
+        daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
+        dagger:             "com.google.dagger:dagger:${daggerVersion}",
+        javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
+        rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
+        lombok:             "org.projectlombok:lombok:${lombokVersion}",
+        joda:               "joda-time:joda-time:${jodaVersion}"
+    ]
 
-  domainTestDependencies = [
-      junit:              "junit:junit:${jUnitVersion}",
-      mockito:            "org.mockito:mockito-core:${mockitoVersion}",
-  ]
+    domainTestDependencies = [
+        junit:              "junit:junit:${jUnitVersion}",
+        mockito:            "org.mockito:mockito-core:${mockitoVersion}",
+    ]
 
-  dataDependencies = [
-      daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
-      dagger:             "com.google.dagger:dagger:${daggerVersion}",
-      okHttp:             "com.squareup.okhttp:okhttp:${okHttpVersion}",
-      gson:               "com.google.code.gson:gson:${gsonVersion}",
-      rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
-      rxAndroid:          "io.reactivex:rxandroid:${rxAndroidVersion}",
-      javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
-      androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}",
-      mythtvServiceApi:   "org.mythtv.android:mythtv-service-api:${mythtvServiceApiVersion}"
-  ]
+    dataDependencies = [
+        daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
+        dagger:             "com.google.dagger:dagger:${daggerVersion}",
+        okHttp:             "com.squareup.okhttp:okhttp:${okHttpVersion}",
+        gson:               "com.google.code.gson:gson:${gsonVersion}",
+        rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
+        rxAndroid:          "io.reactivex:rxandroid:${rxAndroidVersion}",
+        javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
+        androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}",
+        lombok:             "org.projectlombok:lombok:${lombokVersion}",
+        mythtvServiceApi:   "org.mythtv.android:mythtv-service-api:${mythtvServiceApiVersion}"
+    ]
 
-  dataTestDependencies = [
-      junit:              "junit:junit:${jUnitVersion}",
-      assertj:            "org.assertj:assertj-core:${assertJVersion}",
-      mockito:            "org.mockito:mockito-core:${mockitoVersion}",
-      robolectric:        "org.robolectric:robolectric:${robolectricVersion}",
-  ]
+    dataTestDependencies = [
+        junit:              "junit:junit:${jUnitVersion}",
+        assertj:            "org.assertj:assertj-core:${assertJVersion}",
+        mockito:            "org.mockito:mockito-core:${mockitoVersion}",
+        robolectric:        "org.robolectric:robolectric:${robolectricVersion}",
+    ]
+
 }

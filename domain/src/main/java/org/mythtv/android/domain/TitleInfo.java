@@ -20,78 +20,17 @@ package org.mythtv.android.domain;
 
 import org.mythtv.android.domain.utils.DomainUtils;
 
+import lombok.Data;
+
 /*
  * Created by dmfrey on 12/7/14.
  */
+@Data
 public class TitleInfo implements Comparable<TitleInfo> {
 
     private String title;
     private String inetref;
     private int count;
-
-    public TitleInfo() { }
-
-    public TitleInfo( String title, String inetref, int count ) {
-
-        this.title = title;
-        this.inetref = inetref;
-        this.count = count;
-
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle( String title ) {
-        this.title = title;
-    }
-
-    public String getInetref() {
-        return inetref;
-    }
-
-    public void setInetref( String inetref ) {
-        this.inetref = inetref;
-    }
-
-    public int getCount() {
-
-        return count;
-    }
-
-    public void setCount( int count ) {
-
-        this.count = count;
-
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        TitleInfo titleInfo = (TitleInfo) o;
-
-        return title.equals(titleInfo.title) && !(inetref != null ? !inetref.equals(titleInfo.inetref) : titleInfo.inetref != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = title.hashCode();
-        result = 31 * result + (inetref != null ? inetref.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "TitleInfo{" +
-                "title='" + title + '\'' +
-                ", inetref='" + inetref + '\'' +
-                ", count=" + count +
-                '}';
-    }
 
     @Override
     public int compareTo( TitleInfo another ) {
