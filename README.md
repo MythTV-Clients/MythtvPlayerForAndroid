@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/MythTV-Clients/MythtvPlayerForAndroid.svg?branch=clean_architecture)](https://travis-ci.org/MythTV-Clients/MythtvPlayerForAndroid)
+[![Build Status](https://travis-ci.org/MythTV-Clients/MythtvPlayerForAndroid.svg?branch=clean_architecture)](https://travis-ci.org/MythTV-Clients/MythtvPlayerForAndroid) [![Coverage Status](https://coveralls.io/repos/MythTV-Clients/MythtvPlayerForAndroid/badge.svg?branch=clean_architecture&service=github)](https://coveralls.io/github/MythTV-Clients/MythtvPlayerForAndroid?branch=clean_architecture)
 
 MythTV Player allows you to browse and play your recordings and videos
 stored on your MythTV Backend.
