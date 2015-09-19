@@ -25,7 +25,7 @@ public class DiskDvrDataStore implements DvrDataStore {
     @Override
     public Observable<List<TitleInfoEntity>> titleInfoEntityList() {
 
-        return null;
+        throw new UnsupportedOperationException( "Operation is not available" );
     }
 
     @Override
