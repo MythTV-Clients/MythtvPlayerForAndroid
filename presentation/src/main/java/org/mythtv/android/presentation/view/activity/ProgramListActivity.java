@@ -97,7 +97,7 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
 
-        this.initializeActivity(savedInstanceState);
+        this.initializeActivity( savedInstanceState );
         this.initializeInjector();
 
         Log.d( TAG, "onCreate : exit" );
@@ -228,6 +228,13 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
                 this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
 
             }
+
+        }
+
+        if( null != titleRegEx && !"".equals( titleRegEx ) ) {
+            Log.d( TAG, "initializeActivity : setting toolbar title to '" + titleRegEx + "'" );
+
+            getSupportActionBar().setTitle( titleRegEx );
 
         }
 

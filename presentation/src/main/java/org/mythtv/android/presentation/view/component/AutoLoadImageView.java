@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -28,6 +29,8 @@ import java.net.URLConnection;
  */
 public class AutoLoadImageView extends ImageView {
 
+  private static final String TAG = AutoLoadImageView.class.getSimpleName();
+
   private static final String BASE_IMAGE_NAME_CACHED = "image_";
 
   private int imagePlaceHolderResourceId = -1;
@@ -42,7 +45,7 @@ public class AutoLoadImageView extends ImageView {
   }
 
   public AutoLoadImageView( Context context, AttributeSet attrs, int defStyle ) {
-    super( context, attrs, defStyle );
+    super(context, attrs, defStyle);
   }
 
   /**
@@ -51,18 +54,22 @@ public class AutoLoadImageView extends ImageView {
    * @param imageUrl The url of the resource to load.
    */
   public void setImageUrl( final String imageUrl ) {
+    Log.d( TAG, "setImageUrl : enter" );
 
     AutoLoadImageView.this.loadImagePlaceHolder();
     if( imageUrl != null ) {
+      Log.d( TAG, "setImageUrl : imageUrl != null" );
 
       this.loadImageFromUrl( imageUrl );
 
     } else {
+      Log.d( TAG, "setImageUrl : imageUrl == null" );
 
       this.loadImagePlaceHolder();
 
     }
 
+    Log.d( TAG, "setImageUrl : exit" );
   }
 
   /**
@@ -71,23 +78,28 @@ public class AutoLoadImageView extends ImageView {
    * @param resourceId The resource id to use as a place holder.
    */
   public void setImagePlaceHolder( int resourceId ) {
+    Log.d( TAG, "setImagePlaceHolder : enter" );
 
     this.imagePlaceHolderResourceId = resourceId;
     this.loadImagePlaceHolder();
 
+    Log.d(TAG, "setImagePlaceHolder : exit");
   }
 
   /**
    * Invalidate the internal cache by evicting all cached elements.
    */
   public void invalidateImageCache() {
+    Log.d(TAG, "invalidateImageCache : enter");
 
     if( this.cache != null ) {
+      Log.d( TAG, "invalidateImageCache : cache != null" );
 
       this.cache.evictAll();
 
     }
 
+    Log.d( TAG, "invalidateImageCache : exit" );
   }
 
   /**
@@ -96,42 +108,52 @@ public class AutoLoadImageView extends ImageView {
    * @param imageUrl The remote image url to load.
    */
   private void loadImageFromUrl( final String imageUrl ) {
+    Log.d( TAG, "loadImageFromUrl : enter" );
 
     new Thread() {
 
       @Override
       public void run() {
+        Log.d( TAG, "loadImageFromUrl.run : enter" );
 
         final Bitmap bitmap = AutoLoadImageView.this.getFromCache( getFileNameFromUrl( imageUrl ) );
         if( bitmap != null ) {
+          Log.d( TAG, "loadImageFromUrl.run : bitmap != null" );
 
           AutoLoadImageView.this.loadBitmap( bitmap );
 
         } else {
+          Log.d( TAG, "loadImageFromUrl.run : bitmap == null" );
 
           if( isThereInternetConnection() ) {
+            Log.d( TAG, "loadImageFromUrl.run : internet connected" );
 
             final ImageDownloader imageDownloader = new ImageDownloader();
             imageDownloader.download( imageUrl, new ImageDownloader.Callback() {
 
               @Override
               public void onImageDownloaded( Bitmap bitmap ) {
+                Log.d( TAG, "loadImageFromUrl.run.onImageDownloaded : enter" );
 
                 AutoLoadImageView.this.cacheBitmap( bitmap, getFileNameFromUrl( imageUrl ) );
                 AutoLoadImageView.this.loadBitmap( bitmap );
 
+                Log.d( TAG, "loadImageFromUrl.run.onImageDownloaded : exit" );
               }
 
               @Override
               public void onError() {
+                Log.d( TAG, "loadImageFromUrl.run.onError : enter" );
 
                 AutoLoadImageView.this.loadImagePlaceHolder();
 
+                Log.d( TAG, "loadImageFromUrl.run.onError : exit" );
               }
 
             });
 
           } else {
+            Log.d( TAG, "loadImageFromUrl.run.onError : internet not connected" );
 
             AutoLoadImageView.this.loadImagePlaceHolder();
 
@@ -143,6 +165,7 @@ public class AutoLoadImageView extends ImageView {
 
     }.start();
 
+    Log.d(TAG, "loadImageFromUrl : exit");
   }
 
   /**
@@ -151,40 +174,67 @@ public class AutoLoadImageView extends ImageView {
    * @param bitmap The image to load.
    */
   private void loadBitmap( final Bitmap bitmap ) {
+      Log.d( TAG, "loadBitmap : enter" );
 
-    ( (Activity) getContext() ).runOnUiThread( new Runnable() {
+      ( (Activity) getContext() ).runOnUiThread( new Runnable() {
 
-      @Override
-      public void run() {
+        @Override
+        public void run() {
+          Log.d( TAG, "loadBitmap.run : enter" );
 
-        AutoLoadImageView.this.setImageBitmap( bitmap );
+          AutoLoadImageView.this.setVisibility( View.VISIBLE );
+          AutoLoadImageView.this.setImageBitmap( bitmap );
 
-      }
+          Log.d( TAG, "loadBitmap.run : exit" );
+        }
 
-    });
+      });
 
+      Log.d( TAG, "loadBitmap : exit" );
   }
 
   /**
    * Loads the image place holder if any has been assigned.
    */
   private void loadImagePlaceHolder() {
+    Log.d( TAG, "loadImagePlaceHolder : enter" );
 
     if( this.imagePlaceHolderResourceId != -1 ) {
+      Log.d( TAG, "loadImagePlaceHolder : imagePlaceHolderResourceId != -1" );
 
       ( (Activity) getContext() ).runOnUiThread( new Runnable() {
 
         @Override
         public void run() {
+          Log.d( TAG, "loadImagePlaceHolder.run : enter" );
 
+          AutoLoadImageView.this.setVisibility( View.VISIBLE );
           AutoLoadImageView.this.setImageResource( AutoLoadImageView.this.imagePlaceHolderResourceId );
 
+          Log.d( TAG, "loadImagePlaceHolder.run : exit" );
+        }
+
+      });
+
+    } else {
+      Log.d(TAG, "loadImagePlaceHolder : imagePlaceHolderResourceId == -1");
+
+      ((Activity) getContext()).runOnUiThread( new Runnable() {
+
+        @Override
+        public void run() {
+          Log.d(TAG, "loadImagePlaceHolder.run : enter");
+
+          AutoLoadImageView.this.setVisibility( View.GONE );
+
+          Log.d(TAG, "loadImagePlaceHolder.run : exit");
         }
 
       });
 
     }
 
+    Log.d(TAG, "loadImagePlaceHolder : exit");
   }
 
   /**
@@ -194,14 +244,17 @@ public class AutoLoadImageView extends ImageView {
    * @return A valid cached bitmap, otherwise null.
    */
   private Bitmap getFromCache( String fileName ) {
+    Log.d( TAG, "getFromCache : enter" );
 
     Bitmap bitmap = null;
     if( this.cache != null ) {
+      Log.d( TAG, "getFromCache : cache != null" );
 
       bitmap = this.cache.get( fileName );
 
     }
 
+    Log.d( TAG, "getFromCache : exit" );
     return bitmap;
   }
 
@@ -212,13 +265,16 @@ public class AutoLoadImageView extends ImageView {
    * @param fileName The file name used for caching the bitmap.
    */
   private void cacheBitmap( Bitmap bitmap, String fileName ) {
+    Log.d( TAG, "cacheBitmap : enter" );
 
     if( this.cache != null ) {
+      Log.d( TAG, "cacheBitmap : cache != null" );
 
       this.cache.put( bitmap, fileName );
 
     }
 
+    Log.d( TAG, "cacheBitmap : exit" );
   }
 
   /**
@@ -278,6 +334,7 @@ public class AutoLoadImageView extends ImageView {
      * @param callback A callback used to be reported when the task is finished.
      */
     void download( String imageUrl, Callback callback ) {
+      Log.d( TAG, "download : enter" );
 
       try {
 
@@ -286,21 +343,25 @@ public class AutoLoadImageView extends ImageView {
 
         Bitmap bitmap = BitmapFactory.decodeStream( conn.getInputStream() );
         if( callback != null ) {
+          Log.d( TAG, "download : callback != null" );
 
           callback.onImageDownloaded( bitmap );
 
         }
 
       } catch( MalformedURLException e ) {
+        Log.e( TAG, "download : malformedexception", e );
 
         reportError( callback );
 
       } catch( IOException e ) {
+        Log.e( TAG, "download : ioexception", e );
 
         reportError( callback );
 
       }
 
+      Log.d( TAG, "download : exit" );
     }
 
     /**

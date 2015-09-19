@@ -84,7 +84,7 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
         final TitleInfoModel titleInfoModel = this.titleInfosCollection.get( position );
         if( null != titleInfoModel.getInetref() && !"".equals( titleInfoModel.getInetref() ) ) {
 
-            holder.imageViewCoverart.setImageUrl( getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + titleInfoModel.getInetref() + "&Type=banner&Height=90" );
+            holder.imageViewCoverart.setImageUrl( getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + titleInfoModel.getInetref() + "&Type=banner&Height=100" );
 
         }
         holder.textViewTitle.setText( titleInfoModel.getTitle() );

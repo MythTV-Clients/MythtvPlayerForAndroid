@@ -45,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     @Nullable @Bind( R.id.navigation_view ) protected NavigationView navigationView;
     @Bind( R.id.toolbar ) protected Toolbar toolbar;
 
-    @Bind( R.id.drawer_layout ) protected DrawerLayout drawerLayout;
+    @Nullable @Bind( R.id.drawer_layout ) protected DrawerLayout drawerLayout;
 
     @Nullable @Bind( R.id.mythtv_version ) protected TextView mythtvVersion;
 
