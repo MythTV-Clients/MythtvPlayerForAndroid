@@ -27,6 +27,19 @@ android {
     versionCode globalConfiguration.getAt("androidVersionCode")
   }
 
+  buildTypes {
+    debug {
+      //runProguard true
+      proguardFiles 'proguard-rules.txt'
+      testCoverageEnabled = true
+    }
+    release {
+      //runProguard false
+      proguardFiles 'proguard-rules.txt'
+      testCoverageEnabled = false
+    }
+  }
+
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8

@@ -24,7 +24,7 @@ task jacoco(type: JacocoReport) {
                     '**/preference/*.class'
             ])
     sourceDirectories = files android.sourceSets.main.java.srcDirs
-    executionData = files "${buildDir}/jacoco/testDebug.exec"
+    executionData = files "${buildDir}/jacoco/testDebugUnitTest.exec"
 
     // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
     // We iterate through the compiled .class tree and rename $$ to $.

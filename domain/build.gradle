@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 //noinspection GroovyUnusedAssignment
 sourceCompatibility = 1.7
@@ -29,5 +30,3 @@ dependencies {
   testCompile domainTestDependencies.junit
   testCompile domainTestDependencies.mockito
 }
-
-//apply from: '../buildsystem/jacoco.gradle'
