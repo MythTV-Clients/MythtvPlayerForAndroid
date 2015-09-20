@@ -150,6 +150,14 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
         assertThat( program.getEpisode(), is( FAKE_EPISODE ) );
         assertThat( program.getTotalEpisodes(), is( FAKE_TOTALEPISODES ) );
 
+        assertChannel( program.getChannel() );
+        assertRecording( program.getRecording() );
+
+        assertThat( program.getArtworkInfos().toArray() [ 0 ], is( instanceOf( ArtworkInfo.class ) ) );
+        assertThat( program.getArtworkInfos().size(), is( 1 ) );
+
+        assertThat( program.getCastMembers().toArray() [ 0 ], is( instanceOf( CastMember.class ) ) );
+        assertThat( program.getCastMembers().size(), is( 1 ) );
     }
 
     @Test
@@ -174,7 +182,12 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
     public void testTransformChannelInfoEntity() {
 
         ChannelInfoEntity channelInfoEntity = createFakeChannelInfoEntity();
-        ChannelInfo channelInfo = programEntityDataMapper.transformChannelInfo(channelInfoEntity);
+        ChannelInfo channelInfo = programEntityDataMapper.transformChannelInfo( channelInfoEntity );
+        assertChannel( channelInfo );
+
+    }
+
+    private void assertChannel( ChannelInfo channelInfo ) {
 
         assertThat( channelInfo, is( instanceOf( ChannelInfo.class ) ) );
         assertThat( channelInfo.getChanId(), is( FAKE_CHANNEL_INFO_CHAN_ID ) );
@@ -223,6 +236,11 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
 
         RecordingInfoEntity recordingInfoEntity = createFakeRecordingInfoEntity();
         RecordingInfo recordingInfo = programEntityDataMapper.transformRecordingInfo(recordingInfoEntity);
+        assertRecording(recordingInfo);
+
+    }
+
+    private void assertRecording( RecordingInfo recordingInfo ) {
 
         assertThat( recordingInfo, is( instanceOf( RecordingInfo.class ) ) );
         assertThat( recordingInfo.getRecordedId(), is( FAKE_RECORDING_INFO_RECORDED_ID ) );
@@ -246,12 +264,12 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
     @Test
     public void testTransformRecordingInfoEntityCollection() {
 
-        RecordingInfoEntity mockRecordingInfoEntityOne = mock( RecordingInfoEntity.class );
-        RecordingInfoEntity mockRecordingInfoEntityTwo = mock( RecordingInfoEntity.class );
+        RecordingInfoEntity mockRecordingInfoEntityOne = mock(RecordingInfoEntity.class);
+        RecordingInfoEntity mockRecordingInfoEntityTwo = mock(RecordingInfoEntity.class);
 
         List<RecordingInfoEntity> recordingInfoEntityList = new ArrayList<>( 5 );
-        recordingInfoEntityList.add( mockRecordingInfoEntityOne );
-        recordingInfoEntityList.add( mockRecordingInfoEntityTwo );
+        recordingInfoEntityList.add(mockRecordingInfoEntityOne);
+        recordingInfoEntityList.add(mockRecordingInfoEntityTwo);
 
         Collection<RecordingInfo> recordingInfoCollection = programEntityDataMapper.transformRecordingInfoCollection(recordingInfoEntityList);
 
@@ -266,12 +284,17 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
 
         ArtworkInfoEntity artworkInfoEntity = createFakeArtworkInfoEntity();
         ArtworkInfo artworkInfo = programEntityDataMapper.transformArtworkInfo(artworkInfoEntity);
+        assertArtworkInfo(artworkInfo);
+
+    }
+
+    private void assertArtworkInfo( ArtworkInfo artworkInfo ) {
 
         assertThat( artworkInfo, is( instanceOf( ArtworkInfo.class ) ) );
         assertThat( artworkInfo.getUrl(), is( FAKE_ARTWORK_INFO_URL ) );
         assertThat( artworkInfo.getFileName(), is( FAKE_ARTWORK_INFO_FILENAME ) );
         assertThat( artworkInfo.getStorageGroup(), is( FAKE_ARTWORK_INFO_STORAGE_GROUP ) );
-        assertThat( artworkInfo.getType(), is( FAKE_ARTWORK_INFO_TYPE ) );
+        assertThat(artworkInfo.getType(), is(FAKE_ARTWORK_INFO_TYPE));
 
     }
 
@@ -279,11 +302,11 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
     public void testTransformArtworkInfoEntityCollection() {
 
         ArtworkInfoEntity mockArtworkInfoEntityOne = mock( ArtworkInfoEntity.class );
-        ArtworkInfoEntity mockArtworkInfoEntityTwo = mock( ArtworkInfoEntity.class );
+        ArtworkInfoEntity mockArtworkInfoEntityTwo = mock(ArtworkInfoEntity.class);
 
         List<ArtworkInfoEntity> artworkInfoEntityList = new ArrayList<>( 5 );
-        artworkInfoEntityList.add( mockArtworkInfoEntityOne );
-        artworkInfoEntityList.add( mockArtworkInfoEntityTwo );
+        artworkInfoEntityList.add(mockArtworkInfoEntityOne);
+        artworkInfoEntityList.add(mockArtworkInfoEntityTwo);
 
         Collection<ArtworkInfo> artworkInfoCollection = programEntityDataMapper.transformArtworkInfoCollection(artworkInfoEntityList);
 
@@ -298,6 +321,11 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
 
         CastMemberEntity castMemberEntity = createFakeCastMemberEntity();
         CastMember castMember = programEntityDataMapper.transformCastMember(castMemberEntity);
+        assertCastMember( castMember );
+
+    }
+
+    private void assertCastMember( CastMember castMember ) {
 
         assertThat( castMember, is( instanceOf( CastMember.class ) ) );
         assertThat( castMember.getName(), is( FAKE_CAST_MEMBER_NAME ) );
@@ -311,11 +339,11 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
     public void testTransformCastMemberEntityCollection() {
 
         CastMemberEntity mockCastMemberEntityOne = mock( CastMemberEntity.class );
-        CastMemberEntity mockCastMemberEntityTwo = mock( CastMemberEntity.class );
+        CastMemberEntity mockCastMemberEntityTwo = mock(CastMemberEntity.class);
 
         List<CastMemberEntity> castMemberEntityList = new ArrayList<>( 5 );
-        castMemberEntityList.add( mockCastMemberEntityOne );
-        castMemberEntityList.add( mockCastMemberEntityTwo );
+        castMemberEntityList.add(mockCastMemberEntityOne);
+        castMemberEntityList.add(mockCastMemberEntityTwo);
 
         Collection<CastMember> castMemberCollection = programEntityDataMapper.transformCastMemberCollection(castMemberEntityList);
 
@@ -353,70 +381,98 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
         programEntity.setEpisode( FAKE_EPISODE );
         programEntity.setTotalEpisodes( FAKE_TOTALEPISODES );
 
+        programEntity.setChannel( createFakeChannelInfoEntity() );
+        programEntity.setRecording( createFakeRecordingInfoEntity() );
+
+        programEntity.setArtwork( createFakeArtworkEntity() );
+        programEntity.setCast( createFakeCastEntity() );
+
         return programEntity;
     }
 
-    public ChannelInfoEntity createFakeChannelInfoEntity() {
+    private ChannelInfoEntity createFakeChannelInfoEntity() {
 
         ChannelInfoEntity channelInfoEntity = new ChannelInfoEntity();
-        channelInfoEntity.setChanId( FAKE_CHANNEL_INFO_CHAN_ID );
-        channelInfoEntity.setChanNum( FAKE_CHANNEL_INFO_CHAN_NUM);
-        channelInfoEntity.setCallSign( FAKE_CHANNEL_INFO_CALLSIGN);
-        channelInfoEntity.setIconURL( FAKE_CHANNEL_INFO_ICON_URL);
-        channelInfoEntity.setChannelName( FAKE_CHANNEL_INFO_CHANNEL_NAME);
-        channelInfoEntity.setMplexId( FAKE_CHANNEL_INFO_MPLEXID);
-        channelInfoEntity.setServiceId( FAKE_CHANNEL_INFO_SERVICE_ID);
-        channelInfoEntity.setATSCMajorChan( FAKE_CHANNEL_INFO_ATSC_MAJOR_CHAN);
-        channelInfoEntity.setATSCMinorChan( FAKE_CHANNEL_INFO_ATSC_MINOR_CHAN);
-        channelInfoEntity.setFormat( FAKE_CHANNEL_INFO_FORMAT);
-        channelInfoEntity.setFrequencyId( FAKE_CHANNEL_INFO_FREQUENCY_ID);
-        channelInfoEntity.setFineTune( FAKE_CHANNEL_INFO_FINETUNE);
-        channelInfoEntity.setChanFilters( FAKE_CHANNEL_INFO_CHAN_FILTERS);
-        channelInfoEntity.setSourceId( FAKE_CHANNEL_INFO_SOURCE_ID);
-        channelInfoEntity.setInputId( FAKE_CHANNEL_INFO_INPUT_ID);
-        channelInfoEntity.setCommFree( FAKE_CHANNEL_INFO_COMM_FREE);
-        channelInfoEntity.setUseEIT( FAKE_CHANNEL_INFO_USE_EIT);
-        channelInfoEntity.setVisible( FAKE_CHANNEL_INFO_VISIBLE);
-        channelInfoEntity.setXMLTVID( FAKE_CHANNEL_INFO_XMLTVID);
-        channelInfoEntity.setDefaultAuth( FAKE_CHANNEL_INFO_DEFAULT_AUTH );
+        channelInfoEntity.setChanId(FAKE_CHANNEL_INFO_CHAN_ID);
+        channelInfoEntity.setChanNum(FAKE_CHANNEL_INFO_CHAN_NUM);
+        channelInfoEntity.setCallSign(FAKE_CHANNEL_INFO_CALLSIGN);
+        channelInfoEntity.setIconURL(FAKE_CHANNEL_INFO_ICON_URL);
+        channelInfoEntity.setChannelName(FAKE_CHANNEL_INFO_CHANNEL_NAME);
+        channelInfoEntity.setMplexId(FAKE_CHANNEL_INFO_MPLEXID);
+        channelInfoEntity.setServiceId(FAKE_CHANNEL_INFO_SERVICE_ID);
+        channelInfoEntity.setATSCMajorChan(FAKE_CHANNEL_INFO_ATSC_MAJOR_CHAN);
+        channelInfoEntity.setATSCMinorChan(FAKE_CHANNEL_INFO_ATSC_MINOR_CHAN);
+        channelInfoEntity.setFormat(FAKE_CHANNEL_INFO_FORMAT);
+        channelInfoEntity.setFrequencyId(FAKE_CHANNEL_INFO_FREQUENCY_ID);
+        channelInfoEntity.setFineTune(FAKE_CHANNEL_INFO_FINETUNE);
+        channelInfoEntity.setChanFilters(FAKE_CHANNEL_INFO_CHAN_FILTERS);
+        channelInfoEntity.setSourceId(FAKE_CHANNEL_INFO_SOURCE_ID);
+        channelInfoEntity.setInputId(FAKE_CHANNEL_INFO_INPUT_ID);
+        channelInfoEntity.setCommFree(FAKE_CHANNEL_INFO_COMM_FREE);
+        channelInfoEntity.setUseEIT(FAKE_CHANNEL_INFO_USE_EIT);
+        channelInfoEntity.setVisible(FAKE_CHANNEL_INFO_VISIBLE);
+        channelInfoEntity.setXMLTVID(FAKE_CHANNEL_INFO_XMLTVID);
+        channelInfoEntity.setDefaultAuth(FAKE_CHANNEL_INFO_DEFAULT_AUTH);
 
         return channelInfoEntity;
     }
 
-    public RecordingInfoEntity createFakeRecordingInfoEntity() {
+    private RecordingInfoEntity createFakeRecordingInfoEntity() {
 
         RecordingInfoEntity recordingInfoEntity = new RecordingInfoEntity();
-        recordingInfoEntity.setRecordedId( FAKE_RECORDING_INFO_RECORDED_ID );
-        recordingInfoEntity.setStatus( FAKE_RECORDING_INFO_STATUS );
-        recordingInfoEntity.setPriority( FAKE_RECORDING_INFO_PRIORITY );
-        recordingInfoEntity.setStartTs( FAKE_RECORDING_INFO_START_TS );
-        recordingInfoEntity.setEndTs( FAKE_RECORDING_INFO_END_TS );
-        recordingInfoEntity.setRecordId( FAKE_RECORDING_INFO_RECORD_ID );
-        recordingInfoEntity.setRecGroup( FAKE_RECORDING_INFO_REC_GROUP );
-        recordingInfoEntity.setPlayGroup( FAKE_RECORDING_INFO_PLAY_GROUP );
-        recordingInfoEntity.setStorageGroup( FAKE_RECORDING_INFO_STORAGE_GROUP );
-        recordingInfoEntity.setRecType( FAKE_RECORDING_INFO_REC_TYPE );
-        recordingInfoEntity.setDupInType( FAKE_RECORDING_INFO_DUP_IN_TYPE );
-        recordingInfoEntity.setDupMethod( FAKE_RECORDING_INFO_DUP_METHOD );
-        recordingInfoEntity.setEncoderId( FAKE_RECORDING_INFO_ENCODER_ID );
-        recordingInfoEntity.setEncoderName( FAKE_RECORDING_INFO_ENCODER_NAME );
-        recordingInfoEntity.setProfile( FAKE_RECORDING_INFO_PROFILE );
+        recordingInfoEntity.setRecordedId(FAKE_RECORDING_INFO_RECORDED_ID);
+        recordingInfoEntity.setStatus(FAKE_RECORDING_INFO_STATUS);
+        recordingInfoEntity.setPriority(FAKE_RECORDING_INFO_PRIORITY);
+        recordingInfoEntity.setStartTs(FAKE_RECORDING_INFO_START_TS);
+        recordingInfoEntity.setEndTs(FAKE_RECORDING_INFO_END_TS);
+        recordingInfoEntity.setRecordId(FAKE_RECORDING_INFO_RECORD_ID);
+        recordingInfoEntity.setRecGroup(FAKE_RECORDING_INFO_REC_GROUP);
+        recordingInfoEntity.setPlayGroup(FAKE_RECORDING_INFO_PLAY_GROUP);
+        recordingInfoEntity.setStorageGroup(FAKE_RECORDING_INFO_STORAGE_GROUP);
+        recordingInfoEntity.setRecType(FAKE_RECORDING_INFO_REC_TYPE);
+        recordingInfoEntity.setDupInType(FAKE_RECORDING_INFO_DUP_IN_TYPE);
+        recordingInfoEntity.setDupMethod(FAKE_RECORDING_INFO_DUP_METHOD);
+        recordingInfoEntity.setEncoderId(FAKE_RECORDING_INFO_ENCODER_ID);
+        recordingInfoEntity.setEncoderName(FAKE_RECORDING_INFO_ENCODER_NAME);
+        recordingInfoEntity.setProfile(FAKE_RECORDING_INFO_PROFILE);
 
         return recordingInfoEntity;
     }
 
-    public ArtworkInfoEntity createFakeArtworkInfoEntity() {
+    private ArtworkEntity createFakeArtworkEntity() {
+
+        ArtworkEntity artworkEntity = new ArtworkEntity();
+
+        ArtworkInfoEntity[] artworkInfoEntities = new ArtworkInfoEntity[ 1 ];
+        artworkInfoEntities[ 0 ] = createFakeArtworkInfoEntity();
+        artworkEntity.setArtworkInfos( artworkInfoEntities );
+
+        return artworkEntity;
+    }
+
+    private ArtworkInfoEntity createFakeArtworkInfoEntity() {
 
         ArtworkInfoEntity artworkInfoEntity = new ArtworkInfoEntity();
         artworkInfoEntity.setUrl( FAKE_ARTWORK_INFO_URL );
-        artworkInfoEntity.setFileName(FAKE_ARTWORK_INFO_FILENAME);
-        artworkInfoEntity.setStorageGroup(FAKE_ARTWORK_INFO_STORAGE_GROUP);
+        artworkInfoEntity.setFileName( FAKE_ARTWORK_INFO_FILENAME );
+        artworkInfoEntity.setStorageGroup( FAKE_ARTWORK_INFO_STORAGE_GROUP );
         artworkInfoEntity.setType( FAKE_ARTWORK_INFO_TYPE );
 
         return artworkInfoEntity;
     }
 
-    public CastMemberEntity createFakeCastMemberEntity() {
+    private CastEntity createFakeCastEntity() {
+
+        CastEntity castEntity = new CastEntity();
+
+        CastMemberEntity[] castMemberEntities = new CastMemberEntity[ 1 ];
+        castMemberEntities[ 0 ] = createFakeCastMemberEntity();
+        castEntity.setCastMembers( castMemberEntities );
+
+        return castEntity;
+    }
+
+    private CastMemberEntity createFakeCastMemberEntity() {
 
         CastMemberEntity castMemberEntity = new CastMemberEntity();
         castMemberEntity.setName( FAKE_CAST_MEMBER_NAME );
