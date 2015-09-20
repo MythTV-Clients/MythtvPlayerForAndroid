@@ -45,7 +45,7 @@ public class ProgramDataRepositoryTest extends ApplicationTestCase {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataRepository = new DvrDataRepository(mockDvrDataStoreFactory, mockTitleInfoEntityDataMapper, mockProgramEntityDataMapper );
+        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockTitleInfoEntityDataMapper, mockProgramEntityDataMapper );
 
         given( mockDvrDataStoreFactory.create( anyInt(), any( DateTime.class ) ) ).willReturn(mockDvrDataStore);
         given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn(mockDvrDataStore);
@@ -53,7 +53,7 @@ public class ProgramDataRepositoryTest extends ApplicationTestCase {
     }
 
     @Test
-    public void testGetTitleInfossHappyCase() {
+    public void testGetTitleInfosHappyCase() {
 
         List<TitleInfoEntity> titleInfosList = new ArrayList<>();
         titleInfosList.add( new TitleInfoEntity() );

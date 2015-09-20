@@ -27,7 +27,7 @@ public class DvrDataRepository implements DvrRepository {
     private final ProgramEntityDataMapper programEntityDataMapper;
 
     @Inject
-    public DvrDataRepository(DvrDataStoreFactory dvrDataStoreFactory, TitleInfoEntityDataMapper titleInfoEntityDataMapper, ProgramEntityDataMapper programEntityDataMapper) {
+    public DvrDataRepository(DvrDataStoreFactory dvrDataStoreFactory, TitleInfoEntityDataMapper titleInfoEntityDataMapper, ProgramEntityDataMapper programEntityDataMapper ) {
 
         this.dvrDataStoreFactory = dvrDataStoreFactory;
         this.titleInfoEntityDataMapper = titleInfoEntityDataMapper;
