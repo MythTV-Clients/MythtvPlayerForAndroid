@@ -1,7 +1,5 @@
 package org.mythtv.android.data.entity.mapper.serializers;
 
-import android.util.Log;
-
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -22,10 +20,8 @@ public class DateTimeDeserializer implements JsonDeserializer<DateTime> {
 
     @Override
     public DateTime deserialize( JsonElement json, Type typeOfT, JsonDeserializationContext context ) throws JsonParseException {
-        Log.d(TAG, "deserialize : enter");
 
         DateTime dateTime = DateTime.parse( json.getAsJsonPrimitive().getAsString(), DateTimeFormat.forPattern( pattern ) );
-        Log.d( TAG, "deserialize : dateTime=" + dateTime.toString() );
 
         return dateTime;
     }

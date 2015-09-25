@@ -1,7 +1,5 @@
 package org.mythtv.android.data.entity.mapper.serializers;
 
-import android.util.Log;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
@@ -21,7 +19,6 @@ public class DateTimeSerializer implements JsonSerializer<DateTime> {
 
     @Override
     public JsonElement serialize( DateTime src, Type typeOfSrc, JsonSerializationContext context ) {
-        Log.d( TAG, "serialize : enter" );
 
         return new JsonPrimitive( src.toString( pattern ) );
     }
