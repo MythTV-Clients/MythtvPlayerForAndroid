@@ -12,7 +12,6 @@ import org.junit.Test;
 /**
  * Created by dmfrey on 9/24/15.
  */
-@Ignore
 public class DateTimeSerializerTest {
 
     private DateTimeSerializer serializer;
@@ -27,7 +26,7 @@ public class DateTimeSerializerTest {
     @Test
     public void testSerialize() {
 
-        assertThat( serializer.serialize( new DateTime(), null, null ), is(notNullValue()) );
+        assertThat( serializer.serialize( new DateTime(), null, null ), is( notNullValue() ) );
 
     }
 }

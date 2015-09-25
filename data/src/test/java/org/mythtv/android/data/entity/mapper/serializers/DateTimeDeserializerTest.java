@@ -14,7 +14,6 @@ import static org.junit.Assert.assertThat;
 /**
  * Created by dmfrey on 9/24/15.
  */
-@Ignore
 public class DateTimeDeserializerTest {
 
     private DateTimeSerializer serializer;
