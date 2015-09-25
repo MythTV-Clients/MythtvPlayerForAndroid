@@ -47,8 +47,8 @@ public class ProgramDataRepositoryTest extends ApplicationTestCase {
         MockitoAnnotations.initMocks( this );
         dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockTitleInfoEntityDataMapper, mockProgramEntityDataMapper );
 
-        given( mockDvrDataStoreFactory.create( anyInt(), any( DateTime.class ) ) ).willReturn(mockDvrDataStore);
-        given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn(mockDvrDataStore);
+        given( mockDvrDataStoreFactory.create( anyInt(), any( DateTime.class ) ) ).willReturn( mockDvrDataStore );
+        given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockDvrDataStore );
 
     }
 

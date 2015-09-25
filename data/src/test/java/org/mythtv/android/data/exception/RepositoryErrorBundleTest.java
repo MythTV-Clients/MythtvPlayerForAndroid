@@ -23,6 +23,13 @@ public class RepositoryErrorBundleTest extends ApplicationTestCase {
 
     }
 
+    @Test( expected = Exception.class )
+    public void testGetExceptionInteraction() throws Exception{
+
+        throw repositoryErrorBundle.getException();
+
+    }
+
     @Test
     public void testGetErrorMessageInteraction() {
 

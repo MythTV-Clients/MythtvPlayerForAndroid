@@ -42,7 +42,7 @@ public class ProgramCacheImpl implements ProgramCache {
      * @param fileManager {@link FileManager} for saving serialized objects to the file system.
      */
     @Inject
-    public ProgramCacheImpl(Context context, ProgramEntityJsonSerializer recordedProgramCacheSerializer, FileManager fileManager, ThreadExecutor executor) {
+    public ProgramCacheImpl( Context context, ProgramEntityJsonSerializer recordedProgramCacheSerializer, FileManager fileManager, ThreadExecutor executor ) {
 
         if( context == null || recordedProgramCacheSerializer == null || fileManager == null || executor == null ) {
             throw new IllegalArgumentException( "Invalid null parameter" );
@@ -58,7 +58,10 @@ public class ProgramCacheImpl implements ProgramCache {
     @Override
     public Observable<ProgramEntity> get( int chanId, DateTime startTime ) {
         return Observable.create( new Observable.OnSubscribe<ProgramEntity>() {
-            @Override public void call( Subscriber<? super ProgramEntity> subscriber ) {
+
+            @Override
+            public void call( Subscriber<? super ProgramEntity> subscriber ) {
+
                 File programEntityFile = ProgramCacheImpl.this.buildFile( chanId, startTime );
                 String fileContent = ProgramCacheImpl.this.fileManager.readFileContent( programEntityFile );
                 ProgramEntity programEntity = ProgramCacheImpl.this.serializer.deserialize( fileContent );
@@ -123,7 +126,7 @@ public class ProgramCacheImpl implements ProgramCache {
     @Override
     public synchronized void evictAll() {
 
-        this.executeAsynchronously(new CacheEvictor(this.fileManager, this.cacheDir));
+        this.executeAsynchronously( new CacheEvictor( this.fileManager, this.cacheDir ) );
 
     }
 
@@ -161,6 +164,7 @@ public class ProgramCacheImpl implements ProgramCache {
      * Get in millis, the last time the cache was accessed.
      */
     private long getLastCacheUpdateTimeMillis() {
+
         return this.fileManager.getFromPreferences( this.context, SETTINGS_FILE_NAME, SETTINGS_KEY_LAST_CACHE_UPDATE );
     }
 
