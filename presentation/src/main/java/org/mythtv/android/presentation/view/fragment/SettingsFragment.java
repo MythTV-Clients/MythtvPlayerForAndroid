@@ -75,12 +75,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 }
 
                 boolean isFQDN = backendUrl.matches( "(?=^.{1,253}$)(^(((?!-)[a-zA-Z0-9-]{1,63}(?<!-))|((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\\.)+[a-zA-Z]{2,63})$)" );
-                if( isFQDN ) {
+                return isFQDN;
 
-                    return true;
-                }
-
-                return false;
             }
 
         });

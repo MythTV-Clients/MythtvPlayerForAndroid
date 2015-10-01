@@ -31,6 +31,8 @@
         android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
         android:paddingRight="16dp"
         android:paddingEnd="16dp"
         android:src="@drawable/ic_tv_black" />

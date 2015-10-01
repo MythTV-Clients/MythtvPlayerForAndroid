@@ -26,7 +26,9 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
 
     private MasterBackendDvrDataStore masterBackendDvrDataStore;
 
-    @Mock private DvrApi mockDvrApi;
+    @Mock
+    private DvrApi mockDvrApi;
+
     @Mock
     private ProgramCache mockProgramCache;
 

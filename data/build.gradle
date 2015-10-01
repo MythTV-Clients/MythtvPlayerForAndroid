@@ -20,15 +20,13 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
 
-    def globalConfiguration = rootProject.extensions.getByName("ext")
-
-    compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
-    buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
+    buildToolsVersion "23.0.1"
+    compileSdkVersion 23
 
     defaultConfig {
-        minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
-        targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
-        versionCode globalConfiguration.getAt("androidVersionCode")
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 17
     }
 
     buildTypes {

@@ -432,10 +432,6 @@ public class AutoLoadImageView extends ImageView {
           fileOutputStream.flush();
           fileOutputStream.close();
 
-        } catch( FileNotFoundException e ) {
-
-          Log.e( TAG, e.getMessage() );
-
         } catch( IOException e ) {
 
           Log.e(TAG, e.getMessage());

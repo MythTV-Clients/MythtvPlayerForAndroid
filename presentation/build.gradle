@@ -3,21 +3,21 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
 
-    def globalConfiguration = rootProject.extensions.getByName( "ext" )
+//    def globalConfiguration = rootProject.extensions.getByName( "ext" )
 
-    compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
-    buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
+    buildToolsVersion "23.0.1"
+    compileSdkVersion 23
 
     defaultConfig {
 
-        minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
-        targetSdkVersion globalConfiguration.getAt( "androidTargetSdkVersion" )
+        minSdkVersion 14
+        targetSdkVersion 23
 
-        applicationId globalConfiguration.getAt( "androidApplicationId" )
-        versionCode globalConfiguration.getAt( "androidVersionCode" )
-        versionName globalConfiguration.getAt( "androidVersionName" )
-        testInstrumentationRunner globalConfiguration.getAt( "testInstrumentationRunner" )
-        testApplicationId globalConfiguration.getAt( "testApplicationId" )
+        applicationId 'org.mythtv.android'
+        versionCode 17
+        versionName "1.1.14"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testApplicationId 'org.mythtv.android.test'
 
     }
 
@@ -32,13 +32,11 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            //runProguard true
             proguardFiles 'proguard-rules.txt'
             testCoverageEnabled = true
         }
 
         release {
-            //runProguard false
             proguardFiles 'proguard-rules.txt'
             testCoverageEnabled = false
         }
@@ -99,11 +97,13 @@ dependencies {
     compile presentationDependencies.rxAndroid
     provided presentationDependencies.javaxAnnotation
 
-    androidTestCompile presentationTestDependencies.mockito
+    testCompile presentationTestDependencies.mockito
     androidTestCompile presentationTestDependencies.dexmaker
     androidTestCompile presentationTestDependencies.dexmakerMockito
-    androidTestCompile presentationTestDependencies.espresso
-    androidTestCompile presentationTestDependencies.testingSupportLib
+    testCompile presentationTestDependencies.espresso
+    testCompile presentationTestDependencies.testingSupportLib
+    testCompile presentationTestDependencies.robolectric
+    testCompile presentationTestDependencies.hamcrest
 
 }
 
