@@ -1,5 +1,7 @@
 package org.mythtv.android.data.entity.mapper;
 
+import android.util.Log;
+
 import org.mythtv.android.data.entity.ArtworkInfoEntity;
 import org.mythtv.android.data.entity.CastMemberEntity;
 import org.mythtv.android.data.entity.ChannelInfoEntity;
@@ -24,6 +26,8 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class ProgramEntityDataMapper {
+
+    private static final String TAG = ProgramEntityDataMapper.class.getSimpleName();
 
     @Inject
     public ProgramEntityDataMapper() {
@@ -66,6 +70,7 @@ public class ProgramEntityDataMapper {
             }
 
             if( null != programEntity.getRecording() ) {
+                Log.i( TAG, "transform : recording=" + programEntity.getRecording() );
 
                 program.setRecording( transformRecordingInfo( programEntity.getRecording() ) );
 
@@ -182,21 +187,21 @@ public class ProgramEntityDataMapper {
         if( null != recordingInfoEntity ) {
 
             recordingInfo = new RecordingInfo();
-            recordingInfo.setRecordedId(recordingInfoEntity.getRecordedId());
-            recordingInfo.setStatus(recordingInfoEntity.getStatus());
-            recordingInfo.setPriority(recordingInfoEntity.getPriority());
-            recordingInfo.setStartTs(recordingInfoEntity.getStartTs());
-            recordingInfo.setEndTs(recordingInfoEntity.getEndTs());
-            recordingInfo.setRecordId(recordingInfoEntity.getRecordId());
-            recordingInfo.setRecGroup(recordingInfoEntity.getRecGroup());
-            recordingInfo.setPlayGroup(recordingInfoEntity.getPlayGroup());
-            recordingInfo.setStorageGroup(recordingInfoEntity.getStorageGroup());
-            recordingInfo.setRecType(recordingInfoEntity.getRecType());
-            recordingInfo.setDupInType(recordingInfoEntity.getDupInType());
-            recordingInfo.setDupMethod(recordingInfoEntity.getDupMethod());
-            recordingInfo.setEncoderId(recordingInfoEntity.getEncoderId());
-            recordingInfo.setEncoderName(recordingInfoEntity.getEncoderName());
-            recordingInfo.setProfile(recordingInfoEntity.getProfile());
+            recordingInfo.setRecordedId( recordingInfoEntity.getRecordedId() );
+            recordingInfo.setStatus( recordingInfoEntity.getStatus() );
+            recordingInfo.setPriority( recordingInfoEntity.getPriority() );
+            recordingInfo.setStartTs( recordingInfoEntity.getStartTs() );
+            recordingInfo.setEndTs( recordingInfoEntity.getEndTs() );
+            recordingInfo.setRecordId( recordingInfoEntity.getRecordId() );
+            recordingInfo.setRecGroup( recordingInfoEntity.getRecGroup() );
+            recordingInfo.setPlayGroup( recordingInfoEntity.getPlayGroup() );
+            recordingInfo.setStorageGroup( recordingInfoEntity.getStorageGroup() );
+            recordingInfo.setRecType( recordingInfoEntity.getRecType() );
+            recordingInfo.setDupInType( recordingInfoEntity.getDupInType() );
+            recordingInfo.setDupMethod( recordingInfoEntity.getDupMethod() );
+            recordingInfo.setEncoderId( recordingInfoEntity.getEncoderId() );
+            recordingInfo.setEncoderName( recordingInfoEntity.getEncoderName() );
+            recordingInfo.setProfile( recordingInfoEntity.getProfile() );
 
         }
 

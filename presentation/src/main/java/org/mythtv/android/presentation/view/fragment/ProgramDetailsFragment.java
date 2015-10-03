@@ -2,6 +2,7 @@ package org.mythtv.android.presentation.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,8 @@ import butterknife.OnClick;
  * Created by dmfrey on 8/31/15.
  */
 public class ProgramDetailsFragment extends BaseFragment implements ProgramDetailsView {
+
+    private static final String TAG = ProgramDetailsFragment.class.getSimpleName();
 
     private static final String ARGUMENT_KEY_CHAN_ID = "org.mythtv.android.ARGUMENT_CHAN_ID";
     private static final String ARGUMENT_KEY_START_TIME = "org.mythtv.android.ARGUMENT_START_TIME";
@@ -91,110 +94,142 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
+        Log.d( TAG, "onCreateView : enter" );
 
         View fragmentView = inflater.inflate( R.layout.fragment_program_details, container, false );
-        ButterKnife.bind(this, fragmentView);
+        ButterKnife.bind( this, fragmentView );
 
+        Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
     }
 
     @Override public void onActivityCreated( Bundle savedInstanceState ) {
-        super.onActivityCreated(savedInstanceState);
+        Log.d( TAG, "onActivityCreated : enter" );
+        super.onActivityCreated( savedInstanceState );
 
         this.initialize();
 
+        Log.d( TAG, "onActivityCreated : exit" );
     }
 
     @Override public void onResume() {
+        Log.d( TAG, "onResume : enter" );
         super.onResume();
 
         this.programDetailsPresenter.resume();
 
+        Log.d( TAG, "onResume : exit" );
     }
 
     @Override public void onPause() {
+        Log.d( TAG, "onPause : enter" );
         super.onPause();
 
         this.programDetailsPresenter.pause();
 
+        Log.d( TAG, "onPause : exit" );
     }
 
     @Override public void onDestroyView() {
+        Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
         ButterKnife.unbind( this );
 
+        Log.d( TAG, "onDestroyView : exit" );
     }
 
     @Override public void onDestroy() {
+        Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
         this.programDetailsPresenter.destroy();
 
+        Log.d( TAG, "onDestroy : exit" );
     }
 
     private void initialize() {
+        Log.d( TAG, "initialize : enter" );
 
         this.getComponent( DvrComponent.class ).inject( this );
         this.programDetailsPresenter.setView( this );
         this.chanId = getArguments().getInt( ARGUMENT_KEY_CHAN_ID );
         this.startTime = new DateTime( getArguments().getLong( ARGUMENT_KEY_START_TIME ) );
+        Log.d( TAG, "initialize : chanId=" + this.chanId + ", startTime=" + this.startTime );
+
         this.programDetailsPresenter.initialize( this.chanId, this.startTime );
 
+        Log.d( TAG, "initialize : exit" );
     }
 
     @Override public void renderProgram( ProgramModel program ) {
+        Log.d( TAG, "renderProgram : enter" );
 
         if( null != program ) {
+            Log.d( TAG, "renderProgram : program is not null" );
 
             this.tv_showname.setText( program.getTitle() );
             this.tv_episodename.setText( program.getSubTitle() );
-            //this.tv_callsign.setText( program.getTitle() );
+            this.tv_callsign.setText( program.getChannel().getCallSign() );
             this.tv_starttime.setText( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
-            //this.tv_channelnumber.setText( program.getTitle() );
+            this.tv_channelnumber.setText( program.getChannel().getChanNum() );
             //this.pb_progress;
             this.tv_description.setText( program.getDescription() );
 
         }
 
+        Log.d( TAG, "renderProgram : exit" );
     }
 
     @Override
     public void showLoading() {
+        Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
         this.getActivity().setProgressBarIndeterminateVisibility( true );
 
+        Log.d( TAG, "showLoading : exit" );
     }
 
     @Override public void hideLoading() {
+        Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
         this.getActivity().setProgressBarIndeterminateVisibility( false );
 
+        Log.d( TAG, "hideLoading : exit" );
     }
 
     @Override
     public void showRetry() {
+        Log.d( TAG, "showRetry : enter" );
 
         this.rl_retry.setVisibility( View.VISIBLE );
 
+        Log.d( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
+        Log.d( TAG, "hideRetry : enter" );
 
         this.rl_retry.setVisibility( View.GONE );
 
+        Log.d(TAG, "hideRetry : exit");
     }
 
     @Override
     public void showError( String message ) {
+        Log.d( TAG, "showError : enter" );
+
         this.showToastMessage( message );
+
+        Log.d( TAG, "showError : exit" );
     }
 
     @Override
-    public Context getContext() {
+    public Context getContext()
+    {
         return getActivity().getApplicationContext();
     }
 
@@ -202,18 +237,25 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
      * Loads all users.
      */
     private void loadProgramDetails() {
+        Log.d( TAG, "loadProgramDetails : enter" );
 
         if( null != this.programDetailsPresenter ) {
+            Log.d( TAG, "loadProgramDetails : programDetailsPresenter is not null" );
 
             this.programDetailsPresenter.initialize( this.chanId, this.startTime );
 
         }
 
+        Log.d( TAG, "loadProgramDetails : exit" );
     }
 
     @OnClick( R.id.bt_retry )
     void onButtonRetryClick() {
+        Log.d( TAG, "onButtonRetryClick : enter" );
+
         ProgramDetailsFragment.this.loadProgramDetails();
+
+        Log.d(TAG, "onButtonRetryClick : exit");
     }
 
 }

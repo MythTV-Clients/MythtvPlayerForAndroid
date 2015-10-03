@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.presentation.view.activity.ProgramDetailsActivity;
 import org.mythtv.android.presentation.view.activity.ProgramListActivity;
 import org.mythtv.android.presentation.view.activity.SettingsActivity;
 import org.mythtv.android.presentation.view.activity.TitleInfoListActivity;
@@ -60,6 +61,9 @@ public class Navigator {
 
         if( null != context ) {
             Log.i(TAG, "navigateToProgram : context != null");
+
+            Intent intentToLaunch = ProgramDetailsActivity.getCallingIntent( context, chanId, startTime );
+            context.startActivity( intentToLaunch );
 
         }
 

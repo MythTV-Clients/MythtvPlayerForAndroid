@@ -1,6 +1,7 @@
 package org.mythtv.android.presentation.presenter;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
@@ -22,6 +23,8 @@ import javax.inject.Named;
  * Created by dmfrey on 8/31/15.
  */
 public class ProgramListPresenter extends DefaultSubscriber<List<Program>> implements Presenter {
+
+    private static final String TAG = ProgramListPresenter.class.getSimpleName();
 
     private boolean descending;
     private int startIndex;
@@ -91,6 +94,7 @@ public class ProgramListPresenter extends DefaultSubscriber<List<Program>> imple
     }
 
     public void onProgramClicked( ProgramModel programModel ) {
+        Log.i( TAG, "onProgramClicked : programModel=" + programModel.toString() );
 
         this.viewListView.viewProgram( programModel );
 

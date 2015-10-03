@@ -83,11 +83,11 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
 
         Bundle argumentsBundle = new Bundle();
         argumentsBundle.putBoolean( ARGUMENT_KEY_DESCENDING, descending );
-//        argumentsBundle.putInt( ARGUMENT_KEY_START_INDEX, startIndex );
-//        argumentsBundle.putInt( ARGUMENT_KEY_COUNT, count );
-//        argumentsBundle.putString( ARGUMENT_KEY_TITLE_REG_EX, titleRegEx );
-//        argumentsBundle.putString( ARGUMENT_KEY_REC_GROUP, recGroup );
-//        argumentsBundle.putString( ARGUMENT_KEY_STORAGE_GROUP, storageGroup );
+        argumentsBundle.putInt( ARGUMENT_KEY_START_INDEX, startIndex );
+        argumentsBundle.putInt( ARGUMENT_KEY_COUNT, count );
+        argumentsBundle.putString( ARGUMENT_KEY_TITLE_REG_EX, titleRegEx );
+        argumentsBundle.putString( ARGUMENT_KEY_REC_GROUP, recGroup );
+        argumentsBundle.putString( ARGUMENT_KEY_STORAGE_GROUP, storageGroup );
         programListFragment.setArguments( argumentsBundle );
 
         return programListFragment;
@@ -184,7 +184,7 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
 
         this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
         this.programsAdapter.setOnItemClickListener( onItemClickListener );
-        this.rv_programs.setAdapter(programsAdapter);
+        this.rv_programs.setAdapter( programsAdapter );
 
         Log.d(TAG, "setupUI : exit");
     }
@@ -242,9 +242,10 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
 
     @Override
     public void viewProgram( ProgramModel programModel ) {
-        Log.d(TAG, "viewProgram : enter");
+        Log.d( TAG, "viewProgram : enter" );
 
         if( null != this.programListListener ) {
+            Log.d( TAG, "viewProgram : programModel=" + programModel.toString() );
 
             this.programListListener.onProgramClicked( programModel );
 
@@ -283,25 +284,26 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
 
     @OnClick( R.id.bt_retry )
     void onButtonRetryClick() {
-        Log.d(TAG, "onButtonRetryClick : enter");
+        Log.d( TAG, "onButtonRetryClick : enter" );
 
         ProgramListFragment.this.loadProgramList();
 
-        Log.d(TAG, "onButtonRetryClick : exit");
+        Log.d( TAG, "onButtonRetryClick : exit" );
     }
 
     private ProgramsAdapter.OnItemClickListener onItemClickListener = new ProgramsAdapter.OnItemClickListener() {
 
-                @Override
-                public void onProgramItemClicked( ProgramModel programModel ) {
+        @Override
+        public void onProgramItemClicked( ProgramModel programModel ) {
 
-                    if( null != ProgramListFragment.this.programListPresenter && null != programModel ) {
+            if( null != ProgramListFragment.this.programListPresenter && null != programModel ) {
+                Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
 
-                        ProgramListFragment.this.programListPresenter.onProgramClicked( programModel );
+                ProgramListFragment.this.programListPresenter.onProgramClicked( programModel );
 
-                    }
+            }
 
-                }
+        }
 
     };
 

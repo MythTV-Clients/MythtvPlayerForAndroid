@@ -85,10 +85,20 @@
 
         <activity
             android:name=".presentation.view.activity.ProgramListActivity"
-            android:label="@string/watch_recording">
+            android:label="@string/watch_recording"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.view.activity.TitleInfoListActivity" />
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.ProgramDetailsActivity"
+            android:label="@string/watch_recording"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.ProgramListActivity" />
         </activity>
 
         <activity

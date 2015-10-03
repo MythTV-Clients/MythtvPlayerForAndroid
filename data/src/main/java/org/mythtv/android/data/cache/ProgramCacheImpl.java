@@ -1,6 +1,7 @@
 package org.mythtv.android.data.cache;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.data.cache.serializer.ProgramEntityJsonSerializer;
@@ -21,6 +22,8 @@ import rx.Subscriber;
  */
 @Singleton
 public class ProgramCacheImpl implements ProgramCache {
+
+    private static final String TAG = ProgramCacheImpl.class.getSimpleName();
 
     private static final String SETTINGS_FILE_NAME = "org.mythtv.android.SETTINGS";
     private static final String SETTINGS_KEY_LAST_CACHE_UPDATE = "last_cache_update";
@@ -43,6 +46,7 @@ public class ProgramCacheImpl implements ProgramCache {
      */
     @Inject
     public ProgramCacheImpl( Context context, ProgramEntityJsonSerializer recordedProgramCacheSerializer, FileManager fileManager, ThreadExecutor executor ) {
+        Log.d( TAG, "initialize : enter" );
 
         if( context == null || recordedProgramCacheSerializer == null || fileManager == null || executor == null ) {
             throw new IllegalArgumentException( "Invalid null parameter" );
@@ -53,30 +57,40 @@ public class ProgramCacheImpl implements ProgramCache {
         this.serializer = recordedProgramCacheSerializer;
         this.fileManager = fileManager;
         this.threadExecutor = executor;
+
+        Log.d( TAG, "initialize : exit" );
     }
 
     @Override
     public Observable<ProgramEntity> get( int chanId, DateTime startTime ) {
+        Log.d( TAG, "get : enter" );
+        Log.d( TAG, "get : chanId=" + chanId + ", startTime=" + startTime );
+
         return Observable.create( new Observable.OnSubscribe<ProgramEntity>() {
 
             @Override
             public void call( Subscriber<? super ProgramEntity> subscriber ) {
+                Log.d( TAG, "get.call : enter" );
 
                 File programEntityFile = ProgramCacheImpl.this.buildFile( chanId, startTime );
                 String fileContent = ProgramCacheImpl.this.fileManager.readFileContent( programEntityFile );
-                ProgramEntity programEntity = ProgramCacheImpl.this.serializer.deserialize( fileContent );
+                Log.d( TAG, "get.call : fileContent=" + fileContent );
 
+                ProgramEntity programEntity = ProgramCacheImpl.this.serializer.deserialize( fileContent );
                 if( null != programEntity ) {
+                    Log.d( TAG, "get.call : programEntity=" + programEntity.toString() );
 
                     subscriber.onNext( programEntity );
                     subscriber.onCompleted();
 
                 } else {
+                    Log.d( TAG, "get.call : programEntity is null" );
 
                     subscriber.onError( new ProgramNotFoundException() );
 
                 }
 
+                Log.d( TAG, "get.call : exit" );
             }
 
         });
@@ -84,32 +98,39 @@ public class ProgramCacheImpl implements ProgramCache {
 
     @Override
     public void put( ProgramEntity programEntity ) {
+        Log.d( TAG, "put : enter" );
 
         if( null != programEntity ) {
+            Log.d( TAG, "put : programEntity=" + programEntity.toString() );
 
-            File userEntitiyFile = this.buildFile( programEntity.getChannel().getChanId(), programEntity.getRecording().getStartTs() );
+            File programEntityFile = this.buildFile( programEntity.getChannel().getChanId(), programEntity.getRecording().getStartTs() );
 
             if( !isCached( programEntity.getChannel().getChanId(), programEntity.getRecording().getStartTs() ) ) {
 
                 String jsonString = this.serializer.serialize( programEntity );
-                this.executeAsynchronously(new CacheWriter( this.fileManager, userEntitiyFile, jsonString ) );
+                this.executeAsynchronously(new CacheWriter( this.fileManager, programEntityFile, jsonString ) );
                 setLastCacheUpdateTimeMillis();
 
             }
+
         }
 
+        Log.d( TAG, "put : exit" );
     }
 
     @Override
     public boolean isCached( int chanId, DateTime startTime ) {
+        Log.d( TAG, "isCached : enter" );
 
-        File programEntitiyFile = this.buildFile( chanId, startTime );
+        File programEntityFile = this.buildFile( chanId, startTime );
 
-        return this.fileManager.exists( programEntitiyFile );
+        Log.d( TAG, "isCached : exit" );
+        return this.fileManager.exists( programEntityFile );
     }
 
     @Override
     public boolean isExpired() {
+        Log.d( TAG, "isExpired : enter" );
 
         long currentTime = System.currentTimeMillis();
         long lastUpdateTime = this.getLastCacheUpdateTimeMillis();
@@ -117,17 +138,22 @@ public class ProgramCacheImpl implements ProgramCache {
         boolean expired = ( ( currentTime - lastUpdateTime ) > EXPIRATION_TIME );
 
         if( expired ) {
+            Log.d( TAG, "isExpired : cache is expired, evict all entries" );
+
             this.evictAll();
         }
 
+        Log.d( TAG, "isExpired : exit" );
         return expired;
     }
 
     @Override
     public synchronized void evictAll() {
+        Log.d( TAG, "evictAll : enter" );
 
-        this.executeAsynchronously( new CacheEvictor( this.fileManager, this.cacheDir ) );
+        this.executeAsynchronously(new CacheEvictor(this.fileManager, this.cacheDir));
 
+        Log.d(TAG, "evictAll : exit");
     }
 
     /**
@@ -138,6 +164,7 @@ public class ProgramCacheImpl implements ProgramCache {
      * @return A valid file.
      */
     private File buildFile( int chanId, DateTime startTime ) {
+        Log.d( TAG, "buildFile : enter" );
 
         StringBuilder fileNameBuilder = new StringBuilder();
         fileNameBuilder.append( this.cacheDir.getPath() );
@@ -146,7 +173,9 @@ public class ProgramCacheImpl implements ProgramCache {
         fileNameBuilder.append( chanId );
         fileNameBuilder.append( "_" );
         fileNameBuilder.append( startTime.getMillis() );
+        Log.d( TAG, "buildFile : fileNameBuild=" + fileNameBuilder.toString() );
 
+        Log.d( TAG, "buildFile : exit" );
         return new File( fileNameBuilder.toString() );
     }
 
@@ -154,17 +183,21 @@ public class ProgramCacheImpl implements ProgramCache {
      * Set in millis, the last time the cache was accessed.
      */
     private void setLastCacheUpdateTimeMillis() {
+        Log.d( TAG, "setLastCacheUpdateTimeMillis : enter" );
 
         long currentMillis = System.currentTimeMillis();
         this.fileManager.writeToPreferences( this.context, SETTINGS_FILE_NAME, SETTINGS_KEY_LAST_CACHE_UPDATE, currentMillis );
 
+        Log.d( TAG, "setLastCacheUpdateTimeMillis : exit" );
     }
 
     /**
      * Get in millis, the last time the cache was accessed.
      */
     private long getLastCacheUpdateTimeMillis() {
+        Log.d( TAG, "getLastCacheUpdateTimeMillis : enter" );
 
+        Log.d( TAG, "getLastCacheUpdateTimeMillis : exit" );
         return this.fileManager.getFromPreferences( this.context, SETTINGS_FILE_NAME, SETTINGS_KEY_LAST_CACHE_UPDATE );
     }
 

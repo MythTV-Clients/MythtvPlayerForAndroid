@@ -95,7 +95,7 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
         Log.d( TAG, "onCreate : enter" );
 
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
         this.initializeActivity( savedInstanceState );
         this.initializeInjector();
@@ -149,6 +149,50 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
         Log.d( TAG, "onSaveInstanceState : exit" );
     }
 
+    @Override
+    protected void onRestoreInstanceState( Bundle savedInstanceState ) {
+        super.onRestoreInstanceState( savedInstanceState );
+        Log.d( TAG, "onRestoreInstanceState : enter" );
+
+        if( null != savedInstanceState ) {
+            Log.d( TAG, "onRestoreInstanceState : savedInstanceState != null" );
+
+            this.descending = savedInstanceState.getBoolean( INSTANCE_STATE_PARAM_DESCENDING, true );
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_START_INDEX ) ) {
+
+                this.startIndex = savedInstanceState.getInt( INSTANCE_STATE_PARAM_START_INDEX );
+
+            }
+
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_COUNT ) ) {
+
+                this.count = savedInstanceState.getInt( INSTANCE_STATE_PARAM_COUNT );
+
+            }
+
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_TITLE_REG_EX ) ) {
+
+                this.titleRegEx = savedInstanceState.getString( INSTANCE_STATE_PARAM_TITLE_REG_EX );
+
+            }
+
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_REC_GROUP ) ) {
+
+                this.recGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_REC_GROUP );
+
+            }
+
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_STORAGE_GROUP ) ) {
+
+                this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
+
+            }
+
+        }
+
+        Log.d( TAG, "onRestoreInstanceState : exit" );
+    }
+
     /**
      * Initializes this activity.
      */
@@ -159,35 +203,38 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
             Log.d( TAG, "initializeActivity : savedInstanceState == null" );
 
             Bundle extras = getIntent().getExtras();
+            if( null != extras ) {
 
-            this.descending = getIntent().getBooleanExtra( INTENT_EXTRA_PARAM_DESCENDING, true );
-            if( extras.containsKey( INTENT_EXTRA_PARAM_START_INDEX ) ) {
+                this.descending = extras.getBoolean( INTENT_EXTRA_PARAM_DESCENDING, true );
+                if( extras.containsKey( INTENT_EXTRA_PARAM_START_INDEX ) ) {
 
-                this.startIndex = extras.getInt( INTENT_EXTRA_PARAM_START_INDEX );
+                    this.startIndex = extras.getInt( INTENT_EXTRA_PARAM_START_INDEX );
 
-            }
+                }
 
-            if( extras.containsKey( INTENT_EXTRA_PARAM_COUNT ) ) {
+                if( extras.containsKey( INTENT_EXTRA_PARAM_COUNT ) ) {
 
-                this.count = extras.getInt( INTENT_EXTRA_PARAM_COUNT );
+                    this.count = extras.getInt( INTENT_EXTRA_PARAM_COUNT );
 
-            }
+                }
 
-            if( extras.containsKey( INTENT_EXTRA_PARAM_TITLE_REG_EX ) ) {
+                if( extras.containsKey( INTENT_EXTRA_PARAM_TITLE_REG_EX ) ) {
 
-                this.titleRegEx = extras.getString( INTENT_EXTRA_PARAM_TITLE_REG_EX );
+                    this.titleRegEx = extras.getString( INTENT_EXTRA_PARAM_TITLE_REG_EX );
 
-            }
+                }
 
-            if( extras.containsKey( INTENT_EXTRA_PARAM_REC_GROUP ) ) {
+                if( extras.containsKey( INTENT_EXTRA_PARAM_REC_GROUP ) ) {
 
-                this.recGroup = extras.getString( INTENT_EXTRA_PARAM_REC_GROUP );
+                    this.recGroup = extras.getString( INTENT_EXTRA_PARAM_REC_GROUP );
 
-            }
+                }
 
-            if( extras.containsKey( INTENT_EXTRA_PARAM_STORAGE_GROUP ) ) {
+                if( extras.containsKey( INTENT_EXTRA_PARAM_STORAGE_GROUP ) ) {
 
-                this.storageGroup = extras.getString( INTENT_EXTRA_PARAM_STORAGE_GROUP );
+                    this.storageGroup = extras.getString( INTENT_EXTRA_PARAM_STORAGE_GROUP );
+
+                }
 
             }
 
@@ -213,13 +260,13 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
 
             if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_TITLE_REG_EX ) ) {
 
-                this.titleRegEx = savedInstanceState.getString(INSTANCE_STATE_PARAM_TITLE_REG_EX);
+                this.titleRegEx = savedInstanceState.getString( INSTANCE_STATE_PARAM_TITLE_REG_EX );
 
             }
 
             if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_REC_GROUP ) ) {
 
-                this.recGroup = savedInstanceState.getString(INSTANCE_STATE_PARAM_REC_GROUP);
+                this.recGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_REC_GROUP );
 
             }
 
@@ -265,7 +312,8 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
     public void onProgramClicked( ProgramModel programModel ) {
         Log.d( TAG, "onProgramClicked : enter" );
 
-    //    navigator.navigateToProgram( this, programModel.getChannel().getChanId(), programModel.getRecording().getStartTs() );
+        Log.i( TAG, "onProgramClicked : programModel=" + programModel.toString() );
+        navigator.navigateToProgram( this, programModel.getChannel().getChanId(), programModel.getRecording().getStartTs() );
 
         Log.d( TAG, "onProgramClicked : exit" );
     }

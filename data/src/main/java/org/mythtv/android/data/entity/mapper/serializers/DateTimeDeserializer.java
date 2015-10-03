@@ -21,7 +21,7 @@ public class DateTimeDeserializer implements JsonDeserializer<DateTime> {
     @Override
     public DateTime deserialize( JsonElement json, Type typeOfT, JsonDeserializationContext context ) throws JsonParseException {
 
-        DateTime dateTime = DateTime.parse( json.getAsJsonPrimitive().getAsString(), DateTimeFormat.forPattern( pattern ) );
+        DateTime dateTime = DateTime.parse( json.getAsJsonPrimitive().getAsString(), DateTimeFormat.forPattern( pattern ).withZoneUTC() );
 
         return dateTime;
     }

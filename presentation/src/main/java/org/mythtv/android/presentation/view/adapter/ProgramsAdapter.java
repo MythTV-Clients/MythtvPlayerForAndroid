@@ -2,6 +2,7 @@ package org.mythtv.android.presentation.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import butterknife.ButterKnife;
  */
 public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder> {
 
+    private static final String TAG = ProgramsAdapter.class.getSimpleName();
+
     public interface OnItemClickListener {
 
         void onProgramItemClicked( ProgramModel programModel );
@@ -41,7 +44,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
     public ProgramsAdapter( Context context, Collection<ProgramModel> programsCollection ) {
 
-        this.validateProgramsCollection(programsCollection);
+        this.validateProgramsCollection( programsCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         this.programsCollection = (List<ProgramModel>) programsCollection;
     }
@@ -64,19 +67,25 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     @Override
     public void onBindViewHolder( ProgramViewHolder holder, final int position ) {
 
-        final ProgramModel programModel = this.programsCollection.get(position);
+        final ProgramModel programModel = this.programsCollection.get( position );
         holder.textViewTitle.setText( programModel.getTitle() );
         holder.textViewSubTitle.setText( programModel.getSubTitle() );
         holder.textViewDate.setText( programModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
         holder.textViewEpisode.setText( programModel.getSeason() + "x" + programModel.getEpisode() );
         holder.itemView.setOnClickListener( new View.OnClickListener() {
-            @Override public void onClick(View v) {
+
+            @Override
+            public void onClick( View v ) {
+
                 if( null != ProgramsAdapter.this.onItemClickListener ) {
+                    Log.i( TAG, "onClick : program" + programModel.toString() );
 
                     ProgramsAdapter.this.onItemClickListener.onProgramItemClicked( programModel );
 
                 }
+
             }
+
         });
 
     }

@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.mythtv.android.data.entity.ProgramEntity;
@@ -152,36 +153,36 @@ public class DvrApiImpl implements DvrApi {
     @Override
     public Observable<ProgramEntity> recordedProgramById( int chanId, DateTime startTime ) {
 
-        return Observable.create(new Observable.OnSubscribe<ProgramEntity>() {
+        return Observable.create( new Observable.OnSubscribe<ProgramEntity>() {
 
             @Override
-            public void call(Subscriber<? super ProgramEntity> subscriber) {
+            public void call( Subscriber<? super ProgramEntity> subscriber ) {
 
-                if (isThereInternetConnection()) {
+                if( isThereInternetConnection() ) {
 
                     try {
 
-                        String responseProgramDetails = getRecordedProgramDetailsFromApi(chanId, startTime);
-                        if (null != responseProgramDetails) {
+                        String responseProgramDetails = getRecordedProgramDetailsFromApi( chanId, startTime );
+                        if( null != responseProgramDetails ) {
 
-                            subscriber.onNext(programEntityJsonMapper.transformProgramEntity(responseProgramDetails));
+                            subscriber.onNext( programEntityJsonMapper.transformProgramEntity( responseProgramDetails ) );
                             subscriber.onCompleted();
 
                         } else {
 
-                            subscriber.onError(new NetworkConnectionException());
+                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
-                    } catch (Exception e) {
+                    } catch( Exception e ) {
 
-                        subscriber.onError(new NetworkConnectionException(e.getCause()));
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
 
-                    subscriber.onError(new NetworkConnectionException());
+                    subscriber.onError( new NetworkConnectionException() );
 
                 }
 
@@ -250,7 +251,7 @@ public class DvrApiImpl implements DvrApi {
 
     private String getRecordedProgramDetailsFromApi( int chanId, DateTime startTime ) throws MalformedURLException {
 
-        String apiUrl = String.format( DvrApi.RECORDED_BASE_URL, chanId, fmt.print( startTime ) );
+        String apiUrl = String.format( DvrApi.RECORDED_BASE_URL, chanId, fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
 
         return ApiConnection.createGET( getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }

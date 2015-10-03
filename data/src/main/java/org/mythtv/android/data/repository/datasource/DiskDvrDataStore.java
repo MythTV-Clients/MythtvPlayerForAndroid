@@ -1,5 +1,7 @@
 package org.mythtv.android.data.repository.datasource;
 
+import android.util.Log;
+
 import org.joda.time.DateTime;
 import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.entity.ProgramEntity;
@@ -13,6 +15,8 @@ import rx.Observable;
  * Created by dmfrey on 8/27/15.
  */
 public class DiskDvrDataStore implements DvrDataStore {
+
+    private static final String TAG = DiskDvrDataStore.class.getSimpleName();
 
     private final ProgramCache recordedProgramCache;
 
@@ -36,6 +40,8 @@ public class DiskDvrDataStore implements DvrDataStore {
 
     @Override
     public Observable<ProgramEntity> recordedProgramEntityDetails( int chanId, DateTime startTime ) {
+        Log.d( TAG, "recordedProgramEntityDetails : enter" );
+        Log.d( TAG, "recordedProgramEntityDetails : chanId=" + chanId + ", startTime=" + startTime );
 
         return this.recordedProgramCache.get( chanId, startTime );
     }

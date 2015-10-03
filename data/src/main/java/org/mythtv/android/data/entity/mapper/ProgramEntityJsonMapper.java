@@ -50,6 +50,7 @@ public class ProgramEntityJsonMapper {
     public ProgramEntity transformProgramEntity( String programJsonResponse ) throws JsonSyntaxException {
 
         try {
+            Log.i( TAG, "transformProgramEntity : programJsonResponse=" + programJsonResponse );
 
             Type programWrapperEntityType = new TypeToken<ProgramWrapperEntity>() {}.getType();
             ProgramWrapperEntity programWrapperEntity = this.gson.fromJson( programJsonResponse, programWrapperEntityType );
@@ -66,9 +67,11 @@ public class ProgramEntityJsonMapper {
     public List<ProgramEntity> transformProgramEntityCollection( String programListJsonResponse ) throws JsonSyntaxException {
 
         try {
+            Log.i( TAG, "transformProgramEntityCollection : " + programListJsonResponse );
 
             Type programListEntityType = new TypeToken<ProgramListEntity>() {}.getType();
             ProgramListEntity programListEntity = this.gson.fromJson( programListJsonResponse, programListEntityType );
+            Log.i( TAG, "transformProgramEntityCollection : programListEntity=" + programListEntity.toString() );
 
             return Arrays.asList( programListEntity.getPrograms().getPrograms() );
 

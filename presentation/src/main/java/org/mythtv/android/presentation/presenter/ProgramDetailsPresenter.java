@@ -1,6 +1,7 @@
 package org.mythtv.android.presentation.presenter;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.domain.Program;
@@ -20,6 +21,8 @@ import javax.inject.Named;
  * Created by dmfrey on 8/31/15.
  */
 public class ProgramDetailsPresenter implements Presenter {
+
+    private static final String TAG = ProgramDetailsPresenter.class.getCanonicalName();
 
     /** id used to retrieve program details */
     private int chanId;
@@ -94,14 +97,15 @@ public class ProgramDetailsPresenter implements Presenter {
     private void showErrorMessage( ErrorBundle errorBundle ) {
 
         String errorMessage = ErrorMessageFactory.create( this.viewDetailsView.getContext(), errorBundle.getException() );
-        this.viewDetailsView.showError(errorMessage);
+        this.viewDetailsView.showError( errorMessage );
 
     }
 
     private void showProgramDetailsInView( Program program ) {
+        Log.i( TAG, "showProgramDetailsInView : program=" + program.toString() );
 
-        final ProgramModel programModel = this.programModelDataMapper.transform(program);
-        this.viewDetailsView.renderProgram(programModel);
+        final ProgramModel programModel = this.programModelDataMapper.transform( program );
+        this.viewDetailsView.renderProgram( programModel );
 
     }
 

@@ -43,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     Navigator navigator;
 
     @Nullable @Bind( R.id.navigation_view ) protected NavigationView navigationView;
-    @Bind( R.id.toolbar ) protected Toolbar toolbar;
+    @Nullable @Bind( R.id.toolbar ) protected Toolbar toolbar;
 
     @Nullable @Bind( R.id.drawer_layout ) protected DrawerLayout drawerLayout;
 
@@ -104,16 +104,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         super.onResume();
 
         // TODO: Hack remove when android api is updated
-        CoordinatorLayout mainContent = (CoordinatorLayout) findViewById( R.id.main_content );
-        mainContent.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return true;
-            }
-
-        });
+//        CoordinatorLayout mainContent = (CoordinatorLayout) findViewById( R.id.main_content );
+//        mainContent.setOnTouchListener( new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                return true;
+//            }
+//
+//        });
 
     }
 

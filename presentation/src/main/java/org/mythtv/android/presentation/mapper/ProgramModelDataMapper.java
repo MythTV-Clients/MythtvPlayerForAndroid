@@ -1,9 +1,20 @@
 package org.mythtv.android.presentation.mapper;
 
+import android.util.Log;
+
+import org.mythtv.android.data.entity.ArtworkInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
+import org.mythtv.android.domain.ArtworkInfo;
+import org.mythtv.android.domain.CastMember;
+import org.mythtv.android.domain.ChannelInfo;
 import org.mythtv.android.domain.Program;
+import org.mythtv.android.domain.RecordingInfo;
 import org.mythtv.android.presentation.internal.di.PerActivity;
+import org.mythtv.android.presentation.model.ArtworkInfoModel;
+import org.mythtv.android.presentation.model.CastMemberModel;
+import org.mythtv.android.presentation.model.ChannelInfoModel;
 import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.model.RecordingInfoModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +29,8 @@ import javax.inject.Inject;
 @PerActivity
 public class ProgramModelDataMapper {
 
+    private static final String TAG = ProgramModelDataMapper.class.getSimpleName();
+
     @Inject
     public ProgramModelDataMapper() {
     }
@@ -28,6 +41,8 @@ public class ProgramModelDataMapper {
 
             throw new IllegalArgumentException( "Cannot transform a null value" );
         }
+
+        Log.i( TAG, "transform : program=" + program.toString() );
 
         ProgramModel programModel = new ProgramModel();
         programModel.setStartTime( program.getStartTime() );
@@ -55,29 +70,94 @@ public class ProgramModelDataMapper {
         programModel.setEpisode( program.getEpisode() );
         programModel.setTotalEpisodes( program.getTotalEpisodes() );
 
-//        if( null != programEntity.getChannel() ) {
-//            program.setChannel( ChannelInfo.fromprogramEntity( programEntity.getChannel() ) );
-//         }
-//
-//         if( null != programEntity.getRecording() ) {
-//             program.setRecording( RecordingInfo.fromprogramEntity( programEntity.getRecording() ) );
-//         }
-//
-//         List<ArtworkInfo> artworkInfos = new ArrayList<>();
-//         if( null != programEntity.getArtworkInfos() && !programEntity.getArtworkInfos().isEmpty() ) {
-//             for( ArtworkInfoprogramEntity detail : programEntity.getArtworkInfos() ) {
-//                  artworkInfos.add( ArtworkInfo.fromprogramEntity( detail ) );
-//             }
-//         }
-//         program.setArtworkInfos( artworkInfos );
-//
-//         List<CastMember> castMembers = new ArrayList<>();
-//         if( null != programEntity.getCastMembers() && !programEntity.getCastMembers().isEmpty() ) {
-//             for( CastMemberprogramEntity detail : programEntity.getCastMembers() ) {
-//                  castMembers.add( CastMember.fromprogramEntity( detail ) );
-//             }
-//         }
-//         program.setCastMembers( castMembers );
+        if( null != program.getChannel() ) {
+
+            ChannelInfo channelInfo = program.getChannel();
+
+            ChannelInfoModel channelInfoModel = new ChannelInfoModel();
+            channelInfoModel.setChanId( channelInfo.getChanId() );
+            channelInfoModel.setChanNum( channelInfo.getChanNum() );
+            channelInfoModel.setCallSign( channelInfo.getCallSign() );
+            channelInfoModel.setIconURL( channelInfo.getIconURL() );
+            channelInfoModel.setChannelName( channelInfo.getChannelName() );
+            channelInfoModel.setMplexId( channelInfo.getMplexId() );
+            channelInfoModel.setServiceId( channelInfo.getServiceId() );
+            channelInfoModel.setATSCMajorChan( channelInfo.getATSCMajorChan() );
+            channelInfoModel.setATSCMinorChan( channelInfo.getATSCMinorChan() );
+            channelInfoModel.setFormat( channelInfo.getFormat() );
+            channelInfoModel.setFrequencyId( channelInfo.getFrequencyId() );
+            channelInfoModel.setFineTune( channelInfo.getFineTune() );
+            channelInfoModel.setChanFilters( channelInfo.getChanFilters() );
+            channelInfoModel.setSourceId( channelInfo.getSourceId() );
+            channelInfoModel.setInputId( channelInfo.getInputId() );
+            channelInfoModel.setCommFree( channelInfo.isCommFree() );
+            channelInfoModel.setUseEIT( channelInfo.isUseEIT() );
+            channelInfoModel.setVisible( channelInfo.isVisible() );
+            channelInfoModel.setXMLTVID( channelInfo.getXMLTVID() );
+            channelInfoModel.setDefaultAuth( channelInfo.getDefaultAuth() );
+            programModel.setChannel( channelInfoModel );
+
+        }
+
+        if( null != program.getRecording() ) {
+
+            RecordingInfo recordingInfo = program.getRecording();
+            Log.i( TAG, "transform : recordingInfo=" + recordingInfo.toString() );
+
+            RecordingInfoModel recordingInfoModel = new RecordingInfoModel();
+            recordingInfoModel.setRecordedId( recordingInfo.getRecordedId() );
+            recordingInfoModel.setStatus( recordingInfo.getStatus() );
+            recordingInfoModel.setPriority( recordingInfo.getPriority() );
+            recordingInfoModel.setStartTs( recordingInfo.getStartTs() );
+            recordingInfoModel.setEndTs( recordingInfo.getEndTs() );
+            recordingInfoModel.setRecordedId( recordingInfo.getRecordId() );
+            recordingInfoModel.setRecGroup( recordingInfo.getRecGroup() );
+            recordingInfoModel.setPlayGroup( recordingInfo.getPlayGroup() );
+            recordingInfoModel.setStorageGroup( recordingInfo.getStorageGroup() );
+            recordingInfoModel.setRecType( recordingInfo.getRecType() );
+            recordingInfoModel.setDupInType( recordingInfo.getDupInType() );
+            recordingInfoModel.setDupMethod( recordingInfo.getDupMethod() );
+            recordingInfoModel.setEncoderId( recordingInfo.getEncoderId() );
+            recordingInfoModel.setEncoderName( recordingInfo.getEncoderName() );
+            recordingInfoModel.setProfile( recordingInfo.getProfile() );
+            programModel.setRecording( recordingInfoModel );
+            Log.i( TAG, " transform : programModel.getRecording=" + programModel.getRecording().toString() );
+
+        }
+
+        List<ArtworkInfoModel> artworkInfos = new ArrayList<>();
+        if( null != program.getArtworkInfos() && !program.getArtworkInfos().isEmpty() ) {
+
+            for( ArtworkInfo detail : program.getArtworkInfos() ) {
+
+                ArtworkInfoModel artworkInfoModel = new ArtworkInfoModel();
+                artworkInfoModel.setURL( detail.getUrl() );
+                artworkInfoModel.setFileName( detail.getFileName() );
+                artworkInfoModel.setStorageGroup( detail.getStorageGroup() );
+                artworkInfoModel.setType( detail.getType() );
+                artworkInfos.add( artworkInfoModel );
+
+            }
+
+        }
+        programModel.setArtworkInfos( artworkInfos );
+
+        List<CastMemberModel> castMembers = new ArrayList<>();
+        if( null != program.getCastMembers() && !program.getCastMembers().isEmpty() ) {
+
+            for( CastMember detail : program.getCastMembers() ) {
+
+                CastMemberModel castMemberModel = new CastMemberModel();
+                castMemberModel.setName( detail.getName() );
+                castMemberModel.setCharacterName( detail.getCharacterName() );
+                castMemberModel.setRole( detail.getRole() );
+                castMemberModel.setTranslatedRole( detail.getTranslatedRole() );
+                castMembers.add( castMemberModel );
+
+            }
+
+        }
+        programModel.setCastMembers( castMembers );
 
         return programModel;
     }
