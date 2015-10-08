@@ -1,12 +1,14 @@
 package org.mythtv.android.presentation.view.activity;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,11 +17,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.TextView;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.modules.ActivityModule;
@@ -138,7 +139,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
     @Override
     public boolean onNavigationItemSelected( MenuItem menuItem ) {
-        Log.i( TAG, "onNavigationItemSelected : enter" );
+        Log.i(TAG, "onNavigationItemSelected : enter");
 
         menuItem.setChecked( true );
         drawerLayout.closeDrawers();
@@ -197,10 +198,27 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
      */
     protected void addFragment( int containerViewId, Fragment fragment ) {
 
-        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
-        fragmentTransaction.add( containerViewId, fragment );
+        FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(containerViewId, fragment);
         fragmentTransaction.commit();
 
+    }
+
+    protected String getMasterBackendUrl() {
+
+        String host = getFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_PORT );
+
+        String masterBackend = "http://" + host + ":" + port;
+
+        return masterBackend;
+    }
+
+    protected String getFromPreferences( Context context, String key ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        return sharedPreferences.getString( key, "" );
     }
 
     /**

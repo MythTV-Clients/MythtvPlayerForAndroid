@@ -95,6 +95,7 @@ dependencies {
     compile presentationDependencies.palette
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
+    compile presentationDependencies.picasso
     provided presentationDependencies.javaxAnnotation
 
     testCompile presentationTestDependencies.mockito

@@ -175,5 +175,10 @@
     <string name="exception_message_no_connection">There is no internet connection</string>
     <string name="exception_message_program_not_found">Cannot retrieve program data. Check your internet connection</string>
     <string name="btn_text_retry">Retry</string>
+    <string name="recording_description_label">Details:</string>
+    <string name="recording_cast_label">Cast:</string>
+    <string name="recording_cast_name">Name</string>
+    <string name="recording_cast_character">Character</string>
+    <string name="recording_cast_role">Role</string>
 
 </resources>

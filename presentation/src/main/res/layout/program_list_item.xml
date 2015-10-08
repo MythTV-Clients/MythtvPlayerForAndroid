@@ -30,10 +30,11 @@
         android:layout_margin="@dimen/margin"
         android:gravity="center_vertical">
 
-        <ImageView
+        <org.mythtv.android.presentation.view.component.AutoLoadImageView
             android:id="@+id/program_item_preview"
             android:layout_width="125dp"
             android:layout_height="75dp"
+            android:scaleType="fitXY"
             android:layout_marginLeft="@dimen/margin"
             android:layout_marginStart="@dimen/margin"
             android:layout_marginRight="@dimen/outer_margin"

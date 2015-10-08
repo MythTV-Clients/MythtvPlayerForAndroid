@@ -94,7 +94,6 @@
 
         <activity
             android:name=".presentation.view.activity.ProgramDetailsActivity"
-            android:label="@string/watch_recording"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

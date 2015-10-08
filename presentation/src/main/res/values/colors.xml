@@ -69,5 +69,6 @@
     <color name="fab_color_1_muted">#ff8080</color>
     <color name="fab_color_2">#9c27b0</color>
     <color name="fab_color_2_muted">#a56ab0</color>
+    <color name="transparent">#00000000</color>
 
 </resources>

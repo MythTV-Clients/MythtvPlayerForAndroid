@@ -21,24 +21,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recording_details"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/recording_card"
-        android:layout_height="0dp"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_marginTop="@dimen/margin"
-        android:layout_marginLeft="@dimen/margin"
-        android:layout_marginBottom="@dimen/margin"
-        android:layout_marginRight="@dimen/margin">
-
-        <LinearLayout
-            android:id="@+id/recording_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/recording_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
 
             <RelativeLayout
                 android:id="@+id/recording_info_layout"
@@ -47,7 +37,7 @@
                 android:layout_margin="@dimen/margin"
                 android:gravity="fill_horizontal">
 
-                <ImageView
+                <org.mythtv.android.presentation.view.component.AutoLoadImageView
                     android:id="@+id/recording_coverart"
                     android:layout_width="75dp"
                     android:layout_height="125dp"
@@ -58,35 +48,38 @@
                     android:elevation="15dp" />
 
                 <TextView
-                    android:id="@+id/recording_show_name"
-                    android:layout_margin="@dimen/margin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/recording_coverart"
-                    android:layout_toEndOf="@+id/recording_coverart"
-                    tools:text="Show Name" />
-
-                <TextView
                     android:id="@+id/recording_episode_name"
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:layout_below="@+id/recording_show_name"
                     android:layout_toRightOf="@+id/recording_coverart"
                     android:layout_toEndOf="@+id/recording_coverart"
+                    android:textAppearance="@android:style/TextAppearance.Large"
                     tools:text="Episode Name" />
+
+                <TextView
+                    android:id="@+id/recording_show_name"
+                    android:layout_margin="@dimen/margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/recording_episode_name"
+                    android:layout_toRightOf="@+id/recording_coverart"
+                    android:layout_toEndOf="@+id/recording_coverart"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    tools:text="Show Name" />
 
                 <TextView
                     android:id="@+id/recording_episode_callsign"
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/recording_show_name"
-                    android:layout_toRightOf="@+id/recording_episode_name"
-                    android:layout_toEndOf="@+id/recording_episode_name"
+                    android:layout_below="@+id/recording_episode_name"
+                    android:layout_toRightOf="@+id/recording_show_name"
+                    android:layout_toEndOf="@+id/recording_show_name"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
+                    android:textAppearance="@android:style/TextAppearance.Small"
                     android:gravity="right|end"
                     tools:text="Callsign" />
 
@@ -95,7 +88,7 @@
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/recording_episode_name"
+                    android:layout_below="@+id/recording_show_name"
                     android:layout_toRightOf="@+id/recording_coverart"
                     android:layout_toEndOf="@+id/recording_coverart"
                     tools:text="Start Time" />
@@ -105,11 +98,12 @@
                     android:layout_margin="@dimen/margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/recording_episode_name"
+                    android:layout_below="@+id/recording_show_name"
                     android:layout_toRightOf="@+id/recording_start_time"
                     android:layout_toEndOf="@+id/recording_start_time"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
+                    android:textAppearance="@android:style/TextAppearance.Small"
                     android:gravity="right|end"
                     tools:text="1006" />
 
@@ -132,6 +126,19 @@
 
             </RelativeLayout>
 
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_margin="@dimen/margin"
+                layout="@layout/separator" />
+
+            <TextView
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recording_description_label"
+                android:textAppearance="@android:style/TextAppearance.Medium" />
+
             <TextView
                 android:id="@+id/recording_description"
                 android:layout_margin="@dimen/margin"
@@ -139,13 +146,53 @@
                 android:layout_height="wrap_content"
                 tools:text="Episode Description" />
 
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_margin="@dimen/margin"
+                layout="@layout/separator" />
+
+            <TextView
+                android:layout_margin="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recording_cast_label"
+                android:textAppearance="@android:style/TextAppearance.Medium" />
+
+            <TableLayout
+                android:id="@+id/recording_cast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:stretchColumns="1">
+
+                <TableRow>
+
+                    <TextView
+                        android:text="@string/recording_cast_name"
+                        android:layout_gravity="center_horizontal"
+                        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                    <TextView
+                        android:text="@string/recording_cast_character"
+                        android:layout_gravity="center_horizontal"
+                        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                    <TextView
+                        android:text="@string/recording_cast_role"
+                        android:layout_gravity="center_horizontal"
+                        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                </TableRow>
+
+            </TableLayout>
+
             <Button
                 android:id="@+id/recording_play"
                 android:layout_margin="@dimen/margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/play_button"
-                android:layout_alignParentBottom="true"
                 style="?android:attr/borderlessButtonStyle"
                 android:visibility="gone"
                 tools:text="Play"/>
@@ -156,12 +203,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/queue_button"
-                android:layout_alignParentBottom="true"
                 style="?android:attr/borderlessButtonStyle"/>
 
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
+        <!--</LinearLayout>-->
 
     <include
         layout="@layout/view_progress" />

@@ -1,6 +1,8 @@
 package org.mythtv.android.presentation.view.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +15,9 @@ import android.widget.TextView;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,6 +41,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
     }
 
+    private Context context;
     private List<ProgramModel> programsCollection;
     private final LayoutInflater layoutInflater;
 
@@ -44,6 +49,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
     public ProgramsAdapter( Context context, Collection<ProgramModel> programsCollection ) {
 
+        this.context = context;
         this.validateProgramsCollection( programsCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         this.programsCollection = (List<ProgramModel>) programsCollection;
@@ -68,6 +74,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     public void onBindViewHolder( ProgramViewHolder holder, final int position ) {
 
         final ProgramModel programModel = this.programsCollection.get( position );
+        holder.imageViewPreview.setImageUrl( getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + programModel.getChannel().getChanId() + "&StartTime=" + programModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=75" );
         holder.textViewTitle.setText( programModel.getTitle() );
         holder.textViewSubTitle.setText( programModel.getSubTitle() );
         holder.textViewDate.setText( programModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
@@ -98,7 +105,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
     public void setProgramsCollection( Collection<ProgramModel> programsCollection ) {
 
-        this.validateProgramsCollection( programsCollection );
+        this.validateProgramsCollection(programsCollection);
         this.programsCollection = (List<ProgramModel>) programsCollection;
         this.notifyDataSetChanged();
 
@@ -122,7 +129,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     static class ProgramViewHolder extends RecyclerView.ViewHolder {
 
         @Bind( R.id.program_item_preview )
-        ImageView imageViewPreview;
+        AutoLoadImageView imageViewPreview;
 
         @Bind( R.id.program_item_title )
         TextView textViewTitle;
@@ -149,6 +156,23 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
         }
 
+    }
+
+    private String getMasterBackendUrl() {
+
+        String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+
+        String masterBackend = "http://" + host + ":" + port;
+
+        return masterBackend;
+    }
+
+    public String getFromPreferences( Context context, String key ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        return sharedPreferences.getString( key, "" );
     }
 
 }

@@ -1,9 +1,13 @@
 package org.mythtv.android.presentation.view.fragment;
 
-import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 
 /**
@@ -39,6 +43,23 @@ public abstract class BaseFragment extends Fragment {
     protected <C> C getComponent( Class<C> componentType ) {
 
         return componentType.cast( ( (HasComponent<C>) getActivity() ).getComponent() );
+    }
+
+    protected String getMasterBackendUrl() {
+
+        String host = getFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
+
+        String masterBackend = "http://" + host + ":" + port;
+
+        return masterBackend;
+    }
+
+    protected String getFromPreferences( Context context, String key ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        return sharedPreferences.getString(key, "");
     }
 
 }
