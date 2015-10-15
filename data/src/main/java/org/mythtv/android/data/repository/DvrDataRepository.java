@@ -3,11 +3,16 @@ package org.mythtv.android.data.repository;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.SearchResultEntity;
 import org.mythtv.android.data.entity.mapper.ProgramEntityDataMapper;
+import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityDataMapper;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
+import org.mythtv.android.data.repository.datasource.SearchDataStore;
+import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
 import org.mythtv.android.domain.Program;
+import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.domain.TitleInfo;
 import org.mythtv.android.domain.repository.DvrRepository;
 
@@ -17,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by dmfrey on 8/27/15.
@@ -29,13 +35,17 @@ public class DvrDataRepository implements DvrRepository {
     private final DvrDataStoreFactory dvrDataStoreFactory;
     private final TitleInfoEntityDataMapper titleInfoEntityDataMapper;
     private final ProgramEntityDataMapper programEntityDataMapper;
+    private final SearchDataStoreFactory searchDataStoreFactory;
+    private final SearchResultEntityDataMapper searchResultEntityDataMapper;
 
     @Inject
-    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, TitleInfoEntityDataMapper titleInfoEntityDataMapper, ProgramEntityDataMapper programEntityDataMapper ) {
+    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, TitleInfoEntityDataMapper titleInfoEntityDataMapper, ProgramEntityDataMapper programEntityDataMapper, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
 
         this.dvrDataStoreFactory = dvrDataStoreFactory;
         this.titleInfoEntityDataMapper = titleInfoEntityDataMapper;
         this.programEntityDataMapper = programEntityDataMapper;
+        this.searchDataStoreFactory = searchDataStoreFactory;
+        this.searchResultEntityDataMapper = searchResultEntityDataMapper;
 
     }
 
@@ -45,6 +55,12 @@ public class DvrDataRepository implements DvrRepository {
         Log.d( TAG, "titleInfos : enter" );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
+        final SearchDataStore searchDataStore = this.searchDataStoreFactory.createWriteSearchDataStore();
+
+        dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null )
+                .subscribeOn( Schedulers.io() )
+                .map( recordedProgramEntities -> this.searchResultEntityDataMapper.transformPrograms( recordedProgramEntities ) )
+                .subscribe( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) );
 
         return dvrDataStore.titleInfoEntityList()
                 .map( titleInfoEntities -> this.titleInfoEntityDataMapper.transform( titleInfoEntities ) );

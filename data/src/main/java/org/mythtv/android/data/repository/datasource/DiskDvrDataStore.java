@@ -20,7 +20,7 @@ public class DiskDvrDataStore implements DvrDataStore {
 
     private final ProgramCache recordedProgramCache;
 
-    public DiskDvrDataStore(ProgramCache recordedProgramCache) {
+    public DiskDvrDataStore( ProgramCache recordedProgramCache ) {
 
         this.recordedProgramCache = recordedProgramCache;
 

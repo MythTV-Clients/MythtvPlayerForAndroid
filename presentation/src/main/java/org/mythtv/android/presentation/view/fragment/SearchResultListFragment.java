@@ -12,12 +12,18 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
+import org.mythtv.android.presentation.internal.di.components.SearchComponent;
 import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.presenter.ProgramListPresenter;
-import org.mythtv.android.presentation.view.ProgramListView;
+import org.mythtv.android.presentation.presenter.SearchResultListPresenter;
+import org.mythtv.android.presentation.view.SearchResultListView;
 import org.mythtv.android.presentation.view.adapter.ProgramsAdapter;
 import org.mythtv.android.presentation.view.adapter.ProgramsLayoutManager;
+import org.mythtv.android.presentation.view.adapter.SearchResultsAdapter;
+import org.mythtv.android.presentation.view.adapter.SearchResultsLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,37 +35,30 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by dmfrey on 8/31/15.
+ * Created by dmfrey on 10/12/15.
  */
-public class ProgramListFragment extends BaseFragment implements ProgramListView {
+public class SearchResultListFragment extends BaseFragment implements SearchResultListView {
 
-    private static final String TAG = ProgramListFragment.class.getSimpleName();
+    private static final String TAG = SearchResultListFragment.class.getSimpleName();
 
-    private static final String ARGUMENT_KEY_DESCENDING = "org.mythtv.android.ARGUMENT_DESCENDING";
-    private static final String ARGUMENT_KEY_START_INDEX = "org.mythtv.android.ARGUMENT_START_INDEX";
-    private static final String ARGUMENT_KEY_COUNT = "org.mythtv.android.ARGUMENT_COUNT";
-    private static final String ARGUMENT_KEY_TITLE_REG_EX = "org.mythtv.android.ARGUMENT_TITLE_REG_EX";
-    private static final String ARGUMENT_KEY_REC_GROUP = "org.mythtv.android.ARGUMENT_REC_GROUP";
-    private static final String ARGUMENT_KEY_STORAGE_GROUP = "org.mythtv.android.ARGUMENT_STORAGE_GROUP";
+    private static final String ARGUMENT_KEY_SEARCH_TEXT = "org.mythtv.android.ARGUMENT_SEARCH_TEXT";
 
-    private boolean descending;
-    private int startIndex, count;
-    private String titleRegEx, recGroup, storageGroup;
+    private String searchText;
 
     /**
      * Interface for listening program list events.
      */
-    public interface ProgramListListener {
+    public interface SearchResultListListener {
 
-        void onProgramClicked( final ProgramModel programModel );
+        void onSearchResultClicked( final SearchResultModel searchResultModel );
 
     }
 
     @Inject
-    ProgramListPresenter programListPresenter;
+    SearchResultListPresenter searchResultListPresenter;
 
-    @Bind( R.id.rv_programs )
-    RecyclerView rv_programs;
+    @Bind( R.id.rv_search_results )
+    RecyclerView rv_searchResults;
 
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
@@ -70,27 +69,24 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
     @Bind( R.id.bt_retry )
     Button bt_retry;
 
-    private ProgramsAdapter programsAdapter;
-    private ProgramsLayoutManager programsLayoutManager;
+    private SearchResultsAdapter searchResultsAdapter;
+    private SearchResultsLayoutManager searchResultsLayoutManager;
 
-    private ProgramListListener programListListener;
+    private SearchResultListListener searchResultListListener;
 
-    public ProgramListFragment() { super(); }
+    public SearchResultListFragment() {
+        super();
+    }
 
-    public static ProgramListFragment newInstance( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
+    public static SearchResultListFragment newInstance( String searchText ) {
 
-        ProgramListFragment programListFragment = new ProgramListFragment();
+        SearchResultListFragment fragment = new SearchResultListFragment();
 
         Bundle argumentsBundle = new Bundle();
-        argumentsBundle.putBoolean( ARGUMENT_KEY_DESCENDING, descending );
-        argumentsBundle.putInt( ARGUMENT_KEY_START_INDEX, startIndex );
-        argumentsBundle.putInt( ARGUMENT_KEY_COUNT, count );
-        argumentsBundle.putString( ARGUMENT_KEY_TITLE_REG_EX, titleRegEx );
-        argumentsBundle.putString( ARGUMENT_KEY_REC_GROUP, recGroup );
-        argumentsBundle.putString( ARGUMENT_KEY_STORAGE_GROUP, storageGroup );
-        programListFragment.setArguments( argumentsBundle );
+        argumentsBundle.putString( ARGUMENT_KEY_SEARCH_TEXT, searchText );
+        fragment.setArguments( argumentsBundle );
 
-        return programListFragment;
+        return fragment;
     }
 
     @Override
@@ -98,8 +94,8 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
         super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        if( activity instanceof ProgramListListener ) {
-            this.programListListener = (ProgramListListener) activity;
+        if( activity instanceof SearchResultListListener ) {
+            this.searchResultListListener = (SearchResultListListener) activity;
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -109,7 +105,7 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_program_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_search_result_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
 
@@ -123,7 +119,7 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
         super.onActivityCreated( savedInstanceState );
 
         this.initialize();
-        this.loadProgramList();
+        this.loadSearchResultList();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -133,7 +129,7 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-        this.programListPresenter.resume();
+        this.searchResultListPresenter.resume();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -143,7 +139,7 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-        this.programListPresenter.pause();
+        this.searchResultListPresenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -153,7 +149,7 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
         Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
-        this.programListPresenter.destroy();
+        this.searchResultListPresenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
     }
@@ -171,8 +167,8 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
     private void initialize() {
         Log.d( TAG, "initialize : enter" );
 
-        this.getComponent( DvrComponent.class ).inject( this );
-        this.programListPresenter.setView( this );
+        this.getComponent( SearchComponent.class ).inject( this );
+        this.searchResultListPresenter.setView( this );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -180,12 +176,12 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.programsLayoutManager = new ProgramsLayoutManager( getActivity() );
-        this.rv_programs.setLayoutManager( programsLayoutManager );
+        this.searchResultsLayoutManager = new SearchResultsLayoutManager( getActivity() );
+        this.rv_searchResults.setLayoutManager( searchResultsLayoutManager );
 
-        this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
-        this.programsAdapter.setOnItemClickListener( onItemClickListener );
-        this.rv_programs.setAdapter( programsAdapter );
+        this.searchResultsAdapter = new SearchResultsAdapter( getActivity(), new ArrayList<SearchResultModel>() );
+        this.searchResultsAdapter.setOnItemClickListener( onItemClickListener );
+        this.rv_searchResults.setAdapter( searchResultsAdapter );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -229,30 +225,30 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
     }
 
     @Override
-    public void renderProgramList( Collection<ProgramModel> programModelCollection ) {
-        Log.d( TAG, "renderProgramList : enter" );
+    public void renderSearchResultList( Collection<SearchResultModel> searchResultModelCollection ) {
+        Log.d( TAG, "renderSearchResultList : enter" );
 
-        if( null != programModelCollection ) {
+        if( null != searchResultModelCollection ) {
 
-            this.programsAdapter.setProgramsCollection( programModelCollection );
+            this.searchResultsAdapter.setSearchResultsCollection( searchResultModelCollection );
 
         }
 
-        Log.d( TAG, "renderProgramList : exit" );
+        Log.d( TAG, "renderSearchResultList : exit" );
     }
 
     @Override
-    public void viewProgram( ProgramModel programModel ) {
-        Log.d( TAG, "viewProgram : enter" );
+    public void viewSearchResult( SearchResultModel searchResultModel ) {
+        Log.d( TAG, "viewSearchResult : enter" );
 
-        if( null != this.programListListener ) {
-            Log.d( TAG, "viewProgram : programModel=" + programModel.toString() );
+        if( null != this.searchResultListListener ) {
+            Log.d( TAG, "viewSearchResult : searchResultModel=" + searchResultModel.toString() );
 
-            this.programListListener.onProgramClicked( programModel );
+            this.searchResultListListener.onSearchResultClicked(searchResultModel );
 
         }
 
-        Log.d( TAG, "viewProgram : exit" );
+        Log.d( TAG, "viewSearchResult : exit" );
     }
 
     @Override
@@ -273,34 +269,34 @@ public class ProgramListFragment extends BaseFragment implements ProgramListView
     }
 
     /**
-     * Loads all programs.
+     * Loads all search results.
      */
-    private void loadProgramList() {
-        Log.d( TAG, "loadProgramList : enter" );
+    private void loadSearchResultList() {
+        Log.d( TAG, "loadSearchResultList : enter" );
 
-        this.programListPresenter.initialize( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
+        this.searchResultListPresenter.initialize( searchText );
 
-        Log.d( TAG, "loadProgramList : exit" );
+        Log.d( TAG, "loadSearchResultList : exit" );
     }
 
     @OnClick( R.id.bt_retry )
     void onButtonRetryClick() {
         Log.d( TAG, "onButtonRetryClick : enter" );
 
-        ProgramListFragment.this.loadProgramList();
+        SearchResultListFragment.this.loadSearchResultList();
 
         Log.d( TAG, "onButtonRetryClick : exit" );
     }
 
-    private ProgramsAdapter.OnItemClickListener onItemClickListener = new ProgramsAdapter.OnItemClickListener() {
+    private SearchResultsAdapter.OnItemClickListener onItemClickListener = new SearchResultsAdapter.OnItemClickListener() {
 
         @Override
-        public void onProgramItemClicked( ProgramModel programModel ) {
+        public void onSearchResultItemClicked( SearchResultModel searchResultModel ) {
 
-            if( null != ProgramListFragment.this.programListPresenter && null != programModel ) {
-                Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
+            if( null != SearchResultListFragment.this.searchResultListListener && null != searchResultModel ) {
+                Log.d( TAG, "onProgramItemClicked : searchResultModel=" + searchResultModel.toString() );
 
-                ProgramListFragment.this.programListPresenter.onProgramClicked( programModel );
+                SearchResultListFragment.this.searchResultListListener.onSearchResultClicked(searchResultModel );
 
             }
 

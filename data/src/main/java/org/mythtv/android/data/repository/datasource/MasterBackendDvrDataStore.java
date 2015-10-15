@@ -30,7 +30,7 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
                 }
             };
 
-    public MasterBackendDvrDataStore(DvrApi api, ProgramCache recordedProgramCache) {
+    public MasterBackendDvrDataStore( DvrApi api, ProgramCache recordedProgramCache ) {
 
         this.api = api;
         this.recordedProgramCache = recordedProgramCache;

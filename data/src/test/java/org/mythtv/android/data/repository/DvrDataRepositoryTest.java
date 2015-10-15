@@ -4,9 +4,11 @@ import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.entity.mapper.ProgramEntityDataMapper;
+import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityDataMapper;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
+import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
 import org.mythtv.android.domain.Program;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 
-public class ProgramDataRepositoryTest extends ApplicationTestCase {
+public class DvrDataRepositoryTest extends ApplicationTestCase {
 
     private static final int FAKE_CHAN_ID = 999;
     private static final DateTime FAKE_START_TIME = new DateTime();
@@ -34,6 +36,8 @@ public class ProgramDataRepositoryTest extends ApplicationTestCase {
     @Mock private DvrDataStoreFactory mockDvrDataStoreFactory;
     @Mock private TitleInfoEntityDataMapper mockTitleInfoEntityDataMapper;
     @Mock private ProgramEntityDataMapper mockProgramEntityDataMapper;
+    @Mock private SearchDataStoreFactory mockSearchDataStoreFactory;
+    @Mock private SearchResultEntityDataMapper mockSearchResultEntityDataMapper;
     @Mock private DvrDataStore mockDvrDataStore;
     @Mock private ProgramEntity mockProgramEntity;
     @Mock private Program mockProgram;
@@ -45,7 +49,7 @@ public class ProgramDataRepositoryTest extends ApplicationTestCase {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockTitleInfoEntityDataMapper, mockProgramEntityDataMapper );
+        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockTitleInfoEntityDataMapper, mockProgramEntityDataMapper, mockSearchDataStoreFactory, mockSearchResultEntityDataMapper );
 
         given( mockDvrDataStoreFactory.create( anyInt(), any( DateTime.class ) ) ).willReturn( mockDvrDataStore );
         given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockDvrDataStore );

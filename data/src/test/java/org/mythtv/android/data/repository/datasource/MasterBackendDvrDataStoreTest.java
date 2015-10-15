@@ -9,7 +9,6 @@ import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.net.DvrApi;
-import org.mythtv.android.domain.Program;
 
 import rx.Observable;
 
@@ -61,9 +60,9 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
 
         ProgramEntity fakeProgramEntity = new ProgramEntity();
         Observable<ProgramEntity> fakeObservable = Observable.just( fakeProgramEntity );
-        given( mockDvrApi.recordedProgramById( FAKE_CHAN_ID, FAKE_START_TIME ) ).willReturn(fakeObservable);
+        given( mockDvrApi.recordedProgramById( FAKE_CHAN_ID, FAKE_START_TIME ) ).willReturn( fakeObservable );
 
-        masterBackendDvrDataStore.recordedProgramEntityDetails(FAKE_CHAN_ID, FAKE_START_TIME);
+        masterBackendDvrDataStore.recordedProgramEntityDetails( FAKE_CHAN_ID, FAKE_START_TIME );
 
         verify( mockDvrApi ).recordedProgramById( FAKE_CHAN_ID, FAKE_START_TIME );
 

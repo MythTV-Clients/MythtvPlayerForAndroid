@@ -1,5 +1,6 @@
 package org.mythtv.android.presentation.view.activity;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -14,8 +15,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -116,6 +120,21 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 //
 //        });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu( Menu menu ) {
+
+        // Inflate the options menu from XML
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate( R.menu.main, menu );
+
+        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
+        SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
+        searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
+        searchView.setIconifiedByDefault( false );
+
+        return super.onCreateOptionsMenu( menu );
     }
 
     @Override

@@ -37,6 +37,7 @@ public class GetRecordedProgramList extends UseCase {
 
     @Override
     public Observable buildUseCaseObservable() {
+
         return this.dvrRepository.recordedPrograms( this.descending, this.startIndex, this.count, this.titleRegEx, this.recGroup, this.storageGroup );
     }
 

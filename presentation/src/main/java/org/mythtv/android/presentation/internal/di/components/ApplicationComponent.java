@@ -5,6 +5,7 @@ import android.content.Context;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.SearchRepository;
 import org.mythtv.android.presentation.internal.di.modules.ApplicationModule;
 import org.mythtv.android.presentation.view.activity.BaseActivity;
 
@@ -28,5 +29,6 @@ public interface ApplicationComponent {
     ThreadExecutor threadExecutor();
     PostExecutionThread postExecutionThread();
     DvrRepository dvrRepository();
+    SearchRepository searchRepository();
 
 }

@@ -59,22 +59,22 @@ public class DvrApiImpl implements DvrApi {
 
             @Override
             public void call( Subscriber<? super List<TitleInfoEntity>> subscriber ) {
-                Log.i( TAG, "titleInfoEntityList.call : enter" );
+                Log.d(TAG, "titleInfoEntityList.call : enter");
 
                 if( isThereInternetConnection() ) {
-                    Log.i( TAG, "titleInfoEntityList.call : network is connected" );
+                    Log.d(TAG, "titleInfoEntityList.call : network is connected");
 
                     try {
 
                         String responseRecordedProgramEntities = getTitleInfoEntitiesFromApi();
                         if( null != responseRecordedProgramEntities ) {
-                            Log.i( TAG, "titleInfoEntityList.call : retrieved title info entities" );
+                            Log.d(TAG, "titleInfoEntityList.call : retrieved title info entities");
 
                             subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( responseRecordedProgramEntities ) );
                             subscriber.onCompleted();
 
                         } else {
-                            Log.i( TAG, "titleInfoEntityList.call : failed to retrieve title info entities" );
+                            Log.d(TAG, "titleInfoEntityList.call : failed to retrieve title info entities");
 
                             subscriber.onError( new NetworkConnectionException() );
 
@@ -88,13 +88,13 @@ public class DvrApiImpl implements DvrApi {
                     }
 
                 } else {
-                    Log.i( TAG, "titleInfoEntityList.call : network is not connected" );
+                    Log.d(TAG, "titleInfoEntityList.call : network is not connected");
 
                     subscriber.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.i( TAG, "titleInfoEntityList.call : exit" );
+                Log.d(TAG, "titleInfoEntityList.call : exit");
             }
 
         });
@@ -103,27 +103,29 @@ public class DvrApiImpl implements DvrApi {
 
     @Override
     public Observable<List<ProgramEntity>> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) {
+        Log.d( TAG, "recordedProgramEntityList : enter" );
 
+        Log.d( TAG, "recordedProgramEntityList : exit" );
         return Observable.create( new Observable.OnSubscribe<List<ProgramEntity>>() {
 
             @Override
             public void call( Subscriber<? super List<ProgramEntity>> subscriber ) {
-                Log.i( TAG, "recordedProgramEntityList.call : enter" );
+                Log.d( TAG, "recordedProgramEntityList.call : enter" );
 
                 if( isThereInternetConnection() ) {
-                    Log.i( TAG, "recordedProgramEntityList.call : network is connected" );
+                    Log.d( TAG, "recordedProgramEntityList.call : network is connected" );
 
                     try {
 
                         String responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
                         if( null != responseRecordedProgramEntities ) {
-                            Log.i( TAG, "recordedProgramEntityList.call : retrieved program entities" );
+                            Log.d( TAG, "recordedProgramEntityList.call : retrieved program entities" );
 
                             subscriber.onNext( programEntityJsonMapper.transformProgramEntityCollection( responseRecordedProgramEntities ) );
                             subscriber.onCompleted();
 
                         } else {
-                            Log.i( TAG, "recordedProgramEntityList.call : failed to retrieve program entities" );
+                            Log.d( TAG, "recordedProgramEntityList.call : failed to retrieve program entities" );
 
                             subscriber.onError( new NetworkConnectionException() );
 
@@ -137,13 +139,13 @@ public class DvrApiImpl implements DvrApi {
                     }
 
                 } else {
-                    Log.i( TAG, "recordedProgramEntityList.call : network is not connected" );
+                    Log.d( TAG, "recordedProgramEntityList.call : network is not connected" );
 
                     subscriber.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.i( TAG, "recordedProgramEntityList.call : exit" );
+                Log.d( TAG, "recordedProgramEntityList.call : exit" );
             }
 
         });
@@ -273,7 +275,7 @@ public class DvrApiImpl implements DvrApi {
         String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         String masterBackend = "http://" + host + ":" + port;
-        Log.i( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
+        Log.d(TAG, "getMasterBackendUrl : masterBackend=" + masterBackend);
 
         return masterBackend;
     }

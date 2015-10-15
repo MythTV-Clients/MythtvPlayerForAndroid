@@ -81,28 +81,64 @@
         <activity
             android:name=".presentation.view.activity.TitleInfoListActivity"
             android:label="@string/watch_recording">
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.SearchableActivity" />
+
         </activity>
 
         <activity
             android:name=".presentation.view.activity.ProgramListActivity"
             android:label="@string/watch_recording"
             android:launchMode="singleTop">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.view.activity.TitleInfoListActivity" />
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.SearchableActivity" />
+
         </activity>
 
         <activity
             android:name=".presentation.view.activity.ProgramDetailsActivity"
             android:launchMode="singleTop">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.view.activity.ProgramListActivity" />
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.SearchableActivity"
+            android:launchMode="singleTop" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
         </activity>
 
         <activity
             android:name=".presentation.view.activity.SettingsActivity"
             android:label="@string/title_activity_settings">
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.SearchableActivity" />
+
         </activity>
 
         <!--<activity-->
@@ -229,17 +265,6 @@
                 <!--android:value=".player.app.videos.VideoDetailsSettingsActivity" />-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name=".player.app.search.SearchableActivity"-->
-            <!--android:launchMode="singleTop" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.SEARCH" />-->
-            <!--</intent-filter>-->
-
-            <!--<meta-data-->
-                <!--android:name="android.app.searchable"-->
-                <!--android:resource="@xml/searchable" />-->
-        <!--</activity>-->
-        <!--<activity-->
             <!--android:name=".player.app.settings.SettingsActivity"-->
             <!--android:label="@string/title_activity_settings"-->
             <!--android:launchMode="singleTask" >-->
@@ -350,17 +375,17 @@
             <!--</intent-filter>-->
         <!--</receiver>-->
 
-        <!--&lt;!&ndash; MythTV Providers &ndash;&gt;-->
+        <!-- MythTV Providers -->
         <!--<provider-->
             <!--android:name=".library.persistence.repository.MythtvProvider"-->
             <!--android:authorities="org.mythtv.android.provider"-->
             <!--android:enabled="true"-->
             <!--android:exported="false"-->
             <!--android:syncable="false" />-->
-        <!--<provider-->
-            <!--android:name=".library.persistence.repository.MythtvSearchSuggestionProvider"-->
-            <!--android:authorities="org.mythtv.android.library.persistence.repository.MythtvSearchSuggestionProvider"-->
-            <!--android:exported="false" />-->
+        <provider
+            android:name="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
+            android:authorities="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
+            android:exported="false" />
 
     </application>
 

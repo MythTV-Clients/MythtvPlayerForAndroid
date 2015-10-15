@@ -66,13 +66,13 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
 
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
 
-        super.onCreate(savedInstanceState);
+        super.onCreate( savedInstanceState );
 
         ButterKnife.bind( this );
 
-        this.initializeActivity(savedInstanceState);
+        this.initializeActivity( savedInstanceState );
         this.initializeInjector();
 
         Log.d( TAG, "onCreate : exit" );
@@ -124,7 +124,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
      * Initializes this activity.
      */
     private void initializeActivity( Bundle savedInstanceState ) {
-        Log.d(TAG, "initializeActivity : enter");
+        Log.d( TAG, "initializeActivity : enter" );
 
         if( null == savedInstanceState  ) {
             Log.d( TAG, "initializeActivity : savedInstanceState is null" );
@@ -137,7 +137,8 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
             Log.d( TAG, "initializeActivity : savedInstanceState is not null" );
 
             this.chanId = savedInstanceState.getInt( INSTANCE_STATE_PARAM_CHAN_ID );
-            this.startTime = new DateTime( getIntent().getLongExtra(INSTANCE_STATE_PARAM_START_TIME, -1) );
+            this.startTime = new DateTime( getIntent().getLongExtra( INSTANCE_STATE_PARAM_START_TIME, -1 ) );
+            addFragment( R.id.fl_fragment, ProgramDetailsFragment.newInstance( this.chanId, this.startTime ) );
 
         }
 
