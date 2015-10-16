@@ -2,9 +2,7 @@ package org.mythtv.android.presentation.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ImageView;
@@ -14,7 +12,6 @@ import com.squareup.picasso.Picasso;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
@@ -72,7 +69,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
         ButterKnife.bind( this );
 
-        this.initializeActivity( savedInstanceState );
+        this.initializeActivity(savedInstanceState);
         this.initializeInjector();
 
         Log.d( TAG, "onCreate : exit" );
@@ -100,7 +97,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
         }
 
-        super.onSaveInstanceState(outState);
+        super.onSaveInstanceState( outState );
 
         Log.d( TAG, "onSaveInstanceState : exit" );
     }
@@ -111,6 +108,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
         super.onRestoreInstanceState(savedInstanceState);
 
         if( null != savedInstanceState ) {
+            Log.d( TAG, "onRestoreInstanceState : savedInstanceState != null" );
 
             this.chanId = savedInstanceState.getInt( INSTANCE_STATE_PARAM_CHAN_ID );
             this.startTime = new DateTime( savedInstanceState.getLong( INSTANCE_STATE_PARAM_START_TIME ) );
@@ -129,16 +127,31 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
         if( null == savedInstanceState  ) {
             Log.d( TAG, "initializeActivity : savedInstanceState is null" );
 
-            this.chanId = getIntent().getIntExtra( INTENT_EXTRA_PARAM_CHAN_ID, -1 );
-            this.startTime = new DateTime( getIntent().getLongExtra( INTENT_EXTRA_PARAM_START_TIME, -1 ) );
+            Bundle extras = getIntent().getExtras();
+            if( null != extras ) {
+                Log.d( TAG, "initializeActivity : extras != null" );
+
+                if( extras.containsKey( INTENT_EXTRA_PARAM_CHAN_ID ) ) {
+
+                    this.chanId = getIntent().getIntExtra( INTENT_EXTRA_PARAM_CHAN_ID, -1 );
+
+                }
+
+                if( extras.containsKey( INTENT_EXTRA_PARAM_START_TIME ) ) {
+
+                    this.startTime = new DateTime( getIntent().getLongExtra( INTENT_EXTRA_PARAM_START_TIME, -1 ) );
+
+                }
+
+            }
+
             addFragment( R.id.fl_fragment, ProgramDetailsFragment.newInstance( this.chanId, this.startTime ) );
 
         } else {
             Log.d( TAG, "initializeActivity : savedInstanceState is not null" );
 
             this.chanId = savedInstanceState.getInt( INSTANCE_STATE_PARAM_CHAN_ID );
-            this.startTime = new DateTime( getIntent().getLongExtra( INSTANCE_STATE_PARAM_START_TIME, -1 ) );
-            addFragment( R.id.fl_fragment, ProgramDetailsFragment.newInstance( this.chanId, this.startTime ) );
+            this.startTime = new DateTime( savedInstanceState.getLong( INSTANCE_STATE_PARAM_START_TIME, -1 ) );
 
         }
 
@@ -148,6 +161,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
     }
 
     private void initializeInjector() {
+        Log.d( TAG, "initializeInjector : enter" );
 
         this.dvrComponent = DaggerDvrComponent.builder()
                 .applicationComponent( getApplicationComponent() )
@@ -155,15 +169,19 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
                 .programModule( new ProgramModule( this.chanId, this.startTime ) )
                 .build();
 
+        Log.d( TAG, "initializeInjector : exit" );
     }
 
     @Override
     public DvrComponent getComponent() {
+        Log.d( TAG, "getComponent : enter" );
 
+        Log.d( TAG, "getComponent : exit" );
         return dvrComponent;
     }
 
     private void loadBackdrop() {
+        Log.d( TAG, "loadBackdrop : enter" );
 
         String previewUrl = getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone(DateTimeZone.UTC).toString("yyyy-MM-dd'T'HH:mm:ss") + "&Height=" + backdropHeight;
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
@@ -173,6 +191,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
                 .fit().centerCrop()
                 .into( imageView );
 
+        Log.d( TAG, "loadBackdrop : exit" );
     }
 
 }

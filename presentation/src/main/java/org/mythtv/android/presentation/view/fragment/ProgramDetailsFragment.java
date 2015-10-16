@@ -160,7 +160,7 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
 
         this.programDetailsPresenter.destroy();
 
-        Log.d(TAG, "onDestroy : exit");
+        Log.d( TAG, "onDestroy : exit" );
     }
 
     private void initialize() {
@@ -240,32 +240,32 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
         this.rl_progress.setVisibility(View.GONE);
         this.getActivity().setProgressBarIndeterminateVisibility(false);
 
-        Log.d(TAG, "hideLoading : exit" );
+        Log.d( TAG, "hideLoading : exit" );
     }
 
     @Override
     public void showRetry() {
-        Log.d(TAG, "showRetry : enter");
+        Log.d( TAG, "showRetry : enter" );
 
-        this.rl_retry.setVisibility(View.VISIBLE);
+        this.rl_retry.setVisibility( View.VISIBLE );
 
-        Log.d(TAG, "showRetry : exit" );
+        Log.d( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
-        Log.d(TAG, "hideRetry : enter");
+        Log.d( TAG, "hideRetry : enter" );
 
-        this.rl_retry.setVisibility(View.GONE);
+        this.rl_retry.setVisibility( View.GONE );
 
-        Log.d(TAG, "hideRetry : exit");
+        Log.d( TAG, "hideRetry : exit" );
     }
 
     @Override
     public void showError(String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage(message);
+        this.showToastMessage( message );
 
         Log.d( TAG, "showError : exit" );
     }
@@ -298,7 +298,7 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
 
         ProgramDetailsFragment.this.loadProgramDetails();
 
-        Log.d(TAG, "onButtonRetryClick : exit");
+        Log.d( TAG, "onButtonRetryClick : exit" );
     }
 
 }
