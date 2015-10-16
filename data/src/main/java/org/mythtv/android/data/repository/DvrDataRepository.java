@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -59,6 +60,8 @@ public class DvrDataRepository implements DvrRepository {
 
         dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null )
                 .subscribeOn( Schedulers.io() )
+                .observeOn( AndroidSchedulers.mainThread() )
+                .doOnError( throwable -> Log.e( TAG, "titleInfos : error", throwable ) )
                 .map( recordedProgramEntities -> this.searchResultEntityDataMapper.transformPrograms( recordedProgramEntities ) )
                 .subscribe( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) );
 

@@ -61,12 +61,18 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
 
         List<TitleInfoEntity> titleInfosList = new ArrayList<>();
         titleInfosList.add( new TitleInfoEntity() );
+
+        List<ProgramEntity> recordedProgramsList = new ArrayList<>();
+        recordedProgramsList.add( new ProgramEntity() );
+
         given( mockDvrDataStore.titleInfoEntityList() ).willReturn( Observable.just( titleInfosList ) );
+        given( mockDvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null ) ).willReturn( Observable.just( recordedProgramsList ) );
 
         dvrDataRepository.titleInfos();
 
         verify( mockDvrDataStoreFactory ).createMasterBackendDataStore();
         verify( mockDvrDataStore ).titleInfoEntityList();
+        verify( mockDvrDataStore ).recordedProgramEntityList( true, -1, -1, null, null, null );
 
     }
 
