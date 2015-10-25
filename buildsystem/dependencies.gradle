@@ -51,6 +51,7 @@ ext {
     mythtvServiceApiVersion = '2.0.4'
     jodaVersion = '2.8.2'
     lombokVersion = '1.16.6'
+    exoplayerVersion = 'r1.5.1'
 
     //Testing
     robolectricVersion = '3.0'
@@ -78,7 +79,8 @@ ext {
         javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
         picasso:            "com.squareup.picasso:picasso:${picassoVersion}",
         lombok:             "org.projectlombok:lombok:${lombokVersion}",
-        androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}"
+        androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}",
+        exoplayer:          "com.google.android.exoplayer:exoplayer:${exoplayerVersion}"
     ]
 
     presentationTestDependencies = [

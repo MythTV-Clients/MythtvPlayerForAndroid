@@ -13,6 +13,7 @@ import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.model.ArtworkInfoModel;
 import org.mythtv.android.presentation.model.CastMemberModel;
 import org.mythtv.android.presentation.model.ChannelInfoModel;
+import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.RecordingInfoModel;
 
@@ -31,8 +32,13 @@ public class ProgramModelDataMapper {
 
     private static final String TAG = ProgramModelDataMapper.class.getSimpleName();
 
+    private final LiveStreamInfoModelDataMapper liveStreamInfoModelDataMapper;
+
     @Inject
-    public ProgramModelDataMapper() {
+    public ProgramModelDataMapper( LiveStreamInfoModelDataMapper liveStreamInfoModelDataMapper ) {
+
+        this.liveStreamInfoModelDataMapper = liveStreamInfoModelDataMapper;
+
     }
 
     public ProgramModel transform( Program program ) {
@@ -158,6 +164,12 @@ public class ProgramModelDataMapper {
 
         }
         programModel.setCastMembers( castMembers );
+
+        if( null != program.getLiveStreamInfo() ) {
+
+            programModel.setLiveStreamInfo( liveStreamInfoModelDataMapper.transform( program.getLiveStreamInfo() ) );
+
+        }
 
         return programModel;
     }

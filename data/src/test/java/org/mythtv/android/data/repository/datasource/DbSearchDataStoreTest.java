@@ -43,6 +43,9 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
     private static final String FAKE_CAST_MEMBERS = "fake cast members";
     private static final String FAKE_CHARACTERS = "fake characters";
     private static final String FAKE_RATING = "fake rating";
+    private static final String FAKE_STORAGE_GROUP = "fake storage group";
+    private static final String FAKE_FILENAME = "fake filename";
+    private static final String FAKE_HOSTNAME = "fake hostname";
     private static final String FAKE_TYPE = "fake type";
 
     private DbSearchDataStore dbSearchDataStore;
@@ -78,7 +81,7 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
         List<SearchResultEntity> fakeSearchResultEntityList = new ArrayList<>();
         fakeSearchResultEntityList.add( fakeSearchResultEntity );
 
-        dbSearchDataStore.refreshRecordedProgramData(fakeSearchResultEntityList);
+        dbSearchDataStore.refreshRecordedProgramData( fakeSearchResultEntityList );
         Observable<List<SearchResultEntity>> results = dbSearchDataStore.search( FAKE_TITLE );
         assertThat( results, is( instanceOf( Observable.class ) ) );
 
@@ -101,6 +104,9 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
         searchResultEntity.setCastMembers( FAKE_CAST_MEMBERS );
         searchResultEntity.setCharacters( FAKE_CHARACTERS );
         searchResultEntity.setRating( FAKE_RATING );
+        searchResultEntity.setStoreageGroup( FAKE_STORAGE_GROUP );
+        searchResultEntity.setFilename( FAKE_FILENAME );
+        searchResultEntity.setHostname( FAKE_HOSTNAME );
         searchResultEntity.setType( FAKE_TYPE );
 
         return searchResultEntity;

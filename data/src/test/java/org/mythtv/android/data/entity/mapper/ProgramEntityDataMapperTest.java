@@ -114,7 +114,7 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
     @Before
     public void setup() throws Exception {
 
-        programEntityDataMapper = new ProgramEntityDataMapper();
+        programEntityDataMapper = new ProgramEntityDataMapper( new LiveStreamInfoEntityDataMapper() );
 
     }
 

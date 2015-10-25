@@ -2,8 +2,13 @@ package org.mythtv.android.presentation.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
@@ -12,10 +17,13 @@ import com.squareup.picasso.Picasso;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
+import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
+import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.view.fragment.ProgramDetailsFragment;
 
 import butterknife.Bind;
@@ -25,17 +33,24 @@ import butterknife.ButterKnife;
 /**
  * Created by dmfrey on 9/30/15.
  */
-public class ProgramDetailsActivity extends BaseActivity implements HasComponent<DvrComponent> {
+public class ProgramDetailsActivity extends BaseActivity implements HasComponent<DvrComponent>, ProgramDetailsFragment.ProgramDetailsListener {
 
     private static final String TAG = ProgramDetailsActivity.class.getSimpleName();
 
     private static final String INTENT_EXTRA_PARAM_CHAN_ID = "org.mythtv.android.INTENT_PARAM_CHAN_ID";
     private static final String INTENT_EXTRA_PARAM_START_TIME = "org.mythtv.android.INTENT_PARAM_START_TIME";
+    private static final String INTENT_EXTRA_PARAM_STORAGE_GROUP = "org.mythtv.android.INTENT_PARAM_STORAGE_GROUP";
+    private static final String INTENT_EXTRA_PARAM_FILENAME = "org.mythtv.android.INTENT_PARAM_FILENAME";
+    private static final String INTENT_EXTRA_PARAM_HOSTNAME = "org.mythtv.android.INTENT_PARAM_HOSTNAME";
     private static final String INSTANCE_STATE_PARAM_CHAN_ID = "org.mythtv.android.STATE_PARAM_CHAN_ID";
     private static final String INSTANCE_STATE_PARAM_START_TIME = "org.mythtv.android.STATE_PARAM_START_TIME";
+    private static final String INSTANCE_STATE_PARAM_STORAGE_GROUP = "org.mythtv.android.STATE_PARAM_STORAGE_GROUP";
+    private static final String INSTANCE_STATE_PARAM_FILENAME = "org.mythtv.android.STATE_PARAM_FILENAME";
+    private static final String INSTANCE_STATE_PARAM_HOSTNAME = "org.mythtv.android.STATE_PARAM_HOSTNAME";
 
     private int chanId;
     private DateTime startTime;
+    private String storageGroup, filename, hostname;
     private DvrComponent dvrComponent;
 
     @Bind( R.id.backdrop )
@@ -44,11 +59,14 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
     @BindDimen( R.dimen.detail_backdrop_height )
     int backdropHeight;
 
-    public static Intent getCallingIntent( Context context, int chanId, DateTime startTime ) {
+    public static Intent getCallingIntent( Context context, int chanId, DateTime startTime, String storageGroup, String filename, String hostname ) {
 
         Intent callingIntent = new Intent( context, ProgramDetailsActivity.class );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_CHAN_ID, chanId );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_START_TIME, startTime.getMillis() );
+        callingIntent.putExtra( INTENT_EXTRA_PARAM_STORAGE_GROUP, storageGroup );
+        callingIntent.putExtra( INTENT_EXTRA_PARAM_FILENAME, filename );
+        callingIntent.putExtra( INTENT_EXTRA_PARAM_HOSTNAME, hostname );
 
         return callingIntent;
     }
@@ -61,18 +79,18 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-        Log.d( TAG, "onCreate : enter" );
+        Log.d(TAG, "onCreate : enter");
 
-        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        ButterKnife.bind( this );
+        ButterKnife.bind(this);
 
         this.initializeActivity(savedInstanceState);
         this.initializeInjector();
 
-        Log.d( TAG, "onCreate : exit" );
+        Log.d(TAG, "onCreate : exit");
     }
 
     @Override
@@ -92,12 +110,15 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
         if( null != outState ) {
             Log.d( TAG, "onSaveInstanceState : outState is not null" );
 
-            outState.putInt( INSTANCE_STATE_PARAM_CHAN_ID, this.chanId );
-            outState.putLong( INSTANCE_STATE_PARAM_START_TIME, this.startTime.getMillis() );
+            outState.putInt(INSTANCE_STATE_PARAM_CHAN_ID, this.chanId);
+            outState.putLong(INSTANCE_STATE_PARAM_START_TIME, this.startTime.getMillis());
+            outState.putString(INSTANCE_STATE_PARAM_STORAGE_GROUP, this.storageGroup);
+            outState.putString( INSTANCE_STATE_PARAM_FILENAME, this.filename );
+            outState.putString( INSTANCE_STATE_PARAM_HOSTNAME, this.hostname );
 
         }
 
-        super.onSaveInstanceState( outState );
+        super.onSaveInstanceState(outState);
 
         Log.d( TAG, "onSaveInstanceState : exit" );
     }
@@ -112,17 +133,45 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
             this.chanId = savedInstanceState.getInt( INSTANCE_STATE_PARAM_CHAN_ID );
             this.startTime = new DateTime( savedInstanceState.getLong( INSTANCE_STATE_PARAM_START_TIME ) );
+            this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
+            this.filename = savedInstanceState.getString( INSTANCE_STATE_PARAM_FILENAME );
+            this.hostname = savedInstanceState.getString( INSTANCE_STATE_PARAM_HOSTNAME );
 
         }
 
-        Log.d( TAG, "onRestoreInstanceState : exit" );
+        Log.d(TAG, "onRestoreInstanceState : exit");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu( Menu menu ) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate( R.menu.menu_details, menu );
+
+        return super.onCreateOptionsMenu( menu );
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+
+        switch( item.getItemId() ) {
+
+            case R.id.menu_settings :
+
+                navigator.navigateToProgramSettings( this );
+
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected( item );
     }
 
     /**
      * Initializes this activity.
      */
     private void initializeActivity( Bundle savedInstanceState ) {
-        Log.d( TAG, "initializeActivity : enter" );
+        Log.d(TAG, "initializeActivity : enter");
 
         if( null == savedInstanceState  ) {
             Log.d( TAG, "initializeActivity : savedInstanceState is null" );
@@ -143,6 +192,24 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
                 }
 
+                if( extras.containsKey( INTENT_EXTRA_PARAM_STORAGE_GROUP ) ) {
+
+                    this.storageGroup = getIntent().getStringExtra(INTENT_EXTRA_PARAM_STORAGE_GROUP);
+
+                }
+
+                if( extras.containsKey( INTENT_EXTRA_PARAM_FILENAME ) ) {
+
+                    this.filename = getIntent().getStringExtra( INTENT_EXTRA_PARAM_FILENAME );
+
+                }
+
+                if( extras.containsKey( INTENT_EXTRA_PARAM_HOSTNAME ) ) {
+
+                    this.hostname = getIntent().getStringExtra( INTENT_EXTRA_PARAM_HOSTNAME );
+
+                }
+
             }
 
             addFragment( R.id.fl_fragment, ProgramDetailsFragment.newInstance( this.chanId, this.startTime ) );
@@ -152,6 +219,9 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
             this.chanId = savedInstanceState.getInt( INSTANCE_STATE_PARAM_CHAN_ID );
             this.startTime = new DateTime( savedInstanceState.getLong( INSTANCE_STATE_PARAM_START_TIME, -1 ) );
+            this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
+            this.filename = savedInstanceState.getString( INSTANCE_STATE_PARAM_FILENAME );
+            this.hostname = savedInstanceState.getString( INSTANCE_STATE_PARAM_HOSTNAME );
 
         }
 
@@ -167,6 +237,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
                 .applicationComponent( getApplicationComponent() )
                 .activityModule( getActivityModule() )
                 .programModule( new ProgramModule( this.chanId, this.startTime ) )
+                .liveStreamModule( new LiveStreamModule( this.storageGroup, this.filename, this.hostname ) )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );
@@ -180,18 +251,46 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
         return dvrComponent;
     }
 
+    @Override
+    public void onPlayRecording( ProgramModel programModel ) {
+        Log.d( TAG, "onPlayRecording : enter" );
+
+        if( !getInternalPlayerPreferenceFromPreferences() ) {
+
+            String recordingUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
+
+            navigator.navigateToExternalPlayer(this, recordingUrl);
+
+        } else if( null != programModel.getLiveStreamInfo() ) {
+
+            String recordingUrl = getMasterBackendUrl() + programModel.getLiveStreamInfo().getRelativeUrl();
+
+            navigator.navigateToInternalPlayer( this, recordingUrl, null, PlayerActivity.TYPE_HLS );
+
+        }
+
+        Log.d( TAG, "onPlayRecording : exit" );
+    }
+
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone(DateTimeZone.UTC).toString("yyyy-MM-dd'T'HH:mm:ss") + "&Height=" + backdropHeight;
+        String previewUrl = getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone(DateTimeZone.UTC).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=" + backdropHeight;
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
         Picasso.with( this )
                 .load( previewUrl )
                 .fit().centerCrop()
-                .into( imageView );
+                .into(imageView);
 
         Log.d( TAG, "loadBackdrop : exit" );
+    }
+
+    public boolean getInternalPlayerPreferenceFromPreferences() {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
+
+        return sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, false );
     }
 
 }

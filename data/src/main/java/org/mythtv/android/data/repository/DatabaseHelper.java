@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import org.mythtv.android.data.entity.SearchResultEntity;
+import org.mythtv.android.domain.SearchResult;
 
 /**
  * Created by dmfrey on 10/8/15.
@@ -15,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "mythtvdb";
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 19;
 
     public DatabaseHelper( Context context ) {
         super( context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -99,6 +100,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //            Log.v( TAG, "dropTable : dropVideoDirs=" + dropVideoDirs );
 //        }
 //        db.execSQL( dropVideoDirs );
+
+        String dropSearchResult = SearchResultEntity.DROP_TABLE;
+        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
+            Log.v( TAG, "dropTable : dropSearchResult=" + dropSearchResult );
+        }
+        db.execSQL( dropSearchResult );
 
         Log.v( TAG, "dropTables : exit" );
     }

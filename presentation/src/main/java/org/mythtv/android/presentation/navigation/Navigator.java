@@ -2,10 +2,13 @@ package org.mythtv.android.presentation.navigation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.presentation.view.activity.PlayerActivity;
 import org.mythtv.android.presentation.view.activity.ProgramDetailsActivity;
+import org.mythtv.android.presentation.view.activity.ProgramDetailsSettingsActivity;
 import org.mythtv.android.presentation.view.activity.ProgramListActivity;
 import org.mythtv.android.presentation.view.activity.SettingsActivity;
 import org.mythtv.android.presentation.view.activity.TitleInfoListActivity;
@@ -29,59 +32,104 @@ public class Navigator {
     }
 
     public void navigateToTitleInfos( Context context ) {
-        Log.i( TAG, "navigateToTitleInfos : enter" );
+        Log.d( TAG, "navigateToTitleInfos : enter" );
 
         if( null != context ) {
-            Log.i( TAG, "navigateToTitleInfos : context != null" );
+            Log.d( TAG, "navigateToTitleInfos : context != null" );
 
             Intent intentToLaunch = TitleInfoListActivity.getCallingIntent(context);
             context.startActivity( intentToLaunch );
 
         }
 
-        Log.i( TAG, "navigateToTitleInfos : exit" );
+        Log.d( TAG, "navigateToTitleInfos : exit" );
     }
 
     public void navigateToPrograms( Context context, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
-        Log.i( TAG, "navigateToPrograms : enter" );
+        Log.d( TAG, "navigateToPrograms : enter" );
 
         if( null != context ) {
-            Log.i( TAG, "navigateToPrograms : context != null" );
+            Log.d( TAG, "navigateToPrograms : context != null" );
 
             Intent intentToLaunch = ProgramListActivity.getCallingIntent( context, descending, startIndex, count, titleRegEx, recGroup, storageGroup );
             context.startActivity( intentToLaunch );
 
         }
 
-        Log.i( TAG, "navigateToPrograms : exit" );
+        Log.d( TAG, "navigateToPrograms : exit" );
     }
 
-    public void navigateToProgram( Context context, int chanId, DateTime startTime ) {
-        Log.i( TAG, "navigateToProgram : enter" );
+    public void navigateToProgram( Context context, int chanId, DateTime startTime, String storeageGroup, String filename, String hostname ) {
+        Log.d( TAG, "navigateToProgram : enter" );
 
         if( null != context ) {
-            Log.i(TAG, "navigateToProgram : context != null");
+            Log.d(TAG, "navigateToProgram : context != null");
 
-            Intent intentToLaunch = ProgramDetailsActivity.getCallingIntent( context, chanId, startTime );
-            context.startActivity( intentToLaunch );
-
-        }
-
-        Log.i( TAG, "navigateToProgram : exit" );
-    }
-
-    public void navigateToSettings( Context context ) {
-        Log.i( TAG, "navigateToSettings : enter" );
-
-        if( null != context ) {
-            Log.i( TAG, "navigateToSettings : context != null" );
-
-            Intent intentToLaunch = SettingsActivity.getCallingIntent(context);
+            Intent intentToLaunch = ProgramDetailsActivity.getCallingIntent( context, chanId, startTime, storeageGroup, filename, hostname );
             context.startActivity(intentToLaunch);
 
         }
 
-        Log.i( TAG, "navigateToSettings : exit" );
+        Log.d( TAG, "navigateToProgram : exit" );
+    }
+
+    public void navigateToProgramSettings( Context context ) {
+        Log.d( TAG, "navigateToProgramSettings : enter" );
+
+        if( null != context ) {
+            Log.d(TAG, "navigateToProgramSettings : context != null");
+
+            Intent intentToLaunch = ProgramDetailsSettingsActivity.getCallingIntent( context );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToProgramSettings : exit" );
+    }
+
+    public void navigateToInternalPlayer( Context context, String uri, String contentId, int type ) {
+        Log.d( TAG, "navigateToInternalPlayer : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToInternalPlayer : context != null" );
+            Log.d( TAG, "navigateToInternalPlayer : uri=" + uri );
+
+            Intent intentToLaunch = PlayerActivity.getCallingIntent( context, uri, contentId, type );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToInternalPlayer : exit" );
+    }
+
+    public void navigateToExternalPlayer( Context context, String uri ) {
+        Log.d( TAG, "navigateToExternalPlayer : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToExternalPlayer : context != null" );
+            Log.d( TAG, "navigateToExternalPlayer : uri=" + uri );
+
+            Intent intentToLaunch = new Intent( Intent.ACTION_VIEW );
+            intentToLaunch.setDataAndType( Uri.parse( uri ), "video/*" );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToInternalPlayer : exit" );
+    }
+
+    public void navigateToSettings( Context context ) {
+        Log.d( TAG, "navigateToSettings : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToSettings : context != null" );
+
+            Intent intentToLaunch = SettingsActivity.getCallingIntent( context );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToSettings : exit" );
     }
 
 }

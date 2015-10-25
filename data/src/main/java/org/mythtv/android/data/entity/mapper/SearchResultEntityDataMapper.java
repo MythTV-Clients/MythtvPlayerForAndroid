@@ -48,6 +48,9 @@ public class SearchResultEntityDataMapper {
             searchResult.setCastMembers( searchResultEntity.getCastMembers() );
             searchResult.setCharacters( searchResultEntity.getCharacters() );
             searchResult.setRating( searchResultEntity.getRating() );
+            searchResult.setStoreageGroup( searchResultEntity.getStoreageGroup() );
+            searchResult.setFilename( searchResultEntity.getFilename() );
+            searchResult.setHostname( searchResultEntity.getHostname() );
             searchResult.setType( SearchResult.Type.valueOf( searchResultEntity.getType() ) );
 
         }
@@ -125,6 +128,9 @@ public class SearchResultEntityDataMapper {
                 searchResult.setCharacters( cast.trim() );
             }
 
+            searchResult.setStoreageGroup( programEntity.getRecording().getStorageGroup() );
+            searchResult.setFilename( programEntity.getFileName() );
+            searchResult.setHostname( programEntity.getHostName() );
             searchResult.setType( SearchResult.Type.RECORDING.name() );
 
         }

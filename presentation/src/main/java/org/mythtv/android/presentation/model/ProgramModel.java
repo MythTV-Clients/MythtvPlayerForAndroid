@@ -62,4 +62,6 @@ public class ProgramModel {
     private List<ArtworkInfoModel> artworkInfos;
     private List<CastMemberModel> castMembers;
 
+    private LiveStreamInfoModel liveStreamInfo;
+
 }

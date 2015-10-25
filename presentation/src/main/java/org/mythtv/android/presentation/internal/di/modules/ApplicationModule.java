@@ -5,10 +5,12 @@ import android.content.Context;
 import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.cache.ProgramCacheImpl;
 import org.mythtv.android.data.executor.JobExecutor;
+import org.mythtv.android.data.repository.ContentDataRepository;
 import org.mythtv.android.data.repository.DvrDataRepository;
 import org.mythtv.android.data.repository.SearchDataRepository;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
+import org.mythtv.android.domain.repository.ContentRepository;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.domain.repository.SearchRepository;
 import org.mythtv.android.presentation.AndroidApplication;
@@ -79,6 +81,13 @@ public class ApplicationModule {
     SearchRepository provideSearchRepository( SearchDataRepository searchDataRepository ) {
 
         return searchDataRepository;
+    }
+
+    @Provides
+    @Singleton
+    ContentRepository provideContentRepository( ContentDataRepository contentDataRepository) {
+
+        return contentDataRepository;
     }
 
 }

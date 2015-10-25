@@ -1,11 +1,15 @@
 package org.mythtv.android.data.repository;
 
 import org.mythtv.android.data.ApplicationTestCase;
+import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
+import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityDataMapper;
+import org.mythtv.android.data.repository.datasource.ContentDataStore;
+import org.mythtv.android.data.repository.datasource.ContentDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
@@ -38,7 +42,10 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     @Mock private ProgramEntityDataMapper mockProgramEntityDataMapper;
     @Mock private SearchDataStoreFactory mockSearchDataStoreFactory;
     @Mock private SearchResultEntityDataMapper mockSearchResultEntityDataMapper;
+    @Mock private ContentDataStoreFactory mockContentDataStoreFactory;
+    @Mock private LiveStreamInfoEntityDataMapper mockLiveStreamInfoEntityDataMapper;
     @Mock private DvrDataStore mockDvrDataStore;
+    @Mock private ContentDataStore mockContentDataStore;
     @Mock private ProgramEntity mockProgramEntity;
     @Mock private Program mockProgram;
 
@@ -49,10 +56,12 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockTitleInfoEntityDataMapper, mockProgramEntityDataMapper, mockSearchDataStoreFactory, mockSearchResultEntityDataMapper );
+        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockTitleInfoEntityDataMapper, mockProgramEntityDataMapper, mockSearchDataStoreFactory, mockSearchResultEntityDataMapper, mockContentDataStoreFactory, mockLiveStreamInfoEntityDataMapper );
 
         given( mockDvrDataStoreFactory.create( anyInt(), any( DateTime.class ) ) ).willReturn( mockDvrDataStore );
         given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockDvrDataStore );
+        given( mockContentDataStoreFactory.create() ).willReturn( mockContentDataStore );
+        given( mockContentDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockContentDataStore );
 
     }
 
@@ -83,10 +92,17 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
         recordedProgramsList.add( new ProgramEntity() );
         given( mockDvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null ) ).willReturn( Observable.just( recordedProgramsList ) );
 
+        List<LiveStreamInfoEntity> liveStreamInfoEntityList = new ArrayList<>();
+        liveStreamInfoEntityList.add( new LiveStreamInfoEntity() );
+        given( mockContentDataStore.liveStreamInfoEntityList( null ) ).willReturn( Observable.just( liveStreamInfoEntityList ) );
+
         dvrDataRepository.recordedPrograms( true, -1, -1, null, null, null );
 
         verify( mockDvrDataStoreFactory ).createMasterBackendDataStore();
         verify( mockDvrDataStore ).recordedProgramEntityList( true, -1, -1, null, null, null );
+
+        verify( mockContentDataStoreFactory ).createMasterBackendDataStore();
+        verify( mockContentDataStore ).liveStreamInfoEntityList( null );
 
     }
 

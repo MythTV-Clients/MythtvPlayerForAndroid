@@ -44,6 +44,9 @@ public class SearchResultModelDataMapper {
             searchResultModel.setCastMembers( searchResult.getCastMembers() );
             searchResultModel.setCharacters( searchResult.getCharacters() );
             searchResultModel.setRating( searchResult.getRating() );
+            searchResultModel.setStoreageGroup( searchResult.getStoreageGroup() );
+            searchResultModel.setFilename( searchResult.getFilename() );
+            searchResultModel.setHostname( searchResult.getHostname() );
             searchResultModel.setType( searchResult.getType() );
 
         }

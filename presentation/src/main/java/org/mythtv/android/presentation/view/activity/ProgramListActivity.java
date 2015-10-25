@@ -313,7 +313,7 @@ public class ProgramListActivity extends BaseActivity implements HasComponent<Dv
         Log.d( TAG, "onProgramClicked : enter" );
 
         Log.i( TAG, "onProgramClicked : programModel=" + programModel.toString() );
-        navigator.navigateToProgram( this, programModel.getChannel().getChanId(), programModel.getRecording().getStartTs() );
+        navigator.navigateToProgram( this, programModel.getChannel().getChanId(), programModel.getRecording().getStartTs(), programModel.getRecording().getStorageGroup(), programModel.getFileName(), programModel.getHostName() );
 
         Log.d( TAG, "onProgramClicked : exit" );
     }

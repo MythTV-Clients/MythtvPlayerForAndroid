@@ -24,12 +24,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <!--<LinearLayout-->
-            <!--android:id="@+id/recording_layout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="vertical">-->
-
             <RelativeLayout
                 android:id="@+id/recording_info_layout"
                 android:layout_width="match_parent"
@@ -128,7 +122,7 @@
 
             <include
                 android:layout_width="match_parent"
-                android:layout_height="2px"
+                android:layout_height="1dp"
                 android:layout_margin="@dimen/margin"
                 layout="@layout/separator" />
 
@@ -148,7 +142,7 @@
 
             <include
                 android:layout_width="match_parent"
-                android:layout_height="2px"
+                android:layout_height="1dp"
                 android:layout_margin="@dimen/margin"
                 layout="@layout/separator" />
 
@@ -194,7 +188,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/play_button"
                 style="?android:attr/borderlessButtonStyle"
-                android:visibility="gone"
                 tools:text="Play"/>
 
             <Button
@@ -202,10 +195,9 @@
                 android:layout_margin="@dimen/margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="@string/queue_button"
                 style="?android:attr/borderlessButtonStyle"/>
-
-        <!--</LinearLayout>-->
 
     <include
         layout="@layout/view_progress" />

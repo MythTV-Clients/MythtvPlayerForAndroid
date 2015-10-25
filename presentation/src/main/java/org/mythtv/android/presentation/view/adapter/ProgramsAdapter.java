@@ -73,12 +73,25 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     @Override
     public void onBindViewHolder( ProgramViewHolder holder, final int position ) {
 
-        final ProgramModel programModel = this.programsCollection.get( position );
+        final ProgramModel programModel = this.programsCollection.get(position);
         holder.imageViewPreview.setImageUrl( getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + programModel.getChannel().getChanId() + "&StartTime=" + programModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=75" );
         holder.textViewTitle.setText( programModel.getTitle() );
         holder.textViewSubTitle.setText( programModel.getSubTitle() );
         holder.textViewDate.setText( programModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
         holder.textViewEpisode.setText( programModel.getSeason() + "x" + programModel.getEpisode() );
+
+        if( null != programModel.getLiveStreamInfo() ) {
+
+            holder.progressBarProgress.setVisibility( View.VISIBLE );
+            holder.progressBarProgress.setIndeterminate( false );
+            holder.progressBarProgress.setProgress( programModel.getLiveStreamInfo().getPercentComplete() );
+
+        } else {
+
+            holder.progressBarProgress.setVisibility( View.GONE );
+
+        }
+
         holder.itemView.setOnClickListener( new View.OnClickListener() {
 
             @Override

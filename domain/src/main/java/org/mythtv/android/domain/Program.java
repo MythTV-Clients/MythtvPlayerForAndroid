@@ -61,4 +61,6 @@ public class Program {
     private List<ArtworkInfo> artworkInfos;
     private List<CastMember> castMembers;
 
+    private LiveStreamInfo liveStreamInfo;
+
 }

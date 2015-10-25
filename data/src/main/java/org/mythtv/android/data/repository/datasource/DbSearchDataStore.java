@@ -66,20 +66,23 @@ public class DbSearchDataStore implements SearchDataStore {
 
                         searchResultEntity = new SearchResultEntity();
                         searchResultEntity.setChanId( cursor.getInt( cursor.getColumnIndex( "CHAN_ID" ) ) );
-                        searchResultEntity.setStartTime(cursor.getLong(cursor.getColumnIndex("START_TIME")));
-                        searchResultEntity.setTitle(cursor.getString(cursor.getColumnIndex("TITLE")));
-                        searchResultEntity.setSubTitle(cursor.getString(cursor.getColumnIndex("SUB_TITLE")));
-                        searchResultEntity.setCategory(cursor.getString(cursor.getColumnIndex("CATEGORY")));
-                        searchResultEntity.setDescription(cursor.getString(cursor.getColumnIndex("DESCRIPTION")));
-                        searchResultEntity.setInetref(cursor.getString(cursor.getColumnIndex("INETREF")));
-                        searchResultEntity.setChanId(cursor.getInt(cursor.getColumnIndex("CHAN_ID")));
-                        searchResultEntity.setChannelNumber(cursor.getString(cursor.getColumnIndex("CHAN_NUM")));
-                        searchResultEntity.setCallsign(cursor.getString(cursor.getColumnIndex("CALLSIGN")));
-                        searchResultEntity.setSeason(cursor.getInt(cursor.getColumnIndex("EPISODE")));
+                        searchResultEntity.setStartTime( cursor.getLong( cursor.getColumnIndex( "START_TIME" ) ) );
+                        searchResultEntity.setTitle( cursor.getString( cursor.getColumnIndex( "TITLE" ) ) );
+                        searchResultEntity.setSubTitle( cursor.getString( cursor.getColumnIndex( "SUB_TITLE" ) ) );
+                        searchResultEntity.setCategory( cursor.getString( cursor.getColumnIndex( "CATEGORY" ) ) );
+                        searchResultEntity.setDescription( cursor.getString( cursor.getColumnIndex( "DESCRIPTION" ) ) );
+                        searchResultEntity.setInetref( cursor.getString( cursor.getColumnIndex( "INETREF" ) ) );
+                        searchResultEntity.setChanId( cursor.getInt( cursor.getColumnIndex( "CHAN_ID" ) ) );
+                        searchResultEntity.setChannelNumber( cursor.getString( cursor.getColumnIndex( "CHAN_NUM" ) ) );
+                        searchResultEntity.setCallsign( cursor.getString( cursor.getColumnIndex( "CALLSIGN" ) ) );
+                        searchResultEntity.setSeason( cursor.getInt( cursor.getColumnIndex( "EPISODE" ) ) );
                         searchResultEntity.setSeason( cursor.getInt( cursor.getColumnIndex( "SEASON" ) ) );
-                        searchResultEntity.setCastMembers(cursor.getString(cursor.getColumnIndex("CAST_MEMBER_NAMES")));
-                        searchResultEntity.setCharacters(cursor.getString(cursor.getColumnIndex("CAST_MEMBER_CHARACTERS")));
-                        searchResultEntity.setType(cursor.getString(cursor.getColumnIndex("TYPE")));
+                        searchResultEntity.setCastMembers( cursor.getString( cursor.getColumnIndex( "CAST_MEMBER_NAMES" ) ) );
+                        searchResultEntity.setCharacters( cursor.getString( cursor.getColumnIndex( "CAST_MEMBER_CHARACTERS" ) ) );
+                        searchResultEntity.setStoreageGroup( cursor.getString( cursor.getColumnIndex( "STORAGE_GROUP" ) ) );
+                        searchResultEntity.setFilename( cursor.getString( cursor.getColumnIndex( "FILENAME" ) ) );
+                        searchResultEntity.setHostname( cursor.getString( cursor.getColumnIndex( "HOSTNAME" ) ) );
+                        searchResultEntity.setType( cursor.getString( cursor.getColumnIndex( "TYPE" ) ) );
 
                         Log.d( TAG, "search.call : searchResultEntity=" + searchResultEntity.toString() );
                         searchResultEntities.add( searchResultEntity );
@@ -105,7 +108,7 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
-    public void refreshRecordedProgramData(Collection<SearchResultEntity> searchResultEntityCollection) {
+    public void refreshRecordedProgramData( Collection<SearchResultEntity> searchResultEntityCollection ) {
         Log.d( TAG, "refreshRecordedProgramData : enter" );
 
         if( null != searchResultEntityCollection && !searchResultEntityCollection.isEmpty() ) {
@@ -134,7 +137,10 @@ public class DbSearchDataStore implements SearchDataStore {
                 statement.bindString( 12, null != searchResultEntity.getCastMembers() ? searchResultEntity.getCastMembers() : "" );
                 statement.bindString( 13, null != searchResultEntity.getCharacters() ? searchResultEntity.getCharacters() : "" );
                 statement.bindString( 14, null != searchResultEntity.getRating() ? searchResultEntity.getRating() : "" );
-                statement.bindString( 15, searchResultEntity.getType() );
+                statement.bindString( 15, searchResultEntity.getStoreageGroup() );
+                statement.bindString( 16, searchResultEntity.getFilename() );
+                statement.bindString( 17, searchResultEntity.getHostname() );
+                statement.bindString( 18, searchResultEntity.getType() );
                 statement.executeInsert();
 
             }

@@ -25,6 +25,9 @@ public class SearchResultModel {
     private String castMembers;
     private String characters;
     private String rating;
+    private String storeageGroup;
+    private String filename;
+    private String hostname;
     private SearchResult.Type type;
 
 }

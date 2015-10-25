@@ -29,8 +29,13 @@ public class ProgramEntityDataMapper {
 
     private static final String TAG = ProgramEntityDataMapper.class.getSimpleName();
 
+    private final LiveStreamInfoEntityDataMapper liveStreamInfoEntityDataMapper;
+
     @Inject
-    public ProgramEntityDataMapper() {
+    public ProgramEntityDataMapper( LiveStreamInfoEntityDataMapper liveStreamInfoEntityDataMapper ) {
+
+        this.liveStreamInfoEntityDataMapper = liveStreamInfoEntityDataMapper;
+
     }
 
     public Program transform( ProgramEntity programEntity ) {
@@ -99,6 +104,11 @@ public class ProgramEntityDataMapper {
 
             }
             program.setCastMembers( castMembers );
+
+            if( null != programEntity.getLiveStreamInfoEntity() ) {
+
+                program.setLiveStreamInfo( liveStreamInfoEntityDataMapper.transform( programEntity.getLiveStreamInfoEntity() ) );
+            }
 
         }
 

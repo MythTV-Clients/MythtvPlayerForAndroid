@@ -28,7 +28,7 @@ public class ApiConnection implements Callable<String> {
     private URL url;
     private String response;
 
-    private ApiConnection( String url ) throws MalformedURLException {
+    private ApiConnection(String url) throws MalformedURLException {
 
         this.url = new URL( url );
 
@@ -54,8 +54,8 @@ public class ApiConnection implements Callable<String> {
     }
 
     private void connectToApi() {
+        Log.d( TAG, "connectToApi : url=" + this.url );
 
-        Log.i( TAG, "connectToApi : url=" + this.url );
         OkHttpClient okHttpClient = this.createClient();
         final Request request = new Request.Builder()
                 .url( this.url )
@@ -66,7 +66,7 @@ public class ApiConnection implements Callable<String> {
         try {
 
             this.response = okHttpClient.newCall( request ).execute().body().string();
-            Log.i( TAG, "connectToApi : response=" + this.response );
+            Log.d( TAG, "connectToApi : response=" + this.response );
 
         } catch( IOException e ) {
 
@@ -85,7 +85,8 @@ public class ApiConnection implements Callable<String> {
         return okHttpClient;
     }
 
-    @Override public String call() throws Exception {
+    @Override
+    public String call() throws Exception {
 
         return requestSyncCall();
     }

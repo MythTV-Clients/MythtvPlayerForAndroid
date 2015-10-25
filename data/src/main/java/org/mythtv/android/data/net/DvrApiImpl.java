@@ -196,7 +196,7 @@ public class DvrApiImpl implements DvrApi {
 
     private String getTitleInfoEntitiesFromApi() throws MalformedURLException {
 
-        return ApiConnection.createGET( getMasterBackendUrl() + TITLE_INFO_LIST_URL ).requestSyncCall();
+        return ApiConnection.createGET(getMasterBackendUrl() + TITLE_INFO_LIST_URL).requestSyncCall();
     }
 
     private String getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
@@ -248,14 +248,14 @@ public class DvrApiImpl implements DvrApi {
 
         }
 
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.createGET(sb.toString()).requestSyncCall();
     }
 
     private String getRecordedProgramDetailsFromApi( int chanId, DateTime startTime ) throws MalformedURLException {
 
         String apiUrl = String.format( DvrApi.RECORDED_BASE_URL, chanId, fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
 
-        return ApiConnection.createGET( getMasterBackendUrl() + apiUrl ).requestSyncCall();
+        return ApiConnection.createGET(getMasterBackendUrl() + apiUrl).requestSyncCall();
     }
 
     private boolean isThereInternetConnection() {

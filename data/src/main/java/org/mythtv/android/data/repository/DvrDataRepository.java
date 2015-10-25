@@ -3,10 +3,15 @@ package org.mythtv.android.data.repository;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.LiveStreamInfoEntity;
+import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.SearchResultEntity;
+import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityDataMapper;
+import org.mythtv.android.data.repository.datasource.ContentDataStore;
+import org.mythtv.android.data.repository.datasource.ContentDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.SearchDataStore;
@@ -23,6 +28,7 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 /**
@@ -38,22 +44,26 @@ public class DvrDataRepository implements DvrRepository {
     private final ProgramEntityDataMapper programEntityDataMapper;
     private final SearchDataStoreFactory searchDataStoreFactory;
     private final SearchResultEntityDataMapper searchResultEntityDataMapper;
+    private final ContentDataStoreFactory contentDataStoreFactory;
+    private final LiveStreamInfoEntityDataMapper liveStreamInfoEntityDataMapper;
 
     @Inject
-    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, TitleInfoEntityDataMapper titleInfoEntityDataMapper, ProgramEntityDataMapper programEntityDataMapper, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
+    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, TitleInfoEntityDataMapper titleInfoEntityDataMapper, ProgramEntityDataMapper programEntityDataMapper, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper, ContentDataStoreFactory contentDataStoreFactory, LiveStreamInfoEntityDataMapper liveStreamInfoEntityDataMapper ) {
 
         this.dvrDataStoreFactory = dvrDataStoreFactory;
         this.titleInfoEntityDataMapper = titleInfoEntityDataMapper;
         this.programEntityDataMapper = programEntityDataMapper;
         this.searchDataStoreFactory = searchDataStoreFactory;
         this.searchResultEntityDataMapper = searchResultEntityDataMapper;
+        this.contentDataStoreFactory = contentDataStoreFactory;
+        this.liveStreamInfoEntityDataMapper = liveStreamInfoEntityDataMapper;
 
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<List<TitleInfo>> titleInfos() {
-        Log.d( TAG, "titleInfos : enter" );
+        Log.d(TAG, "titleInfos : enter");
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
         final SearchDataStore searchDataStore = this.searchDataStoreFactory.createWriteSearchDataStore();
@@ -76,8 +86,34 @@ public class DvrDataRepository implements DvrRepository {
         Log.d( TAG, "recordedPrograms : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
+        final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
-        return dvrDataStore.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup )
+        Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList(descending, startIndex, count, titleRegEx, recGroup, storageGroup);
+        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList(null);
+
+        Observable<List<ProgramEntity>> recordedProgramEntityList = Observable.zip( programEntities, liveStreamInfoEntities, ( programEntityList, liveStreamInfoEntityList ) -> {
+
+            if( null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty() ) {
+
+                for( ProgramEntity programEntity : programEntityList ) {
+
+                    for( LiveStreamInfoEntity liveStreamInfoEntity : liveStreamInfoEntityList ) {
+
+                        if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
+
+                            programEntity.setLiveStreamInfoEntity( liveStreamInfoEntityList.get( 0 ) );
+
+                        }
+
+                    }
+
+                }
+            }
+
+            return programEntityList;
+        });
+
+        return recordedProgramEntityList
                 .map( recordedProgramEntities -> this.programEntityDataMapper.transform( recordedProgramEntities ) );
     }
 
@@ -88,9 +124,26 @@ public class DvrDataRepository implements DvrRepository {
         Log.d( TAG, "recordedProgram : chanId=" + chanId + ", startTime=" + startTime );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.create( chanId, startTime );
+        final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
-        return dvrDataStore.recordedProgramEntityDetails( chanId, startTime )
-                .map( recordedProgramEntity -> this.programEntityDataMapper.transform( recordedProgramEntity ) );
+        Observable<ProgramEntity> programEntity = dvrDataStore.recordedProgramEntityDetails( chanId, startTime );
+        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntity = programEntity
+                .flatMap(recordedProgramEntity -> contentDataStore.liveStreamInfoEntityList(recordedProgramEntity.getFileName()));
+
+        Observable<ProgramEntity> recordedProgramEntity = Observable.zip(programEntity, liveStreamInfoEntity, (programEntity1, liveStreamInfoEntityList) -> {
+
+            if (null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty()) {
+
+                programEntity1.setLiveStreamInfoEntity(liveStreamInfoEntityList.get(0));
+
+            }
+
+            Log.d( TAG, "recordedProgram : programEntity=" + programEntity1.toString() );
+            return programEntity1;
+        });
+
+        return recordedProgramEntity
+                .map(recordedProgram -> this.programEntityDataMapper.transform(recordedProgram));
     }
 
 }

@@ -1,16 +1,17 @@
 package org.mythtv.android.presentation.view.fragment;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -21,8 +22,10 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.CastMemberModel;
+import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.presenter.ProgramDetailsPresenter;
 import org.mythtv.android.presentation.view.ProgramDetailsView;
@@ -35,6 +38,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -45,6 +49,14 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
 
     private static final String ARGUMENT_KEY_CHAN_ID = "org.mythtv.android.ARGUMENT_CHAN_ID";
     private static final String ARGUMENT_KEY_START_TIME = "org.mythtv.android.ARGUMENT_START_TIME";
+
+    public interface ProgramDetailsListener {
+
+        void onPlayRecording( final ProgramModel programModel );
+
+    }
+
+    private ProgramDetailsListener programDetailsListener;
 
     private int chanId;
     private DateTime startTime;
@@ -79,6 +91,12 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
     @Bind( R.id.recording_cast )
     TableLayout tl_cast;
 
+    @Bind( R.id.recording_queue_hls )
+    Button bt_queue;
+
+    @Bind( R.id.recording_play )
+    Button bt_play;
+
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
 
@@ -87,6 +105,8 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
 
     @Bind( R.id.bt_retry )
     Button bt_retry;
+
+    private ProgramModel programModel;
 
     public ProgramDetailsFragment() { super(); }
 
@@ -97,30 +117,42 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
         Bundle argumentsBundle = new Bundle();
         argumentsBundle.putInt( ARGUMENT_KEY_CHAN_ID, chanId );
         argumentsBundle.putLong( ARGUMENT_KEY_START_TIME, startTime.getMillis() );
-        programDetailsFragment.setArguments( argumentsBundle );
+        programDetailsFragment.setArguments(argumentsBundle);
 
         return programDetailsFragment;
     }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.d( TAG, "onCreateView : enter" );
+        Log.d(TAG, "onCreateView : enter");
 
         View fragmentView = inflater.inflate( R.layout.fragment_program_details, container, false );
         ButterKnife.bind( this, fragmentView );
 
-        Log.d( TAG, "onCreateView : exit" );
+        Log.d(TAG, "onCreateView : exit");
         return fragmentView;
     }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
         Log.d( TAG, "onActivityCreated : enter" );
-        super.onActivityCreated( savedInstanceState );
+        super.onActivityCreated(savedInstanceState);
 
         this.initialize();
 
         Log.d( TAG, "onActivityCreated : exit" );
+    }
+
+    @Override
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
+        Log.d( TAG, "onAttach : enter" );
+
+        if( activity instanceof ProgramDetailsListener ) {
+            this.programDetailsListener = (ProgramDetailsListener) activity;
+        }
+
+        Log.d( TAG, "onAttach : exit" );
     }
 
     @Override
@@ -129,6 +161,7 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
         super.onResume();
 
         this.programDetailsPresenter.resume();
+        updateLiveStreamControls();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -148,7 +181,7 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        ButterKnife.unbind(this);
 
         Log.d(TAG, "onDestroyView : exit");
     }
@@ -160,7 +193,7 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
 
         this.programDetailsPresenter.destroy();
 
-        Log.d( TAG, "onDestroy : exit" );
+        Log.d(TAG, "onDestroy : exit");
     }
 
     private void initialize() {
@@ -170,7 +203,7 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
         this.programDetailsPresenter.setView( this );
         this.chanId = getArguments().getInt( ARGUMENT_KEY_CHAN_ID );
         this.startTime = new DateTime( getArguments().getLong( ARGUMENT_KEY_START_TIME ) );
-        Log.d( TAG, "initialize : chanId=" + this.chanId + ", startTime=" + this.startTime );
+        Log.d(TAG, "initialize : chanId=" + this.chanId + ", startTime=" + this.startTime);
 
         this.programDetailsPresenter.initialize(this.chanId, this.startTime);
 
@@ -178,35 +211,36 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
     }
 
     @Override
-    public void renderProgram( ProgramModel program ) {
+    public void renderProgram( ProgramModel programModel ) {
         Log.d(TAG, "renderProgram : enter");
 
-        if( null != program ) {
+        if( null != programModel ) {
             Log.d( TAG, "renderProgram : program is not null" );
 
+            this.programModel = programModel;
+
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
-            actionBar.setTitle( program.getSubTitle() );
-            actionBar.setSubtitle( program.getTitle() );
+            actionBar.setTitle( programModel.getSubTitle() );
+            actionBar.setSubtitle( programModel.getTitle() );
 
-            if( null == program.getSubTitle() || "".equals( program.getSubTitle() ) ) {
+            if( null == programModel.getSubTitle() || "".equals( programModel.getSubTitle() ) ) {
 
-                actionBar.setTitle( program.getTitle() );
+                actionBar.setTitle( programModel.getTitle() );
                 actionBar.setSubtitle( "" );
 
             }
 
-            this.iv_coverart.setImageUrl( getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + program.getInetref() + "&Type=coverart&Width=150" );
-            this.tv_showname.setText( program.getTitle() );
-            this.tv_episodename.setText( program.getSubTitle() );
-            this.tv_callsign.setText( program.getChannel().getCallSign() );
-            this.tv_starttime.setText( program.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
-            this.tv_channelnumber.setText( program.getChannel().getChanNum() );
-            //this.pb_progress;
-            this.tv_description.setText( program.getDescription() );
+            this.iv_coverart.setImageUrl( getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=coverart&Width=150" );
+            this.tv_showname.setText( programModel.getTitle() );
+            this.tv_episodename.setText( programModel.getSubTitle() );
+            this.tv_callsign.setText( programModel.getChannel().getCallSign() );
+            this.tv_starttime.setText( programModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
+            this.tv_channelnumber.setText( programModel.getChannel().getChanNum() );
+            this.tv_description.setText( programModel.getDescription() );
 
-            if( null != program.getCastMembers() && !program.getCastMembers().isEmpty() ) {
+            if( null != programModel.getCastMembers() && !programModel.getCastMembers().isEmpty() ) {
 
-                for( CastMemberModel castMember : program.getCastMembers() ) {
+                for( CastMemberModel castMember : programModel.getCastMembers() ) {
                     Log.d( TAG, "renderProgram : castMember=" + castMember );
 
                     TableRow row = (TableRow)LayoutInflater.from( getActivity() ).inflate( R.layout.cast_member_row, null );
@@ -219,22 +253,34 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
 
             }
 
+            updateLiveStreamControls();
+
         }
 
-        Log.d( TAG, "renderProgram : exit" );
+        Log.d(TAG, "renderProgram : exit");
+    }
+
+    @Override
+    public void updateLiveStream( LiveStreamInfoModel liveStreamInfo ) {
+
+        this.programModel.setLiveStreamInfo(liveStreamInfo);
+
+        updateLiveStreamControls();
+
     }
 
     @Override
     public void showLoading() {
-        Log.d( TAG, "showLoading : enter" );
+        Log.d(TAG, "showLoading : enter");
 
-        this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
+        this.rl_progress.setVisibility(View.VISIBLE);
+        this.getActivity().setProgressBarIndeterminateVisibility(true);
 
-        Log.d( TAG, "showLoading : exit" );
+        Log.d(TAG, "showLoading : exit");
     }
 
-    @Override public void hideLoading() {
+    @Override
+    public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility(View.GONE);
@@ -245,9 +291,9 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
 
     @Override
     public void showRetry() {
-        Log.d( TAG, "showRetry : enter" );
+        Log.d(TAG, "showRetry : enter");
 
-        this.rl_retry.setVisibility( View.VISIBLE );
+        this.rl_retry.setVisibility(View.VISIBLE);
 
         Log.d( TAG, "showRetry : exit" );
     }
@@ -256,13 +302,13 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
     public void hideRetry() {
         Log.d( TAG, "hideRetry : enter" );
 
-        this.rl_retry.setVisibility( View.GONE );
+        this.rl_retry.setVisibility(View.GONE);
 
         Log.d( TAG, "hideRetry : exit" );
     }
 
     @Override
-    public void showError(String message ) {
+    public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
         this.showToastMessage( message );
@@ -277,19 +323,91 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
     }
 
     /**
-     * Loads all users.
+     * Loads program details.
      */
     private void loadProgramDetails() {
         Log.d( TAG, "loadProgramDetails : enter" );
 
         if( null != this.programDetailsPresenter ) {
-            Log.d( TAG, "loadProgramDetails : programDetailsPresenter is not null" );
+            Log.d(TAG, "loadProgramDetails : programDetailsPresenter is not null");
 
-            this.programDetailsPresenter.initialize( this.chanId, this.startTime );
+            this.programDetailsPresenter.initialize(this.chanId, this.startTime);
 
         }
 
         Log.d( TAG, "loadProgramDetails : exit" );
+    }
+
+    private void updateLiveStreamControls() {
+        Log.d( TAG, "updateLiveStreamControls : enter" );
+
+        boolean useInternalPlayer = getInternalPlayerPreferenceFromPreferences( getActivity() );
+        if( !useInternalPlayer ) {
+            Log.d( TAG, "updateLiveStreamControls : using external player" );
+
+            pb_progress.setVisibility( View.GONE );
+            bt_play.setVisibility( View.VISIBLE );
+            bt_queue.setVisibility( View.GONE );
+
+            return;
+        }
+
+        if( null != programModel && null != programModel.getLiveStreamInfo() ) {
+            Log.d( TAG, "updateLiveStreamControls : hls exists" );
+
+            pb_progress.setVisibility( View.VISIBLE );
+            pb_progress.setIndeterminate( false );
+            pb_progress.setProgress( programModel.getLiveStreamInfo().getPercentComplete() );
+
+            if( programModel.getLiveStreamInfo().getPercentComplete() > 2 ) {
+                Log.d( TAG, "updateLiveStreamControls : hls can be played" );
+
+                bt_play.setVisibility( View.VISIBLE );
+                bt_queue.setVisibility( View.GONE );
+
+            } else {
+                Log.d( TAG, "updateLiveStreamControls : hls processing..." );
+
+                bt_play.setVisibility( View.GONE );
+                bt_queue.setVisibility( View.GONE );
+
+            }
+
+        } else {
+            Log.d( TAG, "updateLiveStreamControls : hls does not exist" );
+
+            pb_progress.setVisibility( View.GONE );
+            bt_play.setVisibility(View.GONE);
+            bt_queue.setVisibility(View.VISIBLE);
+        }
+
+        Log.d( TAG, "updateLiveStreamControls : exit" );
+    }
+
+    @OnClick( R.id.recording_play )
+    void onButtonPlayClick() {
+        Log.d( TAG, "onButtonPlayClick : enter" );
+
+        if( null != programModel ) {
+
+            this.programDetailsListener.onPlayRecording( programModel );
+
+        }
+
+        Log.d( TAG, "onButtonPlayClick : exit" );
+    }
+
+    @OnClick( R.id.recording_queue_hls )
+    void onButtonQueueClick() {
+        Log.d(TAG, "onButtonQueueClick : enter");
+
+        if( null != programModel ) {
+
+            this.programDetailsPresenter.addLiveStream();
+
+        }
+
+        Log.d( TAG, "onButtonQueueClick : exit" );
     }
 
     @OnClick( R.id.bt_retry )
@@ -299,6 +417,13 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
         ProgramDetailsFragment.this.loadProgramDetails();
 
         Log.d( TAG, "onButtonRetryClick : exit" );
+    }
+
+    public boolean getInternalPlayerPreferenceFromPreferences( Context context ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        return sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, false );
     }
 
 }

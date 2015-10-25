@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerSearchComponent;
 import org.mythtv.android.presentation.internal.di.components.SearchComponent;
@@ -152,7 +151,7 @@ public class SearchableActivity extends BaseActivity implements HasComponent<Sea
 
             case RECORDING:
 
-                navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime() );
+                navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime(), searchResultModel.getStoreageGroup(), searchResultModel.getFilename(), searchResultModel.getHostname() );
 
                 break;
 

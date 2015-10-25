@@ -26,6 +26,9 @@ public class SearchResult {
     private String castMembers;
     private String characters;
     private String rating;
+    private String storeageGroup;
+    private String filename;
+    private String hostname;
     private Type type;
 
 }

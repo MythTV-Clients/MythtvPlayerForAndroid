@@ -115,4 +115,6 @@ public class ProgramEntity {
     @SerializedName( "Cast" )
     private CastEntity cast;
 
+    private LiveStreamInfoEntity liveStreamInfoEntity;
+
 }

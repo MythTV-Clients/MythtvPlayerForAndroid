@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.interactor.GetRecordedProgramDetails;
-import org.mythtv.android.domain.interactor.GetRecordedProgramList;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
@@ -15,7 +14,7 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Dagger module that provides user related collaborators.
+ * Dagger module that provides program related collaborators.
  *
  * Created by dmfrey on 8/30/15.
  */

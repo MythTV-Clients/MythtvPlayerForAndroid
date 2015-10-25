@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
 
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 23
 
         applicationId 'org.mythtv.android'
@@ -96,6 +96,7 @@ dependencies {
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
     compile presentationDependencies.picasso
+    compile presentationDependencies.exoplayer
     provided presentationDependencies.javaxAnnotation
 
     testCompile presentationTestDependencies.mockito
