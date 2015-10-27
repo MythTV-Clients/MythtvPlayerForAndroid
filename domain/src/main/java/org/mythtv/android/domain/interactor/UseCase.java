@@ -38,10 +38,12 @@ public abstract class UseCase {
      */
     @SuppressWarnings("unchecked")
     public void execute( Subscriber UseCaseSubscriber ) {
+
         this.subscription = this.buildUseCaseObservable()
-                .subscribeOn( Schedulers.from( threadExecutor) )
+                .subscribeOn( Schedulers.from( threadExecutor ) )
                 .observeOn( postExecutionThread.getScheduler() )
                 .subscribe( UseCaseSubscriber );
+
     }
 
     /**

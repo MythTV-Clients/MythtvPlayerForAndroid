@@ -76,6 +76,7 @@ public class ProgramDetailsPresenter implements Presenter {
     public void destroy() {
 
         this.getProgramDetailsUseCase.unsubscribe();
+        this.getLiveStreamsListUseCase.unsubscribe();
         this.addLiveStreamDetailsUseCase.unsubscribe();
 
     }
@@ -99,9 +100,9 @@ public class ProgramDetailsPresenter implements Presenter {
 
         this.hideViewRetry();
         this.showViewLoading();
-        this.addLiveStreamDetailsUseCase.execute(new LiveStreamInfoDetailsSubscriber());
+        this.addLiveStreamDetailsUseCase.execute( new LiveStreamInfoDetailsSubscriber() );
 
-        Log.d(TAG, "addLiveStream : exit");
+        Log.d( TAG, "addLiveStream : exit" );
     }
 
     /**
@@ -112,37 +113,46 @@ public class ProgramDetailsPresenter implements Presenter {
         this.hideViewRetry();
         this.showViewLoading();
         this.getProgramDetails();
+        this.getLiveStreamDetails();
 
     }
 
     private void showViewLoading() {
+
         this.viewDetailsView.showLoading();
+
     }
 
     private void hideViewLoading() {
+
         this.viewDetailsView.hideLoading();
+
     }
 
     private void showViewRetry() {
+
         this.viewDetailsView.showRetry();
+
     }
 
     private void hideViewRetry() {
+
         this.viewDetailsView.hideRetry();
+
     }
 
     private void showErrorMessage( ErrorBundle errorBundle ) {
 
-        String errorMessage = ErrorMessageFactory.create(this.viewDetailsView.getContext(), errorBundle.getException());
-        this.viewDetailsView.showError(errorMessage);
+        String errorMessage = ErrorMessageFactory.create( this.viewDetailsView.getContext(), errorBundle.getException() );
+        this.viewDetailsView.showError( errorMessage );
 
     }
 
     private void showProgramDetailsInView( Program program ) {
-        Log.d(TAG, "showProgramDetailsInView : program=" + program.toString());
+        Log.d( TAG, "showProgramDetailsInView : program=" + program.toString() );
 
-        final ProgramModel programModel = this.programModelDataMapper.transform(program);
-        this.viewDetailsView.renderProgram(programModel);
+        final ProgramModel programModel = this.programModelDataMapper.transform( program );
+        this.viewDetailsView.renderProgram( programModel );
 
     }
 
@@ -157,7 +167,7 @@ public class ProgramDetailsPresenter implements Presenter {
     private void getProgramDetails() {
         Log.d( TAG, "getProgramDetails : enter" );
 
-        this.getProgramDetailsUseCase.execute( new ProgramDetailsSubscriber() );
+        this.getProgramDetailsUseCase.execute(new ProgramDetailsSubscriber());
 
         Log.d( TAG, "getProgramDetails : exit" );
     }
@@ -242,6 +252,12 @@ public class ProgramDetailsPresenter implements Presenter {
             if( null != liveStreamInfos && !liveStreamInfos.isEmpty() ) {
 
                 ProgramDetailsPresenter.this.showLiveStreamDetailsInView( liveStreamInfos.get( 0 ) );
+
+                if( liveStreamInfos.get( 0 ).getPercentComplete() == 100 ) {
+
+                    ProgramDetailsPresenter.this.getLiveStreamsListUseCase.unsubscribe();
+
+                }
 
             }
 

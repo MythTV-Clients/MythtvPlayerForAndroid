@@ -1,10 +1,15 @@
 package org.mythtv.android.domain.interactor;
 
+import org.mythtv.android.domain.LiveStreamInfo;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.ContentRepository;
 
+import java.util.List;
+
 import rx.Observable;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by dmfrey on 10/25/15.
@@ -25,7 +30,22 @@ public class GetLiveStreamsList extends UseCase {
     @Override
     protected Observable buildUseCaseObservable() {
 
-        return this.contentRepository.liveStreamInfos( this.filename );
+        Action1<List<LiveStreamInfo>> onNextAction = new Action1<List<LiveStreamInfo>>() {
+
+            @Override
+            public void call( List<LiveStreamInfo> liveStreamInfos ) {
+
+                try {
+                    Thread.sleep( 5000 );
+                } catch( InterruptedException e ) { }
+
+            }
+
+        };
+
+        return this.contentRepository.liveStreamInfos( this.filename )
+                .repeat( Schedulers.io() )
+                .doOnNext( onNextAction );
     }
 
 }

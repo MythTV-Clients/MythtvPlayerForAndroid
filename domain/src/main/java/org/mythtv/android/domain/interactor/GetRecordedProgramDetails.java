@@ -6,6 +6,7 @@ import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
 
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by dmfrey on 8/26/15.
