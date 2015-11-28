@@ -5,7 +5,6 @@ import android.util.Log;
 import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
-import org.mythtv.android.data.entity.SearchResultEntity;
 import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
@@ -17,7 +16,6 @@ import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.SearchDataStore;
 import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
 import org.mythtv.android.domain.Program;
-import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.domain.TitleInfo;
 import org.mythtv.android.domain.repository.DvrRepository;
 
@@ -28,7 +26,6 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 /**
@@ -63,7 +60,7 @@ public class DvrDataRepository implements DvrRepository {
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<List<TitleInfo>> titleInfos() {
-        Log.d(TAG, "titleInfos : enter");
+        Log.d( TAG, "titleInfos : enter" );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
         final SearchDataStore searchDataStore = this.searchDataStoreFactory.createWriteSearchDataStore();

@@ -19,7 +19,7 @@ import dagger.Component;
  * Created by dmfrey on 8/30/15.
  */
 @PerActivity
-@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, TitleInfosModule.class, ProgramsModule.class, ProgramModule.class, LiveStreamModule.class} )
+@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, TitleInfosModule.class, ProgramsModule.class, ProgramModule.class, LiveStreamModule.class } )
 public interface DvrComponent {
 
     void inject( TitleInfoListFragment titleInfoListFragment );

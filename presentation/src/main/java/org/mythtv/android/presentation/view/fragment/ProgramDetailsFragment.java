@@ -421,6 +421,11 @@ public class ProgramDetailsFragment extends BaseFragment implements ProgramDetai
 
     public boolean getInternalPlayerPreferenceFromPreferences( Context context ) {
 
+        if( null == context ) {
+
+            return false;
+        }
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, false );

@@ -12,6 +12,10 @@ import org.mythtv.android.presentation.view.activity.ProgramDetailsSettingsActiv
 import org.mythtv.android.presentation.view.activity.ProgramListActivity;
 import org.mythtv.android.presentation.view.activity.SettingsActivity;
 import org.mythtv.android.presentation.view.activity.TitleInfoListActivity;
+import org.mythtv.android.presentation.view.activity.VideoDetailsActivity;
+import org.mythtv.android.presentation.view.activity.VideoDetailsSettingsActivity;
+import org.mythtv.android.presentation.view.activity.VideoMetadataInfoListActivity;
+import org.mythtv.android.presentation.view.activity.VideoPlayerActivity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -63,10 +67,10 @@ public class Navigator {
         Log.d( TAG, "navigateToProgram : enter" );
 
         if( null != context ) {
-            Log.d(TAG, "navigateToProgram : context != null");
+            Log.d( TAG, "navigateToProgram : context != null" );
 
             Intent intentToLaunch = ProgramDetailsActivity.getCallingIntent( context, chanId, startTime, storeageGroup, filename, hostname );
-            context.startActivity(intentToLaunch);
+            context.startActivity( intentToLaunch );
 
         }
 
@@ -77,7 +81,7 @@ public class Navigator {
         Log.d( TAG, "navigateToProgramSettings : enter" );
 
         if( null != context ) {
-            Log.d(TAG, "navigateToProgramSettings : context != null");
+            Log.d( TAG, "navigateToProgramSettings : context != null" );
 
             Intent intentToLaunch = ProgramDetailsSettingsActivity.getCallingIntent( context );
             context.startActivity( intentToLaunch );
@@ -85,6 +89,48 @@ public class Navigator {
         }
 
         Log.d( TAG, "navigateToProgramSettings : exit" );
+    }
+
+    public void navigateToVideos( Context context ) {
+        Log.d( TAG, "navigateToVideos : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToVideos : context != null" );
+
+            Intent intentToLaunch = VideoMetadataInfoListActivity.getCallingIntent( context );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToTitleInfos : exit" );
+    }
+
+    public void navigateToVideo( Context context, int id, String storeageGroup, String filename, String hostname ) {
+        Log.d( TAG, "navigateToVideo : enter" );
+
+        if( null != context ) {
+            Log.d(TAG, "navigateToVideo : context != null");
+
+            Intent intentToLaunch = VideoDetailsActivity.getCallingIntent( context, id, storeageGroup, filename, hostname );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToVideo : exit" );
+    }
+
+    public void navigateToVideoSettings( Context context ) {
+        Log.d( TAG, "navigateToVideoSettings : enter" );
+
+        if( null != context ) {
+            Log.d(TAG, "navigateToVideoSettings : context != null");
+
+            Intent intentToLaunch = VideoDetailsSettingsActivity.getCallingIntent( context );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToVideoSettings : exit" );
     }
 
     public void navigateToInternalPlayer( Context context, String uri, String contentId, int type ) {
@@ -116,6 +162,21 @@ public class Navigator {
         }
 
         Log.d( TAG, "navigateToInternalPlayer : exit" );
+    }
+
+    public void navigateToVideoPlayer( Context context, String uri ) {
+        Log.d( TAG, "navigateToVideoPlayer : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToVideoPlayer : context != null" );
+            Log.d( TAG, "navigateToVideoPlayer : uri=" + uri );
+
+            Intent intentToLaunch = VideoPlayerActivity.getCallingIntent( context, uri );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToVideoPlayer : exit" );
     }
 
     public void navigateToSettings( Context context ) {

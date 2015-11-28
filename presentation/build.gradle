@@ -3,18 +3,18 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
 
-//    def globalConfiguration = rootProject.extensions.getByName( "ext" )
+    def globalConfiguration = rootProject.extensions.getByName( "ext" )
 
-    buildToolsVersion "23.0.1"
-    compileSdkVersion 23
+    compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
+    buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
 
     defaultConfig {
 
-        minSdkVersion 16
-        targetSdkVersion 23
+        minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
+        targetSdkVersion globalConfiguration.getAt( "androidTargetSdkVersion" )
 
         applicationId 'org.mythtv.android'
-        versionCode 17
+        versionCode globalConfiguration.getAt( "androidVersionCode" )
         versionName "1.1.14"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId 'org.mythtv.android.test'
@@ -84,8 +84,6 @@ dependencies {
     compile project( ':data' )
 
     apt presentationDependencies.daggerCompiler
-//    provided dataDependencies.lombok
-//    apt dataDependencies.lombok
     compile presentationDependencies.dagger
     compile presentationDependencies.butterKnife
     compile presentationDependencies.appCompat
@@ -109,4 +107,4 @@ dependencies {
 
 }
 
-apply from: '../buildsystem/jacoco.gradle'
+//apply from: '../buildsystem/jacoco.gradle'

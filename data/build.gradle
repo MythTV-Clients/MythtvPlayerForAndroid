@@ -1,7 +1,6 @@
 buildscript {
 
     repositories {
-        mavenCentral()
         jcenter()
     }
 
@@ -12,7 +11,6 @@ buildscript {
 }
 
 repositories {
-    mavenCentral()
     jcenter()
 }
 
@@ -22,29 +20,17 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
 
-    buildToolsVersion "23.0.1"
-    compileSdkVersion 23
+    defaultPublishConfig "debug"
+
+    def globalConfiguration = rootProject.extensions.getByName( "ext" )
+
+    compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
+    buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 23
-        versionCode 17
-    }
-
-    buildTypes {
-
-        debug {
-            //runProguard true
-            proguardFiles 'proguard-rules.txt'
-            testCoverageEnabled = true
-        }
-
-        release {
-            //runProguard false
-            proguardFiles 'proguard-rules.txt'
-            testCoverageEnabled = false
-        }
-
+        minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
+        targetSdkVersion globalConfiguration.getAt( "androidTargetSdkVersion" )
+        versionCode globalConfiguration.getAt( "androidVersionCode" )
     }
 
     compileOptions {
@@ -63,7 +49,7 @@ android {
     }
 
     lintOptions {
-        quiet true
+//        quiet true
         abortOnError false
         ignoreWarnings true
         disable 'InvalidPackage'  // Some libraries have issues with this
@@ -95,5 +81,3 @@ dependencies {
     testCompile testDependencies.robolectric
 
 }
-
-apply from: '../buildsystem/jacoco.gradle'

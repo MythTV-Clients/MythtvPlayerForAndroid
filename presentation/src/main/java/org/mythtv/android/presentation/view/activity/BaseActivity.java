@@ -175,6 +175,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             case R.id.navigation_item_watch_videos :
                 Log.i( TAG, "onNavigationItemSelected : watch videos clicked" );
 
+                navigator.navigateToVideos( this );
+
 //                String videoView  = MainApplication.getInstance().getVideoView();
 //                if( "grid".equals( videoView ) ) {
 
@@ -225,19 +227,29 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
     protected String getMasterBackendUrl() {
 
-        String host = getFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_PORT );
+        String host = getStringFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getStringFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
+        return "http://" + host + ":" + port;
     }
 
-    protected String getFromPreferences( Context context, String key ) {
+    protected boolean getShowAdultContent() {
+
+        return getBooleanFromPreferences( this, SettingsKeys.KEY_PREF_SHOW_ADULT_TAB );
+    }
+
+    protected String getStringFromPreferences( Context context, String key ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         return sharedPreferences.getString( key, "" );
+    }
+
+    protected boolean getBooleanFromPreferences( Context context, String key ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        return sharedPreferences.getBoolean( key, false );
     }
 
     /**

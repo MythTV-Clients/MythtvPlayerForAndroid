@@ -26,6 +26,9 @@ import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.view.fragment.ProgramDetailsFragment;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -81,13 +84,13 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d(TAG, "onCreate : enter");
 
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
 
-        super.onCreate(savedInstanceState);
+        super.onCreate( savedInstanceState );
 
-        ButterKnife.bind(this);
+        ButterKnife.bind( this );
 
-        this.initializeActivity(savedInstanceState);
+        this.initializeActivity( savedInstanceState );
         this.initializeInjector();
 
         Log.d(TAG, "onCreate : exit");
@@ -95,7 +98,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
     @Override
     public boolean onNavigateUp() {
-        Log.d(TAG, "onNavigateUp : enter");
+        Log.d( TAG, "onNavigateUp : enter" );
 
         onBackPressed();
 
@@ -105,20 +108,20 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
-        Log.d(TAG, "onSaveInstanceState : enter");
+        Log.d( TAG, "onSaveInstanceState : enter" );
 
         if( null != outState ) {
             Log.d( TAG, "onSaveInstanceState : outState is not null" );
 
-            outState.putInt(INSTANCE_STATE_PARAM_CHAN_ID, this.chanId);
-            outState.putLong(INSTANCE_STATE_PARAM_START_TIME, this.startTime.getMillis());
-            outState.putString(INSTANCE_STATE_PARAM_STORAGE_GROUP, this.storageGroup);
+            outState.putInt( INSTANCE_STATE_PARAM_CHAN_ID, this.chanId );
+            outState.putLong( INSTANCE_STATE_PARAM_START_TIME, this.startTime.getMillis() );
+            outState.putString( INSTANCE_STATE_PARAM_STORAGE_GROUP, this.storageGroup );
             outState.putString( INSTANCE_STATE_PARAM_FILENAME, this.filename );
             outState.putString( INSTANCE_STATE_PARAM_HOSTNAME, this.hostname );
 
         }
 
-        super.onSaveInstanceState(outState);
+        super.onSaveInstanceState( outState );
 
         Log.d( TAG, "onSaveInstanceState : exit" );
     }
@@ -139,7 +142,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
         }
 
-        Log.d(TAG, "onRestoreInstanceState : exit");
+        Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
     @Override
@@ -171,7 +174,7 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
      * Initializes this activity.
      */
     private void initializeActivity( Bundle savedInstanceState ) {
-        Log.d(TAG, "initializeActivity : enter");
+        Log.d( TAG, "initializeActivity : enter" );
 
         if( null == savedInstanceState  ) {
             Log.d( TAG, "initializeActivity : savedInstanceState is null" );
@@ -259,14 +262,20 @@ public class ProgramDetailsActivity extends BaseActivity implements HasComponent
 
             String recordingUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
 
-            navigator.navigateToExternalPlayer(this, recordingUrl);
+            navigator.navigateToExternalPlayer( this, recordingUrl );
 
         } else if( null != programModel.getLiveStreamInfo() ) {
 
-            String recordingUrl = getMasterBackendUrl() + programModel.getLiveStreamInfo().getRelativeUrl();
+            try {
 
-            navigator.navigateToInternalPlayer( this, recordingUrl, null, PlayerActivity.TYPE_HLS );
+                String recordingUrl = getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
+                recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
+                recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
 
+//                navigator.navigateToInternalPlayer( this, recordingUrl, null, PlayerActivity.TYPE_HLS );
+                navigator.navigateToVideoPlayer( this, recordingUrl );
+
+            } catch( UnsupportedEncodingException e ) { }
         }
 
         Log.d( TAG, "onPlayRecording : exit" );

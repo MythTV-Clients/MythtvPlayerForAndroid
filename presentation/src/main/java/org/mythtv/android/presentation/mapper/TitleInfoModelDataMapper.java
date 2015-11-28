@@ -19,6 +19,7 @@ import javax.inject.Inject;
 public class TitleInfoModelDataMapper {
 
     private static final String TAG = TitleInfoModelDataMapper.class.getSimpleName();
+
     @Inject
     public TitleInfoModelDataMapper() {
     }

@@ -17,7 +17,9 @@ import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.domain.SettingsKeys;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +35,7 @@ public class ContentApiImpl implements ContentApi {
 
     private static final String TAG = ContentApiImpl.class.getSimpleName();
 
-    private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final DateTimeFormatter fmt = DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
 
     private final Context context;
     private final LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper;
@@ -106,7 +108,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = addRecordingLiveStreamFromApi(recordedId, chanId, startTime);
+                        String responseLiveStreamInfo = addRecordingLiveStreamFromApi( recordedId, chanId, startTime );
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseLiveStreamInfo ) );
@@ -148,7 +150,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = addVideoLiveStreamFromApi(id);
+                        String responseLiveStreamInfo = addVideoLiveStreamFromApi( id );
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseLiveStreamInfo ) );
@@ -192,7 +194,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfoEntities = getLiveStreamInfoEntitiesFromApi(filename);
+                        String responseLiveStreamInfoEntities = getLiveStreamInfoEntitiesFromApi( filename );
                         if( null != responseLiveStreamInfoEntities ) {
                             Log.d(TAG, "LiveStreamInfoEntityList.call : retrieved LiveStream info entities");
 
@@ -214,13 +216,13 @@ public class ContentApiImpl implements ContentApi {
                     }
 
                 } else {
-                    Log.d(TAG, "LiveStreamInfoEntityList.call : network is not connected");
+                    Log.d( TAG, "LiveStreamInfoEntityList.call : network is not connected" );
 
                     subscriber.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d(TAG, "LiveStreamInfoEntityList.call : exit");
+                Log.d( TAG, "LiveStreamInfoEntityList.call : exit" );
             }
 
         });
@@ -239,10 +241,10 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = getLiveStreamInfoFromApi(id);
+                        String responseLiveStreamInfo = getLiveStreamInfoFromApi( id );
                         if( null != responseLiveStreamInfo ) {
 
-                            subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity(responseLiveStreamInfo) );
+                            subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseLiveStreamInfo ) );
                             subscriber.onCompleted();
 
                         } else {
@@ -359,20 +361,43 @@ public class ContentApiImpl implements ContentApi {
 
         if( null != storageGroup && !"".equals( storageGroup ) ) {
 
-            params.add( String.format( STORAGE_GROUP_QS, storageGroup ) );
+            try {
+
+                String encodedStorageGroup = URLEncoder.encode( storageGroup, "UTF-8" );
+                encodedStorageGroup = encodedStorageGroup.replaceAll( "%2F", "/" );
+                encodedStorageGroup = encodedStorageGroup.replaceAll( "\\+", "%20" );
+
+                params.add( String.format( STORAGE_GROUP_QS, encodedStorageGroup ) );
+
+            } catch( UnsupportedEncodingException e ) {
+
+                Log.e( TAG, "addLiveStreamFromApi : error", e );
+
+            }
 
         }
 
         if( null != filename && !"".equals( filename ) ) {
 
-            params.add( String.format( FILENAME_QS, filename ) );
+            try {
+
+                String encodedFilename = URLEncoder.encode( filename, "UTF-8" );
+                encodedFilename = encodedFilename.replaceAll( "%2F", "/" );
+                encodedFilename = encodedFilename.replaceAll( "\\+", "%20" );
+
+                params.add( String.format( FILENAME_QS, encodedFilename ) );
+
+            } catch( UnsupportedEncodingException e ) {
+
+                Log.e( TAG, "addLiveStreamFromApi : error", e );
+
+            }
 
         }
 
         if( null != hostname && !"".equals( hostname ) ) {
 
-            params.add( String.format( HOSTNAME_QS, hostname ) );
-
+           params.add( String.format( HOSTNAME_QS, hostname ) );
         }
 
         addParameters( params );
@@ -484,8 +509,20 @@ public class ContentApiImpl implements ContentApi {
 
         if( null != filename && !"".equals( filename ) ) {
 
-            sb.append( "?" );
-            sb.append( String.format( FILENAME_QS, filename ) );
+            try {
+
+                String encodedFilename = URLEncoder.encode( filename, "UTF-8" );
+                encodedFilename = encodedFilename.replaceAll( "%2F", "/" );
+                encodedFilename = encodedFilename.replaceAll( "\\+", "%20" );
+
+                sb.append( "?" );
+                sb.append( String.format( FILENAME_QS, encodedFilename ) );
+
+            } catch( UnsupportedEncodingException e ) {
+
+                Log.e( TAG, "addLiveStreamFromApi : error", e );
+
+            }
 
         }
 

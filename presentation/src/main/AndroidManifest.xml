@@ -146,12 +146,72 @@
         </activity>
 
         <activity
+            android:name=".presentation.view.activity.VideoMetadataInfoListActivity"
+            android:label="@string/watch_video">
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.VideoDetailsActivity"
+            android:launchMode="singleTop">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.VideoMetadataInfoListActivity" />
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.VideoMetadataInfoListActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.VideoDetailsSettingsActivity"
+            android:launchMode="singleTop">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.VideoDetailsActivity" />
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.SearchableActivity" />
+
+        </activity>
+
+        <activity
             android:name=".presentation.view.activity.SettingsActivity"
             android:label="@string/title_activity_settings">
 
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".presentation.view.activity.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.RecordingSettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".presentation.view.activity.SettingsActivity" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.SettingsActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.VideoSettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".presentation.view.activity.SettingsActivity" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.SettingsActivity" />
 
         </activity>
 
@@ -170,6 +230,16 @@
                 <data android:scheme="asset" />
                 <data android:scheme="file" />
             </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.VideoPlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:launchMode="singleInstance"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
         </activity>
 

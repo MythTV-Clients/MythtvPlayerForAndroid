@@ -60,7 +60,6 @@ public class TitleInfoListFragment extends BaseFragment implements TitleInfoList
     Button bt_retry;
 
     private TitleInfosAdapter titleInfosAdapter;
-    private TitleInfosLayoutManager titleInfosLayoutManager;
 
     private TitleInfoListListener titleInfoListListener;
 
@@ -68,9 +67,7 @@ public class TitleInfoListFragment extends BaseFragment implements TitleInfoList
 
     public static TitleInfoListFragment newInstance() {
 
-        TitleInfoListFragment titleInfoListFragment = new TitleInfoListFragment();
-
-        return titleInfoListFragment;
+        return new TitleInfoListFragment();
     }
 
     @Override public void onAttach( Activity activity ) {
@@ -159,8 +156,7 @@ public class TitleInfoListFragment extends BaseFragment implements TitleInfoList
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.titleInfosLayoutManager = new TitleInfosLayoutManager( getActivity() );
-        this.rv_titleInfos.setLayoutManager( titleInfosLayoutManager );
+        this.rv_titleInfos.setLayoutManager( new TitleInfosLayoutManager( getActivity() ) );
 
         this.titleInfosAdapter = new TitleInfosAdapter( getActivity(), new ArrayList<TitleInfoModel>() );
         this.titleInfosAdapter.setOnItemClickListener( onItemClickListener );

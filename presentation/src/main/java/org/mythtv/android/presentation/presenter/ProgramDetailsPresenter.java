@@ -70,13 +70,16 @@ public class ProgramDetailsPresenter implements Presenter {
     public void resume() {}
 
     @Override
-    public void pause() {}
+    public void pause() {
+
+        this.getLiveStreamsListUseCase.unsubscribe();
+
+    }
 
     @Override
     public void destroy() {
 
         this.getProgramDetailsUseCase.unsubscribe();
-        this.getLiveStreamsListUseCase.unsubscribe();
         this.addLiveStreamDetailsUseCase.unsubscribe();
 
     }
@@ -167,7 +170,7 @@ public class ProgramDetailsPresenter implements Presenter {
     private void getProgramDetails() {
         Log.d( TAG, "getProgramDetails : enter" );
 
-        this.getProgramDetailsUseCase.execute(new ProgramDetailsSubscriber());
+        this.getProgramDetailsUseCase.execute( new ProgramDetailsSubscriber() );
 
         Log.d( TAG, "getProgramDetails : exit" );
     }

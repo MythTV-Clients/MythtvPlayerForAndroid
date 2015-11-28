@@ -31,7 +31,6 @@ public class ProgramEntityJsonMapper {
     private final Gson gson;
 
     @Inject
-
     public ProgramEntityJsonMapper() {
 
         Type dateTimeType = new TypeToken<DateTime>(){}.getType();

@@ -26,7 +26,7 @@ import lombok.Data;
 @Data
 public class ArtworkInfoModel {
 
-    private String uRL;
+    private String url;
     private String fileName;
     private String storageGroup;
     private String type;

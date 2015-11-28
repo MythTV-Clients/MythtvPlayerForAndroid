@@ -4,15 +4,19 @@ import android.content.Context;
 
 import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.cache.ProgramCacheImpl;
+import org.mythtv.android.data.cache.VideoCache;
+import org.mythtv.android.data.cache.VideoCacheImpl;
 import org.mythtv.android.data.executor.JobExecutor;
 import org.mythtv.android.data.repository.ContentDataRepository;
 import org.mythtv.android.data.repository.DvrDataRepository;
 import org.mythtv.android.data.repository.SearchDataRepository;
+import org.mythtv.android.data.repository.VideoDataRepository;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.ContentRepository;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.domain.repository.SearchRepository;
+import org.mythtv.android.domain.repository.VideoRepository;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.UIThread;
 import org.mythtv.android.presentation.navigation.Navigator;
@@ -85,9 +89,23 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    ContentRepository provideContentRepository( ContentDataRepository contentDataRepository) {
+    ContentRepository provideContentRepository( ContentDataRepository contentDataRepository ) {
 
         return contentDataRepository;
+    }
+
+    @Provides
+    @Singleton
+    VideoCache provideVideoCache( VideoCacheImpl videoCacheImpl ) {
+
+        return videoCacheImpl;
+    }
+
+    @Provides
+    @Singleton
+    VideoRepository provideVideoRepository( VideoDataRepository videoDataRepository ) {
+
+        return videoDataRepository;
     }
 
 }

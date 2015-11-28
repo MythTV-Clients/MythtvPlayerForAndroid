@@ -2,8 +2,6 @@ package org.mythtv.android.presentation.mapper;
 
 import android.util.Log;
 
-import org.mythtv.android.data.entity.ArtworkInfoEntity;
-import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.domain.ArtworkInfo;
 import org.mythtv.android.domain.CastMember;
 import org.mythtv.android.domain.ChannelInfo;
@@ -13,7 +11,6 @@ import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.model.ArtworkInfoModel;
 import org.mythtv.android.presentation.model.CastMemberModel;
 import org.mythtv.android.presentation.model.ChannelInfoModel;
-import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.RecordingInfoModel;
 
@@ -137,7 +134,7 @@ public class ProgramModelDataMapper {
             for( ArtworkInfo detail : program.getArtworkInfos() ) {
 
                 ArtworkInfoModel artworkInfoModel = new ArtworkInfoModel();
-                artworkInfoModel.setURL( detail.getUrl() );
+                artworkInfoModel.setUrl( detail.getUrl() );
                 artworkInfoModel.setFileName( detail.getFileName() );
                 artworkInfoModel.setStorageGroup( detail.getStorageGroup() );
                 artworkInfoModel.setType( detail.getType() );
