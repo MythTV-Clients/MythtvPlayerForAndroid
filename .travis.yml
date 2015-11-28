@@ -9,7 +9,8 @@ branches:
   - clean_architecture
 android:
   components:
-  - build-tools-21.1.1
-  - android-21
+  - tools
+  - build-tools-23.0.2
+  - android-23
   - extra-android-m2repository
 script: "./gradlew build"
