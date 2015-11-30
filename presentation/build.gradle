@@ -102,9 +102,9 @@ dependencies {
     androidTestCompile presentationTestDependencies.dexmakerMockito
     androidTestCompile presentationTestDependencies.espresso
     androidTestCompile presentationTestDependencies.testingSupportLib
-//    androidTestCompile presentationTestDependencies.robolectric
-//    androidTestCompile presentationTestDependencies.hamcrest
+    androidTestCompile presentationTestDependencies.robolectric
+    androidTestCompile presentationTestDependencies.hamcrest
 
 }
 
-//apply from: '../buildsystem/jacoco.gradle'
+apply from: '../buildsystem/jacoco.gradle'

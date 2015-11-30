@@ -89,3 +89,5 @@ dependencies {
     testCompile testDependencies.robolectric
 
 }
+
+apply from: '../buildsystem/jacoco.gradle'
