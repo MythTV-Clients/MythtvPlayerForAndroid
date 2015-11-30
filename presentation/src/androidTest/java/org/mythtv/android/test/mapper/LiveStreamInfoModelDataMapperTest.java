@@ -1,9 +1,8 @@
 package org.mythtv.android.test.mapper;
 
+import junit.framework.TestCase;
+
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.mythtv.android.test.ApplicationTestCase;
 import org.mythtv.android.domain.LiveStreamInfo;
 import org.mythtv.android.presentation.mapper.LiveStreamInfoModelDataMapper;
 import org.mythtv.android.presentation.model.LiveStreamInfoModel;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by dmfrey on 10/17/15.
  */
-public class LiveStreamInfoModelDataMapperTest extends ApplicationTestCase {
+public class LiveStreamInfoModelDataMapperTest extends TestCase {
 
     private static final int FAKE_ID = 1;
     private static final int FAKE_WIDTH = 1;
@@ -48,14 +47,13 @@ public class LiveStreamInfoModelDataMapperTest extends ApplicationTestCase {
 
     private LiveStreamInfoModelDataMapper liveStreamInfoModelDataMapper;
 
-    @Before
-    public void setup() throws Exception {
+    protected void setUp() throws Exception {
+        super.setUp();
 
         liveStreamInfoModelDataMapper = new LiveStreamInfoModelDataMapper();
 
     }
 
-    @Test
     public void testTransformLiveStreamInfoModel() {
 
         LiveStreamInfo liveStreamInfo = createFakeLiveStreamInfo();
@@ -88,7 +86,6 @@ public class LiveStreamInfoModelDataMapperTest extends ApplicationTestCase {
 
     }
 
-    @Test
     public void testTransformLiveStreamInfoModelCollection() {
 
         LiveStreamInfo mockLiveStreamInfoOne = mock( LiveStreamInfo.class );

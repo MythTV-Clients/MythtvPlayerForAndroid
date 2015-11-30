@@ -1,8 +1,8 @@
 package org.mythtv.android.test.mapper;
 
+import junit.framework.TestCase;
+
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
 import org.mythtv.android.domain.Artwork;
 import org.mythtv.android.domain.ArtworkInfo;
 import org.mythtv.android.domain.Cast;
@@ -14,7 +14,6 @@ import org.mythtv.android.presentation.model.ArtworkModel;
 import org.mythtv.android.presentation.model.CastMemberModel;
 import org.mythtv.android.presentation.model.CastModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.test.ApplicationTestCase;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +27,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by dmfrey on 9/18/15.
  */
-public class VideoMetadataInfoModelDataMapperTest extends ApplicationTestCase {
+public class VideoMetadataInfoModelDataMapperTest extends TestCase {
 
     private static final int FAKE_ID = 1;
     private static final String FAKE_TITLE = "fake title";
@@ -64,14 +63,13 @@ public class VideoMetadataInfoModelDataMapperTest extends ApplicationTestCase {
 
     private VideoMetadataInfoModelDataMapper videoMetadataInfoModelDataMapper;
 
-    @Before
-    public void setup() throws Exception {
+    protected void setUp() throws Exception {
+        super.setUp();
 
         videoMetadataInfoModelDataMapper = new VideoMetadataInfoModelDataMapper();
 
     }
 
-    @Test
     public void testTransformVideoMetadataInfo() {
 
         VideoMetadataInfo videoMetadataInfo = createFakeVideoMetadataInfo();
@@ -114,7 +112,6 @@ public class VideoMetadataInfoModelDataMapperTest extends ApplicationTestCase {
 
     }
 
-    @Test
     public void testTransformVideoMetadataInfoCollection() {
 
         VideoMetadataInfo mockVideoMetadataInfoOne = mock( VideoMetadataInfo.class );

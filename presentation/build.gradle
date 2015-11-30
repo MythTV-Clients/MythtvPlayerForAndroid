@@ -6,7 +6,7 @@ android {
     def globalConfiguration = rootProject.extensions.getByName( "ext" )
 
     compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
-    buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
 
@@ -97,13 +97,13 @@ dependencies {
     compile presentationDependencies.exoplayer
     provided presentationDependencies.javaxAnnotation
 
-    testCompile presentationTestDependencies.mockito
+    androidTestCompile presentationTestDependencies.mockito
     androidTestCompile presentationTestDependencies.dexmaker
     androidTestCompile presentationTestDependencies.dexmakerMockito
-    testCompile presentationTestDependencies.espresso
-    testCompile presentationTestDependencies.testingSupportLib
-    testCompile presentationTestDependencies.robolectric
-    testCompile presentationTestDependencies.hamcrest
+    androidTestCompile presentationTestDependencies.espresso
+    androidTestCompile presentationTestDependencies.testingSupportLib
+//    androidTestCompile presentationTestDependencies.robolectric
+//    androidTestCompile presentationTestDependencies.hamcrest
 
 }
 
