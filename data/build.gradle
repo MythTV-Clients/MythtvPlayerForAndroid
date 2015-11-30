@@ -56,6 +56,14 @@ android {
         disable 'OldTargetApi'    // Due to Robolectric that modifies the manifest when running tests
     }
 
+    buildTypes {
+
+        debug {
+            testCoverageEnabled = true
+        }
+
+    }
+
 }
 
 dependencies {
