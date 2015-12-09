@@ -139,7 +139,6 @@ public class SearchResultEntityDataMapper {
     }
 
     public List<SearchResultEntity> transformPrograms( Collection<ProgramEntity> programEntityCollection ) {
-        Log.d( TAG, "transformPrograms : enter" );
 
         List<SearchResultEntity> searchResultEntityList = new ArrayList<>( programEntityCollection.size() );
 
@@ -148,7 +147,6 @@ public class SearchResultEntityDataMapper {
 
             searchResult = transformProgram( programEntity );
             if( null != searchResult ) {
-                Log.d( TAG, "transformPrograms : searchResult=" + searchResult );
 
                 searchResultEntityList.add( searchResult );
 
@@ -156,7 +154,6 @@ public class SearchResultEntityDataMapper {
 
         }
 
-        Log.d( TAG, "transformPrograms : exit" );
         return searchResultEntityList;
     }
 
