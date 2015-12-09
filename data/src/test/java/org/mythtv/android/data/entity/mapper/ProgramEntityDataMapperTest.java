@@ -108,7 +108,6 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
     private static final String FAKE_CAST_MEMBER_ROLE = "fake cast member role";
     private static final String FAKE_CAST_MEMBER_TRANSLATED_ROLE = "fake cast member translated role";
 
-
     private ProgramEntityDataMapper programEntityDataMapper;
 
     @Before
