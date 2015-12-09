@@ -197,6 +197,35 @@ public class SearchResultEntityDataMapperTest {
 
     }
 
+    @Test
+    public void testTransformProgramLiveTv() throws Exception {
+
+        ProgramEntity programEntity = createFakeProgramEntity();
+        programEntity.getRecording().setRecGroup( "LiveTV" );
+        SearchResultEntity searchResultEntity = searchResultEntityDataMapper.transformProgram( programEntity );
+
+        assertThat( searchResultEntity, nullValue() );
+
+    }
+
+    @Test
+    public void testTransformProgramEntityCollection() throws Exception {
+
+        ProgramEntity mockProgramEntityOne = createFakeProgramEntity();
+        ProgramEntity mockProgramEntityTwo = createFakeProgramEntity();
+
+        List<ProgramEntity> programEntityList = new ArrayList<>( 5 );
+        programEntityList.add( mockProgramEntityOne );
+        programEntityList.add( mockProgramEntityTwo );
+
+        Collection<SearchResultEntity> searchResultCollection = searchResultEntityDataMapper.transformPrograms( programEntityList );
+
+        assertThat( searchResultCollection.toArray()[ 0 ], is( instanceOf( SearchResultEntity.class ) ) );
+        assertThat( searchResultCollection.toArray()[ 1 ], is( instanceOf( SearchResultEntity.class ) ) );
+        assertThat( searchResultCollection.size(), is( 2 ) );
+
+    }
+
     private SearchResultEntity createFakeSearchResultEntity() {
 
         SearchResultEntity searchResultEntity = new SearchResultEntity();
