@@ -24,6 +24,7 @@ import static org.mockito.Mockito.verify;
 public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
 
     private static final int FAKE_VIDEO_ID = 999;
+    private static final String FAKE_VIDEO_FILENAME= "filename";
 
     private MasterBackendVideoDataStore masterBackendVideoDataStore;
 
@@ -42,7 +43,7 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     }
 
     @Test
-    public void testGetVideoEntityListFromApi() {
+    public void testGetVideos() {
 
         List<VideoMetadataInfoEntity> fakeVideoMetadataInfoEntities = new ArrayList<>();
         VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = new VideoMetadataInfoEntity();
@@ -57,7 +58,22 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     }
 
     @Test
-    public void testGetVideoEntityDetailsFromApi() {
+    public void testGetCategory() {
+
+        List<VideoMetadataInfoEntity> fakeVideoMetadataInfoEntities = new ArrayList<>();
+        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = new VideoMetadataInfoEntity();
+        fakeVideoMetadataInfoEntity.setContentType( ContentType.MOVIE );
+        fakeVideoMetadataInfoEntities.add( fakeVideoMetadataInfoEntity );
+        Observable<List<VideoMetadataInfoEntity>> fakeObservable = Observable.just( fakeVideoMetadataInfoEntities );
+        given( mockVideoApi.getVideoList( null, null, false, -1, -1 ) ).willReturn( fakeObservable );
+
+        masterBackendVideoDataStore.getCategory( null );
+        verify( mockVideoApi ).getVideoList( null, null, false, -1, -1);
+
+    }
+
+    @Test
+    public void testGetVideoById() {
 
         VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = new VideoMetadataInfoEntity();
         Observable<VideoMetadataInfoEntity> fakeObservable = Observable.just( fakeVideoMetadataInfoEntity );
@@ -66,6 +82,19 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
         masterBackendVideoDataStore.getVideoById(FAKE_VIDEO_ID);
 
         verify( mockVideoApi ).getVideoById( FAKE_VIDEO_ID );
+
+    }
+
+    @Test
+    public void testGetVideoByFilename() {
+
+        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = new VideoMetadataInfoEntity();
+        Observable<VideoMetadataInfoEntity> fakeObservable = Observable.just( fakeVideoMetadataInfoEntity );
+        given( mockVideoApi.getVideoByFilename( FAKE_VIDEO_FILENAME ) ).willReturn( fakeObservable );
+
+        masterBackendVideoDataStore.getVideoByFilename( FAKE_VIDEO_FILENAME );
+
+        verify( mockVideoApi ).getVideoByFilename( FAKE_VIDEO_FILENAME );
 
     }
 
