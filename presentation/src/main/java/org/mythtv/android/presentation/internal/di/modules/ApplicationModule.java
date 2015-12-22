@@ -2,10 +2,12 @@ package org.mythtv.android.presentation.internal.di.modules;
 
 import android.content.Context;
 
+import org.mythtv.android.data.cache.DiskVideoCacheImpl;
+import org.mythtv.android.data.cache.MemoryVideoCache;
+import org.mythtv.android.data.cache.MemoryVideoCacheImpl;
 import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.cache.ProgramCacheImpl;
 import org.mythtv.android.data.cache.VideoCache;
-import org.mythtv.android.data.cache.VideoCacheImpl;
 import org.mythtv.android.data.executor.JobExecutor;
 import org.mythtv.android.data.repository.ContentDataRepository;
 import org.mythtv.android.data.repository.DvrDataRepository;
@@ -96,7 +98,14 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    VideoCache provideVideoCache( VideoCacheImpl videoCacheImpl ) {
+    MemoryVideoCache provideMemoryVideoCache( MemoryVideoCacheImpl memoryVideoCacheImpl ) {
+
+        return memoryVideoCacheImpl;
+    }
+
+    @Provides
+    @Singleton
+    VideoCache provideVideoCache( DiskVideoCacheImpl videoCacheImpl ) {
 
         return videoCacheImpl;
     }

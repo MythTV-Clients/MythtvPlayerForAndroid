@@ -12,17 +12,15 @@ import rx.Observable;
  */
 public interface VideoCache {
 
-    Observable<List<VideoMetadataInfoEntity>> getCategory( String category );
-
-    void putCategory( List<VideoMetadataInfoEntity> videos );
+    void put( List<VideoMetadataInfoEntity> videos );
 
     Observable<VideoMetadataInfoEntity> get( final int id );
 
-    void put( VideoMetadataInfoEntity videoMetadataInfoEntity );
+    Observable<List<VideoMetadataInfoEntity>> getCategory( String category );
 
-    boolean isCached( final int id );
+    Observable<List<VideoMetadataInfoEntity>> getDirectory( String directory );
 
-    boolean isCategoryCached( final String category );
+    boolean isCached();
 
     boolean isExpired();
 

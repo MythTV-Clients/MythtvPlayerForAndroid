@@ -47,7 +47,7 @@ public class DbSearchDataStore implements SearchDataStore {
             public void call( Subscriber<? super List<SearchResultEntity>> subscriber ) {
                 Log.d( TAG, "search.call : enter" );
 
-                Cursor cursor = null;
+                Cursor cursor;
 
                 SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 
@@ -65,20 +65,21 @@ public class DbSearchDataStore implements SearchDataStore {
                     while( cursor.moveToNext() ) {
 
                         searchResultEntity = new SearchResultEntity();
-                        searchResultEntity.setChanId( cursor.getInt( cursor.getColumnIndex( "CHAN_ID" ) ) );
                         searchResultEntity.setStartTime( cursor.getLong( cursor.getColumnIndex( "START_TIME" ) ) );
                         searchResultEntity.setTitle( cursor.getString( cursor.getColumnIndex( "TITLE" ) ) );
                         searchResultEntity.setSubTitle( cursor.getString( cursor.getColumnIndex( "SUB_TITLE" ) ) );
                         searchResultEntity.setCategory( cursor.getString( cursor.getColumnIndex( "CATEGORY" ) ) );
                         searchResultEntity.setDescription( cursor.getString( cursor.getColumnIndex( "DESCRIPTION" ) ) );
                         searchResultEntity.setInetref( cursor.getString( cursor.getColumnIndex( "INETREF" ) ) );
+                        searchResultEntity.setSeason( cursor.getInt( cursor.getColumnIndex( "SEASON" ) ) );
+                        searchResultEntity.setEpisode( cursor.getInt( cursor.getColumnIndex( "EPISODE" ) ) );
                         searchResultEntity.setChanId( cursor.getInt( cursor.getColumnIndex( "CHAN_ID" ) ) );
                         searchResultEntity.setChannelNumber( cursor.getString( cursor.getColumnIndex( "CHAN_NUM" ) ) );
                         searchResultEntity.setCallsign( cursor.getString( cursor.getColumnIndex( "CALLSIGN" ) ) );
-                        searchResultEntity.setSeason( cursor.getInt( cursor.getColumnIndex( "EPISODE" ) ) );
-                        searchResultEntity.setSeason( cursor.getInt( cursor.getColumnIndex( "SEASON" ) ) );
                         searchResultEntity.setCastMembers( cursor.getString( cursor.getColumnIndex( "CAST_MEMBER_NAMES" ) ) );
                         searchResultEntity.setCharacters( cursor.getString( cursor.getColumnIndex( "CAST_MEMBER_CHARACTERS" ) ) );
+                        searchResultEntity.setVideoId( cursor.getInt( cursor.getColumnIndex( "VIDEO_ID" ) ) );
+                        searchResultEntity.setRating( cursor.getString( cursor.getColumnIndex( "RATING" ) ) );
                         searchResultEntity.setStoreageGroup( cursor.getString( cursor.getColumnIndex( "STORAGE_GROUP" ) ) );
                         searchResultEntity.setFilename( cursor.getString( cursor.getColumnIndex( "FILENAME" ) ) );
                         searchResultEntity.setHostname( cursor.getString( cursor.getColumnIndex( "HOSTNAME" ) ) );
@@ -118,38 +119,61 @@ public class DbSearchDataStore implements SearchDataStore {
             Log.d( TAG, "refreshRecordedProgramData : deleting old recordings" );
             db.delete( SearchResultEntity.TABLE_NAME, "type = ?", new String[] { SearchResult.Type.RECORDING.name() } );
 
-            SQLiteStatement statement = db.compileStatement( SearchResultEntity.SQL_INSERT );
-            for( SearchResultEntity searchResultEntity : searchResultEntityCollection ) {
-                Log.d(TAG, "refreshRecordedProgramData : searchResultEntity=" + searchResultEntity.toString());
-
-                statement.clearBindings();
-                statement.bindLong( 1, searchResultEntity.getStartTime() );
-                statement.bindString( 2, searchResultEntity.getTitle() );
-                statement.bindString( 3, searchResultEntity.getSubTitle() );
-                statement.bindString( 4, searchResultEntity.getCategory() );
-                statement.bindString( 5, searchResultEntity.getDescription() );
-                statement.bindString( 6, searchResultEntity.getInetref() );
-                statement.bindLong( 7, searchResultEntity.getSeason() );
-                statement.bindLong( 8, searchResultEntity.getEpisode() );
-                statement.bindLong( 9, searchResultEntity.getChanId() );
-                statement.bindString( 10, searchResultEntity.getChannelNumber() );
-                statement.bindString( 11, searchResultEntity.getCallsign() );
-                statement.bindString( 12, null != searchResultEntity.getCastMembers() ? searchResultEntity.getCastMembers() : "" );
-                statement.bindString( 13, null != searchResultEntity.getCharacters() ? searchResultEntity.getCharacters() : "" );
-                statement.bindString( 14, null != searchResultEntity.getRating() ? searchResultEntity.getRating() : "" );
-                statement.bindString( 15, searchResultEntity.getStoreageGroup() );
-                statement.bindString( 16, searchResultEntity.getFilename() );
-                statement.bindString( 17, searchResultEntity.getHostname() );
-                statement.bindString( 18, searchResultEntity.getType() );
-                statement.executeInsert();
-
-            }
-            db.setTransactionSuccessful();
-            db.endTransaction();
-
+            processCollection( searchResultEntityCollection );
         }
 
         Log.d( TAG, "refreshRecordedProgramData : exit" );
+    }
+
+    @Override
+    public void refreshVideoData( Collection<SearchResultEntity> searchResultEntityCollection ) {
+        Log.d( TAG, "refreshVideoData : enter" );
+
+        if( null != searchResultEntityCollection && !searchResultEntityCollection.isEmpty() ) {
+
+            db.beginTransaction();
+
+            Log.d( TAG, "refreshVideoData : deleting old videos" );
+            db.delete( SearchResultEntity.TABLE_NAME, "type = ?", new String[] { SearchResult.Type.VIDEO.name() } );
+
+            processCollection( searchResultEntityCollection );
+        }
+
+        Log.d( TAG, "refreshVideoData : exit" );
+    }
+
+    private void processCollection( Collection<SearchResultEntity> searchResultEntityCollection ) {
+
+        SQLiteStatement statement = db.compileStatement( SearchResultEntity.SQL_INSERT );
+        for( SearchResultEntity searchResultEntity : searchResultEntityCollection ) {
+            Log.d(TAG, "processCollection : searchResultEntity=" + searchResultEntity.toString());
+
+            statement.clearBindings();
+            statement.bindLong( 1, searchResultEntity.getStartTime() );
+            statement.bindString( 2, null != searchResultEntity.getTitle() ? searchResultEntity.getTitle() : "" );
+            statement.bindString( 3, null != searchResultEntity.getSubTitle() ? searchResultEntity.getSubTitle() : "" );
+            statement.bindString( 4, null != searchResultEntity.getCategory() ? searchResultEntity.getCategory() : "" );
+            statement.bindString( 5, null != searchResultEntity.getDescription() ? searchResultEntity.getDescription() : "" );
+            statement.bindString( 6, null != searchResultEntity.getInetref() ? searchResultEntity.getInetref() : "" );
+            statement.bindLong( 7, searchResultEntity.getSeason() );
+            statement.bindLong( 8, searchResultEntity.getEpisode() );
+            statement.bindLong( 9, searchResultEntity.getChanId() );
+            statement.bindString( 10, null != searchResultEntity.getChannelNumber() ? searchResultEntity.getChannelNumber() : "" );
+            statement.bindString( 11, null != searchResultEntity.getCallsign() ? searchResultEntity.getCallsign() : "" );
+            statement.bindString( 12, null != searchResultEntity.getCastMembers() ? searchResultEntity.getCastMembers() : "" );
+            statement.bindString( 13, null != searchResultEntity.getCharacters() ? searchResultEntity.getCharacters() : "" );
+            statement.bindLong( 14, searchResultEntity.getVideoId() );
+            statement.bindString( 15, null != searchResultEntity.getRating() ? searchResultEntity.getRating() : "" );
+            statement.bindString( 16, null != searchResultEntity.getStoreageGroup() ? searchResultEntity.getStoreageGroup() : "" );
+            statement.bindString( 17, searchResultEntity.getFilename() );
+            statement.bindString( 18, searchResultEntity.getHostname() );
+            statement.bindString( 19, searchResultEntity.getType() );
+            statement.executeInsert();
+
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+
     }
 
 }

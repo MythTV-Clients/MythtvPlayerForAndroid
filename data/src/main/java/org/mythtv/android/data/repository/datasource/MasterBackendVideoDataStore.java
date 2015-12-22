@@ -2,16 +2,13 @@ package org.mythtv.android.data.repository.datasource;
 
 import android.util.Log;
 
-import org.joda.time.DateTime;
+import org.mythtv.android.data.cache.MemoryVideoCache;
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
-import org.mythtv.android.data.entity.VideoMetadataInfoListEntity;
+import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.net.VideoApi;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -27,29 +24,42 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
     private final VideoApi videoApi;
     private final VideoCache videoCache;
+    private final MemoryVideoCache memoryVideoCache;
+    private final SearchDataStoreFactory searchDataStoreFactory;
+    private final SearchResultEntityDataMapper searchResultEntityDataMapper;
 
-    private final Action1<VideoMetadataInfoEntity> saveVideoToCacheAction =
-            videoMetadataInfoEntity -> {
-
-                if( null != videoMetadataInfoEntity ) {
-                    MasterBackendVideoDataStore.this.videoCache.put( videoMetadataInfoEntity );
-                }
-
-            };
-
-    private final Action1<List<VideoMetadataInfoEntity>> saveVideoToCategoryToCacheAction =
+    private final Action1<List<VideoMetadataInfoEntity>> saveVideosToCacheAction =
             videoMetadataInfoEntities -> {
 
-                if( null != videoMetadataInfoEntities && !videoMetadataInfoEntities.isEmpty() ) {
-                    MasterBackendVideoDataStore.this.videoCache.putCategory( videoMetadataInfoEntities );
+                if( null != videoMetadataInfoEntities ) {
+                    MasterBackendVideoDataStore.this.videoCache.put( videoMetadataInfoEntities );
                 }
 
             };
 
-    public MasterBackendVideoDataStore( VideoApi videoApi, VideoCache videoCache ) {
+    private final Action1<List<VideoMetadataInfoEntity>> saveVideosToDbAction =
+            videoMetadataInfoEntities -> {
+
+                if( null != videoMetadataInfoEntities ) {
+
+                    final SearchDataStore searchDataStore = MasterBackendVideoDataStore.this.searchDataStoreFactory.createWriteSearchDataStore();
+
+                    Observable
+                        .from( videoMetadataInfoEntities )
+                        .toList()
+                        .map( MasterBackendVideoDataStore.this.searchResultEntityDataMapper::transformVideos )
+                        .subscribe( searchDataStore::refreshVideoData );
+                }
+
+            };
+
+    public MasterBackendVideoDataStore( VideoApi videoApi, VideoCache videoCache, MemoryVideoCache memoryVideoCache, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
 
         this.videoApi = videoApi;
         this.videoCache = videoCache;
+        this.memoryVideoCache = memoryVideoCache;
+        this.searchDataStoreFactory = searchDataStoreFactory;
+        this.searchResultEntityDataMapper = searchResultEntityDataMapper;
 
     }
 
@@ -61,9 +71,8 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Observable<List<VideoMetadataInfoEntity>> videoList = this.videoApi.getVideoList( folder, sort, descending, startIndex, count )
                 .subscribeOn( Schedulers.io() )
-                .observeOn( AndroidSchedulers.mainThread() );
-
-        buildCategories( videoList );
+                .observeOn( AndroidSchedulers.mainThread() )
+                .doOnNext( saveVideosToCacheAction );
 
         Log.d( TAG, "getVideos : exit" );
         return videoList;
@@ -77,15 +86,15 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Observable<List<VideoMetadataInfoEntity>> videoList = this.videoApi.getVideoList( null, null, false, -1, -1 )
                 .subscribeOn( Schedulers.io() )
-                .observeOn( AndroidSchedulers.mainThread() );
+                .observeOn( AndroidSchedulers.mainThread() )
+                .doOnNext( saveVideosToCacheAction )
+                .doOnNext( saveVideosToDbAction );
 
         return videoList
                 .flatMap( Observable::from )
-//                .doOnNext( saveVideoToCacheAction )
-//                .doOnNext( saveVideoToCategoryToCacheAction )
-                .filter( videoMetadataInfoEntity1 -> videoMetadataInfoEntity1.getContentType().equals( category ) )
+                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
                 .toList()
-                .doOnNext( saveVideoToCategoryToCacheAction );
+                .doOnNext( videoMetadataInfoEntities -> this.memoryVideoCache.put( category, videoMetadataInfoEntities ) );
     }
 
     @Override
@@ -96,10 +105,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getVideoById : exit" );
         return this.videoApi.getVideoById( id )
-                .doOnNext( videoMetadataInfoEntity ->  Log.i( TAG, "getVideoById : video=" + videoMetadataInfoEntity ) )
-//                .subscribeOn( Schedulers.io() )
-//                .observeOn( AndroidSchedulers.mainThread() )
-                .doOnNext( saveVideoToCacheAction );
+                .doOnNext( videoMetadataInfoEntity ->  Log.i( TAG, "getVideoById : video=" + videoMetadataInfoEntity ) );
     }
 
     @Override
@@ -109,44 +115,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getVideoById : filename=" + filename );
 
         Log.d( TAG, "getVideoById : exit" );
-        return this.videoApi.getVideoByFilename( filename )
-                .doOnNext( saveVideoToCacheAction );
-    }
-
-    private Map<String, List<VideoMetadataInfoEntity>> buildCategories( Observable<List<VideoMetadataInfoEntity>> videoList ) {
-        Log.d( TAG, "buildCategories : enter");
-
-        Map<String, List<VideoMetadataInfoEntity>> categoryMap = new HashMap<>();
-        videoList
-                .flatMap( Observable::from )
-//                .doOnNext( saveVideoToCacheAction )
-//                .doOnNext(saveVideoToCategoryToCacheAction)
-//                .filter( videoMetadataInfoEntity1 -> videoMetadataInfoEntity1.getContentType().equals( contentType ) )
-                .subscribe(videoMetadataInfoEntity -> mapCategory(videoMetadataInfoEntity, categoryMap));
-
-       Log.d( TAG, "buildCategories : exit" );
-        return categoryMap;
-    }
-
-    private void mapCategory( VideoMetadataInfoEntity videoMetadataInfoEntity, Map<String, List<VideoMetadataInfoEntity>> categoriesMap ) {
-        Log.d( TAG, "mapCategory : enter");
-
-        if( null == videoMetadataInfoEntity ) {
-            Log.d( TAG, "mapCategory : videoMetadataInfoEntity is null" );
-
-            return;
-        }
-
-        if( !categoriesMap.containsKey( videoMetadataInfoEntity.getContentType() ) ) {
-            Log.d( TAG, "mapCategory : adding category" );
-
-            categoriesMap.put( videoMetadataInfoEntity.getContentType(), new ArrayList<>() );
-        }
-
-        Log.d( TAG, "mapCategory : adding video to category" );
-        categoriesMap.get( videoMetadataInfoEntity.getContentType() ).add( videoMetadataInfoEntity );
-
-        Log.d( TAG, "mapCategory : exit" );
+        return this.videoApi.getVideoByFilename( filename );
     }
 
 }

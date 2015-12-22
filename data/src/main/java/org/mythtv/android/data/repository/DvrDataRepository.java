@@ -42,10 +42,9 @@ public class DvrDataRepository implements DvrRepository {
     private final SearchDataStoreFactory searchDataStoreFactory;
     private final SearchResultEntityDataMapper searchResultEntityDataMapper;
     private final ContentDataStoreFactory contentDataStoreFactory;
-    private final LiveStreamInfoEntityDataMapper liveStreamInfoEntityDataMapper;
 
     @Inject
-    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, TitleInfoEntityDataMapper titleInfoEntityDataMapper, ProgramEntityDataMapper programEntityDataMapper, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper, ContentDataStoreFactory contentDataStoreFactory, LiveStreamInfoEntityDataMapper liveStreamInfoEntityDataMapper ) {
+    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, TitleInfoEntityDataMapper titleInfoEntityDataMapper, ProgramEntityDataMapper programEntityDataMapper, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper, ContentDataStoreFactory contentDataStoreFactory ) {
 
         this.dvrDataStoreFactory = dvrDataStoreFactory;
         this.titleInfoEntityDataMapper = titleInfoEntityDataMapper;
@@ -53,7 +52,6 @@ public class DvrDataRepository implements DvrRepository {
         this.searchDataStoreFactory = searchDataStoreFactory;
         this.searchResultEntityDataMapper = searchResultEntityDataMapper;
         this.contentDataStoreFactory = contentDataStoreFactory;
-        this.liveStreamInfoEntityDataMapper = liveStreamInfoEntityDataMapper;
 
     }
 

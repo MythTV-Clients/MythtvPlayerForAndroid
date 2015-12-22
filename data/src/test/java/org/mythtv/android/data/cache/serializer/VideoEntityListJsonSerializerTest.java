@@ -3,9 +3,7 @@ package org.mythtv.android.data.cache.serializer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mythtv.android.data.ApplicationTestCase;
-import org.mythtv.android.data.entity.ProgramListEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoListEntity;
-import org.mythtv.android.domain.VideoMetadataInfo;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

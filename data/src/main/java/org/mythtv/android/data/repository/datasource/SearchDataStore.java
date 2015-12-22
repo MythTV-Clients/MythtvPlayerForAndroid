@@ -16,4 +16,6 @@ public interface SearchDataStore {
 
     void refreshRecordedProgramData( Collection<SearchResultEntity> searchResultEntityCollection );
 
+    void refreshVideoData( Collection<SearchResultEntity> searchResultEntityCollection );
+
 }

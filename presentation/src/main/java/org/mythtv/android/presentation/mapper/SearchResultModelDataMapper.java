@@ -1,7 +1,5 @@
 package org.mythtv.android.presentation.mapper;
 
-import android.util.Log;
-
 import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.model.SearchResultModel;
@@ -44,7 +42,7 @@ public class SearchResultModelDataMapper {
             searchResultModel.setCastMembers( searchResult.getCastMembers() );
             searchResultModel.setCharacters( searchResult.getCharacters() );
             searchResultModel.setRating( searchResult.getRating() );
-            searchResultModel.setStoreageGroup( searchResult.getStoreageGroup() );
+            searchResultModel.setStoreageGroup( searchResult.getStorageGroup() );
             searchResultModel.setFilename( searchResult.getFilename() );
             searchResultModel.setHostname( searchResult.getHostname() );
             searchResultModel.setType( searchResult.getType() );

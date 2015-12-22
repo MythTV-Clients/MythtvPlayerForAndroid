@@ -6,9 +6,11 @@ import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.CastMemberEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.SearchResultEntity;
+import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.domain.CastMember;
 import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.SearchResult;
+import org.mythtv.android.domain.VideoMetadataInfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,8 +49,9 @@ public class SearchResultEntityDataMapper {
             searchResult.setInetref( searchResultEntity.getInetref() );
             searchResult.setCastMembers( searchResultEntity.getCastMembers() );
             searchResult.setCharacters( searchResultEntity.getCharacters() );
+            searchResult.setVideoId( searchResultEntity.getVideoId() );
             searchResult.setRating( searchResultEntity.getRating() );
-            searchResult.setStoreageGroup( searchResultEntity.getStoreageGroup() );
+            searchResult.setStorageGroup( searchResultEntity.getStoreageGroup() );
             searchResult.setFilename( searchResultEntity.getFilename() );
             searchResult.setHostname( searchResultEntity.getHostname() );
             searchResult.setType( SearchResult.Type.valueOf( searchResultEntity.getType() ) );
@@ -146,6 +149,47 @@ public class SearchResultEntityDataMapper {
         for( ProgramEntity programEntity : programEntityCollection ) {
 
             searchResult = transformProgram( programEntity );
+            if( null != searchResult ) {
+
+                searchResultEntityList.add( searchResult );
+
+            }
+
+        }
+
+        return searchResultEntityList;
+    }
+
+    public SearchResultEntity transformVideo( VideoMetadataInfoEntity videoEntity ) {
+
+        SearchResultEntity searchResult = null;
+        if( null != videoEntity ) {
+
+            searchResult = new SearchResultEntity();
+            searchResult.setTitle( videoEntity.getTitle() );
+            searchResult.setSubTitle( videoEntity.getSubTitle() );
+            searchResult.setSeason( videoEntity.getSeason() );
+            searchResult.setEpisode( videoEntity.getEpisode() );
+            searchResult.setDescription( videoEntity.getDescription() );
+            searchResult.setInetref( videoEntity.getInetref() );
+
+            searchResult.setFilename( videoEntity.getFileName() );
+            searchResult.setHostname( videoEntity.getHostName() );
+            searchResult.setType( SearchResult.Type.VIDEO.name() );
+
+        }
+
+        return searchResult;
+    }
+
+    public List<SearchResultEntity> transformVideos( Collection<VideoMetadataInfoEntity> videoEntityCollection ) {
+
+        List<SearchResultEntity> searchResultEntityList = new ArrayList<>( videoEntityCollection.size() );
+
+        SearchResultEntity searchResult;
+        for( VideoMetadataInfoEntity videoEntity : videoEntityCollection ) {
+
+            searchResult = transformVideo( videoEntity );
             if( null != searchResult ) {
 
                 searchResultEntityList.add( searchResult );

@@ -69,6 +69,7 @@ public class VideoMetadataInfoListActivity extends BaseActivity implements HasCo
 
         mTabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
         mPager.setAdapter( new VideosFragmentPagerAdapter( getSupportFragmentManager() ) );
+        mPager.setOffscreenPageLimit( 1 );
         mTabLayout.setupWithViewPager( mPager );
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
 

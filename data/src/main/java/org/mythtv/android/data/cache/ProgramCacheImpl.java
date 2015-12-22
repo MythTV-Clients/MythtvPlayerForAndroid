@@ -26,7 +26,7 @@ public class ProgramCacheImpl implements ProgramCache {
     private static final String TAG = ProgramCacheImpl.class.getSimpleName();
 
     private static final String SETTINGS_FILE_NAME = "org.mythtv.android.SETTINGS";
-    private static final String SETTINGS_KEY_LAST_CACHE_UPDATE = "last_cache_update";
+    private static final String SETTINGS_KEY_LAST_CACHE_UPDATE = "program_last_cache_update";
 
     private static final String DEFAULT_FILE_NAME = "program_";
     private static final long EXPIRATION_TIME = 60 * 10 * 1000;
@@ -53,7 +53,7 @@ public class ProgramCacheImpl implements ProgramCache {
         }
 
         this.context = context.getApplicationContext();
-        this.cacheDir = this.context.getCacheDir();
+        this.cacheDir = new File( this.context.getCacheDir().getPath() + File.separator + "programs" );
         this.serializer = recordedProgramCacheSerializer;
         this.fileManager = fileManager;
         this.threadExecutor = executor;
@@ -151,7 +151,7 @@ public class ProgramCacheImpl implements ProgramCache {
     public synchronized void evictAll() {
         Log.d( TAG, "evictAll : enter" );
 
-        this.executeAsynchronously(new CacheEvictor(this.fileManager, this.cacheDir));
+        this.executeAsynchronously(new CacheEvictor( this.fileManager, this.cacheDir ) );
 
         Log.d(TAG, "evictAll : exit");
     }
@@ -164,18 +164,24 @@ public class ProgramCacheImpl implements ProgramCache {
      * @return A valid file.
      */
     private File buildFile( int chanId, DateTime startTime ) {
-        Log.d( TAG, "buildFile : enter" );
+        Log.v( TAG, "buildFile : enter" );
 
         StringBuilder fileNameBuilder = new StringBuilder();
         fileNameBuilder.append( this.cacheDir.getPath() );
+
+        File dir = new File( fileNameBuilder.toString() );
+        if( !dir.exists() ) {
+            dir.mkdirs();
+        }
+
         fileNameBuilder.append( File.separator );
         fileNameBuilder.append( DEFAULT_FILE_NAME );
         fileNameBuilder.append( chanId );
         fileNameBuilder.append( "_" );
         fileNameBuilder.append( startTime.getMillis() );
-        Log.d( TAG, "buildFile : fileNameBuild=" + fileNameBuilder.toString() );
+        Log.v( TAG, "buildFile : fileNameBuild=" + fileNameBuilder.toString() );
 
-        Log.d( TAG, "buildFile : exit" );
+        Log.v( TAG, "buildFile : exit" );
         return new File( fileNameBuilder.toString() );
     }
 
@@ -183,21 +189,21 @@ public class ProgramCacheImpl implements ProgramCache {
      * Set in millis, the last time the cache was accessed.
      */
     private void setLastCacheUpdateTimeMillis() {
-        Log.d( TAG, "setLastCacheUpdateTimeMillis : enter" );
+        Log.v( TAG, "setLastCacheUpdateTimeMillis : enter" );
 
         long currentMillis = System.currentTimeMillis();
         this.fileManager.writeToPreferences( this.context, SETTINGS_FILE_NAME, SETTINGS_KEY_LAST_CACHE_UPDATE, currentMillis );
 
-        Log.d( TAG, "setLastCacheUpdateTimeMillis : exit" );
+        Log.v( TAG, "setLastCacheUpdateTimeMillis : exit" );
     }
 
     /**
      * Get in millis, the last time the cache was accessed.
      */
     private long getLastCacheUpdateTimeMillis() {
-        Log.d( TAG, "getLastCacheUpdateTimeMillis : enter" );
+        Log.v( TAG, "getLastCacheUpdateTimeMillis : enter" );
 
-        Log.d( TAG, "getLastCacheUpdateTimeMillis : exit" );
+        Log.v( TAG, "getLastCacheUpdateTimeMillis : exit" );
         return this.fileManager.getFromPreferences( this.context, SETTINGS_FILE_NAME, SETTINGS_KEY_LAST_CACHE_UPDATE );
     }
 
