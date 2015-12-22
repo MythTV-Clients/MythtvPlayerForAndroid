@@ -15,7 +15,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.presenter.MovieListPresenter;
+import org.mythtv.android.presentation.presenter.TelevisionListPresenter;
 import org.mythtv.android.presentation.view.VideoMetadataInfoListView;
 import org.mythtv.android.presentation.view.adapter.VideoMetadataInfosAdapter;
 import org.mythtv.android.presentation.view.adapter.VideoMetadataInfosLayoutManager;
@@ -46,7 +46,7 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
     }
 
     @Inject
-    MovieListPresenter movieListPresenter;
+    TelevisionListPresenter televisionListPresenter;
 
     @Bind( R.id.rv_videoMetadataInfos )
     RecyclerView rv_videoMetadataInfos;
@@ -100,7 +100,7 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
         super.onActivityCreated( savedInstanceState );
 
         this.initialize();
-        this.loadMovieList();
+        this.loadTelevisionList();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -110,7 +110,7 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-        this.movieListPresenter.resume();
+        this.televisionListPresenter.resume();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -120,7 +120,7 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-        this.movieListPresenter.pause();
+        this.televisionListPresenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -130,7 +130,7 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
         Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
-        this.movieListPresenter.destroy();
+        this.televisionListPresenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
     }
@@ -149,9 +149,8 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( VideoComponent.class ).inject( this );
-        this.movieListPresenter.setView( this );
+        this.televisionListPresenter.setView( this );
         this.getComponent( VideoComponent.class ).plus( new VideosModule() );
-//        this.movieListPresenter.initialize( contentType );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -251,21 +250,21 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
     }
 
     /**
-     * Loads all movies.
+     * Loads all tv series.
      */
-    private void loadMovieList() {
-        Log.d( TAG, "loadMovieList : enter" );
+    private void loadTelevisionList() {
+        Log.d( TAG, "loadTelevisionList : enter" );
 
-        this.movieListPresenter.initialize();
+        this.televisionListPresenter.initialize();
 
-        Log.d( TAG, "loadMovieList : exit" );
+        Log.d( TAG, "loadTelevisionList : exit" );
     }
 
     @OnClick( R.id.bt_retry )
     void onButtonRetryClick() {
         Log.d( TAG, "onButtonRetryClick : enter" );
 
-        TelevisionListFragment.this.loadMovieList();
+        TelevisionListFragment.this.loadTelevisionList();
 
         Log.d( TAG, "onButtonRetryClick : exit" );
     }
@@ -275,9 +274,9 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
                 @Override
                 public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
 
-                    if( null != TelevisionListFragment.this.movieListPresenter && null != videoMetadataInfoModel ) {
+                    if( null != TelevisionListFragment.this.televisionListPresenter && null != videoMetadataInfoModel ) {
 
-                        TelevisionListFragment.this.movieListPresenter.onVideoClicked(videoMetadataInfoModel);
+                        TelevisionListFragment.this.televisionListPresenter.onVideoClicked(videoMetadataInfoModel);
 
                     }
 

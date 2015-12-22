@@ -37,8 +37,18 @@ public class DiskVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getCategory : enter" );
         Log.d( TAG, "getCategory : category=" + category );
 
-        return this.videoCache.getCategory( category )
-                .doOnNext( videoMetadataInfoEntities -> this.memoryVideoCache.put( category, videoMetadataInfoEntities ) );
+        if( "TELEVISION".equals( category ) ) {
+
+            return this.videoCache.getCategory( category )
+                    .doOnNext(videoMetadataInfoEntities -> this.memoryVideoCache.put(category, videoMetadataInfoEntities));
+
+        } else {
+
+            return this.videoCache.getCategory(category)
+                    .doOnNext(videoMetadataInfoEntities -> this.memoryVideoCache.put(category, videoMetadataInfoEntities));
+
+        }
+
     }
 
     @Override
