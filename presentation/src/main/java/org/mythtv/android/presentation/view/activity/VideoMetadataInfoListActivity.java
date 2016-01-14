@@ -165,11 +165,19 @@ public class VideoMetadataInfoListActivity extends BaseActivity implements HasCo
     }
 
     @Override
-    public void onVideoClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
+    public void onVideoClicked( VideoMetadataInfoModel videoMetadataInfoModel, String contentType ) {
         Log.d( TAG, "onVideoClicked : enter" );
 
         Log.i( TAG, "onVideoClicked : videoMetadataInfoModel=" + videoMetadataInfoModel.toString() );
-        navigator.navigateToVideo( this, videoMetadataInfoModel.getId(), null, videoMetadataInfoModel.getFileName(), videoMetadataInfoModel.getHostName() );
+        if( ContentType.TELEVISION.equals( contentType ) ) {
+
+            navigator.navigateToVideoSeries( this, videoMetadataInfoModel.getTitle() );
+
+        } else {
+
+            navigator.navigateToVideo( this, videoMetadataInfoModel.getId(), null, videoMetadataInfoModel.getFileName(), videoMetadataInfoModel.getHostName() );
+
+        }
 
         Log.d( TAG, "onVideoClicked : exit" );
     }

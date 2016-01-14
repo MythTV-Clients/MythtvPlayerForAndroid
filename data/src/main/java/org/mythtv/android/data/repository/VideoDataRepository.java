@@ -66,9 +66,24 @@ public class VideoDataRepository implements VideoRepository {
         return videoDataStore.getCategory( contentType )
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
-                .doOnError( throwable -> Log.e( TAG, "getVideoList : error", throwable ) )
+                .doOnError( throwable -> Log.e( TAG, "getVideoListByContentType : error", throwable ) )
                 .map( videoMetadataInfoEntities -> this.videoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntities ) );
 
+    }
+
+    @SuppressWarnings( "Convert2MethodRef" )
+    @Override
+    public Observable<List<VideoMetadataInfo>> getVideoListByContentTypeAndSeries( String contentType, String series ) {
+        Log.d( TAG, "getVideoListByContentTypeAndSeries : enter" );
+        Log.d( TAG, "getVideoListByContentTypeAndSeries : contentType=" + contentType + ", series=" + series );
+
+        final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore( contentType );
+
+        return videoDataStore.getSeriesInCategory( contentType, series )
+                .subscribeOn( Schedulers.io() )
+                .observeOn( AndroidSchedulers.mainThread() )
+                .doOnError( throwable -> Log.e( TAG, "getVideoListByContentTypeAndSeries : error", throwable ) )
+                .map( videoMetadataInfoEntities -> this.videoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntities ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )

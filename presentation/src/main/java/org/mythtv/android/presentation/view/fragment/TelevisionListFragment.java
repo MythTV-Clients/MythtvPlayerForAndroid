@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
@@ -32,18 +33,9 @@ import butterknife.OnClick;
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class TelevisionListFragment extends BaseFragment implements VideoMetadataInfoListView {
+public class TelevisionListFragment extends BaseVideoPagerFragment implements VideoMetadataInfoListView {
 
     private static final String TAG = TelevisionListFragment.class.getSimpleName();
-
-    /**
-     * Interface for listening videoMetadataInfo list events.
-     */
-    public interface VideoMetadataInfoListListener {
-
-        void onVideoMetadataInfoClicked( final VideoMetadataInfoModel videoMetadataInfoModel );
-
-    }
 
     @Inject
     TelevisionListPresenter televisionListPresenter;
@@ -62,7 +54,7 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
 
     private VideoMetadataInfosAdapter videoMetadataInfosAdapter;
 
-    private VideoMetadataInfoListListener videoMetadataInfoListListener;
+    private VideoListListener videoListListener;
 
     public TelevisionListFragment() { super(); }
 
@@ -75,8 +67,8 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
         super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        if( activity instanceof VideoMetadataInfoListListener ) {
-            this.videoMetadataInfoListListener = (VideoMetadataInfoListListener) activity;
+        if( activity instanceof VideoListListener ) {
+            this.videoListListener = (VideoListListener) activity;
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -223,9 +215,9 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
     public void viewVideoMetadataInfo( VideoMetadataInfoModel videoMetadataInfoModel ) {
         Log.d( TAG, "viewVideoMetadataInfo : enter" );
 
-        if( null != this.videoMetadataInfoListListener ) {
+        if( null != this.videoListListener ) {
 
-            this.videoMetadataInfoListListener.onVideoMetadataInfoClicked( videoMetadataInfoModel );
+            this.videoListListener.onVideoClicked( videoMetadataInfoModel, ContentType.TELEVISION );
 
         }
 
@@ -276,7 +268,7 @@ public class TelevisionListFragment extends BaseFragment implements VideoMetadat
 
                     if( null != TelevisionListFragment.this.televisionListPresenter && null != videoMetadataInfoModel ) {
 
-                        TelevisionListFragment.this.televisionListPresenter.onVideoClicked(videoMetadataInfoModel);
+                        TelevisionListFragment.this.televisionListPresenter.onVideoClicked( videoMetadataInfoModel );
 
                     }
 

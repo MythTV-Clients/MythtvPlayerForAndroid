@@ -15,6 +15,8 @@ public interface VideoDataStore {
 
     Observable<List<VideoMetadataInfoEntity>> getCategory( String category );
 
+    Observable<List<VideoMetadataInfoEntity>> getSeriesInCategory( String category, String series );
+
     Observable<VideoMetadataInfoEntity> getVideoById( final int id );
 
     Observable<VideoMetadataInfoEntity> getVideoByFilename( final String filename );

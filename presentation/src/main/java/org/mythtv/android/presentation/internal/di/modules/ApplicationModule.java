@@ -3,8 +3,6 @@ package org.mythtv.android.presentation.internal.di.modules;
 import android.content.Context;
 
 import org.mythtv.android.data.cache.DiskVideoCacheImpl;
-import org.mythtv.android.data.cache.MemoryVideoCache;
-import org.mythtv.android.data.cache.MemoryVideoCacheImpl;
 import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.cache.ProgramCacheImpl;
 import org.mythtv.android.data.cache.VideoCache;
@@ -94,13 +92,6 @@ public class ApplicationModule {
     ContentRepository provideContentRepository( ContentDataRepository contentDataRepository ) {
 
         return contentDataRepository;
-    }
-
-    @Provides
-    @Singleton
-    MemoryVideoCache provideMemoryVideoCache( MemoryVideoCacheImpl memoryVideoCacheImpl ) {
-
-        return memoryVideoCacheImpl;
     }
 
     @Provides

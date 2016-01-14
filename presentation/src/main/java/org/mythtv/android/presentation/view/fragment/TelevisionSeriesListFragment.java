@@ -12,15 +12,15 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.presenter.MovieListPresenter;
-import org.mythtv.android.presentation.presenter.MusicVideoListPresenter;
+import org.mythtv.android.presentation.presenter.TelevisionListPresenter;
+import org.mythtv.android.presentation.presenter.TelevisionSeriesListPresenter;
 import org.mythtv.android.presentation.view.VideoMetadataInfoListView;
 import org.mythtv.android.presentation.view.adapter.VideoMetadataInfosAdapter;
 import org.mythtv.android.presentation.view.adapter.VideoMetadataInfosLayoutManager;
+import org.mythtv.android.presentation.view.adapter.VideoSeriesAdapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,12 +34,25 @@ import butterknife.OnClick;
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class MusicVideoListFragment extends BaseVideoPagerFragment implements VideoMetadataInfoListView {
+public class TelevisionSeriesListFragment extends BaseFragment implements VideoMetadataInfoListView {
 
-    private static final String TAG = MusicVideoListFragment.class.getSimpleName();
+    private static final String TAG = TelevisionSeriesListFragment.class.getSimpleName();
+
+    private static final String ARGUMENT_KEY_SERIES = "org.mythtv.android.ARGUMENT_SERIES";
+
+    private String series;
+
+    /**
+     * Interface for listening videoMetadataInfo list events.
+     */
+    public interface VideoMetadataInfoListListener {
+
+        void onVideoMetadataInfoClicked( final VideoMetadataInfoModel videoMetadataInfoModel );
+
+    }
 
     @Inject
-    MusicVideoListPresenter musicVideoListPresenter;
+    TelevisionSeriesListPresenter televisionSeriesListPresenter;
 
     @Bind( R.id.rv_videoMetadataInfos )
     RecyclerView rv_videoMetadataInfos;
@@ -53,23 +66,29 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
     @Bind( R.id.bt_retry )
     Button bt_retry;
 
-    private VideoMetadataInfosAdapter videoMetadataInfosAdapter;
+    private VideoSeriesAdapter videoSeriesAdapter;
 
-    private VideoListListener videoListListener;
+    private VideoMetadataInfoListListener videoMetadataInfoListListener;
 
-    public MusicVideoListFragment() { super(); }
+    public TelevisionSeriesListFragment() { super(); }
 
-    public static MusicVideoListFragment newInstance() {
+    public static TelevisionSeriesListFragment newInstance( String series ) {
 
-        return new MusicVideoListFragment();
+        TelevisionSeriesListFragment fragment = new TelevisionSeriesListFragment();
+
+        Bundle argumentsBundle = new Bundle();
+        argumentsBundle.putString( ARGUMENT_KEY_SERIES, series );
+        fragment.setArguments( argumentsBundle );
+
+        return fragment;
     }
 
     @Override public void onAttach( Activity activity ) {
         super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        if( activity instanceof VideoListListener ) {
-            this.videoListListener = (VideoListListener) activity;
+        if( activity instanceof VideoMetadataInfoListListener ) {
+            this.videoMetadataInfoListListener = (VideoMetadataInfoListListener) activity;
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -93,7 +112,7 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
         super.onActivityCreated( savedInstanceState );
 
         this.initialize();
-        this.loadMovieList();
+        this.loadTelevisionSeriesList();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -103,7 +122,7 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-        this.musicVideoListPresenter.resume();
+        this.televisionSeriesListPresenter.resume();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -113,7 +132,7 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-        this.musicVideoListPresenter.pause();
+        this.televisionSeriesListPresenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -123,7 +142,7 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
         Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
-        this.musicVideoListPresenter.destroy();
+        this.televisionSeriesListPresenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
     }
@@ -142,9 +161,11 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( VideoComponent.class ).inject( this );
-        this.musicVideoListPresenter.setView( this );
+        this.televisionSeriesListPresenter.setView( this );
+        this.series = getArguments().getString( ARGUMENT_KEY_SERIES );
         this.getComponent( VideoComponent.class ).plus( new VideosModule() );
-//        this.musicVideoListPresenter.initialize( contentType );
+
+        this.televisionSeriesListPresenter.initialize( this.series );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -154,9 +175,9 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
 
         this.rv_videoMetadataInfos.setLayoutManager( new VideoMetadataInfosLayoutManager( getActivity() ) );
 
-        this.videoMetadataInfosAdapter = new VideoMetadataInfosAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
-        this.videoMetadataInfosAdapter.setOnItemClickListener( onItemClickListener );
-        this.rv_videoMetadataInfos.setAdapter( videoMetadataInfosAdapter );
+        this.videoSeriesAdapter = new VideoSeriesAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
+        this.videoSeriesAdapter.setOnItemClickListener( onItemClickListener );
+        this.rv_videoMetadataInfos.setAdapter( videoSeriesAdapter );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -206,7 +227,7 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
         if( null != videoMetadataInfoModelCollection ) {
             Log.d( TAG, "renderVideoMetadataInfoList : videoMetadataInfoModelCollection is not null, videoMetadataInfoModelCollection=" + videoMetadataInfoModelCollection );
 
-            this.videoMetadataInfosAdapter.setVideoMetadataInfosCollection( videoMetadataInfoModelCollection );
+            this.videoSeriesAdapter.setVideoSeriesCollection( videoMetadataInfoModelCollection );
 
         }
 
@@ -217,9 +238,9 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
     public void viewVideoMetadataInfo( VideoMetadataInfoModel videoMetadataInfoModel ) {
         Log.d( TAG, "viewVideoMetadataInfo : enter" );
 
-        if( null != this.videoListListener ) {
+        if( null != this.videoMetadataInfoListListener ) {
 
-            this.videoListListener.onVideoClicked( videoMetadataInfoModel, ContentType.MUSICVIDEO );
+            this.videoMetadataInfoListListener.onVideoMetadataInfoClicked( videoMetadataInfoModel );
 
         }
 
@@ -244,33 +265,37 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
     }
 
     /**
-     * Loads all musicVideos.
+     * Loads all tv series.
      */
-    private void loadMovieList() {
-        Log.d( TAG, "loadMovieList : enter" );
+    private void loadTelevisionSeriesList() {
+        Log.d( TAG, "loadTelevisionSeriesList : enter" );
 
-        this.musicVideoListPresenter.initialize();
+        if( null != this.televisionSeriesListPresenter ) {
 
-        Log.d( TAG, "loadMovieList : exit" );
+            this.televisionSeriesListPresenter.initialize( series );
+
+        }
+
+        Log.d( TAG, "loadTelevisionSeriesList : exit" );
     }
 
     @OnClick( R.id.bt_retry )
     void onButtonRetryClick() {
         Log.d( TAG, "onButtonRetryClick : enter" );
 
-        MusicVideoListFragment.this.loadMovieList();
+        TelevisionSeriesListFragment.this.loadTelevisionSeriesList();
 
         Log.d( TAG, "onButtonRetryClick : exit" );
     }
 
-    private VideoMetadataInfosAdapter.OnItemClickListener onItemClickListener = new VideoMetadataInfosAdapter.OnItemClickListener() {
+    private VideoSeriesAdapter.OnItemClickListener onItemClickListener = new VideoSeriesAdapter.OnItemClickListener() {
 
                 @Override
                 public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
 
-                    if( null != MusicVideoListFragment.this.musicVideoListPresenter && null != videoMetadataInfoModel ) {
+                    if( null != TelevisionSeriesListFragment.this.televisionSeriesListPresenter && null != videoMetadataInfoModel ) {
 
-                        MusicVideoListFragment.this.musicVideoListPresenter.onVideoClicked(videoMetadataInfoModel);
+                        TelevisionSeriesListFragment.this.televisionSeriesListPresenter.onVideoClicked( videoMetadataInfoModel );
 
                     }
 

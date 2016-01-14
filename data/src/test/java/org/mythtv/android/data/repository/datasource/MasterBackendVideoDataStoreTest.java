@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
-import org.mythtv.android.data.cache.MemoryVideoCache;
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
@@ -37,8 +36,6 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     private VideoCache mockVideoCache;
 
     @Mock
-    private MemoryVideoCache mockMemoryVideoCache;
-    @Mock
     private SearchDataStoreFactory mockSearchDataStoreFactory;
 
     @Mock
@@ -48,7 +45,7 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        masterBackendVideoDataStore = new MasterBackendVideoDataStore( mockVideoApi, mockVideoCache, mockMemoryVideoCache, mockSearchDataStoreFactory, mockSearchResultEntityDataMapper );
+        masterBackendVideoDataStore = new MasterBackendVideoDataStore( mockVideoApi, mockVideoCache, mockSearchDataStoreFactory, mockSearchResultEntityDataMapper );
 
     }
 

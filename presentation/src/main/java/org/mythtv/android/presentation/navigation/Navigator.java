@@ -16,6 +16,7 @@ import org.mythtv.android.presentation.view.activity.VideoDetailsActivity;
 import org.mythtv.android.presentation.view.activity.VideoDetailsSettingsActivity;
 import org.mythtv.android.presentation.view.activity.VideoMetadataInfoListActivity;
 import org.mythtv.android.presentation.view.activity.VideoPlayerActivity;
+import org.mythtv.android.presentation.view.activity.VideoSeriesListActivity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -102,7 +103,21 @@ public class Navigator {
 
         }
 
-        Log.d( TAG, "navigateToTitleInfos : exit" );
+        Log.d( TAG, "navigateToVideos : exit" );
+    }
+
+    public void navigateToVideoSeries( Context context, String series ) {
+        Log.d( TAG, "navigateToVideoSeries : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToVideoSeries : context != null" );
+
+            Intent intentToLaunch = VideoSeriesListActivity.getCallingIntent( context, series );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToVideoSeries : exit" );
     }
 
     public void navigateToVideo( Context context, int id, String storeageGroup, String filename, String hostname ) {

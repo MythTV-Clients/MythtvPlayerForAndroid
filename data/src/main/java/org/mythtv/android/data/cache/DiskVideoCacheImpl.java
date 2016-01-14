@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by dmfrey on 11/3/15.
@@ -96,6 +97,7 @@ public class DiskVideoCacheImpl implements VideoCache {
         Log.d( TAG, "get : enter" );
         Log.d( TAG, "get : id=" + id );
 
+
         return readFromFile()
                 .flatMap( Observable::from )
                 .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getId() == id );
@@ -107,9 +109,17 @@ public class DiskVideoCacheImpl implements VideoCache {
         Log.d( TAG, "getCategory : enter" );
         Log.d( TAG, "getCategory : category=" + category );
 
+//        if( !isCached() ) {
+//            Log.d( TAG, "getCategory : exit, not cached on disk" );
+//
+//            return null;
+//        }
+
         return readFromFile()
                 .flatMap( Observable::from )
                 .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
+//                .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
+                .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) )
                 .toList();
 
     }
@@ -118,6 +128,12 @@ public class DiskVideoCacheImpl implements VideoCache {
     public Observable<List<VideoMetadataInfoEntity>> getDirectory( final String directory ) {
         Log.d( TAG, "getDirectory : enter" );
         Log.d( TAG, "getDirectory : directory=" + directory );
+
+//        if( !isCached() ) {
+//            Log.d( TAG, "getDirectory : exit, not cached on disk" );
+//
+//            return null;
+//        }
 
         return readFromFile()
                 .flatMap( Observable::from )

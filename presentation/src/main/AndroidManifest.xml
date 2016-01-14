@@ -157,6 +157,16 @@
         </activity>
 
         <activity
+            android:name=".presentation.view.activity.VideoSeriesListActivity"
+            android:label="@string/watch_video">
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.SearchableActivity" />
+
+        </activity>
+
+        <activity
             android:name=".presentation.view.activity.VideoDetailsActivity"
             android:launchMode="singleTop">
 
@@ -197,7 +207,7 @@
         <activity
             android:name=".presentation.view.activity.RecordingSettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".presentation.view.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.view.activity.SettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

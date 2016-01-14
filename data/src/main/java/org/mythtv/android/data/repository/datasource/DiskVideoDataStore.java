@@ -2,7 +2,6 @@ package org.mythtv.android.data.repository.datasource;
 
 import android.util.Log;
 
-import org.mythtv.android.data.cache.MemoryVideoCache;
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 
@@ -18,12 +17,11 @@ public class DiskVideoDataStore implements VideoDataStore {
     private static final String TAG = DiskVideoDataStore.class.getSimpleName();
 
     private final VideoCache videoCache;
-    private final MemoryVideoCache memoryVideoCache;
 
-    public DiskVideoDataStore( VideoCache videoCache, MemoryVideoCache memoryVideoCache ) {
+    public DiskVideoDataStore( VideoCache videoCache ) {
 
         this.videoCache = videoCache;
-        this.memoryVideoCache = memoryVideoCache;
+
     }
 
     @Override
@@ -40,15 +38,59 @@ public class DiskVideoDataStore implements VideoDataStore {
         if( "TELEVISION".equals( category ) ) {
 
             return this.videoCache.getCategory( category )
-                    .doOnNext(videoMetadataInfoEntities -> this.memoryVideoCache.put(category, videoMetadataInfoEntities));
+                    .flatMap( Observable::from )
+                    .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
+                    .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
+                    .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) );
 
         } else {
 
-            return this.videoCache.getCategory(category)
-                    .doOnNext(videoMetadataInfoEntities -> this.memoryVideoCache.put(category, videoMetadataInfoEntities));
+            return this.videoCache.getCategory( category )
+                    .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) );
 
         }
 
+    }
+
+    @Override
+    public Observable<List<VideoMetadataInfoEntity>> getSeriesInCategory( String category, String series ) {
+        Log.d( TAG, "getSeriesInCategory : enter" );
+
+        Log.d( TAG, "getSeriesInCategory : category=" + category + ", series=" + series );
+
+        return this.videoCache.getCategory( series )
+                .flatMap( Observable::from )
+                .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> {
+
+                    StringBuilder e1 = new StringBuilder();
+                    e1.append( "S" );
+                    if( videoMetadataInfoEntity1.getSeason() < 10 ) {
+                        e1.append( "0" );
+                    }
+                    e1.append( videoMetadataInfoEntity1.getSeason() );
+
+                    e1.append( "E" );
+                    if( videoMetadataInfoEntity1.getEpisode() < 10 ) {
+                        e1.append( "0" );
+                    }
+                    e1.append( videoMetadataInfoEntity1.getEpisode() );
+
+                    StringBuilder e2 = new StringBuilder();
+                    e2.append( "S" );
+                    if( videoMetadataInfoEntity2.getSeason() < 10 ) {
+                        e2.append( "0" );
+                    }
+                    e2.append( videoMetadataInfoEntity2.getSeason() );
+
+                    e2.append( "E" );
+                    if( videoMetadataInfoEntity2.getEpisode() < 10 ) {
+                        e2.append( "0" );
+                    }
+                    e2.append( videoMetadataInfoEntity2.getEpisode() );
+
+                    return e1.toString().compareTo( e2.toString() );
+                })
+                .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) );
     }
 
     @Override

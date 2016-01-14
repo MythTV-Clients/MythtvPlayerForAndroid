@@ -3,7 +3,6 @@ package org.mythtv.android.data.repository.datasource;
 import android.content.Context;
 import android.util.Log;
 
-import org.mythtv.android.data.cache.MemoryVideoCache;
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
@@ -23,24 +22,20 @@ public class VideoDataStoreFactory {
 
     private final Context context;
     private final VideoCache videoCache;
-    private final MemoryVideoCache memoryVideoCache;
-    private final MemoryVideoDataStore memoryVideoDataStore;
     private final SearchDataStoreFactory searchDataStoreFactory;
     private final SearchResultEntityDataMapper searchResultEntityDataMapper;
 
     @Inject
-    public VideoDataStoreFactory( Context context, VideoCache videoCache, MemoryVideoCache memoryVideoCache, MemoryVideoDataStore memoryVideoDataStore, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
+    public VideoDataStoreFactory( Context context, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == context || null == videoCache || null == memoryVideoCache || null == memoryVideoDataStore || null == searchDataStoreFactory || null == searchResultEntityDataMapper ) {
+        if( null == context || null == videoCache || null == searchDataStoreFactory || null == searchResultEntityDataMapper ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
         this.context = context.getApplicationContext();
         this.videoCache = videoCache;
-        this.memoryVideoCache = memoryVideoCache;
-        this.memoryVideoDataStore = memoryVideoDataStore;
         this.searchDataStoreFactory = searchDataStoreFactory;
         this.searchResultEntityDataMapper = searchResultEntityDataMapper;
 
@@ -55,7 +50,7 @@ public class VideoDataStoreFactory {
         if( !this.videoCache.isExpired() && this.videoCache.isCached() ) {
             Log.d( TAG, "create : cache is not expired and videos exists in cache" );
 
-            videoDataStore = new DiskVideoDataStore( this.videoCache, this.memoryVideoCache );
+            videoDataStore = new DiskVideoDataStore( this.videoCache );
 
         } else {
             Log.d( TAG, "create : query backend for data" );
@@ -75,7 +70,7 @@ public class VideoDataStoreFactory {
         VideoApi api = new VideoApiImpl( this.context, videoMetadataInfoEntityJsonMapper );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
-        return new MasterBackendVideoDataStore( api, this.videoCache, this.memoryVideoCache, this.searchDataStoreFactory, this.searchResultEntityDataMapper );
+        return new MasterBackendVideoDataStore( api, this.videoCache, this.searchDataStoreFactory, this.searchResultEntityDataMapper );
     }
 
     public VideoDataStore createCategoryDataStore( String category ) {
@@ -83,15 +78,10 @@ public class VideoDataStoreFactory {
 
         VideoDataStore videoDataStore;
 
-        if( !this.memoryVideoCache.isExpired() && this.memoryVideoCache.isCached( category ) ) {
-            Log.d( TAG, "createCategoryDataStore : memory cache is not expired and videos exists in cache" );
-
-            videoDataStore = this.memoryVideoDataStore;
-
-        } else if( this.videoCache.isExpired() && this.videoCache.isCached() ) {
+        if( this.videoCache.isExpired() && this.videoCache.isCached() ) {
             Log.d( TAG, "createCategoryCategoryDataStore : cache is not expired" );
 
-            videoDataStore = new DiskVideoDataStore( this.videoCache, this.memoryVideoCache );
+            videoDataStore = new DiskVideoDataStore( this.videoCache );
 
         } else {
             Log.d( TAG, "createCategoryCategoryDataStore : query backend for data" );

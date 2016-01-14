@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
@@ -218,7 +219,7 @@ public class HomeVideoListFragment extends BaseVideoPagerFragment implements Vid
 
         if( null != this.videoListListener ) {
 
-            this.videoListListener.onVideoClicked( videoMetadataInfoModel );
+            this.videoListListener.onVideoClicked( videoMetadataInfoModel, ContentType.HOMEVIDEO );
 
         }
 

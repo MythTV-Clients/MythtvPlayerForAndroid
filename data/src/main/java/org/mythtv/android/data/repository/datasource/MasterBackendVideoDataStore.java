@@ -2,7 +2,6 @@ package org.mythtv.android.data.repository.datasource;
 
 import android.util.Log;
 
-import org.mythtv.android.data.cache.MemoryVideoCache;
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
@@ -24,7 +23,6 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
     private final VideoApi videoApi;
     private final VideoCache videoCache;
-    private final MemoryVideoCache memoryVideoCache;
     private final SearchDataStoreFactory searchDataStoreFactory;
     private final SearchResultEntityDataMapper searchResultEntityDataMapper;
 
@@ -53,11 +51,10 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
             };
 
-    public MasterBackendVideoDataStore( VideoApi videoApi, VideoCache videoCache, MemoryVideoCache memoryVideoCache, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
+    public MasterBackendVideoDataStore( VideoApi videoApi, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
 
         this.videoApi = videoApi;
         this.videoCache = videoCache;
-        this.memoryVideoCache = memoryVideoCache;
         this.searchDataStoreFactory = searchDataStoreFactory;
         this.searchResultEntityDataMapper = searchResultEntityDataMapper;
 
@@ -90,11 +87,71 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
                 .doOnNext( saveVideosToCacheAction )
                 .doOnNext( saveVideosToDbAction );
 
-        return videoList
+        if( "TELEVISION".equals( category ) ) {
+
+            return videoList
+                    .flatMap( Observable::from )
+                    .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
+                    .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
+                    .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
+                    .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) );
+
+        } else {
+
+            return videoList
+                    .flatMap( Observable::from )
+                    .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
+                    .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
+                    .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) );
+
+        }
+
+    }
+
+    @Override
+    public Observable<List<VideoMetadataInfoEntity>> getSeriesInCategory( String category, String series ) {
+        Log.d( TAG, "getSeriesInCategory : enter" );
+
+        Log.d( TAG, "getSeriesInCategory : category=" + category + ". series=" + series );
+
+        return this.videoApi.getVideoList( null, null, false, -1, -1 )
+                .subscribeOn( Schedulers.io() )
+                .observeOn( AndroidSchedulers.mainThread() )
                 .flatMap( Observable::from )
                 .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
-                .toList()
-                .doOnNext( videoMetadataInfoEntities -> this.memoryVideoCache.put( category, videoMetadataInfoEntities ) );
+                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle().equals( series ) )
+                .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> {
+
+                    StringBuilder e1 = new StringBuilder();
+                    e1.append( "S" );
+                    if( videoMetadataInfoEntity1.getSeason() < 10 ) {
+                        e1.append( "0" );
+                    }
+                    e1.append( videoMetadataInfoEntity1.getSeason() );
+
+                    e1.append( "E" );
+                    if( videoMetadataInfoEntity1.getEpisode() < 10 ) {
+                        e1.append( "0" );
+                    }
+                    e1.append( videoMetadataInfoEntity1.getEpisode() );
+
+                    StringBuilder e2 = new StringBuilder();
+                    e2.append( "S" );
+                    if( videoMetadataInfoEntity2.getSeason() < 10 ) {
+                        e2.append( "0" );
+                    }
+                    e2.append( videoMetadataInfoEntity2.getSeason() );
+
+                    e2.append( "E" );
+                    if( videoMetadataInfoEntity2.getEpisode() < 10 ) {
+                        e2.append( "0" );
+                    }
+                    e2.append( videoMetadataInfoEntity2.getEpisode() );
+
+                    return e1.toString().compareTo( e2.toString() );
+                })
+                .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getSeriesInCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) );
+
     }
 
     @Override

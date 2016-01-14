@@ -14,6 +14,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
+import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
@@ -27,29 +28,29 @@ import butterknife.ButterKnife;
  *
  * Created by dmfrey on 11/13/15.
  */
-public class VideoMetadataInfosAdapter extends RecyclerView.Adapter<VideoMetadataInfosAdapter.VideoMetadataInfoViewHolder> {
+public class VideoSeriesAdapter extends RecyclerView.Adapter<VideoSeriesAdapter.VideoSeriesViewHolder> {
 
-    private static final String TAG = VideoMetadataInfosAdapter.class.getSimpleName();
+    private static final String TAG = VideoSeriesAdapter.class.getSimpleName();
 
     public interface OnItemClickListener {
 
-        void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel );
+        void onVideoMetadataInfoItemClicked(VideoMetadataInfoModel videoMetadataInfoModel);
 
     }
 
     private Context context;
-    private List<VideoMetadataInfoModel> videoMetadataInfosCollection;
+    private List<VideoMetadataInfoModel> videoSeriesCollection;
     private final LayoutInflater layoutInflater;
 
     private OnItemClickListener onItemClickListener;
 
-    public VideoMetadataInfosAdapter( Context context, Collection<VideoMetadataInfoModel> videoMetadataInfosCollection ) {
+    public VideoSeriesAdapter( Context context, Collection<VideoMetadataInfoModel> videoSeriesCollection ) {
         Log.d( TAG, "initialize : enter" );
 
         this.context = context;
-        this.validateVideoMetadataInfosCollection( videoMetadataInfosCollection );
+        this.validateVideoSeriesCollection( videoSeriesCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.videoMetadataInfosCollection = (List<VideoMetadataInfoModel>) videoMetadataInfosCollection;
+        this.videoSeriesCollection = (List<VideoMetadataInfoModel>) videoSeriesCollection;
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -59,37 +60,38 @@ public class VideoMetadataInfosAdapter extends RecyclerView.Adapter<VideoMetadat
         Log.d( TAG, "getItemCount : enter" );
 
         Log.d( TAG, "getItemCount : exit" );
-        return ( null != this.videoMetadataInfosCollection ) ? this.videoMetadataInfosCollection.size() : 0;
+        return ( null != this.videoSeriesCollection ) ? this.videoSeriesCollection.size() : 0;
     }
 
     @Override
-    public VideoMetadataInfoViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
+    public VideoSeriesViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
         Log.d( TAG, "onCreateViewHolder : enter" );
 
-        View view = this.layoutInflater.inflate( R.layout.video_metadata_info_list_item, parent, false );
-        VideoMetadataInfoViewHolder videoMetadataInfoViewHolder = new VideoMetadataInfoViewHolder( view );
+        View view = this.layoutInflater.inflate( R.layout.video_series_list_item, parent, false );
+        VideoSeriesViewHolder videoMetadataInfoViewHolder = new VideoSeriesViewHolder( view );
 
         Log.d( TAG, "onCreateViewHolder : exit" );
         return videoMetadataInfoViewHolder;
     }
 
     @Override
-    public void onBindViewHolder( VideoMetadataInfoViewHolder holder, final int position ) {
+    public void onBindViewHolder( VideoSeriesViewHolder holder, final int position ) {
         Log.d( TAG, "onBindViewHolder : enter" );
 
-        final VideoMetadataInfoModel videoMetadataInfoModel = this.videoMetadataInfosCollection.get( position );
+        final VideoMetadataInfoModel videoMetadataInfoModel = this.videoSeriesCollection.get( position );
         if( null != videoMetadataInfoModel.getInetref() && !"".equals( videoMetadataInfoModel.getInetref() ) ) {
 
             holder.imageViewBanner.setImageUrl( getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + videoMetadataInfoModel.getId() + "&Type=coverart&Height=175" );
 
         }
-        holder.textViewTitle.setText( videoMetadataInfoModel.getTitle() );
+        holder.textViewEpisodeTitle.setText( ( null != videoMetadataInfoModel.getSubTitle() ) ? videoMetadataInfoModel.getSubTitle() : videoMetadataInfoModel.getTitle() );
+        holder.textViewEpisode.setText( SeasonEpisodeFormatter.format( videoMetadataInfoModel ) );
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( null != VideoMetadataInfosAdapter.this.onItemClickListener ) {
+                if( null != VideoSeriesAdapter.this.onItemClickListener ) {
 
-                    VideoMetadataInfosAdapter.this.onItemClickListener.onVideoMetadataInfoItemClicked( videoMetadataInfoModel );
+                    VideoSeriesAdapter.this.onItemClickListener.onVideoMetadataInfoItemClicked( videoMetadataInfoModel );
 
                 }
             }
@@ -106,14 +108,14 @@ public class VideoMetadataInfosAdapter extends RecyclerView.Adapter<VideoMetadat
         return position;
     }
 
-    public void setVideoMetadataInfosCollection( Collection<VideoMetadataInfoModel> videoMetadataInfosCollection ) {
-        Log.d( TAG, "setVideoMetadataInfosCollection : enter" );
+    public void setVideoSeriesCollection( Collection<VideoMetadataInfoModel> videoSeriesCollection ) {
+        Log.d( TAG, "setVideoSeriesCollection : enter" );
 
-        this.validateVideoMetadataInfosCollection(videoMetadataInfosCollection);
-        this.videoMetadataInfosCollection = (List<VideoMetadataInfoModel>) videoMetadataInfosCollection;
+        this.validateVideoSeriesCollection( videoSeriesCollection );
+        this.videoSeriesCollection = (List<VideoMetadataInfoModel>) videoSeriesCollection;
         this.notifyDataSetChanged();
 
-        Log.d( TAG, "setVideoMetadataInfosCollection : exit");
+        Log.d( TAG, "setVideoSeriesCollection : exit");
     }
 
     public void setOnItemClickListener( OnItemClickListener onItemClickListener ) {
@@ -124,27 +126,30 @@ public class VideoMetadataInfosAdapter extends RecyclerView.Adapter<VideoMetadat
         Log.d( TAG, "setOnItemClickListener : exit" );
     }
 
-    private void validateVideoMetadataInfosCollection( Collection<VideoMetadataInfoModel> videoMetadataInfosCollection ) {
-        Log.d(TAG, "validateVideoMetadataInfosCollection : enter");
+    private void validateVideoSeriesCollection( Collection<VideoMetadataInfoModel> videoSeriesCollection ) {
+        Log.d(TAG, "validateVideoSeriesCollection : enter");
 
-        if( null == videoMetadataInfosCollection ) {
-            Log.w( TAG, "validateVideoMetadataInfosCollection : videoMetadataInfosCollection is null" );
+        if( null == videoSeriesCollection ) {
+            Log.w( TAG, "validateVideoSeriesCollection : videoSeriesCollection is null" );
 
             throw new IllegalArgumentException( "The list cannot be null" );
         }
 
-        Log.d( TAG, "validateVideoMetadataInfosCollection : exit" );
+        Log.d( TAG, "validateVideoSeriesCollection : exit" );
     }
 
-    static class VideoMetadataInfoViewHolder extends RecyclerView.ViewHolder {
+    static class VideoSeriesViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.video_metadata_info_item_banner )
+        @Bind( R.id.video_series_item_banner )
         AutoLoadImageView imageViewBanner;
 
-        @Bind( R.id.video_metadata_info_item_title )
-        TextView textViewTitle;
+        @Bind( R.id.video_series_item_episode_title )
+        TextView textViewEpisodeTitle;
 
-        public VideoMetadataInfoViewHolder( View itemView ) {
+        @Bind( R.id.video_series_item_episode )
+        TextView textViewEpisode;
+
+        public VideoSeriesViewHolder( View itemView ) {
             super( itemView );
 
             ButterKnife.bind( this, itemView );
