@@ -85,14 +85,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         }
 
         if( null != mythtvVersion ) {
-            final PackageManager packageManager = getPackageManager();
-            if (packageManager != null) {
 
-                String versionName = getResources().getString( R.string.app_version );
+            final PackageManager packageManager = getPackageManager();
+            if( null != packageManager ) {
+
                 try {
 
                     PackageInfo packageInfo = packageManager.getPackageInfo( getPackageName(), 0 );
-                    versionName = packageInfo.versionName;
+                    String versionName = packageInfo.versionName;
                     mythtvVersion.setText( versionName );
 
                 } catch( PackageManager.NameNotFoundException ignored ) {
@@ -101,24 +101,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             }
 
         }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // TODO: Hack remove when android api is updated
-//        CoordinatorLayout mainContent = (CoordinatorLayout) findViewById( R.id.main_content );
-//        mainContent.setOnTouchListener( new View.OnTouchListener() {
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//                return true;
-//            }
-//
-//        });
 
     }
 

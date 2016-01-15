@@ -1,15 +1,15 @@
 package org.mythtv.android.presentation.view.activity;
 
-import android.os.Bundle;
+import android.util.Log;
 
 import org.mythtv.android.R;
-
-import butterknife.ButterKnife;
 
 /**
  * Created by dmfrey on 8/31/15.
  */
 public class MainActivity extends BaseActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     public int getLayoutResource() {
@@ -18,8 +18,15 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
+    protected void onResume() {
+        super.onResume();
+
+        if( getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
+            Log.i( TAG, "onResume : MasterBackend not set, redirecting to Settings" );
+
+            navigator.navigateToSettings( this );
+
+        }
 
     }
 
