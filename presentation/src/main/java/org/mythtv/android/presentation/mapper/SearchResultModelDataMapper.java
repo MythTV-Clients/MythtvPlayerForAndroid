@@ -41,6 +41,7 @@ public class SearchResultModelDataMapper {
             searchResultModel.setInetref( searchResult.getInetref() );
             searchResultModel.setCastMembers( searchResult.getCastMembers() );
             searchResultModel.setCharacters( searchResult.getCharacters() );
+            searchResultModel.setVideoId( searchResult.getVideoId() );
             searchResultModel.setRating( searchResult.getRating() );
             searchResultModel.setStoreageGroup( searchResult.getStorageGroup() );
             searchResultModel.setFilename( searchResult.getFilename() );

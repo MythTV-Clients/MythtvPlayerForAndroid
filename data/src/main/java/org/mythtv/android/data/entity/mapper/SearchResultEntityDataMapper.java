@@ -166,6 +166,7 @@ public class SearchResultEntityDataMapper {
         if( null != videoEntity ) {
 
             searchResult = new SearchResultEntity();
+            searchResult.setVideoId( videoEntity.getId() );
             searchResult.setTitle( videoEntity.getTitle() );
             searchResult.setSubTitle( videoEntity.getSubTitle() );
             searchResult.setSeason( videoEntity.getSeason() );

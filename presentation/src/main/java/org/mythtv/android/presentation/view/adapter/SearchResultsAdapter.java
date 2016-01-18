@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
@@ -73,11 +74,24 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     public void onBindViewHolder( SearchResultViewHolder holder, final int position ) {
 
         final SearchResultModel searchResultModel = this.searchResultsCollection.get( position );
-        holder.imageViewPreview.setImageUrl( getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + searchResultModel.getChanId() + "&StartTime=" + searchResultModel.getStartTime().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=75" );
-        holder.textViewTitle.setText( searchResultModel.getTitle() );
-        holder.textViewSubTitle.setText( searchResultModel.getSubTitle() );
-        holder.textViewDate.setText( searchResultModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
-        holder.textViewEpisode.setText( searchResultModel.getSeason() + "x" + searchResultModel.getEpisode() );
+        if( searchResultModel.getType().equals(SearchResult.Type.RECORDING ) ) {
+
+            holder.imageViewPreview.setImageUrl( getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + searchResultModel.getChanId() + "&StartTime=" + searchResultModel.getStartTime().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=75" );
+            holder.textViewTitle.setText( searchResultModel.getTitle() );
+            holder.textViewSubTitle.setText( searchResultModel.getSubTitle() );
+            holder.textViewDate.setText( searchResultModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
+            holder.textViewEpisode.setText( searchResultModel.getSeason() + "x" + searchResultModel.getEpisode() );
+
+        } else {
+
+            holder.imageViewPreview.setImageUrl( getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + searchResultModel.getVideoId() + "&Type=coverart&Height=75" );
+            holder.textViewTitle.setText( searchResultModel.getTitle() );
+            holder.textViewSubTitle.setText( searchResultModel.getSubTitle() );
+            holder.textViewDate.setText( "" );
+            holder.textViewEpisode.setText( ( searchResultModel.getSeason() == 0 || searchResultModel.getEpisode() == 0 ) ? "" : searchResultModel.getSeason() + "x" + searchResultModel.getEpisode() );
+
+        }
+
         holder.itemView.setOnClickListener( new View.OnClickListener() {
 
             @Override

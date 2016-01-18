@@ -157,6 +157,8 @@ public class SearchableActivity extends BaseActivity implements HasComponent<Sea
 
             case VIDEO:
 
+                navigator.navigateToVideo( this, searchResultModel.getVideoId(), searchResultModel.getStoreageGroup(), searchResultModel.getFilename(), searchResultModel.getHostname() );
+
                 break;
 
         }

@@ -24,6 +24,7 @@ public class SearchResultModel {
     private int episode;
     private String castMembers;
     private String characters;
+    private int videoId;
     private String rating;
     private String storeageGroup;
     private String filename;
