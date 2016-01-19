@@ -12,7 +12,7 @@ import org.mythtv.android.data.entity.TitleInfoEntity;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by dmfrey on 9/18/15.

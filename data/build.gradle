@@ -46,6 +46,7 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
     }
 
     lintOptions {
@@ -83,7 +84,6 @@ dependencies {
     compile dataDependencies.rxAndroid
     compile dataDependencies.androidAnnotations
 
-    testCompile testDependencies.junit
     testCompile testDependencies.assertj
     testCompile testDependencies.mockito
     testCompile testDependencies.robolectric

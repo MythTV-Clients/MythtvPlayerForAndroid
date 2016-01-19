@@ -11,8 +11,10 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
+import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
@@ -38,10 +40,11 @@ public class DvrApiImpl implements DvrApi {
     private final Context context;
     private final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper;
     private final ProgramEntityJsonMapper programEntityJsonMapper;
+    private final EncoderEntityJsonMapper encoderEntityJsonMapper;
 
-    public DvrApiImpl( Context context, TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, ProgramEntityJsonMapper programEntityJsonMapper ) {
+    public DvrApiImpl( Context context, TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, ProgramEntityJsonMapper programEntityJsonMapper, EncoderEntityJsonMapper encoderEntityJsonMapper ) {
 
-        if( null == context || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper ) {
+        if( null == context || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
@@ -49,6 +52,7 @@ public class DvrApiImpl implements DvrApi {
         this.context = context.getApplicationContext();
         this.titleInfoEntityJsonMapper = titleInfoEntityJsonMapper;
         this.programEntityJsonMapper = programEntityJsonMapper;
+        this.encoderEntityJsonMapper = encoderEntityJsonMapper;
 
     }
 
@@ -194,9 +198,58 @@ public class DvrApiImpl implements DvrApi {
 
     }
 
+    @Override
+    public Observable<List<EncoderEntity>> encoderEntityList() {
+
+        return Observable.create( new Observable.OnSubscribe<List<EncoderEntity>>() {
+
+            @Override
+            public void call( Subscriber<? super List<EncoderEntity>> subscriber ) {
+                Log.d( TAG, "encoderEntityList.call : enter" );
+
+                if( isThereInternetConnection() ) {
+                    Log.d(TAG, "encoderEntityList.call : network is connected");
+
+                    try {
+
+                        String responseEncoderEntities = getEncoderEntitiesFromApi();
+                        if( null != responseEncoderEntities ) {
+                            Log.d(TAG, "encoderEntityList.call : retrieved encoder entities");
+
+                            subscriber.onNext( encoderEntityJsonMapper.transformEncoderEntityCollection( responseEncoderEntities ) );
+                            subscriber.onCompleted();
+
+                        } else {
+                            Log.d(TAG, "encoderEntityList.call : failed to retrieve encoder entities");
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "encoderEntityList.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d(TAG, "encoderEntityList.call : network is not connected");
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d(TAG, "encoderEntityList.call : exit");
+            }
+
+        });
+
+    }
+
     private String getTitleInfoEntitiesFromApi() throws MalformedURLException {
 
-        return ApiConnection.createGET(getMasterBackendUrl() + TITLE_INFO_LIST_URL).requestSyncCall();
+        return ApiConnection.createGET( getMasterBackendUrl() + TITLE_INFO_LIST_URL ).requestSyncCall();
     }
 
     private String getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
@@ -256,6 +309,11 @@ public class DvrApiImpl implements DvrApi {
         String apiUrl = String.format( DvrApi.RECORDED_BASE_URL, chanId, fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
 
         return ApiConnection.createGET(getMasterBackendUrl() + apiUrl).requestSyncCall();
+    }
+
+    private String getEncoderEntitiesFromApi() throws MalformedURLException {
+
+        return ApiConnection.createGET( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ).requestSyncCall();
     }
 
     private boolean isThereInternetConnection() {

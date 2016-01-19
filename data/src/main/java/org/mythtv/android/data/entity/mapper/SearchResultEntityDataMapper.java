@@ -1,22 +1,16 @@
 package org.mythtv.android.data.entity.mapper;
 
-import android.util.Log;
-
 import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.CastMemberEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.SearchResultEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
-import org.mythtv.android.domain.CastMember;
-import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.SearchResult;
-import org.mythtv.android.domain.VideoMetadataInfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
@@ -27,10 +21,9 @@ public class SearchResultEntityDataMapper {
 
     private static final String TAG = SearchResultEntityDataMapper.class.getSimpleName();
 
-    @Inject
-    public SearchResultEntityDataMapper() { }
+    private SearchResultEntityDataMapper() { }
 
-    public SearchResult transform( SearchResultEntity searchResultEntity ) {
+    public static SearchResult transform( SearchResultEntity searchResultEntity ) {
 
         SearchResult searchResult = null;
         if( null != searchResultEntity ) {
@@ -61,7 +54,7 @@ public class SearchResultEntityDataMapper {
         return searchResult;
     }
 
-    public List<SearchResult> transform( Collection<SearchResultEntity> searchResultEntityCollection ) {
+    public static List<SearchResult> transform( Collection<SearchResultEntity> searchResultEntityCollection ) {
 
         List<SearchResult> searchResultList = new ArrayList<>( searchResultEntityCollection.size() );
 
@@ -80,7 +73,7 @@ public class SearchResultEntityDataMapper {
         return searchResultList;
     }
 
-    public SearchResultEntity transformProgram( ProgramEntity programEntity ) {
+    public static SearchResultEntity transformProgram( ProgramEntity programEntity ) {
 
         SearchResultEntity searchResult = null;
         if( null != programEntity ) {
@@ -141,7 +134,7 @@ public class SearchResultEntityDataMapper {
         return searchResult;
     }
 
-    public List<SearchResultEntity> transformPrograms( Collection<ProgramEntity> programEntityCollection ) {
+    public static List<SearchResultEntity> transformPrograms( Collection<ProgramEntity> programEntityCollection ) {
 
         List<SearchResultEntity> searchResultEntityList = new ArrayList<>( programEntityCollection.size() );
 
@@ -160,7 +153,7 @@ public class SearchResultEntityDataMapper {
         return searchResultEntityList;
     }
 
-    public SearchResultEntity transformVideo( VideoMetadataInfoEntity videoEntity ) {
+    public static SearchResultEntity transformVideo( VideoMetadataInfoEntity videoEntity ) {
 
         SearchResultEntity searchResult = null;
         if( null != videoEntity ) {
@@ -183,7 +176,7 @@ public class SearchResultEntityDataMapper {
         return searchResult;
     }
 
-    public List<SearchResultEntity> transformVideos( Collection<VideoMetadataInfoEntity> videoEntityCollection ) {
+    public static List<SearchResultEntity> transformVideos( Collection<VideoMetadataInfoEntity> videoEntityCollection ) {
 
         List<SearchResultEntity> searchResultEntityList = new ArrayList<>( videoEntityCollection.size() );
 

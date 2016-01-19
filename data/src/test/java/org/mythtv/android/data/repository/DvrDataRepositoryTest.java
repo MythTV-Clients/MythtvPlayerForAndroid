@@ -1,13 +1,10 @@
 package org.mythtv.android.data.repository;
 
 import org.mythtv.android.data.ApplicationTestCase;
+import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
-import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityDataMapper;
-import org.mythtv.android.data.entity.mapper.ProgramEntityDataMapper;
-import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
-import org.mythtv.android.data.entity.mapper.TitleInfoEntityDataMapper;
 import org.mythtv.android.data.repository.datasource.ContentDataStore;
 import org.mythtv.android.data.repository.datasource.ContentDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
@@ -38,10 +35,7 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     private DvrDataRepository dvrDataRepository;
 
     @Mock private DvrDataStoreFactory mockDvrDataStoreFactory;
-    @Mock private TitleInfoEntityDataMapper mockTitleInfoEntityDataMapper;
-    @Mock private ProgramEntityDataMapper mockProgramEntityDataMapper;
     @Mock private SearchDataStoreFactory mockSearchDataStoreFactory;
-    @Mock private SearchResultEntityDataMapper mockSearchResultEntityDataMapper;
     @Mock private ContentDataStoreFactory mockContentDataStoreFactory;
     @Mock private DvrDataStore mockDvrDataStore;
     @Mock private ContentDataStore mockContentDataStore;
@@ -55,7 +49,7 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockTitleInfoEntityDataMapper, mockProgramEntityDataMapper, mockSearchDataStoreFactory, mockSearchResultEntityDataMapper, mockContentDataStoreFactory );
+        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockSearchDataStoreFactory, mockContentDataStoreFactory );
 
         given( mockDvrDataStoreFactory.create( anyInt(), any( DateTime.class ) ) ).willReturn( mockDvrDataStore );
         given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockDvrDataStore );
@@ -115,6 +109,21 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
 
         verify( mockDvrDataStoreFactory ).create( FAKE_CHAN_ID, FAKE_START_TIME );
         verify( mockDvrDataStore ).recordedProgramEntityDetails( FAKE_CHAN_ID, FAKE_START_TIME );
+
+    }
+
+    @Test
+    public void testGetEncodersHappyCase() {
+
+        List<EncoderEntity> encodersList = new ArrayList<>();
+        encodersList.add( new EncoderEntity() );
+
+        given( mockDvrDataStore.encoderEntityList() ).willReturn( Observable.just( encodersList ) );
+
+        dvrDataRepository.encoders();
+
+        verify( mockDvrDataStoreFactory ).createMasterBackendDataStore();
+        verify( mockDvrDataStore ).encoderEntityList();
 
     }
 

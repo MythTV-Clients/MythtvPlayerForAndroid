@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.data.cache.ProgramCache;
+import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.net.DvrApi;
@@ -60,6 +61,14 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
 
         return this.api.recordedProgramById( chanId, startTime )
                 .doOnNext( saveToCacheAction );
+    }
+
+    @Override
+    public Observable<List<EncoderEntity>> encoderEntityList() {
+        Log.d( TAG, "encoderEntityList : enter" );
+
+        Log.d( TAG, "encoderEntityList : exit" );
+        return this.api.encoderEntityList();
     }
 
 }

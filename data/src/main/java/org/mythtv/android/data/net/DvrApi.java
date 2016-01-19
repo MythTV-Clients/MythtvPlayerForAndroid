@@ -1,6 +1,7 @@
 package org.mythtv.android.data.net;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 
@@ -17,6 +18,7 @@ public interface DvrApi {
 
     String RECORDED_LIST_BASE_URL = "/Dvr/GetRecordedList";
     String RECORDED_BASE_URL = "/Dvr/GetRecorded?ChanId=%s&StartTime=%s";
+    String ENCODER_LIST_BASE_URL = "/Dvr/GetEncoderList";
 
     String DESCENDING_QS = "Descending=%s";
     String START_INDEX_QS = "StartIndex=%s";
@@ -30,5 +32,7 @@ public interface DvrApi {
     Observable<List<ProgramEntity>> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup );
 
     Observable<ProgramEntity> recordedProgramById( final int chanId, final DateTime startTime );
+
+    Observable<List<EncoderEntity>> encoderEntityList();
 
 }

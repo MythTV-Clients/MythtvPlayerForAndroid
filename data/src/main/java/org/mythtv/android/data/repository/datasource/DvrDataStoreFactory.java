@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.data.cache.ProgramCache;
+import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.net.DvrApi;
@@ -65,7 +66,8 @@ public class DvrDataStoreFactory {
 
         TitleInfoEntityJsonMapper titleInfoEntityJsonMapper = new TitleInfoEntityJsonMapper();
         ProgramEntityJsonMapper programEntityJsonMapper = new ProgramEntityJsonMapper();
-        DvrApi api = new DvrApiImpl( this.context, titleInfoEntityJsonMapper, programEntityJsonMapper );
+        EncoderEntityJsonMapper encoderEntityJsonMapper = new EncoderEntityJsonMapper();
+        DvrApi api = new DvrApiImpl( this.context, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
         return new MasterBackendDvrDataStore( api, this.recordedProgramCache );

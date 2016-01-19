@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
@@ -16,11 +15,9 @@ import javax.inject.Singleton;
 @Singleton
 public class LiveStreamInfoEntityDataMapper {
 
-    @Inject
-    public LiveStreamInfoEntityDataMapper() {
-    }
+    private LiveStreamInfoEntityDataMapper() { }
 
-    public LiveStreamInfo transform( LiveStreamInfoEntity liveStreamInfoEntity ) {
+    public static LiveStreamInfo transform( LiveStreamInfoEntity liveStreamInfoEntity ) {
 
         LiveStreamInfo liveStreamInfo = null;
         if( null != liveStreamInfoEntity ) {
@@ -55,7 +52,7 @@ public class LiveStreamInfoEntityDataMapper {
         return liveStreamInfo;
     }
 
-    public List<LiveStreamInfo> transform( Collection<LiveStreamInfoEntity> liveStreamInfoEntityCollection ) {
+    public static List<LiveStreamInfo> transform( Collection<LiveStreamInfoEntity> liveStreamInfoEntityCollection ) {
 
         List<LiveStreamInfo> liveStreamInfoList = new ArrayList<>( liveStreamInfoEntityCollection.size() );
 

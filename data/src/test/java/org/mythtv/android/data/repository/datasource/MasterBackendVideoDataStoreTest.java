@@ -38,14 +38,11 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     @Mock
     private SearchDataStoreFactory mockSearchDataStoreFactory;
 
-    @Mock
-    private SearchResultEntityDataMapper mockSearchResultEntityDataMapper;
-
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        masterBackendVideoDataStore = new MasterBackendVideoDataStore( mockVideoApi, mockVideoCache, mockSearchDataStoreFactory, mockSearchResultEntityDataMapper );
+        masterBackendVideoDataStore = new MasterBackendVideoDataStore( mockVideoApi, mockVideoCache, mockSearchDataStoreFactory );
 
     }
 

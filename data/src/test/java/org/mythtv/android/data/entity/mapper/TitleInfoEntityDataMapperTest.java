@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -24,20 +24,11 @@ public class TitleInfoEntityDataMapperTest extends ApplicationTestCase {
     private static final String FAKE_INETREF = "fake inetref";
     private static final int FAKE_COUNT = 1;
 
-    private TitleInfoEntityDataMapper titleInfoEntityDataMapper;
-
-    @Before
-    public void setup() throws Exception {
-
-        titleInfoEntityDataMapper = new TitleInfoEntityDataMapper();
-
-    }
-
     @Test
     public void testTransformTitleInfoEntity() {
 
         TitleInfoEntity titleInfoEntity = createFakeTitleInfoEntity();
-        TitleInfo titleInfo = titleInfoEntityDataMapper.transform( titleInfoEntity );
+        TitleInfo titleInfo = TitleInfoEntityDataMapper.transform( titleInfoEntity );
 
         assertThat( titleInfo, is( instanceOf( TitleInfo.class ) ) );
         assertThat( titleInfo.getTitle(), is( FAKE_TITLE ) );
@@ -56,7 +47,7 @@ public class TitleInfoEntityDataMapperTest extends ApplicationTestCase {
         titleInfoEntityList.add( mockTitleInfoEntityOne );
         titleInfoEntityList.add( mockTitleInfoEntityTwo );
 
-        Collection<TitleInfo> titleInfoCollection = titleInfoEntityDataMapper.transform( titleInfoEntityList );
+        Collection<TitleInfo> titleInfoCollection = TitleInfoEntityDataMapper.transform( titleInfoEntityList );
 
         assertThat( titleInfoCollection.toArray()[ 0 ], is( instanceOf( TitleInfo.class ) ) );
         assertThat( titleInfoCollection.toArray()[ 1 ], is( instanceOf( TitleInfo.class ) ) );

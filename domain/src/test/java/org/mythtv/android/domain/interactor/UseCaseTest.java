@@ -12,8 +12,8 @@ import rx.Subscriber;
 import rx.observers.TestSubscriber;
 import rx.schedulers.TestScheduler;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 
 /**

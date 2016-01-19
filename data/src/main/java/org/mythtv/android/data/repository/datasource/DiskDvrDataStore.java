@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.data.cache.ProgramCache;
+import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 
@@ -44,6 +45,13 @@ public class DiskDvrDataStore implements DvrDataStore {
         Log.d( TAG, "recordedProgramEntityDetails : chanId=" + chanId + ", startTime=" + startTime );
 
         return this.recordedProgramCache.get( chanId, startTime );
+    }
+
+    @Override
+    public Observable<List<EncoderEntity>> encoderEntityList() {
+
+        throw new UnsupportedOperationException( "Operation is not available" );
+
     }
 
 }

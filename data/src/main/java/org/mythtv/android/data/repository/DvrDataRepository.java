@@ -5,7 +5,7 @@ import android.util.Log;
 import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
-import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityDataMapper;
+import org.mythtv.android.data.entity.mapper.EncoderEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityDataMapper;
@@ -15,6 +15,7 @@ import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.SearchDataStore;
 import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
+import org.mythtv.android.domain.Encoder;
 import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.TitleInfo;
 import org.mythtv.android.domain.repository.DvrRepository;
@@ -37,20 +38,14 @@ public class DvrDataRepository implements DvrRepository {
     private static final String TAG = DvrDataRepository.class.getSimpleName();
 
     private final DvrDataStoreFactory dvrDataStoreFactory;
-    private final TitleInfoEntityDataMapper titleInfoEntityDataMapper;
-    private final ProgramEntityDataMapper programEntityDataMapper;
     private final SearchDataStoreFactory searchDataStoreFactory;
-    private final SearchResultEntityDataMapper searchResultEntityDataMapper;
     private final ContentDataStoreFactory contentDataStoreFactory;
 
     @Inject
-    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, TitleInfoEntityDataMapper titleInfoEntityDataMapper, ProgramEntityDataMapper programEntityDataMapper, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper, ContentDataStoreFactory contentDataStoreFactory ) {
+    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, SearchDataStoreFactory searchDataStoreFactory, ContentDataStoreFactory contentDataStoreFactory ) {
 
         this.dvrDataStoreFactory = dvrDataStoreFactory;
-        this.titleInfoEntityDataMapper = titleInfoEntityDataMapper;
-        this.programEntityDataMapper = programEntityDataMapper;
         this.searchDataStoreFactory = searchDataStoreFactory;
-        this.searchResultEntityDataMapper = searchResultEntityDataMapper;
         this.contentDataStoreFactory = contentDataStoreFactory;
 
     }
@@ -67,11 +62,11 @@ public class DvrDataRepository implements DvrRepository {
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "titleInfos : error", throwable ) )
-                .map( recordedProgramEntities -> this.searchResultEntityDataMapper.transformPrograms( recordedProgramEntities ) )
+                .map( recordedProgramEntities -> SearchResultEntityDataMapper.transformPrograms( recordedProgramEntities ) )
                 .subscribe( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) );
 
         return dvrDataStore.titleInfoEntityList()
-                .map( titleInfoEntities -> this.titleInfoEntityDataMapper.transform( titleInfoEntities ) );
+                .map( titleInfoEntities -> TitleInfoEntityDataMapper.transform( titleInfoEntities ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
@@ -109,7 +104,7 @@ public class DvrDataRepository implements DvrRepository {
         });
 
         return recordedProgramEntityList
-                .map( recordedProgramEntities -> this.programEntityDataMapper.transform( recordedProgramEntities ) );
+                .map( recordedProgramEntities -> ProgramEntityDataMapper.transform( recordedProgramEntities ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
@@ -138,7 +133,19 @@ public class DvrDataRepository implements DvrRepository {
         });
 
         return recordedProgramEntity
-                .map(recordedProgram -> this.programEntityDataMapper.transform(recordedProgram));
+                .map( recordedProgram -> ProgramEntityDataMapper.transform( recordedProgram ) );
+    }
+
+    @SuppressWarnings( "Convert2MethodRef" )
+    @Override
+    public Observable<List<Encoder>> encoders() {
+        Log.d( TAG, "encoders : enter" );
+
+        final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
+
+        return dvrDataStore.encoderEntityList()
+                .doOnError( throwable -> Log.e( TAG, "encoders : error", throwable ) )
+                .map( encoderEntities -> EncoderEntityDataMapper.transformCollection( encoderEntities ) );
     }
 
 }

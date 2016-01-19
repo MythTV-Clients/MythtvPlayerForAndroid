@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
@@ -22,11 +21,9 @@ import javax.inject.Singleton;
 @Singleton
 public class VideoMetadataInfoEntityDataMapper {
 
-    @Inject
-    public VideoMetadataInfoEntityDataMapper() {
-    }
+    private VideoMetadataInfoEntityDataMapper() { }
 
-    public VideoMetadataInfo transform( VideoMetadataInfoEntity videoMetadataInfoEntity ) {
+    public static VideoMetadataInfo transform( VideoMetadataInfoEntity videoMetadataInfoEntity ) {
 
         VideoMetadataInfo videoMetadataInfo = null;
         if( null != videoMetadataInfoEntity ) {
@@ -113,7 +110,7 @@ public class VideoMetadataInfoEntityDataMapper {
         return videoMetadataInfo;
     }
 
-    public List<VideoMetadataInfo> transform( Collection<VideoMetadataInfoEntity> videoMetadataInfoEntityCollection ) {
+    public static List<VideoMetadataInfo> transform( Collection<VideoMetadataInfoEntity> videoMetadataInfoEntityCollection ) {
 
         List<VideoMetadataInfo> videoMetadataInfoList = new ArrayList<>( videoMetadataInfoEntityCollection.size() );
 

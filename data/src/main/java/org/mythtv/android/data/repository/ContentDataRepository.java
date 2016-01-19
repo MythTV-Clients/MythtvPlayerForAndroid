@@ -25,13 +25,11 @@ public class ContentDataRepository implements ContentRepository {
     private static final String TAG = ContentDataRepository.class.getSimpleName();
 
     private final ContentDataStoreFactory contentDataStoreFactory;
-    private final LiveStreamInfoEntityDataMapper liveStreamInfoEntityDataMapper;
 
     @Inject
-    public ContentDataRepository( ContentDataStoreFactory contentDataStoreFactory, LiveStreamInfoEntityDataMapper liveStreamInfoEntityDataMapper ) {
+    public ContentDataRepository( ContentDataStoreFactory contentDataStoreFactory ) {
 
         this.contentDataStoreFactory = contentDataStoreFactory;
-        this.liveStreamInfoEntityDataMapper = liveStreamInfoEntityDataMapper;
 
     }
 
@@ -43,7 +41,7 @@ public class ContentDataRepository implements ContentRepository {
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         return contentDataStore.addliveStream( storageGroup, filename, hostname )
-                .map(liveStreamInfoEntity -> this.liveStreamInfoEntityDataMapper.transform(liveStreamInfoEntity));
+                .map(liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
@@ -54,7 +52,7 @@ public class ContentDataRepository implements ContentRepository {
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         return contentDataStore.addRecordingliveStream( recordedId, chanId, startTime )
-                .map(liveStreamInfoEntity -> this.liveStreamInfoEntityDataMapper.transform(liveStreamInfoEntity));
+                .map(liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
@@ -65,7 +63,7 @@ public class ContentDataRepository implements ContentRepository {
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         return contentDataStore.addVideoliveStream( id )
-                .map(liveStreamInfoEntity -> this.liveStreamInfoEntityDataMapper.transform(liveStreamInfoEntity));
+                .map(liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
@@ -76,7 +74,7 @@ public class ContentDataRepository implements ContentRepository {
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         return contentDataStore.liveStreamInfoEntityList( filename )
-                .map( liveStreamInfoEntities -> this.liveStreamInfoEntityDataMapper.transform( liveStreamInfoEntities ) );
+                .map( liveStreamInfoEntities -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntities ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
@@ -88,7 +86,7 @@ public class ContentDataRepository implements ContentRepository {
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.create();
 
         return contentDataStore.liveStreamInfoEntityDetails( id)
-                .map(liveStreamInfoEntity -> this.liveStreamInfoEntityDataMapper.transform(liveStreamInfoEntity));
+                .map(liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )

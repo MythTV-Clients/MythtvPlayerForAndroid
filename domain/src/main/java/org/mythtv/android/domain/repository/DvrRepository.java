@@ -1,6 +1,7 @@
 package org.mythtv.android.domain.repository;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.domain.Encoder;
 import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.TitleInfo;
 
@@ -18,5 +19,7 @@ public interface DvrRepository {
     Observable<List<Program>> recordedPrograms( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup );
 
     Observable<Program> recordedProgram( int chanId, DateTime startTime );
+
+    Observable<List<Encoder>> encoders();
 
 }

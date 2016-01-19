@@ -22,13 +22,11 @@ public class SearchDataRepository implements SearchRepository {
     private static final String TAG = SearchDataRepository.class.getSimpleName();
 
     private final SearchDataStoreFactory searchDataStoreFactory;
-    private final SearchResultEntityDataMapper searchResultEntityDataMapper;
 
     @Inject
-    public SearchDataRepository( SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
+    public SearchDataRepository( SearchDataStoreFactory searchDataStoreFactory ) {
 
         this.searchDataStoreFactory = searchDataStoreFactory;
-        this.searchResultEntityDataMapper = searchResultEntityDataMapper;
 
     }
 
@@ -39,7 +37,7 @@ public class SearchDataRepository implements SearchRepository {
         final SearchDataStore searchDataStore = this.searchDataStoreFactory.createReadSearchDataStore();
 
         return searchDataStore.search( searchString )
-                .map( searchResultEntities -> this.searchResultEntityDataMapper.transform( searchResultEntities ) );
+                .map( searchResultEntities -> SearchResultEntityDataMapper.transform( searchResultEntities ) );
     }
 
 }

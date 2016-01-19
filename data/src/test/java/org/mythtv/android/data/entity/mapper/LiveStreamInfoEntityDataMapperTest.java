@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -45,20 +45,11 @@ public class LiveStreamInfoEntityDataMapperTest extends ApplicationTestCase {
     private static final int FAKE_SOURCE_HEIGHT = 1;
     private static final int FAKE_AUDIO_ONLY_BITRATE = 1;
 
-    private LiveStreamInfoEntityDataMapper liveStreamInfoEntityDataMapper;
-
-    @Before
-    public void setup() throws Exception {
-
-        liveStreamInfoEntityDataMapper = new LiveStreamInfoEntityDataMapper();
-
-    }
-
     @Test
     public void testTransformLiveStreamInfoEntity() {
 
         LiveStreamInfoEntity liveStreamInfoEntity = createFakeLiveStreamInfoEntity();
-        LiveStreamInfo liveStreamInfo = liveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity );
+        LiveStreamInfo liveStreamInfo = LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity );
 
         assertThat( liveStreamInfo, is( instanceOf( LiveStreamInfo.class ) ) );
         assertThat( liveStreamInfo.getId(), is( FAKE_ID ) );
@@ -97,7 +88,7 @@ public class LiveStreamInfoEntityDataMapperTest extends ApplicationTestCase {
         liveStreamInfoEntityList.add( mockLiveStreamInfoEntityOne );
         liveStreamInfoEntityList.add( mockLiveStreamInfoEntityTwo );
 
-        Collection<LiveStreamInfo> liveStreamInfoCollection = liveStreamInfoEntityDataMapper.transform( liveStreamInfoEntityList );
+        Collection<LiveStreamInfo> liveStreamInfoCollection = LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntityList );
 
         assertThat( liveStreamInfoCollection.toArray()[ 0 ], is( instanceOf( LiveStreamInfo.class ) ) );
         assertThat( liveStreamInfoCollection.toArray()[ 1 ], is( instanceOf( LiveStreamInfo.class ) ) );
@@ -108,9 +99,9 @@ public class LiveStreamInfoEntityDataMapperTest extends ApplicationTestCase {
     private LiveStreamInfoEntity createFakeLiveStreamInfoEntity() {
 
         LiveStreamInfoEntity liveStreamInfoEntity = new LiveStreamInfoEntity();
-        liveStreamInfoEntity.setId(FAKE_ID);
-        liveStreamInfoEntity.setWidth(FAKE_WIDTH);
-        liveStreamInfoEntity.setHeight(FAKE_HEIGHT);
+        liveStreamInfoEntity.setId( FAKE_ID );
+        liveStreamInfoEntity.setWidth( FAKE_WIDTH );
+        liveStreamInfoEntity.setHeight(FAKE_HEIGHT );
         liveStreamInfoEntity.setBitrate( FAKE_BITRATE );
         liveStreamInfoEntity.setAudioBitrate( FAKE_AUDIO_BITRATE );
         liveStreamInfoEntity.setSegmentSize( FAKE_SEGMENT_SIZE );

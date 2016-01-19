@@ -23,13 +23,12 @@ public class VideoDataStoreFactory {
     private final Context context;
     private final VideoCache videoCache;
     private final SearchDataStoreFactory searchDataStoreFactory;
-    private final SearchResultEntityDataMapper searchResultEntityDataMapper;
 
     @Inject
-    public VideoDataStoreFactory( Context context, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
+    public VideoDataStoreFactory( Context context, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == context || null == videoCache || null == searchDataStoreFactory || null == searchResultEntityDataMapper ) {
+        if( null == context || null == videoCache || null == searchDataStoreFactory ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
@@ -37,7 +36,6 @@ public class VideoDataStoreFactory {
         this.context = context.getApplicationContext();
         this.videoCache = videoCache;
         this.searchDataStoreFactory = searchDataStoreFactory;
-        this.searchResultEntityDataMapper = searchResultEntityDataMapper;
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -70,7 +68,7 @@ public class VideoDataStoreFactory {
         VideoApi api = new VideoApiImpl( this.context, videoMetadataInfoEntityJsonMapper );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
-        return new MasterBackendVideoDataStore( api, this.videoCache, this.searchDataStoreFactory, this.searchResultEntityDataMapper );
+        return new MasterBackendVideoDataStore( api, this.videoCache, this.searchDataStoreFactory );
     }
 
     public VideoDataStore createCategoryDataStore( String category ) {

@@ -19,9 +19,9 @@ import java.util.List;
 
 import rx.Observable;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by dmfrey on 10/10/15.

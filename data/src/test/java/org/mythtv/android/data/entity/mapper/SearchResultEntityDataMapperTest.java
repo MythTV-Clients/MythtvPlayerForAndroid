@@ -120,20 +120,11 @@ public class SearchResultEntityDataMapperTest {
     private static final String FAKE_CAST_MEMBER_ROLE = "fake cast member role";
     private static final String FAKE_CAST_MEMBER_TRANSLATED_ROLE = "fake cast member translated role";
 
-    private SearchResultEntityDataMapper searchResultEntityDataMapper;
-
-    @Before
-    public void setup() throws Exception {
-
-        searchResultEntityDataMapper = new SearchResultEntityDataMapper();
-
-    }
-
     @Test
     public void testTransformSearchResultEntity() throws Exception {
 
         SearchResultEntity searchResultEntity = createFakeSearchResultEntity();
-        SearchResult searchResult = searchResultEntityDataMapper.transform( searchResultEntity );
+        SearchResult searchResult = SearchResultEntityDataMapper.transform( searchResultEntity );
 
         assertThat( searchResult, is( instanceOf( SearchResult.class ) ) );
         assertThat( searchResult.getChanId(), is( FAKE_CHAN_ID ) );
@@ -164,7 +155,7 @@ public class SearchResultEntityDataMapperTest {
         searchResultEntityList.add( mockSearchResultEntityOne );
         searchResultEntityList.add( mockSearchResultEntityTwo );
 
-        Collection<SearchResult> searchResultCollection = searchResultEntityDataMapper.transform( searchResultEntityList );
+        Collection<SearchResult> searchResultCollection = SearchResultEntityDataMapper.transform( searchResultEntityList );
 
         assertThat( searchResultCollection.toArray()[ 0 ], is( instanceOf( SearchResult.class ) ) );
         assertThat( searchResultCollection.toArray()[ 1 ], is( instanceOf( SearchResult.class ) ) );
@@ -176,7 +167,7 @@ public class SearchResultEntityDataMapperTest {
     public void testTransformProgram() throws Exception {
 
         ProgramEntity programEntity = createFakeProgramEntity();
-        SearchResultEntity searchResultEntity = searchResultEntityDataMapper.transformProgram( programEntity );
+        SearchResultEntity searchResultEntity = SearchResultEntityDataMapper.transformProgram( programEntity );
 
         assertThat( searchResultEntity, is( instanceOf( SearchResultEntity.class ) ) );
         assertThat( searchResultEntity.getChanId(), is( FAKE_CHANNEL_INFO_CHAN_ID ) );
@@ -202,7 +193,7 @@ public class SearchResultEntityDataMapperTest {
 
         ProgramEntity programEntity = createFakeProgramEntity();
         programEntity.getRecording().setRecGroup( "LiveTV" );
-        SearchResultEntity searchResultEntity = searchResultEntityDataMapper.transformProgram( programEntity );
+        SearchResultEntity searchResultEntity = SearchResultEntityDataMapper.transformProgram( programEntity );
 
         assertThat( searchResultEntity, nullValue() );
 
@@ -218,7 +209,7 @@ public class SearchResultEntityDataMapperTest {
         programEntityList.add( mockProgramEntityOne );
         programEntityList.add( mockProgramEntityTwo );
 
-        Collection<SearchResultEntity> searchResultCollection = searchResultEntityDataMapper.transformPrograms( programEntityList );
+        Collection<SearchResultEntity> searchResultCollection = SearchResultEntityDataMapper.transformPrograms( programEntityList );
 
         assertThat( searchResultCollection.toArray()[ 0 ], is( instanceOf( SearchResultEntity.class ) ) );
         assertThat( searchResultCollection.toArray()[ 1 ], is( instanceOf( SearchResultEntity.class ) ) );

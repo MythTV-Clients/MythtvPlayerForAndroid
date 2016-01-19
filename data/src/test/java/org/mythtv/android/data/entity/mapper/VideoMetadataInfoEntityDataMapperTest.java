@@ -21,7 +21,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -61,20 +61,11 @@ public class VideoMetadataInfoEntityDataMapperTest extends ApplicationTestCase {
     private static final String FAKE_SCREENSHOT = "fake screenshot";
     private static final String FAKE_TRAILER = "fake trailer";
 
-    private VideoMetadataInfoEntityDataMapper videoMetadataInfoEntityDataMapper;
-
-    @Before
-    public void setup() throws Exception {
-
-        videoMetadataInfoEntityDataMapper = new VideoMetadataInfoEntityDataMapper();
-
-    }
-
     @Test
     public void testTransformVideoMetadataInfoEntity() {
 
         VideoMetadataInfoEntity videoMetadataInfoEntity = createFakeVideoMetadataInfoEntity();
-        VideoMetadataInfo videoMetadataInfo = videoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntity );
+        VideoMetadataInfo videoMetadataInfo = VideoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntity );
 
         assertThat( videoMetadataInfo, is( instanceOf( VideoMetadataInfo.class ) ) );
         assertThat( videoMetadataInfo.getId(), is( FAKE_ID ) );
@@ -123,7 +114,7 @@ public class VideoMetadataInfoEntityDataMapperTest extends ApplicationTestCase {
         videoMetadataInfoEntityList.add(mockVideoMetadataInfoEntityOne);
         videoMetadataInfoEntityList.add( mockVideoMetadataInfoEntityTwo );
 
-        Collection<VideoMetadataInfo> videoMetadataInfoCollection = videoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntityList );
+        Collection<VideoMetadataInfo> videoMetadataInfoCollection = VideoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntityList );
 
         assertThat( videoMetadataInfoCollection.toArray()[ 0 ], is( instanceOf( VideoMetadataInfo.class ) ) );
         assertThat( videoMetadataInfoCollection.toArray()[ 1 ], is( instanceOf( VideoMetadataInfo.class ) ) );

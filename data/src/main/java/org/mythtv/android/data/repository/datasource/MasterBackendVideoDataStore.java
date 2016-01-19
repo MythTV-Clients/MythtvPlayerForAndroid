@@ -24,7 +24,6 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
     private final VideoApi videoApi;
     private final VideoCache videoCache;
     private final SearchDataStoreFactory searchDataStoreFactory;
-    private final SearchResultEntityDataMapper searchResultEntityDataMapper;
 
     private final Action1<List<VideoMetadataInfoEntity>> saveVideosToCacheAction =
             videoMetadataInfoEntities -> {
@@ -45,18 +44,17 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
                     Observable
                         .from( videoMetadataInfoEntities )
                         .toList()
-                        .map( MasterBackendVideoDataStore.this.searchResultEntityDataMapper::transformVideos )
+                        .map( SearchResultEntityDataMapper::transformVideos )
                         .subscribe( searchDataStore::refreshVideoData );
                 }
 
             };
 
-    public MasterBackendVideoDataStore( VideoApi videoApi, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory, SearchResultEntityDataMapper searchResultEntityDataMapper ) {
+    public MasterBackendVideoDataStore( VideoApi videoApi, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
 
         this.videoApi = videoApi;
         this.videoCache = videoCache;
         this.searchDataStoreFactory = searchDataStoreFactory;
-        this.searchResultEntityDataMapper = searchResultEntityDataMapper;
 
     }
 

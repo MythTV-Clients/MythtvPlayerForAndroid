@@ -1,6 +1,7 @@
 package org.mythtv.android.data.repository.datasource;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 
@@ -18,5 +19,7 @@ public interface DvrDataStore {
     Observable<List<ProgramEntity>> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup );
 
     Observable<ProgramEntity> recordedProgramEntityDetails( final int chanId, final DateTime startTime );
+
+    Observable<List<EncoderEntity>> encoderEntityList();
 
 }

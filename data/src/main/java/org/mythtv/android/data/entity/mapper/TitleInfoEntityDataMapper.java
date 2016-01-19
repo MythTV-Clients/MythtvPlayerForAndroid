@@ -16,11 +16,9 @@ import javax.inject.Singleton;
 @Singleton
 public class TitleInfoEntityDataMapper {
 
-    @Inject
-    public TitleInfoEntityDataMapper() {
-    }
+    private TitleInfoEntityDataMapper() { }
 
-    public TitleInfo transform( TitleInfoEntity titleInfoEntity ) {
+    public static TitleInfo transform( TitleInfoEntity titleInfoEntity ) {
 
         TitleInfo titleInfo = null;
         if( null != titleInfoEntity ) {
@@ -34,7 +32,7 @@ public class TitleInfoEntityDataMapper {
         return titleInfo;
     }
 
-    public List<TitleInfo> transform( Collection<TitleInfoEntity> titleInfoEntityCollection ) {
+    public static List<TitleInfo> transform( Collection<TitleInfoEntity> titleInfoEntityCollection ) {
 
         List<TitleInfo> titleInfoList = new ArrayList<>( titleInfoEntityCollection.size() );
 
