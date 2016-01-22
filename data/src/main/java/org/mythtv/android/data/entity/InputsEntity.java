@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class InputsEntity {
 
-    @SerializedName( "Inputs" )
+    @SerializedName( "Input" )
     private InputEntity[] inputs;
 
 }
