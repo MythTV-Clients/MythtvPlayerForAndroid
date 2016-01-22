@@ -19,6 +19,12 @@
 
 <resources>
 
+    <string-array name="main_tabs">
+        <item>Recent</item>
+        <item>Encoders</item>
+        <item>Upcoming</item>
+    </string-array>
+
     <string-array name="watch_videos_tabs">
         <item>Movies</item>
         <item>TV</item>

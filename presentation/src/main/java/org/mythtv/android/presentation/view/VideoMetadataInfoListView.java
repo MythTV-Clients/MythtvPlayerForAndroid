@@ -1,6 +1,5 @@
 package org.mythtv.android.presentation.view;
 
-import org.mythtv.android.presentation.model.TitleInfoModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
 import java.util.Collection;

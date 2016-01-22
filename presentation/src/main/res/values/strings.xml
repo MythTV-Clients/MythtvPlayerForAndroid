@@ -187,6 +187,18 @@
 
     <string name="enable_background_audio">Play in background</string>
 
+    <string name="encoder">Encoder %1$s is %2$s</string>
+    <string name="encoder_state_error">error</string>
+    <string name="encoder_state_idle">idle</string>
+    <string name="encoder_state_watching_live_tv">watching live tv</string>
+    <string name="encoder_state_watching_recorded">watching recorded</string>
+    <string name="encoder_state_watching_video">watching_video</string>
+    <string name="encoder_state_watching_dvd">watching dvd</string>
+    <string name="encoder_state_watching_bd">watching bluray disc</string>
+    <string name="encoder_state_watching_recording">watching recording</string>
+    <string name="encoder_state_recording">recording</string>
+    <string name="encoder_state_changing_state">changing state</string>
+
     <string name="logging">Logging</string>
     <string name="logging_normal">Normal</string>
     <string name="logging_verbose">Verbose</string>
