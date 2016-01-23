@@ -188,14 +188,14 @@
     <string name="enable_background_audio">Play in background</string>
 
     <string name="encoder">Encoder %1$s [%2$s] is %3$s</string>
-    <string name="encoder_state_error">error</string>
+    <string name="encoder_state_error">in an errored state</string>
     <string name="encoder_state_idle">idle</string>
     <string name="encoder_state_watching_live_tv">watching live tv</string>
     <string name="encoder_state_watching_recorded">watching recorded</string>
-    <string name="encoder_state_watching_video">watching_video</string>
-    <string name="encoder_state_watching_dvd">watching dvd</string>
-    <string name="encoder_state_watching_bd">watching bluray disc</string>
-    <string name="encoder_state_watching_recording">watching recording</string>
+    <string name="encoder_state_watching_video">watching a video</string>
+    <string name="encoder_state_watching_dvd">watching a dvd</string>
+    <string name="encoder_state_watching_bd">watching a bluray disc</string>
+    <string name="encoder_state_watching_recording">watching a recording</string>
     <string name="encoder_state_recording">recording</string>
     <string name="encoder_state_changing_state">changing state</string>
 
