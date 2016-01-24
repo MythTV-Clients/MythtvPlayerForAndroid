@@ -6,10 +6,12 @@ import org.mythtv.android.presentation.internal.di.modules.EncodersModule;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramsModule;
+import org.mythtv.android.presentation.internal.di.modules.RecentProgramsModule;
 import org.mythtv.android.presentation.internal.di.modules.TitleInfosModule;
 import org.mythtv.android.presentation.view.fragment.EncoderListFragment;
 import org.mythtv.android.presentation.view.fragment.ProgramDetailsFragment;
 import org.mythtv.android.presentation.view.fragment.ProgramListFragment;
+import org.mythtv.android.presentation.view.fragment.RecentListFragment;
 import org.mythtv.android.presentation.view.fragment.TitleInfoListFragment;
 
 import dagger.Component;
@@ -21,7 +23,7 @@ import dagger.Component;
  * Created by dmfrey on 8/30/15.
  */
 @PerActivity
-@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, TitleInfosModule.class, ProgramsModule.class, ProgramModule.class, LiveStreamModule.class, EncodersModule.class} )
+@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, TitleInfosModule.class, ProgramsModule.class, ProgramModule.class, RecentProgramsModule.class, LiveStreamModule.class, EncodersModule.class} )
 public interface DvrComponent {
 
     void inject( TitleInfoListFragment titleInfoListFragment );
@@ -29,6 +31,8 @@ public interface DvrComponent {
     void inject( ProgramListFragment programsListFragment );
 
     void inject( ProgramDetailsFragment programDetailsFragment );
+
+    void inject( RecentListFragment recentListFragment );
 
     void inject( EncoderListFragment encoderListFragment );
 

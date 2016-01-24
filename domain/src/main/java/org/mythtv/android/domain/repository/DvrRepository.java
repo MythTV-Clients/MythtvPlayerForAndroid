@@ -20,6 +20,8 @@ public interface DvrRepository {
 
     Observable<Program> recordedProgram( int chanId, DateTime startTime );
 
+    Observable<List<Program>> recent();
+
     Observable<List<Encoder>> encoders();
 
 }

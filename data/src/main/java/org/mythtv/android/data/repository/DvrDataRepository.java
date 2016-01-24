@@ -78,8 +78,8 @@ public class DvrDataRepository implements DvrRepository {
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
-        Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList(descending, startIndex, count, titleRegEx, recGroup, storageGroup);
-        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList(null);
+        Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
+        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList( null );
 
         Observable<List<ProgramEntity>> recordedProgramEntityList = Observable.zip( programEntities, liveStreamInfoEntities, ( programEntityList, liveStreamInfoEntityList ) -> {
 
@@ -134,6 +134,45 @@ public class DvrDataRepository implements DvrRepository {
 
         return recordedProgramEntity
                 .map( recordedProgram -> ProgramEntityDataMapper.transform( recordedProgram ) );
+    }
+
+    @SuppressWarnings( "Convert2MethodRef" )
+    @Override
+    public Observable<List<Program>> recent() {
+        final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
+        final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
+
+        Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null )
+                .flatMap( Observable::from )
+                .filter( programEntity -> !programEntity.getRecording().getRecGroup().equals( "LiveTV" ) )
+                .take( 10 )
+                .toList();
+        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList( null );
+
+        Observable<List<ProgramEntity>> recordedProgramEntityList = Observable.zip( programEntities, liveStreamInfoEntities, ( programEntityList, liveStreamInfoEntityList ) -> {
+
+            if( null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty() ) {
+
+                for( ProgramEntity programEntity : programEntityList ) {
+
+                    for( LiveStreamInfoEntity liveStreamInfoEntity : liveStreamInfoEntityList ) {
+
+                        if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
+
+                            programEntity.setLiveStreamInfoEntity( liveStreamInfoEntityList.get( 0 ) );
+
+                        }
+
+                    }
+
+                }
+            }
+
+            return programEntityList;
+        });
+
+        return recordedProgramEntityList
+                .map( recordedProgramEntities -> ProgramEntityDataMapper.transform( recordedProgramEntities ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
