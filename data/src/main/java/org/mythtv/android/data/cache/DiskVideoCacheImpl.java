@@ -109,11 +109,11 @@ public class DiskVideoCacheImpl implements VideoCache {
         Log.d( TAG, "getCategory : enter" );
         Log.d( TAG, "getCategory : category=" + category );
 
-//        if( !isCached() ) {
-//            Log.d( TAG, "getCategory : exit, not cached on disk" );
-//
-//            return null;
-//        }
+        if( !isCached() ) {
+            Log.d( TAG, "getCategory : exit, not cached on disk" );
+
+            return null;
+        }
 
         return readFromFile()
                 .flatMap( Observable::from )
@@ -129,11 +129,11 @@ public class DiskVideoCacheImpl implements VideoCache {
         Log.d( TAG, "getDirectory : enter" );
         Log.d( TAG, "getDirectory : directory=" + directory );
 
-//        if( !isCached() ) {
-//            Log.d( TAG, "getDirectory : exit, not cached on disk" );
-//
-//            return null;
-//        }
+        if( !isCached() ) {
+            Log.d( TAG, "getDirectory : exit, not cached on disk" );
+
+            return null;
+        }
 
         return readFromFile()
                 .flatMap( Observable::from )
