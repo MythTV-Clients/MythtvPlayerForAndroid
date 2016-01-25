@@ -64,6 +64,12 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
     }
 
     @Override
+    public Observable<List<ProgramEntity>> upcomingProgramEntityList( int startIndex, int count, boolean showAll, int recordId, int recStatus ) {
+
+        return this.api.upcomingProgramEntityList( startIndex, count, showAll, recordId, recStatus );
+    }
+
+    @Override
     public Observable<List<EncoderEntity>> encoderEntityList() {
         Log.d( TAG, "encoderEntityList : enter" );
 

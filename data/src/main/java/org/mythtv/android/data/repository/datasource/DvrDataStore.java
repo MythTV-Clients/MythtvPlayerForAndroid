@@ -20,6 +20,8 @@ public interface DvrDataStore {
 
     Observable<ProgramEntity> recordedProgramEntityDetails( final int chanId, final DateTime startTime );
 
+    Observable<List<ProgramEntity>> upcomingProgramEntityList( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus );
+
     Observable<List<EncoderEntity>> encoderEntityList();
 
 }

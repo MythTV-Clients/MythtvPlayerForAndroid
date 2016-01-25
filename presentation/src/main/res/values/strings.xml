@@ -204,6 +204,8 @@
     <string name="logging_verbose">Verbose</string>
     <string name="off">[off]</string>
 
+    <string name="minutes">%1$s Minutes</string>
+
     <string name="audio">Audio</string>
     <string name="text">Text</string>
     <string name="retry">Retry</string>

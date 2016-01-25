@@ -136,6 +136,17 @@ public class DvrDataRepository implements DvrRepository {
                 .map( recordedProgram -> ProgramEntityDataMapper.transform( recordedProgram ) );
     }
 
+    @Override
+    public Observable<List<Program>> upcoming( int startIndex, int count, boolean showAll, int recordId, int recStatus ) {
+        Log.d( TAG, "upcoming : enter" );
+        Log.d( TAG, "upcoming : startIndex=" + startIndex + ", count=" + count + ", showAll=" + showAll + ", recordId=" + recordId + ", recStatus=" + recStatus );
+
+        final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
+
+        return dvrDataStore.upcomingProgramEntityList( startIndex, count, showAll, recordId, recStatus )
+                .map( ProgramEntityDataMapper::transform );
+    }
+
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<List<Program>> recent() {

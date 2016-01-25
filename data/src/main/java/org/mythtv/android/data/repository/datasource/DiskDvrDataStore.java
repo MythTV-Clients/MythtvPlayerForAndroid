@@ -48,6 +48,13 @@ public class DiskDvrDataStore implements DvrDataStore {
     }
 
     @Override
+    public Observable<List<ProgramEntity>> upcomingProgramEntityList( int startIndex, int count, boolean showAll, int recordId, int recStatus ) {
+
+        throw new UnsupportedOperationException( "Operation is not available" );
+
+    }
+
+    @Override
     public Observable<List<EncoderEntity>> encoderEntityList() {
 
         throw new UnsupportedOperationException( "Operation is not available" );

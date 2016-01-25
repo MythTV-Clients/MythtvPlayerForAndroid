@@ -199,6 +199,57 @@ public class DvrApiImpl implements DvrApi {
     }
 
     @Override
+    public Observable<List<ProgramEntity>> upcomingProgramEntityList(int startIndex, int count, boolean showAll, int recordId, int recStatus) {
+        Log.d( TAG, "upcomingProgramEntityList : enter" );
+
+        Log.d( TAG, "upcomingProgramEntityList : exit" );
+        return Observable.create( new Observable.OnSubscribe<List<ProgramEntity>>() {
+
+            @Override
+            public void call( Subscriber<? super List<ProgramEntity>> subscriber ) {
+                Log.d( TAG, "upcomingProgramEntityList.call : enter" );
+
+                if( isThereInternetConnection() ) {
+                    Log.d( TAG, "upcomingProgramEntityList.call : network is connected" );
+
+                    try {
+
+                        String responseUpcomingProgramEntities = getUpcomingProgramEntitiesFromApi( startIndex, count, showAll, recordId, recStatus );
+                        if( null != responseUpcomingProgramEntities ) {
+                            Log.d( TAG, "upcomingEntityList.call : retrieved program entities" );
+
+                            subscriber.onNext( programEntityJsonMapper.transformProgramEntityCollection( responseUpcomingProgramEntities ) );
+                            subscriber.onCompleted();
+
+                        } else {
+                            Log.d( TAG, "upcomingProgramEntityList.call : failed to retrieve program entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "upcomingProgramEntityList.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d( TAG, "upcomingProgramEntityList.call : network is not connected" );
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d( TAG, "upcomingProgramEntityList.call : exit" );
+            }
+
+        });
+
+    }
+
+    @Override
     public Observable<List<EncoderEntity>> encoderEntityList() {
 
         return Observable.create( new Observable.OnSubscribe<List<EncoderEntity>>() {
@@ -234,13 +285,13 @@ public class DvrApiImpl implements DvrApi {
                     }
 
                 } else {
-                    Log.d(TAG, "encoderEntityList.call : network is not connected");
+                    Log.d( TAG, "encoderEntityList.call : network is not connected" );
 
                     subscriber.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d(TAG, "encoderEntityList.call : exit");
+                Log.d( TAG, "encoderEntityList.call : exit" );
             }
 
         });
@@ -304,11 +355,50 @@ public class DvrApiImpl implements DvrApi {
         return ApiConnection.createGET(sb.toString()).requestSyncCall();
     }
 
-    private String getRecordedProgramDetailsFromApi( int chanId, DateTime startTime ) throws MalformedURLException {
+    private String getRecordedProgramDetailsFromApi(int chanId, DateTime startTime ) throws MalformedURLException {
 
         String apiUrl = String.format( DvrApi.RECORDED_BASE_URL, chanId, fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
 
         return ApiConnection.createGET(getMasterBackendUrl() + apiUrl).requestSyncCall();
+    }
+
+    private String getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() );
+        sb.append( DvrApi.UPCOMING_LIST_BASE_URL );
+        sb.append( "?" );
+        sb.append( String.format( SHOW_ALL_QS, showAll ) );
+
+        if( startIndex != -1 ) {
+
+            sb.append( "&" );
+            sb.append( String.format( START_INDEX_QS, startIndex ) );
+
+        }
+
+        if( count != -1 ) {
+
+            sb.append( "&" );
+            sb.append( String.format( COUNT_QS, startIndex ) );
+
+        }
+
+        if( recordId != -1 ) {
+
+            sb.append( "&" );
+            sb.append( String.format( RECORD_ID_QS, recordId ) );
+
+        }
+
+        if( recStatus != -1 ) {
+
+            sb.append( "&" );
+            sb.append( String.format( REC_STATUS_QS, recStatus ) );
+
+        }
+
+        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
     }
 
     private String getEncoderEntitiesFromApi() throws MalformedURLException {
