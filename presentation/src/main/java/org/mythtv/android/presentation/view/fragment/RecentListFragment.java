@@ -25,7 +25,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 1/20/16.
@@ -33,15 +32,6 @@ import butterknife.OnClick;
 public class RecentListFragment extends BaseFragment implements ProgramListView {
 
     private static final String TAG = RecentListFragment.class.getSimpleName();
-
-    /**
-     * Interface for listening program list events.
-     */
-    public interface ProgramListListener {
-
-        void onProgramClicked( final ProgramModel programModel );
-
-    }
 
     @Inject
     RecentListPresenter recentListPresenter;
@@ -55,25 +45,11 @@ public class RecentListFragment extends BaseFragment implements ProgramListView 
     private ProgramsAdapter programsAdapter;
     private ProgramsLayoutManager programsLayoutManager;
 
-    private ProgramListListener programListListener;
-
     public RecentListFragment() { super(); }
 
     public static RecentListFragment newInstance() {
 
         return new RecentListFragment();
-    }
-
-    @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
-        Log.d( TAG, "onAttach : enter" );
-
-        if( activity instanceof ProgramListListener ) {
-            this.programListListener = (ProgramListListener) activity;
-        }
-
-        Log.d( TAG, "onAttach : exit" );
     }
 
     @Override
@@ -183,16 +159,18 @@ public class RecentListFragment extends BaseFragment implements ProgramListView 
 
     @Override
     public void showRetry() {
-        Log.d( TAG, "showRetry : enter" );
 
-        Log.d( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
-        Log.d( TAG, "hideRetry : enter" );
 
-        Log.d( TAG, "hideRetry : exit" );
+    }
+
+    public void reload() {
+
+        loadRecentList();
+
     }
 
     @Override
@@ -210,16 +188,7 @@ public class RecentListFragment extends BaseFragment implements ProgramListView 
 
     @Override
     public void viewProgram( ProgramModel programModel ) {
-        Log.d( TAG, "viewProgram : enter" );
 
-        if( null != this.programListListener ) {
-            Log.d( TAG, "viewProgram : programModel=" + programModel.toString() );
-
-            this.programListListener.onProgramClicked( programModel );
-
-        }
-
-        Log.d( TAG, "viewProgram : exit" );
     }
 
     @Override

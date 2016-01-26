@@ -173,6 +173,12 @@ public class EncoderListFragment extends BaseFragment implements EncoderListView
         Log.d( TAG, "hideRetry : exit" );
     }
 
+    public void reload() {
+
+        loadEncoderList();
+
+    }
+
     @Override
     public void renderEncoderList( Collection<EncoderModel> encoderModelCollection ) {
         Log.d( TAG, "renderEncoderInfoList : enter" );

@@ -196,6 +196,12 @@ public class UpcomingListFragment extends BaseFragment implements ProgramListVie
         Log.d( TAG, "hideRetry : exit" );
     }
 
+    public void reload() {
+
+        loadUpcomingList();
+
+    }
+
     @Override
     public void renderProgramList( Collection<ProgramModel> programModelCollection ) {
         Log.d( TAG, "renderProgramList : enter" );

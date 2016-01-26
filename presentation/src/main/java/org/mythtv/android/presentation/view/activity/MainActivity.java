@@ -3,12 +3,14 @@ package org.mythtv.android.presentation.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 
 import org.mythtv.android.R;
@@ -45,6 +47,11 @@ public class MainActivity extends BaseActivity implements HasComponent<DvrCompon
     @Bind( R.id.pager )
     ViewPager mPager;
 
+    @Bind( R.id.fab )
+    FloatingActionButton mFab;
+
+    private MainFragmentPagerAdapter mPagerAdapter;
+
     @Override
     public int getLayoutResource() {
 
@@ -61,11 +68,44 @@ public class MainActivity extends BaseActivity implements HasComponent<DvrCompon
 
         this.initializeInjector();
 
+        mPagerAdapter = new MainFragmentPagerAdapter( getSupportFragmentManager() );
+
         mTabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
-        mPager.setAdapter( new MainFragmentPagerAdapter( getSupportFragmentManager() ) );
+        mPager.setAdapter( mPagerAdapter );
         mPager.setOffscreenPageLimit( 1 );
         mTabLayout.setupWithViewPager( mPager );
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
+
+        mFab.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick( View v ) {
+
+                switch( mPager.getCurrentItem() ) {
+
+                    case 0 :
+
+                        ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
+
+                        break;
+
+                    case 1 :
+
+                        ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
+
+                        break;
+
+                    case 2 :
+
+                        ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
+
+                        break;
+
+                }
+
+            }
+
+        });
 
         Log.d( TAG, "onCreate : exit" );
     }

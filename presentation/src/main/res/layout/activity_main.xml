@@ -57,6 +57,9 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+        <include
+            layout="@layout/fab_view" />
+
     </android.support.design.widget.CoordinatorLayout>
 
     <include
