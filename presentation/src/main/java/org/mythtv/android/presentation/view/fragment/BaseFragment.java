@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
+import android.view.View;
 
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
@@ -28,11 +29,16 @@ public abstract class BaseFragment extends Fragment {
     /**
      * Shows a {@link android.widget.Toast} message.
      *
+     * @param view the parent view
      * @param message An string representing a message to be shown.
      */
-    protected void showToastMessage( String message ) {
+    protected void showToastMessage( View view, String message, String retryMessage, View.OnClickListener retryOnClickListener ) {
 
-        Toast.makeText( getActivity(), message, Toast.LENGTH_SHORT ).show();
+//        Toast.makeText( getActivity(), message, Toast.LENGTH_SHORT ).show();
+        Snackbar
+                .make( getView(), message, Snackbar.LENGTH_LONG )
+                .setAction( retryMessage, retryOnClickListener )
+                .show();
 
     }
 

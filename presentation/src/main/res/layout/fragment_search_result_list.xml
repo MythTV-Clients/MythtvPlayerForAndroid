@@ -31,7 +31,4 @@
     <include
         layout="@layout/view_progress" />
 
-    <include
-        layout="@layout/view_retry" />
-
 </FrameLayout>

@@ -77,12 +77,6 @@ public class VideoDetailsFragment extends BaseFragment implements VideoDetailsVi
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
 
-    @Bind( R.id.rl_retry )
-    RelativeLayout rl_retry;
-
-    @Bind( R.id.bt_retry )
-    Button bt_retry;
-
     private VideoMetadataInfoModel videoMetadataInfoModel;
 
     public VideoDetailsFragment() { super(); }
@@ -242,16 +236,12 @@ public class VideoDetailsFragment extends BaseFragment implements VideoDetailsVi
     public void showRetry() {
         Log.d( TAG, "showRetry : enter" );
 
-        this.rl_retry.setVisibility( View.VISIBLE );
-
         Log.d( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
         Log.d( TAG, "hideRetry : enter" );
-
-        this.rl_retry.setVisibility( View.GONE );
 
         Log.d( TAG, "hideRetry : exit" );
     }
@@ -260,7 +250,16 @@ public class VideoDetailsFragment extends BaseFragment implements VideoDetailsVi
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message );
+        this.showToastMessage( getView(), message, getResources().getString( R.string.retry ), new View.OnClickListener() {
+
+            @Override
+            public void onClick( View v ) {
+
+                VideoDetailsFragment.this.loadVideoDetails();
+
+            }
+
+        });
 
         Log.d( TAG, "showError : exit" );
     }
@@ -358,15 +357,6 @@ public class VideoDetailsFragment extends BaseFragment implements VideoDetailsVi
         }
 
         Log.d( TAG, "onButtonQueueClick : exit" );
-    }
-
-    @OnClick( R.id.bt_retry )
-    void onButtonRetryClick() {
-        Log.d( TAG, "onButtonRetryClick : enter" );
-
-        VideoDetailsFragment.this.loadVideoDetails();
-
-        Log.d( TAG, "onButtonRetryClick : exit" );
     }
 
     public boolean getInternalPlayerPreferenceFromPreferences( Context context ) {

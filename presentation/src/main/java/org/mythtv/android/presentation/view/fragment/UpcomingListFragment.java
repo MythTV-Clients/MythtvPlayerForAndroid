@@ -54,12 +54,6 @@ public class UpcomingListFragment extends BaseFragment implements ProgramListVie
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
 
-    @Bind( R.id.rl_retry )
-    RelativeLayout rl_retry;
-
-    @Bind( R.id.bt_retry )
-    Button bt_retry;
-
     private UpcomingProgramsAdapter programsAdapter;
     private ProgramsLayoutManager programsLayoutManager;
 
@@ -192,16 +186,12 @@ public class UpcomingListFragment extends BaseFragment implements ProgramListVie
     public void showRetry() {
         Log.d( TAG, "showRetry : enter" );
 
-        this.rl_retry.setVisibility( View.VISIBLE );
-
         Log.d( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
         Log.d( TAG, "hideRetry : enter" );
-
-        this.rl_retry.setVisibility( View.GONE );
 
         Log.d( TAG, "hideRetry : exit" );
     }
@@ -237,7 +227,16 @@ public class UpcomingListFragment extends BaseFragment implements ProgramListVie
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message );
+        this.showToastMessage( getView(), message, getResources().getString( R.string.retry ), new View.OnClickListener() {
+
+            @Override
+            public void onClick( View v ) {
+
+                UpcomingListFragment.this.loadUpcomingList();
+
+            }
+
+        });
 
         Log.d( TAG, "showError : exit" );
     }
@@ -259,15 +258,6 @@ public class UpcomingListFragment extends BaseFragment implements ProgramListVie
         this.upcomingListPresenter.initialize();
 
         Log.d( TAG, "loadUpcomingList : exit" );
-    }
-
-    @OnClick( R.id.bt_retry )
-    void onButtonRetryClick() {
-        Log.d( TAG, "onButtonRetryClick : enter" );
-
-        UpcomingListFragment.this.loadUpcomingList();
-
-        Log.d( TAG, "onButtonRetryClick : exit" );
     }
 
     private ProgramsAdapter.OnItemClickListener onItemClickListener = new ProgramsAdapter.OnItemClickListener() {

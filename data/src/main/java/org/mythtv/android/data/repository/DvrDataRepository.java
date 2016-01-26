@@ -66,7 +66,8 @@ public class DvrDataRepository implements DvrRepository {
                 .subscribe( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) );
 
         return dvrDataStore.titleInfoEntityList()
-                .map( titleInfoEntities -> TitleInfoEntityDataMapper.transform( titleInfoEntities ) );
+                .map( titleInfoEntities -> TitleInfoEntityDataMapper.transform( titleInfoEntities ) )
+                .doOnError( throwable -> Log.e( TAG, "titleInfos : error", throwable ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )

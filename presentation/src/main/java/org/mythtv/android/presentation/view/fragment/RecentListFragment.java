@@ -8,13 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.presenter.ProgramListPresenter;
 import org.mythtv.android.presentation.presenter.RecentListPresenter;
 import org.mythtv.android.presentation.view.ProgramListView;
 import org.mythtv.android.presentation.view.adapter.ProgramsAdapter;
@@ -53,12 +51,6 @@ public class RecentListFragment extends BaseFragment implements ProgramListView 
 
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
-
-    @Bind( R.id.rl_retry )
-    RelativeLayout rl_retry;
-
-    @Bind( R.id.bt_retry )
-    Button bt_retry;
 
     private ProgramsAdapter programsAdapter;
     private ProgramsLayoutManager programsLayoutManager;
@@ -193,16 +185,12 @@ public class RecentListFragment extends BaseFragment implements ProgramListView 
     public void showRetry() {
         Log.d( TAG, "showRetry : enter" );
 
-        this.rl_retry.setVisibility( View.VISIBLE );
-
         Log.d( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
         Log.d( TAG, "hideRetry : enter" );
-
-        this.rl_retry.setVisibility( View.GONE );
 
         Log.d( TAG, "hideRetry : exit" );
     }
@@ -238,7 +226,16 @@ public class RecentListFragment extends BaseFragment implements ProgramListView 
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message );
+        this.showToastMessage( getView(), message, getResources().getString( R.string.retry ), new View.OnClickListener() {
+
+            @Override
+            public void onClick( View v ) {
+
+                RecentListFragment.this.loadRecentList();
+
+            }
+
+        });
 
         Log.d( TAG, "showError : exit" );
     }
@@ -260,15 +257,6 @@ public class RecentListFragment extends BaseFragment implements ProgramListView 
         this.recentListPresenter.initialize();
 
         Log.d( TAG, "loadRecentList : exit" );
-    }
-
-    @OnClick( R.id.bt_retry )
-    void onButtonRetryClick() {
-        Log.d( TAG, "onButtonRetryClick : enter" );
-
-        RecentListFragment.this.loadRecentList();
-
-        Log.d( TAG, "onButtonRetryClick : exit" );
     }
 
     private ProgramsAdapter.OnItemClickListener onItemClickListener = new ProgramsAdapter.OnItemClickListener() {
