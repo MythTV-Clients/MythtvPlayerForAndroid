@@ -4,6 +4,8 @@ apply plugin: 'com.neenbedankt.android-apt'
 android {
 
     def globalConfiguration = rootProject.extensions.getByName( "ext" )
+    def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
+    def applicationTag  = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
     compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
     buildToolsVersion '23.0.2'
@@ -21,6 +23,9 @@ android {
 
         // Enabling multidex support.
         multiDexEnabled true
+
+        buildConfigField "String", "APPLICATION_SHA1", '"' + applicationSHA1 + '"'
+        buildConfigField "String", "APPLICATION_TAG",  '"' + applicationTag  + '"'
     }
 
     compileOptions {
