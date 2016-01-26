@@ -41,12 +41,14 @@ public class DiskVideoDataStore implements VideoDataStore {
                     .flatMap( Observable::from )
                     .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
                     .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
-                    .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) );
+                    .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) )
+                    .doOnError( throwable -> Log.e( TAG, "getCategory : error", throwable ) );
 
         } else {
 
             return this.videoCache.getCategory( category )
-                    .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) );
+                    .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) )
+                    .doOnError( throwable -> Log.e( TAG, "getCategory : error", throwable ) );
 
         }
 

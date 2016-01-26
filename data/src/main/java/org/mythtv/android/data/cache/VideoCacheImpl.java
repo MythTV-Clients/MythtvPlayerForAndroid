@@ -17,15 +17,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by dmfrey on 11/3/15.
  */
 @Singleton
-public class DiskVideoCacheImpl implements VideoCache {
+public class VideoCacheImpl implements VideoCache {
 
-    private static final String TAG = DiskVideoCacheImpl.class.getSimpleName();
+    private static final String TAG = VideoCacheImpl.class.getSimpleName();
 
     private static final String SETTINGS_FILE_NAME = "org.mythtv.android.SETTINGS";
     private static final String SETTINGS_KEY_LAST_CACHE_UPDATE = "video_last_cache_update";
@@ -41,14 +40,14 @@ public class DiskVideoCacheImpl implements VideoCache {
     private final ThreadExecutor threadExecutor;
 
     /**
-     * Constructor of the class {@link DiskVideoCacheImpl}.
+     * Constructor of the class {@link VideoCacheImpl}.
      *
      * @param context A
      * @param videoEntityJsonSerializer {@link VideoEntityJsonSerializer} for object serialization.
      * @param fileManager {@link FileManager} for saving serialized objects to the file system.
      */
     @Inject
-    public DiskVideoCacheImpl( Context context, VideoEntityJsonSerializer videoEntityJsonSerializer, VideoListEntityJsonSerializer videoListEntityJsonSerializer, FileManager fileManager, ThreadExecutor executor ) {
+    public VideoCacheImpl(Context context, VideoEntityJsonSerializer videoEntityJsonSerializer, VideoListEntityJsonSerializer videoListEntityJsonSerializer, FileManager fileManager, ThreadExecutor executor ) {
         Log.d( TAG, "initialize : enter" );
 
         if( context == null || videoEntityJsonSerializer == null || videoListEntityJsonSerializer == null || fileManager == null || executor == null ) {
@@ -96,7 +95,6 @@ public class DiskVideoCacheImpl implements VideoCache {
     public Observable<VideoMetadataInfoEntity> get( final int id ) {
         Log.d( TAG, "get : enter" );
         Log.d( TAG, "get : id=" + id );
-
 
         return readFromFile()
                 .flatMap( Observable::from )
@@ -210,11 +208,11 @@ public class DiskVideoCacheImpl implements VideoCache {
     private Observable<List<VideoMetadataInfoEntity>> readFromFile() {
         Log.v( TAG, "readFromFile : enter" );
 
-        File file = DiskVideoCacheImpl.this.buildFile();
-        String fileContent = DiskVideoCacheImpl.this.fileManager.readFileContent( file );
+        File file = VideoCacheImpl.this.buildFile();
+        String fileContent = VideoCacheImpl.this.fileManager.readFileContent( file );
         Log.v( TAG, "readFromFile : fileContent=" + fileContent );
 
-        VideoMetadataInfoListEntity videoMetadataInfoListEntity = DiskVideoCacheImpl.this.videoListEntityJsonSerializer.deserialize( fileContent );
+        VideoMetadataInfoListEntity videoMetadataInfoListEntity = VideoCacheImpl.this.videoListEntityJsonSerializer.deserialize( fileContent );
         Log.v( TAG, "readFromFile : videoMetadataInfoListEntity=" + videoMetadataInfoListEntity );
 
         Log.v( TAG, "readFromFile : exit" );

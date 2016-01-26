@@ -54,7 +54,7 @@ public class VideoCacheTest extends ApplicationTestCase {
         videoEntityJsonSerializer = new VideoEntityJsonSerializer();
         videoListEntityJsonSerializer = new VideoListEntityJsonSerializer();
 
-        videoCache = new DiskVideoCacheImpl( context, videoEntityJsonSerializer, videoListEntityJsonSerializer, fileManager, mockThreadExecutor );
+        videoCache = new VideoCacheImpl( context, videoEntityJsonSerializer, videoListEntityJsonSerializer, fileManager, mockThreadExecutor );
 
     }
 
