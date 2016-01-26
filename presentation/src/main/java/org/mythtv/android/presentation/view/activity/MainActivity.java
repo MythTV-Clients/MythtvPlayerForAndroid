@@ -59,8 +59,6 @@ public class MainActivity extends BaseActivity implements HasComponent<DvrCompon
 
         this.initializeInjector();
 
-        setNavigationMenuItemChecked( 1 );
-
         mTabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
         mPager.setAdapter( new MainFragmentPagerAdapter( getSupportFragmentManager() ) );
         mPager.setOffscreenPageLimit( 1 );
@@ -68,6 +66,21 @@ public class MainActivity extends BaseActivity implements HasComponent<DvrCompon
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
 
         Log.d( TAG, "onCreate : exit" );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if( getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
+            Log.i( TAG, "onResume : MasterBackend not set, redirecting to Settings" );
+
+            navigator.navigateToSettings( this );
+
+        }
+
+        setNavigationMenuItemChecked( 0 );
+
     }
 
     @Override
@@ -83,18 +96,6 @@ public class MainActivity extends BaseActivity implements HasComponent<DvrCompon
 
             // Otherwise, select the previous step.
             mPager.setCurrentItem( mPager.getCurrentItem() - 1 );
-
-        }
-
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if( getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
-            Log.i( TAG, "onResume : MasterBackend not set, redirecting to Settings" );
-
-            navigator.navigateToSettings( this );
 
         }
 

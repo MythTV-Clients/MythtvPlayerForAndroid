@@ -209,5 +209,6 @@
     <string name="audio">Audio</string>
     <string name="text">Text</string>
     <string name="retry">Retry</string>
+    <string name="drawer_item_home">Home</string>
 
 </resources>

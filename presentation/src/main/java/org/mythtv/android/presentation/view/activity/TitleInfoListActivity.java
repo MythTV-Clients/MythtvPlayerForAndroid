@@ -10,10 +10,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
-import org.mythtv.android.presentation.internal.di.modules.ProgramsModule;
-import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.TitleInfoModel;
-import org.mythtv.android.presentation.view.fragment.ProgramListFragment;
 import org.mythtv.android.presentation.view.fragment.TitleInfoListFragment;
 
 /**
@@ -49,9 +46,15 @@ public class TitleInfoListActivity extends BaseActivity implements HasComponent<
 
         this.initializeInjector();
 
-        setNavigationMenuItemChecked( 0 );
-
         Log.d( TAG, "onCreate : exit" );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setNavigationMenuItemChecked( 1 );
+
     }
 
     private void initializeInjector() {

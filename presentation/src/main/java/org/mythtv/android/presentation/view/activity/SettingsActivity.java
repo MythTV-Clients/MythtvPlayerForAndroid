@@ -2,7 +2,6 @@ package org.mythtv.android.presentation.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import org.mythtv.android.R;
 
@@ -23,10 +22,10 @@ public class SettingsActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
+    protected void onResume() {
+        super.onResume();
 
-        setNavigationMenuItemChecked( 2 );
+        setNavigationMenuItemChecked( 3 );
 
     }
 

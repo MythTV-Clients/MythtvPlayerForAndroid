@@ -23,7 +23,6 @@ import org.mythtv.android.presentation.view.fragment.HomeVideoListFragment;
 import org.mythtv.android.presentation.view.fragment.MovieListFragment;
 import org.mythtv.android.presentation.view.fragment.MusicVideoListFragment;
 import org.mythtv.android.presentation.view.fragment.TelevisionListFragment;
-import org.mythtv.android.presentation.view.fragment.VideoDetailsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +64,6 @@ public class VideoMetadataInfoListActivity extends BaseActivity implements HasCo
 
         this.initializeInjector();
 
-        setNavigationMenuItemChecked( 1 );
-
         mTabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
         mPager.setAdapter( new VideosFragmentPagerAdapter( getSupportFragmentManager() ) );
         mPager.setOffscreenPageLimit( 1 );
@@ -74,6 +71,14 @@ public class VideoMetadataInfoListActivity extends BaseActivity implements HasCo
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
 
         Log.d( TAG, "onCreate : exit" );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setNavigationMenuItemChecked( 2 );
+
     }
 
     @Override

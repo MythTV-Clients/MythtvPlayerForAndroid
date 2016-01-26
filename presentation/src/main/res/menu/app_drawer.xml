@@ -22,6 +22,11 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/navigation_item_home"
+            android:icon="@drawable/navigation_drawer_home"
+            android:title="@string/drawer_item_home" />
+
+        <item
             android:id="@+id/navigation_item_watch_recordings"
             android:icon="@drawable/navigation_drawer_watch_recordings"
             android:title="@string/drawer_item_watch_recordings" />

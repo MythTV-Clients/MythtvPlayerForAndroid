@@ -70,18 +70,30 @@
         <!-- App Activities -->
         <activity
             android:name=".presentation.view.activity.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:clearTaskOnLaunch="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.SearchableActivity" />
+
         </activity>
 
         <activity
             android:name=".presentation.view.activity.TitleInfoListActivity"
-            android:label="@string/watch_recording">
+            android:label="@string/watch_recording"
+            android:parentActivityName=".presentation.view.activity.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.MainActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -91,8 +103,7 @@
 
         <activity
             android:name=".presentation.view.activity.ProgramListActivity"
-            android:label="@string/watch_recording"
-            android:launchMode="singleTop">
+            android:label="@string/watch_recording">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -105,8 +116,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.ProgramDetailsActivity"
-            android:launchMode="singleTop">
+            android:name=".presentation.view.activity.ProgramDetailsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -119,8 +129,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.ProgramDetailsSettingsActivity"
-            android:launchMode="singleTop">
+            android:name=".presentation.view.activity.ProgramDetailsSettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -133,8 +142,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.SearchableActivity"
-            android:launchMode="singleTop" >
+            android:name=".presentation.view.activity.SearchableActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -148,7 +156,12 @@
 
         <activity
             android:name=".presentation.view.activity.VideoMetadataInfoListActivity"
-            android:label="@string/watch_video">
+            android:label="@string/watch_video"
+            android:parentActivityName=".presentation.view.activity.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.MainActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -167,8 +180,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.VideoDetailsActivity"
-            android:launchMode="singleTop">
+            android:name=".presentation.view.activity.VideoDetailsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -181,8 +193,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.VideoDetailsSettingsActivity"
-            android:launchMode="singleTop">
+            android:name=".presentation.view.activity.VideoDetailsSettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -196,7 +207,12 @@
 
         <activity
             android:name=".presentation.view.activity.SettingsActivity"
-            android:label="@string/title_activity_settings">
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".presentation.view.activity.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.MainActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"

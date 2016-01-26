@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.presentation.view.activity.MainActivity;
 import org.mythtv.android.presentation.view.activity.PlayerActivity;
 import org.mythtv.android.presentation.view.activity.ProgramDetailsActivity;
 import org.mythtv.android.presentation.view.activity.ProgramDetailsSettingsActivity;
@@ -36,6 +37,20 @@ public class Navigator {
         //empty
     }
 
+    public void navigateToHome( Context context ) {
+        Log.d( TAG, "navigateToHome : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToHome : context != null" );
+
+            Intent intentToLaunch = MainActivity.getCallingIntent( context );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToHome : exit" );
+    }
+
     public void navigateToTitleInfos( Context context ) {
         Log.d( TAG, "navigateToTitleInfos : enter" );
 
@@ -43,6 +58,7 @@ public class Navigator {
             Log.d( TAG, "navigateToTitleInfos : context != null" );
 
             Intent intentToLaunch = TitleInfoListActivity.getCallingIntent(context);
+            intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
             context.startActivity( intentToLaunch );
 
         }
@@ -99,6 +115,7 @@ public class Navigator {
             Log.d( TAG, "navigateToVideos : context != null" );
 
             Intent intentToLaunch = VideoMetadataInfoListActivity.getCallingIntent( context );
+            intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
             context.startActivity( intentToLaunch );
 
         }
@@ -201,6 +218,7 @@ public class Navigator {
             Log.d( TAG, "navigateToSettings : context != null" );
 
             Intent intentToLaunch = SettingsActivity.getCallingIntent( context );
+            intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
             context.startActivity( intentToLaunch );
 
         }

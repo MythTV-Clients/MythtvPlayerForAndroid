@@ -147,6 +147,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
         switch( menuItem.getItemId() ) {
 
+            case R.id.navigation_item_home :
+
+                navigator.navigateToHome( this );
+
+                return true;
+
             case R.id.navigation_item_watch_recordings :
                 Log.i( TAG, "onNavigationItemSelected : watch recordings clicked" );
 
