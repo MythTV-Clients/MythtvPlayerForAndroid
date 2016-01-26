@@ -29,12 +29,12 @@ public abstract class BaseFragment extends Fragment {
     /**
      * Shows a {@link android.widget.Toast} message.
      *
-     * @param view the parent view
-     * @param message An string representing a message to be shown.
+     * @param message A string representing a message to be shown.
+     * @param retryMessage A string representing the retry message to be shown
+     * @param retryOnClickListener An onClickListener to handle retries
      */
-    protected void showToastMessage( View view, String message, String retryMessage, View.OnClickListener retryOnClickListener ) {
+    protected void showToastMessage( String message, String retryMessage, View.OnClickListener retryOnClickListener ) {
 
-//        Toast.makeText( getActivity(), message, Toast.LENGTH_SHORT ).show();
         Snackbar
                 .make( getView(), message, Snackbar.LENGTH_LONG )
                 .setAction( retryMessage, retryOnClickListener )

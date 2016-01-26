@@ -220,10 +220,10 @@ public class MusicVideoListFragment extends BaseVideoPagerFragment implements Vi
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( getView(), message, getResources().getString( R.string.retry ), new View.OnClickListener() {
+        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
+            public void onClick( View v ) {
 
                 MusicVideoListFragment.this.loadMovieList();
 
