@@ -58,16 +58,18 @@ public class DvrDataRepository implements DvrRepository {
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
         final SearchDataStore searchDataStore = this.searchDataStoreFactory.createWriteSearchDataStore();
 
-        dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null )
-                .subscribeOn( Schedulers.io() )
-                .observeOn( AndroidSchedulers.mainThread() )
+        return dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null )
+//                .subscribeOn( Schedulers.io() )
+//                .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "titleInfos : error", throwable ) )
                 .map( recordedProgramEntities -> SearchResultEntityDataMapper.transformPrograms( recordedProgramEntities ) )
-                .subscribe( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) );
+                .doOnNext( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) )
+                .flatMap( searchResultEntities -> dvrDataStore.titleInfoEntityList() )
+                .map( titleInfoEntities -> TitleInfoEntityDataMapper.transform( titleInfoEntities ) );
 
-        return dvrDataStore.titleInfoEntityList()
-                .map( titleInfoEntities -> TitleInfoEntityDataMapper.transform( titleInfoEntities ) )
-                .doOnError( throwable -> Log.e( TAG, "titleInfos : error", throwable ) );
+//        return dvrDataStore.titleInfoEntityList()
+//                .map( titleInfoEntities -> TitleInfoEntityDataMapper.transform( titleInfoEntities ) )
+//                .doOnError( throwable -> Log.e( TAG, "titleInfos : error", throwable ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
