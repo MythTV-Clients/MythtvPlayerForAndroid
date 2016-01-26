@@ -2,7 +2,7 @@ package org.mythtv.android.presentation.internal.di.modules;
 
 import android.content.Context;
 
-import org.mythtv.android.data.cache.DiskVideoCacheImpl;
+import org.mythtv.android.data.cache.VideoCacheImpl;
 import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.cache.ProgramCacheImpl;
 import org.mythtv.android.data.cache.VideoCache;
@@ -96,7 +96,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    VideoCache provideVideoCache( DiskVideoCacheImpl videoCacheImpl ) {
+    VideoCache provideVideoCache( VideoCacheImpl videoCacheImpl ) {
 
         return videoCacheImpl;
     }
