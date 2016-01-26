@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import org.mythtv.android.BuildConfig;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -53,6 +54,7 @@ public class MainActivity extends BaseActivity implements HasComponent<DvrCompon
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
+        Log.i( TAG, "Current tag: " + BuildConfig.APPLICATION_TAG + ", Commit: " + BuildConfig.APPLICATION_SHA1 );
 
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
