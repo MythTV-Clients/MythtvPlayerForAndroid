@@ -44,7 +44,7 @@
 
         <!-- App Activities -->
         <activity
-            android:name=".presentation.view.activity.MainActivity"
+            android:name=".presentation.view.activity.AppMainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:clearTaskOnLaunch="true">
@@ -62,13 +62,13 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.TitleInfoListActivity"
+            android:name=".presentation.view.activity.AppTitleInfoListActivity"
             android:label="@string/watch_recording"
-            android:parentActivityName=".presentation.view.activity.MainActivity">
+            android:parentActivityName=".presentation.view.activity.AppMainActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.MainActivity" />
+                android:value=".presentation.view.activity.AppMainActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -77,12 +77,12 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.ProgramListActivity"
+            android:name=".presentation.view.activity.AppProgramListActivity"
             android:label="@string/watch_recording">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.TitleInfoListActivity" />
+                android:value=".presentation.view.activity.AppTitleInfoListActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -91,11 +91,11 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.ProgramDetailsActivity">
+            android:name=".presentation.view.activity.AppProgramDetailsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.ProgramListActivity" />
+                android:value=".presentation.view.activity.AppProgramListActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -104,11 +104,11 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.ProgramDetailsSettingsActivity">
+            android:name=".presentation.view.activity.AppProgramDetailsSettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.ProgramDetailsActivity" />
+                android:value=".presentation.view.activity.AppProgramDetailsActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -117,7 +117,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.SearchableActivity">
+            android:name=".presentation.view.activity.AppSearchableActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -130,13 +130,13 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.VideoMetadataInfoListActivity"
+            android:name=".presentation.view.activity.AppVideoListActivity"
             android:label="@string/watch_video"
-            android:parentActivityName=".presentation.view.activity.MainActivity">
+            android:parentActivityName=".presentation.view.activity.AppMainActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.MainActivity" />
+                android:value=".presentation.view.activity.AppMainActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -145,7 +145,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.VideoSeriesListActivity"
+            android:name=".presentation.view.activity.AppVideoSeriesListActivity"
             android:label="@string/watch_video">
 
             <meta-data
@@ -155,11 +155,11 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.VideoDetailsActivity">
+            android:name=".presentation.view.activity.AppVideoDetailsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.VideoMetadataInfoListActivity" />
+                android:value=".presentation.view.activity.AppVideoListActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -168,11 +168,11 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.VideoDetailsSettingsActivity">
+            android:name=".presentation.view.activity.AppVideoDetailsSettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.VideoDetailsActivity" />
+                android:value=".presentation.view.activity.AppVideoDetailsActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -181,13 +181,13 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.SettingsActivity"
+            android:name=".presentation.view.activity.AppSettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".presentation.view.activity.MainActivity">
+            android:parentActivityName=".presentation.view.activity.AppMainActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.MainActivity" />
+                android:value=".presentation.view.activity.AppMainActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -196,29 +196,29 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.RecordingSettingsActivity"
+            android:name=".presentation.view.activity.AppRecordingSettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".presentation.view.activity.SettingsActivity">
+            android:parentActivityName=".presentation.view.activity.AppSettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.SettingsActivity" />
+                android:value=".presentation.view.activity.AppSettingsActivity" />
 
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.VideoSettingsActivity"
+            android:name=".presentation.view.activity.AppVideoSettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".presentation.view.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.view.activity.AppSettingsActivity" >
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.SettingsActivity" />
+                android:value=".presentation.view.activity.AppSettingsActivity" />
 
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.VideoPlayerActivity"
+            android:name=".presentation.view.activity.AppPlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
             android:launchMode="singleInstance"
@@ -244,31 +244,31 @@
             <!--android:theme="@style/Theme.Leanback" >-->
             <!--<meta-data-->
                 <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.tv.search.SearchableActivity" />-->
+                <!--android:value=".player.tv.search.AppSearchableActivity" />-->
         <!--</activity>-->
         <!--<activity-->
             <!--android:name=".player.tv.recordings.RecordingDetailsActivity"-->
             <!--android:theme="@style/Theme.Leanback" >-->
             <!--<meta-data-->
                 <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.tv.search.SearchableActivity" />-->
+                <!--android:value=".player.tv.search.AppSearchableActivity" />-->
         <!--</activity>-->
         <!--<activity-->
             <!--android:name=".player.tv.videos.VideosActivity"-->
             <!--android:theme="@style/Theme.Leanback" >-->
             <!--<meta-data-->
                 <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.tv.search.SearchableActivity" />-->
+                <!--android:value=".player.tv.search.AppSearchableActivity" />-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name=".player.tv.videos.VideoDetailsActivity"-->
+            <!--android:name=".player.tv.videos.AppVideoDetailsActivity"-->
             <!--android:theme="@style/Theme.Leanback" >-->
             <!--<meta-data-->
                 <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.tv.search.SearchableActivity" />-->
+                <!--android:value=".player.tv.search.AppSearchableActivity" />-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name=".player.tv.search.SearchableActivity"-->
+            <!--android:name=".player.tv.search.AppSearchableActivity"-->
             <!--android:launchMode="singleTop"-->
             <!--android:theme="@style/Theme.Leanback" >-->
             <!--<intent-filter>-->
@@ -280,7 +280,7 @@
                 <!--android:resource="@xml/searchable" />-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name=".player.tv.settings.SettingsActivity"-->
+            <!--android:name=".player.tv.settings.AppSettingsActivity"-->
             <!--android:label="@string/title_activity_settings"-->
             <!--android:theme="@style/Theme.Leanback" >-->
         <!--</activity>-->
@@ -289,7 +289,7 @@
             <!--android:screenOrientation="landscape"-->
             <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />-->
         <!--<activity-->
-            <!--android:name=".player.tv.player.VideoPlayerActivity"-->
+            <!--android:name=".player.tv.player.AppPlayerActivity"-->
             <!--android:screenOrientation="landscape"-->
             <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />-->
 

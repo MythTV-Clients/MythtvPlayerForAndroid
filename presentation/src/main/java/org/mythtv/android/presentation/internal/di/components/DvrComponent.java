@@ -9,12 +9,12 @@ import org.mythtv.android.presentation.internal.di.modules.ProgramsModule;
 import org.mythtv.android.presentation.internal.di.modules.RecentProgramsModule;
 import org.mythtv.android.presentation.internal.di.modules.TitleInfosModule;
 import org.mythtv.android.presentation.internal.di.modules.UpcomingProgramsModule;
-import org.mythtv.android.presentation.view.fragment.EncoderListFragment;
-import org.mythtv.android.presentation.view.fragment.ProgramDetailsFragment;
-import org.mythtv.android.presentation.view.fragment.ProgramListFragment;
-import org.mythtv.android.presentation.view.fragment.RecentListFragment;
-import org.mythtv.android.presentation.view.fragment.TitleInfoListFragment;
-import org.mythtv.android.presentation.view.fragment.UpcomingListFragment;
+import org.mythtv.android.presentation.view.fragment.AppEncoderListFragment;
+import org.mythtv.android.presentation.view.fragment.AppProgramDetailsFragment;
+import org.mythtv.android.presentation.view.fragment.AppProgramListFragment;
+import org.mythtv.android.presentation.view.fragment.AppRecentListFragment;
+import org.mythtv.android.presentation.view.fragment.AppTitleInfoListFragment;
+import org.mythtv.android.presentation.view.fragment.AppUpcomingListFragment;
 
 import dagger.Component;
 
@@ -28,16 +28,16 @@ import dagger.Component;
 @Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, TitleInfosModule.class, ProgramsModule.class, ProgramModule.class, UpcomingProgramsModule.class, RecentProgramsModule.class, LiveStreamModule.class, EncodersModule.class} )
 public interface DvrComponent {
 
-    void inject( TitleInfoListFragment titleInfoListFragment );
+    void inject( AppTitleInfoListFragment titleInfoListFragment );
 
-    void inject( ProgramListFragment programsListFragment );
+    void inject( AppProgramListFragment programsListFragment );
 
-    void inject( ProgramDetailsFragment programDetailsFragment );
+    void inject( AppProgramDetailsFragment programDetailsFragment );
 
-    void inject( RecentListFragment recentListFragment );
+    void inject( AppRecentListFragment recentListFragment );
 
-    void inject( UpcomingListFragment upcomingListFragment );
+    void inject( AppUpcomingListFragment upcomingListFragment );
 
-    void inject( EncoderListFragment encoderListFragment );
+    void inject( AppEncoderListFragment encoderListFragment );
 
 }

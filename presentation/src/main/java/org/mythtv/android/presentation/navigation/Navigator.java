@@ -6,17 +6,17 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.presentation.view.activity.MainActivity;
-import org.mythtv.android.presentation.view.activity.ProgramDetailsActivity;
-import org.mythtv.android.presentation.view.activity.ProgramDetailsSettingsActivity;
-import org.mythtv.android.presentation.view.activity.ProgramListActivity;
-import org.mythtv.android.presentation.view.activity.SettingsActivity;
-import org.mythtv.android.presentation.view.activity.TitleInfoListActivity;
-import org.mythtv.android.presentation.view.activity.VideoDetailsActivity;
-import org.mythtv.android.presentation.view.activity.VideoDetailsSettingsActivity;
-import org.mythtv.android.presentation.view.activity.VideoMetadataInfoListActivity;
-import org.mythtv.android.presentation.view.activity.VideoPlayerActivity;
-import org.mythtv.android.presentation.view.activity.VideoSeriesListActivity;
+import org.mythtv.android.presentation.view.activity.AppMainActivity;
+import org.mythtv.android.presentation.view.activity.AppPlayerActivity;
+import org.mythtv.android.presentation.view.activity.AppProgramDetailsActivity;
+import org.mythtv.android.presentation.view.activity.AppProgramDetailsSettingsActivity;
+import org.mythtv.android.presentation.view.activity.AppProgramListActivity;
+import org.mythtv.android.presentation.view.activity.AppSettingsActivity;
+import org.mythtv.android.presentation.view.activity.AppTitleInfoListActivity;
+import org.mythtv.android.presentation.view.activity.AppVideoDetailsActivity;
+import org.mythtv.android.presentation.view.activity.AppVideoDetailsSettingsActivity;
+import org.mythtv.android.presentation.view.activity.AppVideoListActivity;
+import org.mythtv.android.presentation.view.activity.AppVideoSeriesListActivity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -42,7 +42,7 @@ public class Navigator {
         if( null != context ) {
             Log.d( TAG, "navigateToHome : context != null" );
 
-            Intent intentToLaunch = MainActivity.getCallingIntent( context );
+            Intent intentToLaunch = AppMainActivity.getCallingIntent( context );
             context.startActivity( intentToLaunch );
 
         }
@@ -56,7 +56,7 @@ public class Navigator {
         if( null != context ) {
             Log.d( TAG, "navigateToTitleInfos : context != null" );
 
-            Intent intentToLaunch = TitleInfoListActivity.getCallingIntent(context);
+            Intent intentToLaunch = AppTitleInfoListActivity.getCallingIntent(context);
             intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
             context.startActivity( intentToLaunch );
 
@@ -71,7 +71,7 @@ public class Navigator {
         if( null != context ) {
             Log.d( TAG, "navigateToPrograms : context != null" );
 
-            Intent intentToLaunch = ProgramListActivity.getCallingIntent( context, descending, startIndex, count, titleRegEx, recGroup, storageGroup );
+            Intent intentToLaunch = AppProgramListActivity.getCallingIntent( context, descending, startIndex, count, titleRegEx, recGroup, storageGroup );
             context.startActivity( intentToLaunch );
 
         }
@@ -85,7 +85,7 @@ public class Navigator {
         if( null != context ) {
             Log.d( TAG, "navigateToProgram : context != null" );
 
-            Intent intentToLaunch = ProgramDetailsActivity.getCallingIntent( context, chanId, startTime, storeageGroup, filename, hostname );
+            Intent intentToLaunch = AppProgramDetailsActivity.getCallingIntent( context, chanId, startTime, storeageGroup, filename, hostname );
             context.startActivity( intentToLaunch );
 
         }
@@ -99,7 +99,7 @@ public class Navigator {
         if( null != context ) {
             Log.d( TAG, "navigateToProgramSettings : context != null" );
 
-            Intent intentToLaunch = ProgramDetailsSettingsActivity.getCallingIntent( context );
+            Intent intentToLaunch = AppProgramDetailsSettingsActivity.getCallingIntent( context );
             context.startActivity( intentToLaunch );
 
         }
@@ -113,7 +113,7 @@ public class Navigator {
         if( null != context ) {
             Log.d( TAG, "navigateToVideos : context != null" );
 
-            Intent intentToLaunch = VideoMetadataInfoListActivity.getCallingIntent( context );
+            Intent intentToLaunch = AppVideoListActivity.getCallingIntent( context );
             intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
             context.startActivity( intentToLaunch );
 
@@ -128,7 +128,7 @@ public class Navigator {
         if( null != context ) {
             Log.d( TAG, "navigateToVideoSeries : context != null" );
 
-            Intent intentToLaunch = VideoSeriesListActivity.getCallingIntent( context, series );
+            Intent intentToLaunch = AppVideoSeriesListActivity.getCallingIntent( context, series );
             context.startActivity( intentToLaunch );
 
         }
@@ -142,7 +142,7 @@ public class Navigator {
         if( null != context ) {
             Log.d(TAG, "navigateToVideo : context != null");
 
-            Intent intentToLaunch = VideoDetailsActivity.getCallingIntent( context, id, storeageGroup, filename, hostname );
+            Intent intentToLaunch = AppVideoDetailsActivity.getCallingIntent( context, id, storeageGroup, filename, hostname );
             context.startActivity( intentToLaunch );
 
         }
@@ -156,7 +156,7 @@ public class Navigator {
         if( null != context ) {
             Log.d(TAG, "navigateToVideoSettings : context != null");
 
-            Intent intentToLaunch = VideoDetailsSettingsActivity.getCallingIntent( context );
+            Intent intentToLaunch = AppVideoDetailsSettingsActivity.getCallingIntent( context );
             context.startActivity( intentToLaunch );
 
         }
@@ -187,7 +187,7 @@ public class Navigator {
             Log.d( TAG, "navigateToVideoPlayer : context != null" );
             Log.d( TAG, "navigateToVideoPlayer : uri=" + uri );
 
-            Intent intentToLaunch = VideoPlayerActivity.getCallingIntent( context, uri );
+            Intent intentToLaunch = AppPlayerActivity.getCallingIntent( context, uri );
             context.startActivity( intentToLaunch );
 
         }
@@ -201,7 +201,7 @@ public class Navigator {
         if( null != context ) {
             Log.d( TAG, "navigateToSettings : context != null" );
 
-            Intent intentToLaunch = SettingsActivity.getCallingIntent( context );
+            Intent intentToLaunch = AppSettingsActivity.getCallingIntent( context );
             intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
             context.startActivity( intentToLaunch );
 
