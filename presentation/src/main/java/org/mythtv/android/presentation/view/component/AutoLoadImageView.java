@@ -267,6 +267,8 @@ public class AutoLoadImageView extends ImageView {
   private void cacheBitmap( Bitmap bitmap, String fileName ) {
     Log.d( TAG, "cacheBitmap : enter" );
 
+    Log.d( TAG, "cacheBitmap : fileName=" + fileName );
+
     if( this.cache != null ) {
       Log.d( TAG, "cacheBitmap : cache != null" );
 
@@ -421,6 +423,7 @@ public class AutoLoadImageView extends ImageView {
      * @param fileName A string representing the name of the file to be cached.
      */
     synchronized void put( Bitmap bitmap, String fileName ) {
+      Log.d( TAG, "put : fileName=" + fileName );
 
       File file = buildFileFromFilename( fileName );
       if( !file.exists() ) {
