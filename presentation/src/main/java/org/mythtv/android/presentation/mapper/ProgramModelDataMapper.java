@@ -113,7 +113,7 @@ public class ProgramModelDataMapper {
             recordingInfoModel.setPriority( recordingInfo.getPriority() );
             recordingInfoModel.setStartTs( recordingInfo.getStartTs() );
             recordingInfoModel.setEndTs( recordingInfo.getEndTs() );
-            recordingInfoModel.setRecordedId( recordingInfo.getRecordId() );
+            recordingInfoModel.setRecordId( recordingInfo.getRecordId() );
             recordingInfoModel.setRecGroup( recordingInfo.getRecGroup() );
             recordingInfoModel.setPlayGroup( recordingInfo.getPlayGroup() );
             recordingInfoModel.setStorageGroup( recordingInfo.getStorageGroup() );
