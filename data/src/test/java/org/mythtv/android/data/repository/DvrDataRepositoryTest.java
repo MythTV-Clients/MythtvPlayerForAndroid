@@ -73,7 +73,7 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
         dvrDataRepository.titleInfos();
 
         verify( mockDvrDataStoreFactory ).createMasterBackendDataStore();
-        verify( mockDvrDataStore ).titleInfoEntityList();
+//        verify( mockDvrDataStore ).titleInfoEntityList();
         verify( mockDvrDataStore ).recordedProgramEntityList( true, -1, -1, null, null, null );
 
     }
