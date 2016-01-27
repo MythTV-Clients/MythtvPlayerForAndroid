@@ -84,6 +84,7 @@ dependencies {
     compile dataDependencies.rxAndroid
     compile dataDependencies.androidAnnotations
 
+    testCompile testDependencies.androidAnnotations
     testCompile testDependencies.assertj
     testCompile testDependencies.mockito
     testCompile testDependencies.robolectric

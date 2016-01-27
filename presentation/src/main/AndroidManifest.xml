@@ -28,37 +28,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature
+        android:name="android.hardware.leanback"
+        android:required="false" />
+    <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
-    <uses-feature
-        android:name="android.hardware.faketouch"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.front"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.bluetooth"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.nfc"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.location.gps"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.microphone"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.sensor"
-        android:required="false" />
 
-    <!--android:name=".library.core.MainApplication"-->
     <application
         android:allowBackup="true"
         android:name=".presentation.AndroidApplication"
@@ -243,24 +218,6 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.PlayerActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:launchMode="singleInstance"
-            android:label="@string/app_name">
-
-            <intent-filter>
-                <action android:name="com.google.android.exoplayer.demo.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:scheme="content" />
-                <data android:scheme="asset" />
-                <data android:scheme="file" />
-            </intent-filter>
-
-        </activity>
-
-        <activity
             android:name=".presentation.view.activity.VideoPlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
@@ -269,163 +226,6 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
         </activity>
-
-        <!--<activity-->
-            <!--android:name=".player.app.LaunchActivity"-->
-            <!--android:label="@string/app_name">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.recordings.ShowsActivity"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:launchMode="singleTop" >-->
-
-            <!--<intent-filter>-->
-                <!--<action android:name="org.mythtv.app.SHOWS_ACTIVITY" />-->
-
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--</intent-filter>-->
-
-            <!--<meta-data-->
-                <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.app.search.SearchableActivity" />-->
-
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.recordings.RecordingsActivity"-->
-            <!--android:launchMode="singleTask"-->
-            <!--android:parentActivityName=".player.app.recordings.ShowsActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".player.app.recordings.ShowsActivity" />-->
-            <!--<meta-data-->
-                <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.app.search.SearchableActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.recordings.RecordingDetailsActivity"-->
-            <!--android:launchMode="singleTop"-->
-            <!--android:parentActivityName=".player.app.recordings.RecordingsActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".player.app.recordings.RecordingsActivity" />-->
-            <!--<meta-data-->
-                <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.app.search.SearchableActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.recordings.RecordingDetailsSettingsActivity"-->
-            <!--android:parentActivityName=".player.app.recordings.RecordingDetailsActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".player.app.recordings.RecordingDetailsActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.videos.VideosActivity"-->
-            <!--android:label="@string/drawer_item_watch_videos"-->
-            <!--android:launchMode="singleTask" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="org.mythtv.app.VIDEOS_ACTIVITY" />-->
-
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--</intent-filter>-->
-
-            <!--<meta-data-->
-                <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.app.search.SearchableActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.videos.VideoDirActivity"-->
-            <!--android:label="@string/drawer_item_watch_videos"-->
-            <!--android:launchMode="singleTask" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="org.mythtv.app.VIDEOS_LIST_ACTIVITY" />-->
-
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--</intent-filter>-->
-
-            <!--<meta-data-->
-                <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.app.search.SearchableActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.videos.MovieDetailsActivity"-->
-            <!--android:launchMode="singleTop"-->
-            <!--android:parentActivityName=".player.app.videos.VideosActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".player.app.videos.VideosActivity" />-->
-            <!--<meta-data-->
-                <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.app.search.SearchableActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.videos.TelevisionSeasonsActivity"-->
-            <!--android:label="@string/drawer_item_watch_videos"-->
-            <!--android:launchMode="singleTop"-->
-            <!--android:parentActivityName=".player.app.videos.VideosActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".player.app.videos.VideosActivity" />-->
-            <!--<meta-data-->
-                <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.app.search.SearchableActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.videos.TelevisionDetailsActivity"-->
-            <!--android:launchMode="singleTop"-->
-            <!--android:parentActivityName=".player.app.videos.TelevisionSeasonsActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".player.app.videos.TelevisionSeasonsActivity" />-->
-            <!--<meta-data-->
-                <!--android:name="android.app.default_searchable"-->
-                <!--android:value=".player.app.search.SearchableActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.videos.VideoDetailsSettingsActivity"-->
-            <!--android:parentActivityName=".player.app.videos.VideoDetailsSettingsActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".player.app.videos.VideoDetailsSettingsActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.settings.SettingsActivity"-->
-            <!--android:label="@string/title_activity_settings"-->
-            <!--android:launchMode="singleTask" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="org.mythtv.app.SETTINGS_ACTIVITY" />-->
-
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--</intent-filter>-->
-
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.settings.RecordingSettingsActivity"-->
-            <!--android:label="@string/title_activity_settings"-->
-            <!--android:parentActivityName=".player.app.settings.SettingsActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".player.app.settings.SettingsActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.settings.VideoSettingsActivity"-->
-            <!--android:label="@string/title_activity_settings"-->
-            <!--android:parentActivityName=".player.app.settings.SettingsActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".player.app.settings.SettingsActivity" />-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".player.app.player.RecordingPlayerActivity"-->
-            <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />-->
-        <!--<activity-->
-            <!--android:name=".player.app.player.VideoPlayerActivity"-->
-            <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />-->
 
         <!--&lt;!&ndash; AndroidTv activities &ndash;&gt;-->
         <!--<activity-->

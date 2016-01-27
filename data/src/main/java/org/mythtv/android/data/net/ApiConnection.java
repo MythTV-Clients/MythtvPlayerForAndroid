@@ -3,8 +3,8 @@ package org.mythtv.android.data.net;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -78,9 +78,11 @@ public class ApiConnection implements Callable<String> {
 
     private OkHttpClient createClient() {
 
-        final OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setReadTimeout( 10000, TimeUnit.MILLISECONDS );
-        okHttpClient.setConnectTimeout( 15000, TimeUnit.MILLISECONDS );
+        final OkHttpClient okHttpClient =
+                new OkHttpClient.Builder()
+                    .readTimeout( 10000, TimeUnit.MILLISECONDS )
+                    .connectTimeout( 15000, TimeUnit.MILLISECONDS )
+                    .build();
 
         return okHttpClient;
     }

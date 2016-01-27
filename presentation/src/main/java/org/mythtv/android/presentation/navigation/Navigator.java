@@ -7,7 +7,6 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.presentation.view.activity.MainActivity;
-import org.mythtv.android.presentation.view.activity.PlayerActivity;
 import org.mythtv.android.presentation.view.activity.ProgramDetailsActivity;
 import org.mythtv.android.presentation.view.activity.ProgramDetailsSettingsActivity;
 import org.mythtv.android.presentation.view.activity.ProgramListActivity;
@@ -163,21 +162,6 @@ public class Navigator {
         }
 
         Log.d( TAG, "navigateToVideoSettings : exit" );
-    }
-
-    public void navigateToInternalPlayer( Context context, String uri, String contentId, int type ) {
-        Log.d( TAG, "navigateToInternalPlayer : enter" );
-
-        if( null != context ) {
-            Log.d( TAG, "navigateToInternalPlayer : context != null" );
-            Log.d( TAG, "navigateToInternalPlayer : uri=" + uri );
-
-            Intent intentToLaunch = PlayerActivity.getCallingIntent( context, uri, contentId, type );
-            context.startActivity( intentToLaunch );
-
-        }
-
-        Log.d( TAG, "navigateToInternalPlayer : exit" );
     }
 
     public void navigateToExternalPlayer( Context context, String uri ) {
