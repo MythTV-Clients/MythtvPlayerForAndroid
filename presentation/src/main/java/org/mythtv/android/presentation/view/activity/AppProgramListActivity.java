@@ -87,7 +87,7 @@ public class AppProgramListActivity extends AppAbstractBaseActivity implements H
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_program_list;
+        return R.layout.activity_app_program_list;
     }
 
     @Override

@@ -119,7 +119,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d(TAG, "onCreateView : enter");
 
-        View fragmentView = inflater.inflate( R.layout.fragment_program_details, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_app_program_details, container, false );
         ButterKnife.bind( this, fragmentView );
 
         Log.d(TAG, "onCreateView : exit");
@@ -236,7 +236,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
                 for( CastMemberModel castMember : programModel.getCastMembers() ) {
                     Log.d( TAG, "renderProgram : castMember=" + castMember );
 
-                    TableRow row = (TableRow)LayoutInflater.from( getActivity() ).inflate( R.layout.cast_member_row, null );
+                    TableRow row = (TableRow)LayoutInflater.from( getActivity() ).inflate( R.layout.app_cast_member_row, null );
                     ( (TextView) row.findViewById( R.id.cast_member_name ) ).setText( castMember.getName() );
                     ( (TextView) row.findViewById( R.id.cast_member_character_name ) ).setText( castMember.getCharacterName() );
                     ( (TextView) row.findViewById( R.id.cast_member_role ) ).setText( castMember.getTranslatedRole() );

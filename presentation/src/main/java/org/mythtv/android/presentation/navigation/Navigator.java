@@ -32,7 +32,7 @@ public class Navigator {
     private static final String TAG = Navigator.class.getSimpleName();
 
     @Inject
-    public void Navigator() {
+    public Navigator() {
         //empty
     }
 

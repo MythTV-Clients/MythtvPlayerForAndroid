@@ -88,7 +88,7 @@ public class AppTelevisionSeriesListFragment extends AppAbstractBaseFragment imp
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_video_metadata_info_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_app_video_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
 

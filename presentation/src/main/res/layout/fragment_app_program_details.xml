@@ -124,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="@dimen/margin"
-                layout="@layout/separator" />
+                layout="@layout/app_separator" />
 
             <TextView
                 android:layout_margin="@dimen/margin"
@@ -144,7 +144,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="@dimen/margin"
-                layout="@layout/separator" />
+                layout="@layout/app_separator" />
 
             <TextView
                 android:layout_margin="@dimen/margin"
@@ -200,6 +200,6 @@
                 style="?android:attr/borderlessButtonStyle"/>
 
     <include
-        layout="@layout/view_progress" />
+        layout="@layout/app_view_progress" />
 
 </LinearLayout>

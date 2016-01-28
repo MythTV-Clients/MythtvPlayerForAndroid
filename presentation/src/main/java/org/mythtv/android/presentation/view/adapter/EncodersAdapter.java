@@ -15,8 +15,6 @@ import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.EncoderModel;
 import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.model.TitleInfoModel;
-import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
 import java.util.List;
@@ -68,7 +66,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
     public EncoderViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
         Log.d( TAG, "onCreateViewHolder : enter" );
 
-        View view = this.layoutInflater.inflate( R.layout.encoder_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.app_encoder_list_item, parent, false );
         EncoderViewHolder encoderViewHolder = new EncoderViewHolder( view );
 
         Log.d( TAG, "onCreateViewHolder : exit" );

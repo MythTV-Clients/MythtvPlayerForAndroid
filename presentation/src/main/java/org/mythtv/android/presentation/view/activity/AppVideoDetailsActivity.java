@@ -60,7 +60,7 @@ public class AppVideoDetailsActivity extends AppAbstractBaseActivity implements 
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_video_details;
+        return R.layout.activity_app_video_details;
     }
 
     @Override

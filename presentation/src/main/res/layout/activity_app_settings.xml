@@ -40,29 +40,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:title="@string/all_videos"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_scrollFlags="scroll|enterAlways" />
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:title="@string/app_name"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
+        <fragment
+            android:id="@+id/fragment_settings"
+            android:name="org.mythtv.android.presentation.view.fragment.AppSettingsFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <include
-            layout="@layout/fab_view" />
-
     </android.support.design.widget.CoordinatorLayout>
 
     <include
-        layout="@layout/navigation_view" />
+        layout="@layout/app_navigation_view" />
 
 </android.support.v4.widget.DrawerLayout>

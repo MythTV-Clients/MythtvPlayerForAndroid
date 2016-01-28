@@ -31,7 +31,7 @@ public class AppSearchableActivity extends AppAbstractBaseActivity implements Ha
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_search_result_list;
+        return R.layout.activity_app_search_result_list;
     }
 
     @Override

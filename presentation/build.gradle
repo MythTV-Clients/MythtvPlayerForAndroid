@@ -3,20 +3,20 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
 
-    def globalConfiguration = rootProject.extensions.getByName( "ext" )
+    def globalConfiguration = rootProject.extensions.getByName("ext")
     def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
-    def applicationTag  = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
+    def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
-    compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
+    compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
     buildToolsVersion '23.0.2'
 
     defaultConfig {
 
-        minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
-        targetSdkVersion globalConfiguration.getAt( "androidTargetSdkVersion" )
+        minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
+        targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
 
         applicationId 'org.mythtv.android'
-        versionCode globalConfiguration.getAt( "androidVersionCode" )
+        versionCode globalConfiguration.getAt("androidVersionCode")
         versionName "1.1.14"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId 'org.mythtv.android.test'
@@ -25,7 +25,7 @@ android {
         multiDexEnabled true
 
         buildConfigField "String", "APPLICATION_SHA1", '"' + applicationSHA1 + '"'
-        buildConfigField "String", "APPLICATION_TAG",  '"' + applicationTag  + '"'
+        buildConfigField "String", "APPLICATION_TAG", '"' + applicationTag + '"'
     }
 
     compileOptions {
@@ -65,7 +65,8 @@ android {
         abortOnError false
         ignoreWarnings true
         disable 'InvalidPackage'            //Some libraries have issues with this.
-        disable 'OldTargetApi'              //Lint gives this warning but SDK 20 would be Android L Beta.
+        disable 'OldTargetApi'
+        //Lint gives this warning but SDK 20 would be Android L Beta.
         disable 'IconDensities'             //For testing purpose. This is safe to remove.
         disable 'IconMissingDensityFolder'  //For testing purpose. This is safe to remove.
     }
@@ -88,8 +89,8 @@ dependencies {
     def presentationDependencies = rootProject.ext.presentationDependencies
     def presentationTestDependencies = rootProject.ext.presentationTestDependencies
 
-    compile project( ':domain' )
-    compile project( ':data' )
+    compile project(':domain')
+    compile project(':data')
 
     apt presentationDependencies.daggerCompiler
     compile presentationDependencies.dagger
@@ -106,7 +107,6 @@ dependencies {
     compile presentationDependencies.preferences
     compile presentationDependencies.leanback
     compile presentationDependencies.leanbackPreferences
-//    compile presentationDependencies.exoplayer
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations
@@ -118,6 +118,7 @@ dependencies {
     androidTestCompile presentationTestDependencies.espresso
     androidTestCompile presentationTestDependencies.robolectric
 
+    compile 'com.github.bumptech.glide:glide:3.4.+'
 }
 
 apply from: '../buildsystem/jacoco.gradle'

@@ -52,7 +52,7 @@ public class AppPlayerActivity extends Activity {
         Log.v( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
-        setContentView( R.layout.activity_video_player);
+        setContentView( R.layout.activity_app_video_player);
 
         Uri fileUri = getIntent().getData();
 

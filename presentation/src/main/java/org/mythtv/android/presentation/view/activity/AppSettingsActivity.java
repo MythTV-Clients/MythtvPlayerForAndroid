@@ -18,7 +18,7 @@ public class AppSettingsActivity extends AppAbstractBaseActivity {
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_settings;
+        return R.layout.activity_app_settings;
     }
 
     @Override

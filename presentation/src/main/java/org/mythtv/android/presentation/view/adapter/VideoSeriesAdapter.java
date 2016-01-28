@@ -67,7 +67,7 @@ public class VideoSeriesAdapter extends RecyclerView.Adapter<VideoSeriesAdapter.
     public VideoSeriesViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
         Log.d( TAG, "onCreateViewHolder : enter" );
 
-        View view = this.layoutInflater.inflate( R.layout.video_series_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.app_video_series_list_item, parent, false );
         VideoSeriesViewHolder videoMetadataInfoViewHolder = new VideoSeriesViewHolder( view );
 
         Log.d( TAG, "onCreateViewHolder : exit" );

@@ -55,7 +55,7 @@ public class AppMainActivity extends AppAbstractBaseActivity implements HasCompo
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_main;
+        return R.layout.activity_app_main;
     }
 
     @Override

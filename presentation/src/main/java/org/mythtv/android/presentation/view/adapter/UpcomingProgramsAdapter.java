@@ -1,23 +1,17 @@
 package org.mythtv.android.presentation.view.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.joda.time.DateTimeZone;
 import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
 import java.util.List;
@@ -65,7 +59,7 @@ public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgra
     @Override
     public ProgramViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
-        View view = this.layoutInflater.inflate( R.layout.upcoming_program_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.app_upcoming_program_list_item, parent, false );
         ProgramViewHolder programViewHolder = new ProgramViewHolder( view );
 
         return programViewHolder;

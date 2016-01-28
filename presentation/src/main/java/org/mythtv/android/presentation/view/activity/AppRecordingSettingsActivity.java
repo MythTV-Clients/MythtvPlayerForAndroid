@@ -28,7 +28,7 @@ public class AppRecordingSettingsActivity extends AppAbstractBaseActivity {
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_recording_settings;
+        return R.layout.activity_app_recording_settings;
     }
 
     @Override

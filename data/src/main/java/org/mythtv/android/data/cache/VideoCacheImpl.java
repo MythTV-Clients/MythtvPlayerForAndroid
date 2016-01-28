@@ -173,7 +173,7 @@ public class VideoCacheImpl implements VideoCache {
     }
 
     @Override
-    public synchronized void evictAll() {
+    public void evictAll() {
         Log.d( TAG, "evictAll : enter" );
 
         this.executeAsynchronously( new CacheEvictor( this.fileManager, this.cacheDir ) );

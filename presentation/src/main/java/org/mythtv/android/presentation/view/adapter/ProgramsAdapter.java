@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -64,7 +63,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     @Override
     public ProgramViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
-        View view = this.layoutInflater.inflate( R.layout.program_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.app_program_list_item, parent, false );
         ProgramViewHolder programViewHolder = new ProgramViewHolder( view );
 
         return programViewHolder;

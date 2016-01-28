@@ -8,11 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.ProgramModel;
@@ -21,7 +18,6 @@ import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -70,7 +66,7 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
     public TitleInfoViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
         Log.d( TAG, "onCreateViewHolder : enter" );
 
-        View view = this.layoutInflater.inflate( R.layout.title_info_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.app_title_info_list_item, parent, false );
         TitleInfoViewHolder titleInfoViewHolder = new TitleInfoViewHolder( view );
 
         Log.d( TAG, "onCreateViewHolder : exit" );

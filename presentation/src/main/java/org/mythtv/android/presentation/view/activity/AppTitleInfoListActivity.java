@@ -34,7 +34,7 @@ public class AppTitleInfoListActivity extends AppAbstractBaseActivity implements
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_title_info_list;
+        return R.layout.activity_app_title_info_list;
     }
 
     @Override

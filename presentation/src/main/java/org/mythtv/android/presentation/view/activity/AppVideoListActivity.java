@@ -52,7 +52,7 @@ public class AppVideoListActivity extends AppAbstractBaseActivity implements Has
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_video_metadata_info_list;
+        return R.layout.activity_app_video_metadata_info_list;
     }
 
     @Override

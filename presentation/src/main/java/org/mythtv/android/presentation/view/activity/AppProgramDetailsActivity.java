@@ -77,7 +77,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_program_details;
+        return R.layout.activity_app_program_details;
     }
 
     @Override
