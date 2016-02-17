@@ -50,6 +50,11 @@ android {
 
     }
 
+    if (project.hasProperty("mythtvplayer.signing")
+            && new File(project.property("mythtvplayer.signing") + ".gradle").exists()) {
+        apply from: project.property("mythtvplayer.signing") + ".gradle";
+    }
+
     packagingOptions {
         exclude 'LICENSE.txt'
         exclude 'META-INF/DEPENDENCIES'
@@ -107,6 +112,7 @@ dependencies {
     compile presentationDependencies.preferences
     compile presentationDependencies.leanback
     compile presentationDependencies.leanbackPreferences
+    compile presentationDependencies.glide
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations
@@ -118,7 +124,6 @@ dependencies {
     androidTestCompile presentationTestDependencies.espresso
     androidTestCompile presentationTestDependencies.robolectric
 
-    compile 'com.github.bumptech.glide:glide:3.4.+'
 }
 
 apply from: '../buildsystem/jacoco.gradle'

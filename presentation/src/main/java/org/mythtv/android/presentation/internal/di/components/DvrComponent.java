@@ -15,6 +15,8 @@ import org.mythtv.android.presentation.view.fragment.AppProgramListFragment;
 import org.mythtv.android.presentation.view.fragment.AppRecentListFragment;
 import org.mythtv.android.presentation.view.fragment.AppTitleInfoListFragment;
 import org.mythtv.android.presentation.view.fragment.AppUpcomingListFragment;
+import org.mythtv.android.presentation.view.fragment.TvCategoryListFragment;
+import org.mythtv.android.presentation.view.fragment.TvRecordingsFragment;
 
 import dagger.Component;
 
@@ -29,15 +31,13 @@ import dagger.Component;
 public interface DvrComponent {
 
     void inject( AppTitleInfoListFragment titleInfoListFragment );
-
     void inject( AppProgramListFragment programsListFragment );
-
     void inject( AppProgramDetailsFragment programDetailsFragment );
-
     void inject( AppRecentListFragment recentListFragment );
-
     void inject( AppUpcomingListFragment upcomingListFragment );
-
     void inject( AppEncoderListFragment encoderListFragment );
+
+    void inject( TvCategoryListFragment tvCategoryListFragment );
+    void inject( TvRecordingsFragment tvRecordingsFragment );
 
 }

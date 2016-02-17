@@ -18,13 +18,15 @@
 
 package org.mythtv.android.presentation.model;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 /*
  * Created by dmfrey on 11/12/14.
  */
 @Data
-public class ArtworkInfoModel {
+public class ArtworkInfoModel implements Serializable {
 
     private String url;
     private String fileName;

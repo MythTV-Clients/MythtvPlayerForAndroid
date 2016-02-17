@@ -20,13 +20,15 @@ package org.mythtv.android.presentation.model;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 /*
  * Created by dmfrey on 11/12/14.
  */
 @Data
-public class RecordingInfoModel {
+public class RecordingInfoModel implements Serializable {
 
     private Integer recordedId;
     private Integer status;

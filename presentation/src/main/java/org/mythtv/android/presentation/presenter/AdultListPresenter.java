@@ -11,7 +11,7 @@ import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
 import org.mythtv.android.presentation.mapper.VideoMetadataInfoModelDataMapper;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.view.VideoMetadataInfoListView;
+import org.mythtv.android.presentation.view.VideoListView;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,7 +26,7 @@ public class AdultListPresenter extends DefaultSubscriber<List<VideoMetadataInfo
 
     private static final String TAG = AdultListPresenter.class.getSimpleName();
 
-    private VideoMetadataInfoListView viewListView;
+    private VideoListView viewListView;
 
     private final UseCase getAdultListUseCase;
     private final VideoMetadataInfoModelDataMapper videoMetadataInfoModelDataMapper;
@@ -39,7 +39,7 @@ public class AdultListPresenter extends DefaultSubscriber<List<VideoMetadataInfo
 
     }
 
-    public void setView( @NonNull VideoMetadataInfoListView view ) {
+    public void setView( @NonNull VideoListView view ) {
         this.viewListView = view;
     }
 
@@ -84,7 +84,7 @@ public class AdultListPresenter extends DefaultSubscriber<List<VideoMetadataInfo
 
     public void onVideoClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
 
-        this.viewListView.viewVideoMetadataInfo( videoMetadataInfoModel );
+        this.viewListView.viewVideo( videoMetadataInfoModel );
 
     }
 
@@ -114,7 +114,7 @@ public class AdultListPresenter extends DefaultSubscriber<List<VideoMetadataInfo
     private void showAdultCollectionInView( Collection<VideoMetadataInfo> videoMetadataInfosCollection ) {
 
         final Collection<VideoMetadataInfoModel> videoMetadataInfoModelsCollection = this.videoMetadataInfoModelDataMapper.transform( videoMetadataInfosCollection );
-        this.viewListView.renderVideoMetadataInfoList( videoMetadataInfoModelsCollection);
+        this.viewListView.renderVideoList( videoMetadataInfoModelsCollection);
 
     }
 

@@ -352,14 +352,16 @@ public class DvrApiImpl implements DvrApi {
 
         }
 
-        return ApiConnection.createGET(sb.toString()).requestSyncCall();
+        Log.i( TAG, "getRecordedProgramEntitiesFromApi : url=" + sb.toString() );
+        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
     }
 
     private String getRecordedProgramDetailsFromApi(int chanId, DateTime startTime ) throws MalformedURLException {
 
         String apiUrl = String.format( DvrApi.RECORDED_BASE_URL, chanId, fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
 
-        return ApiConnection.createGET(getMasterBackendUrl() + apiUrl).requestSyncCall();
+        Log.i( TAG, "getRecordedProgramDetailsFromApi : apiUrl=" + ( getMasterBackendUrl() + apiUrl ) );
+        return ApiConnection.createGET( getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
     private String getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
@@ -398,11 +400,13 @@ public class DvrApiImpl implements DvrApi {
 
         }
 
+        Log.i( TAG, "getUpcomingProgramEntitiesFromApi : url=" + sb.toString() );
         return ApiConnection.createGET( sb.toString() ).requestSyncCall();
     }
 
     private String getEncoderEntitiesFromApi() throws MalformedURLException {
 
+        Log.i( TAG, "getEncoderEntitiesFromApi : url=" + ( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ) );
         return ApiConnection.createGET( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ).requestSyncCall();
     }
 

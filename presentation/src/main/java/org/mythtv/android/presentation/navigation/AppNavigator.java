@@ -27,12 +27,12 @@ import javax.inject.Singleton;
  * Created by dmfrey on 8/30/15.
  */
 @Singleton
-public class Navigator {
+public class AppNavigator {
 
-    private static final String TAG = Navigator.class.getSimpleName();
+    private static final String TAG = AppNavigator.class.getSimpleName();
 
     @Inject
-    public Navigator() {
+    public AppNavigator() {
         //empty
     }
 

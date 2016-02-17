@@ -27,9 +27,9 @@ import butterknife.ButterKnife;
  *
  * Created by dmfrey on 11/13/15.
  */
-public class VideoMetadataInfosAdapter extends RecyclerView.Adapter<VideoMetadataInfosAdapter.VideoMetadataInfoViewHolder> {
+public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoMetadataInfoViewHolder> {
 
-    private static final String TAG = VideoMetadataInfosAdapter.class.getSimpleName();
+    private static final String TAG = VideosAdapter.class.getSimpleName();
 
     public interface OnItemClickListener {
 
@@ -43,7 +43,7 @@ public class VideoMetadataInfosAdapter extends RecyclerView.Adapter<VideoMetadat
 
     private OnItemClickListener onItemClickListener;
 
-    public VideoMetadataInfosAdapter( Context context, Collection<VideoMetadataInfoModel> videoMetadataInfosCollection ) {
+    public VideosAdapter(Context context, Collection<VideoMetadataInfoModel> videoMetadataInfosCollection ) {
         Log.d( TAG, "initialize : enter" );
 
         this.context = context;
@@ -87,9 +87,9 @@ public class VideoMetadataInfosAdapter extends RecyclerView.Adapter<VideoMetadat
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( null != VideoMetadataInfosAdapter.this.onItemClickListener ) {
+                if( null != VideosAdapter.this.onItemClickListener ) {
 
-                    VideoMetadataInfosAdapter.this.onItemClickListener.onVideoMetadataInfoItemClicked( videoMetadataInfoModel );
+                    VideosAdapter.this.onItemClickListener.onVideoMetadataInfoItemClicked( videoMetadataInfoModel );
 
                 }
             }

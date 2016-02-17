@@ -12,4 +12,5 @@ public class ContentType {
     public static final String TELEVISION = "TELEVISION";
 
     private ContentType() { }
+
 }

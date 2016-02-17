@@ -11,7 +11,7 @@ import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
 import org.mythtv.android.presentation.mapper.VideoMetadataInfoModelDataMapper;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.view.VideoMetadataInfoListView;
+import org.mythtv.android.presentation.view.VideoListView;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +28,7 @@ public class TelevisionSeriesListPresenter extends DefaultSubscriber<List<VideoM
 
     private String series;
 
-    private VideoMetadataInfoListView viewListView;
+    private VideoListView viewListView;
 
     private final UseCase getTelevisionSeriesListUseCase;
     private final VideoMetadataInfoModelDataMapper videoMetadataInfoModelDataMapper;
@@ -41,7 +41,7 @@ public class TelevisionSeriesListPresenter extends DefaultSubscriber<List<VideoM
 
     }
 
-    public void setView( @NonNull VideoMetadataInfoListView view ) {
+    public void setView( @NonNull VideoListView view ) {
         this.viewListView = view;
     }
 
@@ -87,7 +87,7 @@ public class TelevisionSeriesListPresenter extends DefaultSubscriber<List<VideoM
 
     public void onVideoClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
 
-        this.viewListView.viewVideoMetadataInfo( videoMetadataInfoModel );
+        this.viewListView.viewVideo( videoMetadataInfoModel );
 
     }
 
@@ -117,7 +117,7 @@ public class TelevisionSeriesListPresenter extends DefaultSubscriber<List<VideoM
     private void showTelevisionCollectionInView( Collection<VideoMetadataInfo> videoMetadataInfosCollection ) {
 
         final Collection<VideoMetadataInfoModel> videoMetadataInfoModelsCollection = this.videoMetadataInfoModelDataMapper.transform( videoMetadataInfosCollection );
-        this.viewListView.renderVideoMetadataInfoList( videoMetadataInfoModelsCollection);
+        this.viewListView.renderVideoList( videoMetadataInfoModelsCollection);
 
     }
 

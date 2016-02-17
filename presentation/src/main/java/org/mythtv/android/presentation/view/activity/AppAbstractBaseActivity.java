@@ -28,7 +28,7 @@ import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.modules.ActivityModule;
-import org.mythtv.android.presentation.navigation.Navigator;
+import org.mythtv.android.presentation.navigation.AppNavigator;
 
 import javax.inject.Inject;
 
@@ -45,7 +45,7 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
     private static final String TAG = AppAbstractBaseActivity.class.getSimpleName();
 
     @Inject
-    Navigator navigator;
+    AppNavigator navigator;
 
     @Nullable @Bind( R.id.navigation_view ) protected NavigationView navigationView;
     @Nullable @Bind( R.id.toolbar ) protected Toolbar toolbar;
@@ -235,7 +235,7 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
 
     protected boolean getBooleanFromPreferences( Context context, String key ) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getBoolean( key, false );
     }

@@ -30,7 +30,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import butterknife.Bind;
-import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 /**
@@ -58,9 +57,6 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
     @Bind( R.id.backdrop )
     ImageView backdrop;
-
-    @BindDimen( R.dimen.detail_backdrop_height )
-    int backdropHeight;
 
     public static Intent getCallingIntent( Context context, int chanId, DateTime startTime, String storageGroup, String filename, String hostname ) {
 
@@ -284,7 +280,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone(DateTimeZone.UTC).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=" + backdropHeight;
+        String previewUrl = getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone(DateTimeZone.UTC).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
         Picasso.with( this )

@@ -62,7 +62,8 @@ public class AppTitleInfoListFragment extends AppAbstractBaseFragment implements
         return new AppTitleInfoListFragment();
     }
 
-    @Override public void onAttach( Activity activity ) {
+    @Override
+    public void onAttach( Activity activity ) {
         super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 

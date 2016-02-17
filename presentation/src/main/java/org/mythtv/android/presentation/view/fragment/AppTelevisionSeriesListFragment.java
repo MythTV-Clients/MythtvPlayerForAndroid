@@ -15,8 +15,8 @@ import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.TelevisionSeriesListPresenter;
-import org.mythtv.android.presentation.view.VideoMetadataInfoListView;
-import org.mythtv.android.presentation.view.adapter.VideoMetadataInfosLayoutManager;
+import org.mythtv.android.presentation.view.VideoListView;
+import org.mythtv.android.presentation.view.adapter.VideosLayoutManager;
 import org.mythtv.android.presentation.view.adapter.VideoSeriesAdapter;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class AppTelevisionSeriesListFragment extends AppAbstractBaseFragment implements VideoMetadataInfoListView {
+public class AppTelevisionSeriesListFragment extends AppAbstractBaseFragment implements VideoListView {
 
     private static final String TAG = AppTelevisionSeriesListFragment.class.getSimpleName();
 
@@ -163,7 +163,7 @@ public class AppTelevisionSeriesListFragment extends AppAbstractBaseFragment imp
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.rv_videoMetadataInfos.setLayoutManager( new VideoMetadataInfosLayoutManager( getActivity() ) );
+        this.rv_videoMetadataInfos.setLayoutManager( new VideosLayoutManager( getActivity() ) );
 
         this.videoSeriesAdapter = new VideoSeriesAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
         this.videoSeriesAdapter.setOnItemClickListener( onItemClickListener );
@@ -207,22 +207,22 @@ public class AppTelevisionSeriesListFragment extends AppAbstractBaseFragment imp
     }
 
     @Override
-    public void renderVideoMetadataInfoList( Collection<VideoMetadataInfoModel> videoMetadataInfoModelCollection ) {
-        Log.d( TAG, "renderVideoMetadataInfoList : enter" );
+    public void renderVideoList(Collection<VideoMetadataInfoModel> videoMetadataInfoModelCollection ) {
+        Log.d( TAG, "renderVideoList : enter" );
 
         if( null != videoMetadataInfoModelCollection ) {
-            Log.d( TAG, "renderVideoMetadataInfoList : videoMetadataInfoModelCollection is not null, videoMetadataInfoModelCollection=" + videoMetadataInfoModelCollection );
+            Log.d( TAG, "renderVideoList : videoMetadataInfoModelCollection is not null, videoMetadataInfoModelCollection=" + videoMetadataInfoModelCollection );
 
             this.videoSeriesAdapter.setVideoSeriesCollection( videoMetadataInfoModelCollection );
 
         }
 
-        Log.d( TAG, "renderVideoMetadataInfoList : exit" );
+        Log.d( TAG, "renderVideoList : exit" );
     }
 
     @Override
-    public void viewVideoMetadataInfo( VideoMetadataInfoModel videoMetadataInfoModel ) {
-        Log.d( TAG, "viewVideoMetadataInfo : enter" );
+    public void viewVideo(VideoMetadataInfoModel videoMetadataInfoModel ) {
+        Log.d( TAG, "viewVideo : enter" );
 
         if( null != this.videoMetadataInfoListListener ) {
 
@@ -230,7 +230,7 @@ public class AppTelevisionSeriesListFragment extends AppAbstractBaseFragment imp
 
         }
 
-        Log.d( TAG, "viewVideoMetadataInfo : exit" );
+        Log.d( TAG, "viewVideo : exit" );
     }
 
     @Override

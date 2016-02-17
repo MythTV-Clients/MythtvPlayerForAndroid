@@ -26,6 +26,8 @@
 
         <item name="android:dropDownItemStyle">@style/myDropDownItemStyle</item>
 
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
     </style>
 
     <style name="myDropDownItemStyle" parent="Widget.AppCompat.DropDownItem.Spinner">

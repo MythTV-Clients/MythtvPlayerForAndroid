@@ -22,6 +22,7 @@ package org.mythtv.android.presentation.model;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
@@ -30,7 +31,7 @@ import lombok.Data;
  * Created by dmfrey on 11/12/14.
  */
 @Data
-public class ProgramModel {
+public class ProgramModel implements Serializable {
 
     private long id;
     private DateTime startTime;

@@ -48,6 +48,7 @@ ext {
     jodaVersion = '2.9.1'
     lombokVersion = '1.16.6'
     exoplayerVersion = 'r1.5.4'
+    glideVersion = '3.7.0'
 
     //Testing
     robolectricVersion = '3.0'
@@ -79,7 +80,8 @@ ext {
         javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
         picasso:            "com.squareup.picasso:picasso:${picassoVersion}",
         lombok:             "org.projectlombok:lombok:${lombokVersion}",
-        exoplayer:          "com.google.android.exoplayer:exoplayer:${exoplayerVersion}"
+        exoplayer:          "com.google.android.exoplayer:exoplayer:${exoplayerVersion}",
+        glide:              "com.github.bumptech.glide:glide:${glideVersion}"
     ]
 
     presentationTestDependencies = [

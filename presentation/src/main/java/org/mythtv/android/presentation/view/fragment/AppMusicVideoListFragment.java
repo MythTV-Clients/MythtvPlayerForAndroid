@@ -16,9 +16,9 @@ import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.MusicVideoListPresenter;
-import org.mythtv.android.presentation.view.VideoMetadataInfoListView;
-import org.mythtv.android.presentation.view.adapter.VideoMetadataInfosAdapter;
-import org.mythtv.android.presentation.view.adapter.VideoMetadataInfosLayoutManager;
+import org.mythtv.android.presentation.view.VideoListView;
+import org.mythtv.android.presentation.view.adapter.VideosAdapter;
+import org.mythtv.android.presentation.view.adapter.VideosLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class AppMusicVideoListFragment extends AppAbstractBaseVideoPagerFragment implements VideoMetadataInfoListView {
+public class AppMusicVideoListFragment extends AppAbstractBaseVideoPagerFragment implements VideoListView {
 
     private static final String TAG = AppMusicVideoListFragment.class.getSimpleName();
 
@@ -44,7 +44,7 @@ public class AppMusicVideoListFragment extends AppAbstractBaseVideoPagerFragment
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
 
-    private VideoMetadataInfosAdapter videoMetadataInfosAdapter;
+    private VideosAdapter videoMetadataInfosAdapter;
 
     private VideoListListener videoListListener;
 
@@ -143,9 +143,9 @@ public class AppMusicVideoListFragment extends AppAbstractBaseVideoPagerFragment
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.rv_videoMetadataInfos.setLayoutManager( new VideoMetadataInfosLayoutManager( getActivity() ) );
+        this.rv_videoMetadataInfos.setLayoutManager( new VideosLayoutManager( getActivity() ) );
 
-        this.videoMetadataInfosAdapter = new VideoMetadataInfosAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
+        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
         this.videoMetadataInfosAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_videoMetadataInfos.setAdapter( videoMetadataInfosAdapter );
 
@@ -187,22 +187,22 @@ public class AppMusicVideoListFragment extends AppAbstractBaseVideoPagerFragment
     }
 
     @Override
-    public void renderVideoMetadataInfoList( Collection<VideoMetadataInfoModel> videoMetadataInfoModelCollection ) {
-        Log.d( TAG, "renderVideoMetadataInfoList : enter" );
+    public void renderVideoList(Collection<VideoMetadataInfoModel> videoMetadataInfoModelCollection ) {
+        Log.d( TAG, "renderVideoList : enter" );
 
         if( null != videoMetadataInfoModelCollection ) {
-            Log.d( TAG, "renderVideoMetadataInfoList : videoMetadataInfoModelCollection is not null, videoMetadataInfoModelCollection=" + videoMetadataInfoModelCollection );
+            Log.d( TAG, "renderVideoList : videoMetadataInfoModelCollection is not null, videoMetadataInfoModelCollection=" + videoMetadataInfoModelCollection );
 
             this.videoMetadataInfosAdapter.setVideoMetadataInfosCollection( videoMetadataInfoModelCollection );
 
         }
 
-        Log.d( TAG, "renderVideoMetadataInfoList : exit" );
+        Log.d( TAG, "renderVideoList : exit" );
     }
 
     @Override
-    public void viewVideoMetadataInfo( VideoMetadataInfoModel videoMetadataInfoModel ) {
-        Log.d( TAG, "viewVideoMetadataInfo : enter" );
+    public void viewVideo(VideoMetadataInfoModel videoMetadataInfoModel ) {
+        Log.d( TAG, "viewVideo : enter" );
 
         if( null != this.videoListListener ) {
 
@@ -210,7 +210,7 @@ public class AppMusicVideoListFragment extends AppAbstractBaseVideoPagerFragment
 
         }
 
-        Log.d( TAG, "viewVideoMetadataInfo : exit" );
+        Log.d( TAG, "viewVideo : exit" );
     }
 
     @Override
@@ -251,7 +251,7 @@ public class AppMusicVideoListFragment extends AppAbstractBaseVideoPagerFragment
         Log.d( TAG, "loadMovieList : exit" );
     }
 
-    private VideoMetadataInfosAdapter.OnItemClickListener onItemClickListener = new VideoMetadataInfosAdapter.OnItemClickListener() {
+    private VideosAdapter.OnItemClickListener onItemClickListener = new VideosAdapter.OnItemClickListener() {
 
                 @Override
                 public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {

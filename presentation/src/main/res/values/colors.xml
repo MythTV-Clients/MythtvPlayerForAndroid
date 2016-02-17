@@ -23,9 +23,6 @@
     <color name="background_gradient_end">#DDDDDD</color>
     <color name="background_navigation_drawer">#7f98b4</color>
     <color name="text_navigation_drawer">#000000</color>
-    <color name="fastlane_background">#0096a6</color>
-    <color name="search_opaque">#ffaa3f</color>
-    <color name="detail_background">#0096a6</color>
     <color name="soft_opaque">#30000000</color>
     <color name="img_soft_opaque">#30FF0000</color>
     <color name="img_full_opaque">#00000000</color>
@@ -40,19 +37,6 @@
     <color name="text_dark">#333333</color>
     <color name="text_medium">#555555</color>
     <color name="text_light">#888888</color>
-
-    <!-- color name="colorPrimary">#88a1bb</color>
-    <color name="colorPrimaryDark">#004570</color>
-    <color name="colorAccent">#e6e6f0</color>
-    <color name="textColorPrimary">#111155</color>
-    <color name="textColorSecondary">#696978</color>
-    <color name="windowBackground">#e6e6f0</color -->
-
-    <!-- color name="colorPrimary">#2196F3</color>
-    <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorAccent">#E0A1B9</color>
-
-    <color name="navigationBackground">#e6e6f0</color -->
 
     <color name="primary">#607D8B</color>
     <color name="primary_dark">#455A64</color>
@@ -70,6 +54,5 @@
     <color name="fab_color_2">#9c27b0</color>
     <color name="fab_color_2_muted">#a56ab0</color>
     <color name="transparent">#00000000</color>
-    <color name="selected_background">#ffaa3f</color>
 
 </resources>

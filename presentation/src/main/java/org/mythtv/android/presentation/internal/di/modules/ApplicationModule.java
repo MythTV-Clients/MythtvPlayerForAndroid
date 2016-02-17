@@ -19,7 +19,6 @@ import org.mythtv.android.domain.repository.SearchRepository;
 import org.mythtv.android.domain.repository.VideoRepository;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.UIThread;
-import org.mythtv.android.presentation.navigation.Navigator;
 
 import javax.inject.Singleton;
 

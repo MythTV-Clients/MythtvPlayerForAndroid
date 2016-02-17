@@ -112,103 +112,103 @@ public class TvActivity extends Activity {
         Log.d( TAG, "onCreate : exit" );
     }
 
-    @Override
-    protected void onResume() {
-        Log.d( TAG, "onResume : enter" );
-        super.onResume();
+//    @Override
+//    protected void onResume() {
+//        Log.d( TAG, "onResume : enter" );
+//        super.onResume();
+//
+//        IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
+//        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
+//        registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
+//
+//        if( MainApplication.getInstance().isConnected() ) {
+//            Log.d( TAG, "onResume : backend already connected" );
+//
+////            MainApplication.getInstance().scheduleAlarms();
+//
+//        } else {
+//            Log.d( TAG, "onResume : backend NOT connected" );
+//
+//            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( this );
+//            String backendUrlPref = sharedPref.getString( MainApplication.KEY_PREF_BACKEND_URL, "" );
+//
+//            if( "".equals( backendUrlPref ) || getResources().getString( R.string.pref_backend_url ).equals( backendUrlPref ) ) {
+//                Log.d( TAG, "onResume : backend not set, show settings" );
+//
+//                Intent prefs = new Intent( this, SettingsActivity.class );
+//                startActivity( prefs );
+//
+//            } else {
+//                Log.d( TAG, "onResume : resetting backend connection" );
+//
+//                MainApplication.getInstance().resetBackend();
+//
+//            }
+//
+//        }
+//
+//        Log.d( TAG, "onResume : exit" );
+//    }
 
-        IntentFilter backendConnectedIntentFilter = new IntentFilter( MainApplication.ACTION_CONNECTED );
-        backendConnectedIntentFilter.addAction( MainApplication.ACTION_NOT_CONNECTED );
-        registerReceiver( mBackendConnectedBroadcastReceiver, backendConnectedIntentFilter );
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//
+//        if( null != mBackendConnectedBroadcastReceiver ) {
+//            unregisterReceiver( mBackendConnectedBroadcastReceiver );
+//        }
+//
+////        MainApplication.getInstance().cancelAlarms();
+//
+//    }
 
-        if( MainApplication.getInstance().isConnected() ) {
-            Log.d( TAG, "onResume : backend already connected" );
+//    @Override
+//    protected void onRestoreInstanceState( Bundle savedInstanceState ) {
+//        super.onRestoreInstanceState( savedInstanceState );
+//        Log.d( TAG, "onRestoreInstanceState : enter" );
+//
+//        if( savedInstanceState.containsKey( SELECTED_TITLE_STATE ) ) {
+//            Log.d( TAG, "onRestoreInstanceState : mTitle retrieved from savedInstanceState" );
+//
+//            mTitle = savedInstanceState.getString( SELECTED_TITLE_STATE );
+//
+//            setTitle( mTitle );
+//        }
+//
+//        if( savedInstanceState.containsKey( SELECTED_TITLE_INFO_STATE ) ) {
+//            Log.d( TAG, "onRestoreInstanceState : mTitleInfo retrieved from savedInstanceState" );
+//
+//            mTitleInfo = (TitleInfo) savedInstanceState.getSerializable( SELECTED_TITLE_INFO_STATE );
+//        }
+//
+//        if( savedInstanceState.containsKey( SELECTED_PROGRAM_STATE ) ) {
+//            Log.d( TAG, "onRestoreInstanceState : mProgram retrieved from savedInstanceState" );
+//
+//            mProgram = (Program) savedInstanceState.getSerializable( SELECTED_PROGRAM_STATE );
+//        }
+//
+//        Log.d( TAG, "onRestoreInstanceState : exit" );
+//    }
 
-//            MainApplication.getInstance().scheduleAlarms();
-
-        } else {
-            Log.d( TAG, "onResume : backend NOT connected" );
-
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( this );
-            String backendUrlPref = sharedPref.getString( MainApplication.KEY_PREF_BACKEND_URL, "" );
-
-            if( "".equals( backendUrlPref ) || getResources().getString( R.string.pref_backend_url ).equals( backendUrlPref ) ) {
-                Log.d( TAG, "onResume : backend not set, show settings" );
-
-                Intent prefs = new Intent( this, SettingsActivity.class );
-                startActivity( prefs );
-
-            } else {
-                Log.d( TAG, "onResume : resetting backend connection" );
-
-                MainApplication.getInstance().resetBackend();
-
-            }
-
-        }
-
-        Log.d( TAG, "onResume : exit" );
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if( null != mBackendConnectedBroadcastReceiver ) {
-            unregisterReceiver( mBackendConnectedBroadcastReceiver );
-        }
-
-//        MainApplication.getInstance().cancelAlarms();
-
-    }
-
-    @Override
-    protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        super.onRestoreInstanceState( savedInstanceState );
-        Log.d( TAG, "onRestoreInstanceState : enter" );
-
-        if( savedInstanceState.containsKey( SELECTED_TITLE_STATE ) ) {
-            Log.d( TAG, "onRestoreInstanceState : mTitle retrieved from savedInstanceState" );
-
-            mTitle = savedInstanceState.getString( SELECTED_TITLE_STATE );
-
-            setTitle( mTitle );
-        }
-
-        if( savedInstanceState.containsKey( SELECTED_TITLE_INFO_STATE ) ) {
-            Log.d( TAG, "onRestoreInstanceState : mTitleInfo retrieved from savedInstanceState" );
-
-            mTitleInfo = (TitleInfo) savedInstanceState.getSerializable( SELECTED_TITLE_INFO_STATE );
-        }
-
-        if( savedInstanceState.containsKey( SELECTED_PROGRAM_STATE ) ) {
-            Log.d( TAG, "onRestoreInstanceState : mProgram retrieved from savedInstanceState" );
-
-            mProgram = (Program) savedInstanceState.getSerializable( SELECTED_PROGRAM_STATE );
-        }
-
-        Log.d( TAG, "onRestoreInstanceState : exit" );
-    }
-
-    @Override
-    protected void onSaveInstanceState( Bundle outState ) {
-        Log.d(TAG, "onSaveInstanceState : enter");
-
-        if( null != mTitle ) {
-            outState.putString( SELECTED_TITLE_STATE, mTitle.toString() );
-        }
-
-        if( null != mTitleInfo ) {
-            outState.putSerializable(SELECTED_TITLE_INFO_STATE, mTitleInfo);
-        }
-
-        if( null != mProgram ) {
-            outState.putSerializable( SELECTED_PROGRAM_STATE, mProgram );
-        }
-
-        Log.d( TAG, "onSaveInstanceState : exit" );
-        super.onSaveInstanceState( outState );
-    }
+//    @Override
+//    protected void onSaveInstanceState( Bundle outState ) {
+//        Log.d(TAG, "onSaveInstanceState : enter");
+//
+//        if( null != mTitle ) {
+//            outState.putString( SELECTED_TITLE_STATE, mTitle.toString() );
+//        }
+//
+//        if( null != mTitleInfo ) {
+//            outState.putSerializable(SELECTED_TITLE_INFO_STATE, mTitleInfo);
+//        }
+//
+//        if( null != mProgram ) {
+//            outState.putSerializable( SELECTED_PROGRAM_STATE, mProgram );
+//        }
+//
+//        Log.d( TAG, "onSaveInstanceState : exit" );
+//        super.onSaveInstanceState( outState );
+//    }
 
     private class Category {
 
@@ -329,31 +329,31 @@ public class TvActivity extends Activity {
 
     }
 
-    private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
-
-        private final String TAG = BackendConnectedBroadcastReceiver.class.getSimpleName();
-
-        @Override
-        public void onReceive( Context context, Intent intent ) {
-            Log.d( TAG, "onReceive : enter" );
-
-            if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
-                Log.d(TAG, "onReceive : backend is connected");
-
-//                MainApplication.getInstance().scheduleAlarms();
-
-            }
-
-            if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
-                Log.d( TAG, "onReceive : backend is NOT connected" );
-
-                Toast.makeText( TvActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
-
-            }
-
-            Log.d( TAG, "onReceive : exit" );
-        }
-
-    }
+//    private class BackendConnectedBroadcastReceiver extends BroadcastReceiver {
+//
+//        private final String TAG = BackendConnectedBroadcastReceiver.class.getSimpleName();
+//
+//        @Override
+//        public void onReceive( Context context, Intent intent ) {
+//            Log.d( TAG, "onReceive : enter" );
+//
+//            if( MainApplication.ACTION_CONNECTED.equals(intent.getAction()) ) {
+//                Log.d(TAG, "onReceive : backend is connected");
+//
+////                MainApplication.getInstance().scheduleAlarms();
+//
+//            }
+//
+//            if( MainApplication.ACTION_NOT_CONNECTED.equals( intent.getAction() ) ) {
+//                Log.d( TAG, "onReceive : backend is NOT connected" );
+//
+//                Toast.makeText( TvActivity.this, "Backend not connected", Toast.LENGTH_SHORT ).show();
+//
+//            }
+//
+//            Log.d( TAG, "onReceive : exit" );
+//        }
+//
+//    }
 
 }

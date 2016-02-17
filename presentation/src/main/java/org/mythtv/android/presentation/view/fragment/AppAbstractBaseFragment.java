@@ -65,7 +65,7 @@ public abstract class AppAbstractBaseFragment extends Fragment {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        return sharedPreferences.getString(key, "");
+        return sharedPreferences.getString( key, "" );
     }
 
 }

@@ -10,6 +10,7 @@ import org.mythtv.android.domain.repository.SearchRepository;
 import org.mythtv.android.domain.repository.VideoRepository;
 import org.mythtv.android.presentation.internal.di.modules.ApplicationModule;
 import org.mythtv.android.presentation.view.activity.AppAbstractBaseActivity;
+import org.mythtv.android.presentation.view.activity.TvAbstractBaseActivity;
 
 import javax.inject.Singleton;
 
@@ -25,6 +26,7 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject( AppAbstractBaseActivity baseActivity );
+    void inject( TvAbstractBaseActivity baseActivity );
 
     //Exposed to sub-graphs.
     Context context();

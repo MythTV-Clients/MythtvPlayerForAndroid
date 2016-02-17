@@ -112,8 +112,8 @@ public class RecentListPresenter extends DefaultSubscriber<List<Program>> implem
 
     private void showProgramsCollectionInView( Collection<Program> programsCollection ) {
 
-        final Collection<ProgramModel> programModelsCollection = this.programModelDataMapper.transform(programsCollection);
-        this.viewListView.renderProgramList(programModelsCollection);
+        final Collection<ProgramModel> programModelsCollection = this.programModelDataMapper.transform( programsCollection );
+        this.viewListView.renderProgramList( programModelsCollection );
 
     }
 

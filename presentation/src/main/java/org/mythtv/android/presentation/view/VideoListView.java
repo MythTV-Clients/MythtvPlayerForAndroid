@@ -10,20 +10,20 @@ import java.util.Collection;
  *
  * Created by dmfrey on 11/13/15.
  */
-public interface VideoMetadataInfoListView extends LoadDataView {
+public interface VideoListView extends LoadDataView {
 
     /**
      * Render a videoMetadataInfo list in the UI.
      *
-     * @param videoMetadataInfoModelCollection The collection of {@link VideoMetadataInfoModel} that will be shown.
+     * @param videoModelCollection The collection of {@link VideoMetadataInfoModel} that will be shown.
      */
-    void renderVideoMetadataInfoList( Collection<VideoMetadataInfoModel> videoMetadataInfoModelCollection );
+    void renderVideoList( Collection<VideoMetadataInfoModel> videoModelCollection );
 
     /**
      * View a {@link VideoMetadataInfoModel} details.
      *
-     * @param videoMetadataInfoModel The videoMetadataInfo that will be shown.
+     * @param videoModel The videoMetadataInfo that will be shown.
      */
-    void viewVideoMetadataInfo( VideoMetadataInfoModel videoMetadataInfoModel );
+    void viewVideo( VideoMetadataInfoModel videoModel );
 
 }
