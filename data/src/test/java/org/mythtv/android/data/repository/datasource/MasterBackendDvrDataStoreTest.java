@@ -10,6 +10,9 @@ import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.net.DvrApi;
 
+import java.util.Collections;
+import java.util.List;
+
 import rx.Observable;
 
 import static org.mockito.BDDMockito.given;
@@ -48,7 +51,11 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
     }
 
     @Test
-    public void testGetUserEntityListFromApi() {
+    public void testGetProgramEntityListFromApi() {
+
+        ProgramEntity fakeProgramEntity = new ProgramEntity();
+        Observable<List<ProgramEntity>> fakeObservable = Observable.just( Collections.singletonList( fakeProgramEntity ) );
+        given( mockDvrApi.recordedProgramEntityList( false, -1, -1, null, null, null ) ).willReturn( fakeObservable );
 
         masterBackendDvrDataStore.recordedProgramEntityList( false, -1, -1, null, null, null );
         verify( mockDvrApi ).recordedProgramEntityList( false, -1, -1, null, null, null );
