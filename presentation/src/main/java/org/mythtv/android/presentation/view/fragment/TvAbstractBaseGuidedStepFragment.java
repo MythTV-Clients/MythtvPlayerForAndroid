@@ -69,9 +69,23 @@ public abstract class TvAbstractBaseGuidedStepFragment extends GuidedStepFragmen
 
     protected String getStringFromPreferences( Context context, String key ) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getString( key, "" );
+    }
+
+    protected void putStringToPreferences( Context context, String key, String value ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+        sharedPreferences.edit().putString( key, value ).apply();
+
+    }
+
+    protected void putIntToPreferences( Context context, String key, int value ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+        sharedPreferences.edit().putInt( key, value ).apply();
+
     }
 
     protected boolean getBooleanFromPreferences( Context context, String key ) {

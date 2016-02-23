@@ -159,7 +159,7 @@ public class TvRecordingDetailsFragment extends TvAbstractBaseDetailsFragment {
         int height = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_HEIGHT );
 
         Glide.with( getActivity() )
-                .load( getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgramModel.getChannel().getChanId() + "&StartTime=" + mProgramModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) )
+                .load( getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgramModel.getChannel().getChanId() + "&StartTime=" + mProgramModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=1134" )
 //                .centerCrop()
                 .error( R.drawable.default_background )
                 .into( new SimpleTarget<GlideDrawable>( width, height ) {
@@ -270,7 +270,7 @@ public class TvRecordingDetailsFragment extends TvAbstractBaseDetailsFragment {
                                 .description( mProgramModel.getDescription() )
                                 .videoUrl( masterBackendUrl + mProgramModel.getLiveStreamInfo().getRelativeUrl() )
                                 .bgImageUrl( masterBackendUrl + "/Content/GetRecordingArtwork?Inetref=" + mProgramModel.getInetref() + "&Type=banner" )
-                                .cardImageUrl( masterBackendUrl + "/Content/GetPreviewImage?ChanId=" + mProgramModel.getChannel().getChanId() + "&StartTime=" + mProgramModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) )
+                                .cardImageUrl( masterBackendUrl + "/Content/GetPreviewImage?ChanId=" + mProgramModel.getChannel().getChanId() + "&StartTime=" + mProgramModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=1134" )
                                 .studio( mProgramModel.getChannel().getCallSign() )
                                 .build();
 

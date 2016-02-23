@@ -186,7 +186,7 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
 
         // setBadgeDrawable(getActivity().getResources().getDrawable(
         // R.drawable.videos_by_google_banner));
-        setTitle( getString( R.string.browse_title ) ); // Badge, when set, takes precedent
+        setTitle( getString( R.string.recordings_browse_title ) ); // Badge, when set, takes precedent
 
         // over title
         setHeadersState( HEADERS_ENABLED );

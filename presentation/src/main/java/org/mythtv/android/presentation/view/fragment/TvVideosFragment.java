@@ -51,7 +51,7 @@ public class TvVideosFragment extends TvAbstractBaseGuidedStepFragment {
     @Override
     public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
-        return new GuidanceStylist.Guidance( getResources().getString( R.string.videos_browse_title ), null, "Demo", null );
+        return new GuidanceStylist.Guidance( getResources().getString( R.string.videos_browse_title ), null, "", null );
     }
 
     @Override

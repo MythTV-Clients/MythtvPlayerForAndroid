@@ -135,6 +135,24 @@
     <string name="pref_default_recording_group_summary_off">Keine Standard ufnahmegruppe festgelegt</string>
     <string name="pref_default_recording_group_summary_on"> Nur Aufnahmen der Standardaufnahmegruppe angezeigt</string>
     <string name="pref_enable_default_recording_group">Standardaufnahmegruppe aktiviert</string>
+    <string name="tv_settings_title">MythTV Settings</string>
+    <string name="tv_settings_title_description">MythTV Player backend and content settings</string>
+    <string name="tv_settings_master_backend_title">Master Backend</string>
+    <string name="tv_settings_master_backend_description">Master Backend Connection Settings</string>
+    <string name="tv_settings_master_backend_url">Master Backend URL</string>
+    <string name="tv_settings_master_backend_port">Master Backend Port</string>
+    <string name="tv_settings_playback_title">Playback Settings</string>
+    <string name="tv_settings_playback_title_description">Recording and Video Player Settings</string>
+    <string name="tv_settings_playback_internal_player">Internal Player</string>
+    <string name="tv_settings_playback_internal_player_description">Use the Internal Player for Recording and Video Playback</string>
+    <string name="tv_settings_playback_external_player">External Player</string>
+    <string name="tv_settings_playback_external_player_description">Use the External Player for Video Playback</string>
+    <string name="tv_settings_playback_external_player_override">Internal Player (Override for Videos)</string>
+    <string name="tv_settings_content_title">Content Settings</string>
+    <string name="tv_settings_content_adult_title">Adult Content</string>
+    <string name="tv_settings_content_adult_shown">Adult Content will be shown</string>
+    <string name="tv_settings_content_adult_hidden">Adult Content will be hidden</string>
+    <string name="tv_settings_yes">Yes</string>
+    <string name="tv_settings_no">No</string>
 
 </resources>
-
