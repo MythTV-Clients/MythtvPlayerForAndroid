@@ -256,6 +256,7 @@ public class DvrPersistenceServiceEventHandler implements DvrPersistenceService 
 
                 if( null == program.getStartTime() || null == program.getEndTime() || null == program.getRecording().getStartTs() || null == program.getRecording().getEndTs() ||
                         "LiveTV".equalsIgnoreCase( program.getRecording().getRecGroup() ) ||
+                        "LiveTV".equalsIgnoreCase( program.getRecording().getStorageGroup() ) ||
                         "Deleted".equalsIgnoreCase( program.getRecording().getRecGroup() ) ) {
                     continue;
                 }

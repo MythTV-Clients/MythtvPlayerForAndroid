@@ -78,10 +78,10 @@ public class SearchResultEntityDataMapper {
         SearchResultEntity searchResult = null;
         if( null != programEntity ) {
 
-            if( "LiveTV".equalsIgnoreCase( programEntity.getRecording().getRecGroup() ) ) {
-
-                return null;
-            }
+//            if( "LiveTV".equalsIgnoreCase( programEntity.getRecording().getRecGroup() ) ) {
+//
+//                return null;
+//            }
 
             searchResult = new SearchResultEntity();
             searchResult.setChanId( programEntity.getChannel().getChanId() );

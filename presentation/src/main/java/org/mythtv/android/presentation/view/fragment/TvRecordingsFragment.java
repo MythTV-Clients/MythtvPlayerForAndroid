@@ -242,10 +242,10 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
 
             for( ProgramModel programModel : programModelCollection ) {
 
-                if( "LiveTV".equals( programModel.getRecording().getRecGroup() ) ) {
-
-                    break;
-                }
+//                if( "LiveTV".equalsIgnoreCase( programModel.getRecording().getStorageGroup() ) ) {
+//
+//                    break;
+//                }
 
                 Category category = new Category( programModel.getTitle() );
                 if( !recordings.containsKey( category ) ) {

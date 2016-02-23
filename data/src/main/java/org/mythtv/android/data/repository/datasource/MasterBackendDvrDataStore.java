@@ -53,7 +53,10 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
         Log.d( TAG, "recordedProgramEntityList : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup );
 
         Log.d( TAG, "recordedProgramEntityList : exit" );
-        return this.api.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
+        return this.api.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup )
+                .flatMap( Observable::from )
+                .filter( programEntity -> !programEntity.getRecording().getRecGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) || "Deleted".equalsIgnoreCase( programEntity.getRecording().getRecGroup() ) )
+                .toList();
     }
 
     @Override

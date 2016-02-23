@@ -206,7 +206,7 @@
             android:name=".presentation.view.activity.TvMainActivity"
             android:configChanges="keyboard|keyboardHidden|navigation"
             android:label="@string/app_name"
-            android:theme="@style/LeanbackTheme">
+            android:theme="@style/Theme.Leanback">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -217,7 +217,7 @@
             android:name=".presentation.view.activity.TvRecordingsActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.view.activity.TvMainActivity"
-            android:theme="@style/LeanbackTheme">
+            android:theme="@style/Theme.Leanback">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.mythtv.android.presentation.view.activity.TvMainActivity"/>
@@ -226,7 +226,7 @@
             android:name=".presentation.view.activity.TvRecordingsDetailsActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.view.activity.TvMainActivity"
-            android:theme="@style/LeanbackTheme">
+            android:theme="@style/Theme.Leanback">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.mythtv.android.presentation.view.activity.TvMainActivity"/>
@@ -234,18 +234,18 @@
         <activity
             android:name=".presentation.view.activity.TvSettingsActivity"
             android:label="@string/app_name"
-            android:theme="@style/LeanbackTheme">
+            android:theme="@style/Theme.Leanback">
         </activity>
         <activity
             android:name=".presentation.view.activity.TvRecordingSettingsActivity"
             android:label="@string/app_name"
-            android:theme="@style/LeanbackTheme">
+            android:theme="@style/Theme.Leanback">
         </activity>
         <activity
             android:name=".presentation.view.activity.TvVideosActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.view.activity.TvMainActivity"
-            android:theme="@style/LeanbackTheme">
+            android:theme="@style/Theme.Leanback">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.mythtv.android.presentation.view.activity.TvMainActivity"/>
@@ -254,7 +254,7 @@
             android:name=".presentation.view.activity.TvVideoCategoryActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.view.activity.TvVideosActivity"
-            android:theme="@style/LeanbackTheme">
+            android:theme="@style/Theme.Leanback">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.mythtv.android.presentation.view.activity.TvVideosActivity"/>
@@ -263,7 +263,7 @@
             android:name=".presentation.view.activity.TvVideoDetailsActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.view.activity.TvVideosActivity"
-            android:theme="@style/LeanbackTheme">
+            android:theme="@style/Theme.Leanback">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.mythtv.android.presentation.view.activity.TvVideosActivity"/>
@@ -271,7 +271,7 @@
         <activity
             android:name=".presentation.view.activity.TvVideoSettingsActivity"
             android:label="@string/app_name"
-            android:theme="@style/LeanbackTheme">
+            android:theme="@style/Theme.Leanback">
         </activity>
 
         <activity
