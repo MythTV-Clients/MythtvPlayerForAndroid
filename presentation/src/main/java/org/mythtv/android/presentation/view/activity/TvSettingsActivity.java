@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +41,15 @@ public class TvSettingsActivity extends Activity {
 
     private static final int OPTION_CHECK_SET_ID = 10;
 
+    private static SettingsFragment mSettingsFragment;
+    private static MasterBackendFragment mMasterBackendFragment;
+    private static MasterBackendUrlFragment mMasterBackendUrlFragment;
+    private static MasterBackendPortFragment mMasterBackendPortFragment;
+    private static PlayerFragment mPlayerFragment;
+    private static InternalPlayerFragment mInternalPlayerFragment;
+    private static ExternalPlayerOverrideFragment mExternalPlayerOverrideFragment;
+    private static ContentFragment mContentFragment;
+
     public static Intent getCallingIntent( Context context ) {
 
         return new Intent( context, TvSettingsActivity.class );
@@ -49,7 +60,16 @@ public class TvSettingsActivity extends Activity {
         Log.v( TAG, "onCreate" );
         super.onCreate( savedInstanceState );
 
-        GuidedStepFragment.addAsRoot( this, new SettingsFragment(), android.R.id.content );
+        mSettingsFragment = new SettingsFragment();
+        mMasterBackendFragment = new MasterBackendFragment();
+        mMasterBackendUrlFragment = new MasterBackendUrlFragment();
+        mMasterBackendPortFragment = new MasterBackendPortFragment();
+        mPlayerFragment = new PlayerFragment();
+        mInternalPlayerFragment = new InternalPlayerFragment();
+        mExternalPlayerOverrideFragment = new ExternalPlayerOverrideFragment();
+        mContentFragment = new ContentFragment();
+
+        GuidedStepFragment.addAsRoot( this, mSettingsFragment, android.R.id.content );
 
     }
 
@@ -88,7 +108,50 @@ public class TvSettingsActivity extends Activity {
         }
 
         @Override
-        public void onCreateActions( List<GuidedAction> actions, Bundle savedInstanceState ) {
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+
+            FragmentManager fm = getFragmentManager();
+
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+            switch( (int) action.getId() ) {
+
+                case MASTER_BACKEND_SETTINGS :
+
+                    GuidedStepFragment.add( fm, mMasterBackendFragment, android.R.id.content );
+
+                    break;
+
+                case PLAYER_SETTINGS :
+
+                    GuidedStepFragment.add( fm, mPlayerFragment, android.R.id.content );
+
+                    break;
+
+                case CONTENT_SETTINGS :
+
+                    GuidedStepFragment.add( fm, mContentFragment, android.R.id.content );
+
+                    break;
+
+                default :
+
+            }
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
 
             boolean internalPlayer = getShouldUseInternalPlayer( getActivity() );
             boolean externalPlayerOverride = getShouldUseExternalPlayerOverride( getActivity() );
@@ -113,37 +176,7 @@ public class TvSettingsActivity extends Activity {
                     content,
                     true, true );
 
-        }
-
-        @Override
-        public void onGuidedActionClicked( GuidedAction action ) {
-
-            FragmentManager fm = getFragmentManager();
-
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
-            switch( (int) action.getId() ) {
-
-                case MASTER_BACKEND_SETTINGS :
-
-                    GuidedStepFragment.add( fm, new MasterBackendFragment(), android.R.id.content );
-
-                    break;
-
-                case PLAYER_SETTINGS :
-
-                    GuidedStepFragment.add( fm, new PlayerFragment(), android.R.id.content );
-
-                    break;
-
-                case CONTENT_SETTINGS :
-
-                    GuidedStepFragment.add( fm, new ContentFragment(), android.R.id.content );
-
-                    break;
-
-                default :
-
-            }
+            setActions( actions );
 
         }
 
@@ -163,19 +196,9 @@ public class TvSettingsActivity extends Activity {
         }
 
         @Override
-        public void onCreateActions( List<GuidedAction> actions, Bundle savedInstanceState ) {
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
 
-            String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
-            String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-            addAction( actions, MASTER_BACKEND_URL,
-                    url,
-                    getResources().getString( R.string.pref_backend_url_description ),
-                    true, true );
-            addAction( actions, MASTER_BACKEND_PORT,
-                    port,
-                    getResources().getString( R.string.pref_backend_port_description ),
-                    true, true );
+            updateActions( actions );
 
         }
 
@@ -190,17 +213,41 @@ public class TvSettingsActivity extends Activity {
 
                 case MASTER_BACKEND_URL :
 
-                    GuidedStepFragment.add( fm, new MasterBackendUrlFragment(), android.R.id.content );
+                    GuidedStepFragment.add( fm, mMasterBackendUrlFragment, android.R.id.content );
 
                     break;
 
                 case MASTER_BACKEND_PORT :
 
-                    GuidedStepFragment.add( fm, new MasterBackendPortFragment(), android.R.id.content );
+                    GuidedStepFragment.add( fm, mMasterBackendPortFragment, android.R.id.content );
 
                     break;
 
             }
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
+            String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
+
+            addAction( actions, MASTER_BACKEND_URL,
+                    url,
+                    getResources().getString( R.string.pref_backend_url_description ),
+                    true, true );
+            addAction( actions, MASTER_BACKEND_PORT,
+                    port,
+                    getResources().getString( R.string.pref_backend_port_description ),
+                    true, true );
+
+            setActions( actions );
 
         }
 
@@ -220,13 +267,9 @@ public class TvSettingsActivity extends Activity {
         }
 
         @Override
-        public void onCreateActions( List<GuidedAction> actions, Bundle savedInstanceState ) {
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
 
-            String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
-
-            addEditableAction( actions, MASTER_BACKEND_URL,
-                    url,
-                    getResources().getString( R.string.pref_backend_url_description ) );
+            updateActions( actions );
 
         }
 
@@ -246,7 +289,28 @@ public class TvSettingsActivity extends Activity {
 
                 putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL, action.getEditTitle().toString() );
 
+                mSettingsFragment.updateActions( null );
+                mMasterBackendFragment.updateActions( null );
+
             }
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
+
+            addEditableAction( actions, MASTER_BACKEND_URL,
+                    url,
+                    getResources().getString( R.string.pref_backend_url_description ) );
+
+            setActions( actions );
 
         }
 
@@ -266,13 +330,9 @@ public class TvSettingsActivity extends Activity {
         }
 
         @Override
-        public void onCreateActions( List<GuidedAction> actions, Bundle savedInstanceState ) {
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
 
-            String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-            addEditableAction( actions, MASTER_BACKEND_PORT,
-                    port,
-                    getResources().getString( R.string.pref_backend_port_description ) );
+            updateActions( actions );
 
         }
 
@@ -292,7 +352,28 @@ public class TvSettingsActivity extends Activity {
 
                 putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT, action.getEditTitle().toString() );
 
+                mSettingsFragment.updateActions( null );
+                mMasterBackendFragment.updateActions( null );
+
             }
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
+
+            addEditableAction( actions, MASTER_BACKEND_PORT,
+                    port,
+                    getResources().getString( R.string.pref_backend_port_description ) );
+
+            setActions( actions );
 
         }
 
@@ -312,19 +393,9 @@ public class TvSettingsActivity extends Activity {
         }
 
         @Override
-        public void onCreateActions( List<GuidedAction> actions, Bundle savedInstanceState ) {
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
 
-            String internalPlayer = ( getShouldUseInternalPlayer( getActivity() ) ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
-            String externalPlayer = ( getShouldUseExternalPlayerOverride( getActivity() ) ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
-
-            addAction( actions, INTERNAL_PLAYER_SETTINGS,
-                    getResources().getString( R.string.tv_settings_playback_internal_player ),
-                    internalPlayer,
-                    true, true );
-            addAction( actions, EXTERNAL_PLAYER_OVERRIDE_SETTINGS,
-                    getResources().getString( R.string.tv_settings_playback_external_player ),
-                    externalPlayer,
-                    getShouldUseInternalPlayer( getActivity() ), true );
+            updateActions( actions );
 
         }
 
@@ -338,17 +409,41 @@ public class TvSettingsActivity extends Activity {
 
                 case INTERNAL_PLAYER_SETTINGS :
 
-                    GuidedStepFragment.add( fm, new InternalPlayerFragment(), android.R.id.content );
+                    GuidedStepFragment.add( fm, mInternalPlayerFragment, android.R.id.content );
 
                     break;
 
                 case EXTERNAL_PLAYER_OVERRIDE_SETTINGS :
 
-                    GuidedStepFragment.add( fm, new ExternalPlayerOverrideFragment(), android.R.id.content );
+                    GuidedStepFragment.add( fm, mExternalPlayerOverrideFragment, android.R.id.content );
 
                     break;
 
             }
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            String internalPlayer = ( getShouldUseInternalPlayer( getActivity() ) ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
+            String externalPlayer = ( getShouldUseExternalPlayerOverride( getActivity() ) ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
+
+            addAction( actions, INTERNAL_PLAYER_SETTINGS,
+                    getResources().getString( R.string.tv_settings_playback_internal_player ),
+                    internalPlayer,
+                    true, true );
+            addAction( actions, EXTERNAL_PLAYER_OVERRIDE_SETTINGS,
+                    getResources().getString( R.string.tv_settings_playback_external_player ),
+                    externalPlayer,
+                    getShouldUseInternalPlayer( getActivity() ), true );
+
+            setActions( actions );
 
         }
 
@@ -368,7 +463,38 @@ public class TvSettingsActivity extends Activity {
         }
 
         @Override
-        public void onCreateActions( List<GuidedAction> actions, Bundle savedInstanceState ) {
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_INTERNAL_PLAYER, updated );
+
+            if( !updated ) {
+
+                putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, false );
+
+            }
+
+            mSettingsFragment.updateActions( null );
+            mPlayerFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
 
             boolean internalPlayer = getShouldUseInternalPlayer( getActivity() );
 
@@ -385,22 +511,7 @@ public class TvSettingsActivity extends Activity {
                     null,
                     !internalPlayer );
 
-        }
-
-        @Override
-        public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
-
-            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) ? true : false );
-            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_INTERNAL_PLAYER, updated );
-
-            if( !updated ) {
-
-                putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, false );
-
-            }
-
-            getFragmentManager().popBackStack();
+            setActions( actions );
 
         }
 
@@ -420,7 +531,32 @@ public class TvSettingsActivity extends Activity {
         }
 
         @Override
-        public void onCreateActions( List<GuidedAction> actions, Bundle savedInstanceState ) {
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, updated );
+
+            mSettingsFragment.updateActions( null );
+            mPlayerFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
 
             boolean externalPlayerOverride = getShouldUseExternalPlayerOverride( getActivity() );
 
@@ -437,16 +573,7 @@ public class TvSettingsActivity extends Activity {
                     null,
                     !externalPlayerOverride );
 
-        }
-
-        @Override
-        public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
-
-            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) ? true : false );
-            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, updated );
-
-            getFragmentManager().popBackStack();
+            setActions( actions );
 
         }
 
@@ -466,7 +593,32 @@ public class TvSettingsActivity extends Activity {
         }
 
         @Override
-        public void onCreateActions( List<GuidedAction> actions, Bundle savedInstanceState ) {
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, updated );
+
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
 
             boolean showAdultContent = getShowAdultContent( getActivity() );
 
@@ -483,16 +635,7 @@ public class TvSettingsActivity extends Activity {
                     null,
                     !showAdultContent );
 
-        }
-
-        @Override
-        public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
-
-            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) ? true : false );
-            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, updated );
-
-            getFragmentManager().popBackStack();
+            setActions( actions );
 
         }
 
