@@ -175,11 +175,11 @@ public class TvRecordingDetailsFragment extends TvAbstractBaseDetailsFragment {
 
                 });
 
-        if( mediaSupported() || liveStreamSupported() ) {
+//        if( mediaSupported() || liveStreamSupported() ) {
 
             row.addAction( new Action( ACTION_WATCH, getResources().getString( R.string.watch ) ) );
 
-        }
+//        }
 
         mAdapter.add( row );
 
