@@ -35,8 +35,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
+import org.mythtv.android.presentation.presenter.AdultListPresenter;
 import org.mythtv.android.presentation.presenter.CardPresenter;
-import org.mythtv.android.presentation.presenter.MovieListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.VideoListView;
 import org.mythtv.android.presentation.view.activity.TvVideoDetailsActivity;
@@ -57,9 +57,9 @@ import javax.inject.Inject;
 /**
  * Created by dmfrey on 1/29/16.
  */
-public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements VideoListView {
+public class TvVideoAdultFragment extends TvAbstractBaseVideoFragment implements VideoListView {
 
-    private static final String TAG = TvVideoMovieFragment.class.getSimpleName();
+    private static final String TAG = TvVideoAdultFragment.class.getSimpleName();
 
     private static final int BACKGROUND_UPDATE_DELAY = 300;
     private static final int GRID_ITEM_WIDTH = 200;
@@ -75,17 +75,17 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
     private BackgroundManager mBackgroundManager;
 
     @Inject
-    MovieListPresenter movieListPresenter;
+    AdultListPresenter movieListPresenter;
 
     private ArrayObjectAdapter mRowsAdapter;
 
-    public TvVideoMovieFragment() {
+    public TvVideoAdultFragment() {
         super();
     }
 
-    public static TvVideoMovieFragment newInstance() {
+    public static TvVideoAdultFragment newInstance() {
 
-        return new TvVideoMovieFragment();
+        return new TvVideoAdultFragment();
     }
 
     @Override
@@ -162,7 +162,7 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
 
         // setBadgeDrawable(getActivity().getResources().getDrawable(
         // R.drawable.videos_by_google_banner));
-        setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 0 ] ); // Badge, when set, takes precedent
+        setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 4 ] ); // Badge, when set, takes precedent
 
         // over title
         setHeadersState( HEADERS_ENABLED );

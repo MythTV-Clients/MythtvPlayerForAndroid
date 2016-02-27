@@ -51,6 +51,7 @@ import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.model.VideoModel;
 import org.mythtv.android.presentation.presenter.DetailsDescriptionPresenter;
+import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
 import org.mythtv.android.presentation.utils.Utils;
 import org.mythtv.android.presentation.view.activity.TvPlaybackOverlayActivity;
 import org.mythtv.android.presentation.view.activity.TvVideoDetailsActivity;
@@ -155,7 +156,7 @@ public class TvVideoDetailsFragment extends TvAbstractBaseDetailsFragment {
     private void setupDetailsOverviewRow() {
         Log.d( TAG, "setupDetailsOverviewRow : " + mVideoMetadataInfoModel.toString() );
 
-        final DetailsOverviewRow row = new DetailsOverviewRow(mVideoMetadataInfoModel);
+        final DetailsOverviewRow row = new DetailsOverviewRow( mVideoMetadataInfoModel );
         row.setImageDrawable( getResources().getDrawable( R.drawable.default_background ) );
 
         int width = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_WIDTH );
@@ -253,6 +254,13 @@ public class TvVideoDetailsFragment extends TvAbstractBaseDetailsFragment {
 
                 if( action.getId() == ACTION_WATCH ) {
 
+                    String seasonEpisode = "";
+                    if( "TELEVISION".equals( mVideoMetadataInfoModel ) ) {
+
+                        seasonEpisode = SeasonEpisodeFormatter.format( mVideoMetadataInfoModel );
+
+                    }
+
                     String filename = mVideoMetadataInfoModel.getFileName();
                     try {
                         filename = URLEncoder.encode( mVideoMetadataInfoModel.getFileName(), "UTF-8" );
@@ -289,7 +297,7 @@ public class TvVideoDetailsFragment extends TvAbstractBaseDetailsFragment {
                                     .id( mVideoMetadataInfoModel.getId() )
                                     .category( mVideoMetadataInfoModel.getContentType() )
                                     .title( mVideoMetadataInfoModel.getTitle() )
-                                    .description( mVideoMetadataInfoModel.getDescription() )
+                                    .description( mVideoMetadataInfoModel.getDescription() + " " + seasonEpisode )
                                     .videoUrl( url )
                                     .bgImageUrl( masterBackendUrl + "/Content/GetImageFile?StorageGroup=Fanart&FileName=" + mVideoMetadataInfoModel.getFanart() )
                                     .cardImageUrl( masterBackendUrl + "/Content/GetImageFile?StorageGroup=Coverart&FileName=" + mVideoMetadataInfoModel.getCoverart() )

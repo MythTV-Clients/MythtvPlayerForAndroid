@@ -65,6 +65,25 @@ public class VideoDataRepository implements VideoRepository {
 
     }
 
+    @Override
+    public Observable<List<VideoMetadataInfo>> getVideoSeriesListByContentType(String contentType) {
+        Log.d( TAG, "getVideoSeriesListByContentType : enter" );
+        Log.d( TAG, "getVideoSeriesListByContentType : contentType=" + contentType );
+
+        final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore( contentType );
+
+        return videoDataStore.getCategory( contentType )
+                .subscribeOn( Schedulers.io() )
+                .observeOn( AndroidSchedulers.mainThread() )
+                .doOnError( throwable -> Log.e( TAG, "getVideoSeriesListByContentType : error", throwable ) )
+                .flatMap( Observable::from )
+                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( contentType ) )
+                .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
+                .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
+                .map( videoMetadataInfoEntities -> VideoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntities ) );
+
+    }
+
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<List<VideoMetadataInfo>> getVideoListByContentTypeAndSeries( String contentType, String series ) {

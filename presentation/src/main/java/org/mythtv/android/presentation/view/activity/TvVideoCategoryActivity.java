@@ -15,7 +15,11 @@ import org.mythtv.android.presentation.internal.di.components.DaggerVideoCompone
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.view.fragment.TvAbstractBaseVideoFragment;
+import org.mythtv.android.presentation.view.fragment.TvVideoAdultFragment;
+import org.mythtv.android.presentation.view.fragment.TvVideoHomeMovieFragment;
 import org.mythtv.android.presentation.view.fragment.TvVideoMovieFragment;
+import org.mythtv.android.presentation.view.fragment.TvVideoMusicVideoFragment;
+import org.mythtv.android.presentation.view.fragment.TvVideoTelevisionFragment;
 
 public class TvVideoCategoryActivity extends TvAbstractBaseActivity implements HasComponent<VideoComponent> {
 
@@ -111,25 +115,25 @@ public class TvVideoCategoryActivity extends TvAbstractBaseActivity implements H
 
                 case ContentType.TELEVISION :
 
-//                    addFragment( R.id.fl_fragment, TvVideoMovieFragment.newInstance() );
+                    addFragment( R.id.fl_fragment, TvVideoTelevisionFragment.newInstance() );
 
                     break;
 
                 case ContentType.HOMEVIDEO :
 
-//                    addFragment( R.id.fl_fragment, TvVideoMovieFragment.newInstance() );
+                    addFragment( R.id.fl_fragment, TvVideoHomeMovieFragment.newInstance() );
 
                     break;
 
                 case ContentType.MUSICVIDEO :
 
-//                    addFragment( R.id.fl_fragment, TvVideoMovieFragment.newInstance() );
+                    addFragment( R.id.fl_fragment, TvVideoMusicVideoFragment.newInstance() );
 
                     break;
 
                 case ContentType.ADULT :
 
-//                    addFragment( R.id.fl_fragment, TvVideoMovieFragment.newInstance() );
+                    addFragment( R.id.fl_fragment, TvVideoAdultFragment.newInstance() );
 
                     break;
 
@@ -162,13 +166,6 @@ public class TvVideoCategoryActivity extends TvAbstractBaseActivity implements H
 
         Log.d( TAG, "getComponent : exit" );
         return videoComponent;
-    }
-
-    public boolean getInternalPlayerPreferenceFromPreferences() {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
-
-        return sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, false );
     }
 
 }

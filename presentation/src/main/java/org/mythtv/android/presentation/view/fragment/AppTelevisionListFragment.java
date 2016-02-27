@@ -16,6 +16,7 @@ import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.TelevisionListPresenter;
+import org.mythtv.android.presentation.presenter.TelevisionSeriesCategoryListPresenter;
 import org.mythtv.android.presentation.view.VideoListView;
 import org.mythtv.android.presentation.view.adapter.VideosAdapter;
 import org.mythtv.android.presentation.view.adapter.VideosLayoutManager;
@@ -36,7 +37,7 @@ public class AppTelevisionListFragment extends AppAbstractBaseVideoPagerFragment
     private static final String TAG = AppTelevisionListFragment.class.getSimpleName();
 
     @Inject
-    TelevisionListPresenter televisionListPresenter;
+    TelevisionSeriesCategoryListPresenter televisionSeriesCategoryListPresenter;
 
     @Bind( R.id.rv_videoMetadataInfos )
     RecyclerView rv_videoMetadataInfos;
@@ -94,7 +95,7 @@ public class AppTelevisionListFragment extends AppAbstractBaseVideoPagerFragment
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-        this.televisionListPresenter.resume();
+        this.televisionSeriesCategoryListPresenter.resume();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -104,7 +105,7 @@ public class AppTelevisionListFragment extends AppAbstractBaseVideoPagerFragment
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-        this.televisionListPresenter.pause();
+        this.televisionSeriesCategoryListPresenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -114,7 +115,7 @@ public class AppTelevisionListFragment extends AppAbstractBaseVideoPagerFragment
         Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
-        this.televisionListPresenter.destroy();
+        this.televisionSeriesCategoryListPresenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
     }
@@ -133,7 +134,7 @@ public class AppTelevisionListFragment extends AppAbstractBaseVideoPagerFragment
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( VideoComponent.class ).inject( this );
-        this.televisionListPresenter.setView( this );
+        this.televisionSeriesCategoryListPresenter.setView( this );
         this.getComponent( VideoComponent.class ).plus( new VideosModule() );
 
         Log.d( TAG, "initialize : exit" );
@@ -244,7 +245,7 @@ public class AppTelevisionListFragment extends AppAbstractBaseVideoPagerFragment
     private void loadTelevisionList() {
         Log.d( TAG, "loadTelevisionList : enter" );
 
-        this.televisionListPresenter.initialize();
+        this.televisionSeriesCategoryListPresenter.initialize();
 
         Log.d( TAG, "loadTelevisionList : exit" );
     }
@@ -254,9 +255,9 @@ public class AppTelevisionListFragment extends AppAbstractBaseVideoPagerFragment
                 @Override
                 public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
 
-                    if( null != AppTelevisionListFragment.this.televisionListPresenter && null != videoMetadataInfoModel ) {
+                    if( null != AppTelevisionListFragment.this.televisionSeriesCategoryListPresenter && null != videoMetadataInfoModel ) {
 
-                        AppTelevisionListFragment.this.televisionListPresenter.onVideoClicked( videoMetadataInfoModel );
+                        AppTelevisionListFragment.this.televisionSeriesCategoryListPresenter.onVideoClicked( videoMetadataInfoModel );
 
                     }
 

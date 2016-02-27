@@ -115,17 +115,25 @@ public class TvVideosFragment extends TvAbstractBaseGuidedStepFragment {
 
             case TELEVISION :
 
+                categoryListener.onCategoryClicked( ContentType.TELEVISION );
+
                 break;
 
             case HOME_MOVIES :
+
+                categoryListener.onCategoryClicked( ContentType.HOMEVIDEO );
 
                 break;
 
             case MUSIC_VIDEOS :
 
+                categoryListener.onCategoryClicked( ContentType.MUSICVIDEO );
+
                 break;
 
             case ADULT :
+
+                categoryListener.onCategoryClicked( ContentType.ADULT );
 
                 break;
 

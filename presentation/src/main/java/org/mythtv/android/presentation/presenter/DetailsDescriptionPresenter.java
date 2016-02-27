@@ -18,6 +18,7 @@ import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
+import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
 
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
@@ -38,8 +39,15 @@ public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPrese
             if( item instanceof VideoMetadataInfoModel ) {
                 VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
 
+                String seasonEpisode = "";
+                if( "TELEVISION".equals( videoMetadataInfoModel.getContentType() ) ) {
+
+                    seasonEpisode = SeasonEpisodeFormatter.format( videoMetadataInfoModel );
+
+                }
+
                 viewHolder.getTitle().setText( videoMetadataInfoModel.getTitle() );
-                viewHolder.getSubtitle().setText( videoMetadataInfoModel.getSubTitle() );
+                viewHolder.getSubtitle().setText( videoMetadataInfoModel.getSubTitle() + " " + seasonEpisode );
                 viewHolder.getBody().setText( videoMetadataInfoModel.getDescription() );
 
             }

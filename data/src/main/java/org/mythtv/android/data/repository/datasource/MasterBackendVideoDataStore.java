@@ -79,30 +79,13 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getCategory : category=" + category );
 
-        Observable<List<VideoMetadataInfoEntity>> videoList = this.videoApi.getVideoList( null, null, false, -1, -1 )
-                .subscribeOn( Schedulers.io() )
-                .observeOn( AndroidSchedulers.mainThread() )
+        return this.videoApi.getVideoList( null, null, false, -1, -1 )
                 .doOnNext( saveVideosToCacheAction )
-                .doOnNext( saveVideosToDbAction );
-
-        if( "TELEVISION".equals( category ) ) {
-
-            return videoList
-                    .flatMap( Observable::from )
-                    .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
-                    .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
-                    .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
-                    .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) );
-
-        } else {
-
-            return videoList
-                    .flatMap( Observable::from )
-                    .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
-                    .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
-                    .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) );
-
-        }
+                .doOnNext( saveVideosToDbAction )
+                .flatMap( Observable::from )
+                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
+                .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
+                .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) );
 
     }
 
@@ -113,8 +96,6 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getSeriesInCategory : category=" + category + ". series=" + series );
 
         return this.videoApi.getVideoList( null, null, false, -1, -1 )
-                .subscribeOn( Schedulers.io() )
-                .observeOn( AndroidSchedulers.mainThread() )
                 .flatMap( Observable::from )
                 .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
                 .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle().equals( series ) )

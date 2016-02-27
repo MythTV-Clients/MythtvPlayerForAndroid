@@ -4,6 +4,7 @@ import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.interactor.GetVideoContentTypeList;
+import org.mythtv.android.domain.interactor.GetVideoSeriesCategoryContentTypeList;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.domain.repository.VideoRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
@@ -35,6 +36,14 @@ public class VideosModule {
     UseCase provideHomeVideoListUseCase( VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
         return new GetVideoContentTypeList( ContentType.HOMEVIDEO, videoRepository, threadExecutor, postExecutionThread );
+    }
+
+    @Provides
+    @PerActivity
+    @Named( "televisionSeriesCategoryList" )
+    UseCase provideTelevisionSeriesCategoryListUseCase( VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+
+        return new GetVideoSeriesCategoryContentTypeList( ContentType.TELEVISION, videoRepository, threadExecutor, postExecutionThread );
     }
 
     @Provides

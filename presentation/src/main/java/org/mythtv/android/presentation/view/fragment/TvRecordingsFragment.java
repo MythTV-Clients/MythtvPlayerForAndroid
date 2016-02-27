@@ -301,12 +301,12 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
 
             }
 
-            HeaderItem gridHeader = new HeaderItem( i, "PREFERENCES" );
-
-            GridItemPresenter mGridPresenter = new GridItemPresenter();
-            ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter( mGridPresenter );
-            gridRowAdapter.add( getResources().getString( R.string.personal_settings ) );
-            mRowsAdapter.add( new ListRow( gridHeader, gridRowAdapter ) );
+//            HeaderItem gridHeader = new HeaderItem( i, "PREFERENCES" );
+//
+//            GridItemPresenter mGridPresenter = new GridItemPresenter();
+//            ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter( mGridPresenter );
+//            gridRowAdapter.add( getResources().getString( R.string.personal_settings ) );
+//            mRowsAdapter.add( new ListRow( gridHeader, gridRowAdapter ) );
 
             setAdapter( mRowsAdapter );
 

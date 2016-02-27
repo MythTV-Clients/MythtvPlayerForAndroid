@@ -36,7 +36,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.CardPresenter;
-import org.mythtv.android.presentation.presenter.MovieListPresenter;
+import org.mythtv.android.presentation.presenter.HomeVideoListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.VideoListView;
 import org.mythtv.android.presentation.view.activity.TvVideoDetailsActivity;
@@ -57,9 +57,9 @@ import javax.inject.Inject;
 /**
  * Created by dmfrey on 1/29/16.
  */
-public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements VideoListView {
+public class TvVideoHomeMovieFragment extends TvAbstractBaseVideoFragment implements VideoListView {
 
-    private static final String TAG = TvVideoMovieFragment.class.getSimpleName();
+    private static final String TAG = TvVideoHomeMovieFragment.class.getSimpleName();
 
     private static final int BACKGROUND_UPDATE_DELAY = 300;
     private static final int GRID_ITEM_WIDTH = 200;
@@ -75,17 +75,17 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
     private BackgroundManager mBackgroundManager;
 
     @Inject
-    MovieListPresenter movieListPresenter;
+    HomeVideoListPresenter movieListPresenter;
 
     private ArrayObjectAdapter mRowsAdapter;
 
-    public TvVideoMovieFragment() {
+    public TvVideoHomeMovieFragment() {
         super();
     }
 
-    public static TvVideoMovieFragment newInstance() {
+    public static TvVideoHomeMovieFragment newInstance() {
 
-        return new TvVideoMovieFragment();
+        return new TvVideoHomeMovieFragment();
     }
 
     @Override
@@ -162,7 +162,7 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
 
         // setBadgeDrawable(getActivity().getResources().getDrawable(
         // R.drawable.videos_by_google_banner));
-        setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 0 ] ); // Badge, when set, takes precedent
+        setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 2 ] ); // Badge, when set, takes precedent
 
         // over title
         setHeadersState( HEADERS_ENABLED );
@@ -276,8 +276,8 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
 //            ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter( mGridPresenter );
 //            gridRowAdapter.add( getResources().getString( R.string.personal_settings ) );
 //            mRowsAdapter.add( new ListRow( gridHeader, gridRowAdapter ) );
-
-            setAdapter( mRowsAdapter );
+//
+//            setAdapter( mRowsAdapter );
 
         }
 

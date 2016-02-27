@@ -13,7 +13,11 @@ import org.mythtv.android.presentation.view.fragment.AppMusicVideoListFragment;
 import org.mythtv.android.presentation.view.fragment.AppTelevisionListFragment;
 import org.mythtv.android.presentation.view.fragment.AppTelevisionSeriesListFragment;
 import org.mythtv.android.presentation.view.fragment.AppVideoDetailsFragment;
+import org.mythtv.android.presentation.view.fragment.TvVideoAdultFragment;
+import org.mythtv.android.presentation.view.fragment.TvVideoHomeMovieFragment;
 import org.mythtv.android.presentation.view.fragment.TvVideoMovieFragment;
+import org.mythtv.android.presentation.view.fragment.TvVideoMusicVideoFragment;
+import org.mythtv.android.presentation.view.fragment.TvVideoTelevisionFragment;
 
 import dagger.Component;
 
@@ -33,6 +37,10 @@ public interface VideoComponent {
     void inject( AppVideoDetailsFragment videoDetailsFragment );
 
     void inject( TvVideoMovieFragment videoMovieFragment );
+    void inject( TvVideoTelevisionFragment videoMovieFragment );
+    void inject( TvVideoHomeMovieFragment videoMovieFragment );
+    void inject( TvVideoMusicVideoFragment videoMovieFragment );
+    void inject( TvVideoAdultFragment videoMovieFragment );
 
     void plus( VideosModule videosModule );
     void plus( VideoSeriesModule videoSeriesModule );

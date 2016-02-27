@@ -22,7 +22,7 @@ android {
         testApplicationId 'org.mythtv.android.test'
 
         // Enabling multidex support.
-        multiDexEnabled true
+//        multiDexEnabled true
 
         buildConfigField "String", "APPLICATION_SHA1", '"' + applicationSHA1 + '"'
         buildConfigField "String", "APPLICATION_TAG", '"' + applicationTag + '"'
@@ -57,7 +57,7 @@ android {
         debug {
             signingConfig signingConfigs.debug
             proguardFiles 'proguard-rules.txt'
-            testCoverageEnabled = true
+            testCoverageEnabled = false
         }
 
         release {
@@ -143,4 +143,4 @@ dependencies {
 
 }
 
-apply from: '../buildsystem/jacoco.gradle'
+//apply from: '../buildsystem/jacoco.gradle'

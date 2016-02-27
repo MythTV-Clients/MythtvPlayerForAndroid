@@ -15,6 +15,8 @@ public interface VideoRepository {
 
     Observable<List<VideoMetadataInfo>> getVideoListByContentType( String contentType );
 
+    Observable<List<VideoMetadataInfo>> getVideoSeriesListByContentType( String contentType );
+
     Observable<List<VideoMetadataInfo>> getVideoListByContentTypeAndSeries( String contentType, String series );
 
     Observable<VideoMetadataInfo> getVideo( int id );

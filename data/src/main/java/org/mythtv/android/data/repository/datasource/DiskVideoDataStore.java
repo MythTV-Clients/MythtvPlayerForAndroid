@@ -35,22 +35,9 @@ public class DiskVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getCategory : enter" );
         Log.d( TAG, "getCategory : category=" + category );
 
-        if( "TELEVISION".equals( category ) ) {
-
-            return this.videoCache.getCategory( category )
-                    .flatMap( Observable::from )
-                    .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
-                    .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
-                    .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) )
-                    .doOnError( throwable -> Log.e( TAG, "getCategory : error", throwable ) );
-
-        } else {
-
-            return this.videoCache.getCategory( category )
-                    .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) )
-                    .doOnError( throwable -> Log.e( TAG, "getCategory : error", throwable ) );
-
-        }
+        return this.videoCache.getCategory( category )
+                .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) )
+                .doOnError( throwable -> Log.e( TAG, "getCategory : error", throwable ) );
 
     }
 

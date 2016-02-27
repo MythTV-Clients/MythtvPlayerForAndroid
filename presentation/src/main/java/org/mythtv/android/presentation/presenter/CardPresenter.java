@@ -103,8 +103,16 @@ public class CardPresenter extends Presenter {
         if( item instanceof VideoMetadataInfoModel ) {
 
             VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
+
+            String seasonEpisode = "";
+            if( "TELEVISION".equals( videoMetadataInfoModel.getContentType() )  ) {
+
+                seasonEpisode = SeasonEpisodeFormatter.format( videoMetadataInfoModel );
+
+            }
+
             ImageCardView cardView = (ImageCardView) viewHolder.view;
-            cardView.setTitleText( videoMetadataInfoModel.getTitle() );
+            cardView.setTitleText( videoMetadataInfoModel.getTitle() + " " + seasonEpisode );
             cardView.setContentText( videoMetadataInfoModel.getDescription() );
             cardView.setMainImageDimensions( CARD_WIDTH, CARD_HEIGHT );
             Glide.with( viewHolder.view.getContext() )

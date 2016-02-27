@@ -37,11 +37,15 @@ import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.CardPresenter;
 import org.mythtv.android.presentation.presenter.MovieListPresenter;
+import org.mythtv.android.presentation.presenter.TelevisionListPresenter;
+import org.mythtv.android.presentation.presenter.TelevisionSeriesListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.VideoListView;
 import org.mythtv.android.presentation.view.activity.TvVideoDetailsActivity;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,9 +61,9 @@ import javax.inject.Inject;
 /**
  * Created by dmfrey on 1/29/16.
  */
-public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements VideoListView {
+public class TvVideoTelevisionFragment extends TvAbstractBaseVideoFragment implements VideoListView {
 
-    private static final String TAG = TvVideoMovieFragment.class.getSimpleName();
+    private static final String TAG = TvVideoTelevisionFragment.class.getSimpleName();
 
     private static final int BACKGROUND_UPDATE_DELAY = 300;
     private static final int GRID_ITEM_WIDTH = 200;
@@ -75,17 +79,17 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
     private BackgroundManager mBackgroundManager;
 
     @Inject
-    MovieListPresenter movieListPresenter;
+    TelevisionListPresenter movieListPresenter;
 
     private ArrayObjectAdapter mRowsAdapter;
 
-    public TvVideoMovieFragment() {
+    public TvVideoTelevisionFragment() {
         super();
     }
 
-    public static TvVideoMovieFragment newInstance() {
+    public static TvVideoTelevisionFragment newInstance() {
 
-        return new TvVideoMovieFragment();
+        return new TvVideoTelevisionFragment();
     }
 
     @Override
@@ -162,7 +166,7 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
 
         // setBadgeDrawable(getActivity().getResources().getDrawable(
         // R.drawable.videos_by_google_banner));
-        setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 0 ] ); // Badge, when set, takes precedent
+        setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 1 ] ); // Badge, when set, takes precedent
 
         // over title
         setHeadersState( HEADERS_ENABLED );
@@ -249,8 +253,28 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
 
                         String lhsTitle = ArticleCleaner.clean( lhs.getTitle() );
                         String rhsTitle = ArticleCleaner.clean( rhs.getTitle() );
+                        int comparison = lhsTitle.compareTo( rhsTitle );
+                        if( comparison != 0 ) {
 
-                        return lhsTitle.compareTo( rhsTitle );
+                            return comparison;
+                        }
+
+                        comparison = ( (Integer) lhs.getSeason() ).compareTo( rhs.getSeason() );
+                        if( comparison != 0 ) {
+
+                            return comparison;
+                        }
+
+                        comparison = ( (Integer) lhs.getEpisode() ).compareTo( rhs.getEpisode() );
+                        if( comparison != 0 ) {
+
+                            return comparison;
+                        }
+
+                        String lhsSubTitle = ArticleCleaner.clean( lhs.getSubTitle() );
+                        String rhsSubTitle = ArticleCleaner.clean( rhs.getSubTitle() );
+
+                        return lhsSubTitle.compareTo( rhsSubTitle );
                     }
 
                 });
@@ -430,9 +454,19 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
 
             if( item instanceof VideoMetadataInfoModel ) {
 
-                VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
-                mBackgroundURI = URI.create( getMasterBackendUrl() + "/Content/GetImageFile?StorageGroup=Fanart&FileName=" + videoMetadataInfoModel.getFanart() );
-                startBackgroundTimer();
+                try {
+
+                    VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
+
+                    String fanart = URLEncoder.encode( videoMetadataInfoModel.getFanart(), "UTF-8" );
+                    mBackgroundURI = URI.create( getMasterBackendUrl() + "/Content/GetImageFile?StorageGroup=Fanart&FileName=" + fanart );
+                    startBackgroundTimer();
+
+                } catch( UnsupportedEncodingException e ) {
+
+                    Log.e( TAG, "addLiveStreamFromApi : error", e );
+
+                }
 
             }
 
@@ -492,7 +526,7 @@ public class TvVideoMovieFragment extends TvAbstractBaseVideoFragment implements
 
         public Category( final String title ) {
 
-            this.key = ArticleCleaner.clean( title ).substring( 0, 1 ).toUpperCase();
+            this.key = ArticleCleaner.clean( title );
 
         }
 
