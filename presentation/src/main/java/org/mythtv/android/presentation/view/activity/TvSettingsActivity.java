@@ -163,15 +163,15 @@ public class TvSettingsActivity extends Activity {
             boolean showAdultContent = getShowAdultContent( getActivity() );
             String content = ( showAdultContent ? getResources().getString( R.string.tv_settings_content_adult_shown ) : getResources().getString( R.string.tv_settings_content_adult_hidden ) );
 
-            addAction( actions, MASTER_BACKEND_SETTINGS,
+            addAction( getActivity(), actions, MASTER_BACKEND_SETTINGS,
                     getResources().getString( R.string.tv_settings_master_backend_title ),
                     getMasterBackendUrl( getActivity() ),
                     true, true );
-            addAction( actions, PLAYER_SETTINGS,
+            addAction( getActivity(), actions, PLAYER_SETTINGS,
                     getResources().getString( R.string.tv_settings_playback_title ),
                     playback,
                     true, true );
-            addAction( actions, CONTENT_SETTINGS,
+            addAction( getActivity(), actions, CONTENT_SETTINGS,
                     getResources().getString( R.string.tv_settings_content_title ),
                     content,
                     true, true );
@@ -238,11 +238,11 @@ public class TvSettingsActivity extends Activity {
             String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
             String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-            addAction( actions, MASTER_BACKEND_URL,
+            addAction( getActivity(), actions, MASTER_BACKEND_URL,
                     url,
                     getResources().getString( R.string.pref_backend_url_description ),
                     true, true );
-            addAction( actions, MASTER_BACKEND_PORT,
+            addAction( getActivity(), actions, MASTER_BACKEND_PORT,
                     port,
                     getResources().getString( R.string.pref_backend_port_description ),
                     true, true );
@@ -306,7 +306,7 @@ public class TvSettingsActivity extends Activity {
 
             String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
 
-            addEditableAction( actions, MASTER_BACKEND_URL,
+            addEditableAction( getActivity(), actions, MASTER_BACKEND_URL,
                     url,
                     getResources().getString( R.string.pref_backend_url_description ) );
 
@@ -369,7 +369,7 @@ public class TvSettingsActivity extends Activity {
 
             String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-            addEditableAction( actions, MASTER_BACKEND_PORT,
+            addEditableAction( getActivity(), actions, MASTER_BACKEND_PORT,
                     port,
                     getResources().getString( R.string.pref_backend_port_description ) );
 
@@ -434,11 +434,11 @@ public class TvSettingsActivity extends Activity {
             String internalPlayer = ( getShouldUseInternalPlayer( getActivity() ) ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
             String externalPlayer = ( getShouldUseExternalPlayerOverride( getActivity() ) ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
 
-            addAction( actions, INTERNAL_PLAYER_SETTINGS,
+            addAction( getActivity(), actions, INTERNAL_PLAYER_SETTINGS,
                     getResources().getString( R.string.tv_settings_playback_internal_player ),
                     internalPlayer,
                     true, true );
-            addAction( actions, EXTERNAL_PLAYER_OVERRIDE_SETTINGS,
+            addAction( getActivity(), actions, EXTERNAL_PLAYER_OVERRIDE_SETTINGS,
                     getResources().getString( R.string.tv_settings_playback_external_player ),
                     externalPlayer,
                     getShouldUseInternalPlayer( getActivity() ), true );
@@ -498,15 +498,13 @@ public class TvSettingsActivity extends Activity {
 
             boolean internalPlayer = getShouldUseInternalPlayer( getActivity() );
 
-            addCheckedAction( actions,
+            addCheckedAction( getActivity(), actions,
                     -1,
-                    getActivity(),
                     getResources().getString( R.string.tv_settings_yes ),
                     null,
                     internalPlayer );
-            addCheckedAction( actions,
+            addCheckedAction( getActivity(), actions,
                     -1,
-                    getActivity(),
                     getResources().getString( R.string.tv_settings_no ),
                     null,
                     !internalPlayer );
@@ -560,15 +558,13 @@ public class TvSettingsActivity extends Activity {
 
             boolean externalPlayerOverride = getShouldUseExternalPlayerOverride( getActivity() );
 
-            addCheckedAction( actions,
+            addCheckedAction( getActivity(), actions,
                     -1,
-                    getActivity(),
                     getResources().getString( R.string.tv_settings_yes ),
                     null,
                     externalPlayerOverride );
-            addCheckedAction( actions,
+            addCheckedAction( getActivity(), actions,
                     -1,
-                    getActivity(),
                     getResources().getString( R.string.tv_settings_no ),
                     null,
                     !externalPlayerOverride );
@@ -622,15 +618,13 @@ public class TvSettingsActivity extends Activity {
 
             boolean showAdultContent = getShowAdultContent( getActivity() );
 
-            addCheckedAction( actions,
+            addCheckedAction( getActivity(), actions,
                     -1,
-                    getActivity(),
                     getResources().getString( R.string.tv_settings_yes ),
                     null,
                     showAdultContent );
-            addCheckedAction( actions,
+            addCheckedAction( getActivity(), actions,
                     -1,
-                    getActivity(),
                     getResources().getString( R.string.tv_settings_no ),
                     null,
                     !showAdultContent );
@@ -641,9 +635,9 @@ public class TvSettingsActivity extends Activity {
 
     }
 
-    private static void addAction( List<GuidedAction> actions, long id, String title, String desc, boolean enabled, boolean hasNext ) {
+    private static void addAction( Context context, List<GuidedAction> actions, long id, String title, String desc, boolean enabled, boolean hasNext ) {
 
-        actions.add( new GuidedAction.Builder()
+        actions.add( new GuidedAction.Builder( context )
                 .id( id )
                 .title( title )
                 .description( desc )
@@ -655,9 +649,9 @@ public class TvSettingsActivity extends Activity {
 
     }
 
-    private static void addEditableAction( List<GuidedAction> actions, long id, String title, String desc ) {
+    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String desc ) {
 
-        actions.add( new GuidedAction.Builder()
+        actions.add( new GuidedAction.Builder( context )
                 .id( id )
                 .title( title )
                 .description( desc )
@@ -667,9 +661,9 @@ public class TvSettingsActivity extends Activity {
 
     }
 
-    private static void addEditableAction( List<GuidedAction> actions, long id, String title, String editTitle, String desc ) {
+    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, String desc ) {
 
-        actions.add( new GuidedAction.Builder()
+        actions.add( new GuidedAction.Builder( context )
                 .id( id )
                 .title( title )
                 .editTitle( editTitle )
@@ -680,9 +674,9 @@ public class TvSettingsActivity extends Activity {
 
     }
 
-//    private static void addEditableAction( List<GuidedAction> actions, long id, String title, String editTitle, int editInputType, String desc, String editDesc ) {
+//    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, int editInputType, String desc, String editDesc ) {
 //
-//        actions.add( new GuidedAction.Builder()
+//        actions.add( new GuidedAction.Builder( context )
 //                .id( id )
 //                .title( title )
 //                .editTitle( editTitle )
@@ -694,9 +688,9 @@ public class TvSettingsActivity extends Activity {
 //
 //    }
 
-//    private static void addEditableDescriptionAction( List<GuidedAction> actions, long id, String title, String desc, String editDescription, int descriptionEditInputType ) {
+//    private static void addEditableDescriptionAction( Context context, List<GuidedAction> actions, long id, String title, String desc, String editDescription, int descriptionEditInputType ) {
 //
-//        actions.add( new GuidedAction.Builder()
+//        actions.add( new GuidedAction.Builder( context )
 //                .id( id )
 //                .title( title )
 //                .description( desc )
@@ -707,9 +701,9 @@ public class TvSettingsActivity extends Activity {
 //
 //    }
 
-    private static void addCheckedAction( List<GuidedAction> actions, int iconResId, Context context, String title, String desc, boolean checked ) {
+    private static void addCheckedAction( Context context, List<GuidedAction> actions, int iconResId, String title, String desc, boolean checked ) {
 
-        GuidedAction guidedAction = new GuidedAction.Builder()
+        GuidedAction guidedAction = new GuidedAction.Builder( context )
                 .title( title )
                 .description( desc )
                 .checkSetId( OPTION_CHECK_SET_ID )

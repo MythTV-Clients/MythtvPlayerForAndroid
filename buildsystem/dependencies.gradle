@@ -33,7 +33,7 @@ ext {
     androidCompileSdkVersion = 23
 
     //Android Support Libraries
-    androidSupportVersion = '23.1.1'
+    androidSupportVersion = '23.2.0'
 
     //Libraries
     daggerVersion = '2.0.2'

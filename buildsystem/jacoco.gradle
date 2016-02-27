@@ -1,9 +1,15 @@
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 
+jacoco {
+    toolVersion "0.7.6.201602180812"
+}
+
 def jacocoDaggerMap = [:]
 
 task jacoco(type: JacocoReport) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
 
     reports {
         xml.enabled true
