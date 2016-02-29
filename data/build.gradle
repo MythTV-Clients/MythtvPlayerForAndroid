@@ -33,23 +33,6 @@ android {
         versionCode globalConfiguration.getAt( "androidVersionCode" )
     }
 
-//    productFlavors {
-//
-//        // Define separate dev and prod product flavors.
-//        dev {
-//            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
-//            // to pre-dex each module and produce an APK that can be tested on
-//            // Android Lollipop without time consuming dex merging processes.
-//            minSdkVersion 21
-//        }
-//
-//        prod {
-//            // The actual minSdkVersion for the application.
-//            minSdkVersion 17
-//        }
-//
-//    }
-
     compileOptions {
 
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -108,4 +91,4 @@ dependencies {
 
 }
 
-//apply from: '../buildsystem/jacoco.gradle'
+apply from: '../buildsystem/jacoco.gradle'
