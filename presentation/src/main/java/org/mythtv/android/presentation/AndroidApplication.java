@@ -5,6 +5,7 @@ import android.app.Application;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerApplicationComponent;
 import org.mythtv.android.presentation.internal.di.modules.ApplicationModule;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
  * Android Main Application
@@ -27,6 +28,7 @@ public class AndroidApplication extends Application {
 
         this.applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule( new ApplicationModule( this ) )
+                .sharedPreferencesModule( new SharedPreferencesModule( this ) )
                 .build();
 
     }

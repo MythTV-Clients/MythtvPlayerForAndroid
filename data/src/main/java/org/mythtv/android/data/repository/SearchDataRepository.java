@@ -1,5 +1,7 @@
 package org.mythtv.android.data.repository;
 
+import android.util.Log;
+
 import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.repository.datasource.SearchDataStore;
 import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
@@ -33,6 +35,7 @@ public class SearchDataRepository implements SearchRepository {
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<List<SearchResult>> search( String searchString ) {
+        Log.d( TAG, "search : enter - searchString=" + searchString );
 
         final SearchDataStore searchDataStore = this.searchDataStoreFactory.createReadSearchDataStore();
 

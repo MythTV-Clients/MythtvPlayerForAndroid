@@ -271,7 +271,7 @@ public class TvVideoDetailsFragment extends TvAbstractBaseDetailsFragment {
                     String masterBackendUrl = getMasterBackendUrl();
                     String externalPlayerUrl = masterBackendUrl + "/Content/GetFile?FileName=" + filename;
 
-                    if( getShouldPlayVideoInExternalPlayer() ) {
+                    if( getSharedPreferencesModule().getShouldPlayVideoInExternalPlayer() ) {
 
                         Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
 

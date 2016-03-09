@@ -1,15 +1,12 @@
 package org.mythtv.android.presentation.view.fragment;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.widget.Toast;
 
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
  * Base {@link Fragment} class for every fragment in this application.
@@ -48,36 +45,14 @@ public abstract class TvAbstractBaseBrowseFragment extends BrowseFragment {
         return componentType.cast( ( (HasComponent<C>) getActivity() ).getComponent() );
     }
 
-    protected String getMasterBackendUrl() {
+    /**
+     * Get a SharedPreferences module for dependency injection.
+     *
+     * @return {@link org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule}
+     */
+    protected SharedPreferencesModule getSharedPreferencesModule() {
 
-        String host = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
-    }
-
-    protected boolean getShouldPlayVideoInExternalPlayer() {
-
-        boolean playInternalPlayer = getBooleanFromPreferences( getActivity(), SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
-        boolean playExternalPlayerOverride = getBooleanFromPreferences( getActivity(), SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
-
-        return ( !playInternalPlayer || playExternalPlayerOverride );
-    }
-
-    protected String getStringFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getString( key, "" );
-    }
-
-    protected boolean getBooleanFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getBoolean( key, false );
+        return new SharedPreferencesModule( getActivity() );
     }
 
 }

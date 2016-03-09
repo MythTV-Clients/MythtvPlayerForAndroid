@@ -230,7 +230,7 @@ public class AppVideoDetailsActivity extends AppAbstractBaseActivity implements 
     public void onPlayVideo( VideoMetadataInfoModel videoMetadataInfoModel ) {
         Log.d( TAG, "onPlayVideo : enter" );
 
-        if( !getInternalPlayerPreferenceFromPreferences() || getExternalPlayerPreferenceFromPreferences() ) {
+        if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() || getSharedPreferencesModule().getExternalPlayerPreferenceFromPreferences() ) {
 
             String filename = "";
             try {
@@ -239,7 +239,7 @@ public class AppVideoDetailsActivity extends AppAbstractBaseActivity implements 
 
             } catch( UnsupportedEncodingException e ) { }
 
-            String videoUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
+            String videoUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
             Log.d( TAG, "onPlayVideo : videoUrl=" + videoUrl );
 
             navigator.navigateToExternalPlayer( this, videoUrl );
@@ -247,7 +247,7 @@ public class AppVideoDetailsActivity extends AppAbstractBaseActivity implements 
         } else if( null != videoMetadataInfoModel.getLiveStreamInfo() ) {
 
             try {
-                String videoUrl = getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
+                String videoUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
                 videoUrl = videoUrl.replaceAll( "%2F", "/" );
                 videoUrl = videoUrl.replaceAll( "\\+", "%20" );
 
@@ -259,20 +259,6 @@ public class AppVideoDetailsActivity extends AppAbstractBaseActivity implements 
         }
 
         Log.d( TAG, "onPlayRecording : exit" );
-    }
-
-    public boolean getInternalPlayerPreferenceFromPreferences() {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
-
-        return sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, false );
-    }
-
-    public boolean getExternalPlayerPreferenceFromPreferences() {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
-
-        return sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO, false );
     }
 
 }

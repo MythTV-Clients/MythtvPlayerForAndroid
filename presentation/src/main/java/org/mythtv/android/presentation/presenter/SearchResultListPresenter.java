@@ -79,7 +79,7 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<SearchResu
 
         this.hideViewRetry();
         this.showViewLoading();
-        this.getProgramList();
+        this.getSearchResultList();
 
     }
 
@@ -120,7 +120,7 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<SearchResu
 
     }
 
-    private void getProgramList() {
+    private void getSearchResultList() {
 
         this.getSearchResultListUseCase.execute( new SearchResultListSubscriber() );
 

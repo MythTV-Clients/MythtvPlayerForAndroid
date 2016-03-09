@@ -41,6 +41,7 @@ import org.mythtv.android.presentation.presenter.ProgramListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.ProgramListView;
 import org.mythtv.android.presentation.view.activity.TvRecordingsDetailsActivity;
+import org.mythtv.android.presentation.view.activity.TvSearchableActivity;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -196,7 +197,7 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
         setBrandColor( getResources().getColor( R.color.primary ) );
 
         // set search icon color
-        setSearchAffordanceColor( getResources().getColor( R.color.primary_dark ) );
+//        setSearchAffordanceColor( getResources().getColor( R.color.primary_dark ) );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -359,16 +360,17 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
     private void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
-        setOnSearchClickedListener( new View.OnClickListener() {
-
-            @Override
-            public void onClick( View view ) {
-
-                Toast.makeText( getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG ).show();
-
-            }
-
-        });
+//        setOnSearchClickedListener( new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick( View view ) {
+//
+//                Intent intent = new Intent( getActivity(), TvSearchableActivity.class );
+//                startActivity( intent );
+//
+//            }
+//
+//        });
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
         setOnItemViewSelectedListener( new ItemViewSelectedListener() );
@@ -462,7 +464,7 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
             if( item instanceof ProgramModel ) {
 
                 ProgramModel programModel = (ProgramModel) item;
-                mBackgroundURI = URI.create( getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=banner" );
+                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=banner" );
                 startBackgroundTimer();
 
             }

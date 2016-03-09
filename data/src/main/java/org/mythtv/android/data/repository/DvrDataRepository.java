@@ -83,6 +83,7 @@ public class DvrDataRepository implements DvrRepository {
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
+        final SearchDataStore searchDataStore = this.searchDataStoreFactory.createWriteSearchDataStore();
 
         Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup )
                 .flatMap( Observable::from )
@@ -111,6 +112,13 @@ public class DvrDataRepository implements DvrRepository {
 
             return programEntityList;
         });
+
+        programEntities
+                .flatMap( Observable::from )
+                .filter( programEntity -> !programEntity.getRecording().getRecGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) )
+                .toList()
+                .map( recordedProgramEntities -> SearchResultEntityDataMapper.transformPrograms( recordedProgramEntities ) )
+                .doOnNext( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) );
 
         return recordedProgramEntityList
                 .map( recordedProgramEntities -> ProgramEntityDataMapper.transform( recordedProgramEntities ) );

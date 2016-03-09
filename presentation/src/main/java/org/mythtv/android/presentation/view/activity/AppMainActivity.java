@@ -114,7 +114,7 @@ public class AppMainActivity extends AppAbstractBaseActivity implements HasCompo
     protected void onResume() {
         super.onResume();
 
-        if( getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
+        if( getSharedPreferencesModule().getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
             Log.i( TAG, "onResume : MasterBackend not set, redirecting to Settings" );
 
             navigator.navigateToSettings( this );

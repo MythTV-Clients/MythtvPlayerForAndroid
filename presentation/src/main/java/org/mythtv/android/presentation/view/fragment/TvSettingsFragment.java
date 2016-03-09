@@ -62,8 +62,8 @@ public class TvSettingsFragment extends TvAbstractBaseGuidedStepFragment {
     @Override
     public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
 
-        String masterBackendUrl = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
-        actions.add( new GuidedAction.Builder()
+        String masterBackendUrl = getSharedPreferencesModule().getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
+        actions.add( new GuidedAction.Builder( getActivity() )
                 .id( MASTER_BACKEND_URL )
                 .title( masterBackendUrl )
                 .editTitle( masterBackendUrl )
@@ -74,8 +74,8 @@ public class TvSettingsFragment extends TvAbstractBaseGuidedStepFragment {
                 .build()
         );
 
-        String masterBackendPort = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
-        actions.add( new GuidedAction.Builder()
+        String masterBackendPort = getSharedPreferencesModule().getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
+        actions.add( new GuidedAction.Builder( getActivity() )
                 .id( MASTER_BACKEND_PORT )
                 .title( masterBackendPort )
                 .editTitle( masterBackendPort )
@@ -98,7 +98,7 @@ public class TvSettingsFragment extends TvAbstractBaseGuidedStepFragment {
             case MASTER_BACKEND_URL :
                 Log.i( TAG, "onGuidedActionEdited : saving master backend url - " + action.getEditTitle() );
 
-                putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL, action.getEditTitle().toString() );
+                getSharedPreferencesModule().putStringToPreferences( SettingsKeys.KEY_PREF_BACKEND_URL, action.getEditTitle().toString() );
 
                 break;
 
@@ -108,7 +108,7 @@ public class TvSettingsFragment extends TvAbstractBaseGuidedStepFragment {
                 try {
 
                     int port = Integer.parseInt( action.getEditTitle().toString() );
-                    putIntToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT, port );
+                    getSharedPreferencesModule().putIntToPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT, port );
 
                 } catch( NumberFormatException e ) {
 

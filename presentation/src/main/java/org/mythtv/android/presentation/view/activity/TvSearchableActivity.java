@@ -2,10 +2,11 @@ package org.mythtv.android.presentation.view.activity;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.util.Log;
-import android.view.MenuItem;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
@@ -14,24 +15,27 @@ import org.mythtv.android.presentation.internal.di.components.SearchComponent;
 import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
-import org.mythtv.android.presentation.view.fragment.AppSearchResultListFragment;
+import org.mythtv.android.presentation.view.fragment.TvSearchResultListFragment;
 
 /**
- * Created by dmfrey on 10/14/15.
+ * Created by dmfrey on 2/27/16.
  */
-public class AppSearchableActivity extends AppAbstractBaseActivity implements HasComponent<SearchComponent>, AppSearchResultListFragment.SearchResultListListener {
+public class TvSearchableActivity extends TvAbstractBaseActivity implements HasComponent<SearchComponent>, TvSearchResultListFragment.SearchResultListListener {
 
-    private static final String TAG = AppSearchableActivity.class.getSimpleName();
+    private static final String TAG = TvSearchableActivity.class.getSimpleName();
 
     private static final String INSTANCE_STATE_PARAM_SEARCH_TEXT = "org.mythtv.android.STATE_PARAM_SEARCH_TEXT";
 
     private String searchText;
     private SearchComponent searchComponent;
 
+    private static final int REQUEST_SPEECH = 1;
+    TvSearchResultListFragment mSearchableFragment;
+
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_app_search_result_list;
+        return R.layout.activity_tv_search;
     }
 
     @Override
@@ -60,15 +64,15 @@ public class AppSearchableActivity extends AppAbstractBaseActivity implements Ha
 
         }
 
-        super.onSaveInstanceState(outState);
+        super.onSaveInstanceState( outState );
 
         Log.d( TAG, "onSaveInstanceState : exit" );
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.d(TAG, "onRestoreInstanceState : enter");
+        super.onRestoreInstanceState( savedInstanceState );
+        Log.d( TAG, "onRestoreInstanceState : enter" );
 
         if( null != savedInstanceState ) {
             Log.d( TAG, "onRestoreInstanceState : savedInstanceState != null" );
@@ -84,44 +88,42 @@ public class AppSearchableActivity extends AppAbstractBaseActivity implements Ha
         Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
-    @Override
-    public boolean onOptionsItemSelected( MenuItem item ) {
-
-        switch( item.getItemId() ) {
-
-            case android.R.id.home:
-
-                finish();
-
-                return true;
-
-        }
-
-        return super.onOptionsItemSelected( item );
-    }
-
     /**
      * Initializes this activity.
      */
     private void initializeActivity( Intent intent ) {
         Log.d( TAG, "initializeActivity : enter" );
 
+        mSearchableFragment = TvSearchResultListFragment.newInstance( this.searchText );
         if( null == intent  ) {
             Log.d( TAG, "initializeActivity : intent == null" );
 
-            addFragment( R.id.fl_fragment, AppSearchResultListFragment.newInstance( this.searchText ) );
+            addFragment( R.id.fl_fragment, mSearchableFragment );
 
         } else {
             Log.d( TAG, "initializeActivity : intent != null" );
 
             searchText = intent.getStringExtra( SearchManager.QUERY );
+            Log.d( TAG, "initializeActivity : searchText = " + searchText );
 
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions( this, MythtvSearchSuggestionProvider.AUTHORITY, MythtvSearchSuggestionProvider.MODE );
             suggestions.saveRecentQuery( searchText, null );
 
-            addFragment( R.id.fl_fragment, AppSearchResultListFragment.newInstance( this.searchText ) );
+            addFragment( R.id.fl_fragment, mSearchableFragment );
 
         }
+
+        SpeechRecognitionCallback mSpeechRecognitionCallback = new SpeechRecognitionCallback() {
+
+            @Override
+            public void recognizeSpeech() {
+
+                startActivityForResult( mSearchableFragment.getRecognizerIntent(), REQUEST_SPEECH );
+
+            }
+
+        };
+        mSearchableFragment.setSpeechRecognitionCallback( mSpeechRecognitionCallback );
 
         Log.d( TAG, "initializeActivity : exit" );
     }
@@ -146,23 +148,23 @@ public class AppSearchableActivity extends AppAbstractBaseActivity implements Ha
 
     @Override
     public void onSearchResultClicked( SearchResultModel searchResultModel ) {
+        Log.d( TAG, "onSearchResultClicked : enter" );
 
         switch( searchResultModel.getType() ) {
 
             case RECORDING:
-
-                navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime(), searchResultModel.getStorageGroup(), searchResultModel.getFilename(), searchResultModel.getHostname() );
+                Log.d( TAG, "onSearchResultClicked : recording clicked" );
 
                 break;
 
             case VIDEO:
-
-                navigator.navigateToVideo( this, searchResultModel.getVideoId(), searchResultModel.getStorageGroup(), searchResultModel.getFilename(), searchResultModel.getHostname() );
+                Log.d( TAG, "onSearchResultClicked : video clicked" );
 
                 break;
 
         }
 
+        Log.d( TAG, "onSearchResultClicked : exit" );
     }
 
 }

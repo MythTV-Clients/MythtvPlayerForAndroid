@@ -6,14 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
-import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.view.fragment.TvRecordingsFragment;
 import org.mythtv.android.presentation.view.fragment.TvVideosFragment;
 
 public class TvVideosActivity extends TvAbstractBaseActivity implements HasComponent<VideoComponent>, TvVideosFragment.CategoryListener {

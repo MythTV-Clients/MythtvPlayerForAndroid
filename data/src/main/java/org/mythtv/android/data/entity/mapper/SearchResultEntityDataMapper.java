@@ -44,7 +44,8 @@ public class SearchResultEntityDataMapper {
             searchResult.setCharacters( searchResultEntity.getCharacters() );
             searchResult.setVideoId( searchResultEntity.getVideoId() );
             searchResult.setRating( searchResultEntity.getRating() );
-            searchResult.setStorageGroup( searchResultEntity.getStoreageGroup() );
+            searchResult.setStorageGroup( searchResultEntity.getStorageGroup() );
+            searchResult.setContentType( searchResultEntity.getContentType() );
             searchResult.setFilename( searchResultEntity.getFilename() );
             searchResult.setHostname( searchResultEntity.getHostname() );
             searchResult.setType( SearchResult.Type.valueOf( searchResultEntity.getType() ) );
@@ -124,7 +125,7 @@ public class SearchResultEntityDataMapper {
                 searchResult.setCharacters( cast.trim() );
             }
 
-            searchResult.setStoreageGroup( programEntity.getRecording().getStorageGroup() );
+            searchResult.setStorageGroup( programEntity.getRecording().getStorageGroup() );
             searchResult.setFilename( programEntity.getFileName() );
             searchResult.setHostname( programEntity.getHostName() );
             searchResult.setType( SearchResult.Type.RECORDING.name() );
@@ -160,6 +161,7 @@ public class SearchResultEntityDataMapper {
 
             searchResult = new SearchResultEntity();
             searchResult.setVideoId( videoEntity.getId() );
+            searchResult.setContentType( videoEntity.getContentType() );
             searchResult.setTitle( videoEntity.getTitle() );
             searchResult.setSubTitle( videoEntity.getSubTitle() );
             searchResult.setSeason( videoEntity.getSeason() );

@@ -1,5 +1,6 @@
 package org.mythtv.android.presentation.utils;
 
+import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
 /**
@@ -28,6 +29,29 @@ public class SeasonEpisodeFormatter {
             sb.append( "0" );
         }
         sb.append( videoMetadataInfoModel.getEpisode() );
+
+        return sb.toString();
+    }
+
+    public static String format( SearchResultModel searchResultModel ) {
+
+        if( searchResultModel.getSeason() == -1 || searchResultModel.getEpisode() == -1 ) {
+
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( "S" );
+        if( searchResultModel.getSeason() < 10 ) {
+            sb.append( "0" );
+        }
+        sb.append( searchResultModel.getSeason() );
+
+        sb.append( "E" );
+        if( searchResultModel.getEpisode() < 10 ) {
+            sb.append( "0" );
+        }
+        sb.append( searchResultModel.getEpisode() );
 
         return sb.toString();
     }

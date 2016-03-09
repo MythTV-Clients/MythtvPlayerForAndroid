@@ -59,37 +59,37 @@ public class TvVideosFragment extends TvAbstractBaseGuidedStepFragment {
 
         String[] labels = getResources().getStringArray( R.array.watch_videos_tabs );
 
-        actions.add( new GuidedAction.Builder()
+        actions.add( new GuidedAction.Builder( getActivity() )
                 .id( MOVIES )
                 .title( labels[ 0 ] )
                 .editable( false )
                 .build()
         );
 
-        actions.add( new GuidedAction.Builder()
+        actions.add( new GuidedAction.Builder( getActivity() )
                 .id( TELEVISION )
                 .title( labels[ 1 ] )
                 .editable( false )
                 .build()
         );
 
-        actions.add( new GuidedAction.Builder()
+        actions.add( new GuidedAction.Builder( getActivity() )
                 .id( HOME_MOVIES )
                 .title( labels[ 2 ] )
                 .editable( false )
                 .build()
         );
 
-        actions.add( new GuidedAction.Builder()
+        actions.add( new GuidedAction.Builder( getActivity() )
                 .id( MUSIC_VIDEOS )
                 .title( labels[ 3 ] )
                 .editable( false )
                 .build()
         );
 
-        if( getShowAdultContent() ) {
+        if( getSharedPreferencesModule().getShowAdultContent() ) {
 
-            actions.add( new GuidedAction.Builder()
+            actions.add( new GuidedAction.Builder( getActivity() )
                     .id( ADULT )
                     .title( labels[ 4 ] )
                     .editable( false )

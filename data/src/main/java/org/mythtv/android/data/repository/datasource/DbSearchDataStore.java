@@ -35,6 +35,7 @@ public class DbSearchDataStore implements SearchDataStore {
 
     @Override
     public Observable<List<SearchResultEntity>> search( String searchString ) {
+        Log.d( TAG, "search : enter - searchString=" + searchString );
 
         searchString = "*" + searchString + "*";
         searchString = searchString.replaceAll( " ", "*" );
@@ -80,7 +81,8 @@ public class DbSearchDataStore implements SearchDataStore {
                         searchResultEntity.setCharacters( cursor.getString( cursor.getColumnIndex( "CAST_MEMBER_CHARACTERS" ) ) );
                         searchResultEntity.setVideoId( cursor.getInt( cursor.getColumnIndex( "VIDEO_ID" ) ) );
                         searchResultEntity.setRating( cursor.getString( cursor.getColumnIndex( "RATING" ) ) );
-                        searchResultEntity.setStoreageGroup( cursor.getString( cursor.getColumnIndex( "STORAGE_GROUP" ) ) );
+                        searchResultEntity.setStorageGroup( cursor.getString( cursor.getColumnIndex( "STORAGE_GROUP" ) ) );
+                        searchResultEntity.setContentType( cursor.getString( cursor.getColumnIndex( "CONTENT_TYPE" ) ) );
                         searchResultEntity.setFilename( cursor.getString( cursor.getColumnIndex( "FILENAME" ) ) );
                         searchResultEntity.setHostname( cursor.getString( cursor.getColumnIndex( "HOSTNAME" ) ) );
                         searchResultEntity.setType( cursor.getString( cursor.getColumnIndex( "TYPE" ) ) );
@@ -164,10 +166,11 @@ public class DbSearchDataStore implements SearchDataStore {
             statement.bindString( 13, null != searchResultEntity.getCharacters() ? searchResultEntity.getCharacters() : "" );
             statement.bindLong( 14, searchResultEntity.getVideoId() );
             statement.bindString( 15, null != searchResultEntity.getRating() ? searchResultEntity.getRating() : "" );
-            statement.bindString( 16, null != searchResultEntity.getStoreageGroup() ? searchResultEntity.getStoreageGroup() : "" );
-            statement.bindString( 17, searchResultEntity.getFilename() );
-            statement.bindString( 18, searchResultEntity.getHostname() );
-            statement.bindString( 19, searchResultEntity.getType() );
+            statement.bindString( 16, null != searchResultEntity.getContentType() ? searchResultEntity.getContentType() : "" );
+            statement.bindString( 17, null != searchResultEntity.getStorageGroup() ? searchResultEntity.getStorageGroup() : "" );
+            statement.bindString( 18, searchResultEntity.getFilename() );
+            statement.bindString( 19, searchResultEntity.getHostname() );
+            statement.bindString( 20, searchResultEntity.getType() );
             statement.executeInsert();
 
         }

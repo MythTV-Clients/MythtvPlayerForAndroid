@@ -123,7 +123,7 @@ public class AppVideoListActivity extends AppAbstractBaseActivity implements Has
         String[] tabs;
         List<Fragment> fragments = new ArrayList<>();
 
-        boolean showAdultTab = getShowAdultContent();
+        boolean showAdultTab = getSharedPreferencesModule().getShowAdultContent();
 
         public VideosFragmentPagerAdapter( FragmentManager fm ) {
             super( fm );

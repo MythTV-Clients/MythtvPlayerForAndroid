@@ -28,6 +28,8 @@ import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.modules.ActivityModule;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.presentation.navigation.AppNavigator;
 
 import javax.inject.Inject;
@@ -208,36 +210,9 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
     protected void addFragment( int containerViewId, Fragment fragment ) {
 
         FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(containerViewId, fragment);
+        fragmentTransaction.add( containerViewId, fragment );
         fragmentTransaction.commit();
 
-    }
-
-    protected String getMasterBackendUrl() {
-
-        String host = getStringFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getStringFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-        return "http://" + host + ":" + port;
-    }
-
-    protected boolean getShowAdultContent() {
-
-        return getBooleanFromPreferences( this, SettingsKeys.KEY_PREF_SHOW_ADULT_TAB );
-    }
-
-    protected String getStringFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return sharedPreferences.getString( key, "" );
-    }
-
-    protected boolean getBooleanFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getBoolean( key, false );
     }
 
     /**
@@ -258,6 +233,16 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
     protected ActivityModule getActivityModule() {
 
         return new ActivityModule( this );
+    }
+
+    /**
+     * Get a SharedPreferences module for dependency injection.
+     *
+     * @return {@link org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule}
+     */
+    protected SharedPreferencesModule getSharedPreferencesModule() {
+
+        return new SharedPreferencesModule( this );
     }
 
 }

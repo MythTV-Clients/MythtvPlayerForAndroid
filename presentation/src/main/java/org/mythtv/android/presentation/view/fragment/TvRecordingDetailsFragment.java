@@ -251,7 +251,7 @@ public class TvRecordingDetailsFragment extends TvAbstractBaseDetailsFragment {
                 if( action.getId() == ACTION_WATCH ) {
 
                     String masterBackendUrl = getMasterBackendUrl();
-                    if( getShouldPlayVideoInExternalPlayer() ) {
+                    if( getSharedPreferencesModule().getShouldPlayVideoInExternalPlayer() ) {
 
                         String externalPlayerUrl = masterBackendUrl + "/Content/GetFile?FileName=" + mProgramModel.getFileName();
                         Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );

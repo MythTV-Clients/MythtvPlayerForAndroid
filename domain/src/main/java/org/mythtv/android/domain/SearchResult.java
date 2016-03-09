@@ -26,6 +26,7 @@ public class SearchResult {
     private String castMembers;
     private String characters;
     private int videoId;
+    private String contentType;
     private String rating;
     private String storageGroup;
     private String filename;

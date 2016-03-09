@@ -13,7 +13,7 @@ public class SearchResultEntity {
     public static final String DROP_TABLE;
     public static final String SQL_SELECT_MATCH = TABLE_NAME + " MATCH ?";
     public static final String SQL_DELETE_ALL = "delete from " + TABLE_NAME + " where type = ?";
-    public static final String SQL_INSERT = "insert into " + TABLE_NAME + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public static final String SQL_INSERT = "insert into " + TABLE_NAME + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     static {
 
@@ -38,6 +38,7 @@ public class SearchResultEntity {
 
         createTable.append( "VIDEO_ID" ).append( " " ).append( "INTEGER" ).append( ", ");
         createTable.append( "RATING" ).append( " " ).append( "TEXT" ).append( ", " );
+        createTable.append( "CONTENT_TYPE" ).append( " " ).append( "TEXT" ).append( ", " );
 
         createTable.append( "STORAGE_GROUP" ).append( " " ).append( "TEXT" ).append( ", " );
         createTable.append( "FILENAME" ).append( " " ).append( "TEXT" ).append( ", " );
@@ -65,8 +66,9 @@ public class SearchResultEntity {
     private String castMembers;
     private String characters;
     private int videoId;
+    private String contentType;
     private String rating;
-    private String storeageGroup;
+    private String storageGroup;
     private String filename;
     private String hostname;
     private String type;

@@ -22,7 +22,7 @@ android {
         testApplicationId 'org.mythtv.android.test'
 
         // Enabling multidex support.
-//        multiDexEnabled true
+        multiDexEnabled true
 
         buildConfigField "String", "APPLICATION_SHA1", '"' + applicationSHA1 + '"'
         buildConfigField "String", "APPLICATION_TAG", '"' + applicationTag + '"'
@@ -130,6 +130,7 @@ dependencies {
     compile presentationDependencies.leanback
     compile presentationDependencies.leanbackPreferences
     compile presentationDependencies.glide
+    compile presentationDependencies.multidex
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations

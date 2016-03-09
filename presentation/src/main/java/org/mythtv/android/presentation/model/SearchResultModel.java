@@ -26,7 +26,8 @@ public class SearchResultModel {
     private String characters;
     private int videoId;
     private String rating;
-    private String storeageGroup;
+    private String contentType;
+    private String storageGroup;
     private String filename;
     private String hostname;
     private SearchResult.Type type;

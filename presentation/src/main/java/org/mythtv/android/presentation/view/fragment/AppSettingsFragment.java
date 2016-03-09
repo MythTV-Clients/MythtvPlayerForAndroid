@@ -18,8 +18,6 @@
 
 package org.mythtv.android.presentation.view.fragment;
 
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.CheckBoxPreference;

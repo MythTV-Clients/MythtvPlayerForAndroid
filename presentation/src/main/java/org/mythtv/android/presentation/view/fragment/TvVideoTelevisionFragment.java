@@ -36,11 +36,10 @@ import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.CardPresenter;
-import org.mythtv.android.presentation.presenter.MovieListPresenter;
 import org.mythtv.android.presentation.presenter.TelevisionListPresenter;
-import org.mythtv.android.presentation.presenter.TelevisionSeriesListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.VideoListView;
+import org.mythtv.android.presentation.view.activity.TvSearchableActivity;
 import org.mythtv.android.presentation.view.activity.TvVideoDetailsActivity;
 
 import java.io.UnsupportedEncodingException;
@@ -176,7 +175,7 @@ public class TvVideoTelevisionFragment extends TvAbstractBaseVideoFragment imple
         setBrandColor( getResources().getColor( R.color.primary ) );
 
         // set search icon color
-        setSearchAffordanceColor( getResources().getColor( R.color.primary_dark ) );
+//        setSearchAffordanceColor( getResources().getColor( R.color.primary_dark ) );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -352,16 +351,17 @@ public class TvVideoTelevisionFragment extends TvAbstractBaseVideoFragment imple
     private void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
-        setOnSearchClickedListener( new View.OnClickListener() {
-
-            @Override
-            public void onClick( View view ) {
-
-                Toast.makeText( getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG ).show();
-
-            }
-
-        });
+//        setOnSearchClickedListener( new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick( View view ) {
+//
+//                Intent intent = new Intent( getActivity(), TvSearchableActivity.class );
+//                startActivity( intent );
+//
+//            }
+//
+//        });
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
         setOnItemViewSelectedListener( new ItemViewSelectedListener() );
@@ -459,7 +459,7 @@ public class TvVideoTelevisionFragment extends TvAbstractBaseVideoFragment imple
                     VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
 
                     String fanart = URLEncoder.encode( videoMetadataInfoModel.getFanart(), "UTF-8" );
-                    mBackgroundURI = URI.create( getMasterBackendUrl() + "/Content/GetImageFile?StorageGroup=Fanart&FileName=" + fanart );
+                    mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetImageFile?StorageGroup=Fanart&FileName=" + fanart );
                     startBackgroundTimer();
 
                 } catch( UnsupportedEncodingException e ) {

@@ -43,7 +43,7 @@ public class SearchResultModelDataMapper {
             searchResultModel.setCharacters( searchResult.getCharacters() );
             searchResultModel.setVideoId( searchResult.getVideoId() );
             searchResultModel.setRating( searchResult.getRating() );
-            searchResultModel.setStoreageGroup( searchResult.getStorageGroup() );
+            searchResultModel.setStorageGroup( searchResult.getStorageGroup() );
             searchResultModel.setFilename( searchResult.getFilename() );
             searchResultModel.setHostname( searchResult.getHostname() );
             searchResultModel.setType( searchResult.getType() );

@@ -256,7 +256,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
         if( !getInternalPlayerPreferenceFromPreferences() ) {
 
-            String recordingUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
+            String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
 
             navigator.navigateToExternalPlayer( this, recordingUrl );
 
@@ -264,7 +264,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
             try {
 
-                String recordingUrl = getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
+                String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
                 recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
                 recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
 
@@ -280,7 +280,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone(DateTimeZone.UTC).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone(DateTimeZone.UTC).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
         Picasso.with( this )

@@ -39,6 +39,7 @@ import org.mythtv.android.presentation.presenter.AdultListPresenter;
 import org.mythtv.android.presentation.presenter.CardPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.VideoListView;
+import org.mythtv.android.presentation.view.activity.TvSearchableActivity;
 import org.mythtv.android.presentation.view.activity.TvVideoDetailsActivity;
 
 import java.net.URI;
@@ -172,7 +173,7 @@ public class TvVideoAdultFragment extends TvAbstractBaseVideoFragment implements
         setBrandColor( getResources().getColor( R.color.primary ) );
 
         // set search icon color
-        setSearchAffordanceColor( getResources().getColor( R.color.primary_dark ) );
+//        setSearchAffordanceColor( getResources().getColor( R.color.primary_dark ) );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -328,16 +329,17 @@ public class TvVideoAdultFragment extends TvAbstractBaseVideoFragment implements
     private void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
-        setOnSearchClickedListener( new View.OnClickListener() {
-
-            @Override
-            public void onClick( View view ) {
-
-                Toast.makeText( getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG ).show();
-
-            }
-
-        });
+//        setOnSearchClickedListener( new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick( View view ) {
+//
+//                Intent intent = new Intent( getActivity(), TvSearchableActivity.class );
+//                startActivity( intent );
+//
+//            }
+//
+//        });
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
         setOnItemViewSelectedListener( new ItemViewSelectedListener() );
@@ -431,7 +433,7 @@ public class TvVideoAdultFragment extends TvAbstractBaseVideoFragment implements
             if( item instanceof VideoMetadataInfoModel ) {
 
                 VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
-                mBackgroundURI = URI.create( getMasterBackendUrl() + "/Content/GetImageFile?StorageGroup=Fanart&FileName=" + videoMetadataInfoModel.getFanart() );
+                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetImageFile?StorageGroup=Fanart&FileName=" + videoMetadataInfoModel.getFanart() );
                 startBackgroundTimer();
 
             }

@@ -4,6 +4,7 @@ import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.internal.di.modules.ActivityModule;
 import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.view.fragment.AppSearchResultListFragment;
+import org.mythtv.android.presentation.view.fragment.TvSearchResultListFragment;
 
 import dagger.Component;
 
@@ -15,5 +16,6 @@ import dagger.Component;
 public interface SearchComponent {
 
     void inject( AppSearchResultListFragment searchResultListFragment );
+    void inject( TvSearchResultListFragment searchResultListFragment );
 
 }

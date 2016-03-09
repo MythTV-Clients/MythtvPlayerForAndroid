@@ -1,18 +1,19 @@
 package org.mythtv.android.presentation.view.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v17.leanback.app.SearchFragment;
 import android.widget.Toast;
 
 import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
- * Base {@link android.app.Fragment} class for every fragment in this application.
+ * Base {@link SearchFragment} class for every fragment in this application.
  *
- * Created by dmfrey on 1/28/16.
+ * Created by dmfrey on 2/27/16.
  */
-public abstract class TvAbstractBaseFragment extends Fragment {
+public abstract class TvAbstractBaseSearchFragment extends SearchFragment {
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
@@ -23,7 +24,7 @@ public abstract class TvAbstractBaseFragment extends Fragment {
     }
 
     /**
-     * Shows a {@link android.widget.Toast} message.
+     * Shows a {@link Toast} message.
      *
      * @param message A string representing a message to be shown.
      */

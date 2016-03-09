@@ -83,7 +83,7 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".presentation.view.activity.SearchableActivity"/>
+                android:value=".presentation.view.activity.AppSearchableActivity"/>
         </activity>
         <activity
             android:name=".presentation.view.activity.AppTitleInfoListActivity"
@@ -94,7 +94,7 @@
                 android:value=".presentation.view.activity.AppMainActivity"/>
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".presentation.view.activity.SearchableActivity"/>
+                android:value=".presentation.view.activity.AppSearchableActivity"/>
         </activity>
         <activity
             android:name=".presentation.view.activity.AppProgramListActivity"
@@ -104,7 +104,7 @@
                 android:value=".presentation.view.activity.AppTitleInfoListActivity"/>
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".presentation.view.activity.SearchableActivity"/>
+                android:value=".presentation.view.activity.AppSearchableActivity"/>
         </activity>
         <activity android:name=".presentation.view.activity.AppProgramDetailsActivity">
             <meta-data
@@ -112,7 +112,7 @@
                 android:value=".presentation.view.activity.AppProgramListActivity"/>
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".presentation.view.activity.SearchableActivity"/>
+                android:value=".presentation.view.activity.AppSearchableActivity"/>
         </activity>
         <activity android:name=".presentation.view.activity.AppProgramDetailsSettingsActivity">
             <meta-data
@@ -120,7 +120,7 @@
                 android:value=".presentation.view.activity.AppProgramDetailsActivity"/>
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".presentation.view.activity.SearchableActivity"/>
+                android:value=".presentation.view.activity.AppSearchableActivity"/>
         </activity>
         <activity android:name=".presentation.view.activity.AppSearchableActivity">
             <intent-filter>
@@ -140,14 +140,14 @@
                 android:value=".presentation.view.activity.AppMainActivity"/>
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".presentation.view.activity.SearchableActivity"/>
+                android:value=".presentation.view.activity.AppSearchableActivity"/>
         </activity>
         <activity
             android:name=".presentation.view.activity.AppVideoSeriesListActivity"
             android:label="@string/watch_video">
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".presentation.view.activity.SearchableActivity"/>
+                android:value=".presentation.view.activity.AppSearchableActivity"/>
         </activity>
         <activity android:name=".presentation.view.activity.AppVideoDetailsActivity">
             <meta-data
@@ -163,7 +163,7 @@
                 android:value=".presentation.view.activity.AppVideoDetailsActivity"/>
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".presentation.view.activity.SearchableActivity"/>
+                android:value=".presentation.view.activity.AppSearchableActivity"/>
         </activity>
         <activity
             android:name=".presentation.view.activity.AppSettingsActivity"
@@ -174,7 +174,7 @@
                 android:value=".presentation.view.activity.AppMainActivity"/>
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".presentation.view.activity.SearchableActivity"/>
+                android:value=".presentation.view.activity.AppSearchableActivity"/>
         </activity>
         <activity
             android:name=".presentation.view.activity.AppRecordingSettingsActivity"
@@ -220,7 +220,10 @@
             android:theme="@style/Theme.Leanback">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.presentation.view.activity.TvMainActivity"/>
+                android:value="org.mythtv.android.presentation.view.activity.TvMainActivity" />
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.TvSearchableActivity" />
         </activity>
         <activity
             android:name=".presentation.view.activity.TvRecordingsDetailsActivity"
@@ -258,6 +261,9 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.mythtv.android.presentation.view.activity.TvVideosActivity"/>
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.TvSearchableActivity" />
         </activity>
         <activity
             android:name=".presentation.view.activity.TvVideoDetailsActivity"
@@ -274,74 +280,20 @@
             android:theme="@style/Theme.Leanback">
         </activity>
 
+        <activity android:name=".presentation.view.activity.TvSearchableActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
+
         <activity
             android:name=".presentation.view.activity.TvPlaybackOverlayActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
-        <!-- <activity -->
-        <!-- android:name=".player.tv.recordings.RecordingsActivity" -->
-        <!-- android:theme="@style/Theme.Leanback" > -->
-        <!-- <meta-data -->
-        <!-- android:name="android.app.default_searchable" -->
-        <!-- android:value=".player.tv.search.AppSearchableActivity" /> -->
-        <!-- </activity> -->
-        <!-- <activity -->
-        <!-- android:name=".player.tv.recordings.RecordingDetailsActivity" -->
-        <!-- android:theme="@style/Theme.Leanback" > -->
-        <!-- <meta-data -->
-        <!-- android:name="android.app.default_searchable" -->
-        <!-- android:value=".player.tv.search.AppSearchableActivity" /> -->
-        <!-- </activity> -->
-        <!-- <activity -->
-        <!-- android:name=".player.tv.videos.VideosActivity" -->
-        <!-- android:theme="@style/Theme.Leanback" > -->
-        <!-- <meta-data -->
-        <!-- android:name="android.app.default_searchable" -->
-        <!-- android:value=".player.tv.search.AppSearchableActivity" /> -->
-        <!-- </activity> -->
-        <!-- <activity -->
-        <!-- android:name=".player.tv.videos.AppVideoDetailsActivity" -->
-        <!-- android:theme="@style/Theme.Leanback" > -->
-        <!-- <meta-data -->
-        <!-- android:name="android.app.default_searchable" -->
-        <!-- android:value=".player.tv.search.AppSearchableActivity" /> -->
-        <!-- </activity> -->
-        <!-- <activity -->
-        <!-- android:name=".player.tv.search.AppSearchableActivity" -->
-        <!-- android:launchMode="singleTop" -->
-        <!-- android:theme="@style/Theme.Leanback" > -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.SEARCH" /> -->
-        <!-- </intent-filter> -->
-
-
-        <!-- <meta-data -->
-        <!-- android:name="android.app.searchable" -->
-        <!-- android:resource="@xml/searchable" /> -->
-        <!-- </activity> -->
-        <!-- <activity -->
-        <!-- android:name=".player.tv.settings.AppSettingsActivity" -->
-        <!-- android:label="@string/title_activity_settings" -->
-        <!-- android:theme="@style/Theme.Leanback" > -->
-        <!-- </activity> -->
-        <!-- <activity -->
-        <!-- android:name=".player.tv.player.RecordingPlayerActivity" -->
-        <!-- android:screenOrientation="landscape" -->
-        <!-- android:theme="@android:style/Theme.NoTitleBar.Fullscreen" /> -->
-        <!-- <activity -->
-        <!-- android:name=".player.tv.player.AppPlayerActivity" -->
-        <!-- android:screenOrientation="landscape" -->
-        <!-- android:theme="@android:style/Theme.NoTitleBar.Fullscreen" /> -->
-
-
-        <!-- MythTV Providers -->
-        <!-- <provider -->
-        <!-- android:name=".library.persistence.repository.MythtvProvider" -->
-        <!-- android:authorities="org.mythtv.android.provider" -->
-        <!-- android:enabled="true" -->
-        <!-- android:exported="false" -->
-        <!-- android:syncable="false" /> -->
 
         <provider
             android:name=".presentation.provider.MythtvSearchSuggestionProvider"

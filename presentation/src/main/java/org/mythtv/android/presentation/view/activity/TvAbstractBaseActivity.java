@@ -3,15 +3,13 @@ package org.mythtv.android.presentation.view.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.modules.ActivityModule;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.presentation.navigation.TvNavigator;
 
 import javax.inject.Inject;
@@ -52,33 +50,6 @@ public abstract class TvAbstractBaseActivity extends Activity {
 
     }
 
-    protected String getMasterBackendUrl() {
-
-        String host = getStringFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getStringFromPreferences( this, SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-        return "http://" + host + ":" + port;
-    }
-
-    protected boolean getShowAdultContent() {
-
-        return getBooleanFromPreferences( this, SettingsKeys.KEY_PREF_SHOW_ADULT_TAB );
-    }
-
-    protected String getStringFromPreferences(Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return sharedPreferences.getString( key, "" );
-    }
-
-    protected boolean getBooleanFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return sharedPreferences.getBoolean( key, false );
-    }
-
     /**
      * Get the Main Application component for dependency injection.
      *
@@ -97,6 +68,16 @@ public abstract class TvAbstractBaseActivity extends Activity {
     protected ActivityModule getActivityModule() {
 
         return new ActivityModule( this );
+    }
+
+    /**
+     * Get a SharedPreferences module for dependency injection.
+     *
+     * @return {@link org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule}
+     */
+    protected SharedPreferencesModule getSharedPreferencesModule() {
+
+        return new SharedPreferencesModule( this );
     }
 
 }

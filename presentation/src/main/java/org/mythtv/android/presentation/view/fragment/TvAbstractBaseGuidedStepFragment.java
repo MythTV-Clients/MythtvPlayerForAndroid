@@ -1,19 +1,12 @@
 package org.mythtv.android.presentation.view.fragment;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.widget.Toast;
 
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.navigation.TvNavigator;
-
-import javax.inject.Inject;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
  * Base {@link Fragment} class for every fragment in this application.
@@ -52,47 +45,14 @@ public abstract class TvAbstractBaseGuidedStepFragment extends GuidedStepFragmen
         return componentType.cast( ( (HasComponent<C>) getActivity() ).getComponent() );
     }
 
-    protected String getMasterBackendUrl() {
+    /**
+     * Get a SharedPreferences module for dependency injection.
+     *
+     * @return {@link org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule}
+     */
+    protected SharedPreferencesModule getSharedPreferencesModule() {
 
-        String host = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
-    }
-
-    protected boolean getShowAdultContent() {
-
-        return getBooleanFromPreferences( getActivity(), SettingsKeys.KEY_PREF_SHOW_ADULT_TAB );
-    }
-
-    protected String getStringFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getString( key, "" );
-    }
-
-    protected void putStringToPreferences( Context context, String key, String value ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-        sharedPreferences.edit().putString( key, value ).apply();
-
-    }
-
-    protected void putIntToPreferences( Context context, String key, int value ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-        sharedPreferences.edit().putInt( key, value ).apply();
-
-    }
-
-    protected boolean getBooleanFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return sharedPreferences.getBoolean( key, false );
+        return new SharedPreferencesModule( getActivity() );
     }
 
 }

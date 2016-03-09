@@ -44,6 +44,7 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
     private static final String FAKE_CHARACTERS = "fake characters";
     private static final String FAKE_RATING = "fake rating";
     private static final String FAKE_STORAGE_GROUP = "fake storage group";
+    private static final String FAKE_CONTENT_TYPE = "fake content type";
     private static final String FAKE_FILENAME = "fake filename";
     private static final String FAKE_HOSTNAME = "fake hostname";
     private static final String FAKE_TYPE = "fake type";
@@ -104,7 +105,8 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
         searchResultEntity.setCastMembers( FAKE_CAST_MEMBERS );
         searchResultEntity.setCharacters( FAKE_CHARACTERS );
         searchResultEntity.setRating( FAKE_RATING );
-        searchResultEntity.setStoreageGroup( FAKE_STORAGE_GROUP );
+        searchResultEntity.setStorageGroup( FAKE_STORAGE_GROUP );
+        searchResultEntity.setContentType( FAKE_CONTENT_TYPE );
         searchResultEntity.setFilename( FAKE_FILENAME );
         searchResultEntity.setHostname( FAKE_HOSTNAME );
         searchResultEntity.setType( FAKE_TYPE );

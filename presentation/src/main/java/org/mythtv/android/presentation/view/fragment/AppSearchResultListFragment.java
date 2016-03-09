@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.presentation.internal.di.components.SearchComponent;
+import org.mythtv.android.presentation.mapper.SearchResultModelDataMapper;
 import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.presenter.SearchResultListPresenter;
 import org.mythtv.android.presentation.view.SearchResultListView;
@@ -20,11 +22,14 @@ import org.mythtv.android.presentation.view.adapter.SearchResultsLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by dmfrey on 10/12/15.
@@ -64,7 +69,7 @@ public class AppSearchResultListFragment extends AppAbstractBaseFragment impleme
         super();
     }
 
-    public static AppSearchResultListFragment newInstance(String searchText ) {
+    public static AppSearchResultListFragment newInstance( String searchText ) {
 
         AppSearchResultListFragment fragment = new AppSearchResultListFragment();
 
@@ -153,7 +158,13 @@ public class AppSearchResultListFragment extends AppAbstractBaseFragment impleme
     private void initialize() {
         Log.d( TAG, "initialize : enter" );
 
+        Log.d( TAG, "initialize : get searchText" );
+        this.searchText = getArguments().getString( ARGUMENT_KEY_SEARCH_TEXT );
+
+        Log.d( TAG, "initialize : get component" );
         this.getComponent( SearchComponent.class ).inject( this );
+
+        Log.d( TAG, "initialize : set view" );
         this.searchResultListPresenter.setView( this );
 
         Log.d( TAG, "initialize : exit" );
@@ -226,7 +237,7 @@ public class AppSearchResultListFragment extends AppAbstractBaseFragment impleme
         if( null != this.searchResultListListener ) {
             Log.d( TAG, "viewSearchResult : searchResultModel=" + searchResultModel.toString() );
 
-            this.searchResultListListener.onSearchResultClicked(searchResultModel );
+            this.searchResultListListener.onSearchResultClicked( searchResultModel );
 
         }
 
