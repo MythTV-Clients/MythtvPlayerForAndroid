@@ -24,6 +24,8 @@ android {
         // Enabling multidex support.
         multiDexEnabled true
 
+        resValue "string", "versionName", "1.1.14"
+
         buildConfigField "String", "APPLICATION_SHA1", '"' + applicationSHA1 + '"'
         buildConfigField "String", "APPLICATION_TAG", '"' + applicationTag + '"'
     }

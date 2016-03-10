@@ -54,8 +54,6 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
 
     @Nullable @Bind( R.id.drawer_layout ) protected DrawerLayout drawerLayout;
 
-    @Nullable @Bind( R.id.mythtv_version ) protected TextView mythtvVersion;
-
     public abstract int getLayoutResource();
 
     @Override
@@ -82,24 +80,6 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
                 }
 
                 actionBar.setDisplayHomeAsUpEnabled( true );
-            }
-
-        }
-
-        if( null != mythtvVersion ) {
-
-            final PackageManager packageManager = getPackageManager();
-            if( null != packageManager ) {
-
-                try {
-
-                    PackageInfo packageInfo = packageManager.getPackageInfo( getPackageName(), 0 );
-                    String versionName = packageInfo.versionName;
-                    mythtvVersion.setText( versionName );
-
-                } catch( PackageManager.NameNotFoundException ignored ) {
-                }
-
             }
 
         }
