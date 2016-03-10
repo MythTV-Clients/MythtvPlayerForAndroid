@@ -82,6 +82,10 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
 
             holder.imageViewCoverart.setImageUrl( getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + titleInfoModel.getInetref() + "&Type=banner&Height=100" );
 
+        } else {
+
+            holder.imageViewCoverart.setImageDrawable( context.getResources().getDrawable( R.drawable.ffffff, null ) );
+
         }
         holder.textViewTitle.setText( titleInfoModel.getTitle() );
         holder.textViewCount.setText( String.valueOf( titleInfoModel.getCount() ) );
