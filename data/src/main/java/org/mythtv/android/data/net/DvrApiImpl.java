@@ -327,15 +327,15 @@ public class DvrApiImpl implements DvrApi {
 
         if( null != titleRegEx && !"".equals( titleRegEx ) ) {
 
-            try {
+//            try {
 
                 sb.append( "&" );
-                sb.append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( titleRegEx, "UTF-8" ) ).replaceAll( "%", "\\%" ) );
+                sb.append( String.format( TITLE_REG_EX_QS, titleRegEx.replaceAll( "[^\\dA-Za-z]", "." ).replaceAll( "\\s+", "+" ) ) );
 
-            } catch( UnsupportedEncodingException e ) {
-
-                Log.e( TAG, "getRecordedProgramEntitiesFromApi : error", e );
-            }
+//            } catch( UnsupportedEncodingException e ) {
+//
+//                Log.e( TAG, "getRecordedProgramEntitiesFromApi : error", e );
+//            }
         }
 
         if( null != recGroup && !"".equals( recGroup ) ) {
