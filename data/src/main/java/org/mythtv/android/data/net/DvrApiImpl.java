@@ -330,7 +330,7 @@ public class DvrApiImpl implements DvrApi {
             try {
 
                 sb.append( "&" );
-                sb.append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( titleRegEx, "UTF-8" ) ) );
+                sb.append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( titleRegEx, "UTF-8" ) ).replaceAll( "%", "\\%" ) );
 
             } catch( UnsupportedEncodingException e ) {
 
