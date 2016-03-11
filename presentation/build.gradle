@@ -17,14 +17,14 @@ android {
 
         applicationId 'org.mythtv.android'
         versionCode globalConfiguration.getAt("androidVersionCode")
-        versionName "1.1.14"
+        versionName globalConfiguration.getAt("androidVersionName")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId 'org.mythtv.android.test'
 
         // Enabling multidex support.
         multiDexEnabled true
 
-        resValue "string", "versionName", "1.1.14"
+        resValue "string", "versionName", globalConfiguration.getAt("androidVersionName")
 
         buildConfigField "String", "APPLICATION_SHA1", '"' + applicationSHA1 + '"'
         buildConfigField "String", "APPLICATION_TAG", '"' + applicationTag + '"'
