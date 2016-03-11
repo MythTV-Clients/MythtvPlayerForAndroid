@@ -435,9 +435,9 @@ public class AutoLoadImageView extends ImageView {
           fileOutputStream.flush();
           fileOutputStream.close();
 
-        } catch( IOException e ) {
+        } catch( NullPointerException | IOException e ) {
 
-          Log.e(TAG, e.getMessage());
+          Log.e( TAG, e.getMessage() );
 
         }
 
