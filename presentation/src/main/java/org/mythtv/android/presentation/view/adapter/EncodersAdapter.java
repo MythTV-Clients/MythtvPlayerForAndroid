@@ -41,8 +41,6 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
     private List<EncoderModel> encodersCollection;
     private final LayoutInflater layoutInflater;
 
-    private OnItemClickListener onItemClickListener;
-
     public EncodersAdapter( Context context, Collection<EncoderModel> encodersCollection ) {
         Log.d( TAG, "initialize : enter" );
 
@@ -123,7 +121,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
     public void setOnItemClickListener( OnItemClickListener onItemClickListener ) {
         Log.d( TAG, "setOnItemClickListener : enter" );
 
-        this.onItemClickListener = onItemClickListener;
+        OnItemClickListener onItemClickListener1 = onItemClickListener;
 
         Log.d( TAG, "setOnItemClickListener : exit" );
     }
@@ -206,9 +204,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
         String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
         String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
+        return "http://" + host + ":" + port;
     }
 
     public String getFromPreferences( Context context, String key ) {

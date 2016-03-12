@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.ProgramListEntity;
-import org.mythtv.android.data.entity.ProgramsEntity;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
 
@@ -42,16 +41,12 @@ public class ProgramListEntityJsonSerializer {
 
     public String serialize( ProgramListEntity programListEntity ) {
 
-        String jsonString = gson.toJson( programListEntity, ProgramListEntity.class );
-
-        return jsonString;
+        return gson.toJson( programListEntity, ProgramListEntity.class );
     }
 
     public ProgramListEntity deserialize( String jsonString ) {
 
-        ProgramListEntity programListEntity = gson.fromJson( jsonString, ProgramListEntity.class );
-
-        return programListEntity;
+        return gson.fromJson( jsonString, ProgramListEntity.class );
     }
 
 }

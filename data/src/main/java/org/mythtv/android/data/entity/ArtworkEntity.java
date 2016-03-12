@@ -2,9 +2,6 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Arrays;
-import java.util.List;
-
 import lombok.Data;
 
 /**

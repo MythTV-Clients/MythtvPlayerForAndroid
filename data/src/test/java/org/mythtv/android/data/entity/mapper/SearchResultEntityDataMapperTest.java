@@ -2,7 +2,6 @@ package org.mythtv.android.data.entity.mapper;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.Before;
 import org.junit.Test;
 import org.mythtv.android.data.entity.ArtworkEntity;
 import org.mythtv.android.data.entity.ArtworkInfoEntity;
@@ -57,7 +56,7 @@ public class SearchResultEntityDataMapperTest {
     private static final String FAKE_PROGRAM_SERIESID = "fake seriesId";
     private static final String FAKE_PROGRAM_PROGRAMID = "fake programId";
     private static final double FAKE_PROGRAM_STARS = 1.0;
-    private static final long FAKE_PROGRAM_FILESIZE = 1l;
+    private static final long FAKE_PROGRAM_FILESIZE = 1L;
     private static final DateTime FAKE_PROGRAM_LASTMODIFIED = new DateTime();
     private static final int FAKE_PROGRAM_PROGRAMFLAGS = 1;
     private static final String FAKE_PROGRAM_FILENAME = "fake fileName";

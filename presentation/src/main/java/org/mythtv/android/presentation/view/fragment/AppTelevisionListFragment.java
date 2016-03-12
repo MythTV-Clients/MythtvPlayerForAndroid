@@ -15,7 +15,6 @@ import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.presenter.TelevisionListPresenter;
 import org.mythtv.android.presentation.presenter.TelevisionSeriesCategoryListPresenter;
 import org.mythtv.android.presentation.view.VideoListView;
 import org.mythtv.android.presentation.view.adapter.VideosAdapter;

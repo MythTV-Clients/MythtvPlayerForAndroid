@@ -41,16 +41,12 @@ public class VideoEntityJsonSerializer {
 
     public String serialize( VideoMetadataInfoEntity videoMetadataInfoEntity) {
 
-        String jsonString = gson.toJson( videoMetadataInfoEntity, VideoMetadataInfoEntity.class );
-
-        return jsonString;
+        return gson.toJson( videoMetadataInfoEntity, VideoMetadataInfoEntity.class );
     }
 
     public VideoMetadataInfoEntity deserialize( String jsonString ) {
 
-        VideoMetadataInfoEntity videoMetadataInfoEntity = gson.fromJson( jsonString, VideoMetadataInfoEntity.class );
-
-        return videoMetadataInfoEntity;
+        return gson.fromJson( jsonString, VideoMetadataInfoEntity.class );
     }
 
 }

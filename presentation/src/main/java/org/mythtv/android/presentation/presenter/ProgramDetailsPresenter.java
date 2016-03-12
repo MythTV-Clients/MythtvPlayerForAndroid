@@ -18,14 +18,9 @@ import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.view.ProgramDetailsView;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import rx.Observable;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -33,10 +28,6 @@ import rx.schedulers.Schedulers;
 public class ProgramDetailsPresenter implements Presenter {
 
     private static final String TAG = ProgramDetailsPresenter.class.getSimpleName();
-
-    /** id used to retrieve program details */
-    private int chanId;
-    private DateTime startTime;
 
     private ProgramDetailsView viewDetailsView;
 
@@ -89,8 +80,9 @@ public class ProgramDetailsPresenter implements Presenter {
      */
     public void initialize( int chanId, DateTime startTime ) {
 
-        this.chanId = chanId;
-        this.startTime = startTime;
+        /* id used to retrieve program details */
+        int chanId1 = chanId;
+        DateTime startTime1 = startTime;
         this.loadProgramDetails();
 
     }

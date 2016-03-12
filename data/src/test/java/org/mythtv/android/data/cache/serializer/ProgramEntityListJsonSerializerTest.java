@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.ProgramListEntity;
-import org.mythtv.android.data.entity.ProgramsEntity;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

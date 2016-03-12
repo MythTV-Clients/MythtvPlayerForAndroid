@@ -42,7 +42,6 @@ public class AppRecentListFragment extends AppAbstractBaseFragment implements Pr
     RelativeLayout rl_progress;
 
     private ProgramsAdapter programsAdapter;
-    private ProgramsLayoutManager programsLayoutManager;
 
     public AppRecentListFragment() { super(); }
 
@@ -126,8 +125,8 @@ public class AppRecentListFragment extends AppAbstractBaseFragment implements Pr
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.programsLayoutManager = new ProgramsLayoutManager( getActivity() );
-        this.rv_programs.setLayoutManager( programsLayoutManager );
+        ProgramsLayoutManager programsLayoutManager = new ProgramsLayoutManager(getActivity());
+        this.rv_programs.setLayoutManager(programsLayoutManager);
 
         this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
         this.programsAdapter.setOnItemClickListener( onItemClickListener );

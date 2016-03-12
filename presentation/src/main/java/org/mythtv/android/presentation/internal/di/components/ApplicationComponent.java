@@ -14,8 +14,6 @@ import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModu
 import org.mythtv.android.presentation.view.activity.AppAbstractBaseActivity;
 import org.mythtv.android.presentation.view.activity.TvAbstractBaseActivity;
 
-import javax.inject.Named;
-import javax.inject.Qualifier;
 import javax.inject.Singleton;
 
 import dagger.Component;

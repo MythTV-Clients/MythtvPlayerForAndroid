@@ -20,21 +20,11 @@ package org.mythtv.android.presentation.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v14.preference.SwitchPreference;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
-import android.support.v17.preference.LeanbackPreferenceFragment;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.EditTextPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.domain.SettingsKeys;
 
 import java.util.List;

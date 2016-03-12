@@ -38,9 +38,6 @@ public class AppPlayerActivity extends Activity {
 
     public static final String FULL_URL_TAG = "full_url";
 
-    private VideoView mVideoView;
-    private MediaController mMediaController;
-
     public static Intent getCallingIntent( Context context, String uri ) {
 
         return new Intent( context, AppPlayerActivity.class )
@@ -56,12 +53,12 @@ public class AppPlayerActivity extends Activity {
 
         Uri fileUri = getIntent().getData();
 
-        mVideoView =  (VideoView) findViewById( R.id.videoView );
+        VideoView mVideoView = (VideoView) findViewById(R.id.videoView);
         mVideoView.setVideoURI( fileUri );
 
-        mMediaController = new MediaController( this );
-        mMediaController.setAnchorView( mVideoView );
-        mVideoView.setMediaController( mMediaController );
+        MediaController mMediaController = new MediaController(this);
+        mMediaController.setAnchorView(mVideoView);
+        mVideoView.setMediaController(mMediaController);
 
         mVideoView.start();
 

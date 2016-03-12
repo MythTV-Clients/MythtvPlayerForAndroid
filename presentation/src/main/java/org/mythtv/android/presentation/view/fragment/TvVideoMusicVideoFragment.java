@@ -39,7 +39,6 @@ import org.mythtv.android.presentation.presenter.CardPresenter;
 import org.mythtv.android.presentation.presenter.MusicVideoListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.VideoListView;
-import org.mythtv.android.presentation.view.activity.TvSearchableActivity;
 import org.mythtv.android.presentation.view.activity.TvVideoDetailsActivity;
 
 import java.net.URI;
@@ -77,8 +76,6 @@ public class TvVideoMusicVideoFragment extends TvAbstractBaseVideoFragment imple
 
     @Inject
     MusicVideoListPresenter movieListPresenter;
-
-    private ArrayObjectAdapter mRowsAdapter;
 
     public TvVideoMusicVideoFragment() {
         super();
@@ -205,7 +202,7 @@ public class TvVideoMusicVideoFragment extends TvAbstractBaseVideoFragment imple
         if( null != videoModelCollection ) {
             Log.d( TAG, "renderVideoList : videoModelCollection is not null" );
 
-            mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
+            ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
             CardPresenter cardPresenter = new CardPresenter();
 
             Map<Category, List<VideoMetadataInfoModel>> videos = new TreeMap<>( new Comparator<Category>() {
@@ -278,7 +275,7 @@ public class TvVideoMusicVideoFragment extends TvAbstractBaseVideoFragment imple
 //            gridRowAdapter.add( getResources().getString( R.string.personal_settings ) );
 //            mRowsAdapter.add( new ListRow( gridHeader, gridRowAdapter ) );
 
-            setAdapter( mRowsAdapter );
+            setAdapter(mRowsAdapter);
 
         }
 
@@ -409,7 +406,7 @@ public class TvVideoMusicVideoFragment extends TvAbstractBaseVideoFragment imple
 
             } else if( item instanceof String ) {
 
-                if (((String) item).indexOf(getString(R.string.error_fragment)) >= 0) {
+                if (((String) item).contains(getString(R.string.error_fragment))) {
 //                    Intent intent = new Intent(getActivity(), BrowseErrorActivity.class);
 //                    startActivity(intent);
 

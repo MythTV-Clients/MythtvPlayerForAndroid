@@ -2,19 +2,14 @@ package org.mythtv.android.presentation.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.ContentType;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
-import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.view.fragment.TvAbstractBaseVideoFragment;
 import org.mythtv.android.presentation.view.fragment.TvVideoAdultFragment;
 import org.mythtv.android.presentation.view.fragment.TvVideoHomeMovieFragment;
 import org.mythtv.android.presentation.view.fragment.TvVideoMovieFragment;

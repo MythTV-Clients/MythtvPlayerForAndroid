@@ -41,7 +41,6 @@ import org.mythtv.android.presentation.presenter.ProgramListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.ProgramListView;
 import org.mythtv.android.presentation.view.activity.TvRecordingsDetailsActivity;
-import org.mythtv.android.presentation.view.activity.TvSearchableActivity;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -87,8 +86,6 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
 
     @Inject
     ProgramListPresenter programListPresenter;
-
-    private ArrayObjectAdapter mRowsAdapter;
 
     private ProgramListListener programListListener;
 
@@ -228,7 +225,7 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
 
         if( null != programModelCollection ) {
 
-            mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
+            ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
             CardPresenter cardPresenter = new CardPresenter();
 
             Map<Category, List<ProgramModel>> recordings = new TreeMap<>( new Comparator<Category>() {
@@ -309,7 +306,7 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
 //            gridRowAdapter.add( getResources().getString( R.string.personal_settings ) );
 //            mRowsAdapter.add( new ListRow( gridHeader, gridRowAdapter ) );
 
-            setAdapter( mRowsAdapter );
+            setAdapter(mRowsAdapter);
 
         }
 
@@ -440,7 +437,7 @@ public class TvRecordingsFragment extends TvAbstractBaseBrowseFragment implement
 
             } else if( item instanceof String ) {
 
-                if (((String) item).indexOf(getString(R.string.error_fragment)) >= 0) {
+                if( ( (String) item ).contains( getString( R.string.error_fragment ) ) ) {
 //                    Intent intent = new Intent(getActivity(), BrowseErrorActivity.class);
 //                    startActivity(intent);
 

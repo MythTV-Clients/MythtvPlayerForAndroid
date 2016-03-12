@@ -5,7 +5,6 @@ import android.support.v17.leanback.app.SearchFragment;
 import android.widget.Toast;
 
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**

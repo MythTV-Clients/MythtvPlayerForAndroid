@@ -10,7 +10,6 @@ import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
-import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.net.VideoApi;
 import org.mythtv.android.domain.ContentType;
 

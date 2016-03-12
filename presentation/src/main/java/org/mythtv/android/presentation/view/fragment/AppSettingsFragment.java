@@ -36,8 +36,6 @@ import org.mythtv.android.domain.SettingsKeys;
  */
 public class AppSettingsFragment extends PreferenceFragmentCompat {
 
-    private EditTextPreference mBackendUrl;
-    private CheckBoxPreference internalPlayer;
     private SwitchPreference externalPlayerOverride;
 
     @Override
@@ -57,13 +55,13 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
-        mBackendUrl = (EditTextPreference) getPreferenceManager().findPreference( SettingsKeys.KEY_PREF_BACKEND_URL );
-        mBackendUrl.setOnPreferenceChangeListener( new Preference.OnPreferenceChangeListener() {
+        EditTextPreference mBackendUrl = (EditTextPreference) getPreferenceManager().findPreference(SettingsKeys.KEY_PREF_BACKEND_URL);
+        mBackendUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange( Preference preference, Object newValue ) {
 
-                String backendUrl = ( (String) newValue ).toLowerCase();
+                String backendUrl = ((String) newValue).toLowerCase();
 
 //                boolean isIPv6 = backendUrl.matches("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))" );
 //                if( isIPv6 ) {
@@ -72,22 +70,17 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 //                    return true;
 //                }
 
-                boolean isIPv4 = backendUrl.matches( "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}" );
-                if( isIPv4 ) {
+                boolean isIPv4 = backendUrl.matches("^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}");
 
-                    return true;
-                }
-
-                boolean isFQDN = backendUrl.matches( "(?=^.{1,253}$)(^(((?!-)[a-zA-Z0-9-]{1,63}(?<!-))|((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\\.)+[a-zA-Z]{2,63})$)" );
-                return isFQDN;
+                return isIPv4 || backendUrl.matches("(?=^.{1,253}$)(^(((?!-)[a-zA-Z0-9-]{1,63}(?<!-))|((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\\.)+[a-zA-Z]{2,63})$)");
 
             }
 
         });
 
         externalPlayerOverride = (SwitchPreference) getPreferenceManager().findPreference( SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
-        internalPlayer = (CheckBoxPreference) getPreferenceManager().findPreference( SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
-        internalPlayer.setOnPreferenceChangeListener( new Preference.OnPreferenceChangeListener() {
+        CheckBoxPreference internalPlayer = (CheckBoxPreference) getPreferenceManager().findPreference(SettingsKeys.KEY_PREF_INTERNAL_PLAYER);
+        internalPlayer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange( Preference preference, Object newValue ) {

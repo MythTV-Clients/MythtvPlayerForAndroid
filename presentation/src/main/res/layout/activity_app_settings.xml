@@ -25,7 +25,6 @@
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -47,7 +46,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <fragment
-            android:id="@+id/fragment_settings"
+            android:id="@+id/fragment"
             android:name="org.mythtv.android.presentation.view.fragment.AppSettingsFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

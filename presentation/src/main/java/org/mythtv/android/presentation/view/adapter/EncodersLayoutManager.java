@@ -1,7 +1,6 @@
 package org.mythtv.android.presentation.view.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 
 /**

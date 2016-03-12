@@ -30,7 +30,6 @@
         android:layout_gravity="center" />
 
     <fragment
-        android:id="@+id/playback_controls_fragment"
         android:name="org.mythtv.android.presentation.view.fragment.TvPlaybackOverlayFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

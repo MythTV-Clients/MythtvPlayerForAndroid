@@ -49,37 +49,21 @@ public class LiveStreamInfoEntityJsonMapper {
 
     public LiveStreamInfoEntity transformLiveStreamInfoEntity( String liveStreamInfoJsonResponse ) throws JsonSyntaxException {
 
-        try {
-            Log.i( TAG, "transformLiveStreamInfoEntity : liveStreamInfoJsonResponse=" + liveStreamInfoJsonResponse );
+        Log.i( TAG, "transformLiveStreamInfoEntity : liveStreamInfoJsonResponse=" + liveStreamInfoJsonResponse );
+        Type liveStreamInfoWrapperEntityType = new TypeToken<LiveStreamInfoWrapperEntity>() {}.getType();
+        LiveStreamInfoWrapperEntity liveStreamInfoWrapperEntity = this.gson.fromJson( liveStreamInfoJsonResponse, liveStreamInfoWrapperEntityType );
 
-            Type liveStreamInfoWrapperEntityType = new TypeToken<LiveStreamInfoWrapperEntity>() {}.getType();
-            LiveStreamInfoWrapperEntity liveStreamInfoWrapperEntity = this.gson.fromJson( liveStreamInfoJsonResponse, liveStreamInfoWrapperEntityType );
-
-            return liveStreamInfoWrapperEntity.getLiveStreamInfo();
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return liveStreamInfoWrapperEntity.getLiveStreamInfo();
     }
 
     public List<LiveStreamInfoEntity> transformLiveStreamInfoEntityCollection( String liveStreamInfoListJsonResponse ) throws JsonSyntaxException {
 
-        try {
-            Log.i( TAG, "transformLiveStreamInfoEntityCollection : " + liveStreamInfoListJsonResponse );
+        Log.i( TAG, "transformLiveStreamInfoEntityCollection : " + liveStreamInfoListJsonResponse );
+        Type liveStreamInfoListEntityType = new TypeToken<LiveStreamInfoListEntity>() {}.getType();
+        LiveStreamInfoListEntity liveStreamInfoListEntity = gson.fromJson( liveStreamInfoListJsonResponse, liveStreamInfoListEntityType );
+        Log.i( TAG, "transformLiveStreamInfoEntityCollection : liveStreamInfoListEntity=" + liveStreamInfoListEntity.toString() );
 
-            Type liveStreamInfoListEntityType = new TypeToken<LiveStreamInfoListEntity>() {}.getType();
-            LiveStreamInfoListEntity liveStreamInfoListEntity = gson.fromJson( liveStreamInfoListJsonResponse, liveStreamInfoListEntityType );
-            Log.i( TAG, "transformLiveStreamInfoEntityCollection : liveStreamInfoListEntity=" + liveStreamInfoListEntity.toString() );
-
-            return Arrays.asList( liveStreamInfoListEntity.getLiveStreamInfos().getLiveStreamInfos() );
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return Arrays.asList( liveStreamInfoListEntity.getLiveStreamInfos().getLiveStreamInfos() );
     }
 
 }

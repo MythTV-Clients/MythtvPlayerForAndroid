@@ -45,7 +45,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
@@ -255,7 +254,7 @@ public class TvVideoDetailsFragment extends TvAbstractBaseDetailsFragment {
                 if( action.getId() == ACTION_WATCH ) {
 
                     String seasonEpisode = "";
-                    if( "TELEVISION".equals( mVideoMetadataInfoModel ) ) {
+                    if( "TELEVISION".equals( mVideoMetadataInfoModel.getContentType() ) ) {
 
                         seasonEpisode = SeasonEpisodeFormatter.format( mVideoMetadataInfoModel );
 
@@ -378,9 +377,7 @@ public class TvVideoDetailsFragment extends TvAbstractBaseDetailsFragment {
         String host = getFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
         String port = getFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
+        return "http://" + host + ":" + port;
     }
 
     protected String getFromPreferences(Context context, String key ) {

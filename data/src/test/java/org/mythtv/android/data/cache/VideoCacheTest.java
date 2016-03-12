@@ -35,10 +35,7 @@ public class VideoCacheTest extends ApplicationTestCase {
     @Mock
     private ThreadExecutor mockThreadExecutor;
 
-    private Context context;
     private FileManager fileManager;
-    private VideoEntityJsonSerializer videoEntityJsonSerializer;
-    private VideoListEntityJsonSerializer videoListEntityJsonSerializer;
     private VideoCache videoCache;
     private File cacheDir;
 
@@ -47,14 +44,12 @@ public class VideoCacheTest extends ApplicationTestCase {
 
         MockitoAnnotations.initMocks( this );
 
-        context = RuntimeEnvironment.application.getApplicationContext();
+        Context context = RuntimeEnvironment.application.getApplicationContext();
         cacheDir = RuntimeEnvironment.application.getCacheDir();
 
         fileManager = new FileManager();
-        videoEntityJsonSerializer = new VideoEntityJsonSerializer();
-        videoListEntityJsonSerializer = new VideoListEntityJsonSerializer();
 
-        videoCache = new VideoCacheImpl( context, videoEntityJsonSerializer, videoListEntityJsonSerializer, fileManager, mockThreadExecutor );
+        videoCache = new VideoCacheImpl( context, new VideoEntityJsonSerializer(), new VideoListEntityJsonSerializer(), fileManager, mockThreadExecutor );
 
     }
 

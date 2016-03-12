@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.EncoderEntity;
-import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
 
@@ -42,16 +41,12 @@ public class EncoderEntityJsonSerializer {
 
     public String serialize( EncoderEntity encoderEntity) {
 
-        String jsonString = gson.toJson( encoderEntity, EncoderEntity.class );
-
-        return jsonString;
+        return gson.toJson( encoderEntity, EncoderEntity.class );
     }
 
     public EncoderEntity deserialize( String jsonString ) {
 
-        EncoderEntity encoderEntity = gson.fromJson( jsonString, EncoderEntity.class );
-
-        return encoderEntity;
+        return gson.fromJson( jsonString, EncoderEntity.class );
     }
 
 }

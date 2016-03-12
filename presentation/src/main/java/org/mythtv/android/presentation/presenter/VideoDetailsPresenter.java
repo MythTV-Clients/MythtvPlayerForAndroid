@@ -3,9 +3,7 @@ package org.mythtv.android.presentation.presenter;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.domain.LiveStreamInfo;
-import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.VideoMetadataInfo;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
@@ -14,12 +12,9 @@ import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.VideoDetailsView;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
 import org.mythtv.android.presentation.mapper.LiveStreamInfoModelDataMapper;
-import org.mythtv.android.presentation.mapper.ProgramModelDataMapper;
 import org.mythtv.android.presentation.mapper.VideoMetadataInfoModelDataMapper;
 import org.mythtv.android.presentation.model.LiveStreamInfoModel;
-import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.view.ProgramDetailsView;
 
 import java.util.List;
 

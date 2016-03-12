@@ -1,7 +1,6 @@
 package org.mythtv.android.data.entity.mapper;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
 import org.junit.Test;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.ArtworkEntity;

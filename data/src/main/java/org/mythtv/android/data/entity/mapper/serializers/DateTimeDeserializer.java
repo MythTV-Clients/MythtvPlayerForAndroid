@@ -26,9 +26,7 @@ public class DateTimeDeserializer implements JsonDeserializer<DateTime> {
             return null;
         }
 
-        DateTime dateTime = DateTime.parse( json.getAsJsonPrimitive().getAsString(), DateTimeFormat.forPattern( pattern ).withZoneUTC() );
-
-        return dateTime;
+        return DateTime.parse( json.getAsJsonPrimitive().getAsString(), DateTimeFormat.forPattern( pattern ).withZoneUTC() );
     }
 
 }

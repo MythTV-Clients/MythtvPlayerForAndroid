@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.presentation.internal.di.components.SearchComponent;
-import org.mythtv.android.presentation.mapper.SearchResultModelDataMapper;
 import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.presenter.SearchResultListPresenter;
 import org.mythtv.android.presentation.view.SearchResultListView;
@@ -22,14 +20,11 @@ import org.mythtv.android.presentation.view.adapter.SearchResultsLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by dmfrey on 10/12/15.
@@ -61,7 +56,6 @@ public class AppSearchResultListFragment extends AppAbstractBaseFragment impleme
     RelativeLayout rl_progress;
 
     private SearchResultsAdapter searchResultsAdapter;
-    private SearchResultsLayoutManager searchResultsLayoutManager;
 
     private SearchResultListListener searchResultListListener;
 
@@ -173,8 +167,8 @@ public class AppSearchResultListFragment extends AppAbstractBaseFragment impleme
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.searchResultsLayoutManager = new SearchResultsLayoutManager( getActivity() );
-        this.rv_searchResults.setLayoutManager( searchResultsLayoutManager );
+        SearchResultsLayoutManager searchResultsLayoutManager = new SearchResultsLayoutManager(getActivity());
+        this.rv_searchResults.setLayoutManager(searchResultsLayoutManager);
 
         this.searchResultsAdapter = new SearchResultsAdapter( getActivity(), new ArrayList<SearchResultModel>() );
         this.searchResultsAdapter.setOnItemClickListener( onItemClickListener );

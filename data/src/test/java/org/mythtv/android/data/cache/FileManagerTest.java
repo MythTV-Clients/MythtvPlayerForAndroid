@@ -67,9 +67,9 @@ public class FileManagerTest extends ApplicationTestCase {
     public void testWriteToPreferences() {
 
         String key = "key";
-        long value = 1l;
+        long value = 1L;
 
-        fileManager.writeToPreferences( context, TESTS_PREFERENCES, key, 1l );
+        fileManager.writeToPreferences( context, TESTS_PREFERENCES, key, 1L );
 
         assertThat( value, is( equalTo( fileManager.getFromPreferences( context, TESTS_PREFERENCES, key ) ) ) );
 
@@ -78,9 +78,8 @@ public class FileManagerTest extends ApplicationTestCase {
     private File createDummyFile() {
 
         String dummyFilePath = cacheDir.getPath() + File.separator + "dumyFile";
-        File dummyFile = new File( dummyFilePath );
 
-        return dummyFile;
+        return new File( dummyFilePath );
     }
 
 }

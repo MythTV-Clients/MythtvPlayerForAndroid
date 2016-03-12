@@ -19,8 +19,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tv_item"
-    android:layout_width="250dp"
+                android:layout_width="250dp"
     android:layout_height="300dp"
     android:gravity="center_vertical"
     android:background="@drawable/tv_selector">
@@ -31,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/outer_margin"
         android:gravity="center"
-        tools:src="@drawable/tv_watch_recordings" />
+        tools:src="@drawable/tv_watch_recordings"
+        android:contentDescription="@string/tv_item_category_content_description" />
 
     <TextView
         android:id="@+id/tv_item_title"

@@ -1,7 +1,6 @@
 package org.mythtv.android.data.cache;
 
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
-import org.mythtv.android.data.entity.VideoMetadataInfoListEntity;
 
 import java.util.List;
 

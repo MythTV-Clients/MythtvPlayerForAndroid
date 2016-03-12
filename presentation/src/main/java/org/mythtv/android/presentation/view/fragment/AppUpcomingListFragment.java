@@ -53,7 +53,6 @@ public class AppUpcomingListFragment extends AppAbstractBaseFragment implements 
     RelativeLayout rl_progress;
 
     private UpcomingProgramsAdapter programsAdapter;
-    private ProgramsLayoutManager programsLayoutManager;
 
     private ProgramListListener programListListener;
 
@@ -151,8 +150,8 @@ public class AppUpcomingListFragment extends AppAbstractBaseFragment implements 
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.programsLayoutManager = new ProgramsLayoutManager( getActivity() );
-        this.rv_programs.setLayoutManager( programsLayoutManager );
+        ProgramsLayoutManager programsLayoutManager = new ProgramsLayoutManager(getActivity());
+        this.rv_programs.setLayoutManager(programsLayoutManager);
 
         this.programsAdapter = new UpcomingProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
         this.rv_programs.setAdapter( programsAdapter );

@@ -41,16 +41,12 @@ public class EncoderListEntityJsonSerializer {
 
     public String serialize( EncoderListEntity entityListEntity ) {
 
-        String jsonString = gson.toJson( entityListEntity, EncoderListEntity.class );
-
-        return jsonString;
+        return gson.toJson( entityListEntity, EncoderListEntity.class );
     }
 
     public EncoderListEntity deserialize( String jsonString ) {
 
-        EncoderListEntity encoderListEntity = gson.fromJson( jsonString, EncoderListEntity.class );
-
-        return encoderListEntity;
+        return gson.fromJson( jsonString, EncoderListEntity.class );
     }
 
 }

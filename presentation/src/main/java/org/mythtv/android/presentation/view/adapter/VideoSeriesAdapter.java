@@ -163,9 +163,7 @@ public class VideoSeriesAdapter extends RecyclerView.Adapter<VideoSeriesAdapter.
         String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
         String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
+        return "http://" + host + ":" + port;
     }
 
     public String getFromPreferences( Context context, String key ) {

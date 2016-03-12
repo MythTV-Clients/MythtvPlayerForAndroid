@@ -55,7 +55,8 @@ public class AppAdultListFragment extends AppAbstractBaseVideoPagerFragment impl
         return new AppAdultListFragment();
     }
 
-    @Override public void onAttach( Activity activity ) {
+    @Override
+    public void onAttach( Activity activity ) {
         super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 

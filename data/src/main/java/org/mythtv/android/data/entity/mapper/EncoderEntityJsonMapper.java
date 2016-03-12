@@ -48,37 +48,21 @@ public class EncoderEntityJsonMapper {
 
     public EncoderEntity transformEncoderEntity(String encoderJsonResponse ) throws JsonSyntaxException {
 
-        try {
-            Log.i( TAG, "transformEncoderEntity : encoderJsonResponse=" + encoderJsonResponse );
+        Log.i( TAG, "transformEncoderEntity : encoderJsonResponse=" + encoderJsonResponse );
+        Type encoderWrapperEntityType = new TypeToken<EncoderWrapperEntity>() {}.getType();
+        EncoderWrapperEntity encoderWrapperEntity = this.gson.fromJson( encoderJsonResponse, encoderWrapperEntityType );
 
-            Type encoderWrapperEntityType = new TypeToken<EncoderWrapperEntity>() {}.getType();
-            EncoderWrapperEntity encoderWrapperEntity = this.gson.fromJson( encoderJsonResponse, encoderWrapperEntityType );
-
-            return encoderWrapperEntity.getEncoder();
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return encoderWrapperEntity.getEncoder();
     }
 
     public List<EncoderEntity> transformEncoderEntityCollection( String encoderListJsonResponse ) throws JsonSyntaxException {
 
-        try {
-            Log.i( TAG, "transformEncoderEntityCollection : " + encoderListJsonResponse );
+        Log.i( TAG, "transformEncoderEntityCollection : " + encoderListJsonResponse );
+        Type encoderListEntityType = new TypeToken<EncoderListEntity>() {}.getType();
+        EncoderListEntity encoderListEntity = this.gson.fromJson( encoderListJsonResponse, encoderListEntityType );
+        Log.i( TAG, "transformEncoderEntityCollection : encoderListJsonResponse=" + encoderListEntity.toString() );
 
-            Type encoderListEntityType = new TypeToken<EncoderListEntity>() {}.getType();
-            EncoderListEntity encoderListEntity = this.gson.fromJson( encoderListJsonResponse, encoderListEntityType );
-            Log.i( TAG, "transformEncoderEntityCollection : encoderListJsonResponse=" + encoderListEntity.toString() );
-
-            return Arrays.asList( encoderListEntity.getEncoders().getEncoders() );
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return Arrays.asList( encoderListEntity.getEncoders().getEncoders() );
     }
 
 }

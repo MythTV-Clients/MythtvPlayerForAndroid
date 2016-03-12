@@ -22,7 +22,7 @@ public interface VideoDetailsView extends LoadDataView {
     /**
      * Update the live streaming buttons
      *
-     * @param liveStreamInfo
+     * @param liveStreamInfo liveStreamInfo
      */
     void updateLiveStream( LiveStreamInfoModel liveStreamInfo );
 

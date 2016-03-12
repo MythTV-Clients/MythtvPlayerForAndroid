@@ -64,9 +64,8 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     public ProgramViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
         View view = this.layoutInflater.inflate( R.layout.app_program_list_item, parent, false );
-        ProgramViewHolder programViewHolder = new ProgramViewHolder( view );
 
-        return programViewHolder;
+        return new ProgramViewHolder( view );
     }
 
     @Override
@@ -77,7 +76,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         holder.textViewTitle.setText( programModel.getTitle() );
         holder.textViewSubTitle.setText( programModel.getSubTitle() );
         holder.textViewDate.setText( programModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
-        holder.textViewEpisode.setText( programModel.getSeason() + "x" + programModel.getEpisode() );
+        holder.textViewEpisode.setText( String.format( "%sx%s", programModel.getSeason(), programModel.getEpisode() ) );
 
         if( null != programModel.getLiveStreamInfo() ) {
 
@@ -175,9 +174,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
         String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
+        return "http://" + host + ":" + port;
     }
 
     public String getFromPreferences( Context context, String key ) {

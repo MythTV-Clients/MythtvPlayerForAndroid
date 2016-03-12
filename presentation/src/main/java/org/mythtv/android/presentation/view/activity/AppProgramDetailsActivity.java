@@ -272,6 +272,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
                 navigator.navigateToVideoPlayer( this, recordingUrl );
 
             } catch( UnsupportedEncodingException e ) { }
+
         }
 
         Log.d( TAG, "onPlayRecording : exit" );

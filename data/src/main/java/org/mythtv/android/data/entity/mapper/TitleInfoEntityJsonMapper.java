@@ -39,34 +39,17 @@ public class TitleInfoEntityJsonMapper {
 
     public TitleInfoEntity transformTitleInfoEntity( String titleInfoJsonResponse ) throws JsonSyntaxException {
 
-        try {
+        Type titleInfoEntityType = new TypeToken<TitleInfoEntity>() {}.getType();
 
-            Type titleInfoEntityType = new TypeToken<TitleInfoEntity>() {}.getType();
-            TitleInfoEntity titleInfoEntity = this.gson.fromJson( titleInfoJsonResponse, titleInfoEntityType );
-
-            return titleInfoEntity;
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return this.gson.fromJson( titleInfoJsonResponse, titleInfoEntityType );
     }
 
     public List<TitleInfoEntity> transformTitleInfoEntityCollection( String titleInfoListJsonResponse ) throws JsonSyntaxException {
 
-        try {
+        Type titleInfoListEntityType = new TypeToken<TitleInfoListEntity>() {}.getType();
+        TitleInfoListEntity titleInfoListEntity = gson.fromJson( titleInfoListJsonResponse, titleInfoListEntityType );
 
-            Type titleInfoListEntityType = new TypeToken<TitleInfoListEntity>() {}.getType();
-            TitleInfoListEntity titleInfoListEntity = gson.fromJson( titleInfoListJsonResponse, titleInfoListEntityType );
-
-            return Arrays.asList( titleInfoListEntity.getTitleInfos().getTitleInfos() );
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return Arrays.asList( titleInfoListEntity.getTitleInfos().getTitleInfos() );
     }
 
 }

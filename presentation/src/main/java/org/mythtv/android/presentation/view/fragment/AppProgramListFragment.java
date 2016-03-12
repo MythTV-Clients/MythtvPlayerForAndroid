@@ -63,7 +63,6 @@ public class AppProgramListFragment extends AppAbstractBaseFragment implements P
     RelativeLayout rl_progress;
 
     private ProgramsAdapter programsAdapter;
-    private ProgramsLayoutManager programsLayoutManager;
 
     private ProgramListListener programListListener;
 
@@ -172,8 +171,8 @@ public class AppProgramListFragment extends AppAbstractBaseFragment implements P
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.programsLayoutManager = new ProgramsLayoutManager( getActivity() );
-        this.rv_programs.setLayoutManager( programsLayoutManager );
+        ProgramsLayoutManager programsLayoutManager = new ProgramsLayoutManager(getActivity());
+        this.rv_programs.setLayoutManager(programsLayoutManager);
 
         this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
         this.programsAdapter.setOnItemClickListener( onItemClickListener );

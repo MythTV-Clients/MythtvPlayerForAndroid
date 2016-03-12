@@ -29,17 +29,16 @@
         android:background="@color/primary">
 
         <ImageView
-            android:id="@+id/nav_drawer_logo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/drawer_margin_top"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_mythtv_logo" />
+            android:src="@drawable/ic_mythtv_logo"
+            android:contentDescription="@string/nav_drawer_logo_content_description"/>
 
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/nav_drawer_sub_header"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_below="@+id/nav_drawer_header"
@@ -59,7 +58,6 @@
             android:layout_gravity="center_vertical" />
 
         <TextView
-            android:id="@+id/mythtv_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

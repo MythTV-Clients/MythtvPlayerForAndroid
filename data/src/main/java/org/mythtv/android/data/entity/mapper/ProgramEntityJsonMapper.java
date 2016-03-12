@@ -48,37 +48,21 @@ public class ProgramEntityJsonMapper {
 
     public ProgramEntity transformProgramEntity( String programJsonResponse ) throws JsonSyntaxException {
 
-        try {
-            Log.i( TAG, "transformProgramEntity : programJsonResponse=" + programJsonResponse );
+        Log.i( TAG, "transformProgramEntity : programJsonResponse=" + programJsonResponse );
+        Type programWrapperEntityType = new TypeToken<ProgramWrapperEntity>() {}.getType();
+        ProgramWrapperEntity programWrapperEntity = this.gson.fromJson( programJsonResponse, programWrapperEntityType );
 
-            Type programWrapperEntityType = new TypeToken<ProgramWrapperEntity>() {}.getType();
-            ProgramWrapperEntity programWrapperEntity = this.gson.fromJson( programJsonResponse, programWrapperEntityType );
-
-            return programWrapperEntity.getProgram();
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return programWrapperEntity.getProgram();
     }
 
     public List<ProgramEntity> transformProgramEntityCollection( String programListJsonResponse ) throws JsonSyntaxException {
 
-        try {
-            Log.i( TAG, "transformProgramEntityCollection : " + programListJsonResponse );
+        Log.i( TAG, "transformProgramEntityCollection : " + programListJsonResponse );
+        Type programListEntityType = new TypeToken<ProgramListEntity>() {}.getType();
+        ProgramListEntity programListEntity = this.gson.fromJson( programListJsonResponse, programListEntityType );
+        Log.i( TAG, "transformProgramEntityCollection : programListEntity=" + programListEntity.toString() );
 
-            Type programListEntityType = new TypeToken<ProgramListEntity>() {}.getType();
-            ProgramListEntity programListEntity = this.gson.fromJson( programListJsonResponse, programListEntityType );
-            Log.i( TAG, "transformProgramEntityCollection : programListEntity=" + programListEntity.toString() );
-
-            return Arrays.asList( programListEntity.getPrograms().getPrograms() );
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return Arrays.asList( programListEntity.getPrograms().getPrograms() );
     }
 
 }

@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.data.entity.ProgramListEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoListEntity;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
@@ -42,16 +41,12 @@ public class VideoListEntityJsonSerializer {
 
     public String serialize( VideoMetadataInfoListEntity videoListEntity ) {
 
-        String jsonString = gson.toJson( videoListEntity, VideoMetadataInfoListEntity.class );
-
-        return jsonString;
+        return gson.toJson( videoListEntity, VideoMetadataInfoListEntity.class );
     }
 
     public VideoMetadataInfoListEntity deserialize( String jsonString ) {
 
-        VideoMetadataInfoListEntity videoMetadataInfoListEntity = gson.fromJson( jsonString, VideoMetadataInfoListEntity.class );
-
-        return videoMetadataInfoListEntity;
+        return gson.fromJson( jsonString, VideoMetadataInfoListEntity.class );
     }
 
 }

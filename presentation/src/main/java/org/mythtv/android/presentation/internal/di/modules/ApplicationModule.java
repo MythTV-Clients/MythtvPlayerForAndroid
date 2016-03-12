@@ -1,8 +1,6 @@
 package org.mythtv.android.presentation.internal.di.modules;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import org.mythtv.android.data.cache.VideoCacheImpl;
 import org.mythtv.android.data.cache.ProgramCache;

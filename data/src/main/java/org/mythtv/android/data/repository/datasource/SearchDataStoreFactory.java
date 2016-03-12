@@ -17,7 +17,6 @@ public class SearchDataStoreFactory {
 
     private static final String TAG = SearchDataStoreFactory.class.getSimpleName();
 
-    private Context context;
     private DatabaseHelper mOpenHelper;
 
     @Inject
@@ -29,8 +28,7 @@ public class SearchDataStoreFactory {
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
-        this.context = context.getApplicationContext();
-        this.mOpenHelper = new DatabaseHelper( context );
+        this.mOpenHelper = new DatabaseHelper( context.getApplicationContext() );
 
         Log.d( TAG, "initialize : exit" );
     }

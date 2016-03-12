@@ -47,7 +47,7 @@ public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPrese
                 }
 
                 viewHolder.getTitle().setText( videoMetadataInfoModel.getTitle() );
-                viewHolder.getSubtitle().setText( videoMetadataInfoModel.getSubTitle() + " " + seasonEpisode );
+                viewHolder.getSubtitle().setText( String.format( "%s %s", videoMetadataInfoModel.getSubTitle(), seasonEpisode ) );
                 viewHolder.getBody().setText( videoMetadataInfoModel.getDescription() );
 
             }

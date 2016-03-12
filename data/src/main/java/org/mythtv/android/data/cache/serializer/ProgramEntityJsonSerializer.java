@@ -41,16 +41,12 @@ public class ProgramEntityJsonSerializer {
 
     public String serialize( ProgramEntity programEntity) {
 
-        String jsonString = gson.toJson( programEntity, ProgramEntity.class );
-
-        return jsonString;
+        return gson.toJson( programEntity, ProgramEntity.class );
     }
 
     public ProgramEntity deserialize( String jsonString ) {
 
-        ProgramEntity programEntity = gson.fromJson( jsonString, ProgramEntity.class );
-
-        return programEntity;
+        return gson.fromJson( jsonString, ProgramEntity.class );
     }
 
 }

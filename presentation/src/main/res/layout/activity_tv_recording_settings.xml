@@ -18,7 +18,7 @@
   -->
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_settings"
+    android:id="@+id/fragment"
     android:layout_below="@id/toolbar"
     android:name="org.mythtv.android.presentation.view.fragment.TvRecordingSettingsFragment"
     android:layout_width="match_parent"

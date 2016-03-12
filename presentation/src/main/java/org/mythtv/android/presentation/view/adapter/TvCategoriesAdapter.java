@@ -31,7 +31,6 @@ public class TvCategoriesAdapter extends RecyclerView.Adapter<TvCategoriesAdapte
 
     }
 
-    private Context context;
     private List<TvCategoryModel> tvCategoriesCollection;
     private final LayoutInflater layoutInflater;
 
@@ -40,7 +39,6 @@ public class TvCategoriesAdapter extends RecyclerView.Adapter<TvCategoriesAdapte
     public TvCategoriesAdapter( Context context, Collection<TvCategoryModel> tvCategoriesCollection ) {
         Log.d( TAG, "initialize : enter" );
 
-        this.context = context;
         this.validateTvCategoriesCollection( tvCategoriesCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         this.tvCategoriesCollection = (List<TvCategoryModel>) tvCategoriesCollection;

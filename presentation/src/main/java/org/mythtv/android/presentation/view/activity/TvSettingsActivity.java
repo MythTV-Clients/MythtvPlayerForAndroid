@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
-import android.support.v17.leanback.widget.GuidedActionEditText;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -720,9 +719,7 @@ public class TvSettingsActivity extends Activity {
         String host = getStringFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_URL );
         String port = getStringFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
+        return "http://" + host + ":" + port;
     }
 
     private static boolean getShouldUseInternalPlayer( Context context ) {

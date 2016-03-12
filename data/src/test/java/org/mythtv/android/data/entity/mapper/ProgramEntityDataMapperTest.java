@@ -34,7 +34,7 @@ public class ProgramEntityDataMapperTest extends ApplicationTestCase {
     private static final String FAKE_SERIESID = "fake seriesId";
     private static final String FAKE_PROGRAMID = "fake programId";
     private static final double FAKE_STARS = 1.0;
-    private static final long FAKE_FILESIZE = 1l;
+    private static final long FAKE_FILESIZE = 1L;
     private static final DateTime FAKE_LASTMODIFIED = new DateTime();
     private static final int FAKE_PROGRAMFLAGS = 1;
     private static final String FAKE_FILENAME = "fake fileName";

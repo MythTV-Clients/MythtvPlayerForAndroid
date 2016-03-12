@@ -30,9 +30,7 @@ public class AppVideoDetailsSettingsActivity extends AppAbstractBaseActivity {
 
     public static Intent getCallingIntent( Context context ) {
 
-        Intent callingIntent = new Intent( context, AppVideoDetailsSettingsActivity.class );
-
-        return callingIntent;
+        return new Intent( context, AppVideoDetailsSettingsActivity.class );
     }
 
     @Override

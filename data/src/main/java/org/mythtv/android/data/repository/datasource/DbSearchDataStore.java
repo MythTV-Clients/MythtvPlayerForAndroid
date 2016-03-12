@@ -8,7 +8,6 @@ import android.util.Log;
 
 import org.mythtv.android.data.entity.SearchResultEntity;
 import org.mythtv.android.data.exception.DatabaseException;
-import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.domain.SearchResult;
 
 import java.util.ArrayList;

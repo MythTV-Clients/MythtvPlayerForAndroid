@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import org.mythtv.android.data.entity.SearchResultEntity;
-import org.mythtv.android.domain.SearchResult;
 
 /**
  * Created by dmfrey on 10/8/15.

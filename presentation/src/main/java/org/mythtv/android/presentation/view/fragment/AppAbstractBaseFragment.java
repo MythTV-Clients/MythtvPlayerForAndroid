@@ -56,9 +56,7 @@ public abstract class AppAbstractBaseFragment extends Fragment {
         String host = getFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
         String port = getFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
+        return "http://" + host + ":" + port;
     }
 
     protected String getFromPreferences( Context context, String key ) {

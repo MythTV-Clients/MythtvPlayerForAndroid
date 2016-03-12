@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import org.mythtv.android.data.cache.VideoCache;
-import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.net.VideoApi;
 import org.mythtv.android.data.net.VideoApiImpl;

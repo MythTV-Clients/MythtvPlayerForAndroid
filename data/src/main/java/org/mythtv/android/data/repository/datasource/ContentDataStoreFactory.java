@@ -3,16 +3,10 @@ package org.mythtv.android.data.repository.datasource;
 import android.content.Context;
 import android.util.Log;
 
-import org.joda.time.DateTime;
-import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
-import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
-import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.net.ContentApi;
 import org.mythtv.android.data.net.ContentApiImpl;
-import org.mythtv.android.data.net.DvrApi;
-import org.mythtv.android.data.net.DvrApiImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

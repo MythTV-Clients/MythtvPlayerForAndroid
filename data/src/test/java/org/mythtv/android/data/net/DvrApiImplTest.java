@@ -3,7 +3,6 @@ package org.mythtv.android.data.net;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
 
 import android.content.Context;
 import android.content.SharedPreferences;

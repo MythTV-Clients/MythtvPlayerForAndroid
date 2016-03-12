@@ -30,9 +30,7 @@ public class AppProgramDetailsSettingsActivity extends AppAbstractBaseActivity {
 
     public static Intent getCallingIntent( Context context ) {
 
-        Intent callingIntent = new Intent( context, AppProgramDetailsSettingsActivity.class );
-
-        return callingIntent;
+        return new Intent( context, AppProgramDetailsSettingsActivity.class );
     }
 
     @Override

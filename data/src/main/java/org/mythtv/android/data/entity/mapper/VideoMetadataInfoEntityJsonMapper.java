@@ -49,35 +49,19 @@ public class VideoMetadataInfoEntityJsonMapper {
     public VideoMetadataInfoEntity transformVideoMetadataInfoEntity( String videoMetadataInfoJsonResponse ) throws JsonSyntaxException {
         Log.d( TAG, "transformVideoMetadataInfoEntity : enter" );
 
-        try {
-            Log.d( TAG, "transformVideoMetadataInfoEntity : videoMetadataInfoJsonResponse=" + videoMetadataInfoJsonResponse );
+        Log.d( TAG, "transformVideoMetadataInfoEntity : videoMetadataInfoJsonResponse=" + videoMetadataInfoJsonResponse );
+        Type videoMetadataInfoWrapperEntityType = new TypeToken<VideoMetadataInfoWrapperEntity>() {}.getType();
+        VideoMetadataInfoWrapperEntity videoMetadataInfoWrapperEntity = this.gson.fromJson( videoMetadataInfoJsonResponse, videoMetadataInfoWrapperEntityType );
 
-            Type videoMetadataInfoWrapperEntityType = new TypeToken<VideoMetadataInfoWrapperEntity>() {}.getType();
-            VideoMetadataInfoWrapperEntity videoMetadataInfoWrapperEntity = this.gson.fromJson( videoMetadataInfoJsonResponse, videoMetadataInfoWrapperEntityType );
-
-            return videoMetadataInfoWrapperEntity.getVideoMetadataInfo();
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return videoMetadataInfoWrapperEntity.getVideoMetadataInfo();
     }
 
     public List<VideoMetadataInfoEntity> transformVideoMetadataInfoEntityCollection( String videoMetadataInfoListJsonResponse ) throws JsonSyntaxException {
 
-        try {
+        Type videoMetadataInfoListEntityType = new TypeToken<VideoMetadataInfoListWrapperEntity>() {}.getType();
+        VideoMetadataInfoListWrapperEntity videoMetadataInfoListEntity = gson.fromJson( videoMetadataInfoListJsonResponse, videoMetadataInfoListEntityType );
 
-            Type videoMetadataInfoListEntityType = new TypeToken<VideoMetadataInfoListWrapperEntity>() {}.getType();
-            VideoMetadataInfoListWrapperEntity videoMetadataInfoListEntity = gson.fromJson( videoMetadataInfoListJsonResponse, videoMetadataInfoListEntityType );
-
-            return Arrays.asList( videoMetadataInfoListEntity.getVideoMetadataInfoListEntity().getVideoMetadataInfosEntity() );
-
-        } catch( JsonSyntaxException jsonException ) {
-
-            throw jsonException;
-        }
-
+        return Arrays.asList( videoMetadataInfoListEntity.getVideoMetadataInfoListEntity().getVideoMetadataInfosEntity() );
     }
 
 }

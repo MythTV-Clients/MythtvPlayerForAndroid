@@ -4,21 +4,15 @@ import android.util.Log;
 
 import org.mythtv.android.data.entity.ArtworkInfoEntity;
 import org.mythtv.android.data.entity.CastMemberEntity;
-import org.mythtv.android.data.entity.ChannelInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
-import org.mythtv.android.data.entity.RecordingInfoEntity;
 import org.mythtv.android.domain.ArtworkInfo;
 import org.mythtv.android.domain.CastMember;
-import org.mythtv.android.domain.ChannelInfo;
 import org.mythtv.android.domain.Program;
-import org.mythtv.android.domain.RecordingInfo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**

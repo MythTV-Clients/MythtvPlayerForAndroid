@@ -24,7 +24,6 @@
     android:layout_margin="@dimen/margin">
 
     <RelativeLayout
-        android:id="@+id/encoder_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical">
@@ -34,7 +33,8 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="@dimen/margin"
-            android:src="@drawable/ic_fiber_manual_record_black_24dp"/>
+            android:src="@drawable/ic_fiber_manual_record_black_24dp"
+            android:contentDescription="@string/encoder_item_recording_image_content_description" />
 
         <TextView
             android:id="@+id/encoder_item_name"

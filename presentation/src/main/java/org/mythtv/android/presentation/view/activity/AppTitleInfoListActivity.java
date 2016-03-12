@@ -24,9 +24,7 @@ public class AppTitleInfoListActivity extends AppAbstractBaseActivity implements
 
     public static Intent getCallingIntent( Context context ) {
 
-        Intent callingIntent = new Intent( context, AppTitleInfoListActivity.class );
-
-        return callingIntent;
+        return new Intent( context, AppTitleInfoListActivity.class );
     }
 
     private DvrComponent dvrComponent;

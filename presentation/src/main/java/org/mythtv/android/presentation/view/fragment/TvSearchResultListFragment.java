@@ -22,26 +22,17 @@ import android.util.Log;
 import org.joda.time.DateTime;
 import org.mythtv.android.R;
 import org.mythtv.android.data.entity.SearchResultEntity;
-import org.mythtv.android.data.exception.DatabaseException;
 import org.mythtv.android.data.repository.DatabaseHelper;
 import org.mythtv.android.domain.SearchResult;
-import org.mythtv.android.presentation.internal.di.components.SearchComponent;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.CardPresenter;
-import org.mythtv.android.presentation.presenter.SearchResultListPresenter;
 import org.mythtv.android.presentation.view.SearchResultListView;
-import org.mythtv.android.presentation.view.activity.TvSearchableActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by dmfrey on 2/27/16.

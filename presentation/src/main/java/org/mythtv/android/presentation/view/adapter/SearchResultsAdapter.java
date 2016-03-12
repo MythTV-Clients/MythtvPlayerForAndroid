@@ -65,9 +65,8 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     public SearchResultViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
         View view = this.layoutInflater.inflate( R.layout.app_search_result_list_item, parent, false );
-        SearchResultViewHolder searchResultViewHolder = new SearchResultViewHolder( view );
 
-        return searchResultViewHolder;
+        return new SearchResultViewHolder( view );
     }
 
     @Override
@@ -80,7 +79,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
             holder.textViewTitle.setText( searchResultModel.getTitle() );
             holder.textViewSubTitle.setText( searchResultModel.getSubTitle() );
             holder.textViewDate.setText( searchResultModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
-            holder.textViewEpisode.setText( searchResultModel.getSeason() + "x" + searchResultModel.getEpisode() );
+            holder.textViewEpisode.setText( String.format( "%sx%s", searchResultModel.getSeason(), searchResultModel.getEpisode() ) );
 
         } else {
 
@@ -176,9 +175,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
         String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        String masterBackend = "http://" + host + ":" + port;
-
-        return masterBackend;
+        return "http://" + host + ":" + port;
     }
 
     public String getFromPreferences( Context context, String key ) {

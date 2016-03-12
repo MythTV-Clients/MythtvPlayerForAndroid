@@ -3,7 +3,6 @@ package org.mythtv.android.presentation.internal.di.modules;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.interactor.GetRecentProgramList;
-import org.mythtv.android.domain.interactor.GetRecordedProgramList;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
