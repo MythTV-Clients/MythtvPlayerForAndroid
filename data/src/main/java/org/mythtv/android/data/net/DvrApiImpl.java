@@ -20,7 +20,10 @@ import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.domain.SettingsKeys;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
+
 import java.util.List;
 
 import rx.Observable;
@@ -325,15 +328,16 @@ public class DvrApiImpl implements DvrApi {
 
         if( null != titleRegEx && !"".equals( titleRegEx ) ) {
 
-//            try {
+            String  dottedTitleRegex = titleRegEx.replaceAll( "[\\$\\(\\)\\*\\+\\?\\[\\]\\^\\{\\|\\}]", "."  );
+
+            try {
 
                 sb.append( "&" );
-                sb.append( String.format( TITLE_REG_EX_QS, titleRegEx.replaceAll( "[^\\dA-Za-z]", "." ).replaceAll( "\\s+", "+" ) ) );
+                sb.append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( dottedTitleRegex, "UTF-8" ) ) );
 
-//            } catch( UnsupportedEncodingException e ) {
-//
-//                Log.e( TAG, "getRecordedProgramEntitiesFromApi : error", e );
-//            }
+            } catch( UnsupportedEncodingException e ) {
+                Log.e( TAG, "getRecordedProgramEntitiesFromApi : error", e );
+            }
         }
 
         if( null != recGroup && !"".equals( recGroup ) ) {
