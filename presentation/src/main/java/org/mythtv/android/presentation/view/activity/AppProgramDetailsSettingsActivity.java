@@ -21,6 +21,8 @@ package org.mythtv.android.presentation.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 
 import org.mythtv.android.R;
 
@@ -44,6 +46,32 @@ public class AppProgramDetailsSettingsActivity extends AppAbstractBaseActivity {
 
         setTitle( getResources().getString( R.string.drawer_item_preferences ) );
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+
+        switch( item.getItemId() ) {
+
+            case android.R.id.home :
+
+                onBackPressed();
+
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected( item );
+    }
+
+    @Override
+    public boolean onNavigateUp() {
+        Log.d( TAG, "onNavigateUp : enter" );
+
+        onBackPressed();
+
+        Log.d( TAG, "onNavigateUp : exit" );
+        return true;
     }
 
 }

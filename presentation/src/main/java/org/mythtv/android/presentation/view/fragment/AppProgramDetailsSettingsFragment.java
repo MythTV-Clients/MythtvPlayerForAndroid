@@ -36,7 +36,7 @@ public class AppProgramDetailsSettingsFragment extends PreferenceFragment {
         Log.v( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
-        addPreferencesFromResource( R.xml.preferences_recordings );
+        addPreferencesFromResource( R.xml.preferences );
 
         Log.v( TAG, "onCreate : exit" );
     }

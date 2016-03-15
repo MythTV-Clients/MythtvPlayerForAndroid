@@ -78,7 +78,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
-        Log.d(TAG, "onCreate : enter");
+        Log.d( TAG, "onCreate : enter" );
 
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
 
@@ -89,7 +89,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
         this.initializeActivity( savedInstanceState );
         this.initializeInjector();
 
-        Log.d(TAG, "onCreate : exit");
+        Log.d( TAG, "onCreate : exit" );
     }
 
     @Override
@@ -125,7 +125,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
         Log.d( TAG, "onRestoreInstanceState : enter" );
-        super.onRestoreInstanceState(savedInstanceState);
+        super.onRestoreInstanceState( savedInstanceState );
 
         if( null != savedInstanceState ) {
             Log.d( TAG, "onRestoreInstanceState : savedInstanceState != null" );
@@ -136,6 +136,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
             this.filename = savedInstanceState.getString( INSTANCE_STATE_PARAM_FILENAME );
             this.hostname = savedInstanceState.getString( INSTANCE_STATE_PARAM_HOSTNAME );
 
+            Log.d( TAG, "onRestoreInstanceState : chanId=" + chanId + ", startTime=" + startTime + ", storageGroup=" + storageGroup + ", filename=" + filename + ", hostname=" + hostname );
         }
 
         Log.d( TAG, "onRestoreInstanceState : exit" );
@@ -209,9 +210,9 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
                 }
 
-            }
+                addFragment( R.id.fl_fragment, AppProgramDetailsFragment.newInstance( this.chanId, this.startTime ) );
 
-            addFragment( R.id.fl_fragment, AppProgramDetailsFragment.newInstance( this.chanId, this.startTime ) );
+            }
 
         } else {
             Log.d( TAG, "initializeActivity : savedInstanceState is not null" );

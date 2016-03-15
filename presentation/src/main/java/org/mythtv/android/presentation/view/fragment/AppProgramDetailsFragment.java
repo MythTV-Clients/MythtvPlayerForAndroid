@@ -103,7 +103,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
 
     public AppProgramDetailsFragment() { super(); }
 
-    public static AppProgramDetailsFragment newInstance(int chanId, DateTime startTime ) {
+    public static AppProgramDetailsFragment newInstance( int chanId, DateTime startTime ) {
 
         AppProgramDetailsFragment programDetailsFragment = new AppProgramDetailsFragment();
 
