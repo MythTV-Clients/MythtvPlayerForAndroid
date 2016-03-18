@@ -28,7 +28,8 @@
             android:key="enable_default_recording_group"
             android:defaultValue="false"
             android:summaryOn="@string/pref_default_recording_group_summary_on"
-            android:summaryOff="@string/pref_default_recording_group_summary_off" />
+            android:summaryOff="@string/pref_default_recording_group_summary_off"
+            android:enabled="false" />
 
         <ListPreference
             android:title="@string/pref_default_recording_group"
