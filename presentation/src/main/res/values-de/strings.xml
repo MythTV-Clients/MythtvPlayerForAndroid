@@ -95,7 +95,7 @@
     <string name="watch_video">Videos Ansehen</string>
     <string name="recording_preferences">Aufnahmeeinstellungen</string>
     <string name="recording_preferences_summary">Einstellungen für Aufnahmen</string>
-    <string name="pref_set_default_recording_group"> Aufnahme Gruppeneinstellungen</string> <!-- not checked, unknown occurence -->
+    <string name="pref_set_default_recording_group">Aufnahme Gruppeneinstellungen   [Einstellung diesmal nicht verfügbar]</string> <!-- not checked, unknown occurence -->
     <string name="pref_default_recording_group">Standardaufnahmegruppe auswählen</string>
     <string name="pref_default_recording_group_summary_off">Keine Standard ufnahmegruppe festgelegt</string>
     <string name="pref_default_recording_group_summary_on"> Nur Aufnahmen der Standardaufnahmegruppe angezeigt</string>

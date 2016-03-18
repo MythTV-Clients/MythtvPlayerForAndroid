@@ -103,10 +103,10 @@
     <string name="pref_enable_parental_controls_summary_off">Parental Controls are disabled</string>
     <string name="pref_parental_control_level">Select highest Parental Control level displayed</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="settings_description"/>
+    <string name="settings_description" translatable="false" />
     <string name="recording_preferences">Recording Settings</string>
     <string name="recording_preferences_summary">Modify Recordings Display and Filters</string>
-    <string name="pref_set_default_recording_group">Recording Group Settings</string>
+    <string name="pref_set_default_recording_group">Recording Group Settings [setting unavailable at this time]</string>
     <string name="pref_enable_default_recording_group">Enable Default Recording Group</string>
     <string name="pref_default_recording_group_summary_on">Only recordings in selected recording group will be displayed</string>
     <string name="pref_default_recording_group_summary_off">No Default Recording Group is set</string>
