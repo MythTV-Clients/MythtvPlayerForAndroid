@@ -1,0 +1,34 @@
+apply plugin: 'java'
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = 1.7
+//noinspection GroovyUnusedAssignment
+targetCompatibility = 1.7
+
+configurations {
+    provided
+}
+
+sourceSets {
+  main {
+    compileClasspath += configurations.provided
+  }
+}
+
+dependencies {
+
+    def domainDependencies = rootProject.ext.domainDependencies
+    def domainTestDependencies = rootProject.ext.domainTestDependencies
+
+    provided domainDependencies.daggerCompiler
+    provided domainDependencies.javaxAnnotation
+    compile domainDependencies.lombok
+
+    compile domainDependencies.dagger
+    compile domainDependencies.rxJava
+    compile domainDependencies.joda
+
+    testCompile domainTestDependencies.junit
+    testCompile domainTestDependencies.mockito
+
+}

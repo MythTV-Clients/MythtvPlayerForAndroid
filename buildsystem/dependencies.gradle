@@ -1,0 +1,136 @@
+/*
+ * MythTV Player An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2015. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+allprojects {
+
+    repositories {
+        jcenter()
+    }
+
+}
+
+ext {
+
+    //Android
+    androidBuildToolsVersion = "23.0.2"
+    androidMinSdkVersion = 17
+    androidTargetSdkVersion = 23
+    androidCompileSdkVersion = 23
+
+    //Android Support Libraries
+    androidSupportVersion = '23.2.0'
+
+    //Libraries
+    daggerVersion = '2.0.2'
+    butterKnifeVersion = '7.0.1'
+    rxJavaVersion = '1.1.0'
+    rxAndroidVersion = '1.1.0'
+    javaxAnnotationVersion = '10.0-b28'
+    gsonVersion = '2.5'
+    okHttpVersion = '3.0.1'
+    picassoVersion = '2.5.2'
+    mythtvServiceApiVersion = '2.0.4'
+    jodaVersion = '2.9.1'
+    lombokVersion = '1.16.6'
+    exoplayerVersion = 'r1.5.4'
+    glideVersion = '3.7.0'
+    multidexVersion = '1.0.0'
+
+    //Testing
+    robolectricVersion = '3.0'
+    jUnitVersion = '4.10'
+    assertJVersion = '3.3.0'
+    mockitoVersion = '1.10.19'
+    dexmakerVersion = '1.2'
+    espressoVersion = '2.2.1'
+    testingSupportRunnerVersion = '0.4.1'
+    testingSupportRulesVersion = '0.4.1'
+    testingSupportuiVersion = '2.1.2'
+
+
+    presentationDependencies = [
+        daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
+        dagger:             "com.google.dagger:dagger:${daggerVersion}",
+        butterKnife:        "com.jakewharton:butterknife:${butterKnifeVersion}",
+        appCompat:          "com.android.support:appcompat-v7:${androidSupportVersion}",
+        recyclerView:       "com.android.support:recyclerview-v7:${androidSupportVersion}",
+        design:             "com.android.support:design:${androidSupportVersion}",
+        cardView:           "com.android.support:cardview-v7:${androidSupportVersion}",
+        palette:            "com.android.support:palette-v7:${androidSupportVersion}",
+        androidAnnotations: "com.android.support:support-annotations:${androidSupportVersion}",
+        preferences:        "com.android.support:preference-v14:${androidSupportVersion}",
+        leanback:           "com.android.support:leanback-v17:${androidSupportVersion}",
+        leanbackPreferences:"com.android.support:preference-leanback-v17:${androidSupportVersion}",
+        rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
+        rxAndroid:          "io.reactivex:rxandroid:${rxAndroidVersion}",
+        javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
+        picasso:            "com.squareup.picasso:picasso:${picassoVersion}",
+        lombok:             "org.projectlombok:lombok:${lombokVersion}",
+        exoplayer:          "com.google.android.exoplayer:exoplayer:${exoplayerVersion}",
+        glide:              "com.github.bumptech.glide:glide:${glideVersion}",
+        multidex:           "com.android.support:multidex:${multidexVersion}"
+    ]
+
+    presentationTestDependencies = [
+        androidAnnotations: "com.android.support:support-annotations:${androidSupportVersion}",
+        mockito:            "org.mockito:mockito-core:${mockitoVersion}",
+        dexmaker:           "com.google.dexmaker:dexmaker:${dexmakerVersion}",
+        dexmakerMockito:    "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
+        espresso:           "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+        testSupportRunner:  "com.android.support.test:runner:${testingSupportRunnerVersion}",
+        testSupportRules:   "com.android.support.test:rules:${testingSupportRulesVersion}",
+        testSupportUi:      "com.android.support.test.uiautomator:uiautomator-v18:${testingSupportuiVersion}",
+        robolectric:        "org.robolectric:robolectric:${robolectricVersion}"
+    ]
+
+    domainDependencies = [
+        daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
+        dagger:             "com.google.dagger:dagger:${daggerVersion}",
+        javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
+        rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
+        lombok:             "org.projectlombok:lombok:${lombokVersion}",
+        joda:               "joda-time:joda-time:${jodaVersion}"
+    ]
+
+    domainTestDependencies = [
+        junit:              "junit:junit:${jUnitVersion}",
+        mockito:            "org.mockito:mockito-core:${mockitoVersion}"
+    ]
+
+    dataDependencies = [
+        daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
+        dagger:             "com.google.dagger:dagger:${daggerVersion}",
+        okHttp:             "com.squareup.okhttp3:okhttp:${okHttpVersion}",
+        gson:               "com.google.code.gson:gson:${gsonVersion}",
+        rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
+        rxAndroid:          "io.reactivex:rxandroid:${rxAndroidVersion}",
+        javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
+        androidAnnotations: "com.android.support:support-annotations:${androidSupportVersion}",
+        lombok:             "org.projectlombok:lombok:${lombokVersion}",
+        mythtvServiceApi:   "org.mythtv.android:mythtv-service-api:${mythtvServiceApiVersion}"
+    ]
+
+    dataTestDependencies = [
+        androidAnnotations: "com.android.support:support-annotations:${androidSupportVersion}",
+        junit:              "junit:junit:${jUnitVersion}",
+        assertj:            "org.assertj:assertj-core:${assertJVersion}",
+        mockito:            "org.mockito:mockito-core:${mockitoVersion}",
+        robolectric:        "org.robolectric:robolectric:${robolectricVersion}"
+    ]
+
+}
