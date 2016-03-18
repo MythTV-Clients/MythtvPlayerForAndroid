@@ -9,7 +9,7 @@ public class DefaultErrorBundle implements ErrorBundle {
 
     private final Exception exception;
 
-    public DefaultErrorBundle(Exception exception) {
+    public DefaultErrorBundle( Exception exception ) {
         this.exception = exception;
     }
 
@@ -20,7 +20,7 @@ public class DefaultErrorBundle implements ErrorBundle {
 
     @Override
     public String getErrorMessage() {
-        return (exception != null) ? this.exception.getMessage() : DEFAULT_ERROR_MSG;
+        return ( exception != null ) ? this.exception.getMessage() : DEFAULT_ERROR_MSG;
     }
 
 }

@@ -1,4 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
+
+jacoco {
+    toolVersion "0.7.6.201602180812"
+}
 
 //noinspection GroovyUnusedAssignment
 sourceCompatibility = 1.7
@@ -31,4 +37,26 @@ dependencies {
     testCompile domainTestDependencies.junit
     testCompile domainTestDependencies.mockito
 
+    compile 'org.jacoco:org.jacoco.agent:0.7.6.201602180812'
+
 }
+
+jacocoTestReport {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+
+    reports {
+        xml.enabled true
+        csv.enabled false
+        xml.destination "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        html.destination "${buildDir}/reports/coverage"
+    }
+
+    doLast {
+        println "coveralls report has been generated to file://${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        println "jacoco report has been generated to file://${reports.html.destination}/index.html"
+    }
+
+}
+
+check.dependsOn jacocoTestReport

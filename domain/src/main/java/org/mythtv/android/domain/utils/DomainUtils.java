@@ -5,6 +5,8 @@ package org.mythtv.android.domain.utils;
  */
 public class DomainUtils {
 
+    private DomainUtils() { }
+
     public static String removeArticles( String value ) {
 
         String ret = value;
@@ -13,7 +15,7 @@ public class DomainUtils {
             ret = ret.substring( "the ".length() );
         }
 
-        if( value.toLowerCase().startsWith("an ") ) {
+        if( value.toLowerCase().startsWith( "an ") ) {
             ret = ret.substring( "an ".length() );
         }
 

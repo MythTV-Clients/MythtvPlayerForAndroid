@@ -21,4 +21,4 @@ android:
     - android-23
     - extra-android-m2repository
 
-script: ./gradlew build jacoco coveralls
+script: ./gradlew build jacoco jacocoTestReport coveralls
