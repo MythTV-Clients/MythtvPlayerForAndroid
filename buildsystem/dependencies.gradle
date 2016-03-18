@@ -38,7 +38,7 @@ ext {
     //Libraries
     daggerVersion = '2.0.2'
     butterKnifeVersion = '7.0.1'
-    rxJavaVersion = '1.1.0'
+    rxJavaVersion = '1.1.1'
     rxAndroidVersion = '1.1.0'
     javaxAnnotationVersion = '10.0-b28'
     gsonVersion = '2.5'

@@ -7,17 +7,20 @@ import org.mockito.MockitoAnnotations;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.SearchRepository;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 /**
- * Created by dmfrey on 8/26/15.
+ * Created by dmfrey on 3/18/16.
  */
-public class GetTitleInfoListTest {
+public class GetSearchResultListTest {
 
-    private GetTitleInfoList getTitleInfoList;
+    private static final String FAKE_SEARCH_TEXT = "fake test search";
+
+    private GetSearchResultList getSearchResultList;
 
     @Mock
     private ThreadExecutor mockThreadExecutor;
@@ -26,23 +29,23 @@ public class GetTitleInfoListTest {
     private PostExecutionThread mockPostExecutionThread;
 
     @Mock
-    private DvrRepository mockDvrRepository;
+    private SearchRepository mockSearchRepository;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getTitleInfoList = new GetTitleInfoList( mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
+        getSearchResultList = new GetSearchResultList( FAKE_SEARCH_TEXT, mockSearchRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
-    public void testGetTitleInfoListUseCaseObservableHappyCase() {
+    public void testGetSearchResultListUseCaseObservableHappyCase() {
 
-        getTitleInfoList.buildUseCaseObservable();
+        getSearchResultList.buildUseCaseObservable();
 
-        verify( mockDvrRepository ).titleInfos();
-        verifyNoMoreInteractions( mockDvrRepository );
+        verify( mockSearchRepository ).search( FAKE_SEARCH_TEXT );
+        verifyNoMoreInteractions( mockSearchRepository );
         verifyZeroInteractions( mockThreadExecutor );
         verifyZeroInteractions( mockPostExecutionThread );
 

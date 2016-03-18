@@ -13,11 +13,11 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 /**
- * Created by dmfrey on 8/26/15.
+ * Created by dmfrey on 3/18/16.
  */
-public class GetTitleInfoListTest {
+public class GetRecentProgramListTest {
 
-    private GetTitleInfoList getTitleInfoList;
+    private GetRecentProgramList getRecentProgramList;
 
     @Mock
     private ThreadExecutor mockThreadExecutor;
@@ -32,16 +32,16 @@ public class GetTitleInfoListTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getTitleInfoList = new GetTitleInfoList( mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
+        getRecentProgramList = new GetRecentProgramList( mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
-    public void testGetTitleInfoListUseCaseObservableHappyCase() {
+    public void testGetRecentProgramListUseCaseObservableHappyCase() {
 
-        getTitleInfoList.buildUseCaseObservable();
+        getRecentProgramList.buildUseCaseObservable();
 
-        verify( mockDvrRepository ).titleInfos();
+        verify( mockDvrRepository ).recent();
         verifyNoMoreInteractions( mockDvrRepository );
         verifyZeroInteractions( mockThreadExecutor );
         verifyZeroInteractions( mockPostExecutionThread );

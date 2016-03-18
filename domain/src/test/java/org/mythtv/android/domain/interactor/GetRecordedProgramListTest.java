@@ -37,7 +37,7 @@ public class GetRecordedProgramListTest {
     }
 
     @Test
-    public void testGetUserListUseCaseObservableHappyCase() {
+    public void testGetRecordedProgramListUseCaseObservableHappyCase() {
 
         getRecordedProgramList.buildUseCaseObservable();
 

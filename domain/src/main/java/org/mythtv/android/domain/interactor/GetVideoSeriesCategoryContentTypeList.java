@@ -17,7 +17,7 @@ public class GetVideoSeriesCategoryContentTypeList extends UseCase {
     private final VideoRepository videoRepository;
 
     @Inject
-    public GetVideoSeriesCategoryContentTypeList(String contentType, VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetVideoSeriesCategoryContentTypeList( String contentType, VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
         this.contentType = contentType;

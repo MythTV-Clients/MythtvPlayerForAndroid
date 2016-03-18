@@ -6,18 +6,20 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.VideoRepository;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 /**
- * Created by dmfrey on 8/26/15.
+ * Created by dmfrey on 3/18/16.
  */
-public class GetTitleInfoListTest {
+public class GetVideoContentTypeListTest {
 
-    private GetTitleInfoList getTitleInfoList;
+    private static final String FAKE_CONTENT_TYPE = "fake content type";
+
+    private GetVideoContentTypeList getVideoContentTypeList;
 
     @Mock
     private ThreadExecutor mockThreadExecutor;
@@ -26,23 +28,23 @@ public class GetTitleInfoListTest {
     private PostExecutionThread mockPostExecutionThread;
 
     @Mock
-    private DvrRepository mockDvrRepository;
+    private VideoRepository mockVideoRepository;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getTitleInfoList = new GetTitleInfoList( mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
+        getVideoContentTypeList = new GetVideoContentTypeList( FAKE_CONTENT_TYPE, mockVideoRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
-    public void testGetTitleInfoListUseCaseObservableHappyCase() {
+    public void testGetVideoListUseCaseObservableHappyCase() {
 
-        getTitleInfoList.buildUseCaseObservable();
+        getVideoContentTypeList.buildUseCaseObservable();
 
-        verify( mockDvrRepository ).titleInfos();
-        verifyNoMoreInteractions( mockDvrRepository );
+        verify( mockVideoRepository ).getVideoListByContentType( FAKE_CONTENT_TYPE );
+        verifyNoMoreInteractions( mockVideoRepository );
         verifyZeroInteractions( mockThreadExecutor );
         verifyZeroInteractions( mockPostExecutionThread );
 

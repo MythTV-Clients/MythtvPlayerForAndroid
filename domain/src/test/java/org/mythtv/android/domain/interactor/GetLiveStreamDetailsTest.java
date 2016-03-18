@@ -1,13 +1,12 @@
 package org.mythtv.android.domain.interactor;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.ContentRepository;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -15,15 +14,14 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 /**
  * Created by dmfrey on 8/26/15.
  */
-public class GetRecordedProgramDetailsTest {
+public class GetLiveStreamDetailsTest {
 
-    private static final int FAKE_CHAN_ID = 999;
-    private static final DateTime FAKE_START_TIME = new DateTime();
+    private static final int FAKE_LIVE_STREAM_ID = 999;
 
-    private GetRecordedProgramDetails getRecordedProgramDetails;
+    private GetLiveStreamDetails getLiveStreamDetails;
 
     @Mock
-    private DvrRepository mockDvrRepository;
+    private ContentRepository mockContentRepository;
     @Mock private ThreadExecutor mockThreadExecutor;
     @Mock private PostExecutionThread mockPostExecutionThread;
 
@@ -31,16 +29,16 @@ public class GetRecordedProgramDetailsTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getRecordedProgramDetails = new GetRecordedProgramDetails( FAKE_CHAN_ID, FAKE_START_TIME, mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
+        getLiveStreamDetails = new GetLiveStreamDetails( FAKE_LIVE_STREAM_ID, mockContentRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
     public void testGetRecordedProgramDetailsUseCaseObservableHappyCase() {
 
-        getRecordedProgramDetails.buildUseCaseObservable();
+        getLiveStreamDetails.buildUseCaseObservable();
 
-        verify( mockDvrRepository ).recordedProgram( FAKE_CHAN_ID, FAKE_START_TIME );
+        verify( mockContentRepository ).liveStreamInfo( FAKE_LIVE_STREAM_ID );
         verifyZeroInteractions( mockPostExecutionThread );
         verifyZeroInteractions( mockThreadExecutor );
 
