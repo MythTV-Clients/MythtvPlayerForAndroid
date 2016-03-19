@@ -52,6 +52,32 @@ jacocoTestReport {
         html.destination "${buildDir}/reports/coverage"
     }
 
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(
+                    dir: it,
+                    exclude: [
+                            '**/Artwork.class',
+                            '**/ArtworkInfo*.class',
+                            '**/Cast.class',
+                            '**/CastMember.class',
+                            '**/ChannelInfo.class',
+                            '**/ContentType.class',
+                            '**/Encoder.class',
+                            '**/Input.class',
+                            '**/LiveStreamInfo.class',
+                            '**/Program.class',
+                            '**/RecordingInfo.class',
+                            '**/SearchResult.class',
+                            '**/SearchResult$Type.class',
+                            '**/SettingsKeys.class',
+                            '**/TitleInfo.class',
+                            '**/VideoMetadataInfo.class',
+                            '**/*_Factory.class',
+                    ])
+        })
+    }
+
     doLast {
         println "coveralls report has been generated to file://${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
         println "jacoco report has been generated to file://${reports.html.destination}/index.html"
