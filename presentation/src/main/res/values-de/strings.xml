@@ -123,6 +123,5 @@
     <string name="encoder_item_recording_image_content_description">encoder_item_recording_image</string>
     <string name="nav_drawer_logo_content_description">nav_drawer_logo</string>
     <string name="tv_item_category_content_description">tv_item_category</string>
-    <string name="settings_description"/>
 
 </resources>
