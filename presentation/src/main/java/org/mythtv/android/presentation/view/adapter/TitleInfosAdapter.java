@@ -3,6 +3,7 @@ package org.mythtv.android.presentation.view.adapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -84,7 +85,7 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
 
         } else {
 
-            holder.imageViewCoverart.setImageDrawable( context.getResources().getDrawable( R.drawable.ffffff, null ) );
+            holder.imageViewCoverart.setImageDrawable( ContextCompat.getDrawable( context, R.drawable.ffffff ) );
 
         }
         holder.textViewTitle.setText( titleInfoModel.getTitle() );
