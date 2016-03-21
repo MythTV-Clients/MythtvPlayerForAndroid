@@ -123,5 +123,10 @@
     <string name="encoder_item_recording_image_content_description">encoder_item_recording_image</string>
     <string name="nav_drawer_logo_content_description">nav_drawer_logo</string>
     <string name="tv_item_category_content_description">tv_item_category</string>
+    <string name="exception_message_no_connection"> Kann nicht an mythbackend verbinden</string>
+    <string name="encoder_state_idle" translatable="false"> müßig</string>
+    <string name="encoder_state_recording" translatable="false">Aufnahme</string>
+    <string name="encoder_state_watching_bd" translatable="false">ansehen eines BluRay-disc</string>
+    <string name="encoder_state_watching_dvd">Sie eine DVD anschauen</string>
 
 </resources>

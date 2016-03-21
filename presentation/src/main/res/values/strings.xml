@@ -116,7 +116,7 @@
 
     //Exception messages
     <string name="exception_message_generic" translatable="false">There was an application error</string>
-    <string name="exception_message_no_connection" translatable="false">There is no internet connection</string>
+    <string name="exception_message_no_connection">Can\'t connect to mythbackend</string>
     <string name="exception_message_program_not_found" translatable="false">Cannot retrieve program data. Check your internet connection</string>
     <string name="recording_description_label" translatable="false">Details:</string>
     <string name="recording_cast_label" translatable="false">Cast:</string>
@@ -126,14 +126,14 @@
 
     <string name="encoder" translatable="false">Encoder %1$s [%2$s] is %3$s</string>
     <string name="encoder_state_error" translatable="false">in an errored state</string>
-    <string name="encoder_state_idle" translatable="false">idle</string>
+    <string name="encoder_state_idle">idle</string>
     <string name="encoder_state_watching_live_tv" translatable="false">watching live tv</string>
     <string name="encoder_state_watching_recorded" translatable="false">watching recorded</string>
     <string name="encoder_state_watching_video" translatable="false">watching a video</string>
-    <string name="encoder_state_watching_dvd" translatable="false">watching a dvd</string>
-    <string name="encoder_state_watching_bd" translatable="false">watching a bluray disc</string>
+    <string name="encoder_state_watching_dvd">watching a DVD</string>
+    <string name="encoder_state_watching_bd">watching a Blu-ray disc</string>
     <string name="encoder_state_watching_recording" translatable="false">watching a recording</string>
-    <string name="encoder_state_recording" translatable="false">recording</string>
+    <string name="encoder_state_recording">recording</string>
     <string name="encoder_state_changing_state" translatable="false">changing state</string>
 
     <string name="minutes" translatable="false">%1$s Minutes</string>
