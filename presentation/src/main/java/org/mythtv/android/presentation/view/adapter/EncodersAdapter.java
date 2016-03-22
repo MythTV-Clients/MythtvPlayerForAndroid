@@ -88,7 +88,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
         }
 
-        holder.textViewName.setText( context.getResources().getString( R.string.encoder, String.valueOf( encoderModel.getId() ), encoderModel.getInputs().get( 0 ).getDisplayName(), context.getResources().getString( state ) ) );
+        holder.textViewName.setText( context.getResources().getString( R.string.encoder, String.valueOf( encoderModel.getId() ), ( null != encoderModel.getInputs() ? encoderModel.getInputs().get( 0 ).getDisplayName() : "" ), context.getResources().getString( state ) ) );
 
         if( null != encoderModel.getRecording() ) {
 
