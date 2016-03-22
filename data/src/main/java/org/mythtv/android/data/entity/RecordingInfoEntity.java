@@ -30,7 +30,7 @@ import lombok.Data;
 @Data
 public class RecordingInfoEntity {
 
-    @SerializedName( "RecordedId" )
+//    @SerializedName( "RecordedId" )
     private int recordedId;
 
     @SerializedName( "Status" )

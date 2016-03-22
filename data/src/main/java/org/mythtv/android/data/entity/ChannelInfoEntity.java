@@ -73,7 +73,7 @@ public class ChannelInfoEntity {
     @SerializedName( "InputId" )
     private int inputId;
 
-    @SerializedName( "CommFree" )
+//    @SerializedName( "CommFree" )
     private boolean commFree;
 
     @SerializedName( "UseEIT" )
