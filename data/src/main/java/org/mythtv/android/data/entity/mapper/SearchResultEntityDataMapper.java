@@ -99,17 +99,27 @@ public class SearchResultEntityDataMapper {
 
             List<String> castMembers = new ArrayList<>();
             List<String> characters = new ArrayList<>();
-            for( CastMemberEntity castMember : programEntity.getCast().getCastMembers() ) {
 
-                if( !castMembers.contains( castMember.getName() ) ) {
-                    castMembers.add( castMember.getName() );
-                }
+            if( null != programEntity.getCast() ) {
 
-                if( !characters.contains( castMember.getCharacterName() ) ) {
-                    characters.add( castMember.getCharacterName() );
+                if( null != programEntity.getCast().getCastMembers() && programEntity.getCast().getCastMembers().length != 0 ) {
+
+                    for (CastMemberEntity castMember : programEntity.getCast().getCastMembers()) {
+
+                        if (!castMembers.contains(castMember.getName())) {
+                            castMembers.add(castMember.getName());
+                        }
+
+                        if (!characters.contains(castMember.getCharacterName())) {
+                            characters.add(castMember.getCharacterName());
+                        }
+
+                    }
+
                 }
 
             }
+
             if( !castMembers.isEmpty() ) {
                 String cast = "";
                 for( String name : castMembers ) {

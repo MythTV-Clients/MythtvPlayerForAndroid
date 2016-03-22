@@ -1,6 +1,7 @@
 package org.mythtv.android.presentation.presenter;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.mythtv.android.domain.TitleInfo;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
@@ -23,6 +24,8 @@ import javax.inject.Named;
  */
 public class TitleInfoListPresenter extends DefaultSubscriber<List<TitleInfo>> implements Presenter {
 
+    private static final String TAG = TitleInfoListPresenter.class.getSimpleName();
+
     private TitleInfoListView viewListView;
 
     private final UseCase getTitleInfoListUseCase;
@@ -30,10 +33,12 @@ public class TitleInfoListPresenter extends DefaultSubscriber<List<TitleInfo>> i
 
     @Inject
     public TitleInfoListPresenter( @Named( "titleInfoList" ) UseCase getTitleInfoListUseCase, TitleInfoModelDataMapper titleInfoModelDataMapper ) {
+        Log.d( TAG, "construct : enter" );
 
         this.getTitleInfoListUseCase = getTitleInfoListUseCase;
         this.titleInfoModelDataMapper = titleInfoModelDataMapper;
 
+        Log.d( TAG, "construct : exit" );
     }
 
     public void setView( @NonNull TitleInfoListView view ) {
@@ -61,26 +66,32 @@ public class TitleInfoListPresenter extends DefaultSubscriber<List<TitleInfo>> i
      * Initializes the presenter by start retrieving the titleInfo list.
      */
     public void initialize() {
+        Log.d( TAG, "initialize : enter" );
 
         this.loadTitleInfoList();
 
+        Log.d( TAG, "initialize : enter" );
     }
 
     /**
      * Loads all titleInfos.
      */
     private void loadTitleInfoList() {
+        Log.d( TAG, "loadTitleInfoList : enter" );
 
         this.hideViewRetry();
         this.showViewLoading();
         this.getTitleInfoList();
 
+        Log.d( TAG, "loadTitleInfoList : exit" );
     }
 
     public void onTitleInfoClicked( TitleInfoModel titleInfoModel ) {
+        Log.d( TAG, "onTitleInfoClicked : enter" );
 
         this.viewListView.viewTitleInfo( titleInfoModel );
 
+        Log.d( TAG, "onTitleInfoClicked : exit" );
     }
 
     private void showViewLoading() {
@@ -100,23 +111,31 @@ public class TitleInfoListPresenter extends DefaultSubscriber<List<TitleInfo>> i
     }
 
     private void showErrorMessage( ErrorBundle errorBundle ) {
+        Log.d( TAG, "showErrorMessage : enter" );
 
         String errorMessage = ErrorMessageFactory.create( this.viewListView.getContext(), errorBundle.getException() );
+        Log.e( TAG, "showErrorMessage : errorMessage=" + errorMessage, errorBundle.getException() );
+
         this.viewListView.showError( errorMessage );
 
+        Log.d( TAG, "showErrorMessage : exit" );
     }
 
     private void showTitleInfosCollectionInView( Collection<TitleInfo> titleInfosCollection ) {
+        Log.d( TAG, "showTitleInfosCollectionInView : enter" );
 
         final Collection<TitleInfoModel> titleInfoModelsCollection = this.titleInfoModelDataMapper.transform( titleInfosCollection );
         this.viewListView.renderTitleInfoList( titleInfoModelsCollection );
 
+        Log.d( TAG, "showTitleInfosCollectionInView : exit" );
     }
 
     private void getTitleInfoList() {
+        Log.d( TAG, "getTitleInfoList : enter" );
 
         this.getTitleInfoListUseCase.execute( new TitleInfoListSubscriber() );
 
+        Log.d( TAG, "getTitleInfoList : exit" );
     }
 
     private final class TitleInfoListSubscriber extends DefaultSubscriber<List<TitleInfo>> {
