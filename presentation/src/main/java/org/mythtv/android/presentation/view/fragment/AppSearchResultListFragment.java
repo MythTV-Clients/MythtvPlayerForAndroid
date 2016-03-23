@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 /**
  * Created by dmfrey on 10/12/15.
@@ -51,6 +52,9 @@ public class AppSearchResultListFragment extends AppAbstractBaseFragment impleme
 
     @Bind( R.id.rv_search_results )
     RecyclerView rv_searchResults;
+
+    @Bind( R.id.fast_scroller )
+    VerticalRecyclerViewFastScroller fastScroller;
 
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
@@ -93,6 +97,9 @@ public class AppSearchResultListFragment extends AppAbstractBaseFragment impleme
         View fragmentView = inflater.inflate( R.layout.fragment_app_search_result_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
+
+        fastScroller.setRecyclerView( rv_searchResults );
+        rv_searchResults.addOnScrollListener( fastScroller.getOnScrollListener() );
 
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;

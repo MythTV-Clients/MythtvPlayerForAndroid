@@ -133,6 +133,7 @@ dependencies {
     compile presentationDependencies.leanbackPreferences
     compile presentationDependencies.glide
     compile presentationDependencies.multidex
+    compile presentationDependencies.recyclerviewfastscroller
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations

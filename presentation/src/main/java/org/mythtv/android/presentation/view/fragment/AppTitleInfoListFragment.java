@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -47,6 +48,9 @@ public class AppTitleInfoListFragment extends AppAbstractBaseFragment implements
 
     @Bind( R.id.rv_titleInfos )
     RecyclerView rv_titleInfos;
+
+    @Bind( R.id.fast_scroller )
+    VerticalRecyclerViewFastScroller fastScroller;
 
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
@@ -81,6 +85,9 @@ public class AppTitleInfoListFragment extends AppAbstractBaseFragment implements
         View fragmentView = inflater.inflate( R.layout.fragment_app_title_info_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
+
+        fastScroller.setRecyclerView( rv_titleInfos );
+        rv_titleInfos.addOnScrollListener( fastScroller.getOnScrollListener() );
 
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
