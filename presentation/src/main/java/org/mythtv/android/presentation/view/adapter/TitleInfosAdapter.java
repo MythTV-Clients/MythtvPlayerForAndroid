@@ -89,7 +89,11 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
 
         }
         holder.textViewTitle.setText( titleInfoModel.getTitle() );
-        holder.textViewCount.setText( String.valueOf( titleInfoModel.getCount() ) );
+
+        int titleCount = titleInfoModel.getCount();
+        if( titleCount > 0 )
+            holder.textViewCount.setText( String.valueOf( titleCount ) );
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
