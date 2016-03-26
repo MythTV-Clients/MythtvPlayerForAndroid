@@ -131,6 +131,8 @@ dependencies {
     compile presentationDependencies.preferences
     compile presentationDependencies.leanback
     compile presentationDependencies.leanbackPreferences
+    compile presentationDependencies.mediarouter
+    compile presentationDependencies.playservicesCast
     compile presentationDependencies.glide
     compile presentationDependencies.multidex
     compile presentationDependencies.recyclerviewfastscroller

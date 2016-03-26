@@ -33,7 +33,8 @@ ext {
     androidCompileSdkVersion = 23
 
     //Android Support Libraries
-    androidSupportVersion = '23.2.0'
+    androidSupportVersion = '23.2.1'
+    playServicesVersion = '8.4.0'
 
     //Libraries
     daggerVersion = '2.0.2'
@@ -77,6 +78,8 @@ ext {
         preferences:        "com.android.support:preference-v14:${androidSupportVersion}",
         leanback:           "com.android.support:leanback-v17:${androidSupportVersion}",
         leanbackPreferences:"com.android.support:preference-leanback-v17:${androidSupportVersion}",
+        mediarouter:        "com.android.support:mediarouter-v7:${androidSupportVersion}",
+        playservicesCast:   "com.google.android.gms:play-services-cast:${playServicesVersion}",
         rxJava:             "io.reactivex:rxjava:${rxJavaVersion}",
         rxAndroid:          "io.reactivex:rxandroid:${rxAndroidVersion}",
         javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",

@@ -6,8 +6,10 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.view.activity.AppMainActivity;
 import org.mythtv.android.presentation.view.activity.AppPlayerActivity;
+import org.mythtv.android.presentation.view.activity.AppCastPlayerActivity;
 import org.mythtv.android.presentation.view.activity.AppProgramDetailsActivity;
 import org.mythtv.android.presentation.view.activity.AppProgramDetailsSettingsActivity;
 import org.mythtv.android.presentation.view.activity.AppProgramListActivity;
@@ -162,6 +164,20 @@ public class AppNavigator {
         }
 
         Log.d( TAG, "navigateToVideoSettings : exit" );
+    }
+
+    public void navigateToCastPlayer( Context context, ProgramModel programModel ) {
+        Log.d( TAG, "navigateToCastPlayer : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToCastPlayer : context != null" );
+
+            Intent intentToLaunch = AppCastPlayerActivity.getCallingIntent( context, programModel );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToCastPlayer : exit" );
     }
 
     public void navigateToExternalPlayer( Context context, String uri ) {

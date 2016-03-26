@@ -2,21 +2,36 @@ package org.mythtv.android.presentation.view.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.MediaRouteActionProvider;
+import android.support.v7.media.MediaControlIntent;
+import android.support.v7.media.MediaItemStatus;
+import android.support.v7.media.MediaRouteSelector;
+import android.support.v7.media.MediaRouter;
+import android.support.v7.media.MediaSessionStatus;
+import android.support.v7.media.RemotePlaybackClient;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.google.android.gms.cast.Cast;
+import com.google.android.gms.cast.CastDevice;
+import com.google.android.gms.cast.CastMediaControlIntent;
+import com.google.android.gms.cast.RemoteMediaPlayer;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.AndroidApplication;
@@ -38,6 +53,19 @@ import butterknife.ButterKnife;
 public abstract class AppAbstractBaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = AppAbstractBaseActivity.class.getSimpleName();
+
+    private MediaRouter mMediaRouter;
+    private MediaRouteSelector mMediaRouteSelector;
+    private MediaRouter.RouteInfo mRouteInfo;
+    private RemotePlaybackClient mRemotePlaybackClient;
+    private CastDevice mSelectedDevice;
+    private GoogleApiClient mApiClient;
+    private RemoteMediaPlayer mRemoteMediaPlayer;
+    private Cast.Listener mCastClientListener;
+    private boolean mWaitingForReconnect = false;
+    private boolean mApplicationStarted = false;
+    private boolean mVideoIsLoaded;
+    private boolean mIsPlaying;
 
     @Inject
     AppNavigator navigator;
@@ -77,6 +105,28 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
 
         }
 
+        initMediaRouter();
+
+    }
+
+    // Add the callback on start to tell the media router what kinds of routes
+    // your app works with so the framework can discover them.
+    @Override
+    public void onStart() {
+
+        mMediaRouter.addCallback( mMediaRouteSelector, mMediaRouterCallback, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY );
+        super.onStart();
+
+    }
+
+    // Remove the selector on stop to tell the media router that it no longer
+    // needs to discover routes for your app.
+    @Override
+    public void onStop() {
+
+        mMediaRouter.removeCallback( mMediaRouterCallback );
+        super.onStop();
+
     }
 
     @Override
@@ -90,6 +140,10 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
         SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
         searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
         searchView.setIconifiedByDefault( false );
+
+        MenuItem mediaRouteMenuItem = menu.findItem( R.id.media_route_menu_item );
+        MediaRouteActionProvider mediaRouteActionProvider = (MediaRouteActionProvider) MenuItemCompat.getActionProvider( mediaRouteMenuItem );
+        mediaRouteActionProvider.setRouteSelector( mMediaRouteSelector );
 
         return super.onCreateOptionsMenu( menu );
     }
@@ -218,4 +272,108 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
         return new SharedPreferencesModule( this );
     }
 
+    private void initMediaRouter() {
+
+        // Configure Cast device discovery
+        mMediaRouter = MediaRouter.getInstance( getApplicationContext() );
+        mMediaRouteSelector = new MediaRouteSelector.Builder()
+                .addControlCategory( CastMediaControlIntent.categoryForCast( getString( R.string.app_id ) ) )
+                .build();
+
+    }
+
+    private final MediaRouter.Callback mMediaRouterCallback =
+            new MediaRouter.Callback() {
+
+                @Override
+                public void onRouteSelected( MediaRouter router, MediaRouter.RouteInfo route ) {
+                    Log.d( TAG, "onRouteSelected: route=" + route );
+
+                    if( route.supportsControlCategory( MediaControlIntent.CATEGORY_REMOTE_PLAYBACK ) ) {
+
+                        // remote playback device
+                        updateRemotePlayer( route );
+
+                    } else {
+
+                        // secondary output device
+//                        updatePresentation( route );
+
+                    }
+
+                }
+
+                @Override
+                public void onRouteUnselected( MediaRouter router, MediaRouter.RouteInfo route ) {
+                    Log.d( TAG, "onRouteUnselected: route=" + route );
+
+                    if( route.supportsControlCategory( MediaControlIntent.CATEGORY_REMOTE_PLAYBACK ) ) {
+
+                        // remote playback device
+                        updateRemotePlayer( route );
+
+                    } else {
+
+                        // secondary output device
+//                        updatePresentation( route );
+
+                    }
+
+                }
+
+                @Override
+                public void onRoutePresentationDisplayChanged( MediaRouter router, MediaRouter.RouteInfo route ) {
+                    Log.d( TAG, "onRoutePresentationDisplayChanged: route=" + route );
+
+                    if( route.supportsControlCategory( MediaControlIntent.CATEGORY_REMOTE_PLAYBACK ) ) {
+
+                        // remote playback device
+                        updateRemotePlayer( route );
+
+                    } else {
+
+                        // secondary output device
+//                        updatePresentation( route );
+
+                    }
+
+                }
+
+            };
+
+    private void updateRemotePlayer( MediaRouter.RouteInfo routeInfo ) {
+
+        // Changed route: tear down previous client
+        if( null != mRouteInfo && null != mRemotePlaybackClient ) {
+
+            mRemotePlaybackClient.release();
+            mRemotePlaybackClient = null;
+
+        }
+
+        // Save new route
+        mRouteInfo = routeInfo;
+
+        // Attach new playback client
+        mRemotePlaybackClient = new RemotePlaybackClient( this, mRouteInfo );
+
+        // Send file for playback
+        mRemotePlaybackClient.play( Uri.parse( "http://archive.org/download/Sintel/sintel-2048-stereo_512kb.mp4" ),
+                "video/mp4", null, 0, null, new RemotePlaybackClient.ItemActionCallback() {
+
+                    @Override
+                    public void onResult( Bundle data, String sessionId, MediaSessionStatus sessionStatus, String itemId, MediaItemStatus itemStatus ) {
+                        Log.d( TAG, "play: succeeded for item " + itemId );
+                    }
+
+                    @Override
+                    public void onError( String error, int code, Bundle data ) {
+                        Log.e( TAG, "play: failed - error:"+ code +" - "+ error );
+                    }
+
+                });
+
+    }
+
 }
+
