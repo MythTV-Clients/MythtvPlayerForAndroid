@@ -11,6 +11,7 @@ import org.mythtv.android.data.exception.VideoNotFoundException;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -110,7 +111,7 @@ public class VideoCacheImpl implements VideoCache {
         if( !isCached() ) {
             Log.d( TAG, "getCategory : exit, not cached on disk" );
 
-            return null;
+            return Observable.empty();
         }
 
         return readFromFile()
@@ -130,7 +131,7 @@ public class VideoCacheImpl implements VideoCache {
         if( !isCached() ) {
             Log.d( TAG, "getDirectory : exit, not cached on disk" );
 
-            return null;
+            return Observable.empty();
         }
 
         return readFromFile()
