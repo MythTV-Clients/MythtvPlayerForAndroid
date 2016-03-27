@@ -67,6 +67,9 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
     private boolean mVideoIsLoaded;
     private boolean mIsPlaying;
 
+    protected String castUrl, castMimeType;
+    protected boolean castConnected;
+
     @Inject
     AppNavigator navigator;
 
@@ -289,6 +292,8 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
                 public void onRouteSelected( MediaRouter router, MediaRouter.RouteInfo route ) {
                     Log.d( TAG, "onRouteSelected: route=" + route );
 
+                    castConnected = true;
+
                     if( route.supportsControlCategory( MediaControlIntent.CATEGORY_REMOTE_PLAYBACK ) ) {
 
                         // remote playback device
@@ -306,6 +311,8 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
                 @Override
                 public void onRouteUnselected( MediaRouter router, MediaRouter.RouteInfo route ) {
                     Log.d( TAG, "onRouteUnselected: route=" + route );
+
+                    castConnected = false;
 
                     if( route.supportsControlCategory( MediaControlIntent.CATEGORY_REMOTE_PLAYBACK ) ) {
 
@@ -358,8 +365,8 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
         mRemotePlaybackClient = new RemotePlaybackClient( this, mRouteInfo );
 
         // Send file for playback
-        mRemotePlaybackClient.play( Uri.parse( "http://archive.org/download/Sintel/sintel-2048-stereo_512kb.mp4" ),
-                "video/mp4", null, 0, null, new RemotePlaybackClient.ItemActionCallback() {
+        mRemotePlaybackClient.play( Uri.parse( castUrl ),
+                castMimeType, null, 0, null, new RemotePlaybackClient.ItemActionCallback() {
 
                     @Override
                     public void onResult( Bundle data, String sessionId, MediaSessionStatus sessionStatus, String itemId, MediaItemStatus itemStatus ) {
@@ -368,7 +375,7 @@ public abstract class AppAbstractBaseActivity extends AppCompatActivity implemen
 
                     @Override
                     public void onError( String error, int code, Bundle data ) {
-                        Log.e( TAG, "play: failed - error:"+ code +" - "+ error );
+                        Log.e( TAG, "play: failed - error:" + code + " - " + error );
                     }
 
                 });

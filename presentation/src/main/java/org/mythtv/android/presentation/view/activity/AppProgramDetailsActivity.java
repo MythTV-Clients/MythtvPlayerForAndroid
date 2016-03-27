@@ -255,7 +255,11 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     public void onPlayRecording( ProgramModel programModel ) {
         Log.d( TAG, "onPlayRecording : enter" );
 
-        if( !getInternalPlayerPreferenceFromPreferences() ) {
+        if( castConnected && null != programModel.getLiveStreamInfo() ) {
+
+            navigator.navigateToCastPlayer( this, programModel );
+
+        } else if( !getInternalPlayerPreferenceFromPreferences() ) {
 
             String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
 
