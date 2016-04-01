@@ -24,6 +24,7 @@ import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +32,15 @@ import android.view.ViewGroup;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /*
  * Created by dmfrey on 4/7/15.
  */
 public class AppSettingsFragment extends PreferenceFragmentCompat {
+
+    private static final String TAG = AppSettingsFragment.class.getSimpleName();
 
     private SwitchPreference externalPlayerOverride;
 
@@ -63,6 +69,16 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 
                 String backendUrl = ((String) newValue).toLowerCase();
 
+                try {
+
+                    return ( null != InetAddress.getAllByName( backendUrl ) );
+
+                } catch( UnknownHostException e ) {
+                    Log.e( TAG, "mBackendUrl.onPreferenceChange : error", e );
+
+                    return false;
+                }
+
 //                boolean isIPv6 = backendUrl.matches("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))" );
 //                if( isIPv6 ) {
 //                    Log.i( TAG, "onPreferenceChange : validated IPv6" );
@@ -70,9 +86,9 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 //                    return true;
 //                }
 
-                boolean isIPv4 = backendUrl.matches("^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}");
+//                boolean isIPv4 = backendUrl.matches("^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}");
 
-                return isIPv4 || backendUrl.matches("(?=^.{1,253}$)(^(((?!-)[a-zA-Z0-9-]{1,63}(?<!-))|((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\\.)+[a-zA-Z]{2,63})$)");
+//                return isIPv4 || backendUrl.matches("(?=^.{1,253}$)(^(((?!-)[a-zA-Z0-9-]{1,63}(?<!-))|((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\\.)+[a-zA-Z]{2,63})$)");
 
             }
 
