@@ -85,7 +85,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                   // The 2nd exception on the next line fires because we shouldn't be
                   // doing that in this thread.
                 } catch( UnknownHostException | NetworkOnMainThreadException e ) {
-                    Log.e( TAG, "mBackendUrl.onPreferenceChange : an invalid IPv[46] address was passed. ", e );
+                    Log.i( TAG, "mBackendUrl.onPreferenceChange : an invalid IPv[46] address was passed: " + backendUrl );
                 }
 
                 // FIXME: This must be removed, but is here to test DNS lookup:
@@ -98,7 +98,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                     address = InetAddress.getByName( backendUrl );
 
                 } catch (UnknownHostException  e) {
-                    Log.w( TAG, "Unable to resolve hostname " + backendUrl + ". " + e);
+                    Log.i( TAG, "Unable to resolve hostname " + backendUrl );
                 }
 
                 // FIXME: This must be removed, turn off permission so another attempt to change the
