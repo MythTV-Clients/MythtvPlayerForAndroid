@@ -19,6 +19,7 @@
 package org.mythtv.android.presentation.view.fragment;
 
 import android.os.Bundle;
+import android.os.NetworkOnMainThreadException;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
@@ -73,7 +74,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 
                     return ( null != InetAddress.getAllByName( backendUrl ) );
 
-                } catch( UnknownHostException e ) {
+                } catch( UnknownHostException | NetworkOnMainThreadException e ) {
                     Log.e( TAG, "mBackendUrl.onPreferenceChange : error", e );
 
                     return false;
