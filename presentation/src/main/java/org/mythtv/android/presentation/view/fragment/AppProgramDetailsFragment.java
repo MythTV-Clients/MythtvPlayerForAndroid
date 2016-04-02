@@ -51,6 +51,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
 
     public interface ProgramDetailsListener {
 
+        void onRecordingLoaded( final ProgramModel programModel );
         void onPlayRecording( final ProgramModel programModel );
 
     }
@@ -129,7 +130,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
         Log.d( TAG, "onActivityCreated : enter" );
-        super.onActivityCreated(savedInstanceState);
+        super.onActivityCreated( savedInstanceState );
 
         this.initialize();
 
@@ -196,9 +197,9 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
         this.programDetailsPresenter.setView( this );
         this.chanId = getArguments().getInt( ARGUMENT_KEY_CHAN_ID );
         this.startTime = new DateTime( getArguments().getLong( ARGUMENT_KEY_START_TIME ) );
-        Log.d(TAG, "initialize : chanId=" + this.chanId + ", startTime=" + this.startTime);
+        Log.d( TAG, "initialize : chanId=" + this.chanId + ", startTime=" + this.startTime );
 
-        this.programDetailsPresenter.initialize(this.chanId, this.startTime);
+        this.programDetailsPresenter.initialize( this.chanId, this.startTime );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -211,6 +212,8 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
             Log.d( TAG, "renderProgram : program is not null" );
 
             this.programModel = programModel;
+
+            this.programDetailsListener.onRecordingLoaded( this.programModel );
 
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
             actionBar.setTitle( programModel.getSubTitle() );

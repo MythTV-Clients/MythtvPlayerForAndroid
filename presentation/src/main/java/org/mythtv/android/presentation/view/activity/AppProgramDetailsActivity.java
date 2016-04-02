@@ -58,6 +58,9 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     @Bind( R.id.backdrop )
     ImageView backdrop;
 
+    @Bind( R.id.watched )
+    ImageView watched;
+
     public static Intent getCallingIntent( Context context, int chanId, DateTime startTime, String storageGroup, String filename, String hostname ) {
 
         Intent callingIntent = new Intent( context, AppProgramDetailsActivity.class );
@@ -252,6 +255,15 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     }
 
     @Override
+    public void onRecordingLoaded( final ProgramModel programModel ) {
+        Log.d( TAG, "onRecordingLoaded : enter" );
+
+        updateWatchedStatus( programModel );
+
+        Log.d( TAG, "onRecordingLoaded : exit" );
+    }
+
+    @Override
     public void onPlayRecording( ProgramModel programModel ) {
         Log.d( TAG, "onPlayRecording : enter" );
 
@@ -282,7 +294,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone(DateTimeZone.UTC).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
         Picasso.with( this )
@@ -291,6 +303,34 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
                 .into(imageView);
 
         Log.d( TAG, "loadBackdrop : exit" );
+    }
+
+    private void updateWatchedStatus( final ProgramModel programModel ) {
+        Log.d( TAG, "updateWatchedStatus : enter" );
+
+        if( null != programModel ) {
+            Log.d( TAG, "updateWatchedStatus : programModel is not null" );
+
+            if( null != programModel.getProgramFlags() ) {
+                Log.d( TAG, "updateWatchedStatus : programFlags=" + programModel.getProgramFlags() );
+
+                boolean watchedStatus = ( programModel.getProgramFlags() | 0x00000200 ) > 0;
+                Log.d( TAG, "updateWatchedStatus : watchedStatus=" + ( programModel.getProgramFlags() | 0x00000200 ) + " = " + watchedStatus );
+                if( watchedStatus ) {
+
+                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp ) );
+
+                } else {
+
+                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp ) );
+
+                }
+
+            }
+
+        }
+
+        Log.d( TAG, "updateWatchedStatus : exit" );
     }
 
     public boolean getInternalPlayerPreferenceFromPreferences() {

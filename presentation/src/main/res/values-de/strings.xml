@@ -128,5 +128,6 @@
     <string name="encoder_state_recording">Aufnahme</string>
     <string name="encoder_state_watching_bd">ansehen eines BluRay-disc</string>
     <string name="encoder_state_watching_dvd">Sie eine DVD anschauen</string>
+    <string name="watched_content_description">watched status</string>
 
 </resources>
