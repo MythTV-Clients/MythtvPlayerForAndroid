@@ -20,6 +20,7 @@ package org.mythtv.android.presentation.view.fragment;
 
 import android.os.Bundle;
 import android.os.NetworkOnMainThreadException;
+import android.os.StrictMode;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
@@ -70,26 +71,48 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 
                 String backendUrl = ((String) newValue).toLowerCase();
 
+                InetAddress address = null;
+
+                // 1st try to verify an IPv4 or IPv6 address, not a hostname...
                 try {
 
-                    return ( null != InetAddress.getAllByName( backendUrl ) );
+                    Log.d( TAG, "Verify an IPv[46] address");
+                    if ( null != InetAddress.getAllByName( backendUrl ) )
+                        return true;
 
+                  // Typos in a address cause an attemmpt to resolve it as a *hostname
+                  // e.g 192.168.1.123x.
+                  // The 2nd exception on the next line fires because we shouldn't be
+                  // doing that in this thread.
                 } catch( UnknownHostException | NetworkOnMainThreadException e ) {
-                    Log.e( TAG, "mBackendUrl.onPreferenceChange : error", e );
-
-                    return false;
+                    Log.e( TAG, "mBackendUrl.onPreferenceChange : an invalid IPv[46] address was passed. ", e );
                 }
 
-//                boolean isIPv6 = backendUrl.matches("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))" );
-//                if( isIPv6 ) {
-//                    Log.i( TAG, "onPreferenceChange : validated IPv6" );
-//
-//                    return true;
-//                }
+                // FIXME: This must be removed, but is here to test DNS lookup:
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitNetwork ().build();
+                StrictMode.setThreadPolicy(policy);
 
-//                boolean isIPv4 = backendUrl.matches("^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}");
+                // If it wasn't an address, then ^^^ will allow hostname resolution...
+                try {
 
-//                return isIPv4 || backendUrl.matches("(?=^.{1,253}$)(^(((?!-)[a-zA-Z0-9-]{1,63}(?<!-))|((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\\.)+[a-zA-Z]{2,63})$)");
+                    address = InetAddress.getByName( backendUrl );
+
+                } catch (UnknownHostException  e) {
+                    Log.w( TAG, "Unable to resolve hostname " + backendUrl + ". " + e);
+                }
+
+                // FIXME: This must be removed, turn off permission so another attempt to change the
+                // url will work the same way...
+
+                policy = new StrictMode.ThreadPolicy.Builder().detectNetwork ().build();
+                StrictMode.setThreadPolicy(policy);
+
+                if ( null != address ) {
+                    Log.d( TAG, backendUrl + " resolved to " + address.getHostAddress());
+                    return true;
+                }
+
+                return false;
 
             }
 
