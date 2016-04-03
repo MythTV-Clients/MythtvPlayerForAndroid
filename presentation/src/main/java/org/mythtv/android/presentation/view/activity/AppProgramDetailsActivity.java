@@ -309,13 +309,13 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
         Log.d( TAG, "updateWatchedStatus : enter" );
 
         if( null != programModel ) {
-            Log.d( TAG, "updateWatchedStatus : programModel is not null" );
+            //Log.d( TAG, "updateWatchedStatus : programModel is not null" );
 
             if( null != programModel.getProgramFlags() ) {
-                Log.d( TAG, "updateWatchedStatus : programFlags=" + programModel.getProgramFlags() );
+                Log.d( TAG, "updateWatchedStatus : programFlags=0x" + Integer.toHexString( programModel.getProgramFlags() ) );
 
-                boolean watchedStatus = ( programModel.getProgramFlags() | 0x00000200 ) > 0;
-                Log.d( TAG, "updateWatchedStatus : watchedStatus=" + ( programModel.getProgramFlags() | 0x00000200 ) + " = " + watchedStatus );
+                boolean watchedStatus = ( programModel.getProgramFlags() & 0x00000200 ) > 0;
+                Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
                 if( watchedStatus ) {
 
                     watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp ) );
