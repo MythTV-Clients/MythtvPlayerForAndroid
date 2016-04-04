@@ -19,8 +19,6 @@
 package org.mythtv.android.presentation.view.fragment;
 
 import android.os.Bundle;
-import android.os.NetworkOnMainThreadException;
-import android.os.StrictMode;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
@@ -34,8 +32,6 @@ import android.view.ViewGroup;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /*
  * Created by dmfrey on 4/7/15.
