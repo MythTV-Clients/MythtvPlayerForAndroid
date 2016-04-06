@@ -11,7 +11,6 @@ import org.mythtv.android.data.exception.VideoNotFoundException;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
