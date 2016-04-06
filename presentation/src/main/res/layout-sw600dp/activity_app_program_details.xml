@@ -68,6 +68,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_unwatched_24dp"
+                    android:clickable="true"
                     android:contentDescription="@string/watched_content_description" />
 
             </RelativeLayout>

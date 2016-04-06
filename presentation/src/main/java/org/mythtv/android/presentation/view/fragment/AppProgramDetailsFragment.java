@@ -187,7 +187,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
 
         this.programDetailsPresenter.destroy();
 
-        Log.d(TAG, "onDestroy : exit");
+        Log.d( TAG, "onDestroy : exit" );
     }
 
     private void initialize() {
@@ -287,7 +287,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
 
     @Override
     public void showRetry() {
-        Log.d(TAG, "showRetry : enter");
+        Log.d( TAG, "showRetry : enter" );
 
         Log.d( TAG, "showRetry : exit" );
     }
@@ -401,7 +401,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
 
     @OnClick( R.id.recording_queue_hls )
     void onButtonQueueClick() {
-        Log.d(TAG, "onButtonQueueClick : enter");
+        Log.d( TAG, "onButtonQueueClick : enter" );
 
         if( null != programModel ) {
 
