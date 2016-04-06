@@ -318,11 +318,11 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
                 Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
                 if( watchedStatus ) {
 
-                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp ) );
+                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp, null ) );
 
                 } else {
 
-                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp ) );
+                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp, null ) );
 
                 }
 
