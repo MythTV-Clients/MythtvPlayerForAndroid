@@ -21,8 +21,10 @@ import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -34,8 +36,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Created by dmfrey on 9/18/15.
  */
-@Ignore
-public class ProgramEntityJsonDataMapperIssue113Test extends ApplicationTestCase {
+public class ProgramEntityJsonDataMapperIssue113Test {
 
     private ProgramEntityJsonMapper programEntityJsonMapper;
 
@@ -62,9 +63,11 @@ public class ProgramEntityJsonDataMapperIssue113Test extends ApplicationTestCase
     }
 
     @Test
-    public void testTransformProgramEntityCollectionIssue113() throws FileNotFoundException {
+    public void testTransformProgramEntityCollectionIssue113() throws IOException {
 
-        JsonReader reader = new JsonReader( new FileReader( "/opt/Development/Android/git/MythtvPlayerForAndroid/data/src/test/java/org/mythtv/android/data/entity/mapper/Issue113_GetRecordedList-ford.txt" ) );
+        URL url = getClass().getClassLoader().getResource( "Issue113_GetRecordedList-ford.txt" );
+
+        JsonReader reader = new JsonReader( new InputStreamReader( url.openStream() ) );
 
         Type programListEntityType = new TypeToken<ProgramListEntity>() {}.getType();
         ProgramListEntity programListEntity = this.gson.fromJson( reader, programListEntityType );
