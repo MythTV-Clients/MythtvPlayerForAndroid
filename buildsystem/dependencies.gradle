@@ -42,7 +42,7 @@ ext {
     rxAndroidVersion = '1.1.0'
     javaxAnnotationVersion = '10.0-b28'
     gsonVersion = '2.5'
-    okHttpVersion = '3.0.1'
+    okHttpVersion = '3.2.0'
     picassoVersion = '2.5.2'
     mythtvServiceApiVersion = '2.0.4'
     jodaVersion = '2.9.1'
