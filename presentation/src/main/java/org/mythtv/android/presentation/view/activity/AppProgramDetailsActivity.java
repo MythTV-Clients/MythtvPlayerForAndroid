@@ -20,6 +20,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.mythtv.android.R;
+import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
@@ -327,7 +328,17 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
                 watchedStatus = ( programModel.getProgramFlags() & 0x00000200 ) > 0;
                 Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
-                updateWatchedDisplay( watchedStatus );
+                if( watchedStatus ) {
+                    Log.d( TAG, "updateWatchedStatus : setting to watched" );
+
+                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp, null ) );
+
+                } else {
+                    Log.d( TAG, "updateWatchedStatus : setting to unwatched" );
+
+                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp, null ) );
+
+                }
 
             }
 
@@ -356,20 +367,29 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
         Log.d( TAG, "updateWatchedDisplay : result=" + result );
         if( result ) {
-            Log.d( TAG, "updateWatchedDisplay : setting to watched" );
 
-            watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp, null ) );
+            if( watchedStatus ) {
+                Log.d( TAG, "updateWatchedDisplay : setting to unwatched" );
 
-        } else {
-            Log.d( TAG, "updateWatchedDisplay : setting to unwatched" );
+                watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp, null ) );
+                watchedStatus = false;
 
-            watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp, null ) );
+            } else {
+                Log.d( TAG, "updateWatchedDisplay : setting to watched" );
+
+                watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp, null ) );
+                watchedStatus = true;
+
+            }
 
         }
 
         Log.d( TAG, "updateWatchedDisplay : exit" );
     }
 
+    // TODO: Refactor out to data layer
+    // TODO: invalidate cache (needed??)
+    //       Navigating up and back to this recording will result in display not reflecting server state
     private class UpdateRecordedWatchedStatus extends AsyncTask<Void, Void, Boolean> {
 
         private final DateTimeFormatter fmt = DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
@@ -393,19 +413,21 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
             final Request request = new Request.Builder()
                     .url( url )
+                    .addHeader( "Accept", "application/json" )
                     .post( formBody )
                     .build();
 
             try {
 
                 String response = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "connectToApi : response=" + response );
+                Log.d( TAG, "doInBackground : response=" + response );
 
-                return Boolean.getBoolean( response );
+                BooleanJsonMapper booleanJsonMapper = new BooleanJsonMapper();
+                return booleanJsonMapper.transformBoolean( response );
 
             } catch( IOException e ) {
 
-                Log.e( TAG, "connectToApi : error", e );
+                Log.e( TAG, "doInBackground : error", e );
 
             }
 
