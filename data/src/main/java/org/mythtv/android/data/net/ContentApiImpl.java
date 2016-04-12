@@ -418,7 +418,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "addLiveStreamFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( sb.toString() ).requestSyncCall();
     }
 
     private String addRecordingLiveStreamFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
@@ -463,7 +463,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "addRecordingLiveStreamFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( sb.toString() ).requestSyncCall();
     }
 
     private String addVideoLiveStreamFromApi( final int id ) throws MalformedURLException {
@@ -496,7 +496,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "addVideoLiveStreamFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( sb.toString() ).requestSyncCall();
     }
 
     private String getLiveStreamInfoEntitiesFromApi( String filename ) throws MalformedURLException {
@@ -525,7 +525,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "getLiveStreamInfoEntitiesFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( sb.toString() ).requestSyncCall();
     }
 
     private String getLiveStreamInfoFromApi( int id ) throws MalformedURLException {
@@ -533,7 +533,7 @@ public class ContentApiImpl implements ContentApi {
         String apiUrl = String.format( ContentApi.LIVE_STREAM_INFO_URL, id );
         Log.d( TAG, "getLiveStreamInfoFromApi : url=" + apiUrl );
 
-        return ApiConnection.createGET(getMasterBackendUrl() + apiUrl).requestSyncCall();
+        return ApiConnection.create(getMasterBackendUrl() + apiUrl).requestSyncCall();
     }
 
     private String removeLiveStreamInfoFromApi( int id ) throws MalformedURLException {
@@ -541,7 +541,7 @@ public class ContentApiImpl implements ContentApi {
         String apiUrl = String.format( ContentApi.REMOVE_LIVE_STREAM_URL, id );
         Log.d( TAG, "removeLiveStreamInfoFromApi : url=" + apiUrl );
 
-        return ApiConnection.createGET( getMasterBackendUrl() + apiUrl ).requestSyncCall();
+        return ApiConnection.create( getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
     private String stopLiveStreamInfoFromApi( int id ) throws MalformedURLException {
@@ -549,7 +549,7 @@ public class ContentApiImpl implements ContentApi {
         String apiUrl = String.format( ContentApi.STOP_LIVE_STREAM_URL, id );
         Log.d( TAG, "stopLiveStreamInfoFromApi : url=" + apiUrl );
 
-        return ApiConnection.createGET( getMasterBackendUrl() + apiUrl ).requestSyncCall();
+        return ApiConnection.create( getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
     private boolean isThereInternetConnection() {

@@ -31,7 +31,9 @@ import org.mythtv.android.presentation.presenter.ProgramDetailsPresenter;
 import org.mythtv.android.presentation.view.ProgramDetailsView;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -111,7 +113,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
         Bundle argumentsBundle = new Bundle();
         argumentsBundle.putInt( ARGUMENT_KEY_CHAN_ID, chanId );
         argumentsBundle.putLong( ARGUMENT_KEY_START_TIME, startTime.getMillis() );
-        programDetailsFragment.setArguments(argumentsBundle);
+        programDetailsFragment.setArguments( argumentsBundle );
 
         return programDetailsFragment;
     }
@@ -177,7 +179,7 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
 
         ButterKnife.unbind(this);
 
-        Log.d(TAG, "onDestroyView : exit");
+        Log.d( TAG, "onDestroyView : exit" );
     }
 
     @Override
@@ -265,14 +267,27 @@ public class AppProgramDetailsFragment extends AppAbstractBaseFragment implement
 
     }
 
+    public void requestUpdateWatchedStatus( boolean watchedStatus ) {
+        Log.d( TAG, "requestUpdateWatchedStatus : enter" );
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put( "CHAN_ID", programModel.getChannel().getChanId() );
+        parameters.put( "START_TIME", programModel.getStartTime() );
+        parameters.put( "WATCHED", watchedStatus );
+
+        this.programDetailsPresenter.updateWatchedStatus( parameters );
+
+        Log.d( TAG, "requestUpdateWatchedStatus : exit" );
+    }
+
     @Override
     public void showLoading() {
-        Log.d(TAG, "showLoading : enter");
+        Log.d( TAG, "showLoading : enter" );
 
-        this.rl_progress.setVisibility(View.VISIBLE);
-        this.getActivity().setProgressBarIndeterminateVisibility(true);
+        this.rl_progress.setVisibility( View.VISIBLE );
+        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
-        Log.d(TAG, "showLoading : exit");
+        Log.d( TAG, "showLoading : exit" );
     }
 
     @Override

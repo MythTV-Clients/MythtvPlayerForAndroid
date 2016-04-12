@@ -2,10 +2,7 @@ package org.mythtv.android.presentation.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.mythtv.android.R;
-import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
@@ -30,18 +23,12 @@ import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.view.fragment.AppProgramDetailsFragment;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * Created by dmfrey on 9/30/15.
@@ -66,6 +53,8 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     private String storageGroup, filename, hostname;
     private boolean watchedStatus;
     private DvrComponent dvrComponent;
+
+    private AppProgramDetailsFragment appProgramDetailsFragment;
 
     @Bind( R.id.backdrop )
     ImageView backdrop;
@@ -225,7 +214,8 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
                 }
 
-                addFragment( R.id.fl_fragment, AppProgramDetailsFragment.newInstance( this.chanId, this.startTime ) );
+                appProgramDetailsFragment = AppProgramDetailsFragment.newInstance( this.chanId, this.startTime );
+                addFragment( R.id.fl_fragment, appProgramDetailsFragment );
 
             }
 
@@ -249,11 +239,11 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
         Log.d( TAG, "initializeInjector : enter" );
 
         this.dvrComponent = DaggerDvrComponent.builder()
-                .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
-                .programModule( new ProgramModule( this.chanId, this.startTime ) )
-                .liveStreamModule( new LiveStreamModule( this.storageGroup, this.filename, this.hostname ) )
-                .build();
+            .applicationComponent( getApplicationComponent() )
+            .activityModule( getActivityModule() )
+            .programModule( new ProgramModule( this.chanId, this.startTime ) )
+            .liveStreamModule( new LiveStreamModule( this.storageGroup, this.filename, this.hostname ) )
+            .build();
 
         Log.d( TAG, "initializeInjector : exit" );
     }
@@ -279,7 +269,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     public void onPlayRecording( ProgramModel programModel ) {
         Log.d( TAG, "onPlayRecording : enter" );
 
-        if( !getInternalPlayerPreferenceFromPreferences() ) {
+        if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
 
             String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
 
@@ -347,99 +337,11 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
         Log.d( TAG, "updateWatchedStatus : exit" );
     }
 
-    public boolean getInternalPlayerPreferenceFromPreferences() {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
-
-        return sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, false );
-    }
-
     @OnClick( R.id.watched )
     void onButtonWatched() {
         Log.d( TAG, "onButtonWatched : enter" );
 
-        new UpdateRecordedWatchedStatus().execute();
-
-    }
-
-    private void updateWatchedDisplay( Boolean result ) {
-        Log.d( TAG, "updateWatchedDisplay : enter" );
-
-        Log.d( TAG, "updateWatchedDisplay : result=" + result );
-        if( result ) {
-
-            if( watchedStatus ) {
-                Log.d( TAG, "updateWatchedDisplay : setting to unwatched" );
-
-                watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp, null ) );
-                watchedStatus = false;
-
-            } else {
-                Log.d( TAG, "updateWatchedDisplay : setting to watched" );
-
-                watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp, null ) );
-                watchedStatus = true;
-
-            }
-
-        }
-
-        Log.d( TAG, "updateWatchedDisplay : exit" );
-    }
-
-    // TODO: Refactor out to data layer
-    // TODO: invalidate cache (needed??)
-    //       Navigating up and back to this recording will result in display not reflecting server state
-    private class UpdateRecordedWatchedStatus extends AsyncTask<Void, Void, Boolean> {
-
-        private final DateTimeFormatter fmt = DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
-
-        @Override
-        protected Boolean doInBackground( Void... params ) {
-
-            String url = getSharedPreferencesModule().getMasterBackendUrl() + "/Dvr/UpdateRecordedWatchedStatus";
-
-            RequestBody formBody = new FormBody.Builder()
-                    .add( "ChanId", String.valueOf( chanId ) )
-                    .add( "StartTime", fmt.print( startTime.withZone( DateTimeZone.UTC ) ) )
-                    .add( "Watched", String.valueOf( !( watchedStatus ) ) )
-                    .build();
-
-            OkHttpClient okHttpClient =
-                    new OkHttpClient.Builder()
-                            .readTimeout( 10000, TimeUnit.MILLISECONDS )
-                            .connectTimeout( 15000, TimeUnit.MILLISECONDS )
-                            .build();
-
-            final Request request = new Request.Builder()
-                    .url( url )
-                    .addHeader( "Accept", "application/json" )
-                    .post( formBody )
-                    .build();
-
-            try {
-
-                String response = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : response=" + response );
-
-                BooleanJsonMapper booleanJsonMapper = new BooleanJsonMapper();
-                return booleanJsonMapper.transformBoolean( response );
-
-            } catch( IOException e ) {
-
-                Log.e( TAG, "doInBackground : error", e );
-
-            }
-
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute( Boolean result ) {
-
-            updateWatchedDisplay( result );
-
-        }
+        appProgramDetailsFragment.requestUpdateWatchedStatus( !watchedStatus );
 
     }
 
