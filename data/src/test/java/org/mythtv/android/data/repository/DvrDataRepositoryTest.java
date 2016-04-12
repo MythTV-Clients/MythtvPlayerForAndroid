@@ -107,7 +107,7 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
 
         dvrDataRepository.recordedProgram( FAKE_CHAN_ID, FAKE_START_TIME );
 
-        verify( mockDvrDataStoreFactory ).create( FAKE_CHAN_ID, FAKE_START_TIME );
+        verify( mockDvrDataStoreFactory ).createMasterBackendDataStore();
         verify( mockDvrDataStore ).recordedProgramEntityDetails( FAKE_CHAN_ID, FAKE_START_TIME );
 
     }
