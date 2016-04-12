@@ -190,7 +190,7 @@ public class VideoApiImpl implements VideoApi {
 
         }
 
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( sb.toString() ).requestSyncCall();
     }
 
     private String getVideoDetailsFromApi( int id ) throws MalformedURLException {
@@ -201,7 +201,7 @@ public class VideoApiImpl implements VideoApi {
         sb.append( String.format( ID_QS, id ) );
         Log.d( TAG, "getVideoDetailsFromApi : url=" + sb.toString() );
 
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( sb.toString() ).requestSyncCall();
     }
 
     private boolean isThereInternetConnection() {

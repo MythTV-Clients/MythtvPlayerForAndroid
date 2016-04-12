@@ -3,12 +3,14 @@ package org.mythtv.android.data.net;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +36,7 @@ public class ApiConnection implements Callable<String> {
 
     }
 
-    public static ApiConnection createGET( String url ) throws MalformedURLException {
+    public static ApiConnection create(String url ) throws MalformedURLException {
 
         return new ApiConnection( url );
     }
@@ -43,12 +45,42 @@ public class ApiConnection implements Callable<String> {
      * Do a request to an api synchronously.
      * It should not be executed in the main thread of the application.
      *
+     * Performs an HTTP GET
+     *
      * @return A string response
      */
     @Nullable
     public String requestSyncCall() {
 
         connectToApi();
+
+        return response;
+    }
+
+    /**
+     * Do a request to an api synchronously.
+     * It should not be executed in the main thread of the application.
+     *
+     * Performs an HTTP POST
+     *
+     * @return A string response
+     */
+    @Nullable
+    public String requestSyncCall( Map<String, String> parameters ) {
+
+        FormBody.Builder builder = new FormBody.Builder();
+
+        if( null != parameters && !parameters.isEmpty() ) {
+
+            for( String key : parameters.keySet() ) {
+                Log.i( TAG, "requestSyncCall : key=" + key + ", value=" + parameters.get( key ) );
+                builder.add( key, parameters.get( key ) );
+
+            }
+
+        }
+
+        connectToApi( builder.build() );
 
         return response;
     }
@@ -61,6 +93,29 @@ public class ApiConnection implements Callable<String> {
                 .url( this.url )
                 .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
                 .get()
+                .build();
+
+        try {
+
+            this.response = okHttpClient.newCall( request ).execute().body().string();
+            Log.d( TAG, "connectToApi : response=" + this.response );
+
+        } catch( IOException e ) {
+
+            Log.e( TAG, "connectToApi : error", e );
+
+        }
+
+    }
+
+    private void connectToApi( FormBody formBody ) {
+        Log.d( TAG, "connectToApi : url=" + this.url );
+
+        OkHttpClient okHttpClient = this.createClient();
+        final Request request = new Request.Builder()
+                .url( this.url )
+                .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
+                .post( formBody )
                 .build();
 
         try {
