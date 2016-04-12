@@ -79,13 +79,13 @@ public class AppNavigator {
         Log.d( TAG, "navigateToPrograms : exit" );
     }
 
-    public void navigateToProgram( Context context, int chanId, DateTime startTime, String storeageGroup, String filename, String hostname ) {
+    public void navigateToProgram( Context context, int chanId, DateTime startTime, String storageGroup, String filename, String hostname ) {
         Log.d( TAG, "navigateToProgram : enter" );
 
         if( null != context ) {
             Log.d( TAG, "navigateToProgram : context != null" );
 
-            Intent intentToLaunch = AppProgramDetailsActivity.getCallingIntent( context, chanId, startTime, storeageGroup, filename, hostname );
+            Intent intentToLaunch = AppProgramDetailsActivity.getCallingIntent( context, chanId, startTime, storageGroup, filename, hostname );
             context.startActivity( intentToLaunch );
 
         }

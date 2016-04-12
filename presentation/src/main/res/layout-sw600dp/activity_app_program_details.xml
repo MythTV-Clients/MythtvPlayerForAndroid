@@ -50,6 +50,29 @@
                 app:layout_collapseMode="parallax"
                 android:contentDescription="@string/backdrop_content_description" />
 
+            <RelativeLayout
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:fitsSystemWindows="true"
+                android:layout_gravity="right|end"
+                android:layout_marginTop="128dp"
+                android:layout_marginRight="@dimen/outer_margin"
+                android:layout_marginEnd="@dimen/outer_margin"
+                android:padding="@dimen/outer_margin"
+                android:background="@drawable/background_border"
+                app:layout_collapseMode="parallax">
+
+                <ImageView
+                    android:id="@+id/watched"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_unwatched_24dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/watched_content_description" />
+
+            </RelativeLayout>
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"

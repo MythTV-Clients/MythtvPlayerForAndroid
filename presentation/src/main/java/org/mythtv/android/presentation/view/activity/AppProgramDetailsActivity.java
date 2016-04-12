@@ -2,9 +2,7 @@ package org.mythtv.android.presentation.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,7 +15,6 @@ import com.squareup.picasso.Picasso;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
@@ -31,6 +28,7 @@ import java.net.URLEncoder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 9/30/15.
@@ -53,10 +51,16 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     private int chanId;
     private DateTime startTime;
     private String storageGroup, filename, hostname;
+    private boolean watchedStatus;
     private DvrComponent dvrComponent;
+
+    private AppProgramDetailsFragment appProgramDetailsFragment;
 
     @Bind( R.id.backdrop )
     ImageView backdrop;
+
+    @Bind( R.id.watched )
+    ImageView watched;
 
     public static Intent getCallingIntent( Context context, int chanId, DateTime startTime, String storageGroup, String filename, String hostname ) {
 
@@ -210,7 +214,8 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
 
                 }
 
-                addFragment( R.id.fl_fragment, AppProgramDetailsFragment.newInstance( this.chanId, this.startTime ) );
+                appProgramDetailsFragment = AppProgramDetailsFragment.newInstance( this.chanId, this.startTime );
+                addFragment( R.id.fl_fragment, appProgramDetailsFragment );
 
             }
 
@@ -234,11 +239,11 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
         Log.d( TAG, "initializeInjector : enter" );
 
         this.dvrComponent = DaggerDvrComponent.builder()
-                .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
-                .programModule( new ProgramModule( this.chanId, this.startTime ) )
-                .liveStreamModule( new LiveStreamModule( this.storageGroup, this.filename, this.hostname ) )
-                .build();
+            .applicationComponent( getApplicationComponent() )
+            .activityModule( getActivityModule() )
+            .programModule( new ProgramModule( this.chanId, this.startTime ) )
+            .liveStreamModule( new LiveStreamModule( this.storageGroup, this.filename, this.hostname ) )
+            .build();
 
         Log.d( TAG, "initializeInjector : exit" );
     }
@@ -252,10 +257,19 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     }
 
     @Override
+    public void onRecordingLoaded( final ProgramModel programModel ) {
+        Log.d( TAG, "onRecordingLoaded : enter" );
+
+        updateWatchedStatus( programModel );
+
+        Log.d( TAG, "onRecordingLoaded : exit" );
+    }
+
+    @Override
     public void onPlayRecording( ProgramModel programModel ) {
         Log.d( TAG, "onPlayRecording : enter" );
 
-        if( !getInternalPlayerPreferenceFromPreferences() ) {
+        if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
 
             String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
 
@@ -282,7 +296,7 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone(DateTimeZone.UTC).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
         Picasso.with( this )
@@ -293,11 +307,42 @@ public class AppProgramDetailsActivity extends AppAbstractBaseActivity implement
         Log.d( TAG, "loadBackdrop : exit" );
     }
 
-    public boolean getInternalPlayerPreferenceFromPreferences() {
+    private void updateWatchedStatus( final ProgramModel programModel ) {
+        Log.d( TAG, "updateWatchedStatus : enter" );
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
+        if( null != programModel ) {
+            //Log.d( TAG, "updateWatchedStatus : programModel is not null" );
 
-        return sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, false );
+            if( null != programModel.getProgramFlags() ) {
+                Log.d( TAG, "updateWatchedStatus : programFlags=0x" + Integer.toHexString( programModel.getProgramFlags() ) );
+
+                watchedStatus = ( programModel.getProgramFlags() & 0x00000200 ) > 0;
+                Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
+                if( watchedStatus ) {
+                    Log.d( TAG, "updateWatchedStatus : setting to watched" );
+
+                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp, null ) );
+
+                } else {
+                    Log.d( TAG, "updateWatchedStatus : setting to unwatched" );
+
+                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp, null ) );
+
+                }
+
+            }
+
+        }
+
+        Log.d( TAG, "updateWatchedStatus : exit" );
+    }
+
+    @OnClick( R.id.watched )
+    void onButtonWatched() {
+        Log.d( TAG, "onButtonWatched : enter" );
+
+        appProgramDetailsFragment.requestUpdateWatchedStatus( !watchedStatus );
+
     }
 
 }

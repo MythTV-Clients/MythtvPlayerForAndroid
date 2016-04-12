@@ -16,14 +16,16 @@ public interface DvrRepository {
 
     Observable<List<TitleInfo>> titleInfos();
 
-    Observable<List<Program>> recordedPrograms( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup );
+    Observable<List<Program>> recordedPrograms( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup );
 
-    Observable<Program> recordedProgram( int chanId, DateTime startTime );
+    Observable<Program> recordedProgram( final int chanId, final DateTime startTime );
 
-    Observable<List<Program>> upcoming( int startIndex, int count, boolean showAll, int recordId, int recStatus );
+    Observable<List<Program>> upcoming( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus );
 
     Observable<List<Program>> recent();
 
     Observable<List<Encoder>> encoders();
+
+    Observable<Boolean> updateRecordingWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
 
 }
