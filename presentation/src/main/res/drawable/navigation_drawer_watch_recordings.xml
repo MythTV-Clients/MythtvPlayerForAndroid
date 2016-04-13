@@ -17,8 +17,19 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="48"
+    android:viewportHeight="48"
+    android:width="24dp"
+    android:height="24dp">
 
-    <item android:drawable="@drawable/ic_tv_black" />
+    <group android:name="navigation_drawer_watch_recordings">
 
-</selector>
+        <path
+            android:name="tv"
+            android:fillColor="#FF000000"
+            android:pathData="M42 6H6c-2.21 0-4 1.79-4 4v24c0 2.21 1.79 4 4 4h10v4h16v-4h10c2.21 0 3.98-1.79 3.98-4L46 10c0-2.21-1.79-4-4-4zm0 28H6V10h36v24z" />
+
+    </group>
+
+</vector>
