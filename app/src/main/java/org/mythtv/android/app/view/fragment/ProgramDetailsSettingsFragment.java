@@ -16,7 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':app', 'tv'
-include ':presentation'
-include ':domain'
-include ':data'
+package org.mythtv.android.app.view.fragment;
+
+import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.util.Log;
+
+import org.mythtv.android.R;
+
+/*
+ * Created by dmfrey on 4/7/15.
+ */
+public class ProgramDetailsSettingsFragment extends PreferenceFragment {
+
+    private static final String TAG = ProgramDetailsSettingsFragment.class.getSimpleName();
+
+    @Override
+    public void onCreate( Bundle savedInstanceState ) {
+        Log.v( TAG, "onCreate : enter" );
+        super.onCreate( savedInstanceState );
+
+        addPreferencesFromResource( R.xml.preferences );
+
+        Log.v( TAG, "onCreate : exit" );
+    }
+
+}

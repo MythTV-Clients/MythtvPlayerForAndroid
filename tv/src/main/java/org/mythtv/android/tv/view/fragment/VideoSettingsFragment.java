@@ -16,7 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':app', 'tv'
-include ':presentation'
-include ':domain'
-include ':data'
+package org.mythtv.android.tv.view.fragment;
+
+import android.os.Bundle;
+import android.support.v17.preference.LeanbackPreferenceFragment;
+
+import org.mythtv.android.R;
+
+/*
+ * Created by dmfrey on 1/28/16.
+ */
+public class VideoSettingsFragment extends LeanbackPreferenceFragment {
+
+    @Override
+    public void onCreatePreferences( Bundle bundle, String s ) {
+
+        addPreferencesFromResource( R.xml.preferences_videos );
+
+    }
+
+}

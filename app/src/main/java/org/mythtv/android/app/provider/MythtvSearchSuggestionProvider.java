@@ -16,7 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':app', 'tv'
-include ':presentation'
-include ':domain'
-include ':data'
+package org.mythtv.android.app.provider;
+
+import android.content.SearchRecentSuggestionsProvider;
+
+/*
+ * Created by dmfrey on 3/15/15.
+ */
+public class MythtvSearchSuggestionProvider extends SearchRecentSuggestionsProvider {
+
+    public final static String AUTHORITY = "org.mythtv.android.app.provider.MythtvSearchSuggestionProvider";
+    public final static int MODE = DATABASE_MODE_QUERIES;
+
+    public MythtvSearchSuggestionProvider() {
+
+        setupSuggestions( AUTHORITY, MODE );
+
+    }
+
+}

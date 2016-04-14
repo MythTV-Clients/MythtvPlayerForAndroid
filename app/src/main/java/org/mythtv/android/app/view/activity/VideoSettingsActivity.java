@@ -16,7 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':app', 'tv'
-include ':presentation'
-include ':domain'
-include ':data'
+package org.mythtv.android.app.view.activity;
+
+import android.os.Bundle;
+
+import org.mythtv.android.R;
+
+public class VideoSettingsActivity extends AbstractBaseActivity {
+
+    private static final String TAG = VideoSettingsActivity.class.getSimpleName();
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.activity_app_video_settings;
+    }
+
+    @Override
+    protected void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
+
+        setTitle( getResources().getString( R.string.video_preferences ) );
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+}

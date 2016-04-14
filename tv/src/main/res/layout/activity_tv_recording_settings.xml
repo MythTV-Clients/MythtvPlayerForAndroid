@@ -15,12 +15,10 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<manifest package="org.mythtv.android"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+  -->
 
-    <uses-sdk
-        tools:overrideLibrary="org.mythtv.android" />
-
-</manifest>
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment"
+    android:name="org.mythtv.android.tv.view.fragment.RecordingSettingsFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
