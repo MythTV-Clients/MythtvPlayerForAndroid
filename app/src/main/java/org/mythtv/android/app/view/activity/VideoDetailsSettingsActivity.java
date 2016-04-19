@@ -35,7 +35,7 @@ public class VideoDetailsSettingsActivity extends AbstractBaseActivity {
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_app_video_details_settings;
+        return R.layout.activity_video_details_settings;
     }
 
     @Override

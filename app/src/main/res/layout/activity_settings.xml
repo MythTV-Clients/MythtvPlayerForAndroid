@@ -19,7 +19,6 @@
 
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -40,23 +39,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:title="@string/all_recordings"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_scrollFlags="scroll|enterAlways" />
+                android:title="@string/app_name"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         </android.support.design.widget.AppBarLayout>
 
         <fragment
             android:id="@+id/fragment"
-            android:name="org.mythtv.android.app.view.fragment.TitleInfoListFragment"
+            android:name="org.mythtv.android.app.view.fragment.SettingsFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:layout="@layout/fragment_app_title_info_list"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </android.support.design.widget.CoordinatorLayout>
 
     <include
-        layout="@layout/app_navigation_view" />
+        layout="@layout/navigation_view" />
 
 </android.support.v4.widget.DrawerLayout>

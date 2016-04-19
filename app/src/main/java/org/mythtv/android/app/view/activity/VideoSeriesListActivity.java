@@ -41,7 +41,7 @@ public class VideoSeriesListActivity extends AbstractBaseActivity implements Has
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_app_video_series_list;
+        return R.layout.activity_video_series_list;
     }
 
     @Override

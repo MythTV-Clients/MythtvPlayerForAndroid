@@ -63,7 +63,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     @Override
     public ProgramViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
-        View view = this.layoutInflater.inflate( R.layout.app_program_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.program_list_item, parent, false );
 
         return new ProgramViewHolder( view );
     }

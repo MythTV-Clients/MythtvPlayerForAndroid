@@ -42,7 +42,7 @@ public class PlaybackOverlayActivity extends Activity {
         super.onCreate( savedInstanceState );
         Log.d( TAG, "onCreate" );
 
-        setContentView( R.layout.tv_playback_controls );
+        setContentView( R.layout.playback_controls);
 
     }
 

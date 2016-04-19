@@ -130,7 +130,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="@dimen/margin"
-        layout="@layout/app_separator" />
+        layout="@layout/separator" />
 
     <TextView
         android:layout_margin="@dimen/margin"
@@ -156,6 +156,6 @@
         tools:text="Play"/>
 
     <include
-        layout="@layout/app_view_progress" />
+        layout="@layout/view_progress" />
 
 </LinearLayout>

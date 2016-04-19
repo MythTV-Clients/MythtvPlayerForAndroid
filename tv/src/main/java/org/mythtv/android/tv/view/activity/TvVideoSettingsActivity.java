@@ -28,7 +28,7 @@ public class TvVideoSettingsActivity extends AbstractBaseActivity {
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_tv_video_settings;
+        return R.layout.activity_video_settings;
     }
 
     @Override

@@ -59,7 +59,7 @@ public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgra
     @Override
     public ProgramViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
-        View view = this.layoutInflater.inflate( R.layout.app_upcoming_program_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.upcoming_program_list_item, parent, false );
 
         return new ProgramViewHolder( view );
     }

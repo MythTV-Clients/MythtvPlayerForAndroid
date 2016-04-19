@@ -2,10 +2,7 @@ package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +27,6 @@ import java.net.URLEncoder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 11/25/15.
@@ -67,7 +63,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_app_video_details;
+        return R.layout.activity_video_details;
     }
 
     @Override

@@ -67,7 +67,7 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
     public TitleInfoViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
         Log.d( TAG, "onCreateViewHolder : enter" );
 
-        View view = this.layoutInflater.inflate( R.layout.app_title_info_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.title_info_list_item, parent, false );
         TitleInfoViewHolder titleInfoViewHolder = new TitleInfoViewHolder( view );
 
         Log.d( TAG, "onCreateViewHolder : exit" );

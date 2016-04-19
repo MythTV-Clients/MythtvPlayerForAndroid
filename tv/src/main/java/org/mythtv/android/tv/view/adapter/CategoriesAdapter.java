@@ -58,7 +58,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
     public TvCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
         Log.d( TAG, "onCreateViewHolder : enter" );
 
-        View view = this.layoutInflater.inflate( R.layout.tv_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.item, parent, false );
         TvCategoryViewHolder tvCategoryViewHolder = new TvCategoryViewHolder( view );
 
         Log.d( TAG, "onCreateViewHolder : exit" );

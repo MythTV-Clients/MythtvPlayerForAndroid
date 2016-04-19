@@ -36,7 +36,7 @@ public class VideoCategoryActivity extends AbstractBaseActivity implements HasCo
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_tv_video_category;
+        return R.layout.activity_video_category;
     }
 
     @Override

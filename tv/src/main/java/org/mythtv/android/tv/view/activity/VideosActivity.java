@@ -24,7 +24,7 @@ public class VideosActivity extends AbstractBaseActivity implements HasComponent
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_tv_videos;
+        return R.layout.activity_videos;
     }
 
     @Override

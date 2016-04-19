@@ -54,7 +54,7 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_app_program_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_program_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
 

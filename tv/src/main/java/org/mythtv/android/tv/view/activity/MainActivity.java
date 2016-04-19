@@ -45,7 +45,7 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_tv_main;
+        return R.layout.activity_main;
     }
 
     public void onCreate( Bundle savedInstanceState ) {
@@ -207,7 +207,7 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
                 holder = new ViewHolder();
 
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-                convertView = inflater.inflate( R.layout.tv_item, parent, false );
+                convertView = inflater.inflate( R.layout.item, parent, false );
 
                 holder.title = (TextView) convertView.findViewById( R.id.tv_item_title );
                 holder.category = (ImageView) convertView.findViewById( R.id.tv_item_category );

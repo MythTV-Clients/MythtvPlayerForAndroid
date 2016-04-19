@@ -17,24 +17,12 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<android.support.design.widget.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_view"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_search_results"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
-        android:id="@+id/fast_scroller"
-        android:layout_width="24dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <include
-        layout="@layout/app_view_progress" />
-
-</RelativeLayout>
+    android:fitsSystemWindows="true"
+    android:layout_gravity="start"
+    app:headerLayout="@layout/navigation_drawer_header"
+    app:menu="@menu/app_drawer" />

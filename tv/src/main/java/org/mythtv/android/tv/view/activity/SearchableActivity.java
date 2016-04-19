@@ -34,7 +34,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_tv_search;
+        return R.layout.activity_search;
     }
 
     @Override

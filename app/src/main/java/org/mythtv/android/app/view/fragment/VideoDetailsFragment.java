@@ -87,7 +87,7 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_app_video_details, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_video_details, container, false );
         ButterKnife.bind( this, fragmentView );
 
         Log.d( TAG, "onCreateView : exit" );

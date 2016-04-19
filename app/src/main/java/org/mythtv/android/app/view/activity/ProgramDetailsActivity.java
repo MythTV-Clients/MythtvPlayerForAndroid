@@ -3,9 +3,7 @@ package org.mythtv.android.app.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,7 +71,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_app_program_details;
+        return R.layout.activity_program_details;
     }
 
     @Override
