@@ -293,6 +293,15 @@ public class VideoMusicVideoFragment extends AbstractBaseVideoFragment implement
     }
 
     @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showError : enter" );
+
+        this.showToastMessage( message );
+
+        Log.d( TAG, "showError : exit" );
+    }
+
+    @Override
     public Context getContext() {
         Log.d( TAG, "getContext : enter" );
 

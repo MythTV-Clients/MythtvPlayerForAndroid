@@ -305,35 +305,35 @@ public class DvrApiImpl implements DvrApi {
     }
 
     @Override
-    public Observable<Boolean> updateRecordedWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) {
+    public Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched ) {
 
         return Observable.create( new Observable.OnSubscribe<Boolean>() {
 
             @Override
             public void call( Subscriber<? super Boolean> subscriber ) {
-                Log.d( TAG, "updateRecordedWatchedStatus.call : enter" );
+                Log.d( TAG, "updateWatchedStatus.call : enter" );
 
                 if( isThereInternetConnection() ) {
-                    Log.d(TAG, "updateRecordedWatchedStatus.call : network is connected");
+                    Log.d(TAG, "updateWatchedStatus.call : network is connected");
 
                     try {
 
-                        String response = postUpdateRecordingWatchedStatus( chanId, startTime, watched );
+                        String response = postUpdateWatchedStatus( chanId, startTime, watched );
                         if( null != response ) {
-                            Log.d( TAG, "updateRecordedWatchedStatus.call : retrieved status update" );
+                            Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
 
                             subscriber.onNext( booleanJsonMapper.transformBoolean( response ) );
                             subscriber.onCompleted();
 
                         } else {
-                            Log.d( TAG, "updateRecordedWatchedStatus.call : failed to retrieve status update" );
+                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
 
                             subscriber.onError( new NetworkConnectionException() );
 
                         }
 
                     } catch( Exception e ) {
-                        Log.e( TAG, "updateRecordedWatchedStatus.call : error", e );
+                        Log.e( TAG, "updateWatchedStatus.call : error", e );
 
                         subscriber.onError( new NetworkConnectionException( e.getCause() ) );
 
@@ -466,14 +466,14 @@ public class DvrApiImpl implements DvrApi {
         return ApiConnection.create( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ).requestSyncCall();
     }
 
-    private String postUpdateRecordingWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
+    private String postUpdateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put( "ChanId", String.valueOf( chanId ) );
         parameters.put( "StartTime", fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
         parameters.put( "Watched", String.valueOf( watched ) );
 
-        Log.i( TAG, "postUpdateRecordingWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ) );
+        Log.i( TAG, "postUpdateWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ) );
         return ApiConnection.create( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ).requestSyncCall( parameters );
     }
 

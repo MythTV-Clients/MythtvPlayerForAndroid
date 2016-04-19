@@ -19,7 +19,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -187,15 +187,6 @@
                 android:text="@string/play_button"
                 style="?android:attr/borderlessButtonStyle"
                 tools:text="Play"/>
-
-            <Button
-                android:id="@+id/recording_queue_hls"
-                android:layout_margin="@dimen/margin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:text="@string/queue_button"
-                style="?android:attr/borderlessButtonStyle"/>
 
     <include
         layout="@layout/app_view_progress" />

@@ -2,7 +2,10 @@ package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +24,7 @@ import org.mythtv.android.app.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.app.internal.di.modules.ProgramModule;
+import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 
 import java.io.UnsupportedEncodingException;
@@ -39,22 +43,14 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
     private static final String INTENT_EXTRA_PARAM_CHAN_ID = "org.mythtv.android.INTENT_PARAM_CHAN_ID";
     private static final String INTENT_EXTRA_PARAM_START_TIME = "org.mythtv.android.INTENT_PARAM_START_TIME";
-    private static final String INTENT_EXTRA_PARAM_STORAGE_GROUP = "org.mythtv.android.INTENT_PARAM_STORAGE_GROUP";
-    private static final String INTENT_EXTRA_PARAM_FILENAME = "org.mythtv.android.INTENT_PARAM_FILENAME";
-    private static final String INTENT_EXTRA_PARAM_HOSTNAME = "org.mythtv.android.INTENT_PARAM_HOSTNAME";
     private static final String INSTANCE_STATE_PARAM_CHAN_ID = "org.mythtv.android.STATE_PARAM_CHAN_ID";
     private static final String INSTANCE_STATE_PARAM_START_TIME = "org.mythtv.android.STATE_PARAM_START_TIME";
-    private static final String INSTANCE_STATE_PARAM_STORAGE_GROUP = "org.mythtv.android.STATE_PARAM_STORAGE_GROUP";
-    private static final String INSTANCE_STATE_PARAM_FILENAME = "org.mythtv.android.STATE_PARAM_FILENAME";
-    private static final String INSTANCE_STATE_PARAM_HOSTNAME = "org.mythtv.android.STATE_PARAM_HOSTNAME";
 
     private int chanId;
     private DateTime startTime;
-    private String storageGroup, filename, hostname;
-    private boolean watchedStatus;
     private DvrComponent dvrComponent;
 
-    private ProgramDetailsFragment appProgramDetailsFragment;
+    private ProgramDetailsFragment programDetailsFragment;
 
     @Bind( R.id.backdrop )
     ImageView backdrop;
@@ -62,14 +58,14 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     @Bind( R.id.watched )
     ImageView watched;
 
-    public static Intent getCallingIntent( Context context, int chanId, DateTime startTime, String storageGroup, String filename, String hostname ) {
+    @Bind( R.id.hsl_stream )
+    ImageView hls_stream;
+
+    public static Intent getCallingIntent( Context context, int chanId, DateTime startTime ) {
 
         Intent callingIntent = new Intent( context, ProgramDetailsActivity.class );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_CHAN_ID, chanId );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_START_TIME, startTime.getMillis() );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_STORAGE_GROUP, storageGroup );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_FILENAME, filename );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_HOSTNAME, hostname );
 
         return callingIntent;
     }
@@ -115,9 +111,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
             outState.putInt( INSTANCE_STATE_PARAM_CHAN_ID, this.chanId );
             outState.putLong( INSTANCE_STATE_PARAM_START_TIME, this.startTime.getMillis() );
-            outState.putString( INSTANCE_STATE_PARAM_STORAGE_GROUP, this.storageGroup );
-            outState.putString( INSTANCE_STATE_PARAM_FILENAME, this.filename );
-            outState.putString( INSTANCE_STATE_PARAM_HOSTNAME, this.hostname );
 
         }
 
@@ -136,11 +129,8 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
             this.chanId = savedInstanceState.getInt( INSTANCE_STATE_PARAM_CHAN_ID );
             this.startTime = new DateTime( savedInstanceState.getLong( INSTANCE_STATE_PARAM_START_TIME ) );
-            this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
-            this.filename = savedInstanceState.getString( INSTANCE_STATE_PARAM_FILENAME );
-            this.hostname = savedInstanceState.getString( INSTANCE_STATE_PARAM_HOSTNAME );
 
-            Log.d( TAG, "onRestoreInstanceState : chanId=" + chanId + ", startTime=" + startTime + ", storageGroup=" + storageGroup + ", filename=" + filename + ", hostname=" + hostname );
+            Log.d( TAG, "onRestoreInstanceState : chanId=" + chanId + ", startTime=" + startTime );
         }
 
         Log.d( TAG, "onRestoreInstanceState : exit" );
@@ -196,26 +186,8 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
                 }
 
-                if( extras.containsKey( INTENT_EXTRA_PARAM_STORAGE_GROUP ) ) {
-
-                    this.storageGroup = getIntent().getStringExtra(INTENT_EXTRA_PARAM_STORAGE_GROUP);
-
-                }
-
-                if( extras.containsKey( INTENT_EXTRA_PARAM_FILENAME ) ) {
-
-                    this.filename = getIntent().getStringExtra( INTENT_EXTRA_PARAM_FILENAME );
-
-                }
-
-                if( extras.containsKey( INTENT_EXTRA_PARAM_HOSTNAME ) ) {
-
-                    this.hostname = getIntent().getStringExtra( INTENT_EXTRA_PARAM_HOSTNAME );
-
-                }
-
-                appProgramDetailsFragment = ProgramDetailsFragment.newInstance( this.chanId, this.startTime );
-                addFragment( R.id.fl_fragment, appProgramDetailsFragment );
+                programDetailsFragment = ProgramDetailsFragment.newInstance();
+                addFragment( R.id.fl_fragment, programDetailsFragment );
 
             }
 
@@ -224,9 +196,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
             this.chanId = savedInstanceState.getInt( INSTANCE_STATE_PARAM_CHAN_ID );
             this.startTime = new DateTime( savedInstanceState.getLong( INSTANCE_STATE_PARAM_START_TIME, -1 ) );
-            this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
-            this.filename = savedInstanceState.getString( INSTANCE_STATE_PARAM_FILENAME );
-            this.hostname = savedInstanceState.getString( INSTANCE_STATE_PARAM_HOSTNAME );
 
         }
 
@@ -242,7 +211,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
             .applicationComponent( getApplicationComponent() )
             .activityModule( getActivityModule() )
             .programModule( new ProgramModule( this.chanId, this.startTime ) )
-            .liveStreamModule( new LiveStreamModule( this.storageGroup, this.filename, this.hostname ) )
+            .liveStreamModule( new LiveStreamModule() )
             .build();
 
         Log.d( TAG, "initializeInjector : exit" );
@@ -261,6 +230,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         Log.d( TAG, "onRecordingLoaded : enter" );
 
         updateWatchedStatus( programModel );
+        updateHlsStream( programModel.getLiveStreamInfo() );
 
         Log.d( TAG, "onRecordingLoaded : exit" );
     }
@@ -283,7 +253,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
                 recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
                 recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
 
-//                navigator.navigateToInternalPlayer( this, recordingUrl, null, PlayerActivity.TYPE_HLS );
                 navigator.navigateToVideoPlayer( this, recordingUrl );
 
             } catch( UnsupportedEncodingException e ) { }
@@ -316,17 +285,19 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
             if( null != programModel.getProgramFlags() ) {
                 Log.d( TAG, "updateWatchedStatus : programFlags=0x" + Integer.toHexString( programModel.getProgramFlags() ) );
 
-                watchedStatus = ( programModel.getProgramFlags() & 0x00000200 ) > 0;
+                boolean watchedStatus = ( programModel.getProgramFlags() & 0x00000200 ) > 0;
                 Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
                 if( watchedStatus ) {
                     Log.d( TAG, "updateWatchedStatus : setting to watched" );
 
                     watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp ) );
+                    setTint( watched.getDrawable(), Color.WHITE );
 
                 } else {
                     Log.d( TAG, "updateWatchedStatus : setting to unwatched" );
 
                     watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp ) );
+                    setTint( watched.getDrawable(), Color.LTGRAY );
 
                 }
 
@@ -337,12 +308,40 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         Log.d( TAG, "updateWatchedStatus : exit" );
     }
 
+    private void updateHlsStream( final LiveStreamInfoModel liveStreamInfoModel ) {
+        Log.d( TAG, "updateHlsStream : enter" );
+
+        if( null != liveStreamInfoModel ) {
+            Log.d( TAG, "updateHlsStream : liveStreamInfo" + liveStreamInfoModel );
+
+            setTint( hls_stream.getDrawable(), Color.WHITE );
+
+        } else {
+            Log.d( TAG, "updateHlsStream : setting hls_stream to delete" );
+
+            setTint( hls_stream.getDrawable(), Color.LTGRAY );
+
+        }
+
+        Log.d( TAG, "updateHlsStream : exit" );
+    }
+
     @OnClick( R.id.watched )
     void onButtonWatched() {
         Log.d( TAG, "onButtonWatched : enter" );
 
-        appProgramDetailsFragment.requestUpdateWatchedStatus( !watchedStatus );
+        programDetailsFragment.requestUpdateWatchedStatus();
 
+        Log.d( TAG, "onButtonWatched : exit" );
+    }
+
+    @OnClick( R.id.hsl_stream )
+    void onButtonHlsStream() {
+        Log.d( TAG, "onButtonHlsStream : enter" );
+
+        programDetailsFragment.requestUpdateHlsStream();
+
+        Log.d( TAG, "onButtonHlsStream : exit" );
     }
 
 }

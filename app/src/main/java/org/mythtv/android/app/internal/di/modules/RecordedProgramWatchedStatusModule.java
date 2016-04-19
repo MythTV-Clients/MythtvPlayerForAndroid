@@ -1,6 +1,5 @@
 package org.mythtv.android.app.internal.di.modules;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
@@ -21,24 +20,12 @@ import dagger.Provides;
 @Module
 public class RecordedProgramWatchedStatusModule {
 
-    private int chanId = -1;
-    private DateTime startTime = null;
-    private boolean watched;
-
     public RecordedProgramWatchedStatusModule() { }
-
-    public RecordedProgramWatchedStatusModule( int chanId, DateTime startTime, boolean watched ) {
-
-        this.chanId = chanId;
-        this.startTime = startTime;
-        this.watched = watched;
-
-    }
 
     @Provides
     @PerActivity
     @Named( "updateRecordedProgramWatchedStatus" )
-    DynamicUseCase provideGetUserDetailsUseCase(DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    DynamicUseCase provideUpdateRecordedProgramWatchedStatusUseCase( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
         return new PostUpdatedRecordedWatchedStatus( dvrRepository, threadExecutor, postExecutionThread );
     }

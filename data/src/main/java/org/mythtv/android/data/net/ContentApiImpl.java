@@ -281,7 +281,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = removeLiveStreamInfoFromApi(id);
+                        String responseLiveStreamInfo = removeLiveStreamInfoFromApi( id );
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( booleanJsonMapper.transformBoolean(responseLiveStreamInfo) );

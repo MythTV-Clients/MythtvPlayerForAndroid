@@ -264,6 +264,15 @@ public class SearchResultListFragment extends AbstractBaseFragment implements Se
     }
 
     @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showMessage : enter" );
+
+        this.showToastMessage( message, null, null );
+
+        Log.d( TAG, "showMessage : exit" );
+    }
+
+    @Override
     public Context getContext() {
         Log.d( TAG, "getContext : enter" );
 

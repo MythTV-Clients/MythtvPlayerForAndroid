@@ -2,6 +2,7 @@ package org.mythtv.android.data.repository;
 
 import android.util.Log;
 
+import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityDataMapper;
 import org.mythtv.android.data.repository.datasource.VideoDataStore;
 import org.mythtv.android.data.repository.datasource.VideoDataStoreFactory;
@@ -103,16 +104,22 @@ public class VideoDataRepository implements VideoRepository {
     @Override
     public Observable<VideoMetadataInfo> getVideo( int id ) {
 
-        final VideoDataStore videoDataStore = videoDataStoreFactory.create();
+        final VideoDataStore videoDataStore = videoDataStoreFactory.createMasterBackendDataStore();
 
         return videoDataStore.getVideoById( id )
                 .map( videoMetadataInfoEntity -> VideoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntity ) );
     }
 
-//    @SuppressWarnings( "Convert2MethodRef" )
-//    @Override
-//    public Observable<VideoMetadataInfo> getVideoByFileName( String fileName ) {
-//        return null;
-//    }
+    @SuppressWarnings( "Convert2MethodRef" )
+    @Override
+    public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
+        Log.d( TAG, "updateWatchedStatus : enter" );
+
+        final VideoDataStore videoDataStore = this.videoDataStoreFactory.createMasterBackendDataStore();
+
+        return videoDataStore.updateWatchedStatus( videoId, watched )
+                .doOnError( throwable -> Log.e( TAG, "updateWatchedStatus : error", throwable ) )
+                .doOnCompleted( () -> videoDataStore.getVideos( null, null, false, -1, -1 ) );
+    }
 
 }

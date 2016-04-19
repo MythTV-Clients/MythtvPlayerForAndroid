@@ -21,6 +21,6 @@ public interface VideoRepository {
 
     Observable<VideoMetadataInfo> getVideo( int id );
 
-//    Observable<VideoMetadataInfo> getVideoByFileName( String fileName );
+    Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched );
 
 }

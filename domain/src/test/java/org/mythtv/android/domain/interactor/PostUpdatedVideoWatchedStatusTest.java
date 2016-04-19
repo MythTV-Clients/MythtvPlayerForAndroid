@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.VideoRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,13 +20,12 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 /**
  * Created by dmfrey on 3/18/16.
  */
-public class PostUpdatedRecordedWatchedStatusTest {
+public class PostUpdatedVideoWatchedStatusTest {
 
-    private static final int FAKE_CHAN_ID = -1;
-    private static final DateTime FAKE_START_TIME = new DateTime();
+    private static final int FAKE_VIDEO_ID = -1;
     private static final boolean FAKE_WATCHED = false;
 
-    private PostUpdatedRecordedWatchedStatus postUpdatedRecordedWatchedStatus;
+    private PostUpdatedVideoWatchedStatus postUpdatedVideoWatchedStatus;
 
     @Mock
     private ThreadExecutor mockThreadExecutor;
@@ -34,13 +34,13 @@ public class PostUpdatedRecordedWatchedStatusTest {
     private PostExecutionThread mockPostExecutionThread;
 
     @Mock
-    private DvrRepository mockDvrRepository;
+    private VideoRepository mockVideoRepository;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        postUpdatedRecordedWatchedStatus = new PostUpdatedRecordedWatchedStatus( mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
+        postUpdatedVideoWatchedStatus = new PostUpdatedVideoWatchedStatus( mockVideoRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
@@ -48,13 +48,12 @@ public class PostUpdatedRecordedWatchedStatusTest {
     public void testPostUpdatedRecordedWatchedStatusDynamicUseCaseObservableHappyCase() {
 
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put( "CHAN_ID", FAKE_CHAN_ID );
-        parameters.put( "START_TIME", FAKE_START_TIME );
+        parameters.put( "VIDEO_ID", FAKE_VIDEO_ID );
         parameters.put( "WATCHED", FAKE_WATCHED );
-        postUpdatedRecordedWatchedStatus.buildUseCaseObservable( parameters );
+        postUpdatedVideoWatchedStatus.buildUseCaseObservable( parameters );
 
-        verify( mockDvrRepository ).updateWatchedStatus( FAKE_CHAN_ID, FAKE_START_TIME, FAKE_WATCHED );
-        verifyNoMoreInteractions( mockDvrRepository );
+        verify( mockVideoRepository ).updateWatchedStatus( FAKE_VIDEO_ID, FAKE_WATCHED );
+        verifyNoMoreInteractions( mockVideoRepository );
         verifyZeroInteractions( mockThreadExecutor );
         verifyZeroInteractions( mockPostExecutionThread );
 

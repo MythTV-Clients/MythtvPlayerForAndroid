@@ -1,5 +1,6 @@
 package org.mythtv.android.app.internal.di.components;
 
+import org.mythtv.android.app.internal.di.modules.VideoWatchedStatusModule;
 import org.mythtv.android.app.view.fragment.HomeVideoListFragment;
 import org.mythtv.android.app.view.fragment.MusicVideoListFragment;
 import org.mythtv.android.app.view.fragment.TelevisionSeriesListFragment;
@@ -20,7 +21,7 @@ import dagger.Component;
  * Created by dmfrey on 11/9/15.
  */
 @PerActivity
-@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, VideosModule.class, VideoModule.class, VideoSeriesModule.class, LiveStreamModule.class } )
+@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, VideosModule.class, VideoModule.class, VideoSeriesModule.class, LiveStreamModule.class, VideoWatchedStatusModule.class } )
 public interface VideoComponent {
 
     void inject( AdultListFragment videoMovieFragment );

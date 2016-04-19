@@ -219,13 +219,13 @@ public class DvrDataRepository implements DvrRepository {
 
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
-    public Observable<Boolean> updateRecordingWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) {
-        Log.d( TAG, "updateRecordingWatchedStatus : enter" );
+    public Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched ) {
+        Log.d( TAG, "updateWatchedStatus : enter" );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
-        return dvrDataStore.updateRecordingWatchedStatus( chanId, startTime, watched )
-                .doOnError( throwable -> Log.e( TAG, "updateRecordingWatchedStatus : error", throwable ) )
+        return dvrDataStore.updateWatchedStatus( chanId, startTime, watched )
+                .doOnError( throwable -> Log.e( TAG, "updateWatchedStatus : error", throwable ) )
                 .doOnCompleted( () -> dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null ) );
     }
 

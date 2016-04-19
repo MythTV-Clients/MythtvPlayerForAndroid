@@ -218,6 +218,15 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
     }
 
     @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showError : enter" );
+
+        this.showToastMessage( message );
+
+        Log.d( TAG, "showError : exit" );
+    }
+
+    @Override
     public Context getContext() {
         Log.d( TAG, "getContext : enter" );
 

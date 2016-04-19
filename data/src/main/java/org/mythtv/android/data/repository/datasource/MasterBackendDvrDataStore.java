@@ -81,11 +81,11 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
     }
 
     @Override
-    public Observable<Boolean> updateRecordingWatchedStatus( int chanId, DateTime startTime, boolean watched ) {
-        Log.d( TAG, "updateRecordingWatchedStatus : enter" );
+    public Observable<Boolean> updateWatchedStatus(int chanId, DateTime startTime, boolean watched ) {
+        Log.d( TAG, "updateWatchedStatus : enter" );
 
-        Log.d( TAG, "updateRecordingWatchedStatus : exit" );
-        return this.api.updateRecordedWatchedStatus( chanId, startTime, watched );
+        Log.d( TAG, "updateWatchedStatus : exit" );
+        return this.api.updateWatchedStatus( chanId, startTime, watched );
     }
 
 }

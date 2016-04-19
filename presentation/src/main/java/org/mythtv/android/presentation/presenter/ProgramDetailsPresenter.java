@@ -3,7 +3,6 @@ package org.mythtv.android.presentation.presenter;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.domain.LiveStreamInfo;
 import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
@@ -11,6 +10,7 @@ import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.domain.interactor.UseCase;
+import org.mythtv.android.presentation.VideoDetailsView;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
 import org.mythtv.android.presentation.mapper.LiveStreamInfoModelDataMapper;
 import org.mythtv.android.presentation.mapper.ProgramModelDataMapper;
@@ -18,6 +18,8 @@ import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.view.ProgramDetailsView;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,11 +33,19 @@ public class ProgramDetailsPresenter implements Presenter {
 
     private static final String TAG = ProgramDetailsPresenter.class.getSimpleName();
 
+    private enum StreamState{ COMPLETE, AVAILABLE, ADDED, REMOVED, NOT_SET }
+    private StreamState currentStreamState = StreamState.NOT_SET;
+    private Thread streamUpdates;
+
+    private ProgramModel programModel;
+    private LiveStreamInfoModel liveStreamInfoModel;
     private ProgramDetailsView viewDetailsView;
 
     private final UseCase getProgramDetailsUseCase;
-    private final UseCase addLiveStreamDetailsUseCase;
-    private final UseCase getLiveStreamsListUseCase;
+    private final DynamicUseCase addLiveStreamDetailsUseCase;
+    private final DynamicUseCase removeLiveStreamDetailsUseCase;
+    private final DynamicUseCase getLiveStreamsListUseCase;
+    private final DynamicUseCase getLiveStreamDetailsUseCase;
     private final DynamicUseCase postUpdateRecordedProgramWatchedStatusUseCase;
     private final ProgramModelDataMapper programModelDataMapper;
     private final LiveStreamInfoModelDataMapper liveStreamInfoModelDataMapper;
@@ -43,8 +53,10 @@ public class ProgramDetailsPresenter implements Presenter {
     @Inject
     public ProgramDetailsPresenter(
             @Named( "programDetails" ) UseCase getProgramDetailsUseCase,
-            @Named( "addLiveStream" ) UseCase addLiveStreamDetailsUseCase,
-            @Named( "getLiveStreams" ) UseCase getLiveStreamsListUseCase,
+            @Named( "addLiveStream" ) DynamicUseCase addLiveStreamDetailsUseCase,
+            @Named( "removeLiveStream" ) DynamicUseCase removeLiveStreamDetailsUseCase,
+            @Named( "getLiveStreams" ) DynamicUseCase getLiveStreamsListUseCase,
+            @Named( "getLiveStream" ) DynamicUseCase getLiveStreamDetailsUseCase,
             @Named( "updateRecordedProgramWatchedStatus" ) DynamicUseCase postUpdateRecordedProgramWatchedStatusUseCase,
             ProgramModelDataMapper programModelDataMapper,
             LiveStreamInfoModelDataMapper liveStreamInfoModelDataMapper
@@ -52,7 +64,9 @@ public class ProgramDetailsPresenter implements Presenter {
 
         this.getProgramDetailsUseCase = getProgramDetailsUseCase;
         this.addLiveStreamDetailsUseCase = addLiveStreamDetailsUseCase;
+        this.removeLiveStreamDetailsUseCase = removeLiveStreamDetailsUseCase;
         this.getLiveStreamsListUseCase = getLiveStreamsListUseCase;
+        this.getLiveStreamDetailsUseCase = getLiveStreamDetailsUseCase;
         this.postUpdateRecordedProgramWatchedStatusUseCase = postUpdateRecordedProgramWatchedStatusUseCase;
         this.programModelDataMapper = programModelDataMapper;
         this.liveStreamInfoModelDataMapper = liveStreamInfoModelDataMapper;
@@ -60,17 +74,23 @@ public class ProgramDetailsPresenter implements Presenter {
     }
 
     public void setView( @NonNull ProgramDetailsView view ) {
+
         this.viewDetailsView = view;
+
     }
 
     @Override
-    public void resume() {
-    }
+    public void resume() {}
 
     @Override
     public void pause() {
 
-        this.getLiveStreamsListUseCase.unsubscribe();
+        if( null != this.streamUpdates ) {
+
+            this.streamUpdates.interrupt();
+            this.streamUpdates = null;
+
+        }
 
     }
 
@@ -79,39 +99,35 @@ public class ProgramDetailsPresenter implements Presenter {
 
         this.getProgramDetailsUseCase.unsubscribe();
         this.addLiveStreamDetailsUseCase.unsubscribe();
+        this.removeLiveStreamDetailsUseCase.unsubscribe();
+        this.getLiveStreamsListUseCase.unsubscribe();
+        this.getLiveStreamDetailsUseCase.unsubscribe();
+        this.getProgramDetailsUseCase.unsubscribe();
+        this.postUpdateRecordedProgramWatchedStatusUseCase.unsubscribe();
 
     }
 
     /**
      * Initializes the presenter by start retrieving program details.
      */
-    public void initialize( int chanId, DateTime startTime ) {
+    public void initialize() {
 
-        /* id used to retrieve program details */
-        int chanId1 = chanId;
-        DateTime startTime1 = startTime;
         this.loadProgramDetails();
 
     }
 
     /**
-     * Add a new Live Stream
-     */
-    public void addLiveStream() {
-        Log.d( TAG, "addLiveStream : enter" );
-
-        this.hideViewRetry();
-        this.showViewLoading();
-        this.addLiveStreamDetailsUseCase.execute( new LiveStreamInfoDetailsSubscriber() );
-
-        Log.d( TAG, "addLiveStream : exit" );
-    }
-
-    /**
      * Update the watched status for a recorded program
      */
-    public void updateWatchedStatus( Map parameters ) {
+    public void updateWatchedStatus() {
         Log.d( TAG, "updateWatchedStatus : enter" );
+
+        boolean watchedStatus = ( programModel.getProgramFlags() & 0x00000200 ) > 0;
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put( "CHAN_ID", this.programModel.getChannel().getChanId() );
+        parameters.put( "START_TIME", this.programModel.getStartTime() );
+        parameters.put( "WATCHED", !watchedStatus );
 
         this.hideViewRetry();
         this.showViewLoading();
@@ -121,14 +137,35 @@ public class ProgramDetailsPresenter implements Presenter {
     }
 
     /**
+     * Update Live Stream, either add new stream or delete existing one
+     */
+    public void updateHlsStream() {
+        Log.d( TAG, "updateHlsStream : enter" );
+
+        this.hideViewRetry();
+        this.showViewLoading();
+
+        if( null == this.liveStreamInfoModel ) {
+
+            addLiveStream();
+
+        } else {
+
+            removeLiveStream();
+
+        }
+
+        Log.d( TAG, "updateHlsStream : exit" );
+    }
+
+    /**
      * Loads program details.
      */
     private void loadProgramDetails() {
 
         this.hideViewRetry();
         this.showViewLoading();
-        this.getProgramDetails();
-        this.getLiveStreamDetails();
+        this.getDetails();
 
     }
 
@@ -163,76 +200,266 @@ public class ProgramDetailsPresenter implements Presenter {
 
     }
 
-    private void showProgramDetailsInView( Program program ) {
-        Log.d( TAG, "showProgramDetailsInView : program=" + program.toString() );
+    private synchronized void updateDetails(Program program ) {
+        Log.d( TAG, "updateDetails : enter" );
 
-        final ProgramModel programModel = this.programModelDataMapper.transform( program );
-        this.viewDetailsView.renderProgram( programModel );
+        this.programModel = this.programModelDataMapper.transform( program );
+        this.programModel.setLiveStreamInfo( this.liveStreamInfoModel );
+        this.getLiveStreamListDetails();
 
+        showDetailsInView();
+
+        Log.d( TAG, "updateDetails : exit" );
     }
 
-    private void showLiveStreamDetailsInView( LiveStreamInfo liveStreamInfo ) {
-        Log.d( TAG, "showLiveStreamDetailsInView : liveStreamInfo=" + liveStreamInfo.toString() );
+    private synchronized void updateLiveStreamDetails( StreamState streamState, LiveStreamInfo liveStreamInfo ) {
+        Log.d( TAG, "updateLiveStreamDetails : enter" );
 
-        final LiveStreamInfoModel liveStreamInfoModel = this.liveStreamInfoModelDataMapper.transform( liveStreamInfo );
-        this.viewDetailsView.updateLiveStream( liveStreamInfoModel );
+        this.liveStreamInfoModel = null;
 
-    }
+        switch( streamState ) {
 
-    private void showUpdatedWatchedStatusInView( Boolean status ) {
-        Log.d( TAG, "showUpdatedWatchedStatusInView : status=" + status );
+            case AVAILABLE :
+                Log.d( TAG, "updateLiveStreamDetails : stream is available" );
 
-        if( status ) {
+                if( null != liveStreamInfo ) {
 
-//            this.viewDetailsView.updateWatchedStatus(status);
-            this.getProgramDetails();
+                    this.currentStreamState = streamState;
+
+                    this.liveStreamInfoModel = this.liveStreamInfoModelDataMapper.transform( liveStreamInfo );
+
+                    if( this.currentStreamState.equals( StreamState.NOT_SET ) ) {
+
+                        notifyLiveStreamAvailable();
+
+                    }
+
+                }
+
+                break;
+
+            case COMPLETE :
+                Log.d( TAG, "updateLiveStreamDetails : stream is complete" );
+
+                if( null != liveStreamInfo ) {
+
+                    this.currentStreamState = streamState;
+
+                    this.liveStreamInfoModel = this.liveStreamInfoModelDataMapper.transform( liveStreamInfo );
+                    notifyLiveStreamComplete();
+
+                    this.streamUpdates = null;
+
+                }
+
+                break;
+
+            case ADDED :
+                Log.d( TAG, "updateLiveStreamDetails : stream added" );
+
+                if( null != liveStreamInfo ) {
+
+                    this.currentStreamState = streamState;
+
+                    this.liveStreamInfoModel = this.liveStreamInfoModelDataMapper.transform( liveStreamInfo );
+                    notifyLiveStreamAdded();
+
+                }
+
+                break;
+
+            case REMOVED :
+                Log.d( TAG, "updateLiveStreamDetails : stream removed" );
+
+                this.currentStreamState = StreamState.NOT_SET;
+
+                notifyLiveStreamRemoved();
+
+                break;
+        }
+
+        this.programModel.setLiveStreamInfo( this.liveStreamInfoModel );
+        showLiveStreamDetailsInView();
+
+        if( null != this.liveStreamInfoModel && ( this.currentStreamState.equals( StreamState.AVAILABLE ) || this.currentStreamState.equals( StreamState.ADDED ) ) ) {
+            Log.d( TAG, "updateLiveStreamDetails : stream not fully processed check again" );
+
+            getLiveStreamDetails();
 
         }
 
+        Log.d( TAG, "updateLiveStreamDetails : exit" );
     }
 
-    private void getProgramDetails() {
-        Log.d( TAG, "getProgramDetails : enter" );
+    private void showDetailsInView() {
+        Log.d( TAG, "showDetailsInView : enter" );
+
+        this.viewDetailsView.renderProgram( this.programModel );
+
+        Log.d( TAG, "showDetailsInView : exit" );
+    }
+
+    private void showLiveStreamDetailsInView() {
+        Log.d( TAG, "showLiveStreamDetailsInView : enter" );
+
+        this.viewDetailsView.updateLiveStream( this.programModel );
+
+        Log.d( TAG, "showLiveStreamDetailsInView : exit" );
+    }
+
+    private void getDetails() {
+        Log.d( TAG, "getDetails : enter" );
 
         this.getProgramDetailsUseCase.execute( new ProgramDetailsSubscriber() );
 
-        Log.d( TAG, "getProgramDetails : exit" );
+        Log.d( TAG, "getDetails : exit" );
+    }
+
+    private void getLiveStreamListDetails() {
+        Log.d( TAG, "getLiveStreamListDetails : enter" );
+
+        Map<String, String> parameters = Collections.singletonMap( "FILE_NAME", programModel.getFileName() );
+
+        this.getLiveStreamsListUseCase.execute( new LiveStreamListSubscriber(), parameters );
+
+        Log.d( TAG, "getLiveStreamListDetails : exit" );
     }
 
     private void getLiveStreamDetails() {
         Log.d( TAG, "getLiveStreamDetails : enter" );
 
-        this.getLiveStreamsListUseCase.execute( new LiveStreamInfosListSubscriber() );
+        final DynamicUseCase useCase = this.getLiveStreamDetailsUseCase;
+        streamUpdates = new Thread( new Runnable() {
 
-        Log.d( TAG, "getLiveStreamDetails : enter" );
+            @Override
+            public void run() {
+                Log.d( TAG, "getLiveStreamDetails.runnable : enter" );
+
+                try {
+
+                    Thread.sleep( 5000 );
+
+                    Map<String, Integer> parameters = Collections.singletonMap( "LIVE_STREAM_ID", liveStreamInfoModel.getId() );
+
+                    useCase.execute( new LiveStreamSubscriber(), parameters );
+
+                } catch( InterruptedException e ) {
+                    Log.e( TAG, "getLiveStreamDetails.runnable : error", e );
+                }
+
+                Log.d( TAG, "getLiveStreamDetails.runnable : exit" );
+            }
+
+        });
+        streamUpdates.start();
+
+        Log.d( TAG, "getLiveStreamDetails : exit" );
+    }
+
+    private void addLiveStream() {
+        Log.d( TAG, "addLiveStream : enter" );
+
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put( "STORAGE_GROUP", programModel.getRecording().getStorageGroup() );
+        parameters.put( "FILE_NAME", programModel.getFileName() );
+        parameters.put( "HOST_NAME", programModel.getHostName() );
+
+        this.addLiveStreamDetailsUseCase.execute( new LiveStreamAddedSubscriber(), parameters );
+
+        Log.d( TAG, "addLiveStream : exit" );
+    }
+
+    private void removeLiveStream() {
+        Log.d( TAG, "removeLiveStream : enter" );
+
+        if( null != streamUpdates ) {
+
+            streamUpdates.interrupt();
+            streamUpdates = null;
+
+        }
+
+        Map<String, Integer> parameters = Collections.singletonMap( "LIVE_STREAM_ID", liveStreamInfoModel.getId() );
+
+        this.removeLiveStreamDetailsUseCase.execute( new LiveStreamRemovedSubscriber(), parameters );
+
+        Log.d( TAG, "removeLiveStream : exit" );
+    }
+
+    private void notifyLiveStreamComplete() {
+        Log.d( TAG, "notifyLiveStreamComplete : enter" );
+
+        notifyInView( "Stream processing complete!" );
+
+        Log.d( TAG, "notifyLiveStreamComplete : exit" );
+    }
+
+    private void notifyLiveStreamAvailable() {
+        Log.d( TAG, "notifyLiveStreamAvailable : enter" );
+
+        notifyInView( "Stream available!" );
+
+        Log.d( TAG, "notifyLiveStreamAvailable : exit" );
+    }
+
+    private void notifyLiveStreamAdded() {
+        Log.d( TAG, "notifyLiveStreamAdded : enter" );
+
+        notifyInView( "Stream added!" );
+
+        Log.d( TAG, "notifyLiveStreamAdded : exit" );
+    }
+
+    private void notifyLiveStreamRemoved() {
+        Log.d( TAG, "notifyLiveStreamRemoved : enter" );
+
+        notifyInView( "Stream removed!" );
+
+        Log.d( TAG, "notifyLiveStreamRemoved : exit" );
+    }
+
+    private void notifyLiveStreamFailure( StreamState streamState ) {
+        Log.d( TAG, "notifyLiveStreamRemoved : enter" );
+
+        String message = "";
+
+        switch( streamState ) {
+
+            case ADDED :
+                message = "Error adding stream";
+                break;
+
+            case REMOVED :
+                message = "Error removing stream";
+                break;
+        }
+
+        if( !"".equals( message ) ) {
+
+            notifyInView( message );
+
+        }
+
+        Log.d( TAG, "notifyLiveStreamRemoved : exit" );
+    }
+
+    private void notifyWatchedStatus() {
+        Log.d( TAG, "notifyWatchedStatus : enter" );
+
+        notifyInView( "Recording Watched Status updated!" );
+
+        Log.d( TAG, "notifyWatchedStatus : exit" );
+    }
+
+    private void notifyInView( String message ) {
+        Log.d( TAG, "notifyInView : enter" );
+
+        this.viewDetailsView.showMessage( message );
+
+        Log.d( TAG, "notifyInView : exit" );
     }
 
     private final class ProgramDetailsSubscriber extends DefaultSubscriber<Program> {
-
-        @Override
-        public void onCompleted() {
-            ProgramDetailsPresenter.this.hideViewLoading();
-        }
-
-        @Override
-        public void onError(Throwable e) {
-
-            ProgramDetailsPresenter.this.hideViewLoading();
-            ProgramDetailsPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
-            ProgramDetailsPresenter.this.showViewRetry();
-
-        }
-
-        @Override
-        public void onNext( Program program ) {
-
-            ProgramDetailsPresenter.this.showProgramDetailsInView( program );
-
-        }
-
-    }
-
-    private final class LiveStreamInfoDetailsSubscriber extends DefaultSubscriber<LiveStreamInfo> {
 
         @Override
         public void onCompleted() {
@@ -249,15 +476,15 @@ public class ProgramDetailsPresenter implements Presenter {
         }
 
         @Override
-        public void onNext( LiveStreamInfo liveStreamInfo ) {
+        public void onNext( Program program ) {
 
-            ProgramDetailsPresenter.this.showLiveStreamDetailsInView( liveStreamInfo );
+            ProgramDetailsPresenter.this.updateDetails( program );
 
         }
 
     }
 
-    private final class LiveStreamInfosListSubscriber extends DefaultSubscriber<List<LiveStreamInfo>> {
+    private final class LiveStreamListSubscriber extends DefaultSubscriber<List<LiveStreamInfo>> {
 
         @Override
         public void onCompleted() {
@@ -280,13 +507,125 @@ public class ProgramDetailsPresenter implements Presenter {
 
             if( null != liveStreamInfos && !liveStreamInfos.isEmpty() ) {
 
-                ProgramDetailsPresenter.this.showLiveStreamDetailsInView( liveStreamInfos.get( 0 ) );
-
-                if( liveStreamInfos.get( 0 ).getPercentComplete() == 100 ) {
-
-                    ProgramDetailsPresenter.this.getLiveStreamsListUseCase.unsubscribe();
-
+                LiveStreamInfo liveStreamInfo = liveStreamInfos.get( 0 );
+                StreamState streamState = StreamState.AVAILABLE;
+                if( liveStreamInfo.getPercentComplete() == 100 ) {
+                    streamState = StreamState.COMPLETE;
                 }
+                ProgramDetailsPresenter.this.updateLiveStreamDetails( streamState, liveStreamInfo );
+
+            } else {
+
+                ProgramDetailsPresenter.this.updateLiveStreamDetails( StreamState.AVAILABLE, null );
+
+            }
+
+        }
+
+    }
+
+    private final class LiveStreamSubscriber extends DefaultSubscriber<LiveStreamInfo> {
+
+        @Override
+        public void onCompleted() {
+
+            ProgramDetailsPresenter.this.hideViewLoading();
+
+        }
+
+        @Override
+        public void onError( Throwable e ) {
+
+            ProgramDetailsPresenter.this.hideViewLoading();
+            ProgramDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            ProgramDetailsPresenter.this.showViewRetry();
+
+        }
+
+        @Override
+        public void onNext( LiveStreamInfo liveStreamInfo ) {
+
+            if( null != liveStreamInfo ) {
+
+                StreamState streamState = StreamState.AVAILABLE;
+                if( liveStreamInfo.getPercentComplete() == 100 ) {
+                    streamState = StreamState.COMPLETE;
+                }
+                ProgramDetailsPresenter.this.updateLiveStreamDetails( streamState, liveStreamInfo );
+
+            } else {
+
+                ProgramDetailsPresenter.this.updateLiveStreamDetails( StreamState.AVAILABLE, null );
+
+            }
+
+        }
+
+    }
+
+    private final class LiveStreamAddedSubscriber extends DefaultSubscriber<LiveStreamInfo> {
+
+        @Override
+        public void onCompleted() {
+
+            ProgramDetailsPresenter.this.hideViewLoading();
+
+        }
+
+        @Override
+        public void onError( Throwable e ) {
+
+            ProgramDetailsPresenter.this.hideViewLoading();
+            ProgramDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            ProgramDetailsPresenter.this.showViewRetry();
+
+        }
+
+        @Override
+        public void onNext( LiveStreamInfo liveStreamInfo ) {
+
+            if( null != liveStreamInfo ) {
+
+                ProgramDetailsPresenter.this.updateLiveStreamDetails( StreamState.ADDED, liveStreamInfo );
+
+            } else {
+
+                ProgramDetailsPresenter.this.notifyLiveStreamFailure( StreamState.ADDED );
+
+            }
+
+        }
+
+    }
+
+    private final class LiveStreamRemovedSubscriber extends DefaultSubscriber<Boolean> {
+
+        @Override
+        public void onCompleted() {
+
+            ProgramDetailsPresenter.this.hideViewLoading();
+
+        }
+
+        @Override
+        public void onError( Throwable e ) {
+
+            ProgramDetailsPresenter.this.hideViewLoading();
+            ProgramDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            ProgramDetailsPresenter.this.showViewRetry();
+
+        }
+
+        @Override
+        public void onNext( Boolean status ) {
+
+            if( status ) {
+
+                ProgramDetailsPresenter.this.updateLiveStreamDetails( StreamState.REMOVED, null );
+
+            } else {
+
+                ProgramDetailsPresenter.this.notifyLiveStreamFailure( StreamState.REMOVED );
 
             }
 
@@ -315,8 +654,12 @@ public class ProgramDetailsPresenter implements Presenter {
         @Override
         public void onNext( Boolean status ) {
 
-            ProgramDetailsPresenter.this.showUpdatedWatchedStatusInView( status );
-            ProgramDetailsPresenter.this.postUpdateRecordedProgramWatchedStatusUseCase.unsubscribe();
+            if( status ) {
+
+                ProgramDetailsPresenter.this.notifyWatchedStatus();
+                ProgramDetailsPresenter.this.getDetails();
+
+            }
 
         }
 

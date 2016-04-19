@@ -13,6 +13,7 @@ public interface VideoApi {
 
     String VIDEO_LIST_BASE_URL = "/Video/GetVideoList";
     String VIDEO_BASE_URL = "/Video/GetVideo?";
+    String UPDATE_VIDEO_WATCHED_STATUS_URL = "/Video/UpdateVideoWatchedStatus";
 
     String FOLDER_QS = "Folder=%s";
     String SORT_QS = "Sort=%s";
@@ -21,11 +22,14 @@ public interface VideoApi {
     String COUNT_QS = "Count=%s";
     String ID_QS = "Id=%s";
     String FILENAME_QS = "FileName=%s";
+    String WATCHED_QS = "Watched=%s";
 
     Observable<List<VideoMetadataInfoEntity>> getVideoList( final String folder, final String sort, final boolean descending, final int startIndex, final int count );
 
     Observable<VideoMetadataInfoEntity> getVideoById( final int id );
 
     Observable<VideoMetadataInfoEntity> getVideoByFilename( final String filename );
+
+    Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched );
 
 }

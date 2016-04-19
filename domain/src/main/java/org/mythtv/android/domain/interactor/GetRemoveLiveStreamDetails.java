@@ -11,11 +11,11 @@ import rx.Observable;
 /**
  * Created by dmfrey on 8/26/15.
  */
-public class GetAddLiveStreamDetails extends DynamicUseCase {
+public class GetRemoveLiveStreamDetails extends DynamicUseCase {
 
     private final ContentRepository contentRepository;
 
-    public GetAddLiveStreamDetails(final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetRemoveLiveStreamDetails(final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
         this.contentRepository = contentRepository;
@@ -25,11 +25,9 @@ public class GetAddLiveStreamDetails extends DynamicUseCase {
     @Override
     protected Observable buildUseCaseObservable( Map parameters ) {
 
-        final String storageGroup = (String) parameters.get( "STORAGE_GROUP" );
-        final String filename = (String) parameters.get( "FILE_NAME" );
-        final String hostname = (String) parameters.get( "HOST_NAME" );
+        final Integer id = (Integer) parameters.get( "LIVE_STREAM_ID" );
 
-        return this.contentRepository.addliveStream( storageGroup, filename, hostname );
+        return this.contentRepository.removeLiveStream( id );
     }
 
 }

@@ -167,5 +167,6 @@
     <string name="nav_drawer_logo_content_description">nav_drawer_logo</string>
     <string name="tv_item_category_content_description">tv_item_category</string>
     <string name="watched_content_description">watched status</string>
+    <string name="hls_stream_content_description">HLS Stream</string>
 
 </resources>

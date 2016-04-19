@@ -30,7 +30,7 @@ public class PostUpdatedRecordedWatchedStatus extends DynamicUseCase {
         final DateTime startTime = (DateTime) parameters.get( "START_TIME" );
         final boolean watched = (Boolean) parameters.get( "WATCHED" );
 
-        return this.dvrRepository.updateRecordingWatchedStatus( chanId, startTime, watched );
+        return this.dvrRepository.updateWatchedStatus( chanId, startTime, watched );
     }
 
 }

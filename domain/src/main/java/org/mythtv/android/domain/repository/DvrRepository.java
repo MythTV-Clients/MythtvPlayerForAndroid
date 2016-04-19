@@ -26,6 +26,6 @@ public interface DvrRepository {
 
     Observable<List<Encoder>> encoders();
 
-    Observable<Boolean> updateRecordingWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
+    Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched );
 
 }

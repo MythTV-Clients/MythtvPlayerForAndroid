@@ -208,6 +208,15 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
     }
 
     @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showMessage : enter" );
+
+        this.showToastMessage( message, null, null );
+
+        Log.d( TAG, "showMessage : exit" );
+    }
+
+    @Override
     public Context getContext() {
         Log.d( TAG, "getContext : enter" );
 

@@ -151,7 +151,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
             case RECORDING:
 
-                navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime(), searchResultModel.getStorageGroup(), searchResultModel.getFilename(), searchResultModel.getHostname() );
+                navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime() );
 
                 break;
 

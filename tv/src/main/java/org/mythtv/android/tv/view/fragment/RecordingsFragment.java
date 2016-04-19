@@ -324,6 +324,15 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
     }
 
     @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showError : enter" );
+
+        this.showToastMessage( message );
+
+        Log.d( TAG, "showError : exit" );
+    }
+
+    @Override
     public Context getContext() {
         Log.d( TAG, "getContext : enter" );
 
@@ -337,7 +346,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
     private void loadProgramList() {
         Log.d( TAG, "loadProgramList : enter" );
 
-        this.programListPresenter.initialize( false, -1, -1, null, null, null );
+        this.programListPresenter.initialize();
 
         Log.d( TAG, "loadProgramList : exit" );
     }

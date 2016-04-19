@@ -2,9 +2,7 @@ package org.mythtv.android.app.view.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,11 +16,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.CastMemberModel;
 import org.mythtv.android.presentation.model.LiveStreamInfoModel;
@@ -31,9 +27,7 @@ import org.mythtv.android.presentation.presenter.ProgramDetailsPresenter;
 import org.mythtv.android.presentation.view.ProgramDetailsView;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -48,9 +42,6 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
     private static final String TAG = ProgramDetailsFragment.class.getSimpleName();
 
-    private static final String ARGUMENT_KEY_CHAN_ID = "org.mythtv.android.ARGUMENT_CHAN_ID";
-    private static final String ARGUMENT_KEY_START_TIME = "org.mythtv.android.ARGUMENT_START_TIME";
-
     public interface ProgramDetailsListener {
 
         void onRecordingLoaded( final ProgramModel programModel );
@@ -58,13 +49,10 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
     }
 
-    private ProgramDetailsListener programDetailsListener;
-
-    private int chanId;
-    private DateTime startTime;
+    private ProgramDetailsListener listener;
 
     @Inject
-    ProgramDetailsPresenter programDetailsPresenter;
+    ProgramDetailsPresenter presenter;
 
     @Bind( R.id.recording_coverart )
     AutoLoadImageView iv_coverart;
@@ -93,39 +81,27 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     @Bind( R.id.recording_cast )
     TableLayout tl_cast;
 
-    @Bind( R.id.recording_queue_hls )
-    Button bt_queue;
-
     @Bind( R.id.recording_play )
     Button bt_play;
 
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
 
-    private ProgramModel programModel;
-
     public ProgramDetailsFragment() { super(); }
 
-    public static ProgramDetailsFragment newInstance(int chanId, DateTime startTime ) {
+    public static ProgramDetailsFragment newInstance() {
 
-        ProgramDetailsFragment programDetailsFragment = new ProgramDetailsFragment();
-
-        Bundle argumentsBundle = new Bundle();
-        argumentsBundle.putInt( ARGUMENT_KEY_CHAN_ID, chanId );
-        argumentsBundle.putLong( ARGUMENT_KEY_START_TIME, startTime.getMillis() );
-        programDetailsFragment.setArguments( argumentsBundle );
-
-        return programDetailsFragment;
+        return new ProgramDetailsFragment();
     }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.d(TAG, "onCreateView : enter");
+        Log.d( TAG, "onCreateView : enter" );
 
         View fragmentView = inflater.inflate( R.layout.fragment_app_program_details, container, false );
         ButterKnife.bind( this, fragmentView );
 
-        Log.d(TAG, "onCreateView : exit");
+        Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
     }
 
@@ -145,7 +121,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "onAttach : enter" );
 
         if( activity instanceof ProgramDetailsListener ) {
-            this.programDetailsListener = (ProgramDetailsListener) activity;
+            this.listener = (ProgramDetailsListener) activity;
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -156,8 +132,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-        this.programDetailsPresenter.resume();
-        updateLiveStreamControls();
+        this.presenter.resume();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -167,7 +142,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-        this.programDetailsPresenter.pause();
+        this.presenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -177,7 +152,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind(this);
+        ButterKnife.unbind( this );
 
         Log.d( TAG, "onDestroyView : exit" );
     }
@@ -187,7 +162,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
-        this.programDetailsPresenter.destroy();
+        this.presenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
     }
@@ -196,26 +171,21 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( DvrComponent.class ).inject( this );
-        this.programDetailsPresenter.setView( this );
-        this.chanId = getArguments().getInt( ARGUMENT_KEY_CHAN_ID );
-        this.startTime = new DateTime( getArguments().getLong( ARGUMENT_KEY_START_TIME ) );
-        Log.d( TAG, "initialize : chanId=" + this.chanId + ", startTime=" + this.startTime );
+        this.presenter.setView( this );
 
-        this.programDetailsPresenter.initialize( this.chanId, this.startTime );
+        loadProgramDetails();
 
         Log.d( TAG, "initialize : exit" );
     }
 
     @Override
     public void renderProgram( ProgramModel programModel ) {
-        Log.d(TAG, "renderProgram : enter");
+        Log.d( TAG, "renderProgram : enter" );
 
         if( null != programModel ) {
             Log.d( TAG, "renderProgram : program is not null" );
 
-            this.programModel = programModel;
-
-            this.programDetailsListener.onRecordingLoaded( this.programModel );
+            this.listener.onRecordingLoaded( programModel );
 
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
             actionBar.setTitle( programModel.getSubTitle() );
@@ -251,33 +221,35 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
             }
 
-            updateLiveStreamControls();
-
+            updateLiveStream( programModel );
         }
 
-        Log.d(TAG, "renderProgram : exit");
+        Log.d( TAG, "renderProgram : exit" );
     }
 
     @Override
-    public void updateLiveStream( LiveStreamInfoModel liveStreamInfo ) {
+    public void updateLiveStream( ProgramModel programModel ) {
 
-        this.programModel.setLiveStreamInfo(liveStreamInfo);
+        updateLiveStreamControls( programModel.getLiveStreamInfo() );
 
-        updateLiveStreamControls();
+        this.listener.onRecordingLoaded( programModel );
 
     }
 
-    public void requestUpdateWatchedStatus( boolean watchedStatus ) {
+    public void requestUpdateWatchedStatus() {
         Log.d( TAG, "requestUpdateWatchedStatus : enter" );
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put( "CHAN_ID", programModel.getChannel().getChanId() );
-        parameters.put( "START_TIME", programModel.getStartTime() );
-        parameters.put( "WATCHED", watchedStatus );
-
-        this.programDetailsPresenter.updateWatchedStatus( parameters );
+        this.presenter.updateWatchedStatus();
 
         Log.d( TAG, "requestUpdateWatchedStatus : exit" );
+    }
+
+    public void requestUpdateHlsStream() {
+        Log.d( TAG, "requestUpdateHlsStream : enter" );
+
+        this.presenter.updateHlsStream();
+
+        Log.d( TAG, "requestUpdateHlsStream : exit" );
     }
 
     @Override
@@ -294,8 +266,8 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
 
-        this.rl_progress.setVisibility(View.GONE);
-        this.getActivity().setProgressBarIndeterminateVisibility(false);
+        this.rl_progress.setVisibility( View.GONE );
+        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -329,8 +301,16 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
         });
 
-
         Log.d( TAG, "showError : exit" );
+    }
+
+    @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showMessage : enter" );
+
+        this.showToastMessage( message, null, null );
+
+        Log.d( TAG, "showMessage : exit" );
     }
 
     @Override
@@ -345,48 +325,35 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     private void loadProgramDetails() {
         Log.d( TAG, "loadProgramDetails : enter" );
 
-        if( null != this.programDetailsPresenter ) {
-            Log.d(TAG, "loadProgramDetails : programDetailsPresenter is not null");
+        if( null != this.presenter) {
+            Log.d( TAG, "loadProgramDetails : presenter is not null" );
 
-            this.programDetailsPresenter.initialize(this.chanId, this.startTime);
+            this.presenter.initialize();
 
         }
 
         Log.d( TAG, "loadProgramDetails : exit" );
     }
 
-    private void updateLiveStreamControls() {
+    private void updateLiveStreamControls( LiveStreamInfoModel liveStreamInfoModel ) {
         Log.d( TAG, "updateLiveStreamControls : enter" );
 
-        boolean useInternalPlayer = getInternalPlayerPreferenceFromPreferences( getActivity() );
-        if( !useInternalPlayer ) {
-            Log.d( TAG, "updateLiveStreamControls : using external player" );
-
-            pb_progress.setVisibility( View.GONE );
-            bt_play.setVisibility( View.VISIBLE );
-            bt_queue.setVisibility( View.GONE );
-
-            return;
-        }
-
-        if( null != programModel && null != programModel.getLiveStreamInfo() ) {
+        if( null != liveStreamInfoModel ) {
             Log.d( TAG, "updateLiveStreamControls : hls exists" );
 
             pb_progress.setVisibility( View.VISIBLE );
             pb_progress.setIndeterminate( false );
-            pb_progress.setProgress( programModel.getLiveStreamInfo().getPercentComplete() );
+            pb_progress.setProgress( liveStreamInfoModel.getPercentComplete() );
 
-            if( programModel.getLiveStreamInfo().getPercentComplete() > 2 ) {
+            if( liveStreamInfoModel.getPercentComplete() > 2 ) {
                 Log.d( TAG, "updateLiveStreamControls : hls can be played" );
 
                 bt_play.setVisibility( View.VISIBLE );
-                bt_queue.setVisibility( View.GONE );
 
             } else {
                 Log.d( TAG, "updateLiveStreamControls : hls processing..." );
 
                 bt_play.setVisibility( View.GONE );
-                bt_queue.setVisibility( View.GONE );
 
             }
 
@@ -394,8 +361,8 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
             Log.d( TAG, "updateLiveStreamControls : hls does not exist" );
 
             pb_progress.setVisibility( View.GONE );
-            bt_play.setVisibility(View.GONE);
-            bt_queue.setVisibility(View.VISIBLE);
+            bt_play.setVisibility( View.GONE );
+
         }
 
         Log.d( TAG, "updateLiveStreamControls : exit" );
@@ -405,38 +372,13 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     void onButtonPlayClick() {
         Log.d( TAG, "onButtonPlayClick : enter" );
 
-        if( null != programModel ) {
-
-            this.programDetailsListener.onPlayRecording( programModel );
-
-        }
+//        if( null != programModel ) {
+//
+//            this.listener.onPlayRecording( programModel );
+//
+//        }
 
         Log.d( TAG, "onButtonPlayClick : exit" );
-    }
-
-    @OnClick( R.id.recording_queue_hls )
-    void onButtonQueueClick() {
-        Log.d( TAG, "onButtonQueueClick : enter" );
-
-        if( null != programModel ) {
-
-            this.programDetailsPresenter.addLiveStream();
-
-        }
-
-        Log.d( TAG, "onButtonQueueClick : exit" );
-    }
-
-    public boolean getInternalPlayerPreferenceFromPreferences( Context context ) {
-
-        if( null == context ) {
-
-            return false;
-        }
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, false );
     }
 
 }

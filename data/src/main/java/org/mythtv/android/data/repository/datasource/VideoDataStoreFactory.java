@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import org.mythtv.android.data.cache.VideoCache;
+import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.net.VideoApi;
 import org.mythtv.android.data.net.VideoApiImpl;
@@ -64,7 +65,8 @@ public class VideoDataStoreFactory {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
         VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper = new VideoMetadataInfoEntityJsonMapper();
-        VideoApi api = new VideoApiImpl( this.context, videoMetadataInfoEntityJsonMapper );
+        BooleanJsonMapper booleanJsonMapper = new BooleanJsonMapper();
+        VideoApi api = new VideoApiImpl( this.context, videoMetadataInfoEntityJsonMapper, booleanJsonMapper );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
         return new MasterBackendVideoDataStore( api, this.videoCache, this.searchDataStoreFactory );

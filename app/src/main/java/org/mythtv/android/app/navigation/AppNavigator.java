@@ -79,13 +79,13 @@ public class AppNavigator {
         Log.d( TAG, "navigateToPrograms : exit" );
     }
 
-    public void navigateToProgram( Context context, int chanId, DateTime startTime, String storageGroup, String filename, String hostname ) {
+    public void navigateToProgram( Context context, int chanId, DateTime startTime ) {
         Log.d( TAG, "navigateToProgram : enter" );
 
         if( null != context ) {
             Log.d( TAG, "navigateToProgram : context != null" );
 
-            Intent intentToLaunch = ProgramDetailsActivity.getCallingIntent( context, chanId, startTime, storageGroup, filename, hostname );
+            Intent intentToLaunch = ProgramDetailsActivity.getCallingIntent( context, chanId, startTime );
             context.startActivity( intentToLaunch );
 
         }
@@ -142,7 +142,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d(TAG, "navigateToVideo : context != null");
 
-            Intent intentToLaunch = VideoDetailsActivity.getCallingIntent( context, id, storeageGroup, filename, hostname );
+            Intent intentToLaunch = VideoDetailsActivity.getCallingIntent( context, id );
             context.startActivity( intentToLaunch );
 
         }

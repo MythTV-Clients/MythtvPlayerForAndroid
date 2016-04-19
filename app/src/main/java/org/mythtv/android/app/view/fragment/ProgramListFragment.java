@@ -33,17 +33,6 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
 
     private static final String TAG = ProgramListFragment.class.getSimpleName();
 
-    private static final String ARGUMENT_KEY_DESCENDING = "org.mythtv.android.ARGUMENT_DESCENDING";
-    private static final String ARGUMENT_KEY_START_INDEX = "org.mythtv.android.ARGUMENT_START_INDEX";
-    private static final String ARGUMENT_KEY_COUNT = "org.mythtv.android.ARGUMENT_COUNT";
-    private static final String ARGUMENT_KEY_TITLE_REG_EX = "org.mythtv.android.ARGUMENT_TITLE_REG_EX";
-    private static final String ARGUMENT_KEY_REC_GROUP = "org.mythtv.android.ARGUMENT_REC_GROUP";
-    private static final String ARGUMENT_KEY_STORAGE_GROUP = "org.mythtv.android.ARGUMENT_STORAGE_GROUP";
-
-    private boolean descending;
-    private int startIndex, count;
-    private String titleRegEx, recGroup, storageGroup;
-
     /**
      * Interface for listening program list events.
      */
@@ -68,20 +57,9 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
 
     public ProgramListFragment() { super(); }
 
-    public static ProgramListFragment newInstance(boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
+    public static ProgramListFragment newInstance() {
 
-        ProgramListFragment programListFragment = new ProgramListFragment();
-
-        Bundle argumentsBundle = new Bundle();
-        argumentsBundle.putBoolean( ARGUMENT_KEY_DESCENDING, descending );
-        argumentsBundle.putInt( ARGUMENT_KEY_START_INDEX, startIndex );
-        argumentsBundle.putInt( ARGUMENT_KEY_COUNT, count );
-        argumentsBundle.putString( ARGUMENT_KEY_TITLE_REG_EX, titleRegEx );
-        argumentsBundle.putString( ARGUMENT_KEY_REC_GROUP, recGroup );
-        argumentsBundle.putString( ARGUMENT_KEY_STORAGE_GROUP, storageGroup );
-        programListFragment.setArguments( argumentsBundle );
-
-        return programListFragment;
+        return new ProgramListFragment();
     }
 
     @Override
@@ -262,6 +240,15 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
     }
 
     @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showMessage : enter" );
+
+        this.showToastMessage( message, null, null );
+
+        Log.d( TAG, "showMessage : exit" );
+    }
+
+    @Override
     public Context getContext() {
         Log.d( TAG, "getContext : enter" );
 
@@ -275,7 +262,7 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
     private void loadProgramList() {
         Log.d( TAG, "loadProgramList : enter" );
 
-        this.programListPresenter.initialize( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
+        this.programListPresenter.initialize();
 
         Log.d( TAG, "loadProgramList : exit" );
     }

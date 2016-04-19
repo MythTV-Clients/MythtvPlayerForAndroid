@@ -54,6 +54,6 @@ public interface DvrApi {
      * @return true  - if status was successfully updated
      *         false - if status was not updated
      */
-    Observable<Boolean> updateRecordedWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
+    Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched );
 
 }

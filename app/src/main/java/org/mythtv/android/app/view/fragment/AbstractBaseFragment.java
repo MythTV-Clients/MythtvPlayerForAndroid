@@ -2,10 +2,12 @@ package org.mythtv.android.app.view.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.View;
 
 import org.mythtv.android.domain.SettingsKeys;
@@ -64,6 +66,22 @@ public abstract class AbstractBaseFragment extends Fragment {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         return sharedPreferences.getString( key, "" );
+    }
+
+    /**
+     *
+     * Sets the color of a Drawable by changing the tint
+     *
+     * @param d
+     * @param color
+     * @return
+     */
+    protected Drawable setTint( Drawable d, int color ) {
+
+        Drawable wrappedDrawable = DrawableCompat.wrap( d );
+        DrawableCompat.setTint( wrappedDrawable, color );
+
+        return wrappedDrawable;
     }
 
 }

@@ -19,9 +19,55 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="@dimen/margin"
+        android:gravity="fill_horizontal">
+
+        <RelativeLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:fitsSystemWindows="true"
+            android:layout_marginStart="@dimen/outer_margin"
+            android:padding="@dimen/margin"
+            android:background="@drawable/background_border">
+
+            <ImageView
+                android:id="@+id/hsl_stream"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_hls_stream"
+                android:clickable="true"
+                android:contentDescription="@string/hls_stream_content_description" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:fitsSystemWindows="true"
+            android:layout_marginStart="60dp"
+            android:padding="@dimen/margin"
+            android:background="@drawable/background_border">
+
+            <ImageView
+                android:id="@+id/watched"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_unwatched_24dp"
+                android:clickable="true"
+                android:contentDescription="@string/watched_content_description" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -108,15 +154,6 @@
         android:text="@string/play_button"
         style="?android:attr/borderlessButtonStyle"
         tools:text="Play"/>
-
-    <Button
-        android:id="@+id/video_queue_hls"
-        android:layout_margin="@dimen/margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="@string/queue_button"
-        style="?android:attr/borderlessButtonStyle"/>
 
     <include
         layout="@layout/app_view_progress" />

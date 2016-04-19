@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
+import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.domain.SettingsKeys;
@@ -15,7 +16,9 @@ import org.mythtv.android.domain.SettingsKeys;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -29,16 +32,18 @@ public class VideoApiImpl implements VideoApi {
 
     private final Context context;
     private final VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper;
+    private final BooleanJsonMapper booleanJsonMapper;
 
-    public VideoApiImpl( Context context, VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper ) {
+    public VideoApiImpl( Context context, VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
 
-        if( null == context || null == videoMetadataInfoEntityJsonMapper ) {
+        if( null == context || null == videoMetadataInfoEntityJsonMapper || null == booleanJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
 
         this.context = context;
         this.videoMetadataInfoEntityJsonMapper = videoMetadataInfoEntityJsonMapper;
+        this.booleanJsonMapper = booleanJsonMapper;
 
     }
 
@@ -141,6 +146,55 @@ public class VideoApiImpl implements VideoApi {
         return null;
     }
 
+    @Override
+    public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
+
+        return Observable.create( new Observable.OnSubscribe<Boolean>() {
+
+            @Override
+            public void call( Subscriber<? super Boolean> subscriber ) {
+                Log.d( TAG, "updateWatchedStatus.call : enter" );
+
+                if( isThereInternetConnection() ) {
+                    Log.d(TAG, "updateWatchedStatus.call : network is connected");
+
+                    try {
+
+                        String response = postUpdateWatchedStatus( videoId, watched );
+                        if( null != response ) {
+                            Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
+
+                            subscriber.onNext( booleanJsonMapper.transformBoolean( response ) );
+                            subscriber.onCompleted();
+
+                        } else {
+                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "updateWatchedStatus.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d( TAG, "encoderEntityList.call : network is not connected" );
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d( TAG, "encoderEntityList.call : exit" );
+            }
+
+        });
+
+    }
+
     private String getVideoEntitiesFromApi( final String folder, final String sort, final boolean descending, final int startIndex, final int count ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
@@ -202,6 +256,16 @@ public class VideoApiImpl implements VideoApi {
         Log.d( TAG, "getVideoDetailsFromApi : url=" + sb.toString() );
 
         return ApiConnection.create( sb.toString() ).requestSyncCall();
+    }
+
+    private String postUpdateWatchedStatus( final int videoId, final boolean watched ) throws MalformedURLException {
+
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put( "Id", String.valueOf( videoId ) );
+        parameters.put( "Watched", String.valueOf( watched ) );
+
+        Log.i( TAG, "postUpdateRecordingWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL ) );
+        return ApiConnection.create( getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL ).requestSyncCall( parameters );
     }
 
     private boolean isThereInternetConnection() {

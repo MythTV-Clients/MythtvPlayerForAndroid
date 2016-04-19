@@ -233,6 +233,15 @@ public class MusicVideoListFragment extends AbstractBaseVideoPagerFragment imple
     }
 
     @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showMessage : enter" );
+
+        this.showToastMessage( message, null, null );
+
+        Log.d( TAG, "showMessage : exit" );
+    }
+
+    @Override
     public Context getContext() {
         Log.d( TAG, "getContext : enter" );
 
