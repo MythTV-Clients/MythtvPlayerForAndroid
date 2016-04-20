@@ -3,6 +3,7 @@ package org.mythtv.android.app.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +28,7 @@ import java.net.URLEncoder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 11/25/15.
@@ -41,6 +43,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     private int id;
     private VideoComponent videoComponent;
 
+    private VideoMetadataInfoModel videoMetadataInfoModel;
     private VideoDetailsFragment videoDetailsFragment;
 
     @Bind( R.id.backdrop )
@@ -51,6 +54,9 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 //
 //    @Bind( R.id.hsl_stream )
 //    ImageView hls_stream;
+
+    @Bind( R.id.fab )
+    FloatingActionButton fab;
 
     public static Intent getCallingIntent( Context context, int id ) {
 
@@ -209,46 +215,11 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     public void onVideoLoaded( VideoMetadataInfoModel videoMetadataInfoModel ) {
         Log.d( TAG, "onVideoLoaded : enter" );
 
+        this.videoMetadataInfoModel = videoMetadataInfoModel;
         updateWatchedStatus( videoMetadataInfoModel );
         updateHlsStream( videoMetadataInfoModel.getLiveStreamInfo() );
 
         Log.d( TAG, "onVideoLoaded : exit" );
-    }
-
-    @Override
-    public void onPlayVideo( VideoMetadataInfoModel videoMetadataInfoModel ) {
-        Log.d( TAG, "onPlayVideo : enter" );
-
-        if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() || getSharedPreferencesModule().getExternalPlayerPreferenceFromPreferences() ) {
-
-            String filename = "";
-            try {
-
-                filename = URLEncoder.encode( videoMetadataInfoModel.getFileName(), "UTF-8" );
-
-            } catch( UnsupportedEncodingException e ) { }
-
-            String videoUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
-            Log.d( TAG, "onPlayVideo : videoUrl=" + videoUrl );
-
-            navigator.navigateToExternalPlayer( this, videoUrl );
-
-        } else if( null != videoMetadataInfoModel.getLiveStreamInfo() ) {
-
-            try {
-
-                String videoUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
-                videoUrl = videoUrl.replaceAll( "%2F", "/" );
-                videoUrl = videoUrl.replaceAll( "\\+", "%20" );
-
-//                navigator.navigateToInternalPlayer( this, videoUrl, null, PlayerActivity.TYPE_HLS );
-                navigator.navigateToVideoPlayer( this, videoUrl );
-
-            } catch( UnsupportedEncodingException e ) { }
-
-        }
-
-        Log.d( TAG, "onPlayRecording : exit" );
     }
 
     private void loadBackdrop() {
@@ -311,6 +282,52 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 //        }
 
         Log.d( TAG, "updateHlsStream : exit" );
+    }
+
+    @OnClick( R.id.fab )
+    void onButtonFabPlay() {
+        Log.d( TAG, "onButtonFabPlay : enter" );
+
+        if( null == this.videoMetadataInfoModel.getLiveStreamInfo() || this.videoMetadataInfoModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
+            Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
+
+            String filename = "";
+            try {
+
+                filename = URLEncoder.encode( videoMetadataInfoModel.getFileName(), "UTF-8" );
+
+            } catch( UnsupportedEncodingException e ) { }
+
+            String videoUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
+
+            navigator.navigateToExternalPlayer( this, videoUrl );
+
+        } else {
+            Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
+
+            try {
+
+                String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
+                recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
+                recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
+
+                if( getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
+                    Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
+
+                    navigator.navigateToVideoPlayer( this, recordingUrl );
+
+                } else {
+                    Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
+
+                    navigator.navigateToExternalPlayer( this, recordingUrl );
+
+                }
+
+            } catch( UnsupportedEncodingException e ) { }
+
+        }
+
+        Log.d( TAG, "onButtonFabPlay : exit" );
     }
 
 }

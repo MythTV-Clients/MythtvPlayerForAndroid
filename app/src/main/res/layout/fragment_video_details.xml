@@ -146,15 +146,6 @@
         android:layout_height="wrap_content"
         tools:text="Episode Description" />
 
-    <Button
-        android:id="@+id/video_play"
-        android:layout_margin="@dimen/margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/play_button"
-        style="?android:attr/borderlessButtonStyle"
-        tools:text="Play"/>
-
     <include
         layout="@layout/view_progress" />
 

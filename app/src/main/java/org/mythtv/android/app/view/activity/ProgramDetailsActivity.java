@@ -4,24 +4,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
-import org.mythtv.android.app.view.fragment.ProgramDetailsFragment;
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.app.internal.di.modules.ProgramModule;
+import org.mythtv.android.app.view.fragment.ProgramDetailsFragment;
+import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 
@@ -48,6 +50,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     private DateTime startTime;
     private DvrComponent dvrComponent;
 
+    private ProgramModel programModel;
     private ProgramDetailsFragment programDetailsFragment;
 
     @Bind( R.id.backdrop )
@@ -58,6 +61,9 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
     @Bind( R.id.hsl_stream )
     ImageView hls_stream;
+
+    @Bind( R.id.fab )
+    FloatingActionButton fab;
 
     public static Intent getCallingIntent( Context context, int chanId, DateTime startTime ) {
 
@@ -227,37 +233,11 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     public void onRecordingLoaded( final ProgramModel programModel ) {
         Log.d( TAG, "onRecordingLoaded : enter" );
 
+        this.programModel = programModel;
         updateWatchedStatus( programModel );
         updateHlsStream( programModel.getLiveStreamInfo() );
 
         Log.d( TAG, "onRecordingLoaded : exit" );
-    }
-
-    @Override
-    public void onPlayRecording( ProgramModel programModel ) {
-        Log.d( TAG, "onPlayRecording : enter" );
-
-        if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
-
-            String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
-
-            navigator.navigateToExternalPlayer( this, recordingUrl );
-
-        } else if( null != programModel.getLiveStreamInfo() ) {
-
-            try {
-
-                String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
-                recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
-                recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
-
-                navigator.navigateToVideoPlayer( this, recordingUrl );
-
-            } catch( UnsupportedEncodingException e ) { }
-
-        }
-
-        Log.d( TAG, "onPlayRecording : exit" );
     }
 
     private void loadBackdrop() {
@@ -340,6 +320,45 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         programDetailsFragment.requestUpdateHlsStream();
 
         Log.d( TAG, "onButtonHlsStream : exit" );
+    }
+
+    @OnClick( R.id.fab )
+    void onButtonFabPlay() {
+        Log.d( TAG, "onButtonFabPlay : enter" );
+
+        if( null == this.programModel.getLiveStreamInfo() || this.programModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
+            Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
+
+            String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
+
+            navigator.navigateToExternalPlayer( this, recordingUrl );
+
+        } else {
+            Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
+
+            try {
+
+                String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
+                recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
+                recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
+
+                if( getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
+                    Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
+
+                    navigator.navigateToVideoPlayer( this, recordingUrl );
+
+                } else {
+                    Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
+
+                    navigator.navigateToExternalPlayer( this, recordingUrl );
+
+                }
+
+            } catch( UnsupportedEncodingException e ) { }
+
+        }
+
+        Log.d( TAG, "onButtonFabPlay : exit" );
     }
 
 }

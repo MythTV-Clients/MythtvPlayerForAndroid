@@ -2,6 +2,7 @@ package org.mythtv.android.app.view.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -33,7 +33,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -45,7 +44,6 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     public interface ProgramDetailsListener {
 
         void onRecordingLoaded( final ProgramModel programModel );
-        void onPlayRecording( final ProgramModel programModel );
 
     }
 
@@ -80,9 +78,6 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
     @Bind( R.id.recording_cast )
     TableLayout tl_cast;
-
-    @Bind( R.id.recording_play )
-    Button bt_play;
 
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
@@ -185,8 +180,6 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         if( null != programModel ) {
             Log.d( TAG, "renderProgram : program is not null" );
 
-            this.listener.onRecordingLoaded( programModel );
-
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
             actionBar.setTitle( programModel.getSubTitle() );
             actionBar.setSubtitle( programModel.getTitle() );
@@ -229,11 +222,13 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
     @Override
     public void updateLiveStream( ProgramModel programModel ) {
+        Log.d( TAG, "updateLiveStream : enter" );
 
         updateLiveStreamControls( programModel.getLiveStreamInfo() );
 
         this.listener.onRecordingLoaded( programModel );
 
+        Log.d( TAG, "updateLiveStream : exit" );
     }
 
     public void requestUpdateWatchedStatus() {
@@ -345,15 +340,13 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
             pb_progress.setIndeterminate( false );
             pb_progress.setProgress( liveStreamInfoModel.getPercentComplete() );
 
-            if( liveStreamInfoModel.getPercentComplete() > 2 ) {
-                Log.d( TAG, "updateLiveStreamControls : hls can be played" );
+            if( liveStreamInfoModel.getPercentComplete() < 2 ) {
 
-                bt_play.setVisibility( View.VISIBLE );
+                pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
 
             } else {
-                Log.d( TAG, "updateLiveStreamControls : hls processing..." );
 
-                bt_play.setVisibility( View.GONE );
+                pb_progress.getProgressDrawable().setColorFilter( getResources().getColor( R.color.accent ), android.graphics.PorterDuff.Mode.SRC_IN );
 
             }
 
@@ -361,24 +354,10 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
             Log.d( TAG, "updateLiveStreamControls : hls does not exist" );
 
             pb_progress.setVisibility( View.GONE );
-            bt_play.setVisibility( View.GONE );
 
         }
 
         Log.d( TAG, "updateLiveStreamControls : exit" );
-    }
-
-    @OnClick( R.id.recording_play )
-    void onButtonPlayClick() {
-        Log.d( TAG, "onButtonPlayClick : enter" );
-
-//        if( null != programModel ) {
-//
-//            this.listener.onPlayRecording( programModel );
-//
-//        }
-
-        Log.d( TAG, "onButtonPlayClick : exit" );
     }
 
 }

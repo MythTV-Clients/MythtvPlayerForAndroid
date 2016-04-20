@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -40,7 +39,6 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
     public interface VideoDetailsListener {
 
         void onVideoLoaded( final VideoMetadataInfoModel videoMetadataInfoModel );
-        void onPlayVideo( final VideoMetadataInfoModel videoMetadataInfoModel );
 
     }
 
@@ -63,9 +61,6 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
 
     @Bind( R.id.video_description )
     TextView tv_description;
-
-    @Bind( R.id.video_play )
-    Button bt_play;
 
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
@@ -174,8 +169,6 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
         if( null != videoMetadataInfoModel ) {
             Log.d( TAG, "renderVideo : video is not null" );
 
-            this.listener.onVideoLoaded( videoMetadataInfoModel );
-
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
             actionBar.setTitle( videoMetadataInfoModel.getTitle() );
 
@@ -194,11 +187,13 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
 
     @Override
     public void updateLiveStream( VideoMetadataInfoModel videoMetadataInfoModel ) {
+        Log.d( TAG, "updateLiveStream : enter" );
 
         updateLiveStreamControls( videoMetadataInfoModel.getLiveStreamInfo() );
 
         this.listener.onVideoLoaded( videoMetadataInfoModel );
 
+        Log.d( TAG, "updateLiveStream : exit" );
     }
 
     @OnClick( R.id.watched )
@@ -316,7 +311,7 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
                 Log.d( TAG, "updateWatchedStatus : setting to watched" );
 
                 watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp ) );
-                setTint( watched.getDrawable(), Color.WHITE );
+                setTint( watched.getDrawable(), getResources().getColor( R.color.accent ) );
 
             } else {
                 Log.d( TAG, "updateWatchedStatus : setting to unwatched" );
@@ -339,21 +334,19 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
         if( null != liveStreamInfoModel ) {
             Log.d( TAG, "updateLiveStreamControls : hls exists" );
 
-            setTint( hls_stream.getDrawable(), Color.WHITE );
+            setTint( hls_stream.getDrawable(), getResources().getColor( R.color.accent ) );
 
             pb_progress.setVisibility( View.VISIBLE );
             pb_progress.setIndeterminate( false );
             pb_progress.setProgress( liveStreamInfoModel.getPercentComplete() );
 
-            if( liveStreamInfoModel.getPercentComplete() > 2 ) {
-                Log.d( TAG, "updateLiveStreamControls : hls can be played" );
+            if( liveStreamInfoModel.getPercentComplete() < 2 ) {
 
-                bt_play.setVisibility( View.VISIBLE );
+                pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
 
             } else {
-                Log.d( TAG, "updateLiveStreamControls : hls processing..." );
 
-                bt_play.setVisibility( View.GONE );
+                pb_progress.getProgressDrawable().setColorFilter( getResources().getColor( R.color.accent ), android.graphics.PorterDuff.Mode.SRC_IN );
 
             }
 
@@ -363,26 +356,12 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
             setTint( hls_stream.getDrawable(), Color.LTGRAY );
 
             pb_progress.setVisibility( View.GONE );
-            bt_play.setVisibility( View.GONE );
 
         }
 
         hls_stream.setEnabled( true );
 
         Log.d( TAG, "updateLiveStreamControls : exit" );
-    }
-
-    @OnClick( R.id.video_play )
-    void onButtonPlayClick() {
-        Log.d( TAG, "onButtonPlayClick : enter" );
-
-//        if( null != videoMetadataInfoModel ) {
-//
-//            this.listener.onPlayVideo( videoMetadataInfoModel );
-//
-//        }
-
-        Log.d( TAG, "onButtonPlayClick : exit" );
     }
 
 }
