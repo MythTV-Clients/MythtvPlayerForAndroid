@@ -168,5 +168,11 @@
     <string name="tv_item_category_content_description">tv_item_category</string>
     <string name="watched_content_description">watched status</string>
     <string name="hls_stream_content_description">HLS Stream</string>
+    <string name="remove_live_stream_title">Remove Live Stream?</string>
+    <string name="remove_live_stream_positive_label">Remove</string>
+    <string name="add_live_stream_positive_label">Create</string>
+    <string name="add_live_stream_title">Create Live Stream?</string>
+    <string name="http_live_stream">HTTP Live Stream</string>
+    <string name="watched">Watched</string>
 
 </resources>

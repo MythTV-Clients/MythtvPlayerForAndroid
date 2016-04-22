@@ -2,7 +2,6 @@ package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 
@@ -24,7 +22,6 @@ import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.app.internal.di.modules.ProgramModule;
 import org.mythtv.android.app.view.fragment.ProgramDetailsFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 
 import java.io.UnsupportedEncodingException;
@@ -51,16 +48,9 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     private DvrComponent dvrComponent;
 
     private ProgramModel programModel;
-    private ProgramDetailsFragment programDetailsFragment;
 
     @Bind( R.id.backdrop )
     ImageView backdrop;
-
-    @Bind( R.id.watched )
-    ImageView watched;
-
-    @Bind( R.id.hsl_stream )
-    ImageView hls_stream;
 
     @Bind( R.id.fab )
     FloatingActionButton fab;
@@ -190,8 +180,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
                 }
 
-                programDetailsFragment = ProgramDetailsFragment.newInstance();
-                addFragment( R.id.fl_fragment, programDetailsFragment );
+                addFragment( R.id.fl_fragment, ProgramDetailsFragment.newInstance() );
 
             }
 
@@ -234,8 +223,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         Log.d( TAG, "onRecordingLoaded : enter" );
 
         this.programModel = programModel;
-        updateWatchedStatus( programModel );
-        updateHlsStream( programModel.getLiveStreamInfo() );
 
         Log.d( TAG, "onRecordingLoaded : exit" );
     }
@@ -252,74 +239,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
                 .into(imageView);
 
         Log.d( TAG, "loadBackdrop : exit" );
-    }
-
-    private void updateWatchedStatus( final ProgramModel programModel ) {
-        Log.d( TAG, "updateWatchedStatus : enter" );
-
-        if( null != programModel ) {
-            //Log.d( TAG, "updateWatchedStatus : programModel is not null" );
-
-            if( null != programModel.getProgramFlags() ) {
-                Log.d( TAG, "updateWatchedStatus : programFlags=0x" + Integer.toHexString( programModel.getProgramFlags() ) );
-
-                boolean watchedStatus = ( programModel.getProgramFlags() & 0x00000200 ) > 0;
-                Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
-                if( watchedStatus ) {
-                    Log.d( TAG, "updateWatchedStatus : setting to watched" );
-
-                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp ) );
-                    setTint( watched.getDrawable(), Color.WHITE );
-
-                } else {
-                    Log.d( TAG, "updateWatchedStatus : setting to unwatched" );
-
-                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp ) );
-                    setTint( watched.getDrawable(), Color.LTGRAY );
-
-                }
-
-            }
-
-        }
-
-        Log.d( TAG, "updateWatchedStatus : exit" );
-    }
-
-    private void updateHlsStream( final LiveStreamInfoModel liveStreamInfoModel ) {
-        Log.d( TAG, "updateHlsStream : enter" );
-
-        if( null != liveStreamInfoModel ) {
-            Log.d( TAG, "updateHlsStream : liveStreamInfo" + liveStreamInfoModel );
-
-            setTint( hls_stream.getDrawable(), Color.WHITE );
-
-        } else {
-            Log.d( TAG, "updateHlsStream : setting hls_stream to delete" );
-
-            setTint( hls_stream.getDrawable(), Color.LTGRAY );
-
-        }
-
-        Log.d( TAG, "updateHlsStream : exit" );
-    }
-
-    @OnClick( R.id.watched )
-    void onButtonWatched() {
-        Log.d( TAG, "onButtonWatched : enter" );
-
-        programDetailsFragment.requestUpdateWatchedStatus();
-
-        Log.d( TAG, "onButtonWatched : exit" );
-    }
-
-    @OnClick( R.id.hsl_stream )
-    void onButtonHlsStream() {
-        Log.d( TAG, "onButtonHlsStream : enter" );
-
-        programDetailsFragment.requestUpdateHlsStream();
-
-        Log.d( TAG, "onButtonHlsStream : exit" );
     }
 
     @OnClick( R.id.fab )

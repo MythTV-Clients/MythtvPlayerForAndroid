@@ -20,7 +20,6 @@ import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.app.internal.di.modules.VideoModule;
 import org.mythtv.android.app.view.fragment.VideoDetailsFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
 import java.io.UnsupportedEncodingException;
@@ -44,16 +43,9 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     private VideoComponent videoComponent;
 
     private VideoMetadataInfoModel videoMetadataInfoModel;
-    private VideoDetailsFragment videoDetailsFragment;
 
     @Bind( R.id.backdrop )
     ImageView backdrop;
-
-//    @Bind( R.id.watched )
-//    ImageView watched;
-//
-//    @Bind( R.id.hsl_stream )
-//    ImageView hls_stream;
 
     @Bind( R.id.fab )
     FloatingActionButton fab;
@@ -175,7 +167,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
             }
 
-            videoDetailsFragment = VideoDetailsFragment.newInstance();
             addFragment( R.id.fl_fragment, VideoDetailsFragment.newInstance() );
 
         } else {
@@ -216,8 +207,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
         Log.d( TAG, "onVideoLoaded : enter" );
 
         this.videoMetadataInfoModel = videoMetadataInfoModel;
-        updateWatchedStatus( videoMetadataInfoModel );
-        updateHlsStream( videoMetadataInfoModel.getLiveStreamInfo() );
 
         Log.d( TAG, "onVideoLoaded : exit" );
     }
@@ -234,54 +223,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
                 .into(imageView);
 
         Log.d( TAG, "loadBackdrop : exit" );
-    }
-
-    private void updateWatchedStatus( final VideoMetadataInfoModel videoMetadataInfoModel ) {
-        Log.d( TAG, "updateWatchedStatus : enter" );
-
-//        if( null != programModel ) {
-//            //Log.d( TAG, "updateWatchedStatus : programModel is not null" );
-//
-//            if( null != programModel.getProgramFlags() ) {
-//                Log.d( TAG, "updateWatchedStatus : programFlags=0x" + Integer.toHexString( programModel.getProgramFlags() ) );
-//
-//                boolean watchedStatus = ( programModel.getProgramFlags() & 0x00000200 ) > 0;
-//                Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
-//                if( watchedStatus ) {
-//                    Log.d( TAG, "updateWatchedStatus : setting to watched" );
-//
-//                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp ) );
-//
-//                } else {
-//                    Log.d( TAG, "updateWatchedStatus : setting to unwatched" );
-//
-//                    watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp ) );
-//
-//                }
-//
-//            }
-//
-//        }
-
-        Log.d( TAG, "updateWatchedStatus : exit" );
-    }
-
-    private void updateHlsStream( final LiveStreamInfoModel liveStreamInfoModel ) {
-        Log.d( TAG, "updateHlsStream : enter" );
-
-//        if( null != liveStreamInfoModel ) {
-//            Log.d( TAG, "updateHlsStream : liveStreamInfo" + liveStreamInfoModel );
-//
-//            setTint( hls_stream.getDrawable(), Color.WHITE );
-//
-//        } else {
-//            Log.d( TAG, "updateHlsStream : setting hls_stream to delete" );
-//
-//            setTint( hls_stream.getDrawable(), Color.LTGRAY );
-//
-//        }
-
-        Log.d( TAG, "updateHlsStream : exit" );
     }
 
     @OnClick( R.id.fab )

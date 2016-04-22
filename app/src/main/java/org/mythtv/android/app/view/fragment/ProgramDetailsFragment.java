@@ -6,10 +6,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -37,7 +39,7 @@ import butterknife.ButterKnife;
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class ProgramDetailsFragment extends AbstractBaseFragment implements ProgramDetailsView {
+public class ProgramDetailsFragment extends AbstractBaseFragment implements ProgramDetailsView, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = ProgramDetailsFragment.class.getSimpleName();
 
@@ -82,6 +84,12 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
 
+    @Bind( R.id.watched_switch )
+    SwitchCompat watched;
+
+    @Bind( R.id.hsl_stream_switch )
+    SwitchCompat hls_stream;
+
     public ProgramDetailsFragment() { super(); }
 
     public static ProgramDetailsFragment newInstance() {
@@ -116,7 +124,9 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "onAttach : enter" );
 
         if( activity instanceof ProgramDetailsListener ) {
+
             this.listener = (ProgramDetailsListener) activity;
+
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -160,6 +170,29 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         this.presenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
+    }
+
+    @Override
+    public void onCheckedChanged( CompoundButton buttonView, boolean isChecked ) {
+        Log.d( TAG, "onCheckedChanged : enter" );
+
+        switch( buttonView.getId() ) {
+
+            case R.id.watched_switch :
+
+                this.presenter.updateWatchedStatus();
+
+                break;
+
+            case R.id.hsl_stream_switch :
+
+                this.presenter.updateHlsStream();
+
+                break;
+
+        }
+
+        Log.d( TAG, "onCheckedChanged : exit" );
     }
 
     private void initialize() {
@@ -231,22 +264,6 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "updateLiveStream : exit" );
     }
 
-    public void requestUpdateWatchedStatus() {
-        Log.d( TAG, "requestUpdateWatchedStatus : enter" );
-
-        this.presenter.updateWatchedStatus();
-
-        Log.d( TAG, "requestUpdateWatchedStatus : exit" );
-    }
-
-    public void requestUpdateHlsStream() {
-        Log.d( TAG, "requestUpdateHlsStream : enter" );
-
-        this.presenter.updateHlsStream();
-
-        Log.d( TAG, "requestUpdateHlsStream : exit" );
-    }
-
     @Override
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
@@ -309,8 +326,8 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     }
 
     @Override
-    public Context getContext()
-    {
+    public Context getContext() {
+
         return getActivity().getApplicationContext();
     }
 
@@ -330,11 +347,34 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "loadProgramDetails : exit" );
     }
 
+    private void updateWatchedStatus( final ProgramModel programModel ) {
+        Log.d( TAG, "updateWatchedStatus : enter" );
+
+        watched.setOnCheckedChangeListener( null );
+
+        if( null != programModel ) {
+            Log.d( TAG, "updateWatchedStatus : programModel is not null" );
+
+            boolean watchedStatus = ( programModel.getProgramFlags() & 0x00000200 ) > 0;
+            Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
+            watched.setChecked( watchedStatus );
+
+        }
+
+        watched.setOnCheckedChangeListener( this );
+
+        Log.d( TAG, "updateWatchedStatus : exit" );
+    }
+
     private void updateLiveStreamControls( LiveStreamInfoModel liveStreamInfoModel ) {
         Log.d( TAG, "updateLiveStreamControls : enter" );
 
+        hls_stream.setOnCheckedChangeListener( null );
+
         if( null != liveStreamInfoModel ) {
             Log.d( TAG, "updateLiveStreamControls : hls exists" );
+
+            hls_stream.setChecked( true );
 
             pb_progress.setVisibility( View.VISIBLE );
             pb_progress.setIndeterminate( false );
@@ -353,9 +393,13 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         } else {
             Log.d( TAG, "updateLiveStreamControls : hls does not exist" );
 
+            hls_stream.setChecked( false );
+
             pb_progress.setVisibility( View.GONE );
 
         }
+
+        hls_stream.setOnCheckedChangeListener( this );
 
         Log.d( TAG, "updateLiveStreamControls : exit" );
     }

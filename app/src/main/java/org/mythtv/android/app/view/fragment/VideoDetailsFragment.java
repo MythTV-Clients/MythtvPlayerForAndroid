@@ -6,11 +6,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,12 +28,11 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class VideoDetailsFragment extends AbstractBaseFragment implements VideoDetailsView {
+public class VideoDetailsFragment extends AbstractBaseFragment implements VideoDetailsView, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = VideoDetailsFragment.class.getSimpleName();
 
@@ -65,11 +65,11 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
 
-    @Bind( R.id.watched )
-    ImageView watched;
+    @Bind( R.id.watched_switch )
+    SwitchCompat watched;
 
-    @Bind( R.id.hsl_stream )
-    ImageView hls_stream;
+    @Bind( R.id.hsl_stream_switch )
+    SwitchCompat hls_stream;
 
     public VideoDetailsFragment() { super(); }
 
@@ -105,7 +105,9 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
         Log.d( TAG, "onAttach : enter" );
 
         if( activity instanceof VideoDetailsListener ) {
+
             this.listener = (VideoDetailsListener) activity;
+
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -151,6 +153,29 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
         Log.d( TAG, "onDestroy : exit" );
     }
 
+    @Override
+    public void onCheckedChanged( CompoundButton buttonView, boolean isChecked ) {
+        Log.d( TAG, "onCheckedChanged : enter" );
+
+        switch( buttonView.getId() ) {
+
+            case R.id.watched_switch :
+
+                this.presenter.updateWatchedStatus();
+
+                break;
+
+            case R.id.hsl_stream_switch :
+
+                this.presenter.updateHlsStream();
+
+                break;
+
+        }
+
+        Log.d( TAG, "onCheckedChanged : exit" );
+    }
+
     private void initialize() {
         Log.d( TAG, "initialize : enter" );
 
@@ -194,26 +219,6 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
         this.listener.onVideoLoaded( videoMetadataInfoModel );
 
         Log.d( TAG, "updateLiveStream : exit" );
-    }
-
-    @OnClick( R.id.watched )
-    public void requestUpdateWatchedStatus() {
-        Log.d( TAG, "requestUpdateWatchedStatus : enter" );
-
-        watched.setEnabled( false );
-        this.presenter.updateWatchedStatus();
-
-        Log.d( TAG, "requestUpdateWatchedStatus : exit" );
-    }
-
-    @OnClick( R.id.hsl_stream )
-    public void requestUpdateHlsStream() {
-        Log.d( TAG, "requestUpdateHlsStream : enter" );
-
-        hls_stream.setEnabled( false );
-        this.presenter.updateHlsStream();
-
-        Log.d( TAG, "requestUpdateHlsStream : exit" );
     }
 
     @Override
@@ -278,8 +283,8 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
     }
 
     @Override
-    public Context getContext()
-    {
+    public Context getContext() {
+
         return getActivity().getApplicationContext();
     }
 
@@ -302,28 +307,18 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
     private void updateWatchedStatus( final VideoMetadataInfoModel videoMetadataInfoModel ) {
         Log.d( TAG, "updateWatchedStatus : enter" );
 
+        watched.setOnCheckedChangeListener( null );
+
         if( null != videoMetadataInfoModel ) {
             Log.d( TAG, "updateWatchedStatus : videoMetadataInfoModel is not null" );
 
             boolean watchedStatus = videoMetadataInfoModel.isWatched();
             Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
-            if( watchedStatus ) {
-                Log.d( TAG, "updateWatchedStatus : setting to watched" );
-
-                watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_watched_24dp ) );
-                setTint( watched.getDrawable(), getResources().getColor( R.color.accent ) );
-
-            } else {
-                Log.d( TAG, "updateWatchedStatus : setting to unwatched" );
-
-                watched.setImageDrawable( getResources().getDrawable( R.drawable.ic_unwatched_24dp ) );
-                setTint( watched.getDrawable(), Color.LTGRAY );
-
-            }
+            watched.setChecked( watchedStatus );
 
         }
 
-        watched.setEnabled( true );
+        watched.setOnCheckedChangeListener( this );
 
         Log.d( TAG, "updateWatchedStatus : exit" );
     }
@@ -331,10 +326,12 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
     private void updateLiveStreamControls( LiveStreamInfoModel liveStreamInfoModel ) {
         Log.d( TAG, "updateLiveStreamControls : enter" );
 
+        hls_stream.setOnCheckedChangeListener( null );
+
         if( null != liveStreamInfoModel ) {
             Log.d( TAG, "updateLiveStreamControls : hls exists" );
 
-            setTint( hls_stream.getDrawable(), getResources().getColor( R.color.accent ) );
+            hls_stream.setChecked( true );
 
             pb_progress.setVisibility( View.VISIBLE );
             pb_progress.setIndeterminate( false );
@@ -353,13 +350,13 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
         } else {
             Log.d( TAG, "updateLiveStreamControls : hls does not exist" );
 
-            setTint( hls_stream.getDrawable(), Color.LTGRAY );
+            hls_stream.setChecked( false );
 
             pb_progress.setVisibility( View.GONE );
 
         }
 
-        hls_stream.setEnabled( true );
+        hls_stream.setOnCheckedChangeListener( this );
 
         Log.d( TAG, "updateLiveStreamControls : exit" );
     }

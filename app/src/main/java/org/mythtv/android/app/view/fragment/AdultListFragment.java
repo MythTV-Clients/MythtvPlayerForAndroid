@@ -136,7 +136,6 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
         this.getComponent( VideoComponent.class ).inject( this );
         this.adultListPresenter.setView( this );
         this.getComponent( VideoComponent.class ).plus( new VideosModule() );
-//        this.adultListPresenter.initialize( contentType );
 
         Log.d( TAG, "initialize : exit" );
     }
