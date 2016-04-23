@@ -45,20 +45,6 @@ public class SharedPreferencesModule {
         return getBooleanFromPreferences( SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
     }
 
-    public boolean getExternalPlayerPreferenceFromPreferences() {
-
-        return getBooleanFromPreferences( SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
-    }
-
-    public boolean getShouldPlayVideoInExternalPlayer() {
-
-        boolean playInternalPlayer = getBooleanFromPreferences( SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
-        boolean playExternalPlayerOverride = getBooleanFromPreferences( SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
-
-        return ( !playInternalPlayer || playExternalPlayerOverride );
-    }
-
-
     public boolean getShowAdultContent() {
 
         return getBooleanFromPreferences( SettingsKeys.KEY_PREF_SHOW_ADULT_TAB );

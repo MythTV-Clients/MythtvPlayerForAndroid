@@ -55,16 +55,7 @@
             android:summaryOn="@string/pref_internal_player_summary_on"
             android:summaryOff="@string/pref_internal_player_summary_off" />
 
-        <SwitchPreference
-            android:dependency="internal_player"
-            android:title="@string/pref_external_player_override_video"
-            android:key="external_player_override_video"
-            android:defaultValue="false"
-            android:summaryOn="@string/pref_external_player_override_video_summary_on"
-            android:summaryOff="@string/pref_external_player_override_video_summary_off" />
-
         <ListPreference
-            android:dependency="internal_player"
             android:key="hls_video_width"
             android:title="@string/pref_hls_video_width_title"
             android:summary="@string/pref_hls_video_width_title_summary"
@@ -74,7 +65,6 @@
             android:defaultValue="@string/pref_hls_video_width_default" />
 
         <ListPreference
-            android:dependency="internal_player"
             android:key="hls_video_height"
             android:title="@string/pref_hls_video_height_title"
             android:summary="@string/pref_hls_video_height_title_summary"
@@ -84,7 +74,6 @@
             android:defaultValue="@string/pref_hls_video_height_default" />
 
         <ListPreference
-            android:dependency="internal_player"
             android:key="hls_video_bitrate"
             android:title="@string/pref_hls_video_bitrate_title"
             android:summary="@string/pref_hls_video_bitrate_title_summary"
@@ -94,7 +83,6 @@
             android:defaultValue="@string/pref_hls_video_bitrate_default" />
 
         <ListPreference
-            android:dependency="internal_player"
             android:key="hls_audio_bitrate"
             android:title="@string/pref_hls_audio_bitrate_title"
             android:summary="@string/pref_hls_audio_bitrate_title_summary"

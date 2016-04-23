@@ -40,9 +40,6 @@
     <string name="pref_hls_video_bitrate_title">Bitrate</string>
     <string name="pref_hls_audio_bitrate_title">Audio Bitrate</string>
     <string name="pref_default_player">Standardplayer</string>
-    <string name="pref_external_player_override_video"> Externer Videoplayer</string>
-    <string name="pref_external_player_override_video_summary_on">Videos werden von einem externen Player wiedergegeben werden</string> <!-- not checked, unknown occurence -->
-    <string name="pref_external_player_override_video_summary_off">Videos werden von der Internal Player wiedergegeben werden</string> <!-- not checked, unknown occurence -->
     <string name="pref_hls_video_height_title_summary">Video Höhe</string>
     <string name="pref_hls_video_bitrate_title_summary">Video Bitrate</string>
     <string name="pref_hls_audio_bitrate_title_summary">Audio Bitrate</string>
@@ -111,7 +108,6 @@
     <string name="tv_settings_playback_internal_player">Internal Player</string>
     <string name="tv_settings_playback_internal_player_description">Use the Internal Player for Recording and Video Playback</string>
     <string name="tv_settings_playback_external_player">External Player</string>
-    <string name="tv_settings_playback_external_player_override">Internal Player (Override for Videos)</string>
     <string name="tv_settings_content_title">Content Settings</string>
     <string name="tv_settings_content_title_description">Show Adult Content</string>
     <string name="tv_settings_content_adult_title">Adult Content</string>
