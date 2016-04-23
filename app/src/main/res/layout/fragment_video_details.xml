@@ -93,6 +93,8 @@
             android:id="@+id/hsl_stream_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
             android:checked="false"
             android:text="@string/http_live_stream" />
 
@@ -100,6 +102,8 @@
             android:id="@+id/watched_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
             android:checked="false"
             android:text="@string/watched" />
 

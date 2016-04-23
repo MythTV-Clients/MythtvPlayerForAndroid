@@ -130,7 +130,10 @@
     <string name="remove_live_stream_positive_label">Remove</string>
     <string name="add_live_stream_positive_label">Create</string>
     <string name="add_live_stream_title">Create Live Stream?</string>
-    <string name="http_live_stream">HTTP Live Stream</string>
+    <string name="http_live_stream">HTTP Live Stream %1$s</string>
+    <string name="available">Available</string>
+    <string name="unavailable">Unavailable</string>
     <string name="watched">Watched</string>
+    <string name="unwatched">Unwatched</string>
 
 </resources>

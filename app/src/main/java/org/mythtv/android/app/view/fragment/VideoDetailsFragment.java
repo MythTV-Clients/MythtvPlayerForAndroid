@@ -315,6 +315,7 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
             boolean watchedStatus = videoMetadataInfoModel.isWatched();
             Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
             watched.setChecked( watchedStatus );
+            watched.setText( watchedStatus ? getResources().getString( R.string.watched ) : getResources().getString( R.string.unwatched ) );
 
         }
 
@@ -339,10 +340,12 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
 
             if( liveStreamInfoModel.getPercentComplete() < 2 ) {
 
+                hls_stream.setText( getResources().getString( R.string.http_live_stream, getResources().getString( R.string.unavailable ) ) );
                 pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
 
             } else {
 
+                hls_stream.setText( getResources().getString( R.string.http_live_stream, getResources().getString( R.string.available ) ) );
                 pb_progress.getProgressDrawable().setColorFilter( getResources().getColor( R.color.accent ), android.graphics.PorterDuff.Mode.SRC_IN );
 
             }
@@ -351,6 +354,7 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
             Log.d( TAG, "updateLiveStreamControls : hls does not exist" );
 
             hls_stream.setChecked( false );
+            hls_stream.setText( getResources().getString( R.string.http_live_stream, getResources().getString( R.string.unavailable ) ) );
 
             pb_progress.setVisibility( View.GONE );
 
