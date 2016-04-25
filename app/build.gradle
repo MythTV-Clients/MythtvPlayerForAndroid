@@ -57,7 +57,7 @@ android {
         debug {
             signingConfig signingConfigs.debug
             proguardFiles 'proguard-rules.txt'
-            testCoverageEnabled = false
+            testCoverageEnabled = true
         }
 
         release {
