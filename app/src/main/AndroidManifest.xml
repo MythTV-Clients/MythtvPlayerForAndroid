@@ -17,13 +17,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest package="org.mythtv.android.app"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-sdk
-        tools:overrideLibrary="org.mythtv.android" />
-    <!--<uses-sdk-->
-        <!--tools:overrideLibrary="android.support.v14.preference" />-->
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
