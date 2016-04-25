@@ -46,7 +46,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import org.joda.time.DateTimeZone;
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.VideoModel;

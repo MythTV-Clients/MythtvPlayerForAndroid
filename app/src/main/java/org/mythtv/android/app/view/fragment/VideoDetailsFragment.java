@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.VideoDetailsView;
 import org.mythtv.android.app.internal.di.components.VideoComponent;

@@ -3,7 +3,7 @@ package org.mythtv.android.app.view.activity;
 import android.content.Context;
 import android.content.Intent;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 
 /**
  * Created by dmfrey on 9/2/15.

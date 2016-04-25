@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 
 public class VideoDetailsSettingsActivity extends AbstractBaseActivity {
 

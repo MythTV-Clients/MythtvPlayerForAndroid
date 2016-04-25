@@ -11,7 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Window;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.app.view.fragment.AbstractBaseVideoPagerFragment;
 import org.mythtv.android.app.view.fragment.AdultListFragment;
 import org.mythtv.android.app.view.fragment.MusicVideoListFragment;

@@ -20,7 +20,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.util.Log;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.data.entity.SearchResultEntity;
 import org.mythtv.android.data.repository.DatabaseHelper;
 import org.mythtv.android.domain.SearchResult;

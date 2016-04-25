@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.EncoderModel;
 import org.mythtv.android.presentation.presenter.EncoderListPresenter;

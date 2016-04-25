@@ -16,7 +16,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<manifest package="org.mythtv.android"
+<manifest package="org.mythtv.android.tv"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk
@@ -62,7 +62,7 @@
         android:required="false" />
 
     <application
-        android:name=".tv.AndroidApplication"
+        android:name=".AndroidApplication"
         android:allowBackup="true"
         android:banner="@drawable/mythtv_logo"
         android:icon="@drawable/ic_mythtv"
@@ -71,7 +71,7 @@
 
         <!-- AndroidTv activities -->
         <activity
-            android:name=".tv.view.activity.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:configChanges="keyboard|keyboardHidden|navigation">
             <intent-filter>
 
@@ -83,72 +83,72 @@
         </activity>
 
         <activity
-            android:name=".tv.view.activity.RecordingsActivity"
-            android:parentActivityName=".tv.view.activity.MainActivity">
+            android:name=".view.activity.RecordingsActivity"
+            android:parentActivityName=".view.activity.MainActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tv.view.activity.MainActivity" />
+                android:value=".view.activity.MainActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".tv.view.activity.SearchableActivity" />
+                android:value=".view.activity.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".tv.view.activity.RecordingsDetailsActivity"
-            android:parentActivityName=".tv.view.activity.MainActivity">
+            android:name=".view.activity.RecordingsDetailsActivity"
+            android:parentActivityName=".view.activity.MainActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tv.view.activity.MainActivity" />
+                android:value=".view.activity.MainActivity" />
 
         </activity>
 
         <activity
-            android:name=".tv.view.activity.SettingsActivity" />
+            android:name=".view.activity.SettingsActivity" />
 
         <activity
-            android:name=".tv.view.activity.RecordingSettingsActivity" />
+            android:name=".view.activity.RecordingSettingsActivity" />
 
         <activity
-            android:name=".tv.view.activity.VideosActivity"
-            android:parentActivityName=".tv.view.activity.MainActivity">
+            android:name=".view.activity.VideosActivity"
+            android:parentActivityName=".view.activity.MainActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tv.view.activity.MainActivity" />
+                android:value=".view.activity.MainActivity" />
 
         </activity>
 
         <activity
-            android:name=".tv.view.activity.VideoCategoryActivity"
-            android:parentActivityName=".tv.view.activity.VideosActivity">
+            android:name=".view.activity.VideoCategoryActivity"
+            android:parentActivityName=".view.activity.VideosActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tv.view.activity.VideosActivity" />
+                android:value=".view.activity.VideosActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".tv.view.activity.SearchableActivity" />
+                android:value=".view.activity.SearchableActivity" />
         </activity>
 
         <activity
-            android:name=".tv.view.activity.VideoDetailsActivity"
-            android:parentActivityName=".tv.view.activity.VideosActivity">
+            android:name=".view.activity.VideoDetailsActivity"
+            android:parentActivityName=".view.activity.VideosActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tv.view.activity.VideosActivity"/>
+                android:value=".view.activity.VideosActivity"/>
 
         </activity>
 
         <activity
-            android:name=".tv.view.activity.TvVideoSettingsActivity" />
+            android:name=".view.activity.TvVideoSettingsActivity" />
 
-        <activity android:name=".tv.view.activity.SearchableActivity">
+        <activity android:name=".view.activity.SearchableActivity">
 
             <intent-filter>
 
@@ -163,12 +163,12 @@
         </activity>
 
         <activity
-            android:name=".tv.view.activity.PlaybackOverlayActivity"
+            android:name=".view.activity.PlaybackOverlayActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <provider
-            android:name=".tv.provider.MythtvSearchSuggestionProvider"
+            android:name=".provider.MythtvSearchSuggestionProvider"
             android:authorities="org.mythtv.android.tv.provider.MythtvSearchSuggestionProvider"
             android:exported="false"/>
 

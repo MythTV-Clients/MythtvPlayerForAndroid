@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.data.exception.ProgramNotFoundException;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
-import org.mythtv.android.R;
+import org.mythtv.android.presentation.R;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

@@ -7,7 +7,7 @@ import android.provider.SearchRecentSuggestions;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.util.Log;
 
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.tv.internal.di.components.DaggerSearchComponent;
 import org.mythtv.android.tv.internal.di.components.SearchComponent;

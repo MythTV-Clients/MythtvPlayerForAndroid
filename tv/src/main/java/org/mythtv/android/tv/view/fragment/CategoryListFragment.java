@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.tv.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.TvCategoryModel;
 import org.mythtv.android.presentation.presenter.TvCategoryListPresenter;

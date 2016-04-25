@@ -16,11 +16,18 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<manifest package="org.mythtv.android"
+<manifest package="org.mythtv.android.presentation"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-sdk
         tools:overrideLibrary="org.mythtv.android" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        >
+
+    </application>
 
 </manifest>
