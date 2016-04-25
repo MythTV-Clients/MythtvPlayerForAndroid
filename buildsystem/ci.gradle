@@ -1,6 +1,12 @@
 def ciServer = 'TRAVIS'
 def executingOnCI = "true".equals( System.getenv( ciServer ) )
 
+ext {
+    travisBuild = System.getenv( "TRAVIS" ) == "true"
+    // allows for -Dpre-dex=false to be set
+    preDexEnabled = "true".equals( System.getProperty( "pre-dex", "true" ) )
+}
+
 // Since for CI we always do full clean builds, we don't want to pre-dex
 // See http://tools.android.com/tech-docs/new-build-system/tips
 subprojects {
@@ -9,7 +15,7 @@ subprojects {
 
         if( 'com.android.build.gradle.AppPlugin'.equals( plugin.class.name ) || 'com.android.build.gradle.LibraryPlugin'.equals( plugin.class.name ) ) {
 
-            project.android.dexOptions.preDexLibraries = !executingOnCI
+            project.android.dexOptions.preDexLibraries = preDexEnabled && !travisBuild
 
         }
 
