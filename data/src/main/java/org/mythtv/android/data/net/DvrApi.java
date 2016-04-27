@@ -20,6 +20,7 @@ public interface DvrApi {
     String RECORDED_BASE_URL = "/Dvr/GetRecorded?ChanId=%s&StartTime=%s";
     String UPCOMING_LIST_BASE_URL = "/Dvr/GetUpcomingList";
     String ENCODER_LIST_BASE_URL = "/Dvr/GetEncoderList";
+    String UPDATE_RECORDED_WATCHED_STATUS_URL = "/Dvr/UpdateRecordedWatchedStatus";
 
     String DESCENDING_QS = "Descending=%s";
     String START_INDEX_QS = "StartIndex=%s";
@@ -30,6 +31,7 @@ public interface DvrApi {
     String SHOW_ALL_QS = "ShowAll=%s";
     String RECORD_ID_QS = "RecordId=%s";
     String REC_STATUS_QS = "RecStatus=%s";
+    String WATCHED_QS = "Watched=%s";
 
     Observable<List<TitleInfoEntity>> titleInfoEntityList();
 
@@ -40,5 +42,18 @@ public interface DvrApi {
     Observable<List<ProgramEntity>> upcomingProgramEntityList( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus );
 
     Observable<List<EncoderEntity>> encoderEntityList();
+
+    /**
+     * Updates Recording Watched status on the backend
+     *
+     * HTTP Status Codes:
+     *   200 - if request completed successfully
+     *   404 - if input parameters are valid, but recording is not found on the backend
+     *   501 - if input parameters are invalid
+     *
+     * @return true  - if status was successfully updated
+     *         false - if status was not updated
+     */
+    Observable<Boolean> updateRecordedWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
 
 }

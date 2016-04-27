@@ -61,4 +61,11 @@ public class DiskDvrDataStore implements DvrDataStore {
 
     }
 
+    @Override
+    public Observable<Boolean> updateRecordingWatchedStatus( int chanId, DateTime startTime, boolean watched ) {
+
+        throw new UnsupportedOperationException( "Operation is not available" );
+
+    }
+
 }

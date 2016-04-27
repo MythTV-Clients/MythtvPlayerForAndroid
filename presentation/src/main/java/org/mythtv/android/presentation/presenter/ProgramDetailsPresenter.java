@@ -9,6 +9,7 @@ import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
+import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
 import org.mythtv.android.presentation.mapper.LiveStreamInfoModelDataMapper;
@@ -18,6 +19,7 @@ import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.view.ProgramDetailsView;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,6 +36,7 @@ public class ProgramDetailsPresenter implements Presenter {
     private final UseCase getProgramDetailsUseCase;
     private final UseCase addLiveStreamDetailsUseCase;
     private final UseCase getLiveStreamsListUseCase;
+    private final DynamicUseCase postUpdateRecordedProgramWatchedStatusUseCase;
     private final ProgramModelDataMapper programModelDataMapper;
     private final LiveStreamInfoModelDataMapper liveStreamInfoModelDataMapper;
 
@@ -42,12 +45,15 @@ public class ProgramDetailsPresenter implements Presenter {
             @Named( "programDetails" ) UseCase getProgramDetailsUseCase,
             @Named( "addLiveStream" ) UseCase addLiveStreamDetailsUseCase,
             @Named( "getLiveStreams" ) UseCase getLiveStreamsListUseCase,
+            @Named( "updateRecordedProgramWatchedStatus" ) DynamicUseCase postUpdateRecordedProgramWatchedStatusUseCase,
             ProgramModelDataMapper programModelDataMapper,
-            LiveStreamInfoModelDataMapper liveStreamInfoModelDataMapper ) {
+            LiveStreamInfoModelDataMapper liveStreamInfoModelDataMapper
+    ) {
 
         this.getProgramDetailsUseCase = getProgramDetailsUseCase;
         this.addLiveStreamDetailsUseCase = addLiveStreamDetailsUseCase;
         this.getLiveStreamsListUseCase = getLiveStreamsListUseCase;
+        this.postUpdateRecordedProgramWatchedStatusUseCase = postUpdateRecordedProgramWatchedStatusUseCase;
         this.programModelDataMapper = programModelDataMapper;
         this.liveStreamInfoModelDataMapper = liveStreamInfoModelDataMapper;
 
@@ -58,7 +64,8 @@ public class ProgramDetailsPresenter implements Presenter {
     }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
     public void pause() {
@@ -98,6 +105,19 @@ public class ProgramDetailsPresenter implements Presenter {
         this.addLiveStreamDetailsUseCase.execute( new LiveStreamInfoDetailsSubscriber() );
 
         Log.d( TAG, "addLiveStream : exit" );
+    }
+
+    /**
+     * Update the watched status for a recorded program
+     */
+    public void updateWatchedStatus( Map parameters ) {
+        Log.d( TAG, "updateWatchedStatus : enter" );
+
+        this.hideViewRetry();
+        this.showViewLoading();
+        this.postUpdateRecordedProgramWatchedStatusUseCase.execute( new WatchedStatusSubscriber(), parameters );
+
+        Log.d( TAG, "updateWatchedStatus : enter" );
     }
 
     /**
@@ -159,6 +179,18 @@ public class ProgramDetailsPresenter implements Presenter {
 
     }
 
+    private void showUpdatedWatchedStatusInView( Boolean status ) {
+        Log.d( TAG, "showUpdatedWatchedStatusInView : status=" + status );
+
+        if( status ) {
+
+//            this.viewDetailsView.updateWatchedStatus(status);
+            this.getProgramDetails();
+
+        }
+
+    }
+
     private void getProgramDetails() {
         Log.d( TAG, "getProgramDetails : enter" );
 
@@ -183,10 +215,10 @@ public class ProgramDetailsPresenter implements Presenter {
         }
 
         @Override
-        public void onError( Throwable e ) {
+        public void onError(Throwable e) {
 
             ProgramDetailsPresenter.this.hideViewLoading();
-            ProgramDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            ProgramDetailsPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
             ProgramDetailsPresenter.this.showViewRetry();
 
         }
@@ -219,7 +251,7 @@ public class ProgramDetailsPresenter implements Presenter {
         @Override
         public void onNext( LiveStreamInfo liveStreamInfo ) {
 
-            ProgramDetailsPresenter.this.showLiveStreamDetailsInView(liveStreamInfo);
+            ProgramDetailsPresenter.this.showLiveStreamDetailsInView( liveStreamInfo );
 
         }
 
@@ -229,7 +261,9 @@ public class ProgramDetailsPresenter implements Presenter {
 
         @Override
         public void onCompleted() {
+
             ProgramDetailsPresenter.this.hideViewLoading();
+
         }
 
         @Override
@@ -255,6 +289,34 @@ public class ProgramDetailsPresenter implements Presenter {
                 }
 
             }
+
+        }
+
+    }
+
+    private final class WatchedStatusSubscriber extends DefaultSubscriber<Boolean> {
+
+        @Override
+        public void onCompleted() {
+
+            ProgramDetailsPresenter.this.hideViewLoading();
+
+        }
+
+        @Override
+        public void onError( Throwable e ) {
+
+            ProgramDetailsPresenter.this.hideViewLoading();
+            ProgramDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            ProgramDetailsPresenter.this.showViewRetry();
+
+        }
+
+        @Override
+        public void onNext( Boolean status ) {
+
+            ProgramDetailsPresenter.this.showUpdatedWatchedStatusInView( status );
+            ProgramDetailsPresenter.this.postUpdateRecordedProgramWatchedStatusUseCase.unsubscribe();
 
         }
 
