@@ -1,7 +1,7 @@
 package org.mythtv.android.app.view.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -14,30 +14,6 @@ import org.mythtv.android.app.R;
  */
 public class RemoveLiveStreamDialogFragment extends DialogFragment {
 
-    public interface RemoveLiveStreamDialogListener {
-
-        void onRemoveLiveStreamDialogPositiveClick( DialogFragment dialog );
-        void onRemoveLiveStreamDialogNegativeClick( DialogFragment dialog );
-
-    }
-
-    RemoveLiveStreamDialogListener mListener;
-
-    @Override
-    public void onAttach( Context context ) {
-        super.onAttach( context );
-
-        try {
-
-            mListener = (RemoveLiveStreamDialogListener) context;
-
-        } catch (ClassCastException e) {
-
-            throw new ClassCastException( context.toString() + " must implement RemoveLiveStreamDialogFragment" );
-        }
-
-    }
-
     @Override
     public Dialog onCreateDialog( Bundle savedInstanceState ) {
 
@@ -49,7 +25,7 @@ public class RemoveLiveStreamDialogFragment extends DialogFragment {
                     @Override
                     public void onClick( DialogInterface dialog, int which ) {
 
-                        mListener.onRemoveLiveStreamDialogPositiveClick( RemoveLiveStreamDialogFragment.this );
+                        getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_OK, null );
 
                     }
 
@@ -59,7 +35,7 @@ public class RemoveLiveStreamDialogFragment extends DialogFragment {
                     @Override
                     public void onClick( DialogInterface dialog, int which ) {
 
-                        mListener.onRemoveLiveStreamDialogNegativeClick( RemoveLiveStreamDialogFragment.this );
+                        getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_CANCELED, null );
 
                     }
 

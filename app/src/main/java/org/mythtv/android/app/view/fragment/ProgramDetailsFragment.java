@@ -2,9 +2,9 @@ package org.mythtv.android.app.view.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -19,11 +19,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.app.R;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.CastMemberModel;
 import org.mythtv.android.presentation.model.LiveStreamInfoModel;
@@ -32,15 +30,12 @@ import org.mythtv.android.presentation.presenter.ProgramDetailsPresenter;
 import org.mythtv.android.presentation.view.ProgramDetailsView;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -48,6 +43,8 @@ import butterknife.OnClick;
 public class ProgramDetailsFragment extends AbstractBaseFragment implements ProgramDetailsView, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = ProgramDetailsFragment.class.getSimpleName();
+    private static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
+    private static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
 
     public interface ProgramDetailsListener {
 
@@ -55,6 +52,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
     }
 
+    private ProgramModel programModel;
     private ProgramDetailsListener listener;
 
     @Inject
@@ -179,20 +177,82 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     }
 
     @Override
+    public void onActivityResult( int requestCode, int resultCode, Intent data ) {
+        Log.d( TAG, "onActivityResult : enter" );
+        super.onActivityResult( requestCode, resultCode, data );
+
+        switch( requestCode ) {
+
+            case ADD_LIVE_STREAM_DIALOG_RESULT :
+                Log.d( TAG, "onActivityResult : add live stream result returned " + resultCode );
+
+                if( resultCode == Activity.RESULT_OK ) {
+                    Log.d( TAG, "onActivityResult : positive button pressed" );
+
+                    this.presenter.updateHlsStream();
+
+                } else {
+                    Log.d( TAG, "onActivityResult : negative button pressed" );
+
+                    updateLiveStreamControls( null );
+
+                }
+
+                break;
+
+            case REMOVE_LIVE_STREAM_DIALOG_RESULT :
+                Log.d( TAG, "onActivityResult : remove live stream result returned " + resultCode );
+
+                if( resultCode == Activity.RESULT_OK ) {
+                    Log.d( TAG, "onActivityResult : positive button pressed" );
+
+                    this.presenter.updateHlsStream();
+
+                } else {
+                    Log.d( TAG, "onActivityResult : negative button pressed" );
+
+                    updateLiveStreamControls( programModel.getLiveStreamInfo() );
+
+                }
+
+                break;
+
+        }
+
+        Log.d( TAG, "onActivityResult : exit" );
+    }
+
+    @Override
     public void onCheckedChanged( CompoundButton buttonView, boolean isChecked ) {
         Log.d( TAG, "onCheckedChanged : enter" );
 
         switch( buttonView.getId() ) {
 
             case R.id.watched_switch :
+                Log.d( TAG, "onCheckedChanged : watched switched" );
 
                 this.presenter.updateWatchedStatus();
 
                 break;
 
             case R.id.hsl_stream_switch :
+                Log.d( TAG, "onCheckedChanged : hls_stream switched" );
 
-                this.presenter.updateHlsStream();
+                if( null != programModel.getLiveStreamInfo() ) {
+                    Log.d( TAG, "onCheckedChanged : prompt removing live stream" );
+
+                    RemoveLiveStreamDialogFragment fragment = new RemoveLiveStreamDialogFragment();
+                    fragment.setTargetFragment( this, REMOVE_LIVE_STREAM_DIALOG_RESULT );
+                    fragment.show( getFragmentManager(), "RemoveLiveStreamDialogFragment" );
+
+                } else {
+                    Log.d( TAG, "onCheckedChanged : prompt adding live stream" );
+
+                    AddLiveStreamDialogFragment fragment = new AddLiveStreamDialogFragment();
+                    fragment.setTargetFragment( this, ADD_LIVE_STREAM_DIALOG_RESULT );
+                    fragment.show( getFragmentManager(), "AddLiveStreamDialogFragment" );
+
+                }
 
                 break;
 
@@ -263,6 +323,8 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     @Override
     public void updateLiveStream( ProgramModel programModel ) {
         Log.d( TAG, "updateLiveStream : enter" );
+
+        this.programModel = programModel;
 
         updateLiveStreamControls( programModel.getLiveStreamInfo() );
 
@@ -367,7 +429,6 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
             Log.d( TAG, "updateWatchedStatus : watchedStatus=" + watchedStatus );
             watched.setChecked( watchedStatus );
             watched.setText( watchedStatus ? getResources().getString( R.string.watched ) : getResources().getString( R.string.unwatched ) );
-
 
         }
 

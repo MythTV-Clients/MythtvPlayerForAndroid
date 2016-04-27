@@ -1,5 +1,6 @@
 package org.mythtv.android.app.view.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,30 +15,6 @@ import org.mythtv.android.app.R;
  */
 public class AddLiveStreamDialogFragment extends DialogFragment {
 
-    public interface AddLiveStreamDialogListener {
-
-        void onAddLiveStreamDialogPositiveClick( DialogFragment dialog );
-        void onAddLiveStreamDialogNegativeClick( DialogFragment dialog );
-
-    }
-
-    AddLiveStreamDialogListener mListener;
-
-    @Override
-    public void onAttach( Context context ) {
-        super.onAttach( context );
-
-        try {
-
-            mListener = (AddLiveStreamDialogListener) context;
-
-        } catch (ClassCastException e) {
-
-            throw new ClassCastException( context.toString() + " must implement AddLiveStreamDialogFragment" );
-        }
-
-    }
-
     @Override
     public Dialog onCreateDialog( Bundle savedInstanceState ) {
 
@@ -49,7 +26,7 @@ public class AddLiveStreamDialogFragment extends DialogFragment {
                     @Override
                     public void onClick( DialogInterface dialog, int which ) {
 
-                        mListener.onAddLiveStreamDialogPositiveClick( AddLiveStreamDialogFragment.this );
+                        getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_OK, null );
 
                     }
 
@@ -59,7 +36,7 @@ public class AddLiveStreamDialogFragment extends DialogFragment {
                     @Override
                     public void onClick( DialogInterface dialog, int which ) {
 
-                        mListener.onAddLiveStreamDialogNegativeClick( AddLiveStreamDialogFragment.this );
+                        getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_CANCELED, null );
 
                     }
 
