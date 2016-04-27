@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.TitleInfoModel;
 import org.mythtv.android.presentation.presenter.TitleInfoListPresenter;
@@ -59,11 +59,11 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
 
     private TitleInfoListListener titleInfoListListener;
 
-    public TitleInfoListFragment() { super(); }
+    public AppTitleInfoListFragment() { super(); }
 
-    public static TitleInfoListFragment newInstance() {
+    public static AppTitleInfoListFragment newInstance() {
 
-        return new TitleInfoListFragment();
+        return new AppTitleInfoListFragment();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_title_info_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_app_title_info_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
 

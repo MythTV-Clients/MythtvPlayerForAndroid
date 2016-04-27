@@ -113,7 +113,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d( TAG, "navigateToVideos : context != null" );
 
-            Intent intentToLaunch = VideoListActivity.getCallingIntent( context );
+            Intent intentToLaunch = AppVideoListActivity.getCallingIntent( context );
             intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
             context.startActivity( intentToLaunch );
 
@@ -128,7 +128,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d( TAG, "navigateToVideoSeries : context != null" );
 
-            Intent intentToLaunch = VideoSeriesListActivity.getCallingIntent( context, series );
+            Intent intentToLaunch = AppVideoSeriesListActivity.getCallingIntent( context, series );
             context.startActivity( intentToLaunch );
 
         }

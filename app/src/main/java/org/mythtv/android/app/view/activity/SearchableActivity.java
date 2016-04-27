@@ -7,7 +7,7 @@ import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import android.view.MenuItem;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.app.view.fragment.SearchResultListFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerSearchComponent;

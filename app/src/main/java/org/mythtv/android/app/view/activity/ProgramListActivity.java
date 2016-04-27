@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.app.view.fragment.ProgramListFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.app.internal.di.modules.ProgramsModule;
 import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.view.fragment.AppProgramListFragment;
 
 /**
  * Activity that shows a list of programs.

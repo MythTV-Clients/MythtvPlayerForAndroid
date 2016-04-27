@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -18,9 +19,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.CastMemberModel;
 import org.mythtv.android.presentation.model.LiveStreamInfoModel;
@@ -29,12 +32,15 @@ import org.mythtv.android.presentation.presenter.ProgramDetailsPresenter;
 import org.mythtv.android.presentation.view.ProgramDetailsView;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -46,6 +52,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     public interface ProgramDetailsListener {
 
         void onRecordingLoaded( final ProgramModel programModel );
+        void onPlayRecording( final ProgramModel programModel );
 
     }
 
@@ -80,6 +87,12 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
     @Bind( R.id.recording_cast )
     TableLayout tl_cast;
+
+    @Bind( R.id.recording_queue_hls )
+    Button bt_queue;
+
+    @Bind( R.id.recording_play )
+    Button bt_play;
 
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
@@ -213,6 +226,10 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         if( null != programModel ) {
             Log.d( TAG, "renderProgram : program is not null" );
 
+            this.programModel = programModel;
+
+            this.programDetailsListener.onRecordingLoaded( this.programModel );
+
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
             actionBar.setTitle( programModel.getSubTitle() );
             actionBar.setSubtitle( programModel.getTitle() );
@@ -314,6 +331,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
         });
 
+
         Log.d( TAG, "showError : exit" );
     }
 
@@ -389,6 +407,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
                 pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
 
             } else {
+                Log.d( TAG, "updateLiveStreamControls : hls processing..." );
 
                 hls_stream.setText( getResources().getString( R.string.http_live_stream, getResources().getString( R.string.available ) ) );
                 pb_progress.getProgressDrawable().setColorFilter( getResources().getColor( R.color.accent ), android.graphics.PorterDuff.Mode.SRC_IN );
@@ -402,6 +421,20 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
             hls_stream.setText( getResources().getString( R.string.http_live_stream, getResources().getString( R.string.unavailable ) ) );
 
             pb_progress.setVisibility( View.GONE );
+            bt_play.setVisibility(View.GONE);
+            bt_queue.setVisibility(View.VISIBLE);
+        }
+
+        Log.d( TAG, "updateLiveStreamControls : exit" );
+    }
+
+    @OnClick( R.id.recording_play )
+    void onButtonPlayClick() {
+        Log.d( TAG, "onButtonPlayClick : enter" );
+
+        if( null != programModel ) {
+
+            this.programDetailsListener.onPlayRecording( programModel );
 
         }
 

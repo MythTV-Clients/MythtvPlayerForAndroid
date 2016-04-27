@@ -8,7 +8,7 @@ android {
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
     compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
-    buildToolsVersion '23.0.2'
+    buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
     enforceUniquePackageName = false
 
     defaultConfig {

@@ -1,3 +1,4 @@
+sudo: true
 language: android
 jdk: oraclejdk8
 
@@ -25,8 +26,9 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-23.0.2
+    - build-tools-23.0.3
     - android-23
     - extra-android-m2repository
+    - extra-google-m2repository
 
-script: ./gradlew build jacoco jacocoTestReport coveralls
+script: ./gradlew build jacoco jacocoTestReport coveralls -PdisablePreDex

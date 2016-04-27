@@ -28,7 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.domain.SettingsKeys;
 
 
@@ -72,6 +72,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 return isIPv4 || backendUrl.matches("(?=^.{1,253}$)(^(((?!-)[a-z0-9-]{1,63}(?<!-))|((?!-)[a-z0-9-]{1,63}(?<!-)\\.)+[a-z]{2,63})$)");
 
+            }
+
+        });
+
+        externalPlayerOverride = (SwitchPreference) getPreferenceManager().findPreference( SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
+        CheckBoxPreference internalPlayer = (CheckBoxPreference) getPreferenceManager().findPreference(SettingsKeys.KEY_PREF_INTERNAL_PLAYER);
+        internalPlayer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+            @Override
+            public boolean onPreferenceChange( Preference preference, Object newValue ) {
+
+                if( !( (boolean) newValue ) ) {
+
+                    externalPlayerOverride.setChecked( false );
+
+                }
+
+                return true;
             }
 
         });

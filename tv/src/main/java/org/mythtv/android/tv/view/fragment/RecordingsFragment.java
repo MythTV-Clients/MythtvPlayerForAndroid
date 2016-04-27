@@ -33,7 +33,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.tv.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.tv.presenter.CardPresenter;

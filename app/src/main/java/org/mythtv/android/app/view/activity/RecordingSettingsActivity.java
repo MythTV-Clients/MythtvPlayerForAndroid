@@ -20,7 +20,7 @@ package org.mythtv.android.app.view.activity;
 
 import android.os.Bundle;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 
 public class RecordingSettingsActivity extends AbstractBaseActivity {
 

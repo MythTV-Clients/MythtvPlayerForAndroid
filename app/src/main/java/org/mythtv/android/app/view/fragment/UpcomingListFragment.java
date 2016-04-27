@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.presenter.UpcomingListPresenter;
@@ -56,11 +56,11 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
 
     private ProgramListListener programListListener;
 
-    public UpcomingListFragment() { super(); }
+    public AppUpcomingListFragment() { super(); }
 
-    public static RecentListFragment newInstance() {
+    public static AppRecentListFragment newInstance() {
 
-        return new RecentListFragment();
+        return new AppRecentListFragment();
     }
 
     @Override
@@ -242,15 +242,6 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
         });
 
         Log.d( TAG, "showError : exit" );
-    }
-
-    @Override
-    public void showMessage( String message ) {
-        Log.d( TAG, "showMessage : enter" );
-
-        this.showToastMessage( message, null, null );
-
-        Log.d( TAG, "showMessage : exit" );
     }
 
     @Override

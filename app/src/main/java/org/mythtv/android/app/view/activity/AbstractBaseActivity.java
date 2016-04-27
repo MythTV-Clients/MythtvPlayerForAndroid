@@ -2,13 +2,11 @@ package org.mythtv.android.app.view.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -20,7 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.app.AndroidApplication;
 import org.mythtv.android.app.internal.di.components.ApplicationComponent;
 import org.mythtv.android.app.internal.di.modules.ActivityModule;
@@ -218,22 +216,6 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     protected SharedPreferencesModule getSharedPreferencesModule() {
 
         return new SharedPreferencesModule( this );
-    }
-
-    /**
-     *
-     * Sets the color of a Drawable by changing the tint
-     *
-     * @param d
-     * @param color
-     * @return
-     */
-    protected Drawable setTint( Drawable d, int color ) {
-
-        Drawable wrappedDrawable = DrawableCompat.wrap( d );
-        DrawableCompat.setTint( wrappedDrawable, color );
-
-        return wrappedDrawable;
     }
 
 }

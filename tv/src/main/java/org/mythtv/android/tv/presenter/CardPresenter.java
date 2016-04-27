@@ -26,7 +26,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 
 import org.joda.time.DateTimeZone;
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.ProgramModel;

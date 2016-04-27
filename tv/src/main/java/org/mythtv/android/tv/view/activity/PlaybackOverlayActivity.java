@@ -23,7 +23,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 
 /**
  * PlaybackOverlayActivity for video playback that loads PlaybackOverlayFragment and handles

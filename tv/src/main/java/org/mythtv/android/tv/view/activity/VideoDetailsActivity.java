@@ -17,7 +17,7 @@ package org.mythtv.android.tv.view.activity;
 import android.app.Activity;
 import android.os.Bundle;
 
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 
 /*
  * Details activity class that loads LeanbackDetailsFragment class

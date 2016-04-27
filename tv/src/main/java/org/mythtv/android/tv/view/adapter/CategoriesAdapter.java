@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.presentation.model.TvCategoryModel;
 
 import java.util.Collection;

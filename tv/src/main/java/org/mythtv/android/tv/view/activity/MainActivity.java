@@ -31,7 +31,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.tv.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.tv.internal.di.components.DvrComponent;

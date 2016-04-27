@@ -17,7 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import org.mythtv.android.R;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.domain.SettingsKeys;
 
 import java.util.ArrayList;

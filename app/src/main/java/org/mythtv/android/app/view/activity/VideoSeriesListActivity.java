@@ -7,13 +7,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.app.view.fragment.TelevisionSeriesListFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
 import org.mythtv.android.app.internal.di.modules.VideoSeriesModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
+import org.mythtv.android.presentation.view.fragment.AppTelevisionSeriesListFragment;
 
 /**
  * Activity that shows a list of programs.
