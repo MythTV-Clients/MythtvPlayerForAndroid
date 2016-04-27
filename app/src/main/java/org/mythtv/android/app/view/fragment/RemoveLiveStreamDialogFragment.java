@@ -1,14 +1,13 @@
 package org.mythtv.android.app.view.fragment;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 
 /**
  * Created by dmfrey on 4/21/16.

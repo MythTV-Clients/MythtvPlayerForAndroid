@@ -65,12 +65,6 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
     @Bind( R.id.video_description )
     TextView tv_description;
 
-    @Bind( R.id.video_queue_hls )
-    Button bt_queue;
-
-    @Bind( R.id.video_play )
-    Button bt_play;
-
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
 
@@ -202,8 +196,6 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
 
         if( null != videoMetadataInfoModel ) {
             Log.d( TAG, "renderVideo : video is not null" );
-
-            this.videoMetadataInfoModel = videoMetadataInfoModel;
 
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
             actionBar.setTitle( videoMetadataInfoModel.getTitle() );
@@ -369,24 +361,8 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
             hls_stream.setText( getResources().getString( R.string.http_live_stream, getResources().getString( R.string.unavailable ) ) );
 
             pb_progress.setVisibility( View.GONE );
-            bt_play.setVisibility( View.GONE );
-            bt_queue.setVisibility( View.VISIBLE );
-        }
-
-        Log.d( TAG, "updateLiveStreamControls : exit" );
-    }
-
-    @OnClick( R.id.video_play )
-    void onButtonPlayClick() {
-        Log.d( TAG, "onButtonPlayClick : enter" );
-
-        if( null != videoMetadataInfoModel ) {
-
-            this.videoDetailsListener.onPlayVideo( videoMetadataInfoModel );
 
         }
-
-        hls_stream.setOnCheckedChangeListener( this );
 
         Log.d( TAG, "updateLiveStreamControls : exit" );
     }

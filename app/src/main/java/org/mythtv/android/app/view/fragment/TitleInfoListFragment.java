@@ -59,11 +59,11 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
 
     private TitleInfoListListener titleInfoListListener;
 
-    public AppTitleInfoListFragment() { super(); }
+    public TitleInfoListFragment() { super(); }
 
-    public static AppTitleInfoListFragment newInstance() {
+    public static TitleInfoListFragment newInstance() {
 
-        return new AppTitleInfoListFragment();
+        return new TitleInfoListFragment();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_app_title_info_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_title_info_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
 

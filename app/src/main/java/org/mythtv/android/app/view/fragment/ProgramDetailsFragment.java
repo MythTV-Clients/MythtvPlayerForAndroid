@@ -88,12 +88,6 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     @Bind( R.id.recording_cast )
     TableLayout tl_cast;
 
-    @Bind( R.id.recording_queue_hls )
-    Button bt_queue;
-
-    @Bind( R.id.recording_play )
-    Button bt_play;
-
     @Bind( R.id.rl_progress )
     RelativeLayout rl_progress;
 
@@ -225,10 +219,6 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
         if( null != programModel ) {
             Log.d( TAG, "renderProgram : program is not null" );
-
-            this.programModel = programModel;
-
-            this.programDetailsListener.onRecordingLoaded( this.programModel );
 
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
             actionBar.setTitle( programModel.getSubTitle() );
@@ -421,24 +411,8 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
             hls_stream.setText( getResources().getString( R.string.http_live_stream, getResources().getString( R.string.unavailable ) ) );
 
             pb_progress.setVisibility( View.GONE );
-            bt_play.setVisibility(View.GONE);
-            bt_queue.setVisibility(View.VISIBLE);
-        }
-
-        Log.d( TAG, "updateLiveStreamControls : exit" );
-    }
-
-    @OnClick( R.id.recording_play )
-    void onButtonPlayClick() {
-        Log.d( TAG, "onButtonPlayClick : enter" );
-
-        if( null != programModel ) {
-
-            this.programDetailsListener.onPlayRecording( programModel );
 
         }
-
-        hls_stream.setOnCheckedChangeListener( this );
 
         Log.d( TAG, "updateLiveStreamControls : exit" );
     }

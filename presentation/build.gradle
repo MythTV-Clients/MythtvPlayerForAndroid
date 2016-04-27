@@ -13,18 +13,8 @@ android {
         minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
         targetSdkVersion globalConfiguration.getAt( "androidTargetSdkVersion" )
 
-        applicationId 'org.mythtv.android'
-        versionCode globalConfiguration.getAt("androidVersionCode")
-        versionName globalConfiguration.getAt("androidVersionName")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId 'org.mythtv.android.presentation.test'
-
-    }
-
-    compileOptions {
-
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
 
     }
 
@@ -68,22 +58,20 @@ dependencies {
 
     apt presentationDependencies.daggerCompiler
     compile presentationDependencies.dagger
-    compile presentationDependencies.butterKnife
+//    compile presentationDependencies.butterKnife
     compile presentationDependencies.appCompat
     compile presentationDependencies.design
-    compile presentationDependencies.cardView
-    compile presentationDependencies.recyclerView
-    compile presentationDependencies.palette
+//    compile presentationDependencies.cardView
+//    compile presentationDependencies.recyclerView
+//    compile presentationDependencies.palette
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
     compile presentationDependencies.picasso
     compile presentationDependencies.androidAnnotations
     compile presentationDependencies.preferences
-    compile presentationDependencies.leanback
-    compile presentationDependencies.leanbackPreferences
-    compile presentationDependencies.glide
-    compile presentationDependencies.multidex
-    compile presentationDependencies.recyclerviewfastscroller
+//    compile presentationDependencies.glide
+//    compile presentationDependencies.multidex
+//    compile presentationDependencies.recyclerviewfastscroller
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations
@@ -97,4 +85,4 @@ dependencies {
 
 }
 
-apply from: '../buildsystem/jacoco.gradle'
+//apply from: '../buildsystem/jacoco.gradle'

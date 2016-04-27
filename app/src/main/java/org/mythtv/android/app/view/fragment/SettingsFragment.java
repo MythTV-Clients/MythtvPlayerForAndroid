@@ -76,24 +76,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         });
 
-        externalPlayerOverride = (SwitchPreference) getPreferenceManager().findPreference( SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
-        CheckBoxPreference internalPlayer = (CheckBoxPreference) getPreferenceManager().findPreference(SettingsKeys.KEY_PREF_INTERNAL_PLAYER);
-        internalPlayer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange( Preference preference, Object newValue ) {
-
-                if( !( (boolean) newValue ) ) {
-
-                    externalPlayerOverride.setChecked( false );
-
-                }
-
-                return true;
-            }
-
-        });
-
         return super.onCreateView( inflater, container, savedInstanceState );
     }
 

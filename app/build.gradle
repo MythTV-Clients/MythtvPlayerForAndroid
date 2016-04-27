@@ -143,4 +143,4 @@ dependencies {
 
 }
 
-apply from: '../buildsystem/jacoco.gradle'
+//apply from: '../buildsystem/jacoco.gradle'

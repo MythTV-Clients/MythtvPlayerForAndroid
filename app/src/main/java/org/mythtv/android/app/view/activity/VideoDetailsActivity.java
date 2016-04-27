@@ -11,9 +11,9 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import org.mythtv.android.app.R;
-import org.mythtv.android.app.view.fragment.VideoDetailsFragment;
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
 import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
@@ -21,12 +21,13 @@ import org.mythtv.android.app.internal.di.modules.VideoModule;
 import org.mythtv.android.app.view.fragment.VideoDetailsFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.view.fragment.AppVideoDetailsFragment;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 11/25/15.
@@ -60,9 +61,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
         Intent callingIntent = new Intent( context, VideoDetailsActivity.class );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_VIDEO_ID, id );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_STORAGE_GROUP, storageGroup );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_FILENAME, filename );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_HOSTNAME, hostname );
 
         return callingIntent;
     }

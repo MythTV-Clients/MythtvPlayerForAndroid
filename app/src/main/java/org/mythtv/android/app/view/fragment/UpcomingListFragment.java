@@ -56,11 +56,11 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
 
     private ProgramListListener programListListener;
 
-    public AppUpcomingListFragment() { super(); }
+    public UpcomingListFragment() { super(); }
 
-    public static AppRecentListFragment newInstance() {
+    public static RecentListFragment newInstance() {
 
-        return new AppRecentListFragment();
+        return new RecentListFragment();
     }
 
     @Override
@@ -242,6 +242,15 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
         });
 
         Log.d( TAG, "showError : exit" );
+    }
+
+    @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showMessage : enter" );
+
+        this.showToastMessage( message, null, null );
+
+        Log.d( TAG, "showMessage : exit" );
     }
 
     @Override
