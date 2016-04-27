@@ -5,28 +5,36 @@ jacoco {
     toolVersion "0.7.6.201602180812"
 }
 
-dependencies {
-    compile 'org.jacoco:org.jacoco.agent:0.7.6.201602180812'
-}
-
 def jacocoDaggerMap = [:]
 
-task jacoco(type: JacocoReport) {
+task jacocoTestReportAndroidTest( type: JacocoReport, dependsOn: "connectedAndroidTest" ) {
+    def coverageSourceDirs = [
+            'src/main/java'
+    ]
     group = "Reporting"
     description = "Generate Jacoco coverage reports after running tests."
 
     reports {
-        xml.enabled true
         csv.enabled false
-        xml.destination "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-        html.destination "${buildDir}/reports/coverage"
+        xml {
+            enabled true
+            destination "${ buildDir }/reports/jacoco/jacoco.xml"
+        }
+        html {
+            enabled true
+            destination "${ buildDir }/reports/jacocoHtml"
+        }
     }
 
     classDirectories = fileTree(
-            dir: "${buildDir}/intermediates/classes/debug",
+            dir: "${ buildDir }/intermediates/classes/debug",
             exclude: [
                     '**/R.class',
                     '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Activity*.*',
+                    '**/*Fragment*.*',
                     '**/*$InjectAdapter.class',
                     '**/*$ModuleAdapter.class',
                     '**/*$ViewInjector*.class',
@@ -36,28 +44,20 @@ task jacoco(type: JacocoReport) {
                     '**/*Entity.class',
                     '**/*Model.class'
             ])
-    sourceDirectories = files android.sourceSets.main.java.srcDirs
-    executionData = files "${buildDir}/jacoco/testDebugUnitTest.exec"
+    sourceDirectories = files( coverageSourceDirs )
+    additionalSourceDirs = files( coverageSourceDirs )
 
-    // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
-    // We iterate through the compiled .class tree and rename $$ to $.
-    doFirst {
-        new File("${buildDir}/intermediates/classes/debug").eachFileRecurse { file ->
-            if (file.name.contains('$$')) {
-                def renamed = file.path.replace '$$', '$'
-                jacocoDaggerMap[renamed] = file.path
-                file.renameTo renamed
-            }
-        }
-    }
+    if( project.hasProperty( 'coverageFiles' ) ) {
 
-    doLast {
-        // Revert renamed files back to their generated names
-        jacocoDaggerMap.each { renamed, original ->
-            new File(renamed).renameTo original
-        }
-        println "coveralls report has been generated to file://${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-        println "jacoco report has been generated to file://${reports.html.destination}/index.html"
+        // convert the comma separated string to an array to create an aggregate report from
+        // multiple coverage.ec files
+        def coverageFilesArray = coverageFiles.split( ',' )
+        executionData = files(coverageFilesArray)
+
+    } else {
+
+        executionData = files( 'build/outputs/code-coverage/connected/coverage.ec' )
+
     }
 
 }

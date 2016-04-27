@@ -37,16 +37,9 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     private static final String TAG = VideoDetailsActivity.class.getSimpleName();
 
     private static final String INTENT_EXTRA_PARAM_VIDEO_ID = "org.mythtv.android.INTENT_PARAM_VIDEO_ID";
-    private static final String INTENT_EXTRA_PARAM_STORAGE_GROUP = "org.mythtv.android.INTENT_PARAM_STORAGE_GROUP";
-    private static final String INTENT_EXTRA_PARAM_FILENAME = "org.mythtv.android.INTENT_PARAM_FILENAME";
-    private static final String INTENT_EXTRA_PARAM_HOSTNAME = "org.mythtv.android.INTENT_PARAM_HOSTNAME";
     private static final String INSTANCE_STATE_PARAM_VIDEO_ID = "org.mythtv.android.STATE_PARAM_VIDEO_ID";
-    private static final String INSTANCE_STATE_PARAM_STORAGE_GROUP = "org.mythtv.android.STATE_PARAM_STORAGE_GROUP";
-    private static final String INSTANCE_STATE_PARAM_FILENAME = "org.mythtv.android.STATE_PARAM_FILENAME";
-    private static final String INSTANCE_STATE_PARAM_HOSTNAME = "org.mythtv.android.STATE_PARAM_HOSTNAME";
 
     private int id;
-    private String storageGroup, filename, hostname;
     private VideoComponent videoComponent;
 
     private VideoMetadataInfoModel videoMetadataInfoModel;
@@ -105,9 +98,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
             Log.d( TAG, "onSaveInstanceState : outState is not null" );
 
             outState.putInt( INSTANCE_STATE_PARAM_VIDEO_ID, this.id );
-            outState.putString( INSTANCE_STATE_PARAM_STORAGE_GROUP, this.storageGroup );
-            outState.putString( INSTANCE_STATE_PARAM_FILENAME, this.filename );
-            outState.putString( INSTANCE_STATE_PARAM_HOSTNAME, this.hostname );
 
         }
 
@@ -125,9 +115,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
             Log.d( TAG, "onRestoreInstanceState : savedInstanceState != null" );
 
             this.id = savedInstanceState.getInt( INSTANCE_STATE_PARAM_VIDEO_ID );
-            this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
-            this.filename = savedInstanceState.getString( INSTANCE_STATE_PARAM_FILENAME );
-            this.hostname = savedInstanceState.getString( INSTANCE_STATE_PARAM_HOSTNAME );
 
         }
 
@@ -178,24 +165,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
                 }
 
-                if( extras.containsKey( INTENT_EXTRA_PARAM_STORAGE_GROUP ) ) {
-
-                    this.storageGroup = getIntent().getStringExtra(INTENT_EXTRA_PARAM_STORAGE_GROUP);
-
-                }
-
-                if( extras.containsKey( INTENT_EXTRA_PARAM_FILENAME ) ) {
-
-                    this.filename = getIntent().getStringExtra( INTENT_EXTRA_PARAM_FILENAME );
-
-                }
-
-                if( extras.containsKey( INTENT_EXTRA_PARAM_HOSTNAME ) ) {
-
-                    this.hostname = getIntent().getStringExtra( INTENT_EXTRA_PARAM_HOSTNAME );
-
-                }
-
             }
 
             addFragment( R.id.fl_fragment, VideoDetailsFragment.newInstance() );
@@ -204,9 +173,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
             Log.d( TAG, "initializeActivity : savedInstanceState is not null" );
 
             this.id = savedInstanceState.getInt( INSTANCE_STATE_PARAM_VIDEO_ID );
-            this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
-            this.filename = savedInstanceState.getString( INSTANCE_STATE_PARAM_FILENAME );
-            this.hostname = savedInstanceState.getString( INSTANCE_STATE_PARAM_HOSTNAME );
 
         }
 

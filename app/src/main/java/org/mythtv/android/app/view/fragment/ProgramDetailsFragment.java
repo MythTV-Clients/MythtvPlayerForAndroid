@@ -52,7 +52,6 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     public interface ProgramDetailsListener {
 
         void onRecordingLoaded( final ProgramModel programModel );
-        void onPlayRecording( final ProgramModel programModel );
 
     }
 
@@ -413,6 +412,8 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
             pb_progress.setVisibility( View.GONE );
 
         }
+
+        hls_stream.setOnCheckedChangeListener( this );
 
         Log.d( TAG, "updateLiveStreamControls : exit" );
     }

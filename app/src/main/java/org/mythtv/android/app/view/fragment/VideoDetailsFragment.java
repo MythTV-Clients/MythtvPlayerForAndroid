@@ -364,6 +364,8 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
 
         }
 
+        hls_stream.setOnCheckedChangeListener( this );
+
         Log.d( TAG, "updateLiveStreamControls : exit" );
     }
 

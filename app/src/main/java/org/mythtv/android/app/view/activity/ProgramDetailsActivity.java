@@ -40,14 +40,8 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
     private static final String INTENT_EXTRA_PARAM_CHAN_ID = "org.mythtv.android.INTENT_PARAM_CHAN_ID";
     private static final String INTENT_EXTRA_PARAM_START_TIME = "org.mythtv.android.INTENT_PARAM_START_TIME";
-    private static final String INTENT_EXTRA_PARAM_STORAGE_GROUP = "org.mythtv.android.INTENT_PARAM_STORAGE_GROUP";
-    private static final String INTENT_EXTRA_PARAM_FILENAME = "org.mythtv.android.INTENT_PARAM_FILENAME";
-    private static final String INTENT_EXTRA_PARAM_HOSTNAME = "org.mythtv.android.INTENT_PARAM_HOSTNAME";
     private static final String INSTANCE_STATE_PARAM_CHAN_ID = "org.mythtv.android.STATE_PARAM_CHAN_ID";
     private static final String INSTANCE_STATE_PARAM_START_TIME = "org.mythtv.android.STATE_PARAM_START_TIME";
-    private static final String INSTANCE_STATE_PARAM_STORAGE_GROUP = "org.mythtv.android.STATE_PARAM_STORAGE_GROUP";
-    private static final String INSTANCE_STATE_PARAM_FILENAME = "org.mythtv.android.STATE_PARAM_FILENAME";
-    private static final String INSTANCE_STATE_PARAM_HOSTNAME = "org.mythtv.android.STATE_PARAM_HOSTNAME";
 
     private int chanId;
     private DateTime startTime;
@@ -231,34 +225,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         this.programModel = programModel;
 
         Log.d( TAG, "onRecordingLoaded : exit" );
-    }
-
-    @Override
-    public void onPlayRecording( ProgramModel programModel ) {
-        Log.d( TAG, "onPlayRecording : enter" );
-
-        if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
-
-            String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
-
-            navigator.navigateToExternalPlayer( this, recordingUrl );
-
-        } else if( null != programModel.getLiveStreamInfo() ) {
-
-            try {
-
-                String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
-                recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
-                recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
-
-//                navigator.navigateToInternalPlayer( this, recordingUrl, null, PlayerActivity.TYPE_HLS );
-                navigator.navigateToVideoPlayer( this, recordingUrl );
-
-            } catch( UnsupportedEncodingException e ) { }
-
-        }
-
-        Log.d( TAG, "onPlayRecording : exit" );
     }
 
     private void loadBackdrop() {

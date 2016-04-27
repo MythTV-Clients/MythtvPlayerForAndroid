@@ -40,12 +40,11 @@ android {
         debug {
             signingConfig signingConfigs.debug
             proguardFiles 'proguard-rules.txt'
-            testCoverageEnabled = false
+            testCoverageEnabled = true
         }
 
         release {
             proguardFiles 'proguard-rules.txt'
-            testCoverageEnabled = false
         }
 
     }
@@ -127,4 +126,4 @@ dependencies {
 
 }
 
-//apply from: '../buildsystem/jacoco.gradle'
+apply from: '../buildsystem/jacoco.gradle'
