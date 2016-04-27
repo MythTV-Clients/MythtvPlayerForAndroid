@@ -190,7 +190,7 @@ public class VideoApiImpl implements VideoApi {
 
         }
 
-        return ApiConnection.create( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String getVideoDetailsFromApi( int id ) throws MalformedURLException {
@@ -201,7 +201,7 @@ public class VideoApiImpl implements VideoApi {
         sb.append( String.format( ID_QS, id ) );
         Log.d( TAG, "getVideoDetailsFromApi : url=" + sb.toString() );
 
-        return ApiConnection.create( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private boolean isThereInternetConnection() {
@@ -221,16 +221,23 @@ public class VideoApiImpl implements VideoApi {
         String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         String masterBackend = "http://" + host + ":" + port;
-        Log.d(TAG, "getMasterBackendUrl : masterBackend=" + masterBackend);
+        Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
 
         return masterBackend;
     }
 
-    public String getFromPreferences( Context context, String key ) {
+    private String getFromPreferences( Context context, String key ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getString( key, "" );
+    }
+
+    private int getIntFromPreferences( Context context, String key, int defaultValue ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        return Integer.parseInt( sharedPreferences.getString( key, String.valueOf( defaultValue ) ) );
     }
 
 }

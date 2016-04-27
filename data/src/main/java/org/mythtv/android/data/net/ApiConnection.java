@@ -28,17 +28,20 @@ public class ApiConnection implements Callable<String> {
     private static final String ACCEPT_VALUE_JSON = "application/json";
 
     private URL url;
+    private int readTimeout, connectTimeout;
     private String response;
 
-    private ApiConnection(String url) throws MalformedURLException {
+    private ApiConnection( String url, int readTimeout, int connectTimeout ) throws MalformedURLException {
 
         this.url = new URL( url );
+        this.readTimeout = readTimeout;
+        this.connectTimeout = connectTimeout;
 
     }
 
-    public static ApiConnection create(String url ) throws MalformedURLException {
+    public static ApiConnection create( String url, int readTimeout, int connectTimeout ) throws MalformedURLException {
 
-        return new ApiConnection( url );
+        return new ApiConnection( url, readTimeout, connectTimeout );
     }
 
     /**
@@ -135,8 +138,8 @@ public class ApiConnection implements Callable<String> {
 
         final OkHttpClient okHttpClient =
                 new OkHttpClient.Builder()
-                    .readTimeout( 10000, TimeUnit.MILLISECONDS )
-                    .connectTimeout( 15000, TimeUnit.MILLISECONDS )
+                    .readTimeout( readTimeout, TimeUnit.MILLISECONDS )
+                    .connectTimeout( connectTimeout, TimeUnit.MILLISECONDS )
                     .build();
 
         return okHttpClient;
