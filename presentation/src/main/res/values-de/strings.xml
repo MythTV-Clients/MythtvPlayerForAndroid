@@ -106,6 +106,12 @@
     <string name="tv_settings_master_backend_description">Master Backend Connection Settings</string>
     <string name="tv_settings_master_backend_url">Master Backend URL</string>
     <string name="tv_settings_master_backend_port">Master Backend Port</string>
+    <string name="tv_settings_read_timeout">Master Backend Read Timeout</string>
+    <string name="tv_settings_read_timeout_title">Master Backend Read Timeout</string>
+    <string name="tv_settings_read_timeout_description">Sets the default read timeout for new connections. A value of 0 means no timeout.</string>
+    <string name="tv_settings_connect_timeout">Master Backend Read Timeout</string>
+    <string name="tv_settings_connect_timeout_title">Master Backend Read Timeout</string>
+    <string name="tv_settings_connect_timeout_description">Sets the default connect timeout for new connections. A value of 0 means no timeout.</string>
     <string name="tv_settings_playback_title">Playback Settings</string>
     <string name="tv_settings_playback_title_description">Recording and Video Player Settings</string>
     <string name="tv_settings_playback_internal_player">Internal Player</string>
