@@ -148,7 +148,7 @@
         <item>100 seconds</item>
         <item>110 seconds</item>
         <item>120 seconds</item>
-        <item>No Limit</item>
+        <item>No Timeout (waits forever!)</item>
     </string-array>
 
     <string-array name="pref_timeout_values">

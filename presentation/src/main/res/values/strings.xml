@@ -169,12 +169,12 @@
     <string name="watched_content_description">watched status</string>
 
     <string name="pref_timeouts">Master Backend Timeouts</string>
-    <string name="pref_timeouts_summary">Timeout settings for connecting to the Master Backend. This is an advanced feature and is not normally needed to change. If you are seeing errors because you have a large library, consider increasing these values. Only set it to \'No Limit\' unless no other options work.</string>
+    <string name="pref_timeouts_summary">Timeout settings for connecting to the Master Backend. This is an advanced feature and is not normally needed to change. If you are seeing errors because you have a large library, consider increasing these values. Only set it to \'No Timeout\' if no other values work.</string>
     <string name="pref_read_timeout_title">Read Timeout</string>
-    <string name="pref_read_timeout_title_summary">Sets the default read timeout for new connections. A value of 0 means no timeout.</string>
+    <string name="pref_read_timeout_title_summary">Sets the default read timeout for new connections.</string>
     <string name="pref_read_timeout_default" translatable="false">10000</string>
     <string name="pref_connect_timeout_title">Connect Timeout</string>
-    <string name="pref_connect_timeout_title_summary">Sets the default connection timeout for new connections. A value of 0 means no timeout.</string>
+    <string name="pref_connect_timeout_title_summary">Sets the default connection timeout for new connections.</string>
     <string name="pref_connect_timeout_default" translatable="false">20000</string>
 
 </resources>
