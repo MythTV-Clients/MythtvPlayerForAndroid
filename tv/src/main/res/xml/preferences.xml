@@ -148,7 +148,7 @@
             android:dialogTitle="@string/pref_read_timeout_title"
             android:entries="@array/pref_timeout_entries"
             android:entryValues="@array/pref_timeout_values"
-            android:defaultValue="@int/pref_read_timeout_default" />
+            android:defaultValue="@string/pref_read_timeout_default" />
 
         <ListPreference
             android:key="connect_timeout"
