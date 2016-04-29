@@ -48,7 +48,7 @@ public abstract class AbstractBaseBrowseFragment extends BrowseFragment {
     /**
      * Get a SharedPreferences module for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.SharedPreferencesModule}
+     * @return {@link org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule}
      */
     protected SharedPreferencesModule getSharedPreferencesModule() {
 

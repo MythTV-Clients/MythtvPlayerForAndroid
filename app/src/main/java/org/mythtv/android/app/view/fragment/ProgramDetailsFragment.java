@@ -453,13 +453,20 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
             if( liveStreamInfoModel.getPercentComplete() < 2 ) {
 
-                hls_stream.setText( getResources().getString( R.string.http_live_stream, getResources().getString( R.string.unavailable ) ) );
+                hls_stream.setText( getResources().getString( R.string.http_live_stream_unavailable ) );
                 pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
 
             } else {
                 Log.d( TAG, "updateLiveStreamControls : hls processing..." );
 
-                hls_stream.setText( getResources().getString( R.string.http_live_stream, getResources().getString( R.string.available ) ) );
+                String playerType = getResources().getString( R.string.pref_internal_player );
+                if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
+
+                    playerType = getResources().getString( R.string.pref_external_player );
+
+                }
+
+                hls_stream.setText( getResources().getString( R.string.http_live_stream_available, playerType ) );
                 pb_progress.getProgressDrawable().setColorFilter( getResources().getColor( R.color.accent ), android.graphics.PorterDuff.Mode.SRC_IN );
 
             }

@@ -66,6 +66,7 @@
     <string name="pref_internal_player">Internal Player</string>
     <string name="pref_internal_player_summary_on">Playback will be handled by the Internal Player</string>
     <string name="pref_internal_player_summary_off">Playback will be handled by an External Player</string>
+    <string name="pref_external_player">External Player</string>
     <string name="pref_hls_video_width_title_summary">HLS transcode video width</string>
     <string name="pref_hls_video_height_title_summary">HLS transcode video height</string>
     <string name="pref_hls_video_bitrate_title_summary">HLS transcode video bitrate</string>
@@ -175,6 +176,8 @@
     <string name="add_live_stream_positive_label">Create</string>
     <string name="add_live_stream_title">Create Live Stream?</string>
     <string name="http_live_stream">HTTP Live Stream %1$s</string>
+    <string name="http_live_stream_unavailable">HTTP Live Stream Unavailable</string>
+    <string name="http_live_stream_available">HTTP Live Stream Available on %1$s</string>
     <string name="available">Available</string>
     <string name="unavailable">Unavailable</string>
     <string name="watched">Watched</string>

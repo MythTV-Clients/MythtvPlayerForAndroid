@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.View;
 
+import org.mythtv.android.app.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 
@@ -55,33 +56,20 @@ public abstract class AbstractBaseFragment extends Fragment {
 
     protected String getMasterBackendUrl() {
 
-        String host = getFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
+        String host = getSharedPreferencesModule().getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getSharedPreferencesModule().getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         return "http://" + host + ":" + port;
     }
 
-    protected String getFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return sharedPreferences.getString( key, "" );
-    }
-
     /**
+     * Get a SharedPreferences module for dependency injection.
      *
-     * Sets the color of a Drawable by changing the tint
-     *
-     * @param d
-     * @param color
-     * @return
+     * @return {@link org.mythtv.android.app.internal.di.modules.SharedPreferencesModule}
      */
-    protected Drawable setTint( Drawable d, int color ) {
+    protected SharedPreferencesModule getSharedPreferencesModule() {
 
-        Drawable wrappedDrawable = DrawableCompat.wrap( d );
-        DrawableCompat.setTint( wrappedDrawable, color );
-
-        return wrappedDrawable;
+        return new SharedPreferencesModule( getActivity() );
     }
 
 }
