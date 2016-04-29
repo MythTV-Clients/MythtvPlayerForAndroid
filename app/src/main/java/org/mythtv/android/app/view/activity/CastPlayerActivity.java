@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import org.mythtv.android.R;
+import org.mythtv.android.app.R;
 import org.mythtv.android.presentation.model.ProgramModel;
 
 import java.io.UnsupportedEncodingException;
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * Created by dmfrey on 9/30/15.
  */
-public class CastPlayerActivity extends AppAbstractBaseActivity {
+public class CastPlayerActivity extends AbstractBaseActivity {
 
     private static final String TAG = CastPlayerActivity.class.getSimpleName();
 
@@ -48,7 +48,7 @@ public class CastPlayerActivity extends AppAbstractBaseActivity {
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_app_cast_player;
+        return R.layout.activity_cast_player;
     }
 
     @Override
@@ -147,21 +147,21 @@ public class CastPlayerActivity extends AppAbstractBaseActivity {
         Log.d( TAG, "initializeActivity : exit" );
     }
 
-    public void onPlayRecording( ProgramModel programModel ) {
-        Log.d( TAG, "onPlayRecording : enter" );
-
-            try {
-
-                String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
-                recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
-                recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
-
-                navigator.navigateToVideoPlayer( this, recordingUrl );
-
-            } catch( UnsupportedEncodingException e ) { }
-
-        Log.d( TAG, "onPlayRecording : exit" );
-    }
+//    public void onPlayRecording( ProgramModel programModel ) {
+//        Log.d( TAG, "onPlayRecording : enter" );
+//
+//            try {
+//
+//                String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
+//                recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
+//                recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
+//
+//                navigator.navigateToVideoPlayer( this, recordingUrl );
+//
+//            } catch( UnsupportedEncodingException e ) { }
+//
+//        Log.d( TAG, "onPlayRecording : exit" );
+//    }
 
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );

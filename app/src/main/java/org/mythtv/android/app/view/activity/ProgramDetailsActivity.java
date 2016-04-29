@@ -2,7 +2,6 @@ package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -23,12 +22,7 @@ import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.app.internal.di.modules.ProgramModule;
 import org.mythtv.android.app.view.fragment.ProgramDetailsFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
-import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
-import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
 import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.view.fragment.AppProgramDetailsFragment;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

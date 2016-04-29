@@ -122,6 +122,8 @@ dependencies {
     compile presentationDependencies.cardView
     compile presentationDependencies.recyclerView
     compile presentationDependencies.palette
+    compile presentationDependencies.mediarouter
+    compile presentationDependencies.playservicesCast
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
     compile presentationDependencies.picasso

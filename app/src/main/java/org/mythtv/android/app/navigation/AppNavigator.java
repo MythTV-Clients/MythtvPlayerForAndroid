@@ -6,10 +6,10 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.app.model.ProgramModel;
+import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.app.view.activity.CastPlayerActivity;
 import org.mythtv.android.app.view.activity.MainActivity;
 import org.mythtv.android.app.view.activity.PlayerActivity;
-import org.mythtv.android.app.view.activity.AppCastPlayerActivity;
 import org.mythtv.android.app.view.activity.ProgramDetailsActivity;
 import org.mythtv.android.app.view.activity.ProgramDetailsSettingsActivity;
 import org.mythtv.android.app.view.activity.ProgramListActivity;
@@ -172,7 +172,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d( TAG, "navigateToCastPlayer : context != null" );
 
-            Intent intentToLaunch = AppCastPlayerActivity.getCallingIntent( context, programModel );
+            Intent intentToLaunch = CastPlayerActivity.getCallingIntent( context, programModel );
             context.startActivity( intentToLaunch );
 
         }
