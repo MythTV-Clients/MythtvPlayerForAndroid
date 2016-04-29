@@ -466,7 +466,7 @@ public class DvrApiImpl implements DvrApi {
         return ApiConnection.create( getMasterBackendUrl() + ENCODER_LIST_BASE_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
-    private String postUpdateRecordingWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
+    private String postUpdateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put( "ChanId", String.valueOf( chanId ) );
@@ -474,7 +474,7 @@ public class DvrApiImpl implements DvrApi {
         parameters.put( "Watched", String.valueOf( watched ) );
 
         Log.i( TAG, "postUpdateWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ) );
-        return ApiConnection.create( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ).requestSyncCall( parameters );
+        return ApiConnection.create( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall( parameters );
     }
 
     private boolean isThereInternetConnection() {

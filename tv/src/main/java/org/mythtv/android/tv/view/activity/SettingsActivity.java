@@ -50,7 +50,6 @@ public class SettingsActivity extends Activity {
     private static MasterBackendConnectTimeoutFragment mMasterBackendConnectTimeoutFragment;
     private static PlayerFragment mPlayerFragment;
     private static InternalPlayerFragment mInternalPlayerFragment;
-    private static ExternalPlayerOverrideFragment mExternalPlayerOverrideFragment;
     private static ContentFragment mContentFragment;
 
     public static Intent getCallingIntent( Context context ) {
@@ -71,7 +70,6 @@ public class SettingsActivity extends Activity {
         mMasterBackendConnectTimeoutFragment = new MasterBackendConnectTimeoutFragment();
         mPlayerFragment = new PlayerFragment();
         mInternalPlayerFragment = new InternalPlayerFragment();
-        mExternalPlayerOverrideFragment = new ExternalPlayerOverrideFragment();
         mContentFragment = new ContentFragment();
 
         GuidedStepFragment.addAsRoot( this, mSettingsFragment, android.R.id.content );
@@ -161,9 +159,6 @@ public class SettingsActivity extends Activity {
             boolean internalPlayer = getShouldUseInternalPlayer( getActivity() );
 
             String playback = ( internalPlayer ? getResources().getString( R.string.tv_settings_playback_internal_player ) : getResources().getString( R.string.tv_settings_playback_external_player ) );
-            if( internalPlayer && externalPlayerOverride ) {
-                playback = getResources().getString( R.string.tv_settings_playback_external_player_override );
-            }
 
             boolean showAdultContent = getShowAdultContent( getActivity() );
             String content = ( showAdultContent ? getResources().getString( R.string.tv_settings_content_adult_shown ) : getResources().getString( R.string.tv_settings_content_adult_hidden ) );
@@ -857,11 +852,6 @@ public class SettingsActivity extends Activity {
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
     }
 
-    private static boolean getShouldUseExternalPlayerOverride( Context context ) {
-
-        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
-    }
-
     private static boolean getShowAdultContent( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_SHOW_ADULT_TAB );
@@ -874,24 +864,10 @@ public class SettingsActivity extends Activity {
         return sharedPreferences.getString( key, "" );
     }
 
-    private static int getIntFromPreferences( Context context, String key, int defValue ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getInt( key, defValue );
-    }
-
     private static void putStringToPreferences( Context context, String key, String value ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
         sharedPreferences.edit().putString( key, value ).apply();
-
-    }
-
-    private static void putIntToPreferences( Context context, String key, int value ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-        sharedPreferences.edit().putInt( key, value ).apply();
 
     }
 

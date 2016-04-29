@@ -265,7 +265,7 @@ public class VideoApiImpl implements VideoApi {
         parameters.put( "Watched", String.valueOf( watched ) );
 
         Log.i( TAG, "postUpdateRecordingWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL ) );
-        return ApiConnection.create( getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL ).requestSyncCall( parameters );
+        return ApiConnection.create( getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall( parameters );
     }
 
     private boolean isThereInternetConnection() {
