@@ -33,8 +33,11 @@ public class SettingsActivity extends Activity {
     private static final int MASTER_BACKEND_SETTINGS = 10;
     private static final int MASTER_BACKEND_URL = 11;
     private static final int MASTER_BACKEND_PORT = 12;
+    private static final int MASTER_BACKEND_READ_TIMEOUT = 13;
+    private static final int MASTER_BACKEND_CONNECT_TIMEOUT = 14;
     private static final int PLAYER_SETTINGS = 20;
     private static final int INTERNAL_PLAYER_SETTINGS = 21;
+    private static final int EXTERNAL_PLAYER_OVERRIDE_SETTINGS = 20;
     private static final int CONTENT_SETTINGS = 30;
 
     private static final int OPTION_CHECK_SET_ID = 10;
@@ -43,8 +46,11 @@ public class SettingsActivity extends Activity {
     private static MasterBackendFragment mMasterBackendFragment;
     private static MasterBackendUrlFragment mMasterBackendUrlFragment;
     private static MasterBackendPortFragment mMasterBackendPortFragment;
+    private static MasterBackendReadTimeoutFragment mMasterBackendReadTimeoutFragment;
+    private static MasterBackendConnectTimeoutFragment mMasterBackendConnectTimeoutFragment;
     private static PlayerFragment mPlayerFragment;
     private static InternalPlayerFragment mInternalPlayerFragment;
+    private static ExternalPlayerOverrideFragment mExternalPlayerOverrideFragment;
     private static ContentFragment mContentFragment;
 
     public static Intent getCallingIntent( Context context ) {
@@ -61,8 +67,11 @@ public class SettingsActivity extends Activity {
         mMasterBackendFragment = new MasterBackendFragment();
         mMasterBackendUrlFragment = new MasterBackendUrlFragment();
         mMasterBackendPortFragment = new MasterBackendPortFragment();
+        mMasterBackendReadTimeoutFragment = new MasterBackendReadTimeoutFragment();
+        mMasterBackendConnectTimeoutFragment = new MasterBackendConnectTimeoutFragment();
         mPlayerFragment = new PlayerFragment();
         mInternalPlayerFragment = new InternalPlayerFragment();
+        mExternalPlayerOverrideFragment = new ExternalPlayerOverrideFragment();
         mContentFragment = new ContentFragment();
 
         GuidedStepFragment.addAsRoot( this, mSettingsFragment, android.R.id.content );
@@ -150,7 +159,11 @@ public class SettingsActivity extends Activity {
             }
 
             boolean internalPlayer = getShouldUseInternalPlayer( getActivity() );
+
             String playback = ( internalPlayer ? getResources().getString( R.string.tv_settings_playback_internal_player ) : getResources().getString( R.string.tv_settings_playback_external_player ) );
+            if( internalPlayer && externalPlayerOverride ) {
+                playback = getResources().getString( R.string.tv_settings_playback_external_player_override );
+            }
 
             boolean showAdultContent = getShowAdultContent( getActivity() );
             String content = ( showAdultContent ? getResources().getString( R.string.tv_settings_content_adult_shown ) : getResources().getString( R.string.tv_settings_content_adult_hidden ) );
@@ -215,6 +228,18 @@ public class SettingsActivity extends Activity {
 
                     break;
 
+                case MASTER_BACKEND_READ_TIMEOUT :
+
+                    GuidedStepFragment.add( fm, mMasterBackendReadTimeoutFragment, android.R.id.content );
+
+                    break;
+
+                case MASTER_BACKEND_CONNECT_TIMEOUT :
+
+                    GuidedStepFragment.add( fm, mMasterBackendConnectTimeoutFragment, android.R.id.content );
+
+                    break;
+
             }
 
         }
@@ -230,6 +255,33 @@ public class SettingsActivity extends Activity {
             String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
             String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
 
+            String[] entries = getResources().getStringArray( R.array.pref_timeout_entries );
+            String[] values = getResources().getStringArray( R.array.pref_timeout_values );
+
+            String readTimeout = entries[ 0 ];
+            for( int i = 0; i < values.length; i++ ) {
+
+                String value = values[ i ];
+                if( value.equals( getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_READ_TIMEOUT ) ) ) {
+
+                    readTimeout = entries[ i ];
+
+                }
+
+            }
+
+            String connectTimeout = entries[ 0 ];
+            for( int i = 0; i < values.length; i++ ) {
+
+                String value = values[ i ];
+                if( value.equals( getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_CONNECT_TIMEOUT ) ) ) {
+
+                    connectTimeout = entries[ i ];
+
+                }
+
+            }
+
             addAction( getActivity(), actions, MASTER_BACKEND_URL,
                     url,
                     getResources().getString( R.string.pref_backend_url_description ),
@@ -237,6 +289,14 @@ public class SettingsActivity extends Activity {
             addAction( getActivity(), actions, MASTER_BACKEND_PORT,
                     port,
                     getResources().getString( R.string.pref_backend_port_description ),
+                    true, true );
+            addAction( getActivity(), actions, MASTER_BACKEND_READ_TIMEOUT,
+                    readTimeout,
+                    getResources().getString( R.string.pref_read_timeout_title_summary ),
+                    true, true );
+            addAction( getActivity(), actions, MASTER_BACKEND_CONNECT_TIMEOUT,
+                    connectTimeout,
+                    getResources().getString( R.string.pref_connect_timeout_title_summary ),
                     true, true );
 
             setActions( actions );
@@ -364,6 +424,160 @@ public class SettingsActivity extends Activity {
             addEditableAction( getActivity(), actions, MASTER_BACKEND_PORT,
                     port,
                     getResources().getString( R.string.pref_backend_port_description ) );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class MasterBackendReadTimeoutFragment extends GuidedStepFragment {
+
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.tv_settings_read_timeout );
+            String breadcrumb = getResources().getString( R.string.tv_settings_read_timeout_title );
+            String description = getResources().getString( R.string.pref_read_timeout_title_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            String[] entries = getResources().getStringArray( R.array.pref_timeout_entries );
+            String[] values = getResources().getStringArray( R.array.pref_timeout_values );
+
+            String selectedTimeout = values[ 0 ];
+            for( int i = 0; i < entries.length; i++ ) {
+
+                String entry = entries[ i ];
+                if( entry.equals( action.getLabel1().toString() ) ) {
+
+                    selectedTimeout = values[ i ];
+                    break;
+
+                }
+
+            }
+
+            putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_READ_TIMEOUT, selectedTimeout );
+
+            mSettingsFragment.updateActions( null );
+            mMasterBackendFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            String timeout = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_READ_TIMEOUT );
+            String[] entries = getResources().getStringArray( R.array.pref_timeout_entries );
+            String[] values = getResources().getStringArray( R.array.pref_timeout_values );
+
+            for( int i = 0; i < entries.length; i++ ) {
+
+                addCheckedAction( getActivity(), actions,
+                        -1,
+                        entries[ i ],
+                        null,
+                        values[ i ].equals( timeout ) );
+
+            }
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class MasterBackendConnectTimeoutFragment extends GuidedStepFragment {
+
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.tv_settings_connect_timeout );
+            String breadcrumb = getResources().getString( R.string.tv_settings_connect_timeout_title );
+            String description = getResources().getString( R.string.pref_connect_timeout_title_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            String[] entries = getResources().getStringArray( R.array.pref_timeout_entries );
+            String[] values = getResources().getStringArray( R.array.pref_timeout_values );
+
+            String selectedTimeout = values[ 0 ];
+            for( int i = 0; i < entries.length; i++ ) {
+
+                String entry = entries[ i ];
+                if( entry.equals( action.getLabel1().toString() ) ) {
+
+                    selectedTimeout = values[ i ];
+                    break;
+
+                }
+
+            }
+
+            putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, selectedTimeout );
+
+            mSettingsFragment.updateActions( null );
+            mMasterBackendFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            String timeout = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_CONNECT_TIMEOUT );
+            String[] entries = getResources().getStringArray( R.array.pref_timeout_entries );
+            String[] values = getResources().getStringArray( R.array.pref_timeout_values );
+
+            for( int i = 0; i < entries.length; i++ ) {
+
+                addCheckedAction( getActivity(), actions,
+                        -1,
+                        entries[ i ],
+                        null,
+                        values[ i ].equals( timeout ) );
+
+            }
 
             setActions( actions );
 
@@ -589,12 +803,40 @@ public class SettingsActivity extends Activity {
 
     }
 
+//    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, int editInputType, String desc, String editDesc ) {
+//
+//        actions.add( new GuidedAction.Builder( context )
+//                .id( id )
+//                .title( title )
+//                .editTitle( editTitle )
+//                .editInputType( editInputType )
+//                .description( desc )
+//                .editDescription( editDesc )
+//                .editable( true )
+//                .build() );
+//
+//    }
+
+//    private static void addEditableDescriptionAction( Context context, List<GuidedAction> actions, long id, String title, String desc, String editDescription, int descriptionEditInputType ) {
+//
+//        actions.add( new GuidedAction.Builder( context )
+//                .id( id )
+//                .title( title )
+//                .description( desc )
+//                .editDescription( editDescription )
+//                .descriptionEditInputType( descriptionEditInputType )
+//                .descriptionEditable( true )
+//                .build() );
+//
+//    }
+
     private static void addCheckedAction( Context context, List<GuidedAction> actions, int iconResId, String title, String desc, boolean checked ) {
 
         GuidedAction guidedAction = new GuidedAction.Builder( context )
                 .title( title )
                 .description( desc )
                 .checkSetId( OPTION_CHECK_SET_ID )
+//                .iconResourceId( iconResId, context )
                 .build();
 
         guidedAction.setChecked( checked );
@@ -613,6 +855,11 @@ public class SettingsActivity extends Activity {
     private static boolean getShouldUseInternalPlayer( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
+    }
+
+    private static boolean getShouldUseExternalPlayerOverride( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO );
     }
 
     private static boolean getShowAdultContent( Context context ) {
@@ -650,7 +897,7 @@ public class SettingsActivity extends Activity {
 
     private static boolean getBooleanFromPreferences( Context context, String key ) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getBoolean( key, false );
     }

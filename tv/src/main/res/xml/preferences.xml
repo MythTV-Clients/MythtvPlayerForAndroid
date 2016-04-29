@@ -103,7 +103,7 @@
 
             <intent
                 android:targetPackage="org.mythtv.android"
-                android:targetClass="org.mythtv.android.presentation.view.activity.AppRecordingSettingsActivity" />
+                android:targetClass="org.mythtv.android.presentation.view.activity.RecordingSettingsActivity" />
 
         </PreferenceScreen>
 
@@ -119,9 +119,33 @@
 
             <intent
                 android:targetPackage="org.mythtv.android"
-                android:targetClass="org.mythtv.android.presentation.view.activity.AppVideoSettingsActivity" />
+                android:targetClass="org.mythtv.android.presentation.view.activity.VideoSettingsActivity" />
 
         </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_timeouts"
+        android:key="pref_timeouts">
+
+        <ListPreference
+            android:key="read_timeout"
+            android:title="@string/pref_read_timeout_title"
+            android:summary="@string/pref_read_timeout_title_summary"
+            android:dialogTitle="@string/pref_read_timeout_title"
+            android:entries="@array/pref_timeout_entries"
+            android:entryValues="@array/pref_timeout_values"
+            android:defaultValue="@string/pref_read_timeout_default" />
+
+        <ListPreference
+            android:key="connect_timeout"
+            android:title="@string/pref_connect_timeout_title"
+            android:summary="@string/pref_connect_timeout_title_summary"
+            android:dialogTitle="@string/pref_connect_timeout_title"
+            android:entries="@array/pref_timeout_entries"
+            android:entryValues="@array/pref_timeout_values"
+            android:defaultValue="@string/pref_connect_timeout_default" />
 
     </PreferenceCategory>
 
