@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ MythTV Player An application for Android users to play MythTV Recordings and Videos
+  ~ Copyright (c) 2015. Daniel Frey
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin"
+        android:gravity="center_vertical">
+
+        <org.mythtv.android.presentation.view.component.AutoLoadImageView
+            android:id="@+id/program_item_preview"
+            android:layout_width="125dp"
+            android:layout_height="75dp"
+            android:scaleType="fitXY"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginEnd="@dimen/outer_margin" />
+
+        <TextView
+            android:id="@+id/program_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:layout_toEndOf="@+id/program_item_preview"
+            tools:text="test title" />
+
+        <TextView
+            android:id="@+id/program_item_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+            android:layout_below="@+id/program_item_title"
+            android:layout_toEndOf="@+id/program_item_preview"
+            tools:text="test sub title" />
+
+        <TextView
+            android:id="@+id/program_item_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:layout_below="@+id/program_item_sub_title"
+            android:layout_toEndOf="@+id/program_item_preview"
+            tools:text="test date" />
+
+        <ProgressBar
+            android:id="@+id/program_item_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_below="@+id/program_item_date"
+            android:layout_toEndOf="@+id/program_item_preview"
+            android:indeterminate="true"
+            android:minHeight="10dp"
+            android:maxHeight="10dp"
+            android:minWidth="100dp"
+            android:maxWidth="100dp"
+            android:progress="0"
+            android:max="100"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/program_item_episode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:layout_below="@+id/program_item_progress"
+            android:layout_toEndOf="@+id/program_item_preview"
+            tools:text="test episode" />
+
+        <TextView
+            android:id="@+id/program_item_stream_ready"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:layout_below="@+id/program_item_progress"
+            android:layout_toEndOf="@+id/program_item_preview"
+            android:layout_alignParentEnd="true"
+            android:text="@string/ready_to_stream"
+            android:textColor="@color/primary_dark"
+            android:gravity="end"
+            android:visibility="invisible"
+            tools:text="@string/ready_to_stream" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground" />
+
+</android.support.v7.widget.CardView>

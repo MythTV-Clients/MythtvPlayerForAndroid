@@ -4,32 +4,32 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.ContentRepository;
 
+import java.util.Map;
+
 import rx.Observable;
 
 /**
  * Created by dmfrey on 8/26/15.
  */
-public class GetAddLiveStreamDetails extends UseCase {
+public class GetAddLiveStreamDetails extends DynamicUseCase {
 
-    private final String storageGroup;
-    private final String filename;
-    private final String hostname;
     private final ContentRepository contentRepository;
 
-    public GetAddLiveStreamDetails( final String storageGroup, final String filename, final String hostname, final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+    public GetAddLiveStreamDetails(final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.storageGroup = storageGroup;
-        this.filename = filename;
-        this.hostname = hostname;
         this.contentRepository = contentRepository;
 
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
+    protected Observable buildUseCaseObservable( Map parameters ) {
 
-        return this.contentRepository.addliveStream( this.storageGroup, this.filename, this.hostname );
+        final String storageGroup = (String) parameters.get( "STORAGE_GROUP" );
+        final String filename = (String) parameters.get( "FILE_NAME" );
+        final String hostname = (String) parameters.get( "HOST_NAME" );
+
+        return this.contentRepository.addliveStream( storageGroup, filename, hostname );
     }
 
 }

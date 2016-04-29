@@ -18,7 +18,6 @@ public class BooleanJsonMapper {
     private final JsonParser parser;
 
     @Inject
-
     public BooleanJsonMapper() {
 
         this.parser = new JsonParser();

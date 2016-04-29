@@ -8,6 +8,9 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.ContentRepository;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
@@ -22,8 +25,7 @@ public class GetAddLiveStreamDetailsTest {
 
     private GetAddLiveStreamDetails getAddLiveStreamDetails;
 
-    @Mock
-    private ContentRepository mockContentRepository;
+    @Mock private ContentRepository mockContentRepository;
     @Mock private ThreadExecutor mockThreadExecutor;
     @Mock private PostExecutionThread mockPostExecutionThread;
 
@@ -31,14 +33,18 @@ public class GetAddLiveStreamDetailsTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getAddLiveStreamDetails = new GetAddLiveStreamDetails( FAKE_STORAGE_GROUP, FAKE_FILENAME, FAKE_HOSTNAME, mockContentRepository, mockThreadExecutor, mockPostExecutionThread );
+        getAddLiveStreamDetails = new GetAddLiveStreamDetails( mockContentRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
-    public void testGetAddRecordedProgramDetailsUseCaseObservableHappyCase() {
+    public void testGetAddLiveStreamDetailsUseCaseObservableHappyCase() {
 
-        getAddLiveStreamDetails.buildUseCaseObservable();
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put( "STORAGE_GROUP", FAKE_STORAGE_GROUP );
+        parameters.put( "FILE_NAME", FAKE_FILENAME );
+        parameters.put( "HOST_NAME", FAKE_HOSTNAME );
+        getAddLiveStreamDetails.buildUseCaseObservable( parameters );
 
         verify( mockContentRepository ).addliveStream( FAKE_STORAGE_GROUP, FAKE_FILENAME, FAKE_HOSTNAME );
         verifyZeroInteractions( mockPostExecutionThread );

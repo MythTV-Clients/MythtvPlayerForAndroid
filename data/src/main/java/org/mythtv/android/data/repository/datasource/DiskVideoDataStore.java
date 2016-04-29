@@ -98,4 +98,9 @@ public class DiskVideoDataStore implements VideoDataStore {
         return null;
     }
 
+    @Override
+    public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
+
+        throw new UnsupportedOperationException( "Operation is not available" );
+    }
 }

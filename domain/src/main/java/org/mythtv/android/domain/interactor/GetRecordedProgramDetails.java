@@ -27,6 +27,7 @@ public class GetRecordedProgramDetails extends UseCase {
 
     @Override
     protected Observable buildUseCaseObservable() {
+
         return this.dvrRepository.recordedProgram( this.chanId, this.startTime );
     }
 

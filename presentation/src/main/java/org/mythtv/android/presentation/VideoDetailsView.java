@@ -1,6 +1,5 @@
 package org.mythtv.android.presentation;
 
-import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.view.LoadDataView;
 
@@ -22,8 +21,8 @@ public interface VideoDetailsView extends LoadDataView {
     /**
      * Update the live streaming buttons
      *
-     * @param liveStreamInfo liveStreamInfo
+     * @param videoMetadataInfoModel The {@link VideoMetadataInfoModel} that will be shown.
      */
-    void updateLiveStream( LiveStreamInfoModel liveStreamInfo );
+    void updateLiveStream( VideoMetadataInfoModel videoMetadataInfoModel );
 
 }
