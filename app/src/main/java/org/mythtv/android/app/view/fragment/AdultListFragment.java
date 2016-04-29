@@ -71,7 +71,7 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_app_video_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_video_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
 
@@ -136,7 +136,6 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
         this.getComponent( VideoComponent.class ).inject( this );
         this.adultListPresenter.setView( this );
         this.getComponent( VideoComponent.class ).plus( new VideosModule() );
-//        this.adultListPresenter.initialize( contentType );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -230,6 +229,15 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
         });
 
         Log.d( TAG, "showError : exit" );
+    }
+
+    @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showMessage : enter" );
+
+        this.showToastMessage( message, null, null );
+
+        Log.d( TAG, "showMessage : exit" );
     }
 
     @Override

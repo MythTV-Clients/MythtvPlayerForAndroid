@@ -28,7 +28,7 @@ public class RecordingSettingsActivity extends AbstractBaseActivity {
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_tv_recording_settings;
+        return R.layout.activity_recording_settings;
     }
 
     @Override

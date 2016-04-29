@@ -3,25 +3,31 @@ package org.mythtv.android.app.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import org.mythtv.android.app.R;
-import org.mythtv.android.app.view.fragment.VideoDetailsFragment;
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
 import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.app.internal.di.modules.VideoModule;
+import org.mythtv.android.app.view.fragment.VideoDetailsFragment;
+import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by dmfrey on 11/25/15.
@@ -31,25 +37,23 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     private static final String TAG = VideoDetailsActivity.class.getSimpleName();
 
     private static final String INTENT_EXTRA_PARAM_VIDEO_ID = "org.mythtv.android.INTENT_PARAM_VIDEO_ID";
-    private static final String INTENT_EXTRA_PARAM_STORAGE_GROUP = "org.mythtv.android.INTENT_PARAM_STORAGE_GROUP";
-    private static final String INTENT_EXTRA_PARAM_FILENAME = "org.mythtv.android.INTENT_PARAM_FILENAME";
-    private static final String INTENT_EXTRA_PARAM_HOSTNAME = "org.mythtv.android.INTENT_PARAM_HOSTNAME";
     private static final String INSTANCE_STATE_PARAM_VIDEO_ID = "org.mythtv.android.STATE_PARAM_VIDEO_ID";
-    private static final String INSTANCE_STATE_PARAM_STORAGE_GROUP = "org.mythtv.android.STATE_PARAM_STORAGE_GROUP";
-    private static final String INSTANCE_STATE_PARAM_FILENAME = "org.mythtv.android.STATE_PARAM_FILENAME";
-    private static final String INSTANCE_STATE_PARAM_HOSTNAME = "org.mythtv.android.STATE_PARAM_HOSTNAME";
 
     private int id;
-    private String storageGroup, filename, hostname;
     private VideoComponent videoComponent;
 
-    public static Intent getCallingIntent( Context context, int id, String storageGroup, String filename, String hostname ) {
+    private VideoMetadataInfoModel videoMetadataInfoModel;
+
+    @Bind( R.id.backdrop )
+    ImageView backdrop;
+
+    @Bind( R.id.fab )
+    FloatingActionButton fab;
+
+    public static Intent getCallingIntent( Context context, int id ) {
 
         Intent callingIntent = new Intent( context, VideoDetailsActivity.class );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_VIDEO_ID, id );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_STORAGE_GROUP, storageGroup );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_FILENAME, filename );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_HOSTNAME, hostname );
 
         return callingIntent;
     }
@@ -57,7 +61,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_app_video_details;
+        return R.layout.activity_video_details;
     }
 
     @Override
@@ -94,9 +98,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
             Log.d( TAG, "onSaveInstanceState : outState is not null" );
 
             outState.putInt( INSTANCE_STATE_PARAM_VIDEO_ID, this.id );
-            outState.putString( INSTANCE_STATE_PARAM_STORAGE_GROUP, this.storageGroup );
-            outState.putString( INSTANCE_STATE_PARAM_FILENAME, this.filename );
-            outState.putString( INSTANCE_STATE_PARAM_HOSTNAME, this.hostname );
 
         }
 
@@ -114,9 +115,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
             Log.d( TAG, "onRestoreInstanceState : savedInstanceState != null" );
 
             this.id = savedInstanceState.getInt( INSTANCE_STATE_PARAM_VIDEO_ID );
-            this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
-            this.filename = savedInstanceState.getString( INSTANCE_STATE_PARAM_FILENAME );
-            this.hostname = savedInstanceState.getString( INSTANCE_STATE_PARAM_HOSTNAME );
 
         }
 
@@ -152,7 +150,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
      * Initializes this activity.
      */
     private void initializeActivity( Bundle savedInstanceState ) {
-        Log.d(TAG, "initializeActivity : enter");
+        Log.d( TAG, "initializeActivity : enter" );
 
         if( null == savedInstanceState  ) {
             Log.d( TAG, "initializeActivity : savedInstanceState is null" );
@@ -167,37 +165,18 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
                 }
 
-                if( extras.containsKey( INTENT_EXTRA_PARAM_STORAGE_GROUP ) ) {
-
-                    this.storageGroup = getIntent().getStringExtra(INTENT_EXTRA_PARAM_STORAGE_GROUP);
-
-                }
-
-                if( extras.containsKey( INTENT_EXTRA_PARAM_FILENAME ) ) {
-
-                    this.filename = getIntent().getStringExtra( INTENT_EXTRA_PARAM_FILENAME );
-
-                }
-
-                if( extras.containsKey( INTENT_EXTRA_PARAM_HOSTNAME ) ) {
-
-                    this.hostname = getIntent().getStringExtra( INTENT_EXTRA_PARAM_HOSTNAME );
-
-                }
-
             }
 
-            addFragment( R.id.fl_fragment, VideoDetailsFragment.newInstance( this.id ) );
+            addFragment( R.id.fl_fragment, VideoDetailsFragment.newInstance() );
 
         } else {
             Log.d( TAG, "initializeActivity : savedInstanceState is not null" );
 
             this.id = savedInstanceState.getInt( INSTANCE_STATE_PARAM_VIDEO_ID );
-            this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
-            this.filename = savedInstanceState.getString( INSTANCE_STATE_PARAM_FILENAME );
-            this.hostname = savedInstanceState.getString( INSTANCE_STATE_PARAM_HOSTNAME );
 
         }
+
+        loadBackdrop();
 
         Log.d( TAG, "initializeActivity : exit" );
     }
@@ -209,7 +188,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
                 .applicationComponent( getApplicationComponent() )
                 .activityModule( getActivityModule() )
                 .videoModule( new VideoModule( this.id ) )
-                .liveStreamModule( new LiveStreamModule( this.storageGroup, this.filename, this.hostname ) )
+                .liveStreamModule( new LiveStreamModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );
@@ -224,10 +203,34 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     }
 
     @Override
-    public void onPlayVideo( VideoMetadataInfoModel videoMetadataInfoModel ) {
-        Log.d( TAG, "onPlayVideo : enter" );
+    public void onVideoLoaded( VideoMetadataInfoModel videoMetadataInfoModel ) {
+        Log.d( TAG, "onVideoLoaded : enter" );
 
-        if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() || getSharedPreferencesModule().getExternalPlayerPreferenceFromPreferences() ) {
+        this.videoMetadataInfoModel = videoMetadataInfoModel;
+
+        Log.d( TAG, "onVideoLoaded : exit" );
+    }
+
+    private void loadBackdrop() {
+        Log.d( TAG, "loadBackdrop : enter" );
+
+        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + this.id + "&Type=banner";
+        Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
+        final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
+        Picasso.with( this )
+                .load( previewUrl )
+                .fit().centerCrop()
+                .into(imageView);
+
+        Log.d( TAG, "loadBackdrop : exit" );
+    }
+
+    @OnClick( R.id.fab )
+    void onButtonFabPlay() {
+        Log.d( TAG, "onButtonFabPlay : enter" );
+
+        if( null == this.videoMetadataInfoModel.getLiveStreamInfo() || this.videoMetadataInfoModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
+            Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
 
             String filename = "";
             try {
@@ -241,7 +244,8 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
             navigator.navigateToExternalPlayer( this, videoUrl );
 
-        } else if( null != videoMetadataInfoModel.getLiveStreamInfo() ) {
+        } else {
+            Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
 
             try {
                 String videoUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
@@ -255,7 +259,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
         }
 
-        Log.d( TAG, "onPlayRecording : exit" );
+        Log.d( TAG, "onButtonFabPlay : exit" );
     }
 
 }

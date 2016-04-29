@@ -29,6 +29,6 @@
         android:layout_height="match_parent" />
 
     <include
-        layout="@layout/app_view_progress" />
+        layout="@layout/view_progress" />
 
 </FrameLayout>

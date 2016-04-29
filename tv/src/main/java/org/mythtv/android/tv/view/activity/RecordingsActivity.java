@@ -25,7 +25,7 @@ public class RecordingsActivity extends AbstractBaseActivity implements HasCompo
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_tv_recordings;
+        return R.layout.activity_recordings;
     }
 
     @Override

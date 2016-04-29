@@ -66,7 +66,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoMetad
     public VideoMetadataInfoViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
         Log.d( TAG, "onCreateViewHolder : enter" );
 
-        View view = this.layoutInflater.inflate( R.layout.app_video_metadata_info_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.video_metadata_info_list_item, parent, false );
         VideoMetadataInfoViewHolder videoMetadataInfoViewHolder = new VideoMetadataInfoViewHolder( view );
 
         Log.d( TAG, "onCreateViewHolder : exit" );

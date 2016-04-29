@@ -63,7 +63,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     @Override
     public ProgramViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
-        View view = this.layoutInflater.inflate( R.layout.app_program_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.program_list_item, parent, false );
 
         return new ProgramViewHolder( view );
     }
@@ -71,7 +71,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     @Override
     public void onBindViewHolder( ProgramViewHolder holder, final int position ) {
 
-        final ProgramModel programModel = this.programsCollection.get(position);
+        final ProgramModel programModel = this.programsCollection.get( position );
         holder.imageViewPreview.setImageUrl( getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + programModel.getChannel().getChanId() + "&StartTime=" + programModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=75" );
         holder.textViewTitle.setText( programModel.getTitle() );
         holder.textViewSubTitle.setText( programModel.getSubTitle() );

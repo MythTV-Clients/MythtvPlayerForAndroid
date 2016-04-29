@@ -70,7 +70,7 @@ public class MasterBackendContentDataStore implements ContentDataStore {
         Log.d( TAG, "removeLiveStream : enter" );
 
         Log.d( TAG, "removeLiveStream : exit" );
-        return this.api.removeLiveStream(id);
+        return this.api.removeLiveStream( id );
     }
 
     @Override

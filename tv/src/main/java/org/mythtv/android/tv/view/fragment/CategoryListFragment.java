@@ -75,7 +75,7 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_tv_category_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_category_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
 
@@ -213,6 +213,15 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
     @Override
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
+
+        Log.d( TAG, "showError : exit" );
+    }
+
+    @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showError : enter" );
+
+        this.showToastMessage( message );
 
         Log.d( TAG, "showError : exit" );
     }

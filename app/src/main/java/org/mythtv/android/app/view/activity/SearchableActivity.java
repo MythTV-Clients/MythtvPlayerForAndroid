@@ -31,7 +31,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_app_search_result_list;
+        return R.layout.activity_search_result_list;
     }
 
     @Override
@@ -151,7 +151,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
             case RECORDING:
 
-                navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime(), searchResultModel.getStorageGroup(), searchResultModel.getFilename(), searchResultModel.getHostname() );
+                navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime() );
 
                 break;
 

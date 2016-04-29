@@ -37,6 +37,7 @@ public class SettingsActivity extends Activity {
     private static final int MASTER_BACKEND_CONNECT_TIMEOUT = 14;
     private static final int PLAYER_SETTINGS = 20;
     private static final int INTERNAL_PLAYER_SETTINGS = 21;
+    private static final int EXTERNAL_PLAYER_OVERRIDE_SETTINGS = 20;
     private static final int CONTENT_SETTINGS = 30;
 
     private static final int OPTION_CHECK_SET_ID = 10;
@@ -863,24 +864,10 @@ public class SettingsActivity extends Activity {
         return sharedPreferences.getString( key, "" );
     }
 
-    private static int getIntFromPreferences( Context context, String key, int defValue ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getInt( key, defValue );
-    }
-
     private static void putStringToPreferences( Context context, String key, String value ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
         sharedPreferences.edit().putString( key, value ).apply();
-
-    }
-
-    private static void putIntToPreferences( Context context, String key, int value ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-        sharedPreferences.edit().putInt( key, value ).apply();
 
     }
 

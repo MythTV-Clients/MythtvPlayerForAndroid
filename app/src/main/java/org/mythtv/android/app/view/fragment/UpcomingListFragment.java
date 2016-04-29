@@ -79,7 +79,7 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_app_program_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_program_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
 
@@ -242,6 +242,15 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
         });
 
         Log.d( TAG, "showError : exit" );
+    }
+
+    @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showMessage : enter" );
+
+        this.showToastMessage( message, null, null );
+
+        Log.d( TAG, "showMessage : exit" );
     }
 
     @Override

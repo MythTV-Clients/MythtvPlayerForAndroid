@@ -64,7 +64,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
     public EncoderViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
         Log.d( TAG, "onCreateViewHolder : enter" );
 
-        View view = this.layoutInflater.inflate( R.layout.app_encoder_list_item, parent, false );
+        View view = this.layoutInflater.inflate( R.layout.encoder_list_item, parent, false );
         EncoderViewHolder encoderViewHolder = new EncoderViewHolder( view );
 
         Log.d( TAG, "onCreateViewHolder : exit" );

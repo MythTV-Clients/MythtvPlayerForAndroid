@@ -41,29 +41,29 @@ public class ContentDataRepository implements ContentRepository {
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         return contentDataStore.addliveStream( storageGroup, filename, hostname )
-                .map(liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
+                .map( liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<LiveStreamInfo> addRecordingliveStream( int recordedId, int chanId, DateTime startTime ) {
-        Log.d(TAG, "addRecordingliveStreamInfos : enter");
+        Log.d(TAG, "addRecordingliveStream : enter");
 
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         return contentDataStore.addRecordingliveStream( recordedId, chanId, startTime )
-                .map(liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
+                .map( liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<LiveStreamInfo> addVideoliveStream( int id ) {
-        Log.d(TAG, "addVideoliveStreamInfos : enter");
+        Log.d(TAG, "addVideoliveStream : enter");
 
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         return contentDataStore.addVideoliveStream( id )
-                .map(liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
+                .map( liveStreamInfoEntity -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntity ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )

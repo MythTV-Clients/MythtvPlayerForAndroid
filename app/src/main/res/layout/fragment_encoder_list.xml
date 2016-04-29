@@ -23,22 +23,12 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_titleInfos"
+        android:id="@+id/rv_encoders"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="64dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginRight="64dp"
-        android:layout_marginEnd="64dp" />
-
-    <xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
-        android:id="@+id/fast_scroller"
-        android:layout_width="24dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_height="match_parent" />
 
     <include
-        layout="@layout/app_view_progress" />
+        layout="@layout/view_progress" />
 
 </FrameLayout>

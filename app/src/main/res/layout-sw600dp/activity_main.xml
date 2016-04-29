@@ -61,11 +61,11 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <include
-            layout="@layout/app_fab_view" />
+            layout="@layout/fab_view" />
 
     </android.support.design.widget.CoordinatorLayout>
 
     <include
-        layout="@layout/app_navigation_view" />
+        layout="@layout/navigation_view" />
 
 </android.support.v4.widget.DrawerLayout>

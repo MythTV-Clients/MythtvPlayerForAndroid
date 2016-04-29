@@ -21,7 +21,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
     private static final String TAG = MasterBackendVideoDataStore.class.getSimpleName();
 
-    private final VideoApi videoApi;
+    private final VideoApi api;
     private final VideoCache videoCache;
     private final SearchDataStoreFactory searchDataStoreFactory;
 
@@ -50,9 +50,9 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
             };
 
-    public MasterBackendVideoDataStore( VideoApi videoApi, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
+    public MasterBackendVideoDataStore(VideoApi api, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
 
-        this.videoApi = videoApi;
+        this.api = api;
         this.videoCache = videoCache;
         this.searchDataStoreFactory = searchDataStoreFactory;
 
@@ -64,7 +64,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getVideos : folder=" + folder + ", sort=" + sort + ", descending=" + descending + ", startIndex=" + startIndex + ", count=" + count );
 
-        Observable<List<VideoMetadataInfoEntity>> videoList = this.videoApi.getVideoList( folder, sort, descending, startIndex, count )
+        Observable<List<VideoMetadataInfoEntity>> videoList = this.api.getVideoList( folder, sort, descending, startIndex, count )
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnNext( saveVideosToCacheAction );
@@ -79,7 +79,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getCategory : category=" + category );
 
-        return this.videoApi.getVideoList( null, null, false, -1, -1 )
+        return this.api.getVideoList( null, null, false, -1, -1 )
                 .doOnNext( saveVideosToCacheAction )
                 .doOnNext( saveVideosToDbAction )
                 .flatMap( Observable::from )
@@ -95,7 +95,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getSeriesInCategory : category=" + category + ". series=" + series );
 
-        return this.videoApi.getVideoList( null, null, false, -1, -1 )
+        return this.api.getVideoList( null, null, false, -1, -1 )
                 .flatMap( Observable::from )
                 .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
                 .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle().equals( series ) )
@@ -140,7 +140,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getVideoById : id=" + id );
 
         Log.d( TAG, "getVideoById : exit" );
-        return this.videoApi.getVideoById( id )
+        return this.api.getVideoById( id )
                 .doOnNext( videoMetadataInfoEntity ->  Log.i( TAG, "getVideoById : video=" + videoMetadataInfoEntity ) );
     }
 
@@ -151,7 +151,17 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getVideoById : filename=" + filename );
 
         Log.d( TAG, "getVideoById : exit" );
-        return this.videoApi.getVideoByFilename( filename );
+        return this.api.getVideoByFilename( filename );
+    }
+
+    @Override
+    public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
+        Log.d( TAG, "getVideoById : enter" );
+
+        Log.d( TAG, "getVideoById : videoId=" + videoId + ", watched=" + watched );
+
+        Log.d( TAG, "getVideoById : exit" );
+        return this.api.updateWatchedStatus( videoId, watched );
     }
 
 }

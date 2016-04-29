@@ -24,6 +24,6 @@ public interface DvrDataStore {
 
     Observable<List<EncoderEntity>> encoderEntityList();
 
-    Observable<Boolean> updateRecordingWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
+    Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched );
 
 }

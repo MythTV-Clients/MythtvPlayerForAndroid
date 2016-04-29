@@ -82,7 +82,7 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_app_title_info_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_title_info_list, container, false );
         ButterKnife.bind( this, fragmentView );
         setupUI();
 
@@ -242,6 +242,15 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
         });
 
         Log.d( TAG, "showError : exit" );
+    }
+
+    @Override
+    public void showMessage( String message ) {
+        Log.d( TAG, "showMessage : enter" );
+
+        this.showToastMessage( message, null, null );
+
+        Log.d( TAG, "showMessage : exit" );
     }
 
     @Override

@@ -53,7 +53,7 @@ public class PostUpdatedRecordedWatchedStatusTest {
         parameters.put( "WATCHED", FAKE_WATCHED );
         postUpdatedRecordedWatchedStatus.buildUseCaseObservable( parameters );
 
-        verify( mockDvrRepository ).updateRecordingWatchedStatus( FAKE_CHAN_ID, FAKE_START_TIME, FAKE_WATCHED );
+        verify( mockDvrRepository ).updateWatchedStatus( FAKE_CHAN_ID, FAKE_START_TIME, FAKE_WATCHED );
         verifyNoMoreInteractions( mockDvrRepository );
         verifyZeroInteractions( mockThreadExecutor );
         verifyZeroInteractions( mockPostExecutionThread );

@@ -17,8 +17,8 @@ public interface ContentApi {
     String ADD_VIDEO_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
     String LIVE_STREAM_INFO_LIST_BASE_URL = "/Content/GetLiveStreamList";
     String LIVE_STREAM_INFO_URL = "/Content/GetLiveStream?Id=%s";
-    String REMOVE_LIVE_STREAM_URL = "/Content/AddLiveStream?Id=%s";
-    String STOP_LIVE_STREAM_URL = "/Content/AddLiveStream?Id=%s";
+    String REMOVE_LIVE_STREAM_URL = "/Content/RemoveLiveStream?Id=%s";
+    String STOP_LIVE_STREAM_URL = "/Content/StopLiveStream?Id=%s";
 
     String STORAGE_GROUP_QS = "StorageGroup=%s";
     String FILENAME_QS = "FileName=%s";

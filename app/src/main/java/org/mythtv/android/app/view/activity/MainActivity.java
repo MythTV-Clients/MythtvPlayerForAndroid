@@ -55,7 +55,7 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_app_main;
+        return R.layout.activity_main;
     }
 
     @Override

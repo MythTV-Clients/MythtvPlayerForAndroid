@@ -87,7 +87,7 @@ public class ProgramListActivity extends AbstractBaseActivity implements HasComp
     @Override
     public int getLayoutResource() {
 
-        return R.layout.activity_app_program_list;
+        return R.layout.activity_program_list;
     }
 
     @Override
@@ -239,7 +239,7 @@ public class ProgramListActivity extends AbstractBaseActivity implements HasComp
             }
 
             Log.d( TAG, "initializeActivity : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup );
-            addFragment( R.id.fl_fragment, ProgramListFragment.newInstance( this.descending, this.startIndex, this.count, this.titleRegEx, this.recGroup, this.storageGroup ) );
+            addFragment( R.id.fl_fragment, ProgramListFragment.newInstance() );
 
         } else {
             Log.d( TAG, "initializeActivity : savedInstanceState != null" );
@@ -313,7 +313,7 @@ public class ProgramListActivity extends AbstractBaseActivity implements HasComp
         Log.d( TAG, "onProgramClicked : enter" );
 
         Log.i( TAG, "onProgramClicked : programModel=" + programModel.toString() );
-        navigator.navigateToProgram( this, programModel.getChannel().getChanId(), programModel.getRecording().getStartTs(), programModel.getRecording().getStorageGroup(), programModel.getFileName(), programModel.getHostName() );
+        navigator.navigateToProgram( this, programModel.getChannel().getChanId(), programModel.getRecording().getStartTs() );
 
         Log.d( TAG, "onProgramClicked : exit" );
     }

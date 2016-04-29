@@ -4,28 +4,30 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.ContentRepository;
 
+import java.util.Map;
+
 import rx.Observable;
 
 /**
  * Created by dmfrey on 10/25/15.
  */
-public class GetLiveStreamDetails extends UseCase {
+public class GetLiveStreamDetails extends DynamicUseCase {
 
-    private final int id;
     private final ContentRepository contentRepository;
 
-    public GetLiveStreamDetails( final int id, final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetLiveStreamDetails( final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.id = id;
         this.contentRepository = contentRepository;
 
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
+    protected Observable buildUseCaseObservable( Map parameters ) {
 
-        return this.contentRepository.liveStreamInfo( this.id );
+        final int id = (Integer) parameters.get( "LIVE_STREAM_ID" );
+
+        return this.contentRepository.liveStreamInfo( id );
     }
 
 }
