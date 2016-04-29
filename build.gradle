@@ -28,7 +28,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0-rc1'
+        classpath 'com.android.tools.build:gradle:2.1.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0x'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
@@ -60,18 +60,18 @@ task wrapper( type: Wrapper ) {
   gradleVersion '2.12'
 }
 
-task runDomainUnitTests( dependsOn: [ ':domain:test' ] ) {
+task runDomainUnitTests(dependsOn: [':domain:test']) {
   description 'Run unit tests for both domain and data layers.'
 }
 
-task runDataUnitTests( dependsOn: [ ':data:cleanTestDebugUnitTest', ':data:testDebugUnitTest' ] ) {
+task runDataUnitTests(dependsOn: [':data:cleanTestDebugUnitTest', ':data:testDebugUnitTest']) {
   description 'Run unit tests for both domain and data layers.'
 }
 
-task runUnitTests( dependsOn: [ 'runDomainUnitTests', 'runDataUnitTests' ] ) {
+task runUnitTests(dependsOn: ['runDomainUnitTests', 'runDataUnitTests']) {
   description 'Run unit tests for both domain and data layers.'
 }
 
-task runAcceptanceTests( dependsOn: [ ':presentation:connectedAndroidTest' ] ) {
+task runAcceptanceTests(dependsOn: [':presentation:connectedAndroidTest']) {
   description 'Run application acceptance tests.'
 }
