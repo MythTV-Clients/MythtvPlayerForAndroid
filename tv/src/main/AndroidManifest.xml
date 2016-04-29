@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ MythTV Player An application for Android users to play MythTV Recordings and Videos
+  ~ Copyright (c) 2015. Daniel Frey
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<manifest package="org.mythtv.android.tv"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-sdk
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:overrideLibrary="android.support.v14.preference" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.faketouch"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.sensor"
+        android:required="false" />
+
+    <application
+        android:name=".tv.AndroidApplication"
+        android:allowBackup="true"
+        android:banner="@drawable/mythtv_logo"
+        android:icon="@drawable/ic_mythtv"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Leanback">
+
+        <!-- AndroidTv activities -->
+        <activity
+            android:name=".tv.view.activity.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|navigation">
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".tv.view.activity.RecordingsActivity"
+            android:parentActivityName=".tv.view.activity.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".tv.view.activity.MainActivity" />
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".tv.view.activity.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".tv.view.activity.RecordingsDetailsActivity"
+            android:parentActivityName=".tv.view.activity.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".tv.view.activity.MainActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".tv.view.activity.SettingsActivity" />
+
+        <activity
+            android:name=".tv.view.activity.RecordingSettingsActivity" />
+
+        <activity
+            android:name=".tv.view.activity.VideosActivity"
+            android:parentActivityName=".tv.view.activity.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".tv.view.activity.MainActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".tv.view.activity.VideoCategoryActivity"
+            android:parentActivityName=".tv.view.activity.VideosActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".tv.view.activity.VideosActivity" />
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".tv.view.activity.SearchableActivity" />
+        </activity>
+
+        <activity
+            android:name=".tv.view.activity.VideoDetailsActivity"
+            android:parentActivityName=".tv.view.activity.VideosActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".tv.view.activity.VideosActivity"/>
+
+        </activity>
+
+        <activity
+            android:name=".tv.view.activity.TvVideoSettingsActivity" />
+
+        <activity android:name=".tv.view.activity.SearchableActivity">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.SEARCH" />
+
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+        </activity>
+
+        <activity
+            android:name=".tv.view.activity.PlaybackOverlayActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <provider
+            android:name=".tv.provider.MythtvSearchSuggestionProvider"
+            android:authorities="org.mythtv.android.tv.provider.MythtvSearchSuggestionProvider"
+            android:exported="false"/>
+
+    </application>
+
+</manifest>

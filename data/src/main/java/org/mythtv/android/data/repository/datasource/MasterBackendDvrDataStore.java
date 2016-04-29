@@ -80,4 +80,12 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
         return this.api.encoderEntityList();
     }
 
+    @Override
+    public Observable<Boolean> updateWatchedStatus(int chanId, DateTime startTime, boolean watched ) {
+        Log.d( TAG, "updateWatchedStatus : enter" );
+
+        Log.d( TAG, "updateWatchedStatus : exit" );
+        return this.api.updateWatchedStatus( chanId, startTime, watched );
+    }
+
 }

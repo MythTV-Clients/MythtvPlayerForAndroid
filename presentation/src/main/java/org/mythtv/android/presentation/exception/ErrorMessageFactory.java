@@ -2,7 +2,7 @@ package org.mythtv.android.presentation.exception;
 
 import android.content.Context;
 
-import org.mythtv.android.R;
+import org.mythtv.android.presentation.R;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.data.exception.ProgramNotFoundException;
 
@@ -20,11 +20,11 @@ public class ErrorMessageFactory {
 
         if( exception instanceof NetworkConnectionException ) {
 
-            message = context.getString(R.string.exception_message_no_connection);
+            message = context.getString( R.string.exception_message_no_connection );
 
         } else if( exception instanceof ProgramNotFoundException ) {
 
-            message = context.getString(R.string.exception_message_program_not_found);
+            message = context.getString( R.string.exception_message_program_not_found );
 
         }
 

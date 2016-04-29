@@ -6,6 +6,7 @@ import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.ContentRepository;
 
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.functions.Action1;
@@ -14,38 +15,38 @@ import rx.schedulers.Schedulers;
 /**
  * Created by dmfrey on 10/25/15.
  */
-public class GetLiveStreamsList extends UseCase {
+public class GetLiveStreamsList extends DynamicUseCase {
 
-    private final String filename;
     private final ContentRepository contentRepository;
 
-    public GetLiveStreamsList( final String filename, final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetLiveStreamsList( final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.filename = filename;
         this.contentRepository = contentRepository;
 
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
+    protected Observable buildUseCaseObservable( Map parameters ) {
 
-        Action1<List<LiveStreamInfo>> onNextAction = new Action1<List<LiveStreamInfo>>() {
+//        Action1<List<LiveStreamInfo>> onNextAction = new Action1<List<LiveStreamInfo>>() {
+//
+//            @Override
+//            public void call( List<LiveStreamInfo> liveStreamInfos ) {
+//
+//                try {
+//                    Thread.sleep( 5000 );
+//                } catch( InterruptedException e ) { }
+//
+//            }
+//
+//        };
 
-            @Override
-            public void call( List<LiveStreamInfo> liveStreamInfos ) {
+        final String filename = (String) parameters.get( "FILE_NAME" );
 
-                try {
-                    Thread.sleep( 5000 );
-                } catch( InterruptedException e ) { }
-
-            }
-
-        };
-
-        return this.contentRepository.liveStreamInfos( this.filename )
-                .repeat( Schedulers.io() )
-                .doOnNext( onNextAction );
+        return this.contentRepository.liveStreamInfos( filename );
+//                .repeat( Schedulers.io() )
+//                .doOnNext( onNextAction );
     }
 
 }

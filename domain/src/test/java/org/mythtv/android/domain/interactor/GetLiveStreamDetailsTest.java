@@ -8,6 +8,9 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.ContentRepository;
 
+import java.util.Collections;
+import java.util.Map;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
@@ -29,14 +32,15 @@ public class GetLiveStreamDetailsTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getLiveStreamDetails = new GetLiveStreamDetails( FAKE_LIVE_STREAM_ID, mockContentRepository, mockThreadExecutor, mockPostExecutionThread );
+        getLiveStreamDetails = new GetLiveStreamDetails( mockContentRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
     public void testGetRecordedProgramDetailsUseCaseObservableHappyCase() {
 
-        getLiveStreamDetails.buildUseCaseObservable();
+        Map<String, Integer> parameters = Collections.singletonMap( "LIVE_STREAM_ID", FAKE_LIVE_STREAM_ID );
+        getLiveStreamDetails.buildUseCaseObservable( parameters );
 
         verify( mockContentRepository ).liveStreamInfo( FAKE_LIVE_STREAM_ID );
         verifyZeroInteractions( mockPostExecutionThread );

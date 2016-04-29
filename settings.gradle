@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//include ':core', ':app'
+include ':app', 'tv'
 include ':presentation'
 include ':domain'
 include ':data'
