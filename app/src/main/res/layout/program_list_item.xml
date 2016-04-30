@@ -34,7 +34,9 @@
             android:layout_width="125dp"
             android:layout_height="75dp"
             android:scaleType="fitXY"
+            android:layout_marginLeft="@dimen/margin"
             android:layout_marginStart="@dimen/margin"
+            android:layout_marginRight="@dimen/outer_margin"
             android:layout_marginEnd="@dimen/outer_margin" />
 
         <TextView
@@ -44,6 +46,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:layout_toRightOf="@+id/program_item_preview"
             android:layout_toEndOf="@+id/program_item_preview"
             tools:text="test title" />
 
@@ -56,6 +59,7 @@
             android:gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
             android:layout_below="@+id/program_item_title"
+            android:layout_toRightOf="@+id/program_item_preview"
             android:layout_toEndOf="@+id/program_item_preview"
             tools:text="test sub title" />
 
@@ -65,6 +69,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/program_item_sub_title"
+            android:layout_toRightOf="@+id/program_item_preview"
             android:layout_toEndOf="@+id/program_item_preview"
             tools:text="test date" />
 
@@ -74,6 +79,7 @@
             android:layout_height="wrap_content"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_below="@+id/program_item_date"
+            android:layout_toRightOf="@+id/program_item_preview"
             android:layout_toEndOf="@+id/program_item_preview"
             android:indeterminate="true"
             android:minHeight="10dp"
@@ -90,6 +96,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/program_item_progress"
+            android:layout_toRightOf="@+id/program_item_preview"
             android:layout_toEndOf="@+id/program_item_preview"
             tools:text="test episode" />
 
@@ -99,7 +106,9 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/program_item_progress"
+            android:layout_toRightOf="@+id/program_item_preview"
             android:layout_toEndOf="@+id/program_item_preview"
+            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:text="@string/ready_to_stream"
             android:textColor="@color/primary_dark"
