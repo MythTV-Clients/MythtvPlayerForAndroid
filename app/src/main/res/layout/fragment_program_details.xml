@@ -45,6 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:layout_toRightOf="@+id/recording_coverart"
             android:layout_toEndOf="@+id/recording_coverart"
             android:textAppearance="@android:style/TextAppearance.Large"
             tools:text="Episode Name" />
@@ -55,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/recording_episode_name"
+            android:layout_toRightOf="@+id/recording_coverart"
             android:layout_toEndOf="@+id/recording_coverart"
             android:textAppearance="@android:style/TextAppearance.Medium"
             tools:text="Show Name" />
@@ -65,7 +67,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/recording_episode_name"
+            android:layout_toRightOf="@+id/recording_show_name"
             android:layout_toEndOf="@+id/recording_show_name"
+            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:textAppearance="@android:style/TextAppearance.Small"
             android:gravity="end"
@@ -77,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/recording_show_name"
+            android:layout_toRightOf="@+id/recording_coverart"
             android:layout_toEndOf="@+id/recording_coverart"
             tools:text="Start Time" />
 
@@ -86,7 +91,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/recording_show_name"
+            android:layout_toRightOf="@+id/recording_start_time"
             android:layout_toEndOf="@+id/recording_start_time"
+            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:textAppearance="@android:style/TextAppearance.Small"
             android:gravity="end"
@@ -98,6 +105,7 @@
             android:layout_height="wrap_content"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_below="@+id/recording_start_time"
+            android:layout_toRightOf="@+id/recording_coverart"
             android:layout_toEndOf="@+id/recording_coverart"
             android:indeterminate="true"
             android:minHeight="10dp"
