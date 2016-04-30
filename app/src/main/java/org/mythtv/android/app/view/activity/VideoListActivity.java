@@ -86,24 +86,30 @@ public class VideoListActivity extends AbstractBaseActivity implements HasCompon
 
     @Override
     public void onBackPressed() {
+        Log.d( TAG, "onBackPressed : enter" );
 
         if( mPager.getCurrentItem() == 0 ) {
+            Log.d( TAG, "onBackPressed : navigating home" );
 
             // If the user is currently looking at the first step, allow the system to handle the
             // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed();
 
+            navigator.navigateToHome( this );
+
         } else {
+            Log.d( TAG, "onBackPressed : navigating to previous tab" );
 
             // Otherwise, select the previous step.
             mPager.setCurrentItem( mPager.getCurrentItem() - 1 );
 
         }
 
+        Log.d( TAG, "onBackPressed : exit" );
     }
 
     private void initializeInjector() {
-        Log.d(TAG, "initializeInjector : enter");
+        Log.d( TAG, "initializeInjector : enter" );
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
@@ -144,6 +150,7 @@ public class VideoListActivity extends AbstractBaseActivity implements HasCompon
             }
 
             notifyDataSetChanged();
+
         }
 
         @Override

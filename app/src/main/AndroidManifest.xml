@@ -115,20 +115,6 @@
         </activity>
 
         <activity
-            android:name=".view.activity.SearchableActivity"
-            android:launchMode="singleTop">
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-
-        </activity>
-
-        <activity
             android:name=".view.activity.VideoListActivity"
             android:label="@string/watch_video"
             android:launchMode="singleTop"
@@ -220,6 +206,20 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activity.SettingsActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".view.activity.SearchableActivity"
+            android:launchMode="singleTop">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
 
         </activity>
 

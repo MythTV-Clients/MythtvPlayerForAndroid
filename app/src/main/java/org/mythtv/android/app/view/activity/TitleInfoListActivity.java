@@ -58,6 +58,16 @@ public class TitleInfoListActivity extends AbstractBaseActivity implements HasCo
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Log.d( TAG, "onBackPressed : enter" );
+        super.onBackPressed();
+
+        navigator.navigateToHome( this );
+
+        Log.d( TAG, "onBackPressed : exit" );
+    }
+
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
