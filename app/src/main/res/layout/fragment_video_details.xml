@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:layout_toRigtOf="@+id/video_coverart"
+            android:layout_toRightOf="@+id/video_coverart"
             android:layout_toEndOf="@+id/video_coverart"
             android:textAppearance="@android:style/TextAppearance.Large"
             tools:text="Episode Name" />
