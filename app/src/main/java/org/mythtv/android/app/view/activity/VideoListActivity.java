@@ -38,7 +38,10 @@ public class VideoListActivity extends AbstractBaseActivity implements HasCompon
 
     public static Intent getCallingIntent( Context context ) {
 
-        return new Intent( context, VideoListActivity.class );
+        Intent callingIntent = new Intent( context, VideoListActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
     }
 
     private VideoComponent videoComponent;

@@ -25,7 +25,7 @@ public class TitleInfoListActivity extends AbstractBaseActivity implements HasCo
     public static Intent getCallingIntent( Context context ) {
 
         Intent callingIntent = new Intent( context, TitleInfoListActivity.class );
-        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
 
         return callingIntent;
     }

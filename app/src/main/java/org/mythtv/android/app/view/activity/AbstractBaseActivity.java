@@ -23,7 +23,7 @@ import org.mythtv.android.app.AndroidApplication;
 import org.mythtv.android.app.internal.di.components.ApplicationComponent;
 import org.mythtv.android.app.internal.di.modules.ActivityModule;
 import org.mythtv.android.app.internal.di.modules.SharedPreferencesModule;
-import org.mythtv.android.app.navigation.AppNavigator;
+import org.mythtv.android.app.navigation.Navigator;
 
 import javax.inject.Inject;
 
@@ -40,7 +40,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     private static final String TAG = AbstractBaseActivity.class.getSimpleName();
 
     @Inject
-    AppNavigator navigator;
+    Navigator navigator;
 
     @Nullable @Bind( R.id.navigation_view ) protected NavigationView navigationView;
     @Nullable @Bind( R.id.toolbar ) protected Toolbar toolbar;

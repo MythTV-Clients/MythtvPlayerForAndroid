@@ -16,12 +16,12 @@ import javax.inject.Singleton;
  * Created by dmfrey on 1/28/16.
  */
 @Singleton
-public class TvNavigator {
+public class Navigator {
 
-    private static final String TAG = TvNavigator.class.getSimpleName();
+    private static final String TAG = Navigator.class.getSimpleName();
 
     @Inject
-    public TvNavigator() {
+    public Navigator() {
         //empty
     }
 

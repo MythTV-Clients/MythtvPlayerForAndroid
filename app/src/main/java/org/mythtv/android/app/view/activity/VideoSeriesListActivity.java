@@ -30,6 +30,7 @@ public class VideoSeriesListActivity extends AbstractBaseActivity implements Has
     public static Intent getCallingIntent( Context context, String series ) {
 
         Intent callingIntent = new Intent( context, VideoSeriesListActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_SERIES, series );
 
         return callingIntent;
