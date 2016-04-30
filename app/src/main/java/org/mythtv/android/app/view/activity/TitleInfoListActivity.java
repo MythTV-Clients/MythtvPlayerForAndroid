@@ -24,7 +24,10 @@ public class TitleInfoListActivity extends AbstractBaseActivity implements HasCo
 
     public static Intent getCallingIntent( Context context ) {
 
-        return new Intent( context, TitleInfoListActivity.class );
+        Intent callingIntent = new Intent( context, TitleInfoListActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
     }
 
     private DvrComponent dvrComponent;
