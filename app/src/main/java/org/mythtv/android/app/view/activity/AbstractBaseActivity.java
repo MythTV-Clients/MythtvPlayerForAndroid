@@ -58,7 +58,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         ButterKnife.bind( this );
 
         if( null != navigationView ) {
+
             navigationView.setNavigationItemSelectedListener( this );
+
         }
 
         if( toolbar != null ) {
