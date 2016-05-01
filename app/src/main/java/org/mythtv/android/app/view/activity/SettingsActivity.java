@@ -12,7 +12,10 @@ public class SettingsActivity extends AbstractBaseActivity {
 
     public static Intent getCallingIntent( Context context ) {
 
-        return new Intent( context, SettingsActivity.class );
+        Intent callingIntent = new Intent( context, SettingsActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
     }
 
     @Override
