@@ -19,17 +19,17 @@
 
 <resources>
 
-    <style name="AppTheme" parent="AppTheme.Base"/>
+    <dimen name="drawer_margin_top">48dp</dimen>
 
-    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Default screen margins, per the Android Design guidelines. -->
 
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="colorControlHighlight">@color/primary_light</item>
+    <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
+         https://developer.android.com/design/patterns/navigation-drawer.html -->
 
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    <dimen name="outer_margin">16dp</dimen>
+    <dimen name="margin">8dp</dimen>
+    <dimen name="detail_backdrop_height">256dp</dimen>
 
-    </style>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>
