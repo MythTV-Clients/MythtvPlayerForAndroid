@@ -195,6 +195,7 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
 
     public void reload() {
 
+        initialize();
         loadUpcomingList();
 
     }
