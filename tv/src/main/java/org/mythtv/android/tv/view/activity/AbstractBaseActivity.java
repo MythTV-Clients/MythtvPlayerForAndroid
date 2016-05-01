@@ -9,7 +9,7 @@ import org.mythtv.android.tv.AndroidApplication;
 import org.mythtv.android.tv.internal.di.components.ApplicationComponent;
 import org.mythtv.android.tv.internal.di.modules.ActivityModule;
 import org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule;
-import org.mythtv.android.tv.navigation.TvNavigator;
+import org.mythtv.android.tv.navigation.Navigator;
 
 import javax.inject.Inject;
 
@@ -23,7 +23,7 @@ public abstract class AbstractBaseActivity extends Activity {
     public abstract int getLayoutResource();
 
     @Inject
-    TvNavigator tvNavigator;
+    Navigator navigator;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
