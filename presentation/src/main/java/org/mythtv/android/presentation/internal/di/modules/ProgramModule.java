@@ -1,4 +1,4 @@
-package org.mythtv.android.app.internal.di.modules;
+package org.mythtv.android.presentation.internal.di.modules;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.domain.executor.PostExecutionThread;

@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 
 import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
-import org.mythtv.android.app.internal.di.modules.VideosModule;
+import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.TelevisionSeriesListPresenter;
 import org.mythtv.android.presentation.view.VideoListView;

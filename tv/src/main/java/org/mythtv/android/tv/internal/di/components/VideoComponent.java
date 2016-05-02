@@ -1,11 +1,11 @@
 package org.mythtv.android.tv.internal.di.components;
 
 import org.mythtv.android.presentation.internal.di.PerActivity;
+import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
+import org.mythtv.android.presentation.internal.di.modules.VideoModule;
+import org.mythtv.android.presentation.internal.di.modules.VideoSeriesModule;
+import org.mythtv.android.presentation.internal.di.modules.VideosModule;
 import org.mythtv.android.tv.internal.di.modules.ActivityModule;
-import org.mythtv.android.tv.internal.di.modules.LiveStreamModule;
-import org.mythtv.android.tv.internal.di.modules.VideoModule;
-import org.mythtv.android.tv.internal.di.modules.VideoSeriesModule;
-import org.mythtv.android.tv.internal.di.modules.VideosModule;
 import org.mythtv.android.tv.view.fragment.VideoAdultFragment;
 import org.mythtv.android.tv.view.fragment.VideoHomeMovieFragment;
 import org.mythtv.android.tv.view.fragment.VideoMovieFragment;

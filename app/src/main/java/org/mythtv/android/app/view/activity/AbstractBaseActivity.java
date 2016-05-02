@@ -1,6 +1,7 @@
 package org.mythtv.android.app.view.activity;
 
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -22,7 +23,7 @@ import org.mythtv.android.app.R;
 import org.mythtv.android.app.AndroidApplication;
 import org.mythtv.android.app.internal.di.components.ApplicationComponent;
 import org.mythtv.android.app.internal.di.modules.ActivityModule;
-import org.mythtv.android.app.internal.di.modules.SharedPreferencesModule;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.app.navigation.Navigator;
 
 import javax.inject.Inject;
@@ -88,9 +89,11 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate( R.menu.main, menu );
 
+        ComponentName cn = new ComponentName( this, SearchableActivity.class );
+
         SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
         SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
-        searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
+        searchView.setSearchableInfo( searchManager.getSearchableInfo( cn ) );
         searchView.setIconifiedByDefault( false );
 
         return super.onCreateOptionsMenu( menu );
@@ -213,7 +216,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     /**
      * Get a SharedPreferences module for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.SharedPreferencesModule}
+     * @return {@link SharedPreferencesModule}
      */
     protected SharedPreferencesModule getSharedPreferencesModule() {
 

@@ -4,6 +4,8 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.SearchRepository;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -11,22 +13,22 @@ import rx.Observable;
 /**
  * Created by dmfrey on 10/12/15.
  */
-public class GetSearchResultList extends UseCase {
+public class GetSearchResultList extends DynamicUseCase {
 
-    private final String searchText;
     private final SearchRepository searchRepository;
 
     @Inject
-    public GetSearchResultList( String searchText, SearchRepository searchRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetSearchResultList( SearchRepository searchRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.searchText = searchText;
         this.searchRepository = searchRepository;
 
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
+    protected Observable buildUseCaseObservable( Map parameters ) {
+
+        final String searchText = (String) parameters.get( "SEARCH_TEXT" );
 
         return this.searchRepository.search( searchText );
     }

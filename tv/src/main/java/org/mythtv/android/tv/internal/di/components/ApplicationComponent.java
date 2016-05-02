@@ -9,8 +9,8 @@ import org.mythtv.android.domain.repository.ContentRepository;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.domain.repository.SearchRepository;
 import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.tv.internal.di.modules.ApplicationModule;
-import org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.tv.view.activity.AbstractBaseActivity;
 
 import javax.inject.Singleton;

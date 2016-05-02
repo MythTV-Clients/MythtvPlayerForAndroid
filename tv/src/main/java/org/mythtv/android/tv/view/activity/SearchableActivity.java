@@ -7,13 +7,13 @@ import android.provider.SearchRecentSuggestions;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.util.Log;
 
-import org.mythtv.android.tv.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
+import org.mythtv.android.presentation.model.SearchResultModel;
+import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.tv.internal.di.components.DaggerSearchComponent;
 import org.mythtv.android.tv.internal.di.components.SearchComponent;
-import org.mythtv.android.tv.internal.di.modules.SearchResultsModule;
-import org.mythtv.android.presentation.model.SearchResultModel;
-import org.mythtv.android.tv.provider.MythtvSearchSuggestionProvider;
 import org.mythtv.android.tv.view.fragment.SearchResultListFragment;
 
 /**
@@ -133,7 +133,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
         this.searchComponent = DaggerSearchComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .activityModule( getActivityModule() )
-                .searchResultsModule( new SearchResultsModule( searchText ) )
+                .searchResultsModule( new SearchResultsModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

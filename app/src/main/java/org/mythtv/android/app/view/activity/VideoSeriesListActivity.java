@@ -12,7 +12,7 @@ import org.mythtv.android.app.view.fragment.TelevisionSeriesListFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
-import org.mythtv.android.app.internal.di.modules.VideoSeriesModule;
+import org.mythtv.android.presentation.internal.di.modules.VideoSeriesModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
 /**

@@ -21,11 +21,13 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.tv.R;
+import org.mythtv.android.tv.internal.di.components.SearchComponent;
 import org.mythtv.android.data.entity.SearchResultEntity;
 import org.mythtv.android.data.repository.DatabaseHelper;
 import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.SearchResultModel;
+import org.mythtv.android.presentation.presenter.SearchResultListPresenter;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.tv.presenter.CardPresenter;
 import org.mythtv.android.presentation.view.SearchResultListView;
@@ -33,6 +35,8 @@ import org.mythtv.android.presentation.view.SearchResultListView;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by dmfrey on 2/27/16.
@@ -54,14 +58,11 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
 
     }
 
-    private static final String QUERY_KEY = "query";
-    private static final int SEARCH_DELAY_MS = 1000;
+    @Inject
+    SearchResultListPresenter searchResultListPresenter;
 
     private ArrayObjectAdapter mRowsAdapter;
     private Handler mHandler = new Handler();
-
-//    @Inject
-//    SearchResultListPresenter searchResultListPresenter;
 
     private SQLiteDatabase db;
 
@@ -125,7 +126,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-//        this.searchResultListPresenter.resume();
+        this.searchResultListPresenter.resume();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -135,7 +136,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-//        this.searchResultListPresenter.pause();
+        this.searchResultListPresenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -145,7 +146,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
-//        this.searchResultListPresenter.destroy();
+        this.searchResultListPresenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
     }
@@ -161,10 +162,14 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
     private void initialize() {
         Log.d( TAG, "initialize : enter" );
 
-//        this.getComponent( SearchComponent.class ).inject( this );
-//        this.searchResultListPresenter.setView( this );
-
+        Log.d( TAG, "initialize : get searchText" );
         this.searchText = getArguments().getString( ARGUMENT_KEY_SEARCH_TEXT );
+
+        Log.d( TAG, "initialize : get component" );
+        this.getComponent( SearchComponent.class ).inject( this );
+
+        Log.d( TAG, "initialize : set view" );
+        this.searchResultListPresenter.setView( this );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -269,11 +274,11 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
 
     @Override
     public void showMessage( String message ) {
-        Log.d( TAG, "showError : enter" );
+        Log.d( TAG, "showMessage : enter" );
 
         this.showToastMessage( message );
 
-        Log.d( TAG, "showError : exit" );
+        Log.d( TAG, "showMessage : exit" );
     }
 
     @Override
@@ -291,9 +296,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "loadSearchResultList : enter" );
 
         Log.d( TAG, "loadSearchResultList : searchText=" + searchText );
-//        this.searchResultListPresenter.initialize( searchText );
-
-        renderSearchResultList( search( searchText ) );
+        this.searchResultListPresenter.initialize( this.searchText );
 
         Log.d( TAG, "loadSearchResultList : exit" );
     }
@@ -309,7 +312,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "onQueryTextChange : enter" );
 
         this.searchText = newQuery;
-//        this.loadSearchResultList();
+        this.searchResultListPresenter.initialize( this.searchText );
 
         renderSearchResultList( search( searchText ) );
 
@@ -322,7 +325,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "onQueryTextSubmit : enter" );
 
         this.searchText = query;
-//        this.loadSearchResultList();
+        this.loadSearchResultList();
 
         Log.d( TAG, "onQueryTextSubmit : exit" );
         return true;

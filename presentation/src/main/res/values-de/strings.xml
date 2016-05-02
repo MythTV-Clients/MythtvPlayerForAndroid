@@ -83,7 +83,7 @@
     <string name="queue_button">Queue HLS</string> <!-- not checked, unknown occurence -->
     <string name="ready_to_stream">Bereit zum Streamen</string>
     <string name="recording">Aufzeichnung</string>
-    <string name="search_hint">Show, Film, Schauspieler, Persönlichkeit, Kanal</string> <!-- not checked, unknown occurence -->
+    <string name="search_hint">Suche Show, Film, Schauspieler, Persönlichkeit, Kanal</string> <!-- not checked, unknown occurence -->
     <string name="search_results"> Suchergebnisse</string>
     <string name="search_title">Suche</string>
     <string name="title_activity_settings">Einstellungen</string>

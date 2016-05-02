@@ -3,7 +3,7 @@ package org.mythtv.android.app.internal.di.components;
 import org.mythtv.android.app.view.fragment.SearchResultListFragment;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.app.internal.di.modules.ActivityModule;
-import org.mythtv.android.app.internal.di.modules.SearchResultsModule;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 
 import dagger.Component;
 

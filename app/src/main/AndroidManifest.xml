@@ -177,12 +177,15 @@
             android:label="@string/title_activity_settings"
             android:launchMode="singleTop"
             android:parentActivityName=".view.activity.MainActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activity.MainActivity" />
+
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".view.activity.SearchableActivity" />
+
         </activity>
 
         <activity
@@ -210,8 +213,7 @@
         </activity>
 
         <activity
-            android:name=".view.activity.SearchableActivity"
-            android:launchMode="singleTop">
+            android:name=".view.activity.SearchableActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -232,8 +234,8 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <provider
-            android:name=".provider.MythtvSearchSuggestionProvider"
-            android:authorities="org.mythtv.android.app.provider.MythtvSearchSuggestionProvider"
+            android:name="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
+            android:authorities="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
             android:exported="false" />
 
     </application>

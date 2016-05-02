@@ -5,7 +5,7 @@ import android.support.v17.leanback.app.SearchFragment;
 import android.widget.Toast;
 
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
  * Base {@link SearchFragment} class for every fragment in this application.
@@ -47,7 +47,7 @@ public abstract class AbstractBaseSearchFragment extends SearchFragment {
     /**
      * Get a SharedPreferences module for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.SharedPreferencesModule}
+     * @return {@link org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule}
      */
     protected SharedPreferencesModule getSharedPreferencesModule() {
 

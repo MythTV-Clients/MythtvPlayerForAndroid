@@ -1,4 +1,4 @@
-package org.mythtv.android.tv.internal.di.modules;
+package org.mythtv.android.presentation.internal.di.modules;
 
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;

@@ -5,7 +5,7 @@ import android.app.Application;
 import org.mythtv.android.app.internal.di.components.ApplicationComponent;
 import org.mythtv.android.app.internal.di.components.DaggerApplicationComponent;
 import org.mythtv.android.app.internal.di.modules.ApplicationModule;
-import org.mythtv.android.app.internal.di.modules.SharedPreferencesModule;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
  * Android Main Application

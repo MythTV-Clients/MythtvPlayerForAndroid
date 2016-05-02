@@ -286,7 +286,8 @@ public class SearchResultListFragment extends AbstractBaseFragment implements Se
     private void loadSearchResultList() {
         Log.d( TAG, "loadSearchResultList : enter" );
 
-        this.searchResultListPresenter.initialize( searchText );
+        Log.d( TAG, "loadSearchResultList : searchText=" + searchText );
+        this.searchResultListPresenter.initialize( this.searchText );
 
         Log.d( TAG, "loadSearchResultList : exit" );
     }

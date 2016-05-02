@@ -5,10 +5,10 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.tv.AndroidApplication;
 import org.mythtv.android.tv.internal.di.components.ApplicationComponent;
 import org.mythtv.android.tv.internal.di.modules.ActivityModule;
-import org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.tv.navigation.Navigator;
 
 import javax.inject.Inject;

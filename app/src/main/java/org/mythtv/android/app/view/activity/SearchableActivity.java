@@ -12,9 +12,9 @@ import org.mythtv.android.app.view.fragment.SearchResultListFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerSearchComponent;
 import org.mythtv.android.app.internal.di.components.SearchComponent;
-import org.mythtv.android.app.internal.di.modules.SearchResultsModule;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.model.SearchResultModel;
-import org.mythtv.android.app.provider.MythtvSearchSuggestionProvider;
+import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
 
 /**
  * Created by dmfrey on 10/14/15.
@@ -27,6 +27,8 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
     private String searchText;
     private SearchComponent searchComponent;
+
+    SearchResultListFragment mSearchableFragment;
 
     @Override
     public int getLayoutResource() {
@@ -60,15 +62,15 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
         }
 
-        super.onSaveInstanceState(outState);
+        super.onSaveInstanceState( outState );
 
         Log.d( TAG, "onSaveInstanceState : exit" );
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.d(TAG, "onRestoreInstanceState : enter");
+        super.onRestoreInstanceState( savedInstanceState );
+        Log.d( TAG, "onRestoreInstanceState : enter" );
 
         if( null != savedInstanceState ) {
             Log.d( TAG, "onRestoreInstanceState : savedInstanceState != null" );
@@ -106,20 +108,22 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
     private void initializeActivity( Intent intent ) {
         Log.d( TAG, "initializeActivity : enter" );
 
+        mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
         if( null == intent  ) {
             Log.d( TAG, "initializeActivity : intent == null" );
 
-            addFragment( R.id.fl_fragment, SearchResultListFragment.newInstance( this.searchText ) );
+            addFragment( R.id.fl_fragment, mSearchableFragment );
 
         } else {
             Log.d( TAG, "initializeActivity : intent != null" );
 
             searchText = intent.getStringExtra( SearchManager.QUERY );
+            Log.d( TAG, "initializeActivity : searchText = " + searchText );
 
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions( this, MythtvSearchSuggestionProvider.AUTHORITY, MythtvSearchSuggestionProvider.MODE );
             suggestions.saveRecentQuery( searchText, null );
 
-            addFragment( R.id.fl_fragment, SearchResultListFragment.newInstance( this.searchText ) );
+            addFragment( R.id.fl_fragment, mSearchableFragment );
 
         }
 
@@ -132,7 +136,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
         this.searchComponent = DaggerSearchComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .activityModule( getActivityModule() )
-                .searchResultsModule( new SearchResultsModule( searchText ) )
+                .searchResultsModule( new SearchResultsModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );
@@ -146,16 +150,19 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
     @Override
     public void onSearchResultClicked( SearchResultModel searchResultModel ) {
+        Log.d( TAG, "onSearchResultClicked : enter" );
 
         switch( searchResultModel.getType() ) {
 
             case RECORDING:
+                Log.d( TAG, "onSearchResultClicked : recording clicked" );
 
                 navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime() );
 
                 break;
 
             case VIDEO:
+                Log.d( TAG, "onSearchResultClicked : video clicked" );
 
                 navigator.navigateToVideo( this, searchResultModel.getVideoId(), searchResultModel.getStorageGroup(), searchResultModel.getFilename(), searchResultModel.getHostname() );
 
