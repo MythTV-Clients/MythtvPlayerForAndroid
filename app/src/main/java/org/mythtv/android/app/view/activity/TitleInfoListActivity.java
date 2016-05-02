@@ -24,7 +24,10 @@ public class TitleInfoListActivity extends AbstractBaseActivity implements HasCo
 
     public static Intent getCallingIntent( Context context ) {
 
-        return new Intent( context, TitleInfoListActivity.class );
+        Intent callingIntent = new Intent( context, TitleInfoListActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
     }
 
     private DvrComponent dvrComponent;
@@ -53,6 +56,16 @@ public class TitleInfoListActivity extends AbstractBaseActivity implements HasCo
 
         setNavigationMenuItemChecked( 1 );
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d( TAG, "onBackPressed : enter" );
+        super.onBackPressed();
+
+        navigator.navigateToHome( this );
+
+        Log.d( TAG, "onBackPressed : exit" );
     }
 
     private void initializeInjector() {

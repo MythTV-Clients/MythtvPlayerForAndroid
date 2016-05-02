@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,6 +59,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     public static Intent getCallingIntent( Context context, int chanId, DateTime startTime ) {
 
         Intent callingIntent = new Intent( context, ProgramDetailsActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_CHAN_ID, chanId );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_START_TIME, startTime.getMillis() );
 
@@ -84,16 +86,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         this.initializeInjector();
 
         Log.d( TAG, "onCreate : exit" );
-    }
-
-    @Override
-    public boolean onNavigateUp() {
-        Log.d( TAG, "onNavigateUp : enter" );
-
-        onBackPressed();
-
-        Log.d( TAG, "onNavigateUp : exit" );
-        return true;
     }
 
     @Override
@@ -143,6 +135,12 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     public boolean onOptionsItemSelected( MenuItem item ) {
 
         switch( item.getItemId() ) {
+
+            case android.R.id.home:
+
+                NavUtils.navigateUpFromSameTask( this );
+
+                return true;
 
             case R.id.menu_settings :
 

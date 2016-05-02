@@ -173,6 +173,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
 
     public void reload() {
 
+        initialize();
         loadEncoderList();
 
     }

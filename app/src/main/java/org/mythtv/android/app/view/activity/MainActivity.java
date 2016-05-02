@@ -36,7 +36,10 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
 
     public static Intent getCallingIntent(Context context ) {
 
-        return new Intent( context, MainActivity.class );
+        Intent callingIntent = new Intent( context, MainActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
     }
 
     private DvrComponent dvrComponent;

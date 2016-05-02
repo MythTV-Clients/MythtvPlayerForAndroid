@@ -167,6 +167,7 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
 
     public void reload() {
 
+        initialize();
         loadRecentList();
 
     }

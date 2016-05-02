@@ -53,6 +53,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     public static Intent getCallingIntent( Context context, int id ) {
 
         Intent callingIntent = new Intent( context, VideoDetailsActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_VIDEO_ID, id );
 
         return callingIntent;
