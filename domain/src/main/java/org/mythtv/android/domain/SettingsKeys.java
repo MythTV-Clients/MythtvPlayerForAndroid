@@ -10,7 +10,6 @@ public class SettingsKeys {
     public static final String KEY_PREF_BACKEND_PORT = "backend_port";
 
     public static final String KEY_PREF_INTERNAL_PLAYER = "internal_player";
-    public static final String KEY_PREF_EXTERNAL_PLAYER_OVERRIDE_VIDEO = "external_player_override_video";
     public static final String KEY_PREF_HLS_SETTINGS = "pref_hls_settings";
     public static final String KEY_PREF_HLS_VIDEO_WIDTH = "hls_video_width";
     public static final String KEY_PREF_HLS_VIDEO_HEIGHT = "hls_video_height";
@@ -31,5 +30,8 @@ public class SettingsKeys {
     public static final String KEY_PREF_RATING_PG13 = "rating_pg13";
     public static final String KEY_PREF_RATING_R = "rating_r";
     public static final String KEY_PREF_RATING_NC17 = "rating_nc17";
+
+    public static final String KEY_PREF_READ_TIMEOUT = "read_timeout";
+    public static final String KEY_PREF_CONNECT_TIMEOUT = "connect_timeout";
 
 }

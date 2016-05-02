@@ -110,7 +110,7 @@ public class VideoCacheImpl implements VideoCache {
         if( !isCached() ) {
             Log.d( TAG, "getCategory : exit, not cached on disk" );
 
-            return null;
+            return Observable.empty();
         }
 
         return readFromFile()
@@ -130,7 +130,7 @@ public class VideoCacheImpl implements VideoCache {
         if( !isCached() ) {
             Log.d( TAG, "getDirectory : exit, not cached on disk" );
 
-            return null;
+            return Observable.empty();
         }
 
         return readFromFile()

@@ -21,4 +21,6 @@ public interface VideoDataStore {
 
     Observable<VideoMetadataInfoEntity> getVideoByFilename( final String filename );
 
+    Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched );
+
 }

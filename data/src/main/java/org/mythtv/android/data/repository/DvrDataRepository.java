@@ -119,6 +119,7 @@ public class DvrDataRepository implements DvrRepository {
                 .doOnNext( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) );
 
         return recordedProgramEntityList
+                .doOnError( throwable -> Log.e( TAG, "recordedPrograms : error", throwable ) )
                 .map( recordedProgramEntities -> ProgramEntityDataMapper.transform( recordedProgramEntities ) );
     }
 
@@ -128,18 +129,18 @@ public class DvrDataRepository implements DvrRepository {
         Log.d( TAG, "recordedProgram : enter" );
         Log.d( TAG, "recordedProgram : chanId=" + chanId + ", startTime=" + startTime );
 
-        final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.create( chanId, startTime );
+        final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         Observable<ProgramEntity> programEntity = dvrDataStore.recordedProgramEntityDetails( chanId, startTime );
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntity = programEntity
                 .flatMap(recordedProgramEntity -> contentDataStore.liveStreamInfoEntityList(recordedProgramEntity.getFileName()));
 
-        Observable<ProgramEntity> recordedProgramEntity = Observable.zip(programEntity, liveStreamInfoEntity, (programEntity1, liveStreamInfoEntityList) -> {
+        Observable<ProgramEntity> recordedProgramEntity = Observable.zip( programEntity, liveStreamInfoEntity, ( programEntity1, liveStreamInfoEntityList ) -> {
 
-            if (null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty()) {
+            if( null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty() ) {
 
-                programEntity1.setLiveStreamInfoEntity(liveStreamInfoEntityList.get(0));
+                programEntity1.setLiveStreamInfoEntity( liveStreamInfoEntityList.get( 0 ) );
 
             }
 
@@ -148,6 +149,7 @@ public class DvrDataRepository implements DvrRepository {
         });
 
         return recordedProgramEntity
+                .doOnError( throwable -> Log.e( TAG, "recordedProgram : error", throwable ) )
                 .map( recordedProgram -> ProgramEntityDataMapper.transform( recordedProgram ) );
     }
 
@@ -159,6 +161,7 @@ public class DvrDataRepository implements DvrRepository {
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
         return dvrDataStore.upcomingProgramEntityList( startIndex, count, showAll, recordId, recStatus )
+                .doOnError( throwable -> Log.e( TAG, "upcoming : error", throwable ) )
                 .map( ProgramEntityDataMapper::transform );
     }
 
@@ -198,6 +201,7 @@ public class DvrDataRepository implements DvrRepository {
         });
 
         return recordedProgramEntityList
+                .doOnError( throwable -> Log.e( TAG, "recent : error", throwable ) )
                 .map( recordedProgramEntities -> ProgramEntityDataMapper.transform( recordedProgramEntities ) );
     }
 
@@ -211,6 +215,18 @@ public class DvrDataRepository implements DvrRepository {
         return dvrDataStore.encoderEntityList()
                 .doOnError( throwable -> Log.e( TAG, "encoders : error", throwable ) )
                 .map( encoderEntities -> EncoderEntityDataMapper.transformCollection( encoderEntities ) );
+    }
+
+    @SuppressWarnings( "Convert2MethodRef" )
+    @Override
+    public Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched ) {
+        Log.d( TAG, "updateWatchedStatus : enter" );
+
+        final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
+
+        return dvrDataStore.updateWatchedStatus( chanId, startTime, watched )
+                .doOnError( throwable -> Log.e( TAG, "updateWatchedStatus : error", throwable ) )
+                .doOnCompleted( () -> dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null ) );
     }
 
 }

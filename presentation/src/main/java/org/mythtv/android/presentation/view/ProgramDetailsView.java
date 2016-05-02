@@ -1,6 +1,5 @@
 package org.mythtv.android.presentation.view;
 
-import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 
 /**
@@ -21,8 +20,8 @@ public interface ProgramDetailsView extends LoadDataView {
     /**
      * Update the live streaming buttons
      *
-     * @param liveStreamInfo liveStreamInfo
+     * @param program The {@link ProgramModel} that will be shown.
      */
-    void updateLiveStream( LiveStreamInfoModel liveStreamInfo );
+    void updateLiveStream( ProgramModel program );
 
 }

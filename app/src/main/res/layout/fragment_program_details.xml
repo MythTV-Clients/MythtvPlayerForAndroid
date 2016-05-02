@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ MythTV Player An application for Android users to play MythTV Recordings and Videos
+  ~ Copyright (c) 2015. Daniel Frey
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:gravity="fill_horizontal">
+
+        <org.mythtv.android.presentation.view.component.AutoLoadImageView
+            android:id="@+id/recording_coverart"
+            android:layout_width="75dp"
+            android:layout_height="125dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:elevation="15dp" />
+
+        <TextView
+            android:id="@+id/recording_episode_name"
+            android:layout_margin="@dimen/margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:layout_toRightOf="@+id/recording_coverart"
+            android:layout_toEndOf="@+id/recording_coverart"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            tools:text="Episode Name" />
+
+        <TextView
+            android:id="@+id/recording_show_name"
+            android:layout_margin="@dimen/margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recording_episode_name"
+            android:layout_toRightOf="@+id/recording_coverart"
+            android:layout_toEndOf="@+id/recording_coverart"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            tools:text="Show Name" />
+
+        <TextView
+            android:id="@+id/recording_episode_callsign"
+            android:layout_margin="@dimen/margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recording_episode_name"
+            android:layout_toRightOf="@+id/recording_show_name"
+            android:layout_toEndOf="@+id/recording_show_name"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:gravity="end"
+            tools:text="Callsign" />
+
+        <TextView
+            android:id="@+id/recording_start_time"
+            android:layout_margin="@dimen/margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recording_show_name"
+            android:layout_toRightOf="@+id/recording_coverart"
+            android:layout_toEndOf="@+id/recording_coverart"
+            tools:text="Start Time" />
+
+        <TextView
+            android:id="@+id/recording_episode_channel_number"
+            android:layout_margin="@dimen/margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recording_show_name"
+            android:layout_toRightOf="@+id/recording_start_time"
+            android:layout_toEndOf="@+id/recording_start_time"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:gravity="end"
+            tools:text="1006" />
+
+        <ProgressBar
+            android:id="@+id/recording_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_below="@+id/recording_start_time"
+            android:layout_toRightOf="@+id/recording_coverart"
+            android:layout_toEndOf="@+id/recording_coverart"
+            android:indeterminate="true"
+            android:minHeight="10dp"
+            android:maxHeight="10dp"
+            android:minWidth="100dp"
+            android:maxWidth="100dp"
+            android:progress="0"
+            android:max="100"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/margin"
+        layout="@layout/separator" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/hsl_stream_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
+            android:checked="false"
+            android:text="@string/http_live_stream" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/watched_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
+            android:checked="false"
+            android:text="@string/watched" />
+
+    </LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/margin"
+        layout="@layout/separator" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:text="@string/recording_description_label"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+    <TextView
+        android:id="@+id/recording_description"
+        android:layout_margin="@dimen/margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Episode Description" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/margin"
+        layout="@layout/separator" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:text="@string/recording_cast_label"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+    <TableLayout
+        android:id="@+id/recording_cast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:stretchColumns="1">
+
+        <TableRow>
+
+            <TextView
+                android:text="@string/recording_cast_name"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="@android:style/TextAppearance.Medium" />
+
+            <TextView
+                android:text="@string/recording_cast_character"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="@android:style/TextAppearance.Medium" />
+
+            <TextView
+                android:text="@string/recording_cast_role"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="@android:style/TextAppearance.Medium" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <include
+        layout="@layout/view_progress" />
+
+</LinearLayout>

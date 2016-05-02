@@ -26,13 +26,6 @@ public class ProgramListPresenter extends DefaultSubscriber<List<Program>> imple
 
     private static final String TAG = ProgramListPresenter.class.getSimpleName();
 
-    private boolean descending;
-    private int startIndex;
-    private int count;
-    private String titleRegEx;
-    private String recGroup;
-    private String storageGroup;
-
     private ProgramListView viewListView;
 
     private final UseCase getProgramListUseCase;
@@ -70,15 +63,9 @@ public class ProgramListPresenter extends DefaultSubscriber<List<Program>> imple
     /**
      * Initializes the presenter by start retrieving the program list.
      */
-    public void initialize( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
+    public void initialize() {
         Log.d( TAG, "initialize : enter" );
 
-        this.descending = descending;
-        this.startIndex = startIndex;
-        this.count = count;
-        this.titleRegEx = titleRegEx;
-        this.recGroup = recGroup;
-        this.storageGroup = storageGroup;
         this.loadProgramList();
 
         Log.d( TAG, "initialize : exit" );
