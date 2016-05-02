@@ -57,7 +57,7 @@ public class VideosActivity extends AbstractBaseActivity implements HasComponent
     @Override
     public void onCategoryClicked( String category ) {
 
-        tvNavigator.navigateToVideoCategory( this, category );
+        navigator.navigateToVideoCategory( this, category );
 
     }
 
