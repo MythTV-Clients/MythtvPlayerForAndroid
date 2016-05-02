@@ -29,12 +29,12 @@ import javax.inject.Singleton;
  * Created by dmfrey on 8/30/15.
  */
 @Singleton
-public class AppNavigator {
+public class Navigator {
 
-    private static final String TAG = AppNavigator.class.getSimpleName();
+    private static final String TAG = Navigator.class.getSimpleName();
 
     @Inject
-    public AppNavigator() {
+    public Navigator() {
         //empty
     }
 
@@ -58,9 +58,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d( TAG, "navigateToTitleInfos : context != null" );
 
-            Intent intentToLaunch = TitleInfoListActivity.getCallingIntent(context);
-            intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-            context.startActivity( intentToLaunch );
+            context.startActivity( TitleInfoListActivity.getCallingIntent( context ) );
 
         }
 
@@ -73,8 +71,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d( TAG, "navigateToPrograms : context != null" );
 
-            Intent intentToLaunch = ProgramListActivity.getCallingIntent( context, descending, startIndex, count, titleRegEx, recGroup, storageGroup );
-            context.startActivity( intentToLaunch );
+            context.startActivity( ProgramListActivity.getCallingIntent( context, descending, startIndex, count, titleRegEx, recGroup, storageGroup ) );
 
         }
 
@@ -87,8 +84,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d( TAG, "navigateToProgram : context != null" );
 
-            Intent intentToLaunch = ProgramDetailsActivity.getCallingIntent( context, chanId, startTime );
-            context.startActivity( intentToLaunch );
+            context.startActivity( ProgramDetailsActivity.getCallingIntent( context, chanId, startTime ) );
 
         }
 
@@ -101,8 +97,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d( TAG, "navigateToProgramSettings : context != null" );
 
-            Intent intentToLaunch = ProgramDetailsSettingsActivity.getCallingIntent( context );
-            context.startActivity( intentToLaunch );
+            context.startActivity( ProgramDetailsSettingsActivity.getCallingIntent( context ) );
 
         }
 
@@ -115,9 +110,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d( TAG, "navigateToVideos : context != null" );
 
-            Intent intentToLaunch = VideoListActivity.getCallingIntent( context );
-            intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-            context.startActivity( intentToLaunch );
+            context.startActivity( VideoListActivity.getCallingIntent( context ) );
 
         }
 
@@ -130,8 +123,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d( TAG, "navigateToVideoSeries : context != null" );
 
-            Intent intentToLaunch = VideoSeriesListActivity.getCallingIntent( context, series );
-            context.startActivity( intentToLaunch );
+            context.startActivity( VideoSeriesListActivity.getCallingIntent( context, series ) );
 
         }
 
@@ -144,8 +136,7 @@ public class AppNavigator {
         if( null != context ) {
             Log.d(TAG, "navigateToVideo : context != null");
 
-            Intent intentToLaunch = VideoDetailsActivity.getCallingIntent( context, id );
-            context.startActivity( intentToLaunch );
+            context.startActivity( VideoDetailsActivity.getCallingIntent( context, id ) );
 
         }
 
@@ -156,10 +147,9 @@ public class AppNavigator {
         Log.d( TAG, "navigateToVideoSettings : enter" );
 
         if( null != context ) {
-            Log.d(TAG, "navigateToVideoSettings : context != null");
+            Log.d( TAG, "navigateToVideoSettings : context != null" );
 
-            Intent intentToLaunch = VideoDetailsSettingsActivity.getCallingIntent( context );
-            context.startActivity( intentToLaunch );
+            context.startActivity( VideoDetailsSettingsActivity.getCallingIntent( context ) );
 
         }
 
@@ -203,8 +193,7 @@ public class AppNavigator {
             Log.d( TAG, "navigateToVideoPlayer : context != null" );
             Log.d( TAG, "navigateToVideoPlayer : uri=" + uri );
 
-            Intent intentToLaunch = PlayerActivity.getCallingIntent( context, uri );
-            context.startActivity( intentToLaunch );
+            context.startActivity( PlayerActivity.getCallingIntent( context, uri ) );
 
         }
 
@@ -218,7 +207,6 @@ public class AppNavigator {
             Log.d( TAG, "navigateToSettings : context != null" );
 
             Intent intentToLaunch = SettingsActivity.getCallingIntent( context );
-            intentToLaunch.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
             context.startActivity( intentToLaunch );
 
         }
