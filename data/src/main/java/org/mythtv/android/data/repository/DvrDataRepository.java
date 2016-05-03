@@ -168,7 +168,7 @@ public class DvrDataRepository implements DvrRepository {
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<List<Program>> recent() {
-        Log.d( TAG, "encoders : enter" );
+        Log.d( TAG, "recent : enter" );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
