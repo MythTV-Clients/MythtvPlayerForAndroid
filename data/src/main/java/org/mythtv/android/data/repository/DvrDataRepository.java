@@ -168,39 +168,13 @@ public class DvrDataRepository implements DvrRepository {
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<List<Program>> recent() {
+        Log.d( TAG, "recent : enter" );
+
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
-        final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
-        Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null )
+        return dvrDataStore.recordedProgramEntityList( true, 1, 10, null, null, null )
                 .flatMap( Observable::from )
-//                .filter( programEntity -> !programEntity.getRecording().getRecGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) )
-                .take( 10 )
-                .toList();
-        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList( null );
-
-        Observable<List<ProgramEntity>> recordedProgramEntityList = Observable.zip( programEntities, liveStreamInfoEntities, ( programEntityList, liveStreamInfoEntityList ) -> {
-
-            if( null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty() ) {
-
-                for( ProgramEntity programEntity : programEntityList ) {
-
-                    for( LiveStreamInfoEntity liveStreamInfoEntity : liveStreamInfoEntityList ) {
-
-                        if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
-
-                            programEntity.setLiveStreamInfoEntity( liveStreamInfoEntityList.get( 0 ) );
-
-                        }
-
-                    }
-
-                }
-            }
-
-            return programEntityList;
-        });
-
-        return recordedProgramEntityList
+                .toList()
                 .doOnError( throwable -> Log.e( TAG, "recent : error", throwable ) )
                 .map( recordedProgramEntities -> ProgramEntityDataMapper.transform( recordedProgramEntities ) );
     }
