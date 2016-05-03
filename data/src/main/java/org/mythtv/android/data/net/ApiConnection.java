@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
 import okhttp3.Cache;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -148,7 +150,8 @@ public class ApiConnection implements Callable<String> {
         final OkHttpClient.Builder okHttpClient =
                 new OkHttpClient.Builder()
                     .readTimeout( readTimeout, TimeUnit.MILLISECONDS )
-                    .connectTimeout( connectTimeout, TimeUnit.MILLISECONDS );
+                    .connectTimeout( connectTimeout, TimeUnit.MILLISECONDS )
+                    .addNetworkInterceptor( new StethoInterceptor() );
 
         final File baseDir = context.getCacheDir();
         if( null != baseDir ) {
