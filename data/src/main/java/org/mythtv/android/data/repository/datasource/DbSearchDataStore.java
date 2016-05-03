@@ -34,12 +34,13 @@ public class DbSearchDataStore implements SearchDataStore {
 
     @Override
     public Observable<List<SearchResultEntity>> search( String searchString ) {
-        Log.d( TAG, "search : enter - searchString=" + searchString );
+        Log.d( TAG, "search : enter" );
 
         searchString = "*" + searchString + "*";
         searchString = searchString.replaceAll( " ", "*" );
 
         final String query = searchString;
+        Log.d( TAG, "search : query=" + query );
 
         return Observable.create( new Observable.OnSubscribe<List<SearchResultEntity>>() {
 

@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.mythtv.android.tv.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.tv.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.tv.internal.di.components.DvrComponent;
-import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.tv.view.fragment.RecordingsFragment;
 
 public class RecordingsActivity extends AbstractBaseActivity implements HasComponent<DvrComponent>, RecordingsFragment.ProgramListListener {
@@ -56,8 +55,12 @@ public class RecordingsActivity extends AbstractBaseActivity implements HasCompo
     }
 
     @Override
-    public void onProgramClicked( ProgramModel programModel ) {
+    public void onSearchClicked() {
+        Log.d( TAG, "onSearchClicked : enter" );
 
+        navigator.navigateToSearch( this );
+
+        Log.d( TAG, "onSearchClicked : exit" );
     }
 
 }

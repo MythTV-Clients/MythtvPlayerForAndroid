@@ -52,7 +52,7 @@ public abstract class AbstractBaseActivity extends Activity {
     /**
      * Get the Main Application component for dependency injection.
      *
-     * @return {@link org.mythtv.android.presentation.internal.di.components.ApplicationComponent}
+     * @return {@link org.mythtv.android.tv.internal.di.components.ApplicationComponent}
      */
     protected ApplicationComponent getApplicationComponent() {
 
@@ -62,7 +62,7 @@ public abstract class AbstractBaseActivity extends Activity {
     /**
      * Get an Activity module for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.ActivityModule}
+     * @return {@link org.mythtv.android.tv.internal.di.modules.ActivityModule}
      */
     protected ActivityModule getActivityModule() {
 
@@ -72,7 +72,7 @@ public abstract class AbstractBaseActivity extends Activity {
     /**
      * Get a SharedPreferences module for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.SharedPreferencesModule}
+     * @return {@link org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule}
      */
     protected SharedPreferencesModule getSharedPreferencesModule() {
 

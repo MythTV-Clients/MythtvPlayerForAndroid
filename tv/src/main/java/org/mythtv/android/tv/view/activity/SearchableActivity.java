@@ -1,6 +1,7 @@
 package org.mythtv.android.tv.view.activity;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
@@ -24,6 +25,11 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
     private static final String TAG = SearchableActivity.class.getSimpleName();
 
     private static final String INSTANCE_STATE_PARAM_SEARCH_TEXT = "org.mythtv.android.STATE_PARAM_SEARCH_TEXT";
+
+    public static Intent getCallingIntent( Context context ) {
+
+        return new Intent( context, SearchableActivity.class );
+    }
 
     private String searchText;
     private SearchComponent searchComponent;

@@ -335,17 +335,16 @@ public class VideoMovieFragment extends AbstractBaseVideoFragment implements Vid
     private void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
-//        setOnSearchClickedListener( new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick( View view ) {
-//
-//                Intent intent = new Intent( getActivity(), SearchableActivity.class );
-//                startActivity( intent );
-//
-//            }
-//
-//        });
+        setOnSearchClickedListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick( View view ) {
+
+                VideoMovieFragment.this.listener.onSearchClicked();
+
+            }
+
+        });
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
         setOnItemViewSelectedListener( new ItemViewSelectedListener() );

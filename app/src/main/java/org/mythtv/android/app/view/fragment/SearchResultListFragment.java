@@ -98,9 +98,6 @@ public class SearchResultListFragment extends AbstractBaseFragment implements Se
         ButterKnife.bind( this, fragmentView );
         setupUI();
 
-        fastScroller.setRecyclerView( rv_searchResults );
-        rv_searchResults.addOnScrollListener( fastScroller.getOnScrollListener() );
-
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
     }
@@ -175,11 +172,14 @@ public class SearchResultListFragment extends AbstractBaseFragment implements Se
         Log.d( TAG, "setupUI : enter" );
 
         SearchResultsLayoutManager searchResultsLayoutManager = new SearchResultsLayoutManager(getActivity());
-        this.rv_searchResults.setLayoutManager(searchResultsLayoutManager);
+        this.rv_searchResults.setLayoutManager( searchResultsLayoutManager );
 
         this.searchResultsAdapter = new SearchResultsAdapter( getActivity(), new ArrayList<SearchResultModel>() );
         this.searchResultsAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_searchResults.setAdapter( searchResultsAdapter );
+
+        fastScroller.setRecyclerView( rv_searchResults );
+        rv_searchResults.addOnScrollListener( fastScroller.getOnScrollListener() );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -223,6 +223,7 @@ public class SearchResultListFragment extends AbstractBaseFragment implements Se
         Log.d( TAG, "renderSearchResultList : enter" );
 
         if( null != searchResultModelCollection ) {
+            Log.d( TAG, "renderSearchResultList : searchResultModelCollection is not null" );
 
             this.searchResultsAdapter.setSearchResultsCollection( searchResultModelCollection );
 

@@ -41,6 +41,7 @@ import org.mythtv.android.presentation.presenter.ProgramListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.ProgramListView;
 import org.mythtv.android.tv.view.activity.RecordingsDetailsActivity;
+import org.mythtv.android.tv.view.activity.SearchableActivity;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -80,14 +81,14 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
      */
     public interface ProgramListListener {
 
-        void onProgramClicked( final ProgramModel programModel );
+        void onSearchClicked();
 
     }
 
     @Inject
     ProgramListPresenter programListPresenter;
 
-    private ProgramListListener programListListener;
+    private ProgramListListener listener;
 
     public RecordingsFragment() {
         super();
@@ -104,7 +105,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
         Log.d( TAG, "onAttach : enter" );
 
         if( activity instanceof ProgramListListener ) {
-            this.programListListener = (ProgramListListener) activity;
+            this.listener = (ProgramListListener) activity;
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -366,17 +367,16 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
     private void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
-//        setOnSearchClickedListener( new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick( View view ) {
-//
-//                Intent intent = new Intent( getActivity(), SearchableActivity.class );
-//                startActivity( intent );
-//
-//            }
-//
-//        });
+        setOnSearchClickedListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick( View view ) {
+
+                RecordingsFragment.this.listener.onSearchClicked();
+
+            }
+
+        });
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
         setOnItemViewSelectedListener( new ItemViewSelectedListener() );
