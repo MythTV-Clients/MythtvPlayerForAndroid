@@ -376,7 +376,7 @@ public class DvrApiImpl implements DvrApi {
         if( count != -1 ) {
 
             sb.append( "&" );
-            sb.append( String.format( COUNT_QS, startIndex ) );
+            sb.append( String.format( COUNT_QS, count ) );
 
         }
 
@@ -438,7 +438,7 @@ public class DvrApiImpl implements DvrApi {
         if( count != -1 ) {
 
             sb.append( "&" );
-            sb.append( String.format( COUNT_QS, startIndex ) );
+            sb.append( String.format( COUNT_QS, count ) );
 
         }
 
