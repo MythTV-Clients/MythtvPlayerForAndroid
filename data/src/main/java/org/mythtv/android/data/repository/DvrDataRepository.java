@@ -172,7 +172,7 @@ public class DvrDataRepository implements DvrRepository {
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
-        return dvrDataStore.recordedProgramEntityList( true, 1, 10, null, null, null )
+        return dvrDataStore.recordedProgramEntityList( true, 1, 10, null, null, "Default" )
                 .flatMap( Observable::from )
                 .toList()
                 .doOnError( throwable -> Log.e( TAG, "recent : error", throwable ) )
