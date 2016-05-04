@@ -244,7 +244,7 @@ public class VideoApiImpl implements VideoApi {
 
         }
 
-        return ApiConnection.create( sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String getVideoDetailsFromApi( int id ) throws MalformedURLException {
@@ -255,7 +255,7 @@ public class VideoApiImpl implements VideoApi {
         sb.append( String.format( ID_QS, id ) );
         Log.d( TAG, "getVideoDetailsFromApi : url=" + sb.toString() );
 
-        return ApiConnection.create( sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String postUpdateWatchedStatus( final int videoId, final boolean watched ) throws MalformedURLException {
@@ -265,7 +265,7 @@ public class VideoApiImpl implements VideoApi {
         parameters.put( "Watched", String.valueOf( watched ) );
 
         Log.i( TAG, "postUpdateRecordingWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL ) );
-        return ApiConnection.create( getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall( parameters );
+        return ApiConnection.create( context, getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall( parameters );
     }
 
     private boolean isThereInternetConnection() {

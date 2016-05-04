@@ -126,7 +126,7 @@ public class ProgramDetailsPresenter implements Presenter {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put( "CHAN_ID", this.programModel.getChannel().getChanId() );
-        parameters.put( "START_TIME", this.programModel.getStartTime() );
+        parameters.put( "START_TIME", this.programModel.getRecording().getStartTs() );
         parameters.put( "WATCHED", !watchedStatus );
 
         this.hideViewRetry();

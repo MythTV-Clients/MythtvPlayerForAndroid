@@ -57,9 +57,7 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
 
     @Override
     public int getItemCount() {
-        Log.d( TAG, "getItemCount : enter" );
 
-        Log.d( TAG, "getItemCount : exit" );
         return ( null != this.titleInfosCollection ) ? this.titleInfosCollection.size() : 0;
     }
 

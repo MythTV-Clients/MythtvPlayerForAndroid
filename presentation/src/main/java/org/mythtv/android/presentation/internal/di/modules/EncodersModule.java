@@ -20,7 +20,7 @@ public class EncodersModule {
     @Provides
     @PerActivity
     @Named( "encoderList" )
-    UseCase provideEncoderListUseCase(GetEncoderList getEncoderList ) {
+    UseCase provideEncoderListUseCase( GetEncoderList getEncoderList ) {
 
         return getEncoderList;
     }

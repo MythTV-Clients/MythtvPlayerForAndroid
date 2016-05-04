@@ -83,6 +83,8 @@ dependencies {
     compile dataDependencies.rxJava
     compile dataDependencies.rxAndroid
     compile dataDependencies.androidAnnotations
+    compile dataDependencies.stetho
+    compile dataDependencies.stethoOkhttp
 
     testCompile testDependencies.androidAnnotations
     testCompile testDependencies.assertj

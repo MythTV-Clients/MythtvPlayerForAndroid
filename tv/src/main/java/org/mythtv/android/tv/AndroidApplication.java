@@ -2,6 +2,8 @@ package org.mythtv.android.tv;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.tv.internal.di.components.ApplicationComponent;
 import org.mythtv.android.tv.internal.di.components.DaggerApplicationComponent;
@@ -21,6 +23,8 @@ public class AndroidApplication extends Application {
 
         super.onCreate();
         this.initializeInjector();
+
+        Stetho.initializeWithDefaults( this );
 
     }
 
