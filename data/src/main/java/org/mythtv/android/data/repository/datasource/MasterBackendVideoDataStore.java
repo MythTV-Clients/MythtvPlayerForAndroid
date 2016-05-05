@@ -29,7 +29,9 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
             videoMetadataInfoEntities -> {
 
                 if( null != videoMetadataInfoEntities ) {
+
                     MasterBackendVideoDataStore.this.videoCache.put( videoMetadataInfoEntities );
+
                 }
 
             };
@@ -50,7 +52,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
             };
 
-    public MasterBackendVideoDataStore(VideoApi api, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
+    public MasterBackendVideoDataStore( VideoApi api, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
 
         this.api = api;
         this.videoCache = videoCache;

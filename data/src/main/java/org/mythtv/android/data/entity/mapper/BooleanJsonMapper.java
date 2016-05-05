@@ -26,7 +26,7 @@ public class BooleanJsonMapper {
 
     public Boolean transformBoolean( String booleanJsonResponse ) throws JsonSyntaxException {
 
-        Log.i( TAG, "transformBoolean : booleanJsonResponse=" + booleanJsonResponse );
+//        Log.i( TAG, "transformBoolean : booleanJsonResponse=" + booleanJsonResponse );
         JsonObject rootObject = parser.parse( booleanJsonResponse ).getAsJsonObject();
 
         return rootObject.get( "bool" ).getAsBoolean();

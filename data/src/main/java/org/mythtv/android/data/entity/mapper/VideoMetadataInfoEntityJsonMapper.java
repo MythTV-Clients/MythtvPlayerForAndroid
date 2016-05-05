@@ -47,9 +47,9 @@ public class VideoMetadataInfoEntityJsonMapper {
     }
 
     public VideoMetadataInfoEntity transformVideoMetadataInfoEntity( String videoMetadataInfoJsonResponse ) throws JsonSyntaxException {
-        Log.d( TAG, "transformVideoMetadataInfoEntity : enter" );
+//        Log.d( TAG, "transformVideoMetadataInfoEntity : enter" );
 
-        Log.d( TAG, "transformVideoMetadataInfoEntity : videoMetadataInfoJsonResponse=" + videoMetadataInfoJsonResponse );
+//        Log.d( TAG, "transformVideoMetadataInfoEntity : videoMetadataInfoJsonResponse=" + videoMetadataInfoJsonResponse );
         Type videoMetadataInfoWrapperEntityType = new TypeToken<VideoMetadataInfoWrapperEntity>() {}.getType();
         VideoMetadataInfoWrapperEntity videoMetadataInfoWrapperEntity = this.gson.fromJson( videoMetadataInfoJsonResponse, videoMetadataInfoWrapperEntityType );
 

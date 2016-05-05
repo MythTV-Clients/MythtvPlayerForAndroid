@@ -99,10 +99,10 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
     private void initializeActivity( Intent intent ) {
         Log.d( TAG, "initializeActivity : enter" );
 
-        mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
         if( null == intent  ) {
             Log.d( TAG, "initializeActivity : intent == null" );
 
+            mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
             addFragment( R.id.fl_fragment, mSearchableFragment );
 
         } else {
@@ -114,6 +114,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions( this, MythtvSearchSuggestionProvider.AUTHORITY, MythtvSearchSuggestionProvider.MODE );
             suggestions.saveRecentQuery( searchText, null );
 
+            mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
             addFragment( R.id.fl_fragment, mSearchableFragment );
 
         }

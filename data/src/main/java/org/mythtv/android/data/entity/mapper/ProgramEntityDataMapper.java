@@ -62,7 +62,7 @@ public class ProgramEntityDataMapper {
             }
 
             if( null != programEntity.getRecording() ) {
-                Log.i( TAG, "transform : recording=" + programEntity.getRecording() );
+//                Log.i( TAG, "transform : recording=" + programEntity.getRecording() );
 
                 program.setRecording( RecordingInfoEntityDataMapper.transform( programEntity.getRecording() ) );
 

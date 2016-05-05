@@ -2,11 +2,13 @@ package org.mythtv.android.tv.view.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.SearchFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
+import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.ObjectAdapter;
@@ -14,6 +16,8 @@ import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.mythtv.android.domain.SearchResult;
@@ -25,6 +29,8 @@ import org.mythtv.android.presentation.view.SearchResultListView;
 import org.mythtv.android.tv.R;
 import org.mythtv.android.tv.internal.di.components.SearchComponent;
 import org.mythtv.android.tv.presenter.CardPresenter;
+import org.mythtv.android.tv.view.activity.RecordingsDetailsActivity;
+import org.mythtv.android.tv.view.activity.VideoDetailsActivity;
 
 import java.util.Collection;
 
@@ -306,8 +312,13 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
     public boolean onQueryTextChange( String newQuery ) {
         Log.d( TAG, "onQueryTextChange : enter" );
 
-        this.searchText = newQuery;
-        this.loadSearchResultList();
+        if( !TextUtils.isEmpty( newQuery ) && newQuery.length() > 3 ) {
+            Log.d( TAG, "onQueryTextChange : newQuery is not empty and length is greater than 3" );
+
+            this.searchText = newQuery;
+            this.loadSearchResultList();
+
+        }
 
         Log.d( TAG, "onQueryTextChange : exit" );
         return true;
@@ -317,8 +328,13 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
     public boolean onQueryTextSubmit( String query ) {
         Log.d( TAG, "onQueryTextSubmit : enter" );
 
-        this.searchText = query;
-        this.loadSearchResultList();
+        if( !TextUtils.isEmpty( query ) && query.length() > 3 ) {
+            Log.d( TAG, "onQueryTextSubmit : query is not empty and length is greater than 3" );
+
+            this.searchText = query;
+            this.loadSearchResultList();
+
+        }
 
         Log.d( TAG, "onQueryTextSubmit : exit" );
         return true;
@@ -332,31 +348,31 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
             if( item instanceof ProgramModel ) {
 
                 ProgramModel programModel = (ProgramModel) item;
-                Log.d( TAG, "Program: " + item.toString() );
+//                Log.d( TAG, "Program: " + item.toString() );
 
-//                Intent intent = new Intent( getActivity(), RecordingDetailsActivity.class );
-//                intent.putExtra( RecordingDetailsFragment.PROGRAM_KEY, program );
-//                startActivity( intent );
+                Intent intent = new Intent( getActivity(), RecordingsDetailsActivity.class );
+                intent.putExtra( RecordingsDetailsActivity.PROGRAM, programModel );
+
+                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+                        RecordingsDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
+
+                getActivity().startActivity( intent, bundle );
 
             } else {
 
                 VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
 
-//                if( "MOVIE".equals( video.getContentType() ) ) {
-//                    Log.d( TAG, "Video: " + video.toString() );
-//
-//                    Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
-//                    intent.putExtra( VideoDetailsFragment.VIDEO, video );
-//                    startActivity( intent );
-//
-//                } else {
-//                    Log.d( TAG, "Video: " + video.toString() );
-//
-//                    Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
-//                    intent.putExtra( VideoDetailsFragment.VIDEO, video );
-//                    startActivity( intent );
-//
-//                }
+                Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
+                intent.putExtra( VideoDetailsActivity.VIDEO, videoMetadataInfoModel );
+
+                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        ( (ImageCardView) itemViewHolder.view ).getMainImageView(),
+                        VideoDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
+
+                getActivity().startActivity( intent, bundle );
 
             }
 

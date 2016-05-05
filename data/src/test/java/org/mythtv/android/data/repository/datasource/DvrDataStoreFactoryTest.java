@@ -29,11 +29,14 @@ public class DvrDataStoreFactoryTest extends ApplicationTestCase {
     @Mock
     private ProgramCache mockProgramCache;
 
+    @Mock
+    private SearchDataStoreFactory mockSearchDataStoreFactory;
+
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataStoreFactory = new DvrDataStoreFactory( RuntimeEnvironment.application, mockProgramCache );
+        dvrDataStoreFactory = new DvrDataStoreFactory( RuntimeEnvironment.application, mockProgramCache, mockSearchDataStoreFactory );
 
     }
 
