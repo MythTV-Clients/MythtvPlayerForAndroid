@@ -81,7 +81,8 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
         Log.d( TAG, "titleInfoEntityList : enter" );
 
         return this.api.titleInfoEntityList()
-                .doOnNext( removeStaleTitleInfosDbAction );
+                .doOnNext( removeStaleTitleInfosDbAction )
+                .doOnError( e -> Log.e( TAG, "titleInfoEntityList : error", e ) );
     }
 
     @Override
@@ -96,7 +97,8 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
                 .flatMap( Observable::from )
                 .filter( programEntity -> !programEntity.getRecording().getRecGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) || "Deleted".equalsIgnoreCase( programEntity.getRecording().getRecGroup() ) )
                 .toList()
-                .doOnNext( saveRecordedProgramsToDbAction );
+                .doOnNext( saveRecordedProgramsToDbAction )
+                .doOnError( e -> Log.e( TAG, "recordedProgramEntityList : error", e ) );
     }
 
     @Override
@@ -106,7 +108,8 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
         Log.d( TAG, "recordedProgramEntityList : chanId=" + chanId + ", startTime=" + startTime );
 
         return this.api.recordedProgramById( chanId, startTime )
-                .doOnNext( saveToCacheAction );
+                .doOnNext( saveToCacheAction )
+                .doOnError( e -> Log.e( TAG, "recordedProgramEntityList : error", e ) );
     }
 
     @Override
