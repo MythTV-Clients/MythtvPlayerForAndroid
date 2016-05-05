@@ -25,18 +25,20 @@ public class DvrDataStoreFactory {
 
     private final Context context;
     private final ProgramCache recordedProgramCache;
+    private final SearchDataStoreFactory searchDataStoreFactory;
 
     @Inject
-    public DvrDataStoreFactory( Context context, ProgramCache recordedProgramCache ) {
+    public DvrDataStoreFactory( Context context, ProgramCache recordedProgramCache, SearchDataStoreFactory searchDataStoreFactory ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == context || null == recordedProgramCache ) {
+        if( null == context || null == recordedProgramCache || null == searchDataStoreFactory ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
         this.context = context.getApplicationContext();
         this.recordedProgramCache = recordedProgramCache;
+        this.searchDataStoreFactory = searchDataStoreFactory;
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -72,7 +74,7 @@ public class DvrDataStoreFactory {
         DvrApi api = new DvrApiImpl( this.context, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
-        return new MasterBackendDvrDataStore( api, this.recordedProgramCache );
+        return new MasterBackendDvrDataStore( api, this.recordedProgramCache, this.searchDataStoreFactory );
     }
 
 }

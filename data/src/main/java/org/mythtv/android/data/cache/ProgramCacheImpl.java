@@ -108,7 +108,7 @@ public class ProgramCacheImpl implements ProgramCache {
             if( !isCached( programEntity.getChannel().getChanId(), programEntity.getRecording().getStartTs() ) ) {
 
                 String jsonString = this.serializer.serialize( programEntity );
-                this.executeAsynchronously(new CacheWriter( this.fileManager, programEntityFile, jsonString ) );
+                this.executeAsynchronously( new CacheWriter( this.fileManager, programEntityFile, jsonString ) );
                 setLastCacheUpdateTimeMillis();
 
             }

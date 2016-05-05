@@ -26,6 +26,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by dmfrey on 8/27/15.
@@ -54,34 +56,23 @@ public class DvrDataRepository implements DvrRepository {
         Log.d( TAG, "titleInfos : enter" );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
-        final SearchDataStore searchDataStore = this.searchDataStoreFactory.createWriteSearchDataStore();
+//        final SearchDataStore searchDataStore = this.searchDataStoreFactory.createWriteSearchDataStore();
 
-        return dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null )
-//                .subscribeOn( Schedulers.io() )
-//                .observeOn( AndroidSchedulers.mainThread() )
+        return dvrDataStore.titleInfoEntityList()
                 .doOnError( throwable -> Log.e( TAG, "titleInfos : error", throwable ) )
-//                .flatMap( Observable::from )
-//                .filter( programEntity -> !programEntity.getRecording().getRecGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) )
-//                .toList()
-                .map( recordedProgramEntities -> SearchResultEntityDataMapper.transformPrograms( recordedProgramEntities ) )
-                .doOnNext( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) )
-                .flatMap( searchResultEntities -> dvrDataStore.titleInfoEntityList() )
                 .map( titleInfoEntities -> TitleInfoEntityDataMapper.transform( titleInfoEntities ) );
-
-//        return dvrDataStore.titleInfoEntityList()
-//                .map( titleInfoEntities -> TitleInfoEntityDataMapper.transform( titleInfoEntities ) )
-//                .doOnError( throwable -> Log.e( TAG, "titleInfos : error", throwable ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
     public Observable<List<Program>> recordedPrograms( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
         Log.d( TAG, "recordedPrograms : enter" );
+
         Log.d( TAG, "recordedPrograms : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
-        final SearchDataStore searchDataStore = this.searchDataStoreFactory.createWriteSearchDataStore();
+//        final SearchDataStore searchDataStore = this.searchDataStoreFactory.createWriteSearchDataStore();
 
         Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup )
                 .flatMap( Observable::from )
@@ -111,12 +102,16 @@ public class DvrDataRepository implements DvrRepository {
             return programEntityList;
         });
 
-        programEntities
-                .flatMap( Observable::from )
-                .filter( programEntity -> !programEntity.getRecording().getRecGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) )
-                .toList()
-                .map( recordedProgramEntities -> SearchResultEntityDataMapper.transformPrograms( recordedProgramEntities ) )
-                .doOnNext( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) );
+//        programEntities
+//                .subscribeOn( Schedulers.newThread() )
+//                .observeOn( AndroidSchedulers.mainThread() )
+//                .doOnError( throwable -> Log.e( TAG, "recordedPrograms : error", throwable ) )
+//                .flatMap( Observable::from )
+//                .filter( programEntity -> !programEntity.getRecording().getRecGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) )
+//                .toList()
+//                .map( recordedProgramEntities -> SearchResultEntityDataMapper.transformPrograms( recordedProgramEntities ) )
+//                .doOnNext( searchResultEntities -> searchDataStore.refreshRecordedProgramData( searchResultEntities ) )
+//                .subscribe();
 
         return recordedProgramEntityList
                 .doOnError( throwable -> Log.e( TAG, "recordedPrograms : error", throwable ) )
@@ -127,6 +122,7 @@ public class DvrDataRepository implements DvrRepository {
     @Override
     public Observable<Program> recordedProgram( int chanId, DateTime startTime ) {
         Log.d( TAG, "recordedProgram : enter" );
+
         Log.d( TAG, "recordedProgram : chanId=" + chanId + ", startTime=" + startTime );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();

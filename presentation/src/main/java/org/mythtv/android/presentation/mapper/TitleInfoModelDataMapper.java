@@ -25,7 +25,7 @@ public class TitleInfoModelDataMapper {
     }
 
     public TitleInfoModel transform( TitleInfo titleInfo ) {
-        Log.d( TAG, "transform : enter" );
+//        Log.d( TAG, "transform : enter" );
 
         TitleInfoModel titleInfoModel = null;
         if( null != titleInfo ) {
@@ -37,13 +37,13 @@ public class TitleInfoModelDataMapper {
 
         }
 
-        Log.d( TAG, "transform : titleInfoModle=" + titleInfoModel );
-        Log.d( TAG, "transform : exit" );
+//        Log.d( TAG, "transform : titleInfoModle=" + titleInfoModel );
+//        Log.d( TAG, "transform : exit" );
         return titleInfoModel;
     }
 
     public List<TitleInfoModel> transform( Collection<TitleInfo> titleInfoCollection ) {
-        Log.d( TAG, "transform : enter" );
+//        Log.d( TAG, "transform : enter" );
 
         List<TitleInfoModel> titleInfoModelList = new ArrayList<>( titleInfoCollection.size() );
 
@@ -52,7 +52,7 @@ public class TitleInfoModelDataMapper {
 
             titleInfoModel = transform( titleInfo );
             if( null != titleInfoModel ) {
-                Log.d( TAG, "transform : titleInfoModel is not null" );
+//                Log.d( TAG, "transform : titleInfoModel is not null" );
 
                 titleInfoModelList.add( titleInfoModel );
 
@@ -60,7 +60,7 @@ public class TitleInfoModelDataMapper {
 
         }
 
-        Log.d( TAG, "transform : exit" );
+//        Log.d( TAG, "transform : exit" );
         return titleInfoModelList;
     }
 

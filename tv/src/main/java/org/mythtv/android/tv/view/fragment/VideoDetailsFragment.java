@@ -104,7 +104,7 @@ public class VideoDetailsFragment extends AbstractBaseDetailsFragment {
         } else {
 
             Intent intent = new Intent( getActivity(), VideosActivity.class );
-            startActivity(intent);
+            startActivity( intent );
 
         }
 

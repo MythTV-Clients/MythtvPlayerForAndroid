@@ -45,7 +45,7 @@ public class ProgramModelDataMapper {
             throw new IllegalArgumentException( "Cannot transform a null value" );
         }
 
-        Log.i( TAG, "transform : program=" + program.toString() );
+//        Log.i( TAG, "transform : program=" + program.toString() );
 
         ProgramModel programModel = new ProgramModel();
         programModel.setStartTime( program.getStartTime() );
@@ -105,7 +105,7 @@ public class ProgramModelDataMapper {
         if( null != program.getRecording() ) {
 
             RecordingInfo recordingInfo = program.getRecording();
-            Log.i( TAG, "transform : recordingInfo=" + recordingInfo.toString() );
+//            Log.i( TAG, "transform : recordingInfo=" + recordingInfo.toString() );
 
             RecordingInfoModel recordingInfoModel = new RecordingInfoModel();
             recordingInfoModel.setRecordedId( recordingInfo.getRecordedId() );
@@ -124,7 +124,7 @@ public class ProgramModelDataMapper {
             recordingInfoModel.setEncoderName( recordingInfo.getEncoderName() );
             recordingInfoModel.setProfile( recordingInfo.getProfile() );
             programModel.setRecording( recordingInfoModel );
-            Log.i( TAG, " transform : programModel.getRecording=" + programModel.getRecording().toString() );
+//            Log.i( TAG, " transform : programModel.getRecording=" + programModel.getRecording().toString() );
 
         }
 

@@ -48,7 +48,7 @@ public class EncoderEntityJsonMapper {
 
     public EncoderEntity transformEncoderEntity(String encoderJsonResponse ) throws JsonSyntaxException {
 
-        Log.i( TAG, "transformEncoderEntity : encoderJsonResponse=" + encoderJsonResponse );
+//        Log.i( TAG, "transformEncoderEntity : encoderJsonResponse=" + encoderJsonResponse );
         Type encoderWrapperEntityType = new TypeToken<EncoderWrapperEntity>() {}.getType();
         EncoderWrapperEntity encoderWrapperEntity = this.gson.fromJson( encoderJsonResponse, encoderWrapperEntityType );
 
@@ -57,10 +57,10 @@ public class EncoderEntityJsonMapper {
 
     public List<EncoderEntity> transformEncoderEntityCollection( String encoderListJsonResponse ) throws JsonSyntaxException {
 
-        Log.i( TAG, "transformEncoderEntityCollection : " + encoderListJsonResponse );
+//        Log.i( TAG, "transformEncoderEntityCollection : " + encoderListJsonResponse );
         Type encoderListEntityType = new TypeToken<EncoderListEntity>() {}.getType();
         EncoderListEntity encoderListEntity = this.gson.fromJson( encoderListJsonResponse, encoderListEntityType );
-        Log.i( TAG, "transformEncoderEntityCollection : encoderListJsonResponse=" + encoderListEntity.toString() );
+//        Log.i( TAG, "transformEncoderEntityCollection : encoderListJsonResponse=" + encoderListEntity.toString() );
 
         return Arrays.asList( encoderListEntity.getEncoders().getEncoders() );
     }

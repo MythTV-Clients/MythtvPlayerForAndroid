@@ -110,7 +110,9 @@ public class ApiConnection implements Callable<String> {
         try {
 
             this.response = okHttpClient.newCall( request ).execute().body().string();
-            Log.d( TAG, "connectToApi : response=" + this.response );
+
+//            Logging my be causes of OutOfMemory
+//            Log.d( TAG, "connectToApi : response=" + this.response );
 
         } catch( IOException e ) {
 
