@@ -49,6 +49,12 @@
             android:icon="@drawable/navigation_drawer_settings"
             android:title="@string/drawer_item_preferences" />
 
+        <item
+            android:id="@+id/navigation_item_about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/drawer_item_about"
+            android:checkable="false" />
+
     </group>
 
 </menu>

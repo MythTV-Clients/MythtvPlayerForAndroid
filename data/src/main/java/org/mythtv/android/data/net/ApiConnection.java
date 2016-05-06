@@ -1,12 +1,17 @@
 package org.mythtv.android.data.net;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
+import okhttp3.Cache;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,21 +32,25 @@ public class ApiConnection implements Callable<String> {
     private static final String ACCEPT_LABEL = "Accept";
     private static final String ACCEPT_VALUE_JSON = "application/json";
 
+    private static final int HTTP_RESPONSE_DISK_CACHE_MAX_SIZE = 20 * 1024 * 1024;
+
+    private Context context;
     private URL url;
     private int readTimeout, connectTimeout;
     private String response;
 
-    private ApiConnection( String url, int readTimeout, int connectTimeout ) throws MalformedURLException {
+    private ApiConnection( Context context, String url, int readTimeout, int connectTimeout ) throws MalformedURLException {
 
+        this.context = context;
         this.url = new URL( url );
         this.readTimeout = readTimeout;
         this.connectTimeout = connectTimeout;
 
     }
 
-    public static ApiConnection create( String url, int readTimeout, int connectTimeout ) throws MalformedURLException {
+    public static ApiConnection create( Context context, String url, int readTimeout, int connectTimeout ) throws MalformedURLException {
 
-        return new ApiConnection( url, readTimeout, connectTimeout );
+        return new ApiConnection( context, url, readTimeout, connectTimeout );
     }
 
     /**
@@ -124,7 +133,9 @@ public class ApiConnection implements Callable<String> {
         try {
 
             this.response = okHttpClient.newCall( request ).execute().body().string();
-            Log.d( TAG, "connectToApi : response=" + this.response );
+
+//            Logging my be causes of OutOfMemory
+//            Log.d( TAG, "connectToApi : response=" + this.response );
 
         } catch( IOException e ) {
 
@@ -136,13 +147,21 @@ public class ApiConnection implements Callable<String> {
 
     private OkHttpClient createClient() {
 
-        final OkHttpClient okHttpClient =
+        final OkHttpClient.Builder okHttpClient =
                 new OkHttpClient.Builder()
                     .readTimeout( readTimeout, TimeUnit.MILLISECONDS )
                     .connectTimeout( connectTimeout, TimeUnit.MILLISECONDS )
-                    .build();
+                    .addNetworkInterceptor( new StethoInterceptor() );
 
-        return okHttpClient;
+        final File baseDir = context.getCacheDir();
+        if( null != baseDir ) {
+
+            final File cacheDir = new File( baseDir, "HttpResponseCache" );
+            okHttpClient.cache( new Cache( cacheDir, HTTP_RESPONSE_DISK_CACHE_MAX_SIZE ) );
+
+        }
+
+        return okHttpClient.build();
     }
 
     @Override

@@ -64,7 +64,8 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
-        Log.i( TAG, "Current tag: " + BuildConfig.APPLICATION_TAG + ", Commit: " + BuildConfig.APPLICATION_SHA1 );
+        Log.i( TAG, "Branch: " + BuildConfig.APPLICATION_BRANCH + ", Tag: " + BuildConfig.APPLICATION_TAG + ", Commit: " + BuildConfig.APPLICATION_SHA1 );
+
 
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
