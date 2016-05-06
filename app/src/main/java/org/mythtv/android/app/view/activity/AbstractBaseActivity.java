@@ -3,6 +3,7 @@ package org.mythtv.android.app.view.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import org.mythtv.android.app.internal.di.components.ApplicationComponent;
 import org.mythtv.android.app.internal.di.modules.ActivityModule;
 import org.mythtv.android.app.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.app.navigation.Navigator;
+import org.mythtv.android.app.view.fragment.AboutDialogFragment;
 
 import javax.inject.Inject;
 
@@ -163,6 +165,15 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
                 Log.i( TAG, "onNavigationItemSelected : settings clicked" );
 
                 navigator.navigateToSettings( this );
+
+                return true;
+
+            case R.id.navigation_item_about :
+                Log.i( TAG, "onNavigationItemSelected : about clicked" );
+
+                FragmentManager fm = getSupportFragmentManager();
+                AboutDialogFragment fragment = new AboutDialogFragment();
+                fragment.show( fm, "About Dialog Fragment" );
 
                 return true;
         }
