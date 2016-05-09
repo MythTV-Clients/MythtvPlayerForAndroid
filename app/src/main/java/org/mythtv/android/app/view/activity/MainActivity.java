@@ -82,7 +82,7 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
-        Log.i( TAG, "Branch: " + BuildConfig.APPLICATION_BRANCH + ", Tag: " + BuildConfig.APPLICATION_TAG + ", Commit: " + BuildConfig.APPLICATION_SHA1 );
+        Log.i( TAG, "Branch: " + getResources().getString( R.string.branchName ) + ", Tag: " + getResources().getString( R.string.tagName ) + ", Commit: " + getResources().getString( R.string.shaName ) );
 
 
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );

@@ -45,10 +45,6 @@ android {
         resValue "string", "shaName", applicationSHA1
         resValue "string", "tagName", applicationTag
         resValue "string", "versionName", globalConfiguration.getAt( "androidVersionName" )
-
-        buildConfigField "String", "APPLICATION_BRANCH", '"' + applicationBranch + '"'
-        buildConfigField "String", "APPLICATION_SHA1", '"' + applicationSHA1 + '"'
-        buildConfigField "String", "APPLICATION_TAG", '"' + applicationTag + '"'
     }
 
     productFlavors {
