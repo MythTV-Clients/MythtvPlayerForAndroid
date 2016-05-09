@@ -24,6 +24,8 @@ import android.util.Log;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
+import org.mythtv.android.data.BuildConfig;
+
 import okhttp3.Cache;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -51,11 +53,7 @@ public class ApiConnection implements Callable<String> {
     private static final String ACCEPT_VALUE_JSON = "application/json";
 
     private static final String USER_AGENT_LABEL = "User-Agent";
-
-    // I can hard coode the app & version, but I'm trying to get it
-    // from the proper place.
-
-    private static final String USER_AGENT_VALUE = getContext().getString( R.string.app_name ) + getResources().getString( R.string.versionName );
+    private static final String USER_AGENT_VALUE = BuildConfig.APPLICATION_ID + "-" + BuildConfig.VERSION_NAME;
 
     private static final int HTTP_RESPONSE_DISK_CACHE_MAX_SIZE = 20 * 1024 * 1024;
 
