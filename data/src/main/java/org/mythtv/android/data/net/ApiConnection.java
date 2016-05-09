@@ -50,6 +50,13 @@ public class ApiConnection implements Callable<String> {
     private static final String ACCEPT_LABEL = "Accept";
     private static final String ACCEPT_VALUE_JSON = "application/json";
 
+    private static final String USER_AGENT_LABEL = "User-Agent";
+
+    // I can hard coode the app & version, but I'm trying to get it
+    // from the proper place.
+
+    private static final String USER_AGENT_VALUE = getContext().getString( R.string.app_name ) + getResources().getString( R.string.versionName );
+
     private static final int HTTP_RESPONSE_DISK_CACHE_MAX_SIZE = 20 * 1024 * 1024;
 
     private Context context;
@@ -121,6 +128,7 @@ public class ApiConnection implements Callable<String> {
         OkHttpClient okHttpClient = this.createClient();
         final Request request = new Request.Builder()
                 .url( this.url )
+                .header( USER_AGENT_LABEL, USER_AGENT_VALUE )
                 .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
                 .get()
                 .build();
@@ -144,6 +152,7 @@ public class ApiConnection implements Callable<String> {
         OkHttpClient okHttpClient = this.createClient();
         final Request request = new Request.Builder()
                 .url( this.url )
+                .header( USER_AGENT_LABEL, USER_AGENT_VALUE )
                 .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
                 .post( formBody )
                 .build();
