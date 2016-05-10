@@ -53,7 +53,8 @@ public class ApiConnection implements Callable<String> {
     private static final String ACCEPT_VALUE_JSON = "application/json";
 
     private static final String USER_AGENT_LABEL = "User-Agent";
-    private static final String USER_AGENT_VALUE = BuildConfig.APPLICATION_ID + "-" + BuildConfig.VERSION_NAME;
+    // Puts this in the backend log: ...(Request Header) user-agent: org.mythtv.android.data/2.0.3
+    private static final String USER_AGENT_VALUE = BuildConfig.APPLICATION_ID + "/" + BuildConfig.VERSION_NAME;
 
     private static final int HTTP_RESPONSE_DISK_CACHE_MAX_SIZE = 20 * 1024 * 1024;
 
