@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.presentation.presenter;
 
 import android.support.annotation.NonNull;
@@ -25,13 +43,6 @@ import javax.inject.Named;
 public class ProgramListPresenter extends DefaultSubscriber<List<Program>> implements Presenter {
 
     private static final String TAG = ProgramListPresenter.class.getSimpleName();
-
-    private boolean descending;
-    private int startIndex;
-    private int count;
-    private String titleRegEx;
-    private String recGroup;
-    private String storageGroup;
 
     private ProgramListView viewListView;
 
@@ -70,15 +81,9 @@ public class ProgramListPresenter extends DefaultSubscriber<List<Program>> imple
     /**
      * Initializes the presenter by start retrieving the program list.
      */
-    public void initialize( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
+    public void initialize() {
         Log.d( TAG, "initialize : enter" );
 
-        this.descending = descending;
-        this.startIndex = startIndex;
-        this.count = count;
-        this.titleRegEx = titleRegEx;
-        this.recGroup = recGroup;
-        this.storageGroup = storageGroup;
         this.loadProgramList();
 
         Log.d( TAG, "initialize : exit" );

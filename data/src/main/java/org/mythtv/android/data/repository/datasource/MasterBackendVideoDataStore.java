@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.data.repository.datasource;
 
 import android.util.Log;
@@ -21,7 +39,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
     private static final String TAG = MasterBackendVideoDataStore.class.getSimpleName();
 
-    private final VideoApi videoApi;
+    private final VideoApi api;
     private final VideoCache videoCache;
     private final SearchDataStoreFactory searchDataStoreFactory;
 
@@ -50,9 +68,9 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
             };
 
-    public MasterBackendVideoDataStore( VideoApi videoApi, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
+    public MasterBackendVideoDataStore(VideoApi api, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
 
-        this.videoApi = videoApi;
+        this.api = api;
         this.videoCache = videoCache;
         this.searchDataStoreFactory = searchDataStoreFactory;
 
@@ -64,7 +82,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getVideos : folder=" + folder + ", sort=" + sort + ", descending=" + descending + ", startIndex=" + startIndex + ", count=" + count );
 
-        Observable<List<VideoMetadataInfoEntity>> videoList = this.videoApi.getVideoList( folder, sort, descending, startIndex, count )
+        Observable<List<VideoMetadataInfoEntity>> videoList = this.api.getVideoList( folder, sort, descending, startIndex, count )
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnNext( saveVideosToCacheAction );
@@ -79,7 +97,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getCategory : category=" + category );
 
-        return this.videoApi.getVideoList( null, null, false, -1, -1 )
+        return this.api.getVideoList( null, null, false, -1, -1 )
                 .doOnNext( saveVideosToCacheAction )
                 .doOnNext( saveVideosToDbAction )
                 .flatMap( Observable::from )
@@ -95,7 +113,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getSeriesInCategory : category=" + category + ". series=" + series );
 
-        return this.videoApi.getVideoList( null, null, false, -1, -1 )
+        return this.api.getVideoList( null, null, false, -1, -1 )
                 .flatMap( Observable::from )
                 .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
                 .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle().equals( series ) )
@@ -140,7 +158,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getVideoById : id=" + id );
 
         Log.d( TAG, "getVideoById : exit" );
-        return this.videoApi.getVideoById( id )
+        return this.api.getVideoById( id )
                 .doOnNext( videoMetadataInfoEntity ->  Log.i( TAG, "getVideoById : video=" + videoMetadataInfoEntity ) );
     }
 
@@ -151,7 +169,17 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getVideoById : filename=" + filename );
 
         Log.d( TAG, "getVideoById : exit" );
-        return this.videoApi.getVideoByFilename( filename );
+        return this.api.getVideoByFilename( filename );
+    }
+
+    @Override
+    public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
+        Log.d( TAG, "getVideoById : enter" );
+
+        Log.d( TAG, "getVideoById : videoId=" + videoId + ", watched=" + watched );
+
+        Log.d( TAG, "getVideoById : exit" );
+        return this.api.updateWatchedStatus( videoId, watched );
     }
 
 }

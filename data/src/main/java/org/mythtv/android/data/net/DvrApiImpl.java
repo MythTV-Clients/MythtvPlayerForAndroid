@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.data.net;
 
 import android.content.Context;
@@ -14,6 +32,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
+import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
@@ -24,7 +43,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -42,10 +63,11 @@ public class DvrApiImpl implements DvrApi {
     private final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper;
     private final ProgramEntityJsonMapper programEntityJsonMapper;
     private final EncoderEntityJsonMapper encoderEntityJsonMapper;
+    private final BooleanJsonMapper booleanJsonMapper;
 
-    public DvrApiImpl( Context context, TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, ProgramEntityJsonMapper programEntityJsonMapper, EncoderEntityJsonMapper encoderEntityJsonMapper ) {
+    public DvrApiImpl( Context context, TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, ProgramEntityJsonMapper programEntityJsonMapper, EncoderEntityJsonMapper encoderEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
 
-        if( null == context || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper ) {
+        if( null == context || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
@@ -54,6 +76,7 @@ public class DvrApiImpl implements DvrApi {
         this.titleInfoEntityJsonMapper = titleInfoEntityJsonMapper;
         this.programEntityJsonMapper = programEntityJsonMapper;
         this.encoderEntityJsonMapper = encoderEntityJsonMapper;
+        this.booleanJsonMapper = booleanJsonMapper;
 
     }
 
@@ -299,9 +322,58 @@ public class DvrApiImpl implements DvrApi {
 
     }
 
+    @Override
+    public Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched ) {
+
+        return Observable.create( new Observable.OnSubscribe<Boolean>() {
+
+            @Override
+            public void call( Subscriber<? super Boolean> subscriber ) {
+                Log.d( TAG, "updateWatchedStatus.call : enter" );
+
+                if( isThereInternetConnection() ) {
+                    Log.d(TAG, "updateWatchedStatus.call : network is connected");
+
+                    try {
+
+                        String response = postUpdateWatchedStatus( chanId, startTime, watched );
+                        if( null != response ) {
+                            Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
+
+                            subscriber.onNext( booleanJsonMapper.transformBoolean( response ) );
+                            subscriber.onCompleted();
+
+                        } else {
+                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "updateWatchedStatus.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d( TAG, "encoderEntityList.call : network is not connected" );
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d( TAG, "encoderEntityList.call : exit" );
+            }
+
+        });
+
+    }
+
     private String getTitleInfoEntitiesFromApi() throws MalformedURLException {
 
-        return ApiConnection.createGET( getMasterBackendUrl() + TITLE_INFO_LIST_URL ).requestSyncCall();
+        return ApiConnection.create( context, getMasterBackendUrl() + TITLE_INFO_LIST_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
@@ -322,7 +394,7 @@ public class DvrApiImpl implements DvrApi {
         if( count != -1 ) {
 
             sb.append( "&" );
-            sb.append( String.format( COUNT_QS, startIndex ) );
+            sb.append( String.format( COUNT_QS, count ) );
 
         }
 
@@ -355,7 +427,7 @@ public class DvrApiImpl implements DvrApi {
         }
 
         Log.i( TAG, "getRecordedProgramEntitiesFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String getRecordedProgramDetailsFromApi(int chanId, DateTime startTime ) throws MalformedURLException {
@@ -363,7 +435,7 @@ public class DvrApiImpl implements DvrApi {
         String apiUrl = String.format( DvrApi.RECORDED_BASE_URL, chanId, fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
 
         Log.i( TAG, "getRecordedProgramDetailsFromApi : apiUrl=" + ( getMasterBackendUrl() + apiUrl ) );
-        return ApiConnection.createGET( getMasterBackendUrl() + apiUrl ).requestSyncCall();
+        return ApiConnection.create( context, getMasterBackendUrl() + apiUrl, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
@@ -384,7 +456,7 @@ public class DvrApiImpl implements DvrApi {
         if( count != -1 ) {
 
             sb.append( "&" );
-            sb.append( String.format( COUNT_QS, startIndex ) );
+            sb.append( String.format( COUNT_QS, count ) );
 
         }
 
@@ -403,13 +475,24 @@ public class DvrApiImpl implements DvrApi {
         }
 
         Log.i( TAG, "getUpcomingProgramEntitiesFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String getEncoderEntitiesFromApi() throws MalformedURLException {
 
         Log.i( TAG, "getEncoderEntitiesFromApi : url=" + ( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ) );
-        return ApiConnection.createGET( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ).requestSyncCall();
+        return ApiConnection.create( context, getMasterBackendUrl() + ENCODER_LIST_BASE_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+    }
+
+    private String postUpdateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
+
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put( "ChanId", String.valueOf( chanId ) );
+        parameters.put( "StartTime", fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
+        parameters.put( "Watched", String.valueOf( watched ) );
+
+        Log.i( TAG, "postUpdateWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ) );
+        return ApiConnection.create( context, getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall( parameters );
     }
 
     private boolean isThereInternetConnection() {
@@ -434,11 +517,18 @@ public class DvrApiImpl implements DvrApi {
         return masterBackend;
     }
 
-    public String getFromPreferences( Context context, String key ) {
+    private String getFromPreferences( Context context, String key ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getString( key, "" );
+    }
+
+    private int getIntFromPreferences( Context context, String key, int defaultValue ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        return Integer.parseInt( sharedPreferences.getString( key, String.valueOf( defaultValue ) ) );
     }
 
 }

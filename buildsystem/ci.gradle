@@ -1,18 +1,29 @@
-def ciServer = 'TRAVIS'
-def executingOnCI = "true".equals( System.getenv( ciServer ) )
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-// Since for CI we always do full clean builds, we don't want to pre-dex
-// See http://tools.android.com/tech-docs/new-build-system/tips
+project.ext.preDexLibs = !project.hasProperty('disablePreDex')
+
 subprojects {
-
     project.plugins.whenPluginAdded { plugin ->
-
-        if( 'com.android.build.gradle.AppPlugin'.equals( plugin.class.name ) || 'com.android.build.gradle.LibraryPlugin'.equals( plugin.class.name ) ) {
-
-            project.android.dexOptions.preDexLibraries = !executingOnCI
-
+        if( "com.android.build.gradle.AppPlugin".equals( plugin.class.name ) ) {
+            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
+        } else if( "com.android.build.gradle.LibraryPlugin".equals( plugin.class.name ) ) {
+            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
         }
-
     }
-
 }

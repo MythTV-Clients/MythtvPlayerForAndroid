@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.data.entity.mapper;
 
 import org.joda.time.DateTime;
@@ -99,17 +117,27 @@ public class SearchResultEntityDataMapper {
 
             List<String> castMembers = new ArrayList<>();
             List<String> characters = new ArrayList<>();
-            for( CastMemberEntity castMember : programEntity.getCast().getCastMembers() ) {
 
-                if( !castMembers.contains( castMember.getName() ) ) {
-                    castMembers.add( castMember.getName() );
-                }
+            if( null != programEntity.getCast() ) {
 
-                if( !characters.contains( castMember.getCharacterName() ) ) {
-                    characters.add( castMember.getCharacterName() );
+                if( null != programEntity.getCast().getCastMembers() && programEntity.getCast().getCastMembers().length != 0 ) {
+
+                    for (CastMemberEntity castMember : programEntity.getCast().getCastMembers()) {
+
+                        if (!castMembers.contains(castMember.getName())) {
+                            castMembers.add(castMember.getName());
+                        }
+
+                        if (!characters.contains(castMember.getCharacterName())) {
+                            characters.add(castMember.getCharacterName());
+                        }
+
+                    }
+
                 }
 
             }
+
             if( !castMembers.isEmpty() ) {
                 String cast = "";
                 for( String name : castMembers ) {

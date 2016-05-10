@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.data.net;
 
 import android.content.Context;
@@ -281,7 +299,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = removeLiveStreamInfoFromApi(id);
+                        String responseLiveStreamInfo = removeLiveStreamInfoFromApi( id );
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( booleanJsonMapper.transformBoolean(responseLiveStreamInfo) );
@@ -418,7 +436,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "addLiveStreamFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String addRecordingLiveStreamFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
@@ -463,7 +481,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "addRecordingLiveStreamFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String addVideoLiveStreamFromApi( final int id ) throws MalformedURLException {
@@ -496,7 +514,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "addVideoLiveStreamFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String getLiveStreamInfoEntitiesFromApi( String filename ) throws MalformedURLException {
@@ -525,7 +543,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "getLiveStreamInfoEntitiesFromApi : url=" + sb.toString() );
-        return ApiConnection.createGET( sb.toString() ).requestSyncCall();
+        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String getLiveStreamInfoFromApi( int id ) throws MalformedURLException {
@@ -533,7 +551,7 @@ public class ContentApiImpl implements ContentApi {
         String apiUrl = String.format( ContentApi.LIVE_STREAM_INFO_URL, id );
         Log.d( TAG, "getLiveStreamInfoFromApi : url=" + apiUrl );
 
-        return ApiConnection.createGET(getMasterBackendUrl() + apiUrl).requestSyncCall();
+        return ApiConnection.create( context, getMasterBackendUrl() + apiUrl, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String removeLiveStreamInfoFromApi( int id ) throws MalformedURLException {
@@ -541,7 +559,7 @@ public class ContentApiImpl implements ContentApi {
         String apiUrl = String.format( ContentApi.REMOVE_LIVE_STREAM_URL, id );
         Log.d( TAG, "removeLiveStreamInfoFromApi : url=" + apiUrl );
 
-        return ApiConnection.createGET( getMasterBackendUrl() + apiUrl ).requestSyncCall();
+        return ApiConnection.create( context, getMasterBackendUrl() + apiUrl, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private String stopLiveStreamInfoFromApi( int id ) throws MalformedURLException {
@@ -549,7 +567,7 @@ public class ContentApiImpl implements ContentApi {
         String apiUrl = String.format( ContentApi.STOP_LIVE_STREAM_URL, id );
         Log.d( TAG, "stopLiveStreamInfoFromApi : url=" + apiUrl );
 
-        return ApiConnection.createGET( getMasterBackendUrl() + apiUrl ).requestSyncCall();
+        return ApiConnection.create( context, getMasterBackendUrl() + apiUrl, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
     }
 
     private boolean isThereInternetConnection() {
@@ -583,11 +601,18 @@ public class ContentApiImpl implements ContentApi {
 
     }
 
-    public String getFromPreferences( Context context, String key ) {
+    private String getFromPreferences( Context context, String key ) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getString( key, "" );
+    }
+
+    private int getIntFromPreferences( Context context, String key, int defaultValue ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        return Integer.parseInt( sharedPreferences.getString( key, String.valueOf( defaultValue ) ) );
     }
 
 }

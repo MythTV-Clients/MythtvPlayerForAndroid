@@ -436,7 +436,7 @@ public class AutoLoadImageView extends ImageView {
 
         } catch( NullPointerException | IOException e ) {
 
-          Log.e( TAG, e.getMessage() );
+          Log.e( TAG, "NPE/IOE" + e.getMessage() );
 
         }
 

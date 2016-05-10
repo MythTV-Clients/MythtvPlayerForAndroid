@@ -27,13 +27,14 @@ allprojects {
 ext {
 
     //Android
-    androidBuildToolsVersion = "23.0.2"
-    androidMinSdkVersion = 17
+    androidBuildToolsVersion = "23.0.3"
+    androidMinSdkVersion = 14
+    androidTvMinSdkVersion = 21
     androidTargetSdkVersion = 23
     androidCompileSdkVersion = 23
 
     //Android Support Libraries
-    androidSupportVersion = '23.2.0'
+    androidSupportVersion = '23.3.0'
 
     //Libraries
     daggerVersion = '2.0.2'
@@ -42,7 +43,7 @@ ext {
     rxAndroidVersion = '1.1.0'
     javaxAnnotationVersion = '10.0-b28'
     gsonVersion = '2.5'
-    okHttpVersion = '3.0.1'
+    okHttpVersion = '3.2.0'
     picassoVersion = '2.5.2'
     mythtvServiceApiVersion = '2.0.4'
     jodaVersion = '2.9.1'
@@ -50,6 +51,8 @@ ext {
     exoplayerVersion = 'r1.5.4'
     glideVersion = '3.7.0'
     multidexVersion = '1.0.0'
+    recyclerviewfastscrollerVersion = "0.1.3"
+    stethoVersion = '1.3.1'
 
     //Testing
     robolectricVersion = '3.0'
@@ -83,7 +86,8 @@ ext {
         lombok:             "org.projectlombok:lombok:${lombokVersion}",
         exoplayer:          "com.google.android.exoplayer:exoplayer:${exoplayerVersion}",
         glide:              "com.github.bumptech.glide:glide:${glideVersion}",
-        multidex:           "com.android.support:multidex:${multidexVersion}"
+        multidex:           "com.android.support:multidex:${multidexVersion}",
+        recyclerviewfastscroller: "xyz.danoz:recyclerviewfastscroller:${recyclerviewfastscrollerVersion}"
     ]
 
     presentationTestDependencies = [
@@ -122,7 +126,8 @@ ext {
         javaxAnnotation:    "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
         androidAnnotations: "com.android.support:support-annotations:${androidSupportVersion}",
         lombok:             "org.projectlombok:lombok:${lombokVersion}",
-        mythtvServiceApi:   "org.mythtv.android:mythtv-service-api:${mythtvServiceApiVersion}"
+        stetho:             "com.facebook.stetho:stetho:${stethoVersion}",
+        stethoOkhttp:       "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
     ]
 
     dataTestDependencies = [

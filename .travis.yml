@@ -1,3 +1,4 @@
+sudo: true
 language: android
 jdk: oraclejdk8
 
@@ -11,14 +12,23 @@ notifications:
 branches:
   only:
     - master
-    - clean_architecture
+    - develop
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 
 android:
   components:
     - platform-tools
     - tools
-    - build-tools-23.0.2
+    - build-tools-23.0.3
     - android-23
     - extra-android-m2repository
+    - extra-google-m2repository
 
-script: ./gradlew build jacoco jacocoTestReport coveralls
+script: ./gradlew build jacocoTestReport coveralls -PdisablePreDex

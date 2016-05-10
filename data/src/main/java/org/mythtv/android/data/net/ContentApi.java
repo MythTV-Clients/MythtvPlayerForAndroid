@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.data.net;
 
 import org.joda.time.DateTime;
@@ -17,8 +35,8 @@ public interface ContentApi {
     String ADD_VIDEO_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
     String LIVE_STREAM_INFO_LIST_BASE_URL = "/Content/GetLiveStreamList";
     String LIVE_STREAM_INFO_URL = "/Content/GetLiveStream?Id=%s";
-    String REMOVE_LIVE_STREAM_URL = "/Content/AddLiveStream?Id=%s";
-    String STOP_LIVE_STREAM_URL = "/Content/AddLiveStream?Id=%s";
+    String REMOVE_LIVE_STREAM_URL = "/Content/RemoveLiveStream?Id=%s";
+    String STOP_LIVE_STREAM_URL = "/Content/StopLiveStream?Id=%s";
 
     String STORAGE_GROUP_QS = "StorageGroup=%s";
     String FILENAME_QS = "FileName=%s";
