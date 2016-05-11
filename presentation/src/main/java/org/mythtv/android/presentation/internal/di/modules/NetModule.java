@@ -79,7 +79,7 @@ public class NetModule {
                 .connectTimeout( connectTimeout, TimeUnit.MILLISECONDS )
                 .cache( cache )
                 .addNetworkInterceptor( new StethoInterceptor() )
-                .addInterceptor( new UserAgentInterceptor( context.getResources().getString( R.string.userAgent )+ "/" + BuildConfig.VERSION_NAME ) )
+                .addInterceptor( new UserAgentInterceptor( context.getResources().getString( R.string.app_name )+ "/" + BuildConfig.VERSION_NAME ) )
                 .build();
     }
 
