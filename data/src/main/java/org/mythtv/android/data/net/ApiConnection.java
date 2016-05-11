@@ -24,6 +24,8 @@ import android.util.Log;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
+import org.mythtv.android.data.BuildConfig;
+
 import okhttp3.Cache;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -49,6 +51,10 @@ public class ApiConnection implements Callable<String> {
 
     private static final String ACCEPT_LABEL = "Accept";
     private static final String ACCEPT_VALUE_JSON = "application/json";
+
+    private static final String USER_AGENT_LABEL = "User-Agent";
+    // Puts this in the backend log: ...(Request Header) user-agent: org.mythtv.android.data/2.0.3
+    private static final String USER_AGENT_VALUE = BuildConfig.APPLICATION_ID + "/" + BuildConfig.VERSION_NAME;
 
     private static final int HTTP_RESPONSE_DISK_CACHE_MAX_SIZE = 20 * 1024 * 1024;
 
@@ -121,6 +127,7 @@ public class ApiConnection implements Callable<String> {
         OkHttpClient okHttpClient = this.createClient();
         final Request request = new Request.Builder()
                 .url( this.url )
+                .header( USER_AGENT_LABEL, USER_AGENT_VALUE )
                 .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
                 .get()
                 .build();
@@ -144,6 +151,7 @@ public class ApiConnection implements Callable<String> {
         OkHttpClient okHttpClient = this.createClient();
         final Request request = new Request.Builder()
                 .url( this.url )
+                .header( USER_AGENT_LABEL, USER_AGENT_VALUE )
                 .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
                 .post( formBody )
                 .build();
