@@ -21,10 +21,16 @@ package org.mythtv.android.app;
 import android.app.Application;
 
 import com.facebook.stetho.Stetho;
+import com.squareup.leakcanary.LeakCanary;
 
 import org.mythtv.android.app.internal.di.components.ApplicationComponent;
 import org.mythtv.android.app.internal.di.components.DaggerApplicationComponent;
+import org.mythtv.android.app.internal.di.components.DaggerNetComponent;
+import org.mythtv.android.app.internal.di.components.DaggerSharedPreferencesComponent;
+import org.mythtv.android.app.internal.di.components.NetComponent;
+import org.mythtv.android.app.internal.di.components.SharedPreferencesComponent;
 import org.mythtv.android.app.internal.di.modules.ApplicationModule;
+import org.mythtv.android.presentation.internal.di.modules.NetModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
@@ -35,6 +41,8 @@ import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModu
 public class AndroidApplication extends Application {
 
     private ApplicationComponent applicationComponent;
+    private SharedPreferencesComponent sharedPreferencesComponent;
+    private NetComponent netComponent;
 
     @Override
     public void onCreate() {
@@ -43,20 +51,47 @@ public class AndroidApplication extends Application {
         this.initializeInjector();
 
         Stetho.initializeWithDefaults( this );
+        LeakCanary.install( this );
 
     }
 
     private void initializeInjector() {
 
+        ApplicationModule applicationModule = new ApplicationModule( this );
+        SharedPreferencesModule sharedPreferencesModule = new SharedPreferencesModule( this );
+        NetModule netModule = new NetModule();
+
         this.applicationComponent = DaggerApplicationComponent.builder()
-                .applicationModule( new ApplicationModule( this ) )
-                .sharedPreferencesModule( new SharedPreferencesModule( this ) )
+                .applicationModule( applicationModule )
+                .sharedPreferencesModule( sharedPreferencesModule )
+                .netModule( netModule )
+                .build();
+
+        this.sharedPreferencesComponent = DaggerSharedPreferencesComponent.builder()
+                .sharedPreferencesModule( sharedPreferencesModule )
+                .build();
+
+        this.netComponent = DaggerNetComponent.builder()
+                .applicationModule( applicationModule )
+                .sharedPreferencesModule( sharedPreferencesModule )
+                .netModule( netModule )
                 .build();
 
     }
 
     public ApplicationComponent getApplicationComponent() {
+
         return this.applicationComponent;
+    }
+
+    public SharedPreferencesComponent getSharedPreferencesComponent() {
+
+        return this.sharedPreferencesComponent;
+    }
+
+    public NetComponent getNetComponent() {
+
+        return this.netComponent;
     }
 
 }

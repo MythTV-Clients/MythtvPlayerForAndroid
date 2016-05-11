@@ -157,7 +157,6 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
         this.searchComponent = DaggerSearchComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .searchResultsModule( new SearchResultsModule() )
                 .build();
 

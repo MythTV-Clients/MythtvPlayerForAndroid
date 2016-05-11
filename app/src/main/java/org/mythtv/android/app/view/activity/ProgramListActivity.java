@@ -342,7 +342,6 @@ public class ProgramListActivity extends AbstractBaseActivity implements HasComp
 
         this.dvrComponent = DaggerDvrComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .programsModule( new ProgramsModule( descending, startIndex, count, titleRegEx, recGroup, storageGroup ) )
                 .build();
 

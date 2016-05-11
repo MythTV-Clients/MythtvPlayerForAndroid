@@ -168,7 +168,6 @@ public class VideoCategoryActivity extends AbstractBaseActivity implements HasCo
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

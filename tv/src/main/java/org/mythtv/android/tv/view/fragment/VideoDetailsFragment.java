@@ -270,7 +270,7 @@ public class VideoDetailsFragment extends AbstractBaseDetailsFragment {
                     String masterBackendUrl = getMasterBackendUrl();
                     String externalPlayerUrl = masterBackendUrl + "/Content/GetFile?FileName=" + filename;
 
-                    if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
+                    if( !getSharedPreferencesModule().getInternalPlayer() ) {
 
                         Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
 

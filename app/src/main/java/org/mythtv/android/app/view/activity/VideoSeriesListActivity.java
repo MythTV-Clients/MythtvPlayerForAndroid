@@ -163,7 +163,6 @@ public class VideoSeriesListActivity extends AbstractBaseActivity implements Has
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .videoSeriesModule( new VideoSeriesModule( this.series ) )
                 .build();
 

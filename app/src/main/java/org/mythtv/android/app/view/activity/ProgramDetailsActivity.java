@@ -30,13 +30,12 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
 import org.mythtv.android.app.view.fragment.ProgramDetailsFragment;
@@ -218,7 +217,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
         this.dvrComponent = DaggerDvrComponent.builder()
             .applicationComponent( getApplicationComponent() )
-            .activityModule( getActivityModule() )
             .programModule( new ProgramModule( this.chanId, this.startTime ) )
             .liveStreamModule( new LiveStreamModule() )
             .build();
@@ -246,13 +244,13 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        String previewUrl = getSharedPreferencesComponent().masterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
-        Picasso.with( this )
+        getNetComponent().picasso()
                 .load( previewUrl )
                 .fit().centerCrop()
-                .into(imageView);
+                .into( imageView );
 
         Log.d( TAG, "loadBackdrop : exit" );
     }
@@ -264,7 +262,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         if( null == this.programModel.getLiveStreamInfo() || this.programModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
             Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
 
-            String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
+            String recordingUrl = getSharedPreferencesComponent().masterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
 
             navigator.navigateToExternalPlayer( this, recordingUrl );
 
@@ -273,11 +271,11 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
             try {
 
-                String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
+                String recordingUrl = getSharedPreferencesComponent().masterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
                 recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
                 recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
 
-                if( getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
+                if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
                     Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
 
                     navigator.navigateToVideoPlayer( this, recordingUrl );

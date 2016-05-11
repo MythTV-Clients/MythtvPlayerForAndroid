@@ -58,7 +58,6 @@ public class RecordingsActivity extends AbstractBaseActivity implements HasCompo
 
         this.dvrComponent = DaggerDvrComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

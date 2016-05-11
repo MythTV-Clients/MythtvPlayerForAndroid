@@ -37,6 +37,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 /**
  * Created by dmfrey on 8/27/15.
  */
@@ -50,25 +52,28 @@ public class ApiConnection implements Callable<String> {
     private static final String ACCEPT_LABEL = "Accept";
     private static final String ACCEPT_VALUE_JSON = "application/json";
 
-    private static final int HTTP_RESPONSE_DISK_CACHE_MAX_SIZE = 20 * 1024 * 1024;
+//    private static final int HTTP_RESPONSE_DISK_CACHE_MAX_SIZE = 20 * 1024 * 1024;
 
-    private Context context;
+    private OkHttpClient okHttpClient;
+
+//    private Context context;
     private URL url;
-    private int readTimeout, connectTimeout;
+//    private int readTimeout, connectTimeout;
     private String response;
 
-    private ApiConnection( Context context, String url, int readTimeout, int connectTimeout ) throws MalformedURLException {
+    private ApiConnection( OkHttpClient okHttpClient, String url ) throws MalformedURLException {
 
-        this.context = context;
+        this.okHttpClient = okHttpClient;
+//        this.context = context;
         this.url = new URL( url );
-        this.readTimeout = readTimeout;
-        this.connectTimeout = connectTimeout;
+//        this.readTimeout = readTimeout;
+//        this.connectTimeout = connectTimeout;
 
     }
 
-    public static ApiConnection create( Context context, String url, int readTimeout, int connectTimeout ) throws MalformedURLException {
+    public static ApiConnection create( OkHttpClient okHttpClient, String url ) throws MalformedURLException {
 
-        return new ApiConnection( context, url, readTimeout, connectTimeout );
+        return new ApiConnection( okHttpClient, url );
     }
 
     /**
@@ -118,7 +123,7 @@ public class ApiConnection implements Callable<String> {
     private void connectToApi() {
         Log.d( TAG, "connectToApi : url=" + this.url );
 
-        OkHttpClient okHttpClient = this.createClient();
+        OkHttpClient okHttpClient = this.okHttpClient;
         final Request request = new Request.Builder()
                 .url( this.url )
                 .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
@@ -143,7 +148,7 @@ public class ApiConnection implements Callable<String> {
     private void connectToApi( FormBody formBody ) {
         Log.d( TAG, "connectToApi : url=" + this.url );
 
-        OkHttpClient okHttpClient = this.createClient();
+        OkHttpClient okHttpClient = this.okHttpClient;
         final Request request = new Request.Builder()
                 .url( this.url )
                 .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
@@ -165,24 +170,24 @@ public class ApiConnection implements Callable<String> {
 
     }
 
-    private OkHttpClient createClient() {
-
-        final OkHttpClient.Builder okHttpClient =
-                new OkHttpClient.Builder()
-                    .readTimeout( readTimeout, TimeUnit.MILLISECONDS )
-                    .connectTimeout( connectTimeout, TimeUnit.MILLISECONDS )
-                    .addNetworkInterceptor( new StethoInterceptor() );
-
-        final File baseDir = context.getCacheDir();
-        if( null != baseDir ) {
-
-            final File cacheDir = new File( baseDir, "HttpResponseCache" );
-            okHttpClient.cache( new Cache( cacheDir, HTTP_RESPONSE_DISK_CACHE_MAX_SIZE ) );
-
-        }
-
-        return okHttpClient.build();
-    }
+//    private OkHttpClient createClient() {
+//
+//        final OkHttpClient.Builder okHttpClient =
+//                new OkHttpClient.Builder()
+//                    .readTimeout( readTimeout, TimeUnit.MILLISECONDS )
+//                    .connectTimeout( connectTimeout, TimeUnit.MILLISECONDS )
+//                    .addNetworkInterceptor( new StethoInterceptor() );
+//
+//        final File baseDir = context.getCacheDir();
+//        if( null != baseDir ) {
+//
+//            final File cacheDir = new File( baseDir, "HttpResponseCache" );
+//            okHttpClient.cache( new Cache( cacheDir, HTTP_RESPONSE_DISK_CACHE_MAX_SIZE ) );
+//
+//        }
+//
+//        return okHttpClient.build();
+//    }
 
     @Override
     public String call() throws Exception {

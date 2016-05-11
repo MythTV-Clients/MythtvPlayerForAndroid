@@ -35,6 +35,7 @@ import org.mythtv.android.app.view.fragment.AdultListFragment;
 import org.mythtv.android.app.view.fragment.MusicVideoListFragment;
 import org.mythtv.android.app.view.fragment.TelevisionListFragment;
 import org.mythtv.android.domain.ContentType;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
@@ -131,7 +132,6 @@ public class VideoListActivity extends AbstractBaseActivity implements HasCompon
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );
@@ -150,7 +150,7 @@ public class VideoListActivity extends AbstractBaseActivity implements HasCompon
         String[] tabs;
         List<Fragment> fragments = new ArrayList<>();
 
-        boolean showAdultTab = getSharedPreferencesModule().getShowAdultContent();
+        boolean showAdultTab = getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, false );
 
         public VideosFragmentPagerAdapter( FragmentManager fm ) {
             super( fm );

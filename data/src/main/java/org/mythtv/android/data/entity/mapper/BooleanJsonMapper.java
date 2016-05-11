@@ -18,8 +18,6 @@
 
 package org.mythtv.android.data.entity.mapper;
 
-import android.util.Log;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;

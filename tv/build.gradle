@@ -127,6 +127,7 @@ dependencies {
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
     compile presentationDependencies.picasso
+    compile presentationDependencies.picassoOkHttpDownloader
     compile presentationDependencies.androidAnnotations
     compile presentationDependencies.preferences
     compile presentationDependencies.leanback

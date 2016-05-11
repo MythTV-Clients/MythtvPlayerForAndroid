@@ -41,8 +41,8 @@ import android.view.MenuItem;
 import org.mythtv.android.app.R;
 import org.mythtv.android.app.AndroidApplication;
 import org.mythtv.android.app.internal.di.components.ApplicationComponent;
-import org.mythtv.android.app.internal.di.modules.ActivityModule;
-import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
+import org.mythtv.android.app.internal.di.components.NetComponent;
+import org.mythtv.android.app.internal.di.components.SharedPreferencesComponent;
 import org.mythtv.android.app.navigation.Navigator;
 import org.mythtv.android.app.view.fragment.AboutDialogFragment;
 
@@ -225,7 +225,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     /**
      * Get the Main Application component for dependency injection.
      *
-     * @return {@link ApplicationComponent}
+     * @return {@link org.mythtv.android.app.internal.di.components.ApplicationComponent}
      */
     protected ApplicationComponent getApplicationComponent() {
 
@@ -233,23 +233,23 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     }
 
     /**
-     * Get an Activity module for dependency injection.
+     * Get a SharedPreferences component for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.ActivityModule}
+     * @return {@link SharedPreferencesComponent}
      */
-    protected ActivityModule getActivityModule() {
+    protected SharedPreferencesComponent getSharedPreferencesComponent() {
 
-        return new ActivityModule( this );
+        return ( (AndroidApplication) getApplication() ).getSharedPreferencesComponent();
     }
 
     /**
-     * Get a SharedPreferences module for dependency injection.
+     * Get a NetComponent component for dependency injection.
      *
-     * @return {@link SharedPreferencesModule}
+     * @return {@link NetComponent}
      */
-    protected SharedPreferencesModule getSharedPreferencesModule() {
+    protected NetComponent getNetComponent() {
 
-        return new SharedPreferencesModule( this );
+        return ( (AndroidApplication) getApplication() ).getNetComponent();
     }
 
 }

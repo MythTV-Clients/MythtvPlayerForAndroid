@@ -91,7 +91,6 @@ public class TitleInfoListActivity extends AbstractBaseActivity implements HasCo
 
         this.dvrComponent = DaggerDvrComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

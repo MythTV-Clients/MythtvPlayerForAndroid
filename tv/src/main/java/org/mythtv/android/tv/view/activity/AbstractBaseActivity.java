@@ -26,7 +26,7 @@ import android.os.Bundle;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.tv.AndroidApplication;
 import org.mythtv.android.tv.internal.di.components.ApplicationComponent;
-import org.mythtv.android.tv.internal.di.modules.ActivityModule;
+import org.mythtv.android.tv.internal.di.components.NetComponent;
 import org.mythtv.android.tv.navigation.Navigator;
 
 import javax.inject.Inject;
@@ -78,23 +78,23 @@ public abstract class AbstractBaseActivity extends Activity {
     }
 
     /**
-     * Get an Activity module for dependency injection.
-     *
-     * @return {@link org.mythtv.android.tv.internal.di.modules.ActivityModule}
-     */
-    protected ActivityModule getActivityModule() {
-
-        return new ActivityModule( this );
-    }
-
-    /**
      * Get a SharedPreferences module for dependency injection.
      *
-     * @return {@link org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule}
+     * @return {@link org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule}
      */
     protected SharedPreferencesModule getSharedPreferencesModule() {
 
         return new SharedPreferencesModule( this );
+    }
+
+    /**
+     * Get a NetComponent component for dependency injection.
+     *
+     * @return {@link NetComponent}
+     */
+    protected NetComponent getNetComponent() {
+
+        return ( (AndroidApplication) getApplication() ).getNetComponent();
     }
 
 }
