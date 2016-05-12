@@ -25,8 +25,8 @@ import android.os.Bundle;
 
 import org.mythtv.android.tv.AndroidApplication;
 import org.mythtv.android.tv.internal.di.components.ApplicationComponent;
-import org.mythtv.android.tv.internal.di.modules.ActivityModule;
-import org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule;
+import org.mythtv.android.tv.internal.di.components.SharedPreferencesComponent;
+import org.mythtv.android.tv.internal.di.components.NetComponent;
 import org.mythtv.android.tv.navigation.Navigator;
 
 import javax.inject.Inject;
@@ -70,7 +70,7 @@ public abstract class AbstractBaseActivity extends Activity {
     /**
      * Get the Main Application component for dependency injection.
      *
-     * @return {@link org.mythtv.android.presentation.internal.di.components.ApplicationComponent}
+     * @return {@link org.mythtv.android.tv.internal.di.components.ApplicationComponent}
      */
     protected ApplicationComponent getApplicationComponent() {
 
@@ -78,23 +78,23 @@ public abstract class AbstractBaseActivity extends Activity {
     }
 
     /**
-     * Get an Activity module for dependency injection.
+     * Get a SharedPreferences component for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.ActivityModule}
+     * @return {@link SharedPreferencesComponent}
      */
-    protected ActivityModule getActivityModule() {
+    protected SharedPreferencesComponent getSharedPreferencesComponent() {
 
-        return new ActivityModule( this );
+        return ( (AndroidApplication) getApplication() ).getSharedPreferencesComponent();
     }
 
     /**
-     * Get a SharedPreferences module for dependency injection.
+     * Get a NetComponent component for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.SharedPreferencesModule}
+     * @return {@link NetComponent}
      */
-    protected SharedPreferencesModule getSharedPreferencesModule() {
+    protected NetComponent getNetComponent() {
 
-        return new SharedPreferencesModule( this );
+        return ( (AndroidApplication) getApplication() ).getNetComponent();
     }
 
 }

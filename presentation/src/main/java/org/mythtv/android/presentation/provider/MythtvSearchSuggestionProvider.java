@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mythtv.android.tv.provider;
+package org.mythtv.android.presentation.provider;
 
 import android.content.SearchRecentSuggestionsProvider;
 
@@ -25,7 +25,7 @@ import android.content.SearchRecentSuggestionsProvider;
  */
 public class MythtvSearchSuggestionProvider extends SearchRecentSuggestionsProvider {
 
-    public final static String AUTHORITY = "org.mythtv.android.tv.provider.MythtvSearchSuggestionProvider";
+    public final static String AUTHORITY = "org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider";
     public final static int MODE = DATABASE_MODE_QUERIES;
 
     public MythtvSearchSuggestionProvider() {

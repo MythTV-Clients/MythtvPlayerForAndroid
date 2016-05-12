@@ -1,11 +1,13 @@
 package org.mythtv.android.data.entity.mapper;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 
@@ -29,10 +31,13 @@ public class TitleInfoEntityJsonDataMapperTest extends ApplicationTestCase {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    @Mock
+    private Gson mockGson;
+
     @Before
     public void setUp() {
 
-        titleInfoEntityJsonMapper = new TitleInfoEntityJsonMapper();
+        titleInfoEntityJsonMapper = new TitleInfoEntityJsonMapper( gson );
 
     }
 

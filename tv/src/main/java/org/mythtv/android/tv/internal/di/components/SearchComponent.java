@@ -19,8 +19,8 @@
 package org.mythtv.android.tv.internal.di.components;
 
 import org.mythtv.android.presentation.internal.di.PerActivity;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.tv.internal.di.modules.ActivityModule;
-import org.mythtv.android.tv.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.tv.view.fragment.SearchResultListFragment;
 
 import dagger.Component;

@@ -18,20 +18,13 @@
 
 package org.mythtv.android.data.entity.mapper;
 
-import android.util.Log;
-
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.ProgramListEntity;
 import org.mythtv.android.data.entity.ProgramWrapperEntity;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -49,24 +42,15 @@ public class ProgramEntityJsonMapper {
     private final Gson gson;
 
     @Inject
-    public ProgramEntityJsonMapper() {
+    public ProgramEntityJsonMapper( Gson gson ) {
 
-        Type dateTimeType = new TypeToken<DateTime>(){}.getType();
-
-        this.gson = new GsonBuilder()
-                .disableHtmlEscaping()
-                .setFieldNamingPolicy( FieldNamingPolicy.UPPER_CAMEL_CASE )
-                .setPrettyPrinting()
-                .serializeNulls()
-                .registerTypeAdapter( dateTimeType, new DateTimeSerializer() )
-                .registerTypeAdapter( dateTimeType, new DateTimeDeserializer() )
-                .create();
+        this.gson = gson;
 
     }
 
     public ProgramEntity transformProgramEntity( String programJsonResponse ) throws JsonSyntaxException {
 
-        Log.i( TAG, "transformProgramEntity : programJsonResponse=" + programJsonResponse );
+//        Log.i( TAG, "transformProgramEntity : programJsonResponse=" + programJsonResponse );
         Type programWrapperEntityType = new TypeToken<ProgramWrapperEntity>() {}.getType();
         ProgramWrapperEntity programWrapperEntity = this.gson.fromJson( programJsonResponse, programWrapperEntityType );
 
@@ -75,10 +59,10 @@ public class ProgramEntityJsonMapper {
 
     public List<ProgramEntity> transformProgramEntityCollection( String programListJsonResponse ) throws JsonSyntaxException {
 
-        Log.i( TAG, "transformProgramEntityCollection : " + programListJsonResponse );
+//        Log.i( TAG, "transformProgramEntityCollection : " + programListJsonResponse );
         Type programListEntityType = new TypeToken<ProgramListEntity>() {}.getType();
         ProgramListEntity programListEntity = this.gson.fromJson( programListJsonResponse, programListEntityType );
-        Log.i( TAG, "transformProgramEntityCollection : programListEntity=" + programListEntity.toString() );
+//        Log.i( TAG, "transformProgramEntityCollection : programListEntity=" + programListEntity.toString() );
 
         return Arrays.asList( programListEntity.getPrograms().getPrograms() );
     }

@@ -58,7 +58,6 @@ public class VideosActivity extends AbstractBaseActivity implements HasComponent
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

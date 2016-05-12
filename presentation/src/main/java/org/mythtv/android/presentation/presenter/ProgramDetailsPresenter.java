@@ -218,7 +218,7 @@ public class ProgramDetailsPresenter implements Presenter {
 
     }
 
-    private synchronized void updateDetails(Program program ) {
+    private synchronized void updateDetails( Program program ) {
         Log.d( TAG, "updateDetails : enter" );
 
         this.programModel = this.programModelDataMapper.transform( program );

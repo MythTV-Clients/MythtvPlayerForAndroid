@@ -27,14 +27,14 @@ import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
  */
 public abstract class AbstractBaseVideoFragment extends AbstractBaseBrowseFragment {
 
-    protected VideoListListener videoListListener;
+    protected VideoListListener listener;
 
     /**
      * Interface for listening videoMetadataInfo list events.
      */
     public interface VideoListListener {
 
-        void onVideoClicked( final VideoMetadataInfoModel videoMetadataInfoModel, final String contentType );
+        void onSearchClicked();
 
     }
 
@@ -43,7 +43,7 @@ public abstract class AbstractBaseVideoFragment extends AbstractBaseBrowseFragme
         super.onAttach( activity );
 
         if( activity instanceof VideoListListener ) {
-            this.videoListListener = (VideoListListener) activity;
+            this.listener = (VideoListListener) activity;
         }
 
     }

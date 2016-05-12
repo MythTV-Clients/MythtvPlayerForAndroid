@@ -26,6 +26,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature
         android:name="android.software.leanback"
@@ -168,8 +169,8 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <provider
-            android:name=".provider.MythtvSearchSuggestionProvider"
-            android:authorities="org.mythtv.android.tv.provider.MythtvSearchSuggestionProvider"
+            android:name="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
+            android:authorities="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
             android:exported="false"/>
 
     </application>

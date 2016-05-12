@@ -18,8 +18,6 @@
 
 package org.mythtv.android.data.entity.mapper;
 
-import android.util.Log;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -44,7 +42,7 @@ public class BooleanJsonMapper {
 
     public Boolean transformBoolean( String booleanJsonResponse ) throws JsonSyntaxException {
 
-        Log.i( TAG, "transformBoolean : booleanJsonResponse=" + booleanJsonResponse );
+//        Log.i( TAG, "transformBoolean : booleanJsonResponse=" + booleanJsonResponse );
         JsonObject rootObject = parser.parse( booleanJsonResponse ).getAsJsonObject();
 
         return rootObject.get( "bool" ).getAsBoolean();

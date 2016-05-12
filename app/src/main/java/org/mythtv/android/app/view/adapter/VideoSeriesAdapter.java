@@ -75,26 +75,26 @@ public class VideoSeriesAdapter extends RecyclerView.Adapter<VideoSeriesAdapter.
 
     @Override
     public int getItemCount() {
-        Log.d( TAG, "getItemCount : enter" );
+//        Log.d( TAG, "getItemCount : enter" );
 
-        Log.d( TAG, "getItemCount : exit" );
+//        Log.d( TAG, "getItemCount : exit" );
         return ( null != this.videoSeriesCollection ) ? this.videoSeriesCollection.size() : 0;
     }
 
     @Override
     public VideoSeriesViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
-        Log.d( TAG, "onCreateViewHolder : enter" );
+//        Log.d( TAG, "onCreateViewHolder : enter" );
 
         View view = this.layoutInflater.inflate( R.layout.video_series_list_item, parent, false );
         VideoSeriesViewHolder videoMetadataInfoViewHolder = new VideoSeriesViewHolder( view );
 
-        Log.d( TAG, "onCreateViewHolder : exit" );
+//        Log.d( TAG, "onCreateViewHolder : exit" );
         return videoMetadataInfoViewHolder;
     }
 
     @Override
     public void onBindViewHolder( VideoSeriesViewHolder holder, final int position ) {
-        Log.d( TAG, "onBindViewHolder : enter" );
+//        Log.d( TAG, "onBindViewHolder : enter" );
 
         final VideoMetadataInfoModel videoMetadataInfoModel = this.videoSeriesCollection.get( position );
         if( null != videoMetadataInfoModel.getInetref() && !"".equals( videoMetadataInfoModel.getInetref() ) ) {
@@ -115,45 +115,45 @@ public class VideoSeriesAdapter extends RecyclerView.Adapter<VideoSeriesAdapter.
             }
         });
 
-        Log.d( TAG, "onBindViewHolder : exit" );
+//        Log.d( TAG, "onBindViewHolder : exit" );
     }
 
     @Override
     public long getItemId( int position ) {
-        Log.d( TAG, "getItemId : enter" );
+//        Log.d( TAG, "getItemId : enter" );
 
-        Log.d( TAG, "getItemId : exit" );
+//        Log.d( TAG, "getItemId : exit" );
         return position;
     }
 
     public void setVideoSeriesCollection( Collection<VideoMetadataInfoModel> videoSeriesCollection ) {
-        Log.d( TAG, "setVideoSeriesCollection : enter" );
+//        Log.d( TAG, "setVideoSeriesCollection : enter" );
 
         this.validateVideoSeriesCollection( videoSeriesCollection );
         this.videoSeriesCollection = (List<VideoMetadataInfoModel>) videoSeriesCollection;
         this.notifyDataSetChanged();
 
-        Log.d( TAG, "setVideoSeriesCollection : exit");
+//        Log.d( TAG, "setVideoSeriesCollection : exit");
     }
 
     public void setOnItemClickListener( OnItemClickListener onItemClickListener ) {
-        Log.d( TAG, "setOnItemClickListener : enter" );
+//        Log.d( TAG, "setOnItemClickListener : enter" );
 
         this.onItemClickListener = onItemClickListener;
 
-        Log.d( TAG, "setOnItemClickListener : exit" );
+//        Log.d( TAG, "setOnItemClickListener : exit" );
     }
 
     private void validateVideoSeriesCollection( Collection<VideoMetadataInfoModel> videoSeriesCollection ) {
-        Log.d(TAG, "validateVideoSeriesCollection : enter");
+//        Log.d( TAG, "validateVideoSeriesCollection : enter" );
 
         if( null == videoSeriesCollection ) {
-            Log.w( TAG, "validateVideoSeriesCollection : videoSeriesCollection is null" );
+//            Log.w( TAG, "validateVideoSeriesCollection : videoSeriesCollection is null" );
 
             throw new IllegalArgumentException( "The list cannot be null" );
         }
 
-        Log.d( TAG, "validateVideoSeriesCollection : exit" );
+//        Log.d( TAG, "validateVideoSeriesCollection : exit" );
     }
 
     static class VideoSeriesViewHolder extends RecyclerView.ViewHolder {

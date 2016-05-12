@@ -9,6 +9,9 @@ import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.domain.repository.SearchRepository;
 
+import java.util.Collections;
+import java.util.Map;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -35,14 +38,15 @@ public class GetSearchResultListTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getSearchResultList = new GetSearchResultList( FAKE_SEARCH_TEXT, mockSearchRepository, mockThreadExecutor, mockPostExecutionThread );
+        getSearchResultList = new GetSearchResultList( mockSearchRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
     public void testGetSearchResultListUseCaseObservableHappyCase() {
 
-        getSearchResultList.buildUseCaseObservable();
+        Map<String, String> parameters = Collections.singletonMap( "SEARCH_TEXT", FAKE_SEARCH_TEXT );
+        getSearchResultList.buildUseCaseObservable( parameters );
 
         verify( mockSearchRepository ).search( FAKE_SEARCH_TEXT );
         verifyNoMoreInteractions( mockSearchRepository );

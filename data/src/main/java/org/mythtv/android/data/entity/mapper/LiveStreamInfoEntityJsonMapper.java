@@ -18,20 +18,13 @@
 
 package org.mythtv.android.data.entity.mapper;
 
-import android.util.Log;
-
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoListEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoWrapperEntity;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -50,24 +43,15 @@ public class LiveStreamInfoEntityJsonMapper {
 
     @Inject
 
-    public LiveStreamInfoEntityJsonMapper() {
+    public LiveStreamInfoEntityJsonMapper( Gson gson ) {
 
-        Type dateTimeType = new TypeToken<DateTime>(){}.getType();
-
-        this.gson = new GsonBuilder()
-                .disableHtmlEscaping()
-                .setFieldNamingPolicy( FieldNamingPolicy.UPPER_CAMEL_CASE )
-                .setPrettyPrinting()
-                .serializeNulls()
-                .registerTypeAdapter( dateTimeType, new DateTimeSerializer() )
-                .registerTypeAdapter( dateTimeType, new DateTimeDeserializer() )
-                .create();
+        this.gson = gson;
 
     }
 
     public LiveStreamInfoEntity transformLiveStreamInfoEntity( String liveStreamInfoJsonResponse ) throws JsonSyntaxException {
 
-        Log.i( TAG, "transformLiveStreamInfoEntity : liveStreamInfoJsonResponse=" + liveStreamInfoJsonResponse );
+//        Log.i( TAG, "transformLiveStreamInfoEntity : liveStreamInfoJsonResponse=" + liveStreamInfoJsonResponse );
         Type liveStreamInfoWrapperEntityType = new TypeToken<LiveStreamInfoWrapperEntity>() {}.getType();
         LiveStreamInfoWrapperEntity liveStreamInfoWrapperEntity = this.gson.fromJson( liveStreamInfoJsonResponse, liveStreamInfoWrapperEntityType );
 
@@ -76,10 +60,10 @@ public class LiveStreamInfoEntityJsonMapper {
 
     public List<LiveStreamInfoEntity> transformLiveStreamInfoEntityCollection( String liveStreamInfoListJsonResponse ) throws JsonSyntaxException {
 
-        Log.i( TAG, "transformLiveStreamInfoEntityCollection : " + liveStreamInfoListJsonResponse );
+//        Log.i( TAG, "transformLiveStreamInfoEntityCollection : " + liveStreamInfoListJsonResponse );
         Type liveStreamInfoListEntityType = new TypeToken<LiveStreamInfoListEntity>() {}.getType();
         LiveStreamInfoListEntity liveStreamInfoListEntity = gson.fromJson( liveStreamInfoListJsonResponse, liveStreamInfoListEntityType );
-        Log.i( TAG, "transformLiveStreamInfoEntityCollection : liveStreamInfoListEntity=" + liveStreamInfoListEntity.toString() );
+//        Log.i( TAG, "transformLiveStreamInfoEntityCollection : liveStreamInfoListEntity=" + liveStreamInfoListEntity.toString() );
 
         return Arrays.asList( liveStreamInfoListEntity.getLiveStreamInfos().getLiveStreamInfos() );
     }
