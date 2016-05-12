@@ -19,7 +19,10 @@
 package org.mythtv.android.data.repository.datasource;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.data.cache.ProgramCache;
@@ -33,6 +36,8 @@ import org.mythtv.android.data.net.DvrApiImpl;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Created by dmfrey on 8/27/15.
  */
@@ -42,19 +47,27 @@ public class DvrDataStoreFactory {
     private static final String TAG = DvrDataStoreFactory.class.getSimpleName();
 
     private final Context context;
+    private final SharedPreferences sharedPreferences;
+    private final OkHttpClient okHttpClient;
+    private final Gson gson;
     private final ProgramCache recordedProgramCache;
+    private final SearchDataStoreFactory searchDataStoreFactory;
 
     @Inject
-    public DvrDataStoreFactory( Context context, ProgramCache recordedProgramCache ) {
+    public DvrDataStoreFactory( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, Gson gson, ProgramCache recordedProgramCache, SearchDataStoreFactory searchDataStoreFactory ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == context || null == recordedProgramCache ) {
+        if( null == context || null == sharedPreferences || null == okHttpClient || null == gson || null == recordedProgramCache || null == searchDataStoreFactory ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
         this.context = context.getApplicationContext();
+        this.sharedPreferences = sharedPreferences;
+        this.okHttpClient = okHttpClient;
+        this.gson = gson;
         this.recordedProgramCache = recordedProgramCache;
+        this.searchDataStoreFactory = searchDataStoreFactory;
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -83,14 +96,14 @@ public class DvrDataStoreFactory {
     public DvrDataStore createMasterBackendDataStore() {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
-        TitleInfoEntityJsonMapper titleInfoEntityJsonMapper = new TitleInfoEntityJsonMapper();
-        ProgramEntityJsonMapper programEntityJsonMapper = new ProgramEntityJsonMapper();
-        EncoderEntityJsonMapper encoderEntityJsonMapper = new EncoderEntityJsonMapper();
+        TitleInfoEntityJsonMapper titleInfoEntityJsonMapper = new TitleInfoEntityJsonMapper( this.gson );
+        ProgramEntityJsonMapper programEntityJsonMapper = new ProgramEntityJsonMapper( this.gson );
+        EncoderEntityJsonMapper encoderEntityJsonMapper = new EncoderEntityJsonMapper( this.gson );
         BooleanJsonMapper booleanJsonMapper = new BooleanJsonMapper();
-        DvrApi api = new DvrApiImpl( this.context, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper );
+        DvrApi api = new DvrApiImpl( this.context, this.sharedPreferences, this.okHttpClient, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
-        return new MasterBackendDvrDataStore( api, this.recordedProgramCache );
+        return new MasterBackendDvrDataStore( api, this.recordedProgramCache, this.searchDataStoreFactory );
     }
 
 }

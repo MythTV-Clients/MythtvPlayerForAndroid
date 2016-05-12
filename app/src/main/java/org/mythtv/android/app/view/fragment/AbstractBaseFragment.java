@@ -18,17 +18,12 @@
 
 package org.mythtv.android.app.view.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.View;
 
-import org.mythtv.android.app.internal.di.modules.SharedPreferencesModule;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 
@@ -83,7 +78,7 @@ public abstract class AbstractBaseFragment extends Fragment {
     /**
      * Get a SharedPreferences module for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.SharedPreferencesModule}
+     * @return {@link SharedPreferencesModule}
      */
     protected SharedPreferencesModule getSharedPreferencesModule() {
 

@@ -102,7 +102,6 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
 
         this.dvrComponent = DaggerDvrComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

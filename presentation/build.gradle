@@ -31,6 +31,9 @@ android {
         minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
         targetSdkVersion globalConfiguration.getAt( "androidTargetSdkVersion" )
 
+        versionCode globalConfiguration.getAt( "androidVersionCode" )
+        versionName globalConfiguration.getAt( "androidVersionName" )
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId 'org.mythtv.android.presentation.test'
 
@@ -89,8 +92,11 @@ dependencies {
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
     compile presentationDependencies.picasso
+    compile presentationDependencies.picassoOkHttpDownloader
     compile presentationDependencies.androidAnnotations
     compile presentationDependencies.preferences
+    debugCompile presentationDependencies.leakCanaryDebug
+    releaseCompile presentationDependencies.leakCanaryNoOp
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations
@@ -101,6 +107,7 @@ dependencies {
     androidTestCompile presentationTestDependencies.testSupportRules
     androidTestCompile presentationTestDependencies.espresso
     androidTestCompile presentationTestDependencies.robolectric
+    testCompile presentationDependencies.leakCanaryNoOp
 
 }
 

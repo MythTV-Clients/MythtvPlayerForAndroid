@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mythtv.android.app.internal.di.modules;
+package org.mythtv.android.presentation.internal.di.modules;
 
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.interactor.GetRecordedProgramList;
+import org.mythtv.android.domain.interactor.GetRecentProgramList;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
@@ -33,37 +33,19 @@ import dagger.Provides;
 /**
  * Dagger module that provides programs related collaborators.
  *
- * Created by dmfrey on 8/30/15.
+ * Created by dmfrey on 1/24/16.
  */
 @Module
-public class ProgramsModule {
+public class RecentProgramsModule {
 
-    private boolean descending = false;
-    private int startIndex = -1;
-    private int count = -1;
-    private String titleRegEx = null;
-    private String recGroup = null;
-    private String storageGroup = null;
-
-    public ProgramsModule() {}
-
-    public ProgramsModule( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
-
-        this.descending = descending;
-        this.startIndex = startIndex;
-        this.count = count;
-        this.titleRegEx = titleRegEx;
-        this.recGroup = recGroup;
-        this.storageGroup = storageGroup;
-
-    }
+    public RecentProgramsModule() {}
 
     @Provides
     @PerActivity
-    @Named( "programList" )
-    UseCase provideRecordedProgramListUseCase( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    @Named( "recentProgramList" )
+    UseCase provideRecentProgramListUseCase( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
-        return new GetRecordedProgramList( descending, startIndex, count, titleRegEx, recGroup, storageGroup, dvrRepository, threadExecutor, postExecutionThread );
+        return new GetRecentProgramList( dvrRepository, threadExecutor, postExecutionThread );
     }
 
 }

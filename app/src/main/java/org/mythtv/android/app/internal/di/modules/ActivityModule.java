@@ -36,7 +36,9 @@ public class ActivityModule {
     private final Activity activity;
 
     public ActivityModule( Activity activity ) {
+
         this.activity = activity;
+
     }
 
     /**
@@ -45,6 +47,7 @@ public class ActivityModule {
     @Provides
     @PerActivity
     Activity activity() {
+
         return this.activity;
     }
 

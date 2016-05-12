@@ -217,8 +217,7 @@
         </activity>
 
         <activity
-            android:name=".view.activity.SearchableActivity"
-            android:launchMode="singleTop">
+            android:name=".view.activity.SearchableActivity">
 
             <intent-filter>
 
@@ -241,8 +240,8 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <provider
-            android:name=".provider.MythtvSearchSuggestionProvider"
-            android:authorities="org.mythtv.android.app.provider.MythtvSearchSuggestionProvider"
+            android:name="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
+            android:authorities="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
             android:exported="false" />
 
     </application>

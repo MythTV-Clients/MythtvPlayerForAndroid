@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mythtv.android.tv.internal.di.modules;
+package org.mythtv.android.presentation.internal.di.modules;
 
-import org.mythtv.android.domain.interactor.GetEncoderList;
-import org.mythtv.android.domain.interactor.UseCase;
+import org.mythtv.android.domain.executor.PostExecutionThread;
+import org.mythtv.android.domain.executor.ThreadExecutor;
+import org.mythtv.android.domain.interactor.DynamicUseCase;
+import org.mythtv.android.domain.interactor.PostUpdatedRecordedWatchedStatus;
+import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 
 import javax.inject.Named;
@@ -28,19 +31,21 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by dmfrey on 1/19/16.
+ * Dagger module that updates a recorded program's watched status.
+ *
+ * Created by dmfrey on 4/9/16.
  */
 @Module
-public class EncodersModule {
+public class RecordedProgramWatchedStatusModule {
 
-    public EncodersModule() { }
+    public RecordedProgramWatchedStatusModule() { }
 
     @Provides
     @PerActivity
-    @Named( "encoderList" )
-    UseCase provideEncoderListUseCase(GetEncoderList getEncoderList ) {
+    @Named( "updateRecordedProgramWatchedStatus" )
+    DynamicUseCase provideUpdateRecordedProgramWatchedStatusUseCase( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
-        return getEncoderList;
+        return new PostUpdatedRecordedWatchedStatus( dvrRepository, threadExecutor, postExecutionThread );
     }
 
 }

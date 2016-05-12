@@ -19,7 +19,10 @@
 package org.mythtv.android.data.repository.datasource;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
@@ -28,6 +31,8 @@ import org.mythtv.android.data.net.ContentApiImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import okhttp3.OkHttpClient;
 
 /**
  * Created by dmfrey on 8/27/15.
@@ -38,17 +43,23 @@ public class ContentDataStoreFactory {
     private static final String TAG = ContentDataStoreFactory.class.getSimpleName();
 
     private final Context context;
+    private final SharedPreferences sharedPreferences;
+    private final Gson gson;
+    private final OkHttpClient okHttpClient;
 
     @Inject
-    public ContentDataStoreFactory( Context context ) {
+    public ContentDataStoreFactory( Context context, SharedPreferences sharedPreferences, Gson gson, OkHttpClient okHttpClient ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == context ) {
+        if( null == context || null == sharedPreferences || null == gson || null == okHttpClient ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
-        this.context = context.getApplicationContext();
+        this.context = context;
+        this.sharedPreferences = sharedPreferences;
+        this.gson = gson;
+        this.okHttpClient = okHttpClient;
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -63,9 +74,9 @@ public class ContentDataStoreFactory {
     public ContentDataStore createMasterBackendDataStore() {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
-        LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper = new LiveStreamInfoEntityJsonMapper();
+        LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper = new LiveStreamInfoEntityJsonMapper( gson );
         BooleanJsonMapper booleanJsonMapper = new BooleanJsonMapper();
-        ContentApi api = new ContentApiImpl( this.context, liveStreamInfoEntityJsonMapper, booleanJsonMapper );
+        ContentApi api = new ContentApiImpl( this.context, this.sharedPreferences, this.okHttpClient, liveStreamInfoEntityJsonMapper, booleanJsonMapper );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
         return new MasterBackendContentDataStore( api );

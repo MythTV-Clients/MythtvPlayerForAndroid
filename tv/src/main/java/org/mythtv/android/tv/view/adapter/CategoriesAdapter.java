@@ -66,26 +66,26 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 
     @Override
     public int getItemCount() {
-        Log.d( TAG, "getItemCount : enter" );
+//        Log.d( TAG, "getItemCount : enter" );
 
-        Log.d( TAG, "getItemCount : exit" );
+//        Log.d( TAG, "getItemCount : exit" );
         return ( null != this.tvCategoriesCollection ) ? this.tvCategoriesCollection.size() : 0;
     }
 
     @Override
     public TvCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
-        Log.d( TAG, "onCreateViewHolder : enter" );
+//        Log.d( TAG, "onCreateViewHolder : enter" );
 
         View view = this.layoutInflater.inflate( R.layout.item, parent, false );
         TvCategoryViewHolder tvCategoryViewHolder = new TvCategoryViewHolder( view );
 
-        Log.d( TAG, "onCreateViewHolder : exit" );
+//        Log.d( TAG, "onCreateViewHolder : exit" );
         return tvCategoryViewHolder;
     }
 
     @Override
     public void onBindViewHolder( TvCategoryViewHolder holder, final int position ) {
-        Log.d( TAG, "onBindViewHolder : enter" );
+//        Log.d( TAG, "onBindViewHolder : enter" );
 
         final TvCategoryModel tvCategoryModel = this.tvCategoriesCollection.get( position );
         holder.imageViewCategory.setImageResource( tvCategoryModel.getDrawable() );
@@ -101,45 +101,45 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
             }
         });
 
-        Log.d( TAG, "onBindViewHolder : exit" );
+//        Log.d( TAG, "onBindViewHolder : exit" );
     }
 
     @Override
     public long getItemId( int position ) {
-        Log.d( TAG, "getItemId : enter" );
+//        Log.d( TAG, "getItemId : enter" );
 
-        Log.d( TAG, "getItemId : exit" );
+//        Log.d( TAG, "getItemId : exit" );
         return position;
     }
 
     public void setTvCategoriesCollection( Collection<TvCategoryModel> tvCategoriesCollection ) {
-        Log.d( TAG, "setTitleInfosCollection : enter" );
+//        Log.d( TAG, "setTitleInfosCollection : enter" );
 
         this.validateTvCategoriesCollection( tvCategoriesCollection );
         this.tvCategoriesCollection = (List<TvCategoryModel>) tvCategoriesCollection;
         this.notifyDataSetChanged();
 
-        Log.d( TAG, "setTitleInfosCollection : exit");
+//        Log.d( TAG, "setTitleInfosCollection : exit");
     }
 
     public void setOnItemClickListener( OnItemClickListener onItemClickListener ) {
-        Log.d( TAG, "setOnItemClickListener : enter" );
+//        Log.d( TAG, "setOnItemClickListener : enter" );
 
         this.onItemClickListener = onItemClickListener;
 
-        Log.d( TAG, "setOnItemClickListener : exit" );
+//        Log.d( TAG, "setOnItemClickListener : exit" );
     }
 
     private void validateTvCategoriesCollection( Collection<TvCategoryModel> tvCategoriesCollection ) {
-        Log.d(TAG, "validateTvCategoriesCollection : enter");
+//        Log.d(TAG, "validateTvCategoriesCollection : enter");
 
         if( null == tvCategoriesCollection ) {
-            Log.w( TAG, "validateTvCategoriesCollection : tvCategoriesCollection is null" );
+//            Log.w( TAG, "validateTvCategoriesCollection : tvCategoriesCollection is null" );
 
             throw new IllegalArgumentException( "The list cannot be null" );
         }
 
-        Log.d( TAG, "validateTvCategoriesCollection : exit" );
+//        Log.d( TAG, "validateTvCategoriesCollection : exit" );
     }
 
     static class TvCategoryViewHolder extends RecyclerView.ViewHolder {

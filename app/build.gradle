@@ -45,6 +45,7 @@ android {
         resValue "string", "shaName", applicationSHA1
         resValue "string", "tagName", applicationTag
         resValue "string", "versionName", globalConfiguration.getAt( "androidVersionName" )
+
     }
 
     productFlavors {

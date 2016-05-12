@@ -29,7 +29,7 @@ import org.mythtv.android.app.view.fragment.ProgramListFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
-import org.mythtv.android.app.internal.di.modules.ProgramsModule;
+import org.mythtv.android.presentation.internal.di.modules.ProgramsModule;
 import org.mythtv.android.presentation.model.ProgramModel;
 
 /**
@@ -342,7 +342,6 @@ public class ProgramListActivity extends AbstractBaseActivity implements HasComp
 
         this.dvrComponent = DaggerDvrComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .programsModule( new ProgramsModule( descending, startIndex, count, titleRegEx, recGroup, storageGroup ) )
                 .build();
 

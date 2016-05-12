@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.OkHttpClient;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -60,19 +61,23 @@ public class DvrApiImpl implements DvrApi {
     private static final DateTimeFormatter fmt = DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
 
     private final Context context;
+    private final SharedPreferences sharedPreferences;
+    private final OkHttpClient okHttpClient;
     private final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper;
     private final ProgramEntityJsonMapper programEntityJsonMapper;
     private final EncoderEntityJsonMapper encoderEntityJsonMapper;
     private final BooleanJsonMapper booleanJsonMapper;
 
-    public DvrApiImpl( Context context, TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, ProgramEntityJsonMapper programEntityJsonMapper, EncoderEntityJsonMapper encoderEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
+    public DvrApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, ProgramEntityJsonMapper programEntityJsonMapper, EncoderEntityJsonMapper encoderEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
 
-        if( null == context || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper ) {
+        if( null == context || null == sharedPreferences || null == okHttpClient || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
 
         this.context = context.getApplicationContext();
+        this.sharedPreferences = sharedPreferences;
+        this.okHttpClient = okHttpClient;
         this.titleInfoEntityJsonMapper = titleInfoEntityJsonMapper;
         this.programEntityJsonMapper = programEntityJsonMapper;
         this.encoderEntityJsonMapper = encoderEntityJsonMapper;
@@ -223,7 +228,7 @@ public class DvrApiImpl implements DvrApi {
     }
 
     @Override
-    public Observable<List<ProgramEntity>> upcomingProgramEntityList(int startIndex, int count, boolean showAll, int recordId, int recStatus) {
+    public Observable<List<ProgramEntity>> upcomingProgramEntityList( int startIndex, int count, boolean showAll, int recordId, int recStatus ) {
         Log.d( TAG, "upcomingProgramEntityList : enter" );
 
         Log.d( TAG, "upcomingProgramEntityList : exit" );
@@ -373,7 +378,7 @@ public class DvrApiImpl implements DvrApi {
 
     private String getTitleInfoEntitiesFromApi() throws MalformedURLException {
 
-        return ApiConnection.create( context, getMasterBackendUrl() + TITLE_INFO_LIST_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + TITLE_INFO_LIST_URL ).requestSyncCall();
     }
 
     private String getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
@@ -427,15 +432,15 @@ public class DvrApiImpl implements DvrApi {
         }
 
         Log.i( TAG, "getRecordedProgramEntitiesFromApi : url=" + sb.toString() );
-        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String getRecordedProgramDetailsFromApi(int chanId, DateTime startTime ) throws MalformedURLException {
+    private String getRecordedProgramDetailsFromApi( int chanId, DateTime startTime ) throws MalformedURLException {
 
         String apiUrl = String.format( DvrApi.RECORDED_BASE_URL, chanId, fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
 
         Log.i( TAG, "getRecordedProgramDetailsFromApi : apiUrl=" + ( getMasterBackendUrl() + apiUrl ) );
-        return ApiConnection.create( context, getMasterBackendUrl() + apiUrl, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
     private String getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
@@ -475,13 +480,13 @@ public class DvrApiImpl implements DvrApi {
         }
 
         Log.i( TAG, "getUpcomingProgramEntitiesFromApi : url=" + sb.toString() );
-        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private String getEncoderEntitiesFromApi() throws MalformedURLException {
 
         Log.i( TAG, "getEncoderEntitiesFromApi : url=" + ( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ) );
-        return ApiConnection.create( context, getMasterBackendUrl() + ENCODER_LIST_BASE_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + ENCODER_LIST_BASE_URL ).requestSyncCall();
     }
 
     private String postUpdateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
@@ -492,7 +497,7 @@ public class DvrApiImpl implements DvrApi {
         parameters.put( "Watched", String.valueOf( watched ) );
 
         Log.i( TAG, "postUpdateWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ) );
-        return ApiConnection.create( context, getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall( parameters );
+        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ).requestSyncCall( parameters );
     }
 
     private boolean isThereInternetConnection() {
@@ -512,23 +517,14 @@ public class DvrApiImpl implements DvrApi {
         String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         String masterBackend = "http://" + host + ":" + port;
-        Log.d(TAG, "getMasterBackendUrl : masterBackend=" + masterBackend);
+        Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
 
         return masterBackend;
     }
 
     private String getFromPreferences( Context context, String key ) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
         return sharedPreferences.getString( key, "" );
-    }
-
-    private int getIntFromPreferences( Context context, String key, int defaultValue ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return Integer.parseInt( sharedPreferences.getString( key, String.valueOf( defaultValue ) ) );
     }
 
 }

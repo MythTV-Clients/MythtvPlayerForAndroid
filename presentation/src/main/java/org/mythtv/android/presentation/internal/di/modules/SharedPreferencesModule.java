@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mythtv.android.tv.internal.di.modules;
+package org.mythtv.android.presentation.internal.di.modules;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -24,6 +24,7 @@ import android.preference.PreferenceManager;
 
 import org.mythtv.android.domain.SettingsKeys;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -50,6 +51,8 @@ public class SharedPreferencesModule {
         return sharedPreferences;
     }
 
+    @Provides
+    @Singleton
     public String getMasterBackendUrl() {
 
         String host = getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
@@ -58,7 +61,7 @@ public class SharedPreferencesModule {
         return "http://" + host + ":" + port;
     }
 
-    public boolean getInternalPlayerPreferenceFromPreferences() {
+    public boolean getInternalPlayer() {
 
         return getBooleanFromPreferences( SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
     }

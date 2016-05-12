@@ -31,7 +31,7 @@
     <string name="video">Video</string>
     <string name="should_start" translatable="false">shouldStart</string>
 
-    <string name="search_hint">Show, Movie, Actor, Character, Channel</string>
+    <string name="search_hint">Search Show, Movie, Actor, Character, Channel</string>
     <string name="ready_to_stream">Ready to Stream</string>
 
     <string name="drawer_item_watch_recordings">Watch Recordings</string>

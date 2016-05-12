@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.OkHttpClient;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -49,17 +50,21 @@ public class VideoApiImpl implements VideoApi {
     private static final String TAG = VideoApiImpl.class.getSimpleName();
 
     private final Context context;
+    private final SharedPreferences sharedPreferences;
+    private final OkHttpClient okHttpClient;
     private final VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper;
     private final BooleanJsonMapper booleanJsonMapper;
 
-    public VideoApiImpl( Context context, VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
+    public VideoApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
 
-        if( null == context || null == videoMetadataInfoEntityJsonMapper || null == booleanJsonMapper ) {
+        if( null == context || null == sharedPreferences || null == okHttpClient || null == videoMetadataInfoEntityJsonMapper || null == booleanJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
 
         this.context = context;
+        this.sharedPreferences = sharedPreferences;
+        this.okHttpClient = okHttpClient;
         this.videoMetadataInfoEntityJsonMapper = videoMetadataInfoEntityJsonMapper;
         this.booleanJsonMapper = booleanJsonMapper;
 
@@ -262,7 +267,7 @@ public class VideoApiImpl implements VideoApi {
 
         }
 
-        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private String getVideoDetailsFromApi( int id ) throws MalformedURLException {
@@ -273,7 +278,7 @@ public class VideoApiImpl implements VideoApi {
         sb.append( String.format( ID_QS, id ) );
         Log.d( TAG, "getVideoDetailsFromApi : url=" + sb.toString() );
 
-        return ApiConnection.create( context, sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private String postUpdateWatchedStatus( final int videoId, final boolean watched ) throws MalformedURLException {
@@ -283,7 +288,7 @@ public class VideoApiImpl implements VideoApi {
         parameters.put( "Watched", String.valueOf( watched ) );
 
         Log.i( TAG, "postUpdateRecordingWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL ) );
-        return ApiConnection.create( context, getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall( parameters );
+        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL ).requestSyncCall( parameters );
     }
 
     private boolean isThereInternetConnection() {
@@ -310,14 +315,10 @@ public class VideoApiImpl implements VideoApi {
 
     private String getFromPreferences( Context context, String key ) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
         return sharedPreferences.getString( key, "" );
     }
 
     private int getIntFromPreferences( Context context, String key, int defaultValue ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return Integer.parseInt( sharedPreferences.getString( key, String.valueOf( defaultValue ) ) );
     }
