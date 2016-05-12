@@ -37,8 +37,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId 'org.mythtv.android.presentation.test'
 
-        resValue "string", "userAgent", "org.mythtv.android"
-
     }
 
     compileOptions {
