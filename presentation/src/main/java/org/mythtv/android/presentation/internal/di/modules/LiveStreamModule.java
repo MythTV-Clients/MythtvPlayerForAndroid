@@ -16,12 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mythtv.android.tv.internal.di.modules;
+package org.mythtv.android.presentation.internal.di.modules;
 
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.domain.interactor.GetAddLiveStreamDetails;
+import org.mythtv.android.domain.interactor.GetLiveStreamDetails;
 import org.mythtv.android.domain.interactor.GetLiveStreamsList;
 import org.mythtv.android.domain.interactor.GetRemoveLiveStreamDetails;
 import org.mythtv.android.domain.repository.ContentRepository;
@@ -44,6 +45,22 @@ public class LiveStreamModule {
 
     @Provides
     @PerActivity
+    @Named( "getLiveStreams" )
+    DynamicUseCase provideGetLiveStreamsListUseCase( ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+
+        return new GetLiveStreamsList( contentRepository, threadExecutor, postExecutionThread );
+    }
+
+    @Provides
+    @PerActivity
+    @Named( "getLiveStream" )
+    DynamicUseCase provideGetLiveStreamListUseCase( ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+
+        return new GetLiveStreamDetails( contentRepository, threadExecutor, postExecutionThread );
+    }
+
+    @Provides
+    @PerActivity
     @Named( "addLiveStream" )
     DynamicUseCase provideAddLiveStreamModule( ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
@@ -57,13 +74,4 @@ public class LiveStreamModule {
 
         return new GetRemoveLiveStreamDetails( contentRepository, threadExecutor, postExecutionThread );
     }
-
-    @Provides
-    @PerActivity
-    @Named( "getLiveStreams" )
-    DynamicUseCase provideGetLiveStreamsListUseCase( ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
-
-        return new GetLiveStreamsList( contentRepository, threadExecutor, postExecutionThread );
-    }
-
 }

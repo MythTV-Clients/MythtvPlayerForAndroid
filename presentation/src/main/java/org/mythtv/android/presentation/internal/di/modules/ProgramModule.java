@@ -16,13 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mythtv.android.app.internal.di.modules;
+package org.mythtv.android.presentation.internal.di.modules;
 
+import org.joda.time.DateTime;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.interactor.GetVideoSeriesList;
+import org.mythtv.android.domain.interactor.GetRecordedProgramDetails;
 import org.mythtv.android.domain.interactor.UseCase;
-import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 
 import javax.inject.Named;
@@ -31,27 +32,31 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by dmfrey on 11/9/15.
+ * Dagger module that provides program related collaborators.
+ *
+ * Created by dmfrey on 8/30/15.
  */
 @Module
-public class VideoSeriesModule {
+public class ProgramModule {
 
-    private String series;
+    private int chanId = -1;
+    private DateTime startTime = null;
 
-    public VideoSeriesModule() { }
+    public ProgramModule() {}
 
-    public VideoSeriesModule( String series ) {
+    public ProgramModule( int chanId, DateTime startTime ) {
 
-        this.series = series;
+        this.chanId = chanId;
+        this.startTime = startTime;
 
     }
 
     @Provides
     @PerActivity
-    @Named( "televisionSeriesList" )
-    UseCase provideTelevisionSeriesListUseCase( VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    @Named( "programDetails" )
+    UseCase provideGetUserDetailsUseCase( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
-        return new GetVideoSeriesList( series, videoRepository, threadExecutor, postExecutionThread );
+        return new GetRecordedProgramDetails( chanId, startTime, dvrRepository, threadExecutor, postExecutionThread );
     }
 
 }

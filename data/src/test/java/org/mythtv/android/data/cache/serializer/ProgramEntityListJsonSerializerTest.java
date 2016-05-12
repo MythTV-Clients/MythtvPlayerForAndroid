@@ -14,7 +14,9 @@ public class ProgramEntityListJsonSerializerTest extends ApplicationTestCase {
 
     @Before
     public void setUp() {
-        jsonSerializer = new ProgramListEntityJsonSerializer();
+
+        jsonSerializer = new ProgramListEntityJsonSerializer( this.gson );
+
     }
 
     @Test

@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import org.mythtv.android.tv.view.activity.RecordingsActivity;
+import org.mythtv.android.tv.view.activity.SearchableActivity;
 import org.mythtv.android.tv.view.activity.SettingsActivity;
 import org.mythtv.android.tv.view.activity.VideoCategoryActivity;
 import org.mythtv.android.tv.view.activity.VideosActivity;
@@ -99,6 +100,19 @@ public class Navigator {
         }
 
         Log.d( TAG, "navigateToSettings : exit" );
+    }
+
+    public void navigateToSearch( Context context ) {
+        Log.d( TAG, "navigateToSearch : enter" );
+
+        if( null != context ) {
+
+            Intent intentToLaunch = SearchableActivity.getCallingIntent( context );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToSearch : exit" );
     }
 
 }

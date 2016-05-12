@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mythtv.android.tv.internal.di.modules;
+package org.mythtv.android.presentation.internal.di.modules;
 
 import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.domain.executor.PostExecutionThread;

@@ -16,13 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mythtv.android.tv.internal.di.modules;
+package org.mythtv.android.presentation.internal.di.modules;
 
-import org.mythtv.android.domain.executor.PostExecutionThread;
-import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.interactor.GetVideo;
+import org.mythtv.android.domain.interactor.GetEncoderList;
 import org.mythtv.android.domain.interactor.UseCase;
-import org.mythtv.android.domain.repository.VideoRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 
 import javax.inject.Named;
@@ -31,27 +28,19 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by dmfrey on 11/9/15.
+ * Created by dmfrey on 1/19/16.
  */
 @Module
-public class VideoModule {
+public class EncodersModule {
 
-    private int id = -1;
-
-    public VideoModule() { }
-
-    public VideoModule( int id ) {
-
-        this.id = id;
-
-    }
+    public EncodersModule() { }
 
     @Provides
     @PerActivity
-    @Named( "videoDetails" )
-    UseCase provideVideoUseCase( VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    @Named( "encoderList" )
+    UseCase provideEncoderListUseCase( GetEncoderList getEncoderList ) {
 
-        return new GetVideo( id, videoRepository, threadExecutor, postExecutionThread );
+        return getEncoderList;
     }
 
 }
