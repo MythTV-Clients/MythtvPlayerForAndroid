@@ -23,9 +23,9 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
-import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.tv.AndroidApplication;
 import org.mythtv.android.tv.internal.di.components.ApplicationComponent;
+import org.mythtv.android.tv.internal.di.components.SharedPreferencesComponent;
 import org.mythtv.android.tv.internal.di.components.NetComponent;
 import org.mythtv.android.tv.navigation.Navigator;
 
@@ -78,13 +78,13 @@ public abstract class AbstractBaseActivity extends Activity {
     }
 
     /**
-     * Get a SharedPreferences module for dependency injection.
+     * Get a SharedPreferences component for dependency injection.
      *
-     * @return {@link org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule}
+     * @return {@link SharedPreferencesComponent}
      */
-    protected SharedPreferencesModule getSharedPreferencesModule() {
+    protected SharedPreferencesComponent getSharedPreferencesComponent() {
 
-        return new SharedPreferencesModule( this );
+        return ( (AndroidApplication) getApplication() ).getSharedPreferencesComponent();
     }
 
     /**
