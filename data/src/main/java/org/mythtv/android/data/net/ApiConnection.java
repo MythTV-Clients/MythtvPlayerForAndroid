@@ -18,26 +18,18 @@
 
 package org.mythtv.android.data.net;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.facebook.stetho.okhttp3.StethoInterceptor;
-
-import okhttp3.Cache;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * Created by dmfrey on 8/27/15.
