@@ -135,7 +135,7 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     protected void onResume() {
         super.onResume();
 
-        if( getSharedPreferencesComponent().masterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
+        if( getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
             Log.i( TAG, "onResume : MasterBackend not set, redirecting to Settings" );
 
             navigator.navigateToSettings( this );

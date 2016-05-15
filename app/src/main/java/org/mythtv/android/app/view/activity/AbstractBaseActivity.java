@@ -60,6 +60,7 @@ import org.mythtv.android.app.internal.di.components.NetComponent;
 import org.mythtv.android.app.internal.di.components.SharedPreferencesComponent;
 import org.mythtv.android.app.navigation.Navigator;
 import org.mythtv.android.app.view.fragment.AboutDialogFragment;
+import org.mythtv.android.domain.SettingsKeys;
 
 import javax.inject.Inject;
 
@@ -281,6 +282,15 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     protected NetComponent getNetComponent() {
 
         return ( (AndroidApplication) getApplication() ).getNetComponent();
+    }
+
+    protected String getMasterBackendUrl() {
+
+        String host = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "" );
+        String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
+
+        return "http://" + host + ":" + port;
+
     }
 
     private void initMediaRouter() {
