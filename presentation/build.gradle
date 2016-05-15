@@ -26,6 +26,13 @@ android {
     compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
     buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
 
+    dexOptions {
+
+        maxProcessCount 2
+        javaMaxHeapSize "4g"
+
+    }
+
     defaultConfig {
 
         minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
