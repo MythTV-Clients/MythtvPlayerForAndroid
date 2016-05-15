@@ -186,8 +186,11 @@ public class DvrDataRepository implements DvrRepository {
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
-        return dvrDataStore.recordedProgramEntityList( true, 1, 10, null, null, "Default" )
+        // Limit results to 50, then remove anything in the LiveTV storage group and only take 10 for the final results
+        return dvrDataStore.recordedProgramEntityList( true, 1, 50, null, null, null )
                 .flatMap( Observable::from )
+                .filter( programEntity -> !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) )
+                .take( 10 )
                 .toList()
                 .doOnError( throwable -> Log.e( TAG, "recent : error", throwable ) )
                 .map( recordedProgramEntities -> ProgramEntityDataMapper.transform( recordedProgramEntities ) );
