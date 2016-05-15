@@ -21,6 +21,5 @@ public interface SharedPreferencesComponent {
 
     //Exposed to sub-graphs.
     SharedPreferences sharedPreferences();
-    String masterBackendUrl();
 
 }

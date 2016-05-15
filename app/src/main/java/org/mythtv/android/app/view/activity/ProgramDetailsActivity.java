@@ -244,7 +244,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getSharedPreferencesComponent().masterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        String previewUrl = getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
         getNetComponent().picasso()
@@ -262,7 +262,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         if( null == this.programModel.getLiveStreamInfo() || this.programModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
             Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
 
-            String recordingUrl = getSharedPreferencesComponent().masterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
+            String recordingUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
 
             navigator.navigateToExternalPlayer( this, recordingUrl );
 
@@ -271,7 +271,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
             try {
 
-                String recordingUrl = getSharedPreferencesComponent().masterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
+                String recordingUrl = getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
                 recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
                 recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
 
