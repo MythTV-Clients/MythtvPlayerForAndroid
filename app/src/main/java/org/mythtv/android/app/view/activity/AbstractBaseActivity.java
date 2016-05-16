@@ -22,12 +22,12 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -53,14 +53,18 @@ import com.google.android.gms.cast.CastMediaControlIntent;
 import com.google.android.gms.cast.RemoteMediaPlayer;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.mythtv.android.app.R;
 import org.mythtv.android.app.AndroidApplication;
+import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.ApplicationComponent;
 import org.mythtv.android.app.internal.di.components.NetComponent;
 import org.mythtv.android.app.internal.di.components.SharedPreferencesComponent;
 import org.mythtv.android.app.navigation.Navigator;
 import org.mythtv.android.app.view.fragment.AboutDialogFragment;
 import org.mythtv.android.domain.SettingsKeys;
+import org.mythtv.android.presentation.model.LiveStreamInfoModel;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import javax.inject.Inject;
 
@@ -91,6 +95,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
 
     protected String castUrl, castMimeType;
     protected boolean castConnected;
+    protected LiveStreamInfoModel liveStreamInfoModel;
 
     @Inject
     Navigator navigator;
@@ -132,6 +137,28 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
 
         }
 
+        initMediaRouter();
+
+    }
+
+    // Add the callback on start to tell the media router what kinds of routes
+    // your app works with so the framework can discover them.
+    @Override
+    public void onStart() {
+
+        mMediaRouter.addCallback( mMediaRouteSelector, mMediaRouterCallback, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY );
+        super.onStart();
+
+    }
+
+    // Remove the selector on stop to tell the media router that it no longer
+    // needs to discover routes for your app.
+    @Override
+    public void onStop() {
+
+        mMediaRouter.removeCallback( mMediaRouterCallback );
+        super.onStop();
+
     }
 
     @Override
@@ -147,6 +174,10 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
         searchView.setSearchableInfo( searchManager.getSearchableInfo( cn ) );
         searchView.setIconifiedByDefault( false );
+
+        MenuItem mediaRouteMenuItem = menu.findItem( R.id.media_route_menu_item );
+        MediaRouteActionProvider mediaRouteActionProvider = (MediaRouteActionProvider) MenuItemCompat.getActionProvider( mediaRouteMenuItem );
+        mediaRouteActionProvider.setRouteSelector( mMediaRouteSelector );
 
         return super.onCreateOptionsMenu( menu );
     }
@@ -382,21 +413,35 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         // Attach new playback client
         mRemotePlaybackClient = new RemotePlaybackClient( this, mRouteInfo );
 
-        // Send file for playback
-        mRemotePlaybackClient.play( Uri.parse( castUrl ),
-                castMimeType, null, 0, null, new RemotePlaybackClient.ItemActionCallback() {
+        if( null != liveStreamInfoModel ) {
 
-                    @Override
-                    public void onResult( Bundle data, String sessionId, MediaSessionStatus sessionStatus, String itemId, MediaItemStatus itemStatus ) {
-                        Log.d( TAG, "play: succeeded for item " + itemId );
-                    }
+            try {
 
-                    @Override
-                    public void onError( String error, int code, Bundle data ) {
-                        Log.e( TAG, "play: failed - error:" + code + " - " + error );
-                    }
+                castUrl = getMasterBackendUrl() + URLEncoder.encode( liveStreamInfoModel.getRelativeUrl(), "UTF-8" );
+                castUrl = castUrl.replaceAll( "%2F", "/" );
+                castUrl = castUrl.replaceAll( "\\+", "%20" );
 
-                });
+                // Send file for playback
+                mRemotePlaybackClient.play( Uri.parse( castUrl ),
+                        castMimeType, null, 0, null, new RemotePlaybackClient.ItemActionCallback() {
+
+                            @Override
+                            public void onResult( Bundle data, String sessionId, MediaSessionStatus sessionStatus, String itemId, MediaItemStatus itemStatus ) {
+                                Log.d( TAG, "play: succeeded for item " + itemId );
+                            }
+
+                            @Override
+                            public void onError( String error, int code, Bundle data ) {
+                                Log.e( TAG, "play: failed - error:" + code + " - " + error );
+                            }
+
+                        });
+
+            } catch( UnsupportedEncodingException e ) {
+                Log.e( TAG, "updateRemotePlayer : error", e );
+            }
+
+        }
 
     }
 

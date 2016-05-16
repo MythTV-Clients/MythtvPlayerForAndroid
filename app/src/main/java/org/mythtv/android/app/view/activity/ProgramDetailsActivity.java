@@ -260,6 +260,9 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         Log.d( TAG, "onButtonFabPlay : enter" );
 
         if( castConnected && null != programModel.getLiveStreamInfo() ) {
+            Log.d( TAG, "onButtonFabPlay : stream exists, send to google cast" );
+
+            liveStreamInfoModel = programModel.getLiveStreamInfo();
 
             navigator.navigateToCastPlayer( this, programModel );
 

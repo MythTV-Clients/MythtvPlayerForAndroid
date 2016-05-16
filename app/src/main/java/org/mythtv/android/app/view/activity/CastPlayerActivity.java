@@ -166,7 +166,7 @@ public class CastPlayerActivity extends AbstractBaseActivity {
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=banner";
+        String previewUrl = getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=banner";
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         Picasso.with( this )
                 .load( previewUrl )
