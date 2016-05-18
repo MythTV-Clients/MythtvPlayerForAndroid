@@ -34,7 +34,7 @@ ext {
     androidCompileSdkVersion = 23
 
     //Android Support Libraries
-    androidSupportVersion = '23.3.0'
+    androidSupportVersion = '23.4.0'
     playServicesVersion = '8.4.0'
 
     //Libraries
@@ -52,9 +52,10 @@ ext {
     exoplayerVersion = 'r1.5.4'
     glideVersion = '3.7.0'
     multidexVersion = '1.0.0'
-    recyclerviewfastscrollerVersion = "0.1.3"
+    recyclerviewfastscrollerVersion = '0.1.3'
     stethoVersion = '1.3.1'
     leakCanaryVersion = '1.4-beta2'
+    cclVersion = '2.8.3'
 
     //Testing
     robolectricVersion = '3.0'
@@ -94,7 +95,8 @@ ext {
         multidex:           "com.android.support:multidex:${multidexVersion}",
         recyclerviewfastscroller: "xyz.danoz:recyclerviewfastscroller:${recyclerviewfastscrollerVersion}",
         leakCanaryDebug:    "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
-        leakCanaryNoOp:     "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
+        leakCanaryNoOp:     "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}",
+        ccl:                "com.google.android.libraries.cast.companionlibrary:ccl:${cclVersion}"
     ]
 
     presentationTestDependencies = [

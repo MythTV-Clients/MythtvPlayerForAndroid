@@ -24,8 +24,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.app.view.activity.CastPlayerActivity;
 import org.mythtv.android.app.view.activity.MainActivity;
 import org.mythtv.android.app.view.activity.PlayerActivity;
 import org.mythtv.android.app.view.activity.ProgramDetailsActivity;
@@ -172,20 +170,6 @@ public class Navigator {
         }
 
         Log.d( TAG, "navigateToVideoSettings : exit" );
-    }
-
-    public void navigateToCastPlayer( Context context, ProgramModel programModel ) {
-        Log.d( TAG, "navigateToCastPlayer : enter" );
-
-        if( null != context ) {
-            Log.d( TAG, "navigateToCastPlayer : context != null" );
-
-            Intent intentToLaunch = CastPlayerActivity.getCallingIntent( context, programModel );
-            context.startActivity( intentToLaunch );
-
-        }
-
-        Log.d( TAG, "navigateToCastPlayer : exit" );
     }
 
     public void navigateToExternalPlayer( Context context, String uri ) {

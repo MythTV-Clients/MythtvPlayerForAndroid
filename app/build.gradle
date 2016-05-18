@@ -137,6 +137,9 @@ dependencies {
     def presentationDependencies = rootProject.ext.presentationDependencies
     def presentationTestDependencies = rootProject.ext.presentationTestDependencies
 
+    // Remove this and replace with jcenter dependency below
+    compile project(':CastCompanionLibrary')
+
     compile project( ':presentation' )
     compile project( ':domain' )
     compile project( ':data' )
@@ -158,6 +161,7 @@ dependencies {
     compile presentationDependencies.preferences
     compile presentationDependencies.glide
     compile presentationDependencies.recyclerviewfastscroller
+//    compile presentationDependencies.ccl
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations

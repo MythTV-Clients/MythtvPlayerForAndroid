@@ -18,40 +18,36 @@
 
 package org.mythtv.android.app.view.activity;
 
+import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.MediaRouteActionProvider;
-import android.support.v7.media.MediaControlIntent;
-import android.support.v7.media.MediaItemStatus;
-import android.support.v7.media.MediaRouteSelector;
-import android.support.v7.media.MediaRouter;
-import android.support.v7.media.MediaSessionStatus;
-import android.support.v7.media.RemotePlaybackClient;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.google.android.gms.cast.Cast;
-import com.google.android.gms.cast.CastDevice;
-import com.google.android.gms.cast.CastMediaControlIntent;
-import com.google.android.gms.cast.RemoteMediaPlayer;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.cast.ApplicationMetadata;
+import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
+import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumer;
+import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl;
+import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 
 import org.mythtv.android.app.AndroidApplication;
 import org.mythtv.android.app.R;
@@ -62,9 +58,6 @@ import org.mythtv.android.app.navigation.Navigator;
 import org.mythtv.android.app.view.fragment.AboutDialogFragment;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.LiveStreamInfoModel;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import javax.inject.Inject;
 
@@ -80,21 +73,11 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
 
     private static final String TAG = AbstractBaseActivity.class.getSimpleName();
 
-    private MediaRouter mMediaRouter;
-    private MediaRouteSelector mMediaRouteSelector;
-    private MediaRouter.RouteInfo mRouteInfo;
-    private RemotePlaybackClient mRemotePlaybackClient;
-    private CastDevice mSelectedDevice;
-    private GoogleApiClient mApiClient;
-    private RemoteMediaPlayer mRemoteMediaPlayer;
-    private Cast.Listener mCastClientListener;
-    private boolean mWaitingForReconnect = false;
-    private boolean mApplicationStarted = false;
-    private boolean mVideoIsLoaded;
-    private boolean mIsPlaying;
-
-    protected String castUrl, castMimeType;
-    protected boolean castConnected;
+    protected VideoCastManager mCastManager;
+    protected VideoCastConsumer mCastConsumer;
+    protected MenuItem mMediaRouteMenuItem;
+    protected boolean mIsHoneyCombOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+    protected IntroductoryOverlay mOverlay;
     protected LiveStreamInfoModel liveStreamInfoModel;
 
     @Inject
@@ -111,6 +94,8 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
+        VideoCastManager.checkGooglePlayServices( this );
+
         this.getApplicationComponent().inject( this );
         setContentView( getLayoutResource() );
         ButterKnife.bind( this );
@@ -120,6 +105,60 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
             navigationView.setNavigationItemSelectedListener( this );
 
         }
+
+        mCastManager = VideoCastManager.getInstance();
+        mCastConsumer = new VideoCastConsumerImpl() {
+
+            @Override
+            public void onFailed( int resourceId, int statusCode ) {
+
+                String reason = "Not Available";
+                if( resourceId > 0 ) {
+
+                    reason = getString( resourceId );
+
+                }
+
+                Log.e( TAG, "Action failed, reason:  " + reason + ", status code: " + statusCode );
+            }
+
+            @Override
+            public void onApplicationConnected( ApplicationMetadata appMetadata, String sessionId, boolean wasLaunched ) {
+
+                invalidateOptionsMenu();
+
+            }
+
+            @Override
+            public void onDisconnected() {
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onConnectionSuspended( int cause ) {
+                Log.d( TAG, "onConnectionSuspended() was called with cause: " + cause );
+
+//                com.google.sample.cast.refplayer.utils.Utils.
+//                        showToast( VideoBrowserActivity.this, R.string.connection_temp_lost );
+
+            }
+
+            @Override
+            public void onConnectivityRecovered() {
+//                com.google.sample.cast.refplayer.utils.Utils.
+//                        showToast(VideoBrowserActivity.this, R.string.connection_recovered);
+            }
+
+            @Override
+            public void onCastAvailabilityChanged( boolean castPresent ) {
+
+                if( castPresent && mIsHoneyCombOrAbove ) {
+                    showOverlay();
+                }
+
+            }
+
+        };
 
         if( toolbar != null ) {
             setSupportActionBar( toolbar );
@@ -137,27 +176,30 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
 
         }
 
-        initMediaRouter();
+    }
+
+    @Override
+    protected void onResume() {
+
+        mCastManager = VideoCastManager.getInstance();
+        if( null != mCastManager ) {
+
+            mCastManager.addVideoCastConsumer( mCastConsumer );
+            mCastManager.incrementUiCounter();
+
+        }
+
+        super.onResume();
 
     }
 
-    // Add the callback on start to tell the media router what kinds of routes
-    // your app works with so the framework can discover them.
     @Override
-    public void onStart() {
+    protected void onPause() {
 
-        mMediaRouter.addCallback( mMediaRouteSelector, mMediaRouterCallback, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY );
-        super.onStart();
+        mCastManager.decrementUiCounter();
+        mCastManager.removeVideoCastConsumer(mCastConsumer);
 
-    }
-
-    // Remove the selector on stop to tell the media router that it no longer
-    // needs to discover routes for your app.
-    @Override
-    public void onStop() {
-
-        mMediaRouter.removeCallback( mMediaRouterCallback );
-        super.onStop();
+        super.onPause();
 
     }
 
@@ -175,9 +217,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         searchView.setSearchableInfo( searchManager.getSearchableInfo( cn ) );
         searchView.setIconifiedByDefault( false );
 
-        MenuItem mediaRouteMenuItem = menu.findItem( R.id.media_route_menu_item );
-        MediaRouteActionProvider mediaRouteActionProvider = (MediaRouteActionProvider) MenuItemCompat.getActionProvider( mediaRouteMenuItem );
-        mediaRouteActionProvider.setRouteSelector( mMediaRouteSelector );
+        mMediaRouteMenuItem = mCastManager.addMediaRouterButton( menu, R.id.media_route_menu_item );
 
         return super.onCreateOptionsMenu( menu );
     }
@@ -265,6 +305,51 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         return false;
     }
 
+    @TargetApi( Build.VERSION_CODES.HONEYCOMB )
+    private void showOverlay() {
+        if(mOverlay != null) {
+            mOverlay.remove();
+        }
+
+        new Handler().postDelayed( new Runnable() {
+
+            @Override
+            public void run() {
+
+                if( mMediaRouteMenuItem.isVisible() ) {
+
+                    mOverlay = new IntroductoryOverlay.Builder( AbstractBaseActivity.this )
+                            .setMenuItem( mMediaRouteMenuItem )
+                            .setTitleText( R.string.intro_overlay_text )
+                            .setSingleTime()
+                            .setOnDismissed( new IntroductoryOverlay.OnOverlayDismissedListener() {
+
+                                @Override
+                                public void onOverlayDismissed() {
+                                    Log.d( TAG, "overlay is dismissed" );
+
+                                    mOverlay = null;
+
+                                }
+
+                            }).build();
+
+                    mOverlay.show();
+
+                }
+
+            }
+
+        }, 1000 );
+
+    }
+
+    @Override
+    public boolean dispatchKeyEvent( @NonNull KeyEvent event ) {
+
+        return mCastManager.onDispatchVolumeKeyEvent( event, AndroidApplication.VOLUME_INCREMENT ) || super.dispatchKeyEvent( event );
+    }
+
     public void setNavigationMenuItemChecked( int index ) {
 
         navigationView.getMenu().getItem( index ).setChecked( true );
@@ -321,127 +406,6 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
 
         return "http://" + host + ":" + port;
-
-    }
-
-    private void initMediaRouter() {
-
-        // Configure Cast device discovery
-        mMediaRouter = MediaRouter.getInstance( getApplicationContext() );
-        mMediaRouteSelector = new MediaRouteSelector.Builder()
-                .addControlCategory( CastMediaControlIntent.categoryForCast( getString( R.string.app_id ) ) )
-                .build();
-
-    }
-
-    private final MediaRouter.Callback mMediaRouterCallback =
-            new MediaRouter.Callback() {
-
-                @Override
-                public void onRouteSelected( MediaRouter router, MediaRouter.RouteInfo route ) {
-                    Log.d( TAG, "onRouteSelected: route=" + route );
-
-                    castConnected = true;
-
-                    if( route.supportsControlCategory( MediaControlIntent.CATEGORY_REMOTE_PLAYBACK ) ) {
-
-                        // remote playback device
-                        updateRemotePlayer( route );
-
-                    } else {
-
-                        // secondary output device
-//                        updatePresentation( route );
-
-                    }
-
-                }
-
-                @Override
-                public void onRouteUnselected( MediaRouter router, MediaRouter.RouteInfo route ) {
-                    Log.d( TAG, "onRouteUnselected: route=" + route );
-
-                    castConnected = false;
-
-                    if( route.supportsControlCategory( MediaControlIntent.CATEGORY_REMOTE_PLAYBACK ) ) {
-
-                        // remote playback device
-                        updateRemotePlayer( route );
-
-                    } else {
-
-                        // secondary output device
-//                        updatePresentation( route );
-
-                    }
-
-                }
-
-                @Override
-                public void onRoutePresentationDisplayChanged( MediaRouter router, MediaRouter.RouteInfo route ) {
-                    Log.d( TAG, "onRoutePresentationDisplayChanged: route=" + route );
-
-                    if( route.supportsControlCategory( MediaControlIntent.CATEGORY_REMOTE_PLAYBACK ) ) {
-
-                        // remote playback device
-                        updateRemotePlayer( route );
-
-                    } else {
-
-                        // secondary output device
-//                        updatePresentation( route );
-
-                    }
-
-                }
-
-            };
-
-    private void updateRemotePlayer( MediaRouter.RouteInfo routeInfo ) {
-
-        // Changed route: tear down previous client
-        if( null != mRouteInfo && null != mRemotePlaybackClient ) {
-
-            mRemotePlaybackClient.release();
-            mRemotePlaybackClient = null;
-
-        }
-
-        // Save new route
-        mRouteInfo = routeInfo;
-
-        // Attach new playback client
-        mRemotePlaybackClient = new RemotePlaybackClient( this, mRouteInfo );
-
-        if( null != liveStreamInfoModel ) {
-
-            try {
-
-                castUrl = getMasterBackendUrl() + URLEncoder.encode( liveStreamInfoModel.getRelativeUrl(), "UTF-8" );
-                castUrl = castUrl.replaceAll( "%2F", "/" );
-                castUrl = castUrl.replaceAll( "\\+", "%20" );
-
-                // Send file for playback
-                mRemotePlaybackClient.play( Uri.parse( castUrl ),
-                        castMimeType, null, 0, null, new RemotePlaybackClient.ItemActionCallback() {
-
-                            @Override
-                            public void onResult( Bundle data, String sessionId, MediaSessionStatus sessionStatus, String itemId, MediaItemStatus itemStatus ) {
-                                Log.d( TAG, "play: succeeded for item " + itemId );
-                            }
-
-                            @Override
-                            public void onError( String error, int code, Bundle data ) {
-                                Log.e( TAG, "play: failed - error:" + code + " - " + error );
-                            }
-
-                        });
-
-            } catch( UnsupportedEncodingException e ) {
-                Log.e( TAG, "updateRemotePlayer : error", e );
-            }
-
-        }
 
     }
 

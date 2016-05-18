@@ -158,4 +158,7 @@
     <string name="shaLabel">Commit:</string>
     <string name="tagLabel">Tag:</string>
 
+    <!-- Introductory Overlay text -->
+    <string name="intro_overlay_text">Touch to cast videos to your TV</string>
+
 </resources>

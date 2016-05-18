@@ -20,21 +20,33 @@ package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+
+import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.MediaMetadata;
+import com.google.android.gms.common.images.WebImage;
+import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
+import com.google.android.libraries.cast.companionlibrary.cast.player.VideoCastControllerActivity;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
+import org.mythtv.android.app.utils.MediaInfoHelper;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
@@ -44,10 +56,13 @@ import org.mythtv.android.presentation.model.ProgramModel;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.google.android.libraries.cast.companionlibrary.utils.Utils.*;
 
 /**
  * Created by dmfrey on 9/30/15.
@@ -259,42 +274,58 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     void onButtonFabPlay() {
         Log.d( TAG, "onButtonFabPlay : enter" );
 
-        if( castConnected && null != programModel.getLiveStreamInfo() ) {
-            Log.d( TAG, "onButtonFabPlay : stream exists, send to google cast" );
+        if( mCastManager.isConnected() || mCastManager.isConnecting() ) {
+            Log.d( TAG, "onButtonFabPlay : connected or connecting to Google Cast" );
 
-            liveStreamInfoModel = programModel.getLiveStreamInfo();
+            MediaInfo item = MediaInfoHelper.programModelToMediaInfo( getMasterBackendUrl(), programModel );
+            if( null != item ) {
+                Log.d( TAG, "onButtonFabPlay : item=" + item.getContentId() );
 
-            navigator.navigateToCastPlayer( this, programModel );
+                mCastManager.startVideoCastControllerActivity( this, item, 0, true );
 
-        } else if( null == this.programModel.getLiveStreamInfo() || this.programModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
-            Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
-
-            String recordingUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
-
-            navigator.navigateToExternalPlayer( this, recordingUrl );
+            }
 
         } else {
-            Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
+            Log.d( TAG, "onButtonFabPlay : not connected to Google Cast" );
 
-            try {
+            if( null == this.programModel.getLiveStreamInfo() || this.programModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
+                Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
 
-                String recordingUrl = getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
-                recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
-                recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
+                try {
 
-                if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
-                    Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
+                    String recordingUrl = MediaInfoHelper.buildUrl( getMasterBackendUrl(), "/Content/GetFile?FileName=" + programModel.getFileName() );
+                    Log.d( TAG, "onButtonFabPlay : recordingUrl=" + recordingUrl );
 
-                    navigator.navigateToVideoPlayer( this, recordingUrl );
-
-                } else {
                     Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
-
                     navigator.navigateToExternalPlayer( this, recordingUrl );
 
+                } catch( UnsupportedEncodingException e ) {
+                    Log.e( TAG, "onButtonFabPlay : error", e );
                 }
 
-            } catch( UnsupportedEncodingException e ) { }
+            } else {
+                Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
+
+                try {
+
+                    String recordingUrl = MediaInfoHelper.buildUrl( getMasterBackendUrl(), programModel.getLiveStreamInfo().getRelativeUrl() );
+                    Log.d( TAG, "onButtonFabPlay : recordingUrl=" + recordingUrl );
+
+                    if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
+                        Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
+
+                        navigator.navigateToVideoPlayer( this, recordingUrl );
+
+                    } else {
+                        Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
+
+                        navigator.navigateToExternalPlayer( this, recordingUrl );
+
+                    }
+
+                } catch( UnsupportedEncodingException e ) { }
+
+            }
 
         }
 

@@ -31,6 +31,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <!-- App Activities -->
         <activity
             android:name=".view.activity.MainActivity"
@@ -239,10 +243,32 @@
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
+        <activity
+            android:name="com.google.android.libraries.cast.companionlibrary.cast.player.VideoCastControllerActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.CastVideosDark"
+            android:parentActivityName=".view.activity.ProgramDetailsActivity"
+            android:screenOrientation="portrait" >
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="com.google.sample.cast.refplayer.VideoBrowserActivity" />-->
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
         <provider
             android:name="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
             android:authorities="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
             android:exported="false" />
+
+        <receiver android:name="com.google.android.libraries.cast.companionlibrary.remotecontrol.VideoIntentReceiver" />
+
+        <service android:name="com.google.android.libraries.cast.companionlibrary.notification.VideoCastNotificationService" />
+
+        <service android:name="com.google.android.libraries.cast.companionlibrary.cast.reconnection.ReconnectionService" />
 
     </application>
 

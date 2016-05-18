@@ -20,6 +20,7 @@ package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -29,10 +30,16 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.MediaMetadata;
+import com.google.android.gms.common.images.WebImage;
+
 import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
+import org.mythtv.android.app.utils.MediaInfoHelper;
 import org.mythtv.android.app.view.fragment.VideoDetailsFragment;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.VideoModule;
@@ -245,33 +252,45 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     void onButtonFabPlay() {
         Log.d( TAG, "onButtonFabPlay : enter" );
 
-        if( null == this.videoMetadataInfoModel.getLiveStreamInfo() || this.videoMetadataInfoModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
-            Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
+        if( mCastManager.isConnected() || mCastManager.isConnecting() ) {
+            Log.d( TAG, "onButtonFabPlay : connected or connecting to Google Cast" );
 
-            String filename = "";
-            try {
+            MediaInfo item = MediaInfoHelper.videoModelToMediaInfo( getMasterBackendUrl(), videoMetadataInfoModel );
+            if( null != item ) {
+                Log.d( TAG, "onButtonFabPlay : item=" + item.getContentId() );
 
-                filename = URLEncoder.encode( videoMetadataInfoModel.getFileName(), "UTF-8" );
+                mCastManager.startVideoCastControllerActivity( this, item, 0, true );
 
-            } catch( UnsupportedEncodingException e ) { }
-
-            String videoUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
-            Log.d( TAG, "onPlayVideo : videoUrl=" + videoUrl );
-
-            navigator.navigateToExternalPlayer( this, videoUrl );
+            }
 
         } else {
-            Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
+            Log.d( TAG, "onButtonFabPlay : not connected to Google Cast" );
 
             try {
-                String videoUrl = getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
-                videoUrl = videoUrl.replaceAll( "%2F", "/" );
-                videoUrl = videoUrl.replaceAll( "\\+", "%20" );
 
-//                navigator.navigateToInternalPlayer( this, videoUrl, null, PlayerActivity.TYPE_HLS );
-                navigator.navigateToVideoPlayer( this, videoUrl );
+                String videoUrl = MediaInfoHelper.buildUrl( getMasterBackendUrl(), "/Content/GetFile?FileName=" + videoMetadataInfoModel.getFileName() );
+                if( null != this.videoMetadataInfoModel.getLiveStreamInfo() && this.videoMetadataInfoModel.getLiveStreamInfo().getPercentComplete() >= 2 ) {
 
-            } catch( UnsupportedEncodingException e ) { }
+                    videoUrl = MediaInfoHelper.buildUrl( getMasterBackendUrl(), videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl() );
+
+                }
+                Log.d( TAG, "onPlayVideo : videoUrl=" + videoUrl );
+
+                if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
+                    Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
+
+                    navigator.navigateToVideoPlayer( this, videoUrl );
+
+                } else {
+                    Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
+
+                    navigator.navigateToExternalPlayer( this, videoUrl );
+
+                }
+
+            } catch( UnsupportedEncodingException e ) {
+                Log.e( TAG, "onButtonFabPlay : error", e );
+            }
 
         }
 

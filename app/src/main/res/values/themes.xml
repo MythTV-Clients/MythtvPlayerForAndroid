@@ -46,4 +46,8 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="Theme.CastVideosDark" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+    </style>
+
 </resources>
