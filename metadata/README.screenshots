@@ -1,0 +1,43 @@
+Take screenshots on a device and rename as follows. Names
+are short for ease of change:
+
+    ND.jpg = Navigation Drawer
+
+    Home.jpg = Home Screen, RECENT page
+
+    WR.jpg = Watch Recordings Screen
+    WRT.jpb = Watch Recording Titles List
+    WRD.jpb = Watch Recording Detail
+    WRPp = Player in protrait
+    WRPl = Player in landscape
+
+    WV.jpg = Watch Videos
+    WVT.jpg = Titles
+    WVD.mpg = Detail
+    WVPp = Player in protrait
+    WVPl = Player in landscape
+
+Copy the files from the device to the proper directory under
+.../MythtvPlayerForAndroid/metadata/<device type>
+
+Now, inn Gimp:
+    Open each file, one at a time (control-o)
+    Select Menu->Filters->Blur->Gaussian Blur
+        Set H: 50.0
+            V: 50.0
+    Select Menu->Export (control-shift-e)
+    Click on the small x in the upper left to close
+    the current image, or type: control-w
+
+    NOTE, after doing the 1st blur, just type control-f to repeat on
+    other pictures
+
+Optional way to upload files:
+
+    List the screenshots:
+    adb {-s <device>} shell ls mnt/sdcard/Pictures/Screenshots
+
+    cd to proper images/<locale>/<device name> directory 1st, e.g
+    metadata/en-US/sevenInchScreenshots
+
+    adb {-s <device>} pull -a -p mnt/sdcard/Pictures/Screenshots/<names as above> .
