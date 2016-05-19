@@ -1,43 +1,38 @@
-Take screenshots on a device and rename as follows. Names
-are short for ease of change:
+Take screenshots on a device and rename as follows:
 
-    ND.jpg = Navigation Drawer
+    navigation_drawer.png
+    about.png
+    settings.png
 
-    Home.jpg = Home Screen, RECENT page
+    home_encoders.png
+    home_recent.png
+    home_upcoming.png
 
-    WR.jpg = Watch Recordings Screen
-    WRT.jpb = Watch Recording Titles List
-    WRD.jpb = Watch Recording Detail
-    WRPp = Player in protrait
-    WRPl = Player in landscape
+    watch_recordings.png
+    watch_recordings_episodes.png
+    watch_recordings_details.png
 
-    WV.jpg = Watch Videos
-    WVT.jpg = Titles
-    WVD.mpg = Detail
-    WVPp = Player in protrait
-    WVPl = Player in landscape
+    watch_videos.png
+    watch_videos_details.png
 
 Copy the files from the device to the proper directory under
-.../MythtvPlayerForAndroid/metadata/<device type>
+.../MythtvPlayerForAndroid/metadata/<device type>. Use the
+Android Studio Monitor. Select each screen and click on the
+snapshot icon in the upper left.
 
-Now, inn Gimp:
-    Open each file, one at a time (control-o)
+In Gimp:
+    From the command line, open the files with images:
+
+        gimp home_recent.png watch_recordings.png watch_recordings_episodes.png  \
+            watch_recordings_details.png watch_videos.png watch_videos_details.png
+
+    Use a selection tool, probably the rectangle, to choose the images to blur.
+
     Select Menu->Filters->Blur->Gaussian Blur
-        Set H: 50.0
-            V: 50.0
-    Select Menu->Export (control-shift-e)
-    Click on the small x in the upper left to close
-    the current image, or type: control-w
+        Set H: 14.0
+            V: 14.0
+    Select Menu->Export (control-shift-e) and then press <return> to
+    export, overwrite and save the file.
 
-    NOTE, after doing the 1st blur, just type control-f to repeat on
-    other pictures
-
-Optional way to upload files:
-
-    List the screenshots:
-    adb {-s <device>} shell ls mnt/sdcard/Pictures/Screenshots
-
-    cd to proper images/<locale>/<device name> directory 1st, e.g
-    metadata/en-US/sevenInchScreenshots
-
-    adb {-s <device>} pull -a -p mnt/sdcard/Pictures/Screenshots/<names as above> .
+    NOTE, after doing the 1st blur, just type control-f to repeat on other
+    pictures (after selecting the portion to apply the blur to.)
