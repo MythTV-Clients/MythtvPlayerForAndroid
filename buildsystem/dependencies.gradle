@@ -35,7 +35,7 @@ ext {
 
     //Android Support Libraries
     androidSupportVersion = '23.4.0'
-    playServicesVersion = '8.4.0'
+    playServicesVersion = '9.0.0'
 
     //Libraries
     daggerVersion = '2.4'

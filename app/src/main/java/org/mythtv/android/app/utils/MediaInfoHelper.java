@@ -107,7 +107,9 @@ public class MediaInfoHelper {
 
         String url = masterBackendUrl + URLEncoder.encode( context, "UTF-8");
         url = url.replaceAll( "%2F", "/" );
+        url = url.replaceAll( "%252F", "/" );
         url = url.replaceAll( "\\+", "%20" );
+        url = url.replaceAll( "%2B", "%20" );
         url = url.replaceAll( "%3F", "?" );
         url = url.replaceAll( "%3D", "=" );
 
