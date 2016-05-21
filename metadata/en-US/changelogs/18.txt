@@ -1,0 +1,3 @@
+v2.0.0
+=============
+This version has been completely refactored how it talks to the mythtv master backend. It adopts best practices for separating backend interactions with frontend presentation. There has been considerable work done on automated building and testing with continuous integration and code coverage. New enhancements will be easier to implement going forward and will focus on testing as a part of this work.
