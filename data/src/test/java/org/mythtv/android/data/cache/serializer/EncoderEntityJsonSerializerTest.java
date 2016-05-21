@@ -15,7 +15,9 @@ public class EncoderEntityJsonSerializerTest extends ApplicationTestCase {
 
     @Before
     public void setUp() {
-        jsonSerializer = new EncoderEntityJsonSerializer();
+
+        jsonSerializer = new EncoderEntityJsonSerializer( this.gson );
+
     }
 
     @Test

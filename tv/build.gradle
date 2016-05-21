@@ -30,6 +30,13 @@ android {
     buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
     enforceUniquePackageName = false
 
+    dexOptions {
+
+        maxProcessCount 2
+        javaMaxHeapSize "4g"
+
+    }
+
     defaultConfig {
 
         minSdkVersion globalConfiguration.getAt( "androidTvMinSdkVersion" )
@@ -127,6 +134,7 @@ dependencies {
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
     compile presentationDependencies.picasso
+    compile presentationDependencies.picassoOkHttpDownloader
     compile presentationDependencies.androidAnnotations
     compile presentationDependencies.preferences
     compile presentationDependencies.leanback

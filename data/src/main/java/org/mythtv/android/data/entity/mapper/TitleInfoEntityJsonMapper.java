@@ -43,15 +43,9 @@ public class TitleInfoEntityJsonMapper {
     private final Gson gson;
 
     @Inject
+    public TitleInfoEntityJsonMapper( Gson gson ) {
 
-    public TitleInfoEntityJsonMapper() {
-
-        this.gson = new GsonBuilder()
-                .disableHtmlEscaping()
-                .setFieldNamingPolicy( FieldNamingPolicy.UPPER_CAMEL_CASE )
-                .setPrettyPrinting()
-                .serializeNulls()
-                .create();
+        this.gson = gson;
 
     }
 

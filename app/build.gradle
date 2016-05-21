@@ -30,6 +30,13 @@ android {
     buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
     enforceUniquePackageName = false
 
+    dexOptions {
+
+        maxProcessCount 2
+        javaMaxHeapSize "4g"
+
+    }
+
     defaultConfig {
 
         minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
@@ -45,6 +52,7 @@ android {
         resValue "string", "shaName", applicationSHA1
         resValue "string", "tagName", applicationTag
         resValue "string", "versionName", globalConfiguration.getAt( "androidVersionName" )
+
     }
 
     productFlavors {

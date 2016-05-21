@@ -478,7 +478,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
                 Log.d( TAG, "updateLiveStreamControls : hls processing..." );
 
                 String playerType = getResources().getString( R.string.pref_internal_player );
-                if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
+                if( !getSharedPreferencesModule().getInternalPlayer() ) {
 
                     playerType = getResources().getString( R.string.pref_external_player );
 

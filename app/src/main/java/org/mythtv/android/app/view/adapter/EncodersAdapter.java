@@ -72,26 +72,26 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
     @Override
     public int getItemCount() {
-        Log.d( TAG, "getItemCount : enter" );
+//        Log.d( TAG, "getItemCount : enter" );
 
-        Log.d( TAG, "getItemCount : exit" );
+//        Log.d( TAG, "getItemCount : exit" );
         return ( null != this.encodersCollection ) ? this.encodersCollection.size() : 0;
     }
 
     @Override
     public EncoderViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
-        Log.d( TAG, "onCreateViewHolder : enter" );
+//        Log.d( TAG, "onCreateViewHolder : enter" );
 
         View view = this.layoutInflater.inflate( R.layout.encoder_list_item, parent, false );
         EncoderViewHolder encoderViewHolder = new EncoderViewHolder( view );
 
-        Log.d( TAG, "onCreateViewHolder : exit" );
+//        Log.d( TAG, "onCreateViewHolder : exit" );
         return encoderViewHolder;
     }
 
     @Override
     public void onBindViewHolder( EncoderViewHolder holder, final int position ) {
-        Log.d( TAG, "onBindViewHolder : enter" );
+//        Log.d( TAG, "onBindViewHolder : enter" );
 
         final EncoderModel encoderModel = this.encodersCollection.get( position );
 
@@ -115,45 +115,45 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
         }
 
-        Log.d( TAG, "onBindViewHolder : exit" );
+//        Log.d( TAG, "onBindViewHolder : exit" );
     }
 
     @Override
     public long getItemId( int position ) {
-        Log.d( TAG, "getItemId : enter" );
+//        Log.d( TAG, "getItemId : enter" );
 
-        Log.d( TAG, "getItemId : exit" );
+//        Log.d( TAG, "getItemId : exit" );
         return position;
     }
 
     public void setEncodersCollection( Collection<EncoderModel> encodersCollection ) {
-        Log.d( TAG, "setEncodersCollection : enter" );
+//        Log.d( TAG, "setEncodersCollection : enter" );
 
         this.validateEncodersCollection( encodersCollection );
         this.encodersCollection = (List<EncoderModel>) encodersCollection;
         this.notifyDataSetChanged();
 
-        Log.d( TAG, "setTitleInfosCollection : exit");
+//        Log.d( TAG, "setTitleInfosCollection : exit");
     }
 
     public void setOnItemClickListener( OnItemClickListener onItemClickListener ) {
-        Log.d( TAG, "setOnItemClickListener : enter" );
+//        Log.d( TAG, "setOnItemClickListener : enter" );
 
         OnItemClickListener onItemClickListener1 = onItemClickListener;
 
-        Log.d( TAG, "setOnItemClickListener : exit" );
+//        Log.d( TAG, "setOnItemClickListener : exit" );
     }
 
     private void validateEncodersCollection( Collection<EncoderModel> encodersCollection ) {
-        Log.d(TAG, "validateEncodersCollection : enter");
+//        Log.d(TAG, "validateEncodersCollection : enter");
 
         if( null == encodersCollection ) {
-            Log.w( TAG, "validateEncodersCollection : encodersCollection is null" );
+//            Log.w( TAG, "validateEncodersCollection : encodersCollection is null" );
 
             throw new IllegalArgumentException( "The list cannot be null" );
         }
 
-        Log.d( TAG, "validateEncodersCollection : exit" );
+//        Log.d( TAG, "validateEncodersCollection : exit" );
     }
 
     private int translateState( int state ) {
@@ -215,21 +215,6 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
         }
 
-    }
-
-    private String getMasterBackendUrl() {
-
-        String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-        return "http://" + host + ":" + port;
-    }
-
-    public String getFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getString( key, "" );
     }
 
 }

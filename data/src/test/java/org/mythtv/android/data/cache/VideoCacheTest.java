@@ -49,7 +49,7 @@ public class VideoCacheTest extends ApplicationTestCase {
 
         fileManager = new FileManager();
 
-        videoCache = new VideoCacheImpl( context, new VideoEntityJsonSerializer(), new VideoListEntityJsonSerializer(), fileManager, mockThreadExecutor );
+        videoCache = new VideoCacheImpl( context, new VideoEntityJsonSerializer( this.gson ), new VideoListEntityJsonSerializer( this.gson ), fileManager, mockThreadExecutor );
 
     }
 

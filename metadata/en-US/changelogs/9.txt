@@ -1,0 +1,2 @@
+Skip recorded programs where key fields are null or empty
+Bug Fixes

@@ -20,14 +20,13 @@ package org.mythtv.android.tv.view.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.SearchFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
+import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.ObjectAdapter;
@@ -35,22 +34,25 @@ import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
-import org.joda.time.DateTime;
-import org.mythtv.android.tv.R;
-import org.mythtv.android.data.entity.SearchResultEntity;
-import org.mythtv.android.data.repository.DatabaseHelper;
 import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.tv.presenter.CardPresenter;
+import org.mythtv.android.presentation.presenter.SearchResultListPresenter;
 import org.mythtv.android.presentation.view.SearchResultListView;
+import org.mythtv.android.tv.R;
+import org.mythtv.android.tv.internal.di.components.SearchComponent;
+import org.mythtv.android.tv.presenter.CardPresenter;
+import org.mythtv.android.tv.view.activity.RecordingsDetailsActivity;
+import org.mythtv.android.tv.view.activity.VideoDetailsActivity;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by dmfrey on 2/27/16.
@@ -72,16 +74,11 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
 
     }
 
-    private static final String QUERY_KEY = "query";
-    private static final int SEARCH_DELAY_MS = 1000;
+    @Inject
+    SearchResultListPresenter searchResultListPresenter;
 
     private ArrayObjectAdapter mRowsAdapter;
     private Handler mHandler = new Handler();
-
-//    @Inject
-//    SearchResultListPresenter searchResultListPresenter;
-
-    private SQLiteDatabase db;
 
     private SearchResultListListener searchResultListListener;
 
@@ -117,12 +114,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
-        mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
-        setSearchResultProvider( this );
-        setOnItemViewClickedListener( new ItemViewClickedListener() );
-
-        DatabaseHelper dbOpenHelper = new DatabaseHelper( getActivity() );
-        db = dbOpenHelper.getReadableDatabase();
+        setupUI();
 
         Log.d( TAG, "onCreate : exit" );
     }
@@ -143,7 +135,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-//        this.searchResultListPresenter.resume();
+        this.searchResultListPresenter.resume();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -153,7 +145,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-//        this.searchResultListPresenter.pause();
+        this.searchResultListPresenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -163,7 +155,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
-//        this.searchResultListPresenter.destroy();
+        this.searchResultListPresenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
     }
@@ -179,12 +171,26 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
     private void initialize() {
         Log.d( TAG, "initialize : enter" );
 
-//        this.getComponent( SearchComponent.class ).inject( this );
-//        this.searchResultListPresenter.setView( this );
-
+        Log.d( TAG, "initialize : get searchText" );
         this.searchText = getArguments().getString( ARGUMENT_KEY_SEARCH_TEXT );
 
+        Log.d( TAG, "initialize : get component" );
+        this.getComponent( SearchComponent.class ).inject( this );
+
+        Log.d( TAG, "initialize : set view" );
+        this.searchResultListPresenter.setView( this );
+
         Log.d( TAG, "initialize : exit" );
+    }
+
+    private void setupUI() {
+        Log.d( TAG, "setupUI : enter" );
+
+        mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
+        setSearchResultProvider( this );
+        setOnItemViewClickedListener( new ItemViewClickedListener() );
+
+        Log.d( TAG, "setupUI : exit" );
     }
 
     @Override
@@ -287,11 +293,11 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
 
     @Override
     public void showMessage( String message ) {
-        Log.d( TAG, "showError : enter" );
+        Log.d( TAG, "showMessage : enter" );
 
         this.showToastMessage( message );
 
-        Log.d( TAG, "showError : exit" );
+        Log.d( TAG, "showMessage : exit" );
     }
 
     @Override
@@ -309,9 +315,7 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
         Log.d( TAG, "loadSearchResultList : enter" );
 
         Log.d( TAG, "loadSearchResultList : searchText=" + searchText );
-//        this.searchResultListPresenter.initialize( searchText );
-
-        renderSearchResultList( search( searchText ) );
+        this.searchResultListPresenter.initialize( this.searchText );
 
         Log.d( TAG, "loadSearchResultList : exit" );
     }
@@ -326,10 +330,13 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
     public boolean onQueryTextChange( String newQuery ) {
         Log.d( TAG, "onQueryTextChange : enter" );
 
-        this.searchText = newQuery;
-//        this.loadSearchResultList();
+        if( !TextUtils.isEmpty( newQuery ) && newQuery.length() > 3 ) {
+            Log.d( TAG, "onQueryTextChange : newQuery is not empty and length is greater than 3" );
 
-        renderSearchResultList( search( searchText ) );
+            this.searchText = newQuery;
+            this.loadSearchResultList();
+
+        }
 
         Log.d( TAG, "onQueryTextChange : exit" );
         return true;
@@ -339,88 +346,16 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
     public boolean onQueryTextSubmit( String query ) {
         Log.d( TAG, "onQueryTextSubmit : enter" );
 
-        this.searchText = query;
-//        this.loadSearchResultList();
+        if( !TextUtils.isEmpty( query ) && query.length() > 3 ) {
+            Log.d( TAG, "onQueryTextSubmit : query is not empty and length is greater than 3" );
+
+            this.searchText = query;
+            this.loadSearchResultList();
+
+        }
 
         Log.d( TAG, "onQueryTextSubmit : exit" );
         return true;
-    }
-
-    private List<SearchResultModel> search( String searchString ) {
-        Log.d( TAG, "search : enter" );
-
-        searchString = "*" + searchString + "*";
-        searchString = searchString.replaceAll( " ", "*" );
-        Log.d( TAG, "search : searchString=" + searchString );
-
-        final String query = searchString;
-
-//        return Observable.create( new Observable.OnSubscribe<List<SearchResultModel>>() {
-//
-//            @Override
-//            public void call( Subscriber<? super List<SearchResultModel>> subscriber ) {
-//                Log.d( TAG, "search.call : enter" );
-
-                Cursor cursor;
-
-                SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-
-        List<SearchResultModel> searchResultEntities = new ArrayList<>();
-                try {
-
-                    builder.setTables( "search_result" );
-
-                    String selection = SearchResultEntity.SQL_SELECT_MATCH;
-                    String[] selectionArgs = new String[] { query };
-
-                    SearchResultModel searchResultModel;
-                    cursor = builder.query( db, null, selection, selectionArgs, null, null, "START_TIME DESC, TITLE" );
-                    while( cursor.moveToNext() ) {
-
-                        searchResultModel = new SearchResultModel();
-                        searchResultModel.setStartTime( new DateTime( cursor.getLong( cursor.getColumnIndex( "START_TIME" ) ) ) );
-                        searchResultModel.setTitle( cursor.getString( cursor.getColumnIndex( "TITLE" ) ) );
-                        searchResultModel.setSubTitle( cursor.getString( cursor.getColumnIndex( "SUB_TITLE" ) ) );
-                        searchResultModel.setCategory( cursor.getString( cursor.getColumnIndex( "CATEGORY" ) ) );
-                        searchResultModel.setDescription( cursor.getString( cursor.getColumnIndex( "DESCRIPTION" ) ) );
-                        searchResultModel.setInetref( cursor.getString( cursor.getColumnIndex( "INETREF" ) ) );
-                        searchResultModel.setSeason( cursor.getInt( cursor.getColumnIndex( "SEASON" ) ) );
-                        searchResultModel.setEpisode( cursor.getInt( cursor.getColumnIndex( "EPISODE" ) ) );
-                        searchResultModel.setChanId( cursor.getInt( cursor.getColumnIndex( "CHAN_ID" ) ) );
-                        searchResultModel.setChannelNumber( cursor.getString( cursor.getColumnIndex( "CHAN_NUM" ) ) );
-                        searchResultModel.setCallsign( cursor.getString( cursor.getColumnIndex( "CALLSIGN" ) ) );
-                        searchResultModel.setCastMembers( cursor.getString( cursor.getColumnIndex( "CAST_MEMBER_NAMES" ) ) );
-                        searchResultModel.setCharacters( cursor.getString( cursor.getColumnIndex( "CAST_MEMBER_CHARACTERS" ) ) );
-                        searchResultModel.setVideoId( cursor.getInt( cursor.getColumnIndex( "VIDEO_ID" ) ) );
-                        searchResultModel.setRating( cursor.getString( cursor.getColumnIndex( "RATING" ) ) );
-                        searchResultModel.setStorageGroup( cursor.getString( cursor.getColumnIndex( "STORAGE_GROUP" ) ) );
-                        searchResultModel.setContentType( cursor.getString( cursor.getColumnIndex( "CONTENT_TYPE" ) ) );
-                        searchResultModel.setFilename( cursor.getString( cursor.getColumnIndex( "FILENAME" ) ) );
-                        searchResultModel.setHostname( cursor.getString( cursor.getColumnIndex( "HOSTNAME" ) ) );
-                        searchResultModel.setType( SearchResult.Type.valueOf( cursor.getString( cursor.getColumnIndex( "TYPE" ) ) ) );
-
-                        Log.d( TAG, "search.call : searchResultModel=" + searchResultModel.toString() );
-                        searchResultEntities.add( searchResultModel );
-
-                    }
-                    cursor.close();
-
-//                    subscriber.onNext( searchResultEntities );
-//                    subscriber.onCompleted();
-//
-                } catch( Exception e ) {
-                    Log.e( TAG, "search.call : error", e );
-//
-//                    subscriber.onError( new DatabaseException( e.getCause() ) );
-//
-                }
-//
-//                Log.d( TAG, "search.call : exit" );
-//            }
-//
-//        });
-
-        return searchResultEntities;
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
@@ -431,31 +366,31 @@ public class SearchResultListFragment extends AbstractBaseSearchFragment impleme
             if( item instanceof ProgramModel ) {
 
                 ProgramModel programModel = (ProgramModel) item;
-                Log.d( TAG, "Program: " + item.toString() );
+//                Log.d( TAG, "Program: " + item.toString() );
 
-//                Intent intent = new Intent( getActivity(), RecordingDetailsActivity.class );
-//                intent.putExtra( RecordingDetailsFragment.PROGRAM_KEY, program );
-//                startActivity( intent );
+                Intent intent = new Intent( getActivity(), RecordingsDetailsActivity.class );
+                intent.putExtra( RecordingsDetailsActivity.PROGRAM, programModel );
+
+                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+                        RecordingsDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
+
+                getActivity().startActivity( intent, bundle );
 
             } else {
 
                 VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
 
-//                if( "MOVIE".equals( video.getContentType() ) ) {
-//                    Log.d( TAG, "Video: " + video.toString() );
-//
-//                    Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
-//                    intent.putExtra( VideoDetailsFragment.VIDEO, video );
-//                    startActivity( intent );
-//
-//                } else {
-//                    Log.d( TAG, "Video: " + video.toString() );
-//
-//                    Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
-//                    intent.putExtra( VideoDetailsFragment.VIDEO, video );
-//                    startActivity( intent );
-//
-//                }
+                Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
+                intent.putExtra( VideoDetailsActivity.VIDEO, videoMetadataInfoModel );
+
+                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        ( (ImageCardView) itemViewHolder.view ).getMainImageView(),
+                        VideoDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
+
+                getActivity().startActivity( intent, bundle );
 
             }
 

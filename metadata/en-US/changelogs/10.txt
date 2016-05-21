@@ -1,0 +1,5 @@
+Settings have been updated to allow the Internal Player or an External Player (such as VLC, MX Player, etc.) be selected.
+If the Internal Player is selected, Watch Videos can be allowed to use the External Player.
+Player Settings are also now available from the Recording or Video Details Screens.
+Bug Fixes
+Videos can now be played on Android TV via Internal or an External Player (such as VLC)

@@ -29,15 +29,13 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
-import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
-import org.mythtv.android.app.internal.di.modules.VideoModule;
 import org.mythtv.android.app.view.fragment.VideoDetailsFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
+import org.mythtv.android.presentation.internal.di.modules.VideoModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
 import java.io.UnsupportedEncodingException;
@@ -205,7 +203,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .videoModule( new VideoModule( this.id ) )
                 .liveStreamModule( new LiveStreamModule() )
                 .build();
@@ -233,10 +230,10 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + this.id + "&Type=banner";
+        String previewUrl = getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + this.id + "&Type=banner";
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
-        Picasso.with( this )
+        getNetComponent().picasso()
                 .load( previewUrl )
                 .fit().centerCrop()
                 .into(imageView);
@@ -258,7 +255,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
             } catch( UnsupportedEncodingException e ) { }
 
-            String videoUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
+            String videoUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
             Log.d( TAG, "onPlayVideo : videoUrl=" + videoUrl );
 
             navigator.navigateToExternalPlayer( this, videoUrl );
@@ -267,7 +264,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
             Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
 
             try {
-                String videoUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
+                String videoUrl = getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
                 videoUrl = videoUrl.replaceAll( "%2F", "/" );
                 videoUrl = videoUrl.replaceAll( "\\+", "%20" );
 

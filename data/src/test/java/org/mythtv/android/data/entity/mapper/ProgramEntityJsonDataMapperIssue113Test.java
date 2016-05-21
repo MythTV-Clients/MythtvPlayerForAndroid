@@ -57,7 +57,7 @@ public class ProgramEntityJsonDataMapperIssue113Test {
                 .registerTypeAdapter( dateTimeType, new DateTimeDeserializer() )
                 .create();
 
-        programEntityJsonMapper = new ProgramEntityJsonMapper();
+        programEntityJsonMapper = new ProgramEntityJsonMapper( gson );
 
     }
 

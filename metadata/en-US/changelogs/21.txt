@@ -1,0 +1,7 @@
+v2.0.3
+=============
+- User Settings for increasing timeouts when connecting to backend (for large libraries)
+- Better controls for HLS processing
+- Ability to set Watched status on recordings and videos
+- New Playback Controls from Details Screens
+- IPv6 supported

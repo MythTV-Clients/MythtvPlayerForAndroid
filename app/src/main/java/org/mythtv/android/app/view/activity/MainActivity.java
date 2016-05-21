@@ -32,18 +32,17 @@ import android.view.View;
 import android.view.Window;
 
 import org.mythtv.android.app.R;
-import org.mythtv.android.app.view.fragment.UpcomingListFragment;
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.app.view.fragment.EncoderListFragment;
 import org.mythtv.android.app.view.fragment.RecentListFragment;
+import org.mythtv.android.app.view.fragment.UpcomingListFragment;
+import org.mythtv.android.presentation.internal.di.HasComponent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import org.mythtv.android.app.BuildConfig;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -52,7 +51,7 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public static Intent getCallingIntent(Context context ) {
+    public static Intent getCallingIntent( Context context ) {
 
         Intent callingIntent = new Intent( context, MainActivity.class );
         callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
@@ -136,7 +135,7 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     protected void onResume() {
         super.onResume();
 
-        if( getSharedPreferencesModule().getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
+        if( getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
             Log.i( TAG, "onResume : MasterBackend not set, redirecting to Settings" );
 
             navigator.navigateToSettings( this );
@@ -148,11 +147,10 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     }
 
     private void initializeInjector() {
-        Log.d(TAG, "initializeInjector : enter");
+        Log.d( TAG, "initializeInjector : enter" );
 
         this.dvrComponent = DaggerDvrComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

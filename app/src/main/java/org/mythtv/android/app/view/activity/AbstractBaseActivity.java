@@ -19,6 +19,7 @@
 package org.mythtv.android.app.view.activity;
 
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -40,10 +41,11 @@ import android.view.MenuItem;
 import org.mythtv.android.app.R;
 import org.mythtv.android.app.AndroidApplication;
 import org.mythtv.android.app.internal.di.components.ApplicationComponent;
-import org.mythtv.android.app.internal.di.modules.ActivityModule;
-import org.mythtv.android.app.internal.di.modules.SharedPreferencesModule;
+import org.mythtv.android.app.internal.di.components.NetComponent;
+import org.mythtv.android.app.internal.di.components.SharedPreferencesComponent;
 import org.mythtv.android.app.navigation.Navigator;
 import org.mythtv.android.app.view.fragment.AboutDialogFragment;
+import org.mythtv.android.domain.SettingsKeys;
 
 import javax.inject.Inject;
 
@@ -108,9 +110,11 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate( R.menu.main, menu );
 
+        ComponentName cn = new ComponentName( this, SearchableActivity.class );
+
         SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
         SearchView searchView = (SearchView) menu.findItem( R.id.search_action ) .getActionView();
-        searchView.setSearchableInfo( searchManager.getSearchableInfo( getComponentName() ) );
+        searchView.setSearchableInfo( searchManager.getSearchableInfo( cn ) );
         searchView.setIconifiedByDefault( false );
 
         return super.onCreateOptionsMenu( menu );
@@ -222,7 +226,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     /**
      * Get the Main Application component for dependency injection.
      *
-     * @return {@link ApplicationComponent}
+     * @return {@link org.mythtv.android.app.internal.di.components.ApplicationComponent}
      */
     protected ApplicationComponent getApplicationComponent() {
 
@@ -230,23 +234,32 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     }
 
     /**
-     * Get an Activity module for dependency injection.
+     * Get a SharedPreferences component for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.ActivityModule}
+     * @return {@link SharedPreferencesComponent}
      */
-    protected ActivityModule getActivityModule() {
+    protected SharedPreferencesComponent getSharedPreferencesComponent() {
 
-        return new ActivityModule( this );
+        return ( (AndroidApplication) getApplication() ).getSharedPreferencesComponent();
     }
 
     /**
-     * Get a SharedPreferences module for dependency injection.
+     * Get a NetComponent component for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.SharedPreferencesModule}
+     * @return {@link NetComponent}
      */
-    protected SharedPreferencesModule getSharedPreferencesModule() {
+    protected NetComponent getNetComponent() {
 
-        return new SharedPreferencesModule( this );
+        return ( (AndroidApplication) getApplication() ).getNetComponent();
+    }
+
+    protected String getMasterBackendUrl() {
+
+        String host = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "" );
+        String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
+
+        return "http://" + host + ":" + port;
+
     }
 
 }

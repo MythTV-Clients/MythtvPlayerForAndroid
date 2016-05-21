@@ -54,7 +54,9 @@ public class ApplicationModule {
     private final AndroidApplication application;
 
     public ApplicationModule( AndroidApplication application ) {
+
         this.application = application;
+
     }
 
     @Provides

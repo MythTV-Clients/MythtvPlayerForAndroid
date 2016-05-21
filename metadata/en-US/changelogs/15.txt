@@ -1,0 +1,7 @@
+Watch Recordings now honors Recording Groups in Settings
+Searches honor Recordings Groups
+Searches now honor Parental Controls and Content Ratings in Settings
+
+Bug Fixes
+
+Further German Translations

@@ -19,19 +19,20 @@
 package org.mythtv.android.tv.view.activity;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.util.Log;
 
-import org.mythtv.android.tv.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
+import org.mythtv.android.presentation.model.SearchResultModel;
+import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.tv.internal.di.components.DaggerSearchComponent;
 import org.mythtv.android.tv.internal.di.components.SearchComponent;
-import org.mythtv.android.tv.internal.di.modules.SearchResultsModule;
-import org.mythtv.android.presentation.model.SearchResultModel;
-import org.mythtv.android.tv.provider.MythtvSearchSuggestionProvider;
 import org.mythtv.android.tv.view.fragment.SearchResultListFragment;
 
 /**
@@ -42,6 +43,11 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
     private static final String TAG = SearchableActivity.class.getSimpleName();
 
     private static final String INSTANCE_STATE_PARAM_SEARCH_TEXT = "org.mythtv.android.STATE_PARAM_SEARCH_TEXT";
+
+    public static Intent getCallingIntent( Context context ) {
+
+        return new Intent( context, SearchableActivity.class );
+    }
 
     private String searchText;
     private SearchComponent searchComponent;
@@ -111,10 +117,10 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
     private void initializeActivity( Intent intent ) {
         Log.d( TAG, "initializeActivity : enter" );
 
-        mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
         if( null == intent  ) {
             Log.d( TAG, "initializeActivity : intent == null" );
 
+            mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
             addFragment( R.id.fl_fragment, mSearchableFragment );
 
         } else {
@@ -126,6 +132,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions( this, MythtvSearchSuggestionProvider.AUTHORITY, MythtvSearchSuggestionProvider.MODE );
             suggestions.saveRecentQuery( searchText, null );
 
+            mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
             addFragment( R.id.fl_fragment, mSearchableFragment );
 
         }
@@ -150,8 +157,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
         this.searchComponent = DaggerSearchComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
-                .searchResultsModule( new SearchResultsModule( searchText ) )
+                .searchResultsModule( new SearchResultsModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

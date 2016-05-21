@@ -1,0 +1,6 @@
+Global Search across Recordings and Videos.
+Search looks in any field in those tables (i.e. Title, Character, Actor, Channel Number or Call Sign, Category, Recording Group, etc).
+This feature is highly dependent on your recording and video metadata being up to date.
+Actor/Character search is limited to MythTV Backend v0.28+ and only for recordings at this time.
+Bug Fixes
+Certain special characters in show title resulted in 0 episodes

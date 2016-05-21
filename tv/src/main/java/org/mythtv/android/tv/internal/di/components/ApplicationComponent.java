@@ -27,8 +27,9 @@ import org.mythtv.android.domain.repository.ContentRepository;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.domain.repository.SearchRepository;
 import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.presentation.internal.di.modules.NetModule;
+import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.tv.internal.di.modules.ApplicationModule;
-import org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.tv.view.activity.AbstractBaseActivity;
 
 import javax.inject.Singleton;
@@ -40,8 +41,8 @@ import dagger.Component;
  *
  * Created by dmfrey on 8/30/15.
  */
-@Singleton // Constraints this component to one-per-application or unscoped bindings.
-@Component( modules = { ApplicationModule.class, SharedPreferencesModule.class } )
+@Singleton // Constraints this component to one-per-application or un-scoped bindings.
+@Component( modules = { ApplicationModule.class, SharedPreferencesModule.class, NetModule.class } )
 public interface ApplicationComponent {
 
     void inject( AbstractBaseActivity baseActivity );
@@ -54,7 +55,5 @@ public interface ApplicationComponent {
     SearchRepository searchRepository();
     ContentRepository contentRepository();
     VideoRepository videoRepository();
-
-    SharedPreferences sharedPreferences();
 
 }

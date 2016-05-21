@@ -26,10 +26,20 @@ android {
     compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
     buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
 
+    dexOptions {
+
+        maxProcessCount 2
+        javaMaxHeapSize "4g"
+
+    }
+
     defaultConfig {
 
         minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
         targetSdkVersion globalConfiguration.getAt( "androidTargetSdkVersion" )
+
+        versionCode globalConfiguration.getAt( "androidVersionCode" )
+        versionName globalConfiguration.getAt( "androidVersionName" )
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId 'org.mythtv.android.presentation.test'
@@ -84,20 +94,16 @@ dependencies {
 
     apt presentationDependencies.daggerCompiler
     compile presentationDependencies.dagger
-//    compile presentationDependencies.butterKnife
     compile presentationDependencies.appCompat
     compile presentationDependencies.design
-//    compile presentationDependencies.cardView
-//    compile presentationDependencies.recyclerView
-//    compile presentationDependencies.palette
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
     compile presentationDependencies.picasso
+    compile presentationDependencies.picassoOkHttpDownloader
     compile presentationDependencies.androidAnnotations
     compile presentationDependencies.preferences
-//    compile presentationDependencies.glide
-//    compile presentationDependencies.multidex
-//    compile presentationDependencies.recyclerviewfastscroller
+    debugCompile presentationDependencies.leakCanaryDebug
+    releaseCompile presentationDependencies.leakCanaryNoOp
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations
@@ -108,6 +114,7 @@ dependencies {
     androidTestCompile presentationTestDependencies.testSupportRules
     androidTestCompile presentationTestDependencies.espresso
     androidTestCompile presentationTestDependencies.robolectric
+    testCompile presentationDependencies.leakCanaryNoOp
 
 }
 

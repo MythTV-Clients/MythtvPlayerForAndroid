@@ -28,13 +28,14 @@ import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.tv.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.tv.internal.di.components.VideoComponent;
+import org.mythtv.android.tv.view.fragment.AbstractBaseVideoFragment;
 import org.mythtv.android.tv.view.fragment.VideoAdultFragment;
 import org.mythtv.android.tv.view.fragment.VideoHomeMovieFragment;
 import org.mythtv.android.tv.view.fragment.VideoMovieFragment;
 import org.mythtv.android.tv.view.fragment.VideoMusicVideoFragment;
 import org.mythtv.android.tv.view.fragment.VideoTelevisionFragment;
 
-public class VideoCategoryActivity extends AbstractBaseActivity implements HasComponent<VideoComponent> {
+public class VideoCategoryActivity extends AbstractBaseActivity implements HasComponent<VideoComponent>, AbstractBaseVideoFragment.VideoListListener {
 
     private static final String TAG = VideoCategoryActivity.class.getSimpleName();
 
@@ -167,7 +168,6 @@ public class VideoCategoryActivity extends AbstractBaseActivity implements HasCo
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );
@@ -179,6 +179,15 @@ public class VideoCategoryActivity extends AbstractBaseActivity implements HasCo
 
         Log.d( TAG, "getComponent : exit" );
         return videoComponent;
+    }
+
+    @Override
+    public void onSearchClicked() {
+        Log.d( TAG, "onSearchClicked : enter" );
+
+        navigator.navigateToSearch( this );
+
+        Log.d( TAG, "onSearchClicked : exit" );
     }
 
 }
