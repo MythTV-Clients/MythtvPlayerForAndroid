@@ -1,0 +1,4 @@
+Watch Videos can now be switched from Grid View (with graphics) to Directory View, click the icon in the Toolbar. Your selection is remembered.
+Implemented a lot of Material Design Support Library, more to come
+
+Bug Fixes
