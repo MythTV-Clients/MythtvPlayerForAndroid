@@ -1,0 +1,3 @@
+The Settings now looks like the rest of the app and allows for easier, immediate switching of backend ip addresses.
+Some layout tweaks for tablets.
+Bug Fixes
