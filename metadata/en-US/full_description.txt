@@ -7,3 +7,5 @@ MythTV Player will natively play HTTP Live Streams transcoded by the MythTV Back
 The MythTV Services API does not provide a method to watch LiveTV, therefore, this app can't.
 
 Open issues are here: https://github.com/MythTV-Clients/MythtvPlayerForAndroid/issues
+
+Join the G+ Community to join the discussion regarding the app and for the ability to access beta versions of the app: https://plus.google.com/u/0/communities/104432707624078706786
