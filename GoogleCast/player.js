@@ -836,7 +836,6 @@ sampleplayer.CastPlayer.prototype.loadVideo_ = function(info) {
       host.updateSegmentRequestInfo = function (requestInfo) {
         requestInfo.withCredentials = true;
         requestInfo.headers = {};
-        requestInfo.headers['origin'] = info.message.media.customData.origin;
         requestInfo.headers['content-type'] = info.message.media.contentType;
         requestInfo.headers['accept-encoding'] = 'gzip';
       }
