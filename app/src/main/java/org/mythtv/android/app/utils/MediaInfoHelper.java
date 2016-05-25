@@ -6,6 +6,8 @@ import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.common.images.WebImage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
@@ -32,15 +34,16 @@ public class MediaInfoHelper {
             md.addImage( new WebImage( Uri.parse( masterBackendUrl + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=coverart&Width=150" ) ) );
             md.addImage( new WebImage( Uri.parse( masterBackendUrl + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=coverart&Width=300" ) ) );
 
-            MediaInfo item = new MediaInfo.Builder( recordingUrl )
+            String customData = String.format( "{'origin':'http://%s:%s/'}", programModel.getHostName(), "6544" );
+
+            return new MediaInfo.Builder( recordingUrl )
                     .setStreamType( MediaInfo.STREAM_TYPE_BUFFERED )
                     .setContentType( "application/x-mpegURL" )
                     .setMetadata( md )
+                    .setCustomData( new JSONObject( customData ) )
                     .build();
 
-            return item;
-
-        } catch( UnsupportedEncodingException e ) {
+        } catch( UnsupportedEncodingException|JSONException e ) {
 
             return null;
         }
@@ -88,15 +91,16 @@ public class MediaInfoHelper {
             md.addImage( new WebImage( Uri.parse( masterBackendUrl + "/Content/GetVideoArtwork?Id=" + videoModel.getId() + "&Type=coverart&Width=150" ) ) );
             md.addImage( new WebImage( Uri.parse( masterBackendUrl + "/Content/GetVideoArtwork?Id=" + videoModel.getId() + "&Type=coverart&Width=300" ) ) );
 
-            MediaInfo item = new MediaInfo.Builder( videoUrl )
+            String customData = String.format( "{'origin':'http://%s:%s/'}", videoModel.getHostName(), "6544" );
+
+            return new MediaInfo.Builder( videoUrl )
                     .setStreamType( MediaInfo.STREAM_TYPE_BUFFERED )
                     .setContentType( mimeType )
                     .setMetadata( md )
+                    .setCustomData( new JSONObject( customData ) )
                     .build();
 
-            return item;
-
-        } catch( UnsupportedEncodingException e ) {
+        } catch( UnsupportedEncodingException|JSONException e) {
 
             return null;
         }
