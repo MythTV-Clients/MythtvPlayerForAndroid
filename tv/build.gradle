@@ -140,6 +140,8 @@ dependencies {
     compile presentationDependencies.leanback
     compile presentationDependencies.leanbackPreferences
     compile presentationDependencies.glide
+    compile presentationDependencies.fbCore
+    compile presentationDependencies.fbCrashReporting
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations
@@ -153,4 +155,5 @@ dependencies {
 
 }
 
+apply plugin: 'com.google.gms.google-services'
 apply from: '../buildsystem/jacoco.gradle'

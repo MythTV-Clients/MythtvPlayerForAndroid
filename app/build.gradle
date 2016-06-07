@@ -156,6 +156,8 @@ dependencies {
     compile presentationDependencies.preferences
     compile presentationDependencies.glide
     compile presentationDependencies.recyclerviewfastscroller
+    compile presentationDependencies.fbCore
+    compile presentationDependencies.fbCrashReporting
     provided presentationDependencies.javaxAnnotation
 
     androidTestCompile presentationTestDependencies.androidAnnotations
@@ -169,4 +171,5 @@ dependencies {
 
 }
 
+apply plugin: 'com.google.gms.google-services'
 apply from: '../buildsystem/jacoco.gradle'
