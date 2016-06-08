@@ -18,6 +18,7 @@ Open issues are here:
 
     https://github.com/MythTV-Clients/MythtvPlayerForAndroid/issues
 
-APK Releases can be found on dropbox:
+APK Releases can be found here:
 
-    https://www.dropbox.com/sh/nhvpepzx6gcvlyc/AAAthel65MO4elPN5ijj7ztUa?dl=0
+    https://github.com/MythTV-Clients/MythtvPlayerForAndroid/releases
+
