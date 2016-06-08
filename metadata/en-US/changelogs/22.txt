@@ -1,0 +1,5 @@
+v2.1.0
+=============
+- Bug fixes and performance improvements
+- Fixed crash for users with large libraries
+- Added support for Android 4.0.3+
