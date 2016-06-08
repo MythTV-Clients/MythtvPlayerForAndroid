@@ -106,19 +106,31 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
 
                     case 0 :
 
-                        ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
+                        if( null != mPagerAdapter.getItem( 0 ) ) {
+
+                            ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
+
+                        }
 
                         break;
 
                     case 1 :
 
-                        ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
+                        if( null != mPagerAdapter.getItem( 1 ) ) {
+
+                            ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
+
+                        }
 
                         break;
 
                     case 2 :
 
-                        ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
+                        if( null != mPagerAdapter.getItem( 2 ) ) {
+
+                            ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
+
+                        }
 
                         break;
 
