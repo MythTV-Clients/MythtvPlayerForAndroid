@@ -1,0 +1,5 @@
+The App is now translated to German. If there are inconsistencies, please let us know.
+
+We have had some reports of issues loading recordings and videos for users with very large libraries. These should now load faster for all users. Please let us know if there issues.
+
+Bug Fixes

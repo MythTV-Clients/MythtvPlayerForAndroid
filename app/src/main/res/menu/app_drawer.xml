@@ -19,7 +19,9 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/navigation_item_home"
@@ -36,10 +38,22 @@
             android:icon="@drawable/navigation_drawer_watch_videos"
             android:title="@string/drawer_item_watch_videos" />
 
+    </group>
+
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/navigation_item_watch_settings"
             android:icon="@drawable/navigation_drawer_settings"
             android:title="@string/drawer_item_preferences" />
+
+        <item
+            android:id="@+id/navigation_item_about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/drawer_item_about"
+            android:checkable="false" />
 
     </group>
 

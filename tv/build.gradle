@@ -1,15 +1,41 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
 
     def globalConfiguration = rootProject.extensions.getByName( "ext" )
+    def applicationBranch = "git rev-parse --abbrev-ref HEAD".execute().text.trim()
     def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
     compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
     buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
     enforceUniquePackageName = false
+
+    dexOptions {
+
+        maxProcessCount 2
+        javaMaxHeapSize "4g"
+
+    }
 
     defaultConfig {
 
@@ -22,10 +48,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId 'org.mythtv.android.tv.test'
 
+        resValue "string", "branchName", applicationBranch
+        resValue "string", "shaName", applicationSHA1
+        resValue "string", "tagName", applicationTag
         resValue "string", "versionName", globalConfiguration.getAt( "androidVersionName" )
-
-        buildConfigField "String", "APPLICATION_SHA1", '"' + applicationSHA1 + '"'
-        buildConfigField "String", "APPLICATION_TAG", '"' + applicationTag + '"'
     }
 
     compileOptions {
@@ -108,6 +134,7 @@ dependencies {
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
     compile presentationDependencies.picasso
+    compile presentationDependencies.picassoOkHttpDownloader
     compile presentationDependencies.androidAnnotations
     compile presentationDependencies.preferences
     compile presentationDependencies.leanback

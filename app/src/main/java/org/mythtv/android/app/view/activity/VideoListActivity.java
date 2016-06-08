@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
@@ -17,6 +35,7 @@ import org.mythtv.android.app.view.fragment.AdultListFragment;
 import org.mythtv.android.app.view.fragment.MusicVideoListFragment;
 import org.mythtv.android.app.view.fragment.TelevisionListFragment;
 import org.mythtv.android.domain.ContentType;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
@@ -38,7 +57,10 @@ public class VideoListActivity extends AbstractBaseActivity implements HasCompon
 
     public static Intent getCallingIntent( Context context ) {
 
-        return new Intent( context, VideoListActivity.class );
+        Intent callingIntent = new Intent( context, VideoListActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
     }
 
     private VideoComponent videoComponent;
@@ -83,28 +105,33 @@ public class VideoListActivity extends AbstractBaseActivity implements HasCompon
 
     @Override
     public void onBackPressed() {
+        Log.d( TAG, "onBackPressed : enter" );
 
         if( mPager.getCurrentItem() == 0 ) {
+            Log.d( TAG, "onBackPressed : navigating home" );
 
             // If the user is currently looking at the first step, allow the system to handle the
             // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed();
 
+            navigator.navigateToHome( this );
+
         } else {
+            Log.d( TAG, "onBackPressed : navigating to previous tab" );
 
             // Otherwise, select the previous step.
             mPager.setCurrentItem( mPager.getCurrentItem() - 1 );
 
         }
 
+        Log.d( TAG, "onBackPressed : exit" );
     }
 
     private void initializeInjector() {
-        Log.d(TAG, "initializeInjector : enter");
+        Log.d( TAG, "initializeInjector : enter" );
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );
@@ -123,7 +150,7 @@ public class VideoListActivity extends AbstractBaseActivity implements HasCompon
         String[] tabs;
         List<Fragment> fragments = new ArrayList<>();
 
-        boolean showAdultTab = getSharedPreferencesModule().getShowAdultContent();
+        boolean showAdultTab = getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, false );
 
         public VideosFragmentPagerAdapter( FragmentManager fm ) {
             super( fm );
@@ -141,6 +168,7 @@ public class VideoListActivity extends AbstractBaseActivity implements HasCompon
             }
 
             notifyDataSetChanged();
+
         }
 
         @Override

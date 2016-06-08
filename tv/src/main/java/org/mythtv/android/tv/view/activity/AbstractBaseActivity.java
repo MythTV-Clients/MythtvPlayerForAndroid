@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.tv.view.activity;
 
 import android.app.Activity;
@@ -7,9 +25,9 @@ import android.os.Bundle;
 
 import org.mythtv.android.tv.AndroidApplication;
 import org.mythtv.android.tv.internal.di.components.ApplicationComponent;
-import org.mythtv.android.tv.internal.di.modules.ActivityModule;
-import org.mythtv.android.tv.internal.di.modules.SharedPreferencesModule;
-import org.mythtv.android.tv.navigation.TvNavigator;
+import org.mythtv.android.tv.internal.di.components.SharedPreferencesComponent;
+import org.mythtv.android.tv.internal.di.components.NetComponent;
+import org.mythtv.android.tv.navigation.Navigator;
 
 import javax.inject.Inject;
 
@@ -23,7 +41,7 @@ public abstract class AbstractBaseActivity extends Activity {
     public abstract int getLayoutResource();
 
     @Inject
-    TvNavigator tvNavigator;
+    Navigator navigator;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -52,7 +70,7 @@ public abstract class AbstractBaseActivity extends Activity {
     /**
      * Get the Main Application component for dependency injection.
      *
-     * @return {@link org.mythtv.android.presentation.internal.di.components.ApplicationComponent}
+     * @return {@link org.mythtv.android.tv.internal.di.components.ApplicationComponent}
      */
     protected ApplicationComponent getApplicationComponent() {
 
@@ -60,23 +78,23 @@ public abstract class AbstractBaseActivity extends Activity {
     }
 
     /**
-     * Get an Activity module for dependency injection.
+     * Get a SharedPreferences component for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.ActivityModule}
+     * @return {@link SharedPreferencesComponent}
      */
-    protected ActivityModule getActivityModule() {
+    protected SharedPreferencesComponent getSharedPreferencesComponent() {
 
-        return new ActivityModule( this );
+        return ( (AndroidApplication) getApplication() ).getSharedPreferencesComponent();
     }
 
     /**
-     * Get a SharedPreferences module for dependency injection.
+     * Get a NetComponent component for dependency injection.
      *
-     * @return {@link org.mythtv.android.app.internal.di.modules.SharedPreferencesModule}
+     * @return {@link NetComponent}
      */
-    protected SharedPreferencesModule getSharedPreferencesModule() {
+    protected NetComponent getNetComponent() {
 
-        return new SharedPreferencesModule( this );
+        return ( (AndroidApplication) getApplication() ).getNetComponent();
     }
 
 }

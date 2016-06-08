@@ -1,9 +1,28 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,15 +30,14 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
-import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
-import org.mythtv.android.app.internal.di.modules.ProgramModule;
+import org.mythtv.android.domain.SettingsKeys;
+import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
+import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
 import org.mythtv.android.app.view.fragment.ProgramDetailsFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.model.ProgramModel;
@@ -58,6 +76,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     public static Intent getCallingIntent( Context context, int chanId, DateTime startTime ) {
 
         Intent callingIntent = new Intent( context, ProgramDetailsActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_CHAN_ID, chanId );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_START_TIME, startTime.getMillis() );
 
@@ -84,16 +103,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         this.initializeInjector();
 
         Log.d( TAG, "onCreate : exit" );
-    }
-
-    @Override
-    public boolean onNavigateUp() {
-        Log.d( TAG, "onNavigateUp : enter" );
-
-        onBackPressed();
-
-        Log.d( TAG, "onNavigateUp : exit" );
-        return true;
     }
 
     @Override
@@ -143,6 +152,12 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     public boolean onOptionsItemSelected( MenuItem item ) {
 
         switch( item.getItemId() ) {
+
+            case android.R.id.home:
+
+                NavUtils.navigateUpFromSameTask( this );
+
+                return true;
 
             case R.id.menu_settings :
 
@@ -202,7 +217,6 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
         this.dvrComponent = DaggerDvrComponent.builder()
             .applicationComponent( getApplicationComponent() )
-            .activityModule( getActivityModule() )
             .programModule( new ProgramModule( this.chanId, this.startTime ) )
             .liveStreamModule( new LiveStreamModule() )
             .build();
@@ -230,13 +244,13 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
+        String previewUrl = getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + this.chanId + "&StartTime=" + this.startTime.withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" );
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
-        Picasso.with( this )
+        getNetComponent().picasso()
                 .load( previewUrl )
                 .fit().centerCrop()
-                .into(imageView);
+                .into( imageView );
 
         Log.d( TAG, "loadBackdrop : exit" );
     }
@@ -248,7 +262,7 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
         if( null == this.programModel.getLiveStreamInfo() || this.programModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
             Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
 
-            String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
+            String recordingUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
 
             navigator.navigateToExternalPlayer( this, recordingUrl );
 
@@ -257,11 +271,11 @@ public class ProgramDetailsActivity extends AbstractBaseActivity implements HasC
 
             try {
 
-                String recordingUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
+                String recordingUrl = getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
                 recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
                 recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
 
-                if( getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
+                if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
                     Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
 
                     navigator.navigateToVideoPlayer( this, recordingUrl );

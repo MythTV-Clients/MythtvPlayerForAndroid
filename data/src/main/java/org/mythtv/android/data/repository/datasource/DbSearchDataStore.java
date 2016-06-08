@@ -1,18 +1,40 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.data.repository.datasource;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.database.sqlite.SQLiteStatement;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.mythtv.android.data.entity.SearchResultEntity;
+import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.exception.DatabaseException;
 import org.mythtv.android.domain.SearchResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -34,12 +56,13 @@ public class DbSearchDataStore implements SearchDataStore {
 
     @Override
     public Observable<List<SearchResultEntity>> search( String searchString ) {
-        Log.d( TAG, "search : enter - searchString=" + searchString );
+        Log.d( TAG, "search : enter" );
 
         searchString = "*" + searchString + "*";
         searchString = searchString.replaceAll( " ", "*" );
 
         final String query = searchString;
+        Log.d( TAG, "search : query=" + query );
 
         return Observable.create( new Observable.OnSubscribe<List<SearchResultEntity>>() {
 
@@ -86,7 +109,7 @@ public class DbSearchDataStore implements SearchDataStore {
                         searchResultEntity.setHostname( cursor.getString( cursor.getColumnIndex( "HOSTNAME" ) ) );
                         searchResultEntity.setType( cursor.getString( cursor.getColumnIndex( "TYPE" ) ) );
 
-                        Log.d( TAG, "search.call : searchResultEntity=" + searchResultEntity.toString() );
+//                        Log.d( TAG, "search.call : searchResultEntity=" + searchResultEntity.toString() );
                         searchResultEntities.add( searchResultEntity );
 
                     }
@@ -110,15 +133,54 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
+    public void refreshTitleInfoData( Collection<TitleInfoEntity> titleInfoEntityCollection ) {
+        Log.d( TAG, "refreshTitleInfoData : enter" );
+
+        if( null != titleInfoEntityCollection && !titleInfoEntityCollection.isEmpty() ) {
+            Log.d( TAG, "refreshTitleInfoData : titleInfoEntityCollection is not empty" );
+
+            db.beginTransaction();
+
+            List<String> values = new ArrayList<>();
+            values.add( SearchResult.Type.RECORDING.name() );
+
+            List<String> parameters = new ArrayList<>();
+            for( TitleInfoEntity entity : titleInfoEntityCollection ) {
+
+                parameters.add( "?" );
+                values.add( entity.getTitle() );
+
+            }
+
+            db.delete( SearchResultEntity.TABLE_NAME, "type = ? and not title in (" + TextUtils.join( ",", parameters ) + ")", values.toArray( new String[ values.size() ] ) );
+
+            db.setTransactionSuccessful();
+            db.endTransaction();
+
+        }
+
+        Log.d( TAG, "refreshTitleInfoData : exit" );
+    }
+
+    @Override
     public void refreshRecordedProgramData( Collection<SearchResultEntity> searchResultEntityCollection ) {
         Log.d( TAG, "refreshRecordedProgramData : enter" );
 
         if( null != searchResultEntityCollection && !searchResultEntityCollection.isEmpty() ) {
+            Log.d( TAG, "refreshRecordedProgramData : searchResultEntityCollection is not empty" );
 
             db.beginTransaction();
 
+            String title = "";
+            for( SearchResultEntity entity : searchResultEntityCollection ) {
+
+                title = entity.getTitle();
+                break;
+
+            }
+
             Log.d( TAG, "refreshRecordedProgramData : deleting old recordings" );
-            db.delete( SearchResultEntity.TABLE_NAME, "type = ?", new String[] { SearchResult.Type.RECORDING.name() } );
+            db.delete( SearchResultEntity.TABLE_NAME, "type = ? and title = ?", new String[] { SearchResult.Type.RECORDING.name(), title } );
 
             processCollection( searchResultEntityCollection );
         }
@@ -131,6 +193,7 @@ public class DbSearchDataStore implements SearchDataStore {
         Log.d( TAG, "refreshVideoData : enter" );
 
         if( null != searchResultEntityCollection && !searchResultEntityCollection.isEmpty() ) {
+            Log.d( TAG, "refreshVideoData : searchResultEntityCollection is not empty" );
 
             db.beginTransaction();
 
@@ -147,7 +210,7 @@ public class DbSearchDataStore implements SearchDataStore {
 
         SQLiteStatement statement = db.compileStatement( SearchResultEntity.SQL_INSERT );
         for( SearchResultEntity searchResultEntity : searchResultEntityCollection ) {
-            Log.d(TAG, "processCollection : searchResultEntity=" + searchResultEntity.toString());
+//            Log.d(TAG, "processCollection : searchResultEntity=" + searchResultEntity.toString());
 
             statement.clearBindings();
             statement.bindLong( 1, searchResultEntity.getStartTime() );

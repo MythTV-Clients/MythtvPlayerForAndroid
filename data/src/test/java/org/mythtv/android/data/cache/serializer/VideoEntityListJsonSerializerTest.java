@@ -14,7 +14,9 @@ public class VideoEntityListJsonSerializerTest extends ApplicationTestCase {
 
     @Before
     public void setUp() {
-        jsonSerializer = new VideoListEntityJsonSerializer();
+
+        jsonSerializer = new VideoListEntityJsonSerializer( this.gson );
+
     }
 
     @Test

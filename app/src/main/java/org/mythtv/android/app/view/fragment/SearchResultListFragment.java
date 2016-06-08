@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.app.view.fragment;
 
 import android.app.Activity;
@@ -98,9 +116,6 @@ public class SearchResultListFragment extends AbstractBaseFragment implements Se
         ButterKnife.bind( this, fragmentView );
         setupUI();
 
-        fastScroller.setRecyclerView( rv_searchResults );
-        rv_searchResults.addOnScrollListener( fastScroller.getOnScrollListener() );
-
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
     }
@@ -175,11 +190,14 @@ public class SearchResultListFragment extends AbstractBaseFragment implements Se
         Log.d( TAG, "setupUI : enter" );
 
         SearchResultsLayoutManager searchResultsLayoutManager = new SearchResultsLayoutManager(getActivity());
-        this.rv_searchResults.setLayoutManager(searchResultsLayoutManager);
+        this.rv_searchResults.setLayoutManager( searchResultsLayoutManager );
 
         this.searchResultsAdapter = new SearchResultsAdapter( getActivity(), new ArrayList<SearchResultModel>() );
         this.searchResultsAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_searchResults.setAdapter( searchResultsAdapter );
+
+        fastScroller.setRecyclerView( rv_searchResults );
+        rv_searchResults.addOnScrollListener( fastScroller.getOnScrollListener() );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -223,6 +241,7 @@ public class SearchResultListFragment extends AbstractBaseFragment implements Se
         Log.d( TAG, "renderSearchResultList : enter" );
 
         if( null != searchResultModelCollection ) {
+            Log.d( TAG, "renderSearchResultList : searchResultModelCollection is not null" );
 
             this.searchResultsAdapter.setSearchResultsCollection( searchResultModelCollection );
 
@@ -286,7 +305,8 @@ public class SearchResultListFragment extends AbstractBaseFragment implements Se
     private void loadSearchResultList() {
         Log.d( TAG, "loadSearchResultList : enter" );
 
-        this.searchResultListPresenter.initialize( searchText );
+        Log.d( TAG, "loadSearchResultList : searchText=" + searchText );
+        this.searchResultListPresenter.initialize( this.searchText );
 
         Log.d( TAG, "loadSearchResultList : exit" );
     }

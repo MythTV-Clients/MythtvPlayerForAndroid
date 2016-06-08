@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
@@ -11,15 +29,13 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import org.mythtv.android.app.R;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
-import org.mythtv.android.app.internal.di.modules.LiveStreamModule;
-import org.mythtv.android.app.internal.di.modules.VideoModule;
 import org.mythtv.android.app.view.fragment.VideoDetailsFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
+import org.mythtv.android.presentation.internal.di.modules.VideoModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
 import java.io.UnsupportedEncodingException;
@@ -53,6 +69,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     public static Intent getCallingIntent( Context context, int id ) {
 
         Intent callingIntent = new Intent( context, VideoDetailsActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_VIDEO_ID, id );
 
         return callingIntent;
@@ -186,7 +203,6 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .videoModule( new VideoModule( this.id ) )
                 .liveStreamModule( new LiveStreamModule() )
                 .build();
@@ -214,10 +230,10 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        String previewUrl = getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + this.id + "&Type=banner";
+        String previewUrl = getMasterBackendUrl() + "/Content/GetVideoArtwork?Id=" + this.id + "&Type=banner";
         Log.i( TAG, "loadBackdrop : previewUrl=" + previewUrl );
         final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
-        Picasso.with( this )
+        getNetComponent().picasso()
                 .load( previewUrl )
                 .fit().centerCrop()
                 .into(imageView);
@@ -239,7 +255,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
 
             } catch( UnsupportedEncodingException e ) { }
 
-            String videoUrl = getSharedPreferencesModule().getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
+            String videoUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
             Log.d( TAG, "onPlayVideo : videoUrl=" + videoUrl );
 
             navigator.navigateToExternalPlayer( this, videoUrl );
@@ -248,7 +264,7 @@ public class VideoDetailsActivity extends AbstractBaseActivity implements HasCom
             Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
 
             try {
-                String videoUrl = getSharedPreferencesModule().getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
+                String videoUrl = getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
                 videoUrl = videoUrl.replaceAll( "%2F", "/" );
                 videoUrl = videoUrl.replaceAll( "\\+", "%20" );
 

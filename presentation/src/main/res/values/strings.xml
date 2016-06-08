@@ -31,7 +31,7 @@
     <string name="video">Video</string>
     <string name="should_start" translatable="false">shouldStart</string>
 
-    <string name="search_hint">Show, Movie, Actor, Character, Channel</string>
+    <string name="search_hint">Search Show, Movie, Actor, Character, Channel</string>
     <string name="ready_to_stream">Ready to Stream</string>
 
     <string name="drawer_item_watch_recordings">Watch Recordings</string>
@@ -191,5 +191,11 @@
     <string name="pref_connect_timeout_title">Connect Timeout</string>
     <string name="pref_connect_timeout_title_summary">Sets the default connection timeout for new connections.</string>
     <string name="pref_connect_timeout_default" translatable="false">20000</string>
+    <string name="versionLabel">Version:</string>
+    <string name="drawer_item_about">About</string>
+    <string name="close">Close</string>
+    <string name="branchLabel">Branch:</string>
+    <string name="shaLabel">Commit:</string>
+    <string name="tagLabel">Tag:</string>
 
 </resources>

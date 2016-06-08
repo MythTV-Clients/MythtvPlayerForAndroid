@@ -70,21 +70,21 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
                     case 0:
                         Log.d( TAG, "gridview.onclick : position 0" );
 
-                        tvNavigator.navigateToRecordings( MainActivity.this );
+                        navigator.navigateToRecordings( MainActivity.this );
 
                         break;
 
                     case 1 :
                         Log.d( TAG, "gridview.onclick : position 1" );
 
-                        tvNavigator.navigateToVideos( MainActivity.this );
+                        navigator.navigateToVideos( MainActivity.this );
 
                         break;
 
                     case 2 :
                         Log.d( TAG, "gridview.onclick : position 2" );
 
-                        tvNavigator.navigateToSettings( MainActivity.this );
+                        navigator.navigateToSettings( MainActivity.this );
 
                         break;
 
@@ -102,7 +102,6 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
 
         this.dvrComponent = DaggerDvrComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

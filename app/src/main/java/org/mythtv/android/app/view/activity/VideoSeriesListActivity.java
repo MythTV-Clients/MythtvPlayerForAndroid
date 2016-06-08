@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
@@ -12,7 +30,7 @@ import org.mythtv.android.app.view.fragment.TelevisionSeriesListFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.app.internal.di.components.VideoComponent;
-import org.mythtv.android.app.internal.di.modules.VideoSeriesModule;
+import org.mythtv.android.presentation.internal.di.modules.VideoSeriesModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
 /**
@@ -30,6 +48,7 @@ public class VideoSeriesListActivity extends AbstractBaseActivity implements Has
     public static Intent getCallingIntent( Context context, String series ) {
 
         Intent callingIntent = new Intent( context, VideoSeriesListActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
         callingIntent.putExtra( INTENT_EXTRA_PARAM_SERIES, series );
 
         return callingIntent;
@@ -144,7 +163,6 @@ public class VideoSeriesListActivity extends AbstractBaseActivity implements Has
 
         this.videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .videoSeriesModule( new VideoSeriesModule( this.series ) )
                 .build();
 

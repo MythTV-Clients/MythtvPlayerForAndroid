@@ -251,7 +251,7 @@ public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
                 if( action.getId() == ACTION_WATCH ) {
 
                     String masterBackendUrl = getMasterBackendUrl();
-                    if( !getSharedPreferencesModule().getInternalPlayerPreferenceFromPreferences() ) {
+                    if( !getSharedPreferencesModule().getInternalPlayer() ) {
 
                         String externalPlayerUrl = masterBackendUrl + "/Content/GetFile?FileName=" + mProgramModel.getFileName();
                         Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );

@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.app.view.activity;
 
 import android.content.Context;
@@ -14,18 +32,17 @@ import android.view.View;
 import android.view.Window;
 
 import org.mythtv.android.app.R;
-import org.mythtv.android.app.view.fragment.UpcomingListFragment;
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.app.internal.di.components.DvrComponent;
 import org.mythtv.android.app.view.fragment.EncoderListFragment;
 import org.mythtv.android.app.view.fragment.RecentListFragment;
+import org.mythtv.android.app.view.fragment.UpcomingListFragment;
+import org.mythtv.android.presentation.internal.di.HasComponent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import org.mythtv.android.app.BuildConfig;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -34,9 +51,12 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public static Intent getCallingIntent(Context context ) {
+    public static Intent getCallingIntent( Context context ) {
 
-        return new Intent( context, MainActivity.class );
+        Intent callingIntent = new Intent( context, MainActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
     }
 
     private DvrComponent dvrComponent;
@@ -61,7 +81,8 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
-        Log.i( TAG, "Current tag: " + BuildConfig.APPLICATION_TAG + ", Commit: " + BuildConfig.APPLICATION_SHA1 );
+        Log.i( TAG, "Branch: " + getResources().getString( R.string.branchName ) + ", Tag: " + getResources().getString( R.string.tagName ) + ", Commit: " + getResources().getString( R.string.shaName ) );
+
 
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
@@ -85,19 +106,31 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
 
                     case 0 :
 
-                        ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
+                        if( null != mPagerAdapter.getItem( 0 ) ) {
+
+                            ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
+
+                        }
 
                         break;
 
                     case 1 :
 
-                        ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
+                        if( null != mPagerAdapter.getItem( 1 ) ) {
+
+                            ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
+
+                        }
 
                         break;
 
                     case 2 :
 
-                        ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
+                        if( null != mPagerAdapter.getItem( 2 ) ) {
+
+                            ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
+
+                        }
 
                         break;
 
@@ -114,7 +147,7 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     protected void onResume() {
         super.onResume();
 
-        if( getSharedPreferencesModule().getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
+        if( getMasterBackendUrl().equals( "http://" + getResources().getString( R.string.pref_backend_url ) + ":" + getResources().getString( R.string.pref_backend_port ) ) ) {
             Log.i( TAG, "onResume : MasterBackend not set, redirecting to Settings" );
 
             navigator.navigateToSettings( this );
@@ -126,11 +159,10 @@ public class MainActivity extends AbstractBaseActivity implements HasComponent<D
     }
 
     private void initializeInjector() {
-        Log.d(TAG, "initializeInjector : enter");
+        Log.d( TAG, "initializeInjector : enter" );
 
         this.dvrComponent = DaggerDvrComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

@@ -1,19 +1,38 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.tv.view.activity;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.util.Log;
 
-import org.mythtv.android.tv.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
+import org.mythtv.android.presentation.model.SearchResultModel;
+import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
+import org.mythtv.android.tv.R;
 import org.mythtv.android.tv.internal.di.components.DaggerSearchComponent;
 import org.mythtv.android.tv.internal.di.components.SearchComponent;
-import org.mythtv.android.tv.internal.di.modules.SearchResultsModule;
-import org.mythtv.android.presentation.model.SearchResultModel;
-import org.mythtv.android.tv.provider.MythtvSearchSuggestionProvider;
 import org.mythtv.android.tv.view.fragment.SearchResultListFragment;
 
 /**
@@ -24,6 +43,11 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
     private static final String TAG = SearchableActivity.class.getSimpleName();
 
     private static final String INSTANCE_STATE_PARAM_SEARCH_TEXT = "org.mythtv.android.STATE_PARAM_SEARCH_TEXT";
+
+    public static Intent getCallingIntent( Context context ) {
+
+        return new Intent( context, SearchableActivity.class );
+    }
 
     private String searchText;
     private SearchComponent searchComponent;
@@ -93,10 +117,10 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
     private void initializeActivity( Intent intent ) {
         Log.d( TAG, "initializeActivity : enter" );
 
-        mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
         if( null == intent  ) {
             Log.d( TAG, "initializeActivity : intent == null" );
 
+            mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
             addFragment( R.id.fl_fragment, mSearchableFragment );
 
         } else {
@@ -108,6 +132,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions( this, MythtvSearchSuggestionProvider.AUTHORITY, MythtvSearchSuggestionProvider.MODE );
             suggestions.saveRecentQuery( searchText, null );
 
+            mSearchableFragment = SearchResultListFragment.newInstance( this.searchText );
             addFragment( R.id.fl_fragment, mSearchableFragment );
 
         }
@@ -132,8 +157,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
         this.searchComponent = DaggerSearchComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
-                .searchResultsModule( new SearchResultsModule( searchText ) )
+                .searchResultsModule( new SearchResultsModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

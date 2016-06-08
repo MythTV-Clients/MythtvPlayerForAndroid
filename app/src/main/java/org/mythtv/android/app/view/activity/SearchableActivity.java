@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.app.view.activity;
 
 import android.app.SearchManager;
@@ -12,9 +30,9 @@ import org.mythtv.android.app.view.fragment.SearchResultListFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.app.internal.di.components.DaggerSearchComponent;
 import org.mythtv.android.app.internal.di.components.SearchComponent;
-import org.mythtv.android.app.internal.di.modules.SearchResultsModule;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.model.SearchResultModel;
-import org.mythtv.android.app.provider.MythtvSearchSuggestionProvider;
+import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
 
 /**
  * Created by dmfrey on 10/14/15.
@@ -60,15 +78,15 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
         }
 
-        super.onSaveInstanceState(outState);
+        super.onSaveInstanceState( outState );
 
         Log.d( TAG, "onSaveInstanceState : exit" );
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.d(TAG, "onRestoreInstanceState : enter");
+        super.onRestoreInstanceState( savedInstanceState );
+        Log.d( TAG, "onRestoreInstanceState : enter" );
 
         if( null != savedInstanceState ) {
             Log.d( TAG, "onRestoreInstanceState : savedInstanceState != null" );
@@ -115,6 +133,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
             Log.d( TAG, "initializeActivity : intent != null" );
 
             searchText = intent.getStringExtra( SearchManager.QUERY );
+            Log.d( TAG, "initializeActivity : searchText = " + searchText );
 
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions( this, MythtvSearchSuggestionProvider.AUTHORITY, MythtvSearchSuggestionProvider.MODE );
             suggestions.saveRecentQuery( searchText, null );
@@ -131,8 +150,7 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
         this.searchComponent = DaggerSearchComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .activityModule( getActivityModule() )
-                .searchResultsModule( new SearchResultsModule( searchText ) )
+                .searchResultsModule( new SearchResultsModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );
@@ -146,16 +164,19 @@ public class SearchableActivity extends AbstractBaseActivity implements HasCompo
 
     @Override
     public void onSearchResultClicked( SearchResultModel searchResultModel ) {
+        Log.d( TAG, "onSearchResultClicked : enter" );
 
         switch( searchResultModel.getType() ) {
 
             case RECORDING:
+                Log.d( TAG, "onSearchResultClicked : recording clicked" );
 
                 navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime() );
 
                 break;
 
             case VIDEO:
+                Log.d( TAG, "onSearchResultClicked : video clicked" );
 
                 navigator.navigateToVideo( this, searchResultModel.getVideoId(), searchResultModel.getStorageGroup(), searchResultModel.getFilename(), searchResultModel.getHostname() );
 

@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.presentation.mapper;
 
 import android.util.Log;
@@ -45,7 +63,7 @@ public class ProgramModelDataMapper {
             throw new IllegalArgumentException( "Cannot transform a null value" );
         }
 
-        Log.i( TAG, "transform : program=" + program.toString() );
+//        Log.i( TAG, "transform : program=" + program.toString() );
 
         ProgramModel programModel = new ProgramModel();
         programModel.setStartTime( program.getStartTime() );
@@ -105,7 +123,7 @@ public class ProgramModelDataMapper {
         if( null != program.getRecording() ) {
 
             RecordingInfo recordingInfo = program.getRecording();
-            Log.i( TAG, "transform : recordingInfo=" + recordingInfo.toString() );
+//            Log.i( TAG, "transform : recordingInfo=" + recordingInfo.toString() );
 
             RecordingInfoModel recordingInfoModel = new RecordingInfoModel();
             recordingInfoModel.setRecordedId( recordingInfo.getRecordedId() );
@@ -124,7 +142,7 @@ public class ProgramModelDataMapper {
             recordingInfoModel.setEncoderName( recordingInfo.getEncoderName() );
             recordingInfoModel.setProfile( recordingInfo.getProfile() );
             programModel.setRecording( recordingInfoModel );
-            Log.i( TAG, " transform : programModel.getRecording=" + programModel.getRecording().toString() );
+//            Log.i( TAG, " transform : programModel.getRecording=" + programModel.getRecording().toString() );
 
         }
 

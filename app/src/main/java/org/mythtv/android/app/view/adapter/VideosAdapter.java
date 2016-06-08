@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.app.view.adapter;
 
 import android.content.Context;
@@ -56,26 +74,26 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoMetad
 
     @Override
     public int getItemCount() {
-        Log.d( TAG, "getItemCount : enter" );
+//        Log.d( TAG, "getItemCount : enter" );
 
-        Log.d( TAG, "getItemCount : exit" );
+//        Log.d( TAG, "getItemCount : exit" );
         return ( null != this.videoMetadataInfosCollection ) ? this.videoMetadataInfosCollection.size() : 0;
     }
 
     @Override
     public VideoMetadataInfoViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
-        Log.d( TAG, "onCreateViewHolder : enter" );
+//        Log.d( TAG, "onCreateViewHolder : enter" );
 
         View view = this.layoutInflater.inflate( R.layout.video_metadata_info_list_item, parent, false );
         VideoMetadataInfoViewHolder videoMetadataInfoViewHolder = new VideoMetadataInfoViewHolder( view );
 
-        Log.d( TAG, "onCreateViewHolder : exit" );
+//        Log.d( TAG, "onCreateViewHolder : exit" );
         return videoMetadataInfoViewHolder;
     }
 
     @Override
     public void onBindViewHolder( VideoMetadataInfoViewHolder holder, final int position ) {
-        Log.d( TAG, "onBindViewHolder : enter" );
+//        Log.d( TAG, "onBindViewHolder : enter" );
 
         final VideoMetadataInfoModel videoMetadataInfoModel = this.videoMetadataInfosCollection.get( position );
         if( null != videoMetadataInfoModel.getInetref() && !"".equals( videoMetadataInfoModel.getInetref() ) ) {
@@ -95,45 +113,45 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoMetad
             }
         });
 
-        Log.d( TAG, "onBindViewHolder : exit" );
+//        Log.d( TAG, "onBindViewHolder : exit" );
     }
 
     @Override
     public long getItemId( int position ) {
-        Log.d( TAG, "getItemId : enter" );
+//        Log.d( TAG, "getItemId : enter" );
 
-        Log.d( TAG, "getItemId : exit" );
+//        Log.d( TAG, "getItemId : exit" );
         return position;
     }
 
     public void setVideoMetadataInfosCollection( Collection<VideoMetadataInfoModel> videoMetadataInfosCollection ) {
-        Log.d( TAG, "setVideoMetadataInfosCollection : enter" );
+//        Log.d( TAG, "setVideoMetadataInfosCollection : enter" );
 
         this.validateVideoMetadataInfosCollection(videoMetadataInfosCollection);
         this.videoMetadataInfosCollection = (List<VideoMetadataInfoModel>) videoMetadataInfosCollection;
         this.notifyDataSetChanged();
 
-        Log.d( TAG, "setVideoMetadataInfosCollection : exit");
+//        Log.d( TAG, "setVideoMetadataInfosCollection : exit");
     }
 
     public void setOnItemClickListener( OnItemClickListener onItemClickListener ) {
-        Log.d( TAG, "setOnItemClickListener : enter" );
+//        Log.d( TAG, "setOnItemClickListener : enter" );
 
         this.onItemClickListener = onItemClickListener;
 
-        Log.d( TAG, "setOnItemClickListener : exit" );
+//        Log.d( TAG, "setOnItemClickListener : exit" );
     }
 
     private void validateVideoMetadataInfosCollection( Collection<VideoMetadataInfoModel> videoMetadataInfosCollection ) {
-        Log.d(TAG, "validateVideoMetadataInfosCollection : enter");
+//        Log.d(TAG, "validateVideoMetadataInfosCollection : enter");
 
         if( null == videoMetadataInfosCollection ) {
-            Log.w( TAG, "validateVideoMetadataInfosCollection : videoMetadataInfosCollection is null" );
+//            Log.w( TAG, "validateVideoMetadataInfosCollection : videoMetadataInfosCollection is null" );
 
             throw new IllegalArgumentException( "The list cannot be null" );
         }
 
-        Log.d( TAG, "validateVideoMetadataInfosCollection : exit" );
+//        Log.d( TAG, "validateVideoMetadataInfosCollection : exit" );
     }
 
     static class VideoMetadataInfoViewHolder extends RecyclerView.ViewHolder {

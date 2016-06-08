@@ -1,0 +1,2 @@
+Issue initiating HLS Transcode on mythtv v0.27 backend
+Bug Fixes

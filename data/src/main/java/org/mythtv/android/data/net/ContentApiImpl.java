@@ -1,3 +1,21 @@
+/*
+ * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2016. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.mythtv.android.data.net;
 
 import android.content.Context;
@@ -23,6 +41,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -36,17 +55,21 @@ public class ContentApiImpl implements ContentApi {
     private static final DateTimeFormatter fmt = DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
 
     private final Context context;
+    private final SharedPreferences sharedPreferences;
+    private final OkHttpClient okHttpClient;
     private final LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper;
     private final BooleanJsonMapper booleanJsonMapper;
 
-    public ContentApiImpl( Context context, LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
+    public ContentApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
 
-        if( null == context || null == liveStreamInfoEntityJsonMapper || null == booleanJsonMapper ) {
+        if( null == context || null == sharedPreferences || null == okHttpClient || null == liveStreamInfoEntityJsonMapper || null == booleanJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
 
-        this.context = context.getApplicationContext();
+        this.context = context;
+        this.sharedPreferences = sharedPreferences;
+        this.okHttpClient = okHttpClient;
         this.liveStreamInfoEntityJsonMapper = liveStreamInfoEntityJsonMapper;
         this.booleanJsonMapper = booleanJsonMapper;
 
@@ -418,7 +441,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "addLiveStreamFromApi : url=" + sb.toString() );
-        return ApiConnection.create( sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private String addRecordingLiveStreamFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
@@ -463,7 +486,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "addRecordingLiveStreamFromApi : url=" + sb.toString() );
-        return ApiConnection.create( sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private String addVideoLiveStreamFromApi( final int id ) throws MalformedURLException {
@@ -496,7 +519,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "addVideoLiveStreamFromApi : url=" + sb.toString() );
-        return ApiConnection.create( sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private String getLiveStreamInfoEntitiesFromApi( String filename ) throws MalformedURLException {
@@ -525,7 +548,7 @@ public class ContentApiImpl implements ContentApi {
         }
 
         Log.d( TAG, "getLiveStreamInfoEntitiesFromApi : url=" + sb.toString() );
-        return ApiConnection.create( sb.toString(), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private String getLiveStreamInfoFromApi( int id ) throws MalformedURLException {
@@ -533,7 +556,7 @@ public class ContentApiImpl implements ContentApi {
         String apiUrl = String.format( ContentApi.LIVE_STREAM_INFO_URL, id );
         Log.d( TAG, "getLiveStreamInfoFromApi : url=" + apiUrl );
 
-        return ApiConnection.create( getMasterBackendUrl() + apiUrl, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
     private String removeLiveStreamInfoFromApi( int id ) throws MalformedURLException {
@@ -541,7 +564,7 @@ public class ContentApiImpl implements ContentApi {
         String apiUrl = String.format( ContentApi.REMOVE_LIVE_STREAM_URL, id );
         Log.d( TAG, "removeLiveStreamInfoFromApi : url=" + apiUrl );
 
-        return ApiConnection.create( getMasterBackendUrl() + apiUrl, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
     private String stopLiveStreamInfoFromApi( int id ) throws MalformedURLException {
@@ -549,7 +572,7 @@ public class ContentApiImpl implements ContentApi {
         String apiUrl = String.format( ContentApi.STOP_LIVE_STREAM_URL, id );
         Log.d( TAG, "stopLiveStreamInfoFromApi : url=" + apiUrl );
 
-        return ApiConnection.create( getMasterBackendUrl() + apiUrl, getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_READ_TIMEOUT, 10000 ), getIntFromPreferences( this.context, SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, 15000 ) ).requestSyncCall();
+        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
     private boolean isThereInternetConnection() {
@@ -565,8 +588,8 @@ public class ContentApiImpl implements ContentApi {
 
     private String getMasterBackendUrl() {
 
-        String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+        String host = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         String masterBackend = "http://" + host + ":" + port;
         Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
@@ -576,25 +599,16 @@ public class ContentApiImpl implements ContentApi {
 
     private void addParameters( List<String> params ) {
 
-        params.add( String.format( WIDTH_QS, getFromPreferences( this.context, SettingsKeys.KEY_PREF_HLS_VIDEO_WIDTH ) ) );
-        params.add( String.format( HEIGHT_QS, getFromPreferences( this.context, SettingsKeys.KEY_PREF_HLS_VIDEO_HEIGHT ) ) );
-        params.add( String.format( BITRATE_QS, getFromPreferences( this.context, SettingsKeys.KEY_PREF_HLS_VIDEO_BITRATE ) ) );
-        params.add( String.format( AUDIO_BITRATE_QS, getFromPreferences( this.context, SettingsKeys.KEY_PREF_HLS_AUDIO_BITRATE ) ) );
+        params.add( String.format( WIDTH_QS, getFromPreferences( SettingsKeys.KEY_PREF_HLS_VIDEO_WIDTH ) ) );
+        params.add( String.format( HEIGHT_QS, getFromPreferences( SettingsKeys.KEY_PREF_HLS_VIDEO_HEIGHT ) ) );
+        params.add( String.format( BITRATE_QS, getFromPreferences( SettingsKeys.KEY_PREF_HLS_VIDEO_BITRATE ) ) );
+        params.add( String.format( AUDIO_BITRATE_QS, getFromPreferences( SettingsKeys.KEY_PREF_HLS_AUDIO_BITRATE ) ) );
 
     }
 
-    private String getFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+    private String getFromPreferences( String key ) {
 
         return sharedPreferences.getString( key, "" );
-    }
-
-    private int getIntFromPreferences( Context context, String key, int defaultValue ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return Integer.parseInt( sharedPreferences.getString( key, String.valueOf( defaultValue ) ) );
     }
 
 }
