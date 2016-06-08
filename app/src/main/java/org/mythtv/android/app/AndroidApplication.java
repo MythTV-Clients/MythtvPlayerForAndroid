@@ -21,6 +21,7 @@ package org.mythtv.android.app;
 import android.app.Application;
 
 import com.facebook.stetho.Stetho;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.mythtv.android.app.internal.di.components.ApplicationComponent;
@@ -30,6 +31,7 @@ import org.mythtv.android.app.internal.di.components.DaggerSharedPreferencesComp
 import org.mythtv.android.app.internal.di.components.NetComponent;
 import org.mythtv.android.app.internal.di.components.SharedPreferencesComponent;
 import org.mythtv.android.app.internal.di.modules.ApplicationModule;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.modules.NetModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
@@ -76,6 +78,9 @@ public class AndroidApplication extends Application {
                 .sharedPreferencesModule( sharedPreferencesModule )
                 .netModule( netModule )
                 .build();
+
+        boolean enableFirebaseAnalytics = sharedPreferencesModule.getBooleanFromPreferences( SettingsKeys.KEY_PREF_ENABLE_ANALYTICS );
+        FirebaseAnalytics.getInstance( this ).setAnalyticsCollectionEnabled( enableFirebaseAnalytics );
 
     }
 

@@ -149,4 +149,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/pref_enable_analytics_label"
+        android:key="pref_enable_analytics">
+
+        <CheckBoxPreference
+            android:title="@string/pref_enable_analytics_title"
+            android:key="enable_analytics"
+            android:defaultValue="false"
+            android:summaryOn="@string/pref_enable_analytics_summary_on"
+            android:summaryOff="@string/pref_enable_analytics_summary_off" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
