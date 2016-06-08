@@ -160,9 +160,6 @@ dependencies {
     compile presentationDependencies.fbCrashReporting
     provided presentationDependencies.javaxAnnotation
 
-    debugCompile presentationDependencies.leakCanaryDebug
-    releaseCompile presentationDependencies.leakCanaryNoOp
-
     androidTestCompile presentationTestDependencies.androidAnnotations
     androidTestCompile presentationTestDependencies.mockito
     androidTestCompile presentationTestDependencies.dexmaker
