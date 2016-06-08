@@ -1,0 +1,5 @@
+v2.1.0
+=============
+- Ferhlerkorrekturen und Performanceverbesserungen
+- Absturz für Anwender mit großen Bibliotheken behoben
+- Unterstützung für Android 4.0.3+ hinzugefügt
