@@ -29,7 +29,6 @@ ext {
     //Android
     androidBuildToolsVersion = "23.0.3"
     androidMinSdkVersion = 17
-    androidTvMinSdkVersion = 21
     androidTargetSdkVersion = 23
     androidCompileSdkVersion = 23
 

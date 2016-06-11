@@ -41,9 +41,39 @@ buildscript {
 
 allprojects {
 
+/*
+    Version Code Algorithm
+    ----------------------
+    Version Code = Min API Level + Min Screen Size + Max Screen Size + App Version
+
+    example: 1414210
+
+
+    Android Version Table
+    ---------------------
+    API Level | Version Number | Code Name
+    ------------------------------------------------------------------------------------------------
+    14 - 15   | 4.0 - 4.0.4    | Ice Cream Sandwich
+    16 - 18   | 4.1 - 4.3.1    | Jellybean
+    19 - 20   | 4.4 - 4.4.4    | KitKat
+    21 - 22   | 5.0 - 5.1.1    | Lollipop
+    23        | 6.0 - 6.0.1    | Marshmellow
+    24?       | 7.0?           | N?
+
+    Android Screen Size Table
+    --------------------------
+    Code | Size
+    ------------------------------------------------------------------------------------------------
+    1    | low
+    2    | normal
+    3    | large
+    4    | xlarge
+
+ */
+
     ext {
         androidApplicationId = 'org.mythtv.android'
-        androidVersionCode = 22
+        androidVersionCode = 1714210
         androidVersionName = "2.1.0"
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId = 'org.mythtv.android.test'
@@ -54,6 +84,8 @@ allprojects {
     }
 
 }
+
+//apply plugin: 'android-reporting'
 
 task wrapper( type: Wrapper ) {
   description 'Creates the gradle wrapper.'

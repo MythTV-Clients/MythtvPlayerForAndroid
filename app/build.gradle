@@ -25,35 +25,6 @@ android {
     def applicationBranch = "git rev-parse --abbrev-ref HEAD".execute().text.trim()
     def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
-/*
-    Version Code Algorithm
-    ----------------------
-    Version Code = Min API Level + Min Screen Size + Max Screen Size + App Version
-
-    example: 1414210
-
-
-    Android Version Table
-    ---------------------
-    API Level | Version Number | Code Name
-    ------------------------------------------------------------------------------------------------
-    14 - 15   | 4.0 - 4.0.4    | Ice Cream Sandwich
-    16 - 18   | 4.1 - 4.3.1    | Jellybean
-    19 - 20   | 4.4 - 4.4.4    | KitKat
-    21 - 22   | 5.0 - 5.1.1    | Lollipop
-    23        | 6.0 - 6.0.1    | Marshmellow
-    24?       | 7.0?           | N?
-
-    Android Screen Size Table
-    --------------------------
-    Code | Size
-    ------------------------------------------------------------------------------------------------
-    1    | low
-    2    | normal
-    3    | large
-    4    | xlarge
-
- */
 
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -68,12 +39,12 @@ android {
 
     defaultConfig {
 
-        minSdkVersion 17
-        targetSdkVersion 23
+        minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
+        targetSdkVersion globalConfiguration.getAt( "androidTargetSdkVersion" )
 
         applicationId 'org.mythtv.android'
-        versionCode 1714210
-        versionName "2.1.0"
+        versionCode globalConfiguration.getAt( "androidVersionCode" )
+        versionName globalConfiguration.getAt( "androidVersionName" )
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId 'org.mythtv.android.app.test'
 
