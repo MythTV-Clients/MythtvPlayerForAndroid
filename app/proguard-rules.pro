@@ -26,7 +26,8 @@
 #-dontwarn org.mockito.**
 #-dontwarn org.junit.**
 #-dontwarn com.robotium.**
-#-dontwarn org.joda.convert.**
+-dontwarn org.joda.convert.**
+-dontwarn lombok.**
 
 # Ignore warnings: We are not using DOM model
 #-dontwarn com.fasterxml.jackson.databind.ext.DOMSerializer
