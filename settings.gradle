@@ -19,7 +19,7 @@
 //include ':CastCompanionLibrary'
 //project(':CastCompanionLibrary').projectDir = new File('../CastCompanionLibrary-android/')
 
-include ':app', 'tv'
-include ':presentation'
+include ':app' //, 'tv'
+//include ':presentation'
 include ':domain'
 include ':data'
