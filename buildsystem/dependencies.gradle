@@ -28,8 +28,7 @@ ext {
 
     //Android
     androidBuildToolsVersion = "23.0.3"
-    androidMinSdkVersion = 14
-    androidTvMinSdkVersion = 21
+    androidMinSdkVersion = 17
     androidTargetSdkVersion = 23
     androidCompileSdkVersion = 23
 
@@ -42,15 +41,14 @@ ext {
     //Libraries
     daggerVersion = '2.4'
     butterKnifeVersion = '7.0.1'
-    rxJavaVersion = '1.1.1'
-    rxAndroidVersion = '1.1.0'
+    rxJavaVersion = '1.1.5'
+    rxAndroidVersion = '1.2.0'
     javaxAnnotationVersion = '1.0'
-    gsonVersion = '2.5'
+    gsonVersion = '2.6.2'
     okHttpVersion = '3.2.0'
     picassoVersion = '2.5.2'
-    mythtvServiceApiVersion = '2.0.4'
-    jodaVersion = '2.9.1'
-    lombokVersion = '1.16.6'
+    jodaVersion = '2.9.4'
+    lombokVersion = '1.16.8'
     exoplayerVersion = 'r1.5.4'
     glideVersion = '3.7.0'
     multidexVersion = '1.0.0'
