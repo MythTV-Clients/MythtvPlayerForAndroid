@@ -26,8 +26,8 @@ android {
     def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion globalConfiguration.getAt( "androidCompileSdkVersion" )
+    buildToolsVersion globalConfiguration.getAt( "androidBuildToolsVersion" )
     enforceUniquePackageName = false
 
     dexOptions {
@@ -51,7 +51,7 @@ android {
         resValue "string", "branchName", applicationBranch
         resValue "string", "shaName", applicationSHA1
         resValue "string", "tagName", applicationTag
-        resValue "string", "versionName", "2.1.0"
+        resValue "string", "versionName", globalConfiguration.getAt( "androidVersionName" )
 
     }
 
