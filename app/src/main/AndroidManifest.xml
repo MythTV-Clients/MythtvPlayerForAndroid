@@ -384,9 +384,12 @@
 
         <activity
             android:name=".view.activity.tv.TvVideoSettingsActivity"
-            android:theme="@style/Theme.Leanback"/>
+            android:theme="@style/Theme.Leanback" />
+            android:theme="@style/Theme.Leanback" />
 
-        <activity android:name=".view.activity.tv.SearchableActivity">
+        <activity
+            android:name=".view.activity.tv.SearchableActivity"
+            android:theme="@style/Theme.Leanback">
 
             <intent-filter>
 

@@ -171,16 +171,12 @@ public class DbSearchDataStore implements SearchDataStore {
 
             db.beginTransaction();
 
-            String title = "";
-            for( SearchResultEntity entity : searchResultEntityCollection ) {
-
-                title = entity.getTitle();
-                break;
-
-            }
-
-            Log.d( TAG, "refreshRecordedProgramData : deleting old recordings" );
-            db.delete( SearchResultEntity.TABLE_NAME, "type = ? and title = ?", new String[] { SearchResult.Type.RECORDING.name(), title } );
+            Observable.from( searchResultEntityCollection )
+                    .distinct( searchResultEntity -> searchResultEntity.getTitle() )
+                    .flatMap( searchResultEntity -> Observable.just( searchResultEntity.getTitle() ) )
+                    .doOnNext( title -> db.delete( SearchResultEntity.TABLE_NAME, "type = ? and title = ?", new String[] { SearchResult.Type.RECORDING.name(), title } ) )
+                    .doOnNext( title -> Log.d( TAG, "refreshRecordedPrograms : deleting old recordings for title=" + title ) )
+                    .subscribe();
 
             processCollection( searchResultEntityCollection );
         }

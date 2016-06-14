@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.widget.Toast;
 
+import org.mythtv.android.R;
 import org.mythtv.android.internal.di.HasComponent;
 import org.mythtv.android.internal.di.modules.SharedPreferencesModule;
 
@@ -38,6 +39,7 @@ public abstract class AbstractBaseBrowseFragment extends BrowseFragment {
         super.onCreate( savedInstanceState );
 
         setRetainInstance( true );
+        setSearchAffordanceColor( R.color.accent );
 
     }
 
