@@ -33,7 +33,7 @@ ext {
     androidCompileSdkVersion = 23
 
     //Android Support Libraries
-    androidSupportVersion = '23.3.0'
+    androidSupportVersion = '23.4.0'
 
     //Firebase Libraries
     firebaseVersion = '9.0.2'

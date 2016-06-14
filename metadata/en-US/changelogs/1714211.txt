@@ -1,0 +1,6 @@
+v2.1.1
+=============
+Merged app and android tv versions back together to produce a single intallable version across
+all device types
+Removed support for Ice Cream Sandwich and some versions of Jellybean
+- See the Releases section of the GitHub page for earlier supported versions
