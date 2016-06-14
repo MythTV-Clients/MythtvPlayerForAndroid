@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ MythTV Player An application for Android users to play MythTV Recordings and Videos
+  ~ Copyright (c) 2015. Daniel Frey
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="all_recordings">Alle Aufnahmen</string>
+    <string name="all_videos">Alle Videos</string>
+
+    <string name="video">Video</string>
+
+    <!-- not checked, unknown occurence -->
+    <!-- not checked, unknown occurence -->
+
+    <string name="drawer_item_watch_recordings">Aufnahmen ansehen</string>
+    <string name="drawer_item_watch_videos">Videos ansehen</string>
+    <string name="drawer_item_preferences">Einstellungen</string>
+
+    <string name="action_settings">Einstellungen</string>
+
+    <!-- not checked, unknown occurence -->
+    <!-- HLS not translated, unknown occurence -->
+
+    <!-- HLS not translated, unknown occurence -->
+    <string name="pref_hls_video_bitrate_title">Bitrate</string>
+    <string name="pref_hls_audio_bitrate_title">Audio Bitrate</string>
+    <string name="pref_default_player">Standardplayer</string>
+    <string name="pref_hls_video_height_title_summary">Video Höhe</string>
+    <string name="pref_hls_video_bitrate_title_summary">Video Bitrate</string>
+    <string name="pref_hls_audio_bitrate_title_summary">Audio Bitrate</string>
+    <string name="play_button">Abspielen</string>
+    <string name="pref_rating_nr">NR – Nicht Bewertet</string>
+    <string name="pref_rating_pg">PG – Begleitung eines Erwachsenen erwünscht</string>
+    <string name="pref_rating_pg13">PG-13 – Begleitung eines Erwachsenen unbedingt empfohlen</string>
+    <string name="pref_rating_r">R – Unter 17 Jahren nur in Begleitung eines Erwachsenen</string>
+    <string name="pref_content_ratings">Altersfreigabe (nach Motion Picture Association of America)</string>
+    <string name="pref_enable_parental_controls">Kindersicherung</string>
+    <string name="pref_enable_parental_controls_summary_on">Kindersicherung angeschaltet</string>
+    <string name="pref_enable_parental_controls_summary_off">Kindersicherung ausgeschaltet</string>
+    <string name="pref_backend_url">Master Backend-URL</string>
+    <string name="pref_backend_port_description">Port des Master Backends</string>
+    <string name="pref_backend_url_description">Hostname oder IP-Adresse des Master Backends</string>
+    <string name="pref_backend_url_title">Master Backend Einstellung</string>
+    <string name="pref_hls_video_height_title">Video  Höhe</string>
+    <string name="pref_hls_video_width_title">Video Breite</string>
+    <string name="pref_hls_video_width_title_summary">HLS transcode Video Breite</string> <!-- not checked, unknown occurence -->
+    <string name="pref_internal_player">Interner Player</string>
+    <string name="pref_internal_player_summary_off">Wiedergabe durch externen Player</string>
+    <string name="pref_internal_player_summary_on">Wiedergabe durch internen Player</string>
+    <string name="pref_external_player">Externer Player</string>
+    <string name="pref_parental_control_level">Altersfreigabestufe</string>
+    <string name="pref_parental_controls">Altersfreigabe</string>
+    <string name="pref_rating_g">G – für alle Altersstufen geeignet</string>
+    <string name="pref_rating_g_summary">Alle Altersstufen zugelassen.</string>
+    <string name="pref_rating_nc17">NC-17 – Nur Erwachsene</string>
+    <string name="pref_rating_nc17_summary">Ab 18 Jahren. Für Kinder nicht geeignet.</string>
+    <string name="pref_rating_nr_summary">Nicht bewertet.</string>
+    <string name="pref_rating_pg13_summary">Begleitung eines Erwachsenen unbedingt empfohlen. Für Kinder unter 13 nicht empfohlen.</string>
+    <string name="pref_rating_pg_summary">Begleitung eines Erwachsenen erwünscht.</string>
+    <string name="pref_rating_r_summary">Jugendliche nur in Begleitung eines Erwachsenen. Enthält Material für Erwachsene.</string>
+    <string name="pref_restrict_content_types">Nur anzeigen Ausgewählte Video Bewertungen</string>
+    <string name="pref_restrict_content_types_summary_off">Alle Altersstufen anzeigen</string>
+    <string name="pref_restrict_content_types_summary_on">Nur ausgewählte Altersstufen anzeigen</string>
+    <string name="pref_show_adult_tab">Pornos</string>
+    <string name="pref_show_adult_tab_summary_off">Pornos werden verborgen</string>
+    <string name="pref_show_adult_tab_summary_on">Pornos werden angezeigt</string>
+    <string name="pref_video_display_preferences">Wiedergabeeinstellungen</string>
+    <string name="queue_button">Queue HLS</string><!-- not checked, unknown occurence -->
+    <string name="ready_to_stream">Bereit zum Streamen</string>
+    <string name="recording">Aufnahme</string>
+    <string name="search_hint">Suche Show, Film, Schauspieler, Persönlichkeit, Kanal</string> <!-- not checked, unknown occurence -->
+    <string name="search_results">Suchergebnisse</string>
+    <string name="search_title">Suche</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="video_preferences">Video-Einstellungen</string>
+    <string name="video_preferences_summary">Einstellungen für Videos</string>
+    <string name="watch_recording">Aufnahme ansehen</string>
+    <string name="watch_video">Videos Ansehen</string>
+    <string name="recording_preferences">Aufnahmeeinstellungen</string>
+    <string name="recording_preferences_summary">Einstellungen für Aufnahmen</string>
+    <string name="pref_set_default_recording_group">Aufnahme Gruppeneinstellungen   [Einstellung zur Zeit nicht verfügbar]</string><!-- not checked, unknown occurence -->
+    <string name="pref_default_recording_group">Standardaufnahmegruppe auswählen</string>
+    <string name="pref_default_recording_group_summary_off">Keine Standard ufnahmegruppe festgelegt</string>
+    <string name="pref_default_recording_group_summary_on">Nur Aufnahmen der Standardaufnahmegruppe angezeigt</string>
+    <string name="pref_enable_default_recording_group">Standardaufnahmegruppe aktiviert</string>
+    <string name="tv_settings_title">MythTV Settings</string>
+    <string name="tv_settings_title_description">MythTV Player backend and content settings</string>
+    <string name="tv_settings_master_backend_title">Master Backend</string>
+    <string name="tv_settings_master_backend_description">Master Backend Connection Settings</string>
+    <string name="tv_settings_master_backend_url">Master Backend URL</string>
+    <string name="tv_settings_master_backend_port">Master Backend Port</string>
+    <string name="tv_settings_read_timeout">Master Backend Read Timeout</string>
+    <string name="tv_settings_read_timeout_title">Master Backend Read Timeout</string>
+    <string name="tv_settings_read_timeout_description">Sets the default read timeout for new connections. A value of 0 means no timeout.</string>
+    <string name="tv_settings_connect_timeout">Master Backend Read Timeout</string>
+    <string name="tv_settings_connect_timeout_title">Master Backend Read Timeout</string>
+    <string name="tv_settings_connect_timeout_description">Sets the default connect timeout for new connections. A value of 0 means no timeout.</string>
+    <string name="tv_settings_playback_title">Wiedergabeeinstellungen</string>
+    <string name="tv_settings_playback_title_description">Einstellung des Player für Aufnahmen und Videos</string>
+    <string name="tv_settings_playback_internal_player">Interner Player</string>
+    <string name="tv_settings_playback_internal_player_description">Benutze den internen Player zur Wiedergabe von Aufnahmen und Videos</string>
+    <string name="tv_settings_playback_external_player">Externer Player</string>
+    <string name="tv_settings_content_title">Content Settings</string>
+    <string name="tv_settings_content_title_description">Zeige pornographische Inhalte</string>
+    <string name="tv_settings_content_adult_title">Pornos</string>
+    <string name="tv_settings_content_adult_shown">Pornos werden angezeigt</string>
+    <string name="tv_settings_content_adult_hidden">Pornos werden verborgen</string>
+    <string name="tv_settings_yes">Ja</string>
+    <string name="tv_settings_no">Nein</string>
+    <string name="backdrop_content_description">backdrop</string>
+    <string name="encoder_item_recording_image_content_description">encoder_item_recording_image</string>
+    <string name="nav_drawer_logo_content_description">nav_drawer_logo</string>
+    <string name="tv_item_category_content_description">tv_item_category</string>
+    <string name="exception_message_no_connection">Kann nicht mit mythbackend verbinden</string>
+    <string name="encoder_state_idle">müßig</string>
+    <string name="encoder_state_recording">Aufnahme</string>
+    <string name="encoder_state_watching_bd">ansehen einer BluRay</string>
+    <string name="encoder_state_watching_dvd">ansehen einer DVD</string>
+    <string name="watched_content_description">watched status</string>
+    <string name="hls_stream_content_description">HLS Stream</string>
+    <string name="remove_live_stream_title">Remove Live Stream?</string>
+    <string name="remove_live_stream_positive_label">Remove</string>
+    <string name="add_live_stream_positive_label">Create</string>
+    <string name="add_live_stream_title">Create Live Stream?</string>
+    <string name="http_live_stream">HTTP Live Stream %1$s</string>
+    <string name="http_live_stream_unavailable">HTTP Live Stream Unavailable</string>
+    <string name="http_live_stream_available">HTTP Live Stream Available on %1$s</string>
+    <string name="available">Available</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="watched">Gesehen</string>
+    <string name="unwatched">Ungesehen</string>
+
+    <string name="pref_timeouts">Master Backend Timeouts</string>
+    <string name="pref_timeouts_summary">Timeout settings for connecting to the Master Backend. This is an advanced feature and is not normally needed to change. If you are seeing errors because you have a large library, consider increasing these values. Only set it to \'No Limit\' unless no other options work.</string>
+    <string name="pref_read_timeout_title">Read Timeout</string>
+    <string name="pref_read_timeout_title_summary">Sets the default read timeout for new connections. A value of 0 means no timeout.</string>
+    <string name="pref_connect_timeout_title">Connect Timeout</string>
+    <string name="pref_connect_timeout_title_summary">Sets the default connection timeout for new connections. A value of 0 means no timeout.</string>
+    <string name="versionLabel">Version:</string>
+    <string name="drawer_item_about">About</string>
+    <string name="close">Close</string>
+    <string name="branchLabel">Branch:</string>
+    <string name="shaLabel">Commit:</string>
+    <string name="tagLabel">Tag:</string>
+
+</resources>

@@ -1,0 +1,11 @@
+Mit MythTV Player können Sie Ihre Aufnahmen und Videos auf Ihrem MythTV-Backend durchstöbern und abspielen.
+
+Wenn Sie planen, diese Anwendung zu nutzen, benötigen Sie ein voll funktionsfähiges MythTV-Backend Version v0.27+. Wenn Sie an weiteren Informationen über MythTV interessiert sind, besuchen Sie die Website unter https://mythtv.org. Beachten Sie auch, dass es ein Problem mit HLS Umcodierung in MythTV 0.27 gibt. Einige Benutzer haben zu 0.28 gewechselt.
+
+MythTV Player spielt, durch das MythTV-Backend umcodierte, HTTP Live Streams nativ ab. Sie haben jedoch die Möglichkeit, eine Aufzeichnung oder Video mit einem externen Player zu starten. Wir empfehlen VLC für Android.
+
+Die MythTV Services API bietet keine Möglichkeit fernzusehen, deshalb kann diese App es nicht.
+
+Offene Themen sind hier: https://github.com/MythTV-Clients/MythtvPlayerForAndroid/issues
+
+Schließen Sie sich der G + Gemeinschaft an, um an Diskussionen über die App teilzunehmen und auf Beta-Versionen der App zuzugreifen: https://plus.google.com/u/0/communities/104432707624078706786
