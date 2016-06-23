@@ -1,10 +1,10 @@
 apply plugin: 'java'
-apply plugin: 'jacoco'
-apply plugin: 'com.github.kt3k.coveralls'
+//apply plugin: 'jacoco'
+//apply plugin: 'com.github.kt3k.coveralls'
 
-jacoco {
-    toolVersion "0.7.6.201602180812"
-}
+//jacoco {
+//    toolVersion "0.7.6.201602180812"
+//}
 
 /*
  * MythtvPlayerForAndroid. An application for Android users to play MythTV Recordings and Videos
@@ -46,7 +46,7 @@ dependencies {
 
     provided domainDependencies.daggerCompiler
     provided domainDependencies.javaxAnnotation
-    compile domainDependencies.lombok
+    provided domainDependencies.lombok
 
     compile domainDependencies.dagger
     compile domainDependencies.rxJava
@@ -55,52 +55,52 @@ dependencies {
     testCompile domainTestDependencies.junit
     testCompile domainTestDependencies.mockito
 
-    compile 'org.jacoco:org.jacoco.agent:0.7.6.201602180812'
+//    compile 'org.jacoco:org.jacoco.agent:0.7.6.201602180812'
 
 }
 
-jacocoTestReport {
-    group = "Reporting"
-    description = "Generate Jacoco coverage reports after running tests."
-
-    reports {
-        xml.enabled true
-        csv.enabled false
-        xml.destination "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-        html.destination "${buildDir}/reports/coverage"
-    }
-
-    afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(
-                    dir: it,
-                    exclude: [
-                            '**/Artwork.class',
-                            '**/ArtworkInfo*.class',
-                            '**/Cast.class',
-                            '**/CastMember.class',
-                            '**/ChannelInfo.class',
-                            '**/ContentType.class',
-                            '**/Encoder.class',
-                            '**/Input.class',
-                            '**/LiveStreamInfo.class',
-                            '**/Program.class',
-                            '**/RecordingInfo.class',
-                            '**/SearchResult.class',
-                            '**/SearchResult$Type.class',
-                            '**/SettingsKeys.class',
-                            '**/TitleInfo.class',
-                            '**/VideoMetadataInfo.class',
-                            '**/*_Factory.class',
-                    ])
-        })
-    }
-
-    doLast {
-        println "coveralls report has been generated to file://${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-        println "jacoco report has been generated to file://${reports.html.destination}/index.html"
-    }
-
-}
-
-check.dependsOn jacocoTestReport
+//jacocoTestReport {
+//    group = "Reporting"
+//    description = "Generate Jacoco coverage reports after running tests."
+//
+//    reports {
+//        xml.enabled true
+//        csv.enabled false
+//        xml.destination "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+//        html.destination "${buildDir}/reports/coverage"
+//    }
+//
+//    afterEvaluate {
+//        classDirectories = files(classDirectories.files.collect {
+//            fileTree(
+//                    dir: it,
+//                    exclude: [
+//                            '**/Artwork.class',
+//                            '**/ArtworkInfo*.class',
+//                            '**/Cast.class',
+//                            '**/CastMember.class',
+//                            '**/ChannelInfo.class',
+//                            '**/ContentType.class',
+//                            '**/Encoder.class',
+//                            '**/Input.class',
+//                            '**/LiveStreamInfo.class',
+//                            '**/Program.class',
+//                            '**/RecordingInfo.class',
+//                            '**/SearchResult.class',
+//                            '**/SearchResult$Type.class',
+//                            '**/SettingsKeys.class',
+//                            '**/TitleInfo.class',
+//                            '**/VideoMetadataInfo.class',
+//                            '**/*_Factory.class',
+//                    ])
+//        })
+//    }
+//
+//    doLast {
+//        println "coveralls report has been generated to file://${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+//        println "jacoco report has been generated to file://${reports.html.destination}/index.html"
+//    }
+//
+//}
+//
+//check.dependsOn jacocoTestReport

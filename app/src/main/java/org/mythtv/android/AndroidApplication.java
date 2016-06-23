@@ -19,6 +19,8 @@
 package org.mythtv.android;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
@@ -43,6 +45,14 @@ public class AndroidApplication extends Application {
     private ApplicationComponent applicationComponent;
     private SharedPreferencesComponent sharedPreferencesComponent;
     private NetComponent netComponent;
+
+    @Override
+    protected void attachBaseContext( Context base ) {
+
+        MultiDex.install( this );
+
+        super.attachBaseContext( base );
+    }
 
     @Override
     public void onCreate() {

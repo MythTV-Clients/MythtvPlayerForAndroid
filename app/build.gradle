@@ -42,11 +42,13 @@ android {
         minSdkVersion globalConfiguration.getAt( "androidMinSdkVersion" )
         targetSdkVersion globalConfiguration.getAt( "androidTargetSdkVersion" )
 
+        multiDexEnabled true
+
         applicationId 'org.mythtv.android'
         versionCode globalConfiguration.getAt( "androidVersionCode" )
         versionName globalConfiguration.getAt( "androidVersionName" )
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        testApplicationId 'org.mythtv.android.app.test'
+        testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
+        testApplicationId 'org.mythtv.android.test'
 
         resValue "string", "branchName", applicationBranch
         resValue "string", "shaName", applicationSHA1
@@ -59,9 +61,13 @@ android {
 
         debug {
 
-            signingConfig signingConfigs.debug
-            proguardFiles 'proguard-rules.txt'
-            testCoverageEnabled = false
+//            signingConfig signingConfigs.debug
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile( 'proguard-android.txt' ),
+//                    'proguard-rules.pro',
+//                    'proguard-rules-debug.pro'
+
+            testCoverageEnabled = true
 
         }
 
@@ -117,6 +123,7 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/services/javax.annotation.processing.Processor'
+//        exclude 'changelog.txt'
 
     }
 
@@ -124,7 +131,7 @@ android {
 
         quiet true
         abortOnError false
-        ignoreWarnings true
+        ignoreWarnings false
         disable 'InvalidPackage'            //Some libraries have issues with this.
         disable 'OldTargetApi'
 
@@ -154,11 +161,13 @@ dependencies {
     def presentationDependencies = rootProject.ext.presentationDependencies
     def presentationTestDependencies = rootProject.ext.presentationTestDependencies
 
-//    compile project( ':presentation' )
     compile project( ':domain' )
     compile project( ':data' )
 
     apt presentationDependencies.daggerCompiler
+    provided dataDependencies.lombok
+    apt dataDependencies.lombok
+
     compile presentationDependencies.dagger
     compile presentationDependencies.butterKnife
     compile presentationDependencies.appCompat
@@ -174,6 +183,7 @@ dependencies {
     compile presentationDependencies.preferences
     compile presentationDependencies.glide
     compile presentationDependencies.recyclerviewfastscroller
+    compile presentationDependencies.multidex
 
     compile presentationDependencies.leanback
     compile presentationDependencies.leanbackPreferences
@@ -191,8 +201,16 @@ dependencies {
     androidTestCompile presentationTestDependencies.testSupportRules
     androidTestCompile presentationTestDependencies.espresso
     androidTestCompile presentationTestDependencies.robolectric
+
+    androidTestCompile( 'com.android.support:multidex-instrumentation:1.0.1' ) {
+        exclude group: 'com.android.support', module: 'multidex'
+    }
+
+    testCompile presentationTestDependencies.junit
+    testCompile presentationTestDependencies.hamcrest
+    testCompile presentationTestDependencies.mockito
     testCompile presentationDependencies.leakCanaryNoOp
 
 }
 
-apply from: '../buildsystem/jacoco.gradle'
+// apply from: '../buildsystem/jacoco.gradle'

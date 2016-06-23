@@ -1,13 +1,12 @@
-package org.mythtv.android.test.exception;
+package org.mythtv.android.exception;
 
 import android.test.AndroidTestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mythtv.android.R;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.data.exception.ProgramNotFoundException;
-import org.mythtv.android.exception.ErrorMessageFactory;
-import org.mythtv.android.R;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

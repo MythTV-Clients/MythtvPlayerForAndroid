@@ -28,7 +28,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.1.2'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0x'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
@@ -85,11 +85,11 @@ allprojects {
 
 }
 
-//apply plugin: 'android-reporting'
+apply plugin: 'android-reporting'
 
 task wrapper( type: Wrapper ) {
   description 'Creates the gradle wrapper.'
-  gradleVersion '2.13'
+  gradleVersion '2.14'
 }
 
 task runDomainUnitTests( dependsOn: [ ':domain:test' ] ) {

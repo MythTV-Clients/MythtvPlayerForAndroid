@@ -1,4 +1,4 @@
-package org.mythtv.android.test.mapper;
+package org.mythtv.android.mapper;
 
 import junit.framework.TestCase;
 
