@@ -19,6 +19,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
 
 android {
 
@@ -227,4 +229,13 @@ retrolambda {
     jvmArgs '-noverify'
 }
 
-// apply from: '../buildsystem/jacoco.gradle'
+//jacocoTestReport {
+//
+//    reports {
+//
+//        xml.enabled = true // coveralls plugin depends on xml format report
+//        html.enabled = true
+//
+//    }
+//
+//}
