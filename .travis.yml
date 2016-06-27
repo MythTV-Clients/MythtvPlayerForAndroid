@@ -32,4 +32,4 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository
 
-script: ./gradlew test jacocoTestReport coveralls -PdisablePreDex
+script: ./gradlew test coveralls -PdisablePreDex
