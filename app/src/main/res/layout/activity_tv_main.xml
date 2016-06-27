@@ -41,10 +41,4 @@
         android:stretchMode="columnWidth"
         android:gravity="center" />
 
-    <!--<fragment-->
-        <!--android:id="@+id/fragment"-->
-        <!--android:name="org.mythtv.android.view.fragment.CategoryListFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-
 </LinearLayout>

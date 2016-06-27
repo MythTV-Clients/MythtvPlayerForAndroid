@@ -49,7 +49,7 @@
         <fragment
             android:id="@+id/fragment"
             android:layout_below="@id/appbar"
-            android:name="org.mythtv.android.view.fragment.phone.VideoDetailsSettingsFragment"
+            android:name="org.mythtv.android.presentation.view.fragment.phone.VideoDetailsSettingsFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />

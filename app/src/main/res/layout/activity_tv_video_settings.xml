@@ -19,6 +19,6 @@
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment"
-    android:name="org.mythtv.android.view.fragment.tv.VideoSettingsFragment"
+    android:name="org.mythtv.android.presentation.view.fragment.tv.VideoSettingsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

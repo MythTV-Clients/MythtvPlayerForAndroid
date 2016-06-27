@@ -17,7 +17,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest
-    package="org.mythtv.android"
+    package="org.mythtv.android.presentation"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -99,7 +99,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.MainPhoneActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.MainPhoneActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -115,7 +115,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.TitleInfoListActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.TitleInfoListActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -130,7 +130,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.ProgramListActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.ProgramListActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -145,7 +145,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.ProgramDetailsActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.ProgramDetailsActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -161,7 +161,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.MainPhoneActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.MainPhoneActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -177,7 +177,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.VideoListActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.VideoListActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -192,7 +192,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.VideoSeriesListActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.VideoSeriesListActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -207,7 +207,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.VideoDetailsActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.VideoDetailsActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -223,7 +223,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.MainPhoneActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.MainPhoneActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -239,7 +239,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.SettingsActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SettingsActivity" />
 
         </activity>
 
@@ -251,7 +251,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.view.activity.phone.SettingsActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SettingsActivity" />
 
         </activity>
 
@@ -389,8 +389,8 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <provider
-            android:name="org.mythtv.android.provider.MythtvSearchSuggestionProvider"
-            android:authorities="org.mythtv.android.provider.MythtvSearchSuggestionProvider"
+            android:name="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
+            android:authorities="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
             android:exported="false" />
 
     </application>

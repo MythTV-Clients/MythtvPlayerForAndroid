@@ -18,5 +18,5 @@
 
 include ':app' //, 'tv'
 //include ':presentation'
-include ':domain'
-include ':data'
+//include ':domain'
+//include ':data'
