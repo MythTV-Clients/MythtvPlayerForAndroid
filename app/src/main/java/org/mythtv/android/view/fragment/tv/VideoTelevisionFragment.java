@@ -265,8 +265,8 @@ public class VideoTelevisionFragment extends AbstractBaseVideoFragment implement
                     @Override
                     public int compare( VideoMetadataInfoModel lhs, VideoMetadataInfoModel rhs ) {
 
-                        String lhsTitle = ArticleCleaner.clean( lhs.getTitle() );
-                        String rhsTitle = ArticleCleaner.clean( rhs.getTitle() );
+                        String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.getTitle() );
+                        String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.getTitle() );
                         int comparison = lhsTitle.compareTo( rhsTitle );
                         if( comparison != 0 ) {
 
@@ -285,8 +285,8 @@ public class VideoTelevisionFragment extends AbstractBaseVideoFragment implement
                             return comparison;
                         }
 
-                        String lhsSubTitle = ArticleCleaner.clean( lhs.getSubTitle() );
-                        String rhsSubTitle = ArticleCleaner.clean( rhs.getSubTitle() );
+                        String lhsSubTitle = ArticleCleaner.clean( getActivity(), lhs.getSubTitle() );
+                        String rhsSubTitle = ArticleCleaner.clean( getActivity(), rhs.getSubTitle() );
 
                         return lhsSubTitle.compareTo( rhsSubTitle );
                     }
@@ -549,7 +549,7 @@ public class VideoTelevisionFragment extends AbstractBaseVideoFragment implement
 
         public Category( final String title ) {
 
-            this.key = ArticleCleaner.clean( title );
+            this.key = ArticleCleaner.clean( getActivity(), title );
 
         }
 

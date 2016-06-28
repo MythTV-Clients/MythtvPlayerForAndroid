@@ -549,7 +549,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
 
         public Category( final String title ) {
 
-            this.key = ArticleCleaner.clean( title );
+            this.key = ArticleCleaner.clean( getActivity(), title );
             this.title = title;
 
         }
