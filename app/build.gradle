@@ -48,8 +48,8 @@ android {
         applicationId 'org.mythtv.android'
         versionCode 1714211
         versionName "2.1.1"
-        testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
-        testApplicationId 'org.mythtv.android.test'
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        testApplicationId 'org.mythtv.android.test'
 
         resValue "string", "branchName", applicationBranch
         resValue "string", "shaName", applicationSHA1
