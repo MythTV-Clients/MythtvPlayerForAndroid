@@ -155,6 +155,12 @@ android {
 
     }
 
+    testOptions {
+
+        unitTests.returnDefaultValues = true
+
+    }
+
 }
 
 dependencies {
@@ -227,6 +233,15 @@ configurations.compile.dependencies.each { compileDependency ->
 
 retrolambda {
     jvmArgs '-noverify'
+}
+
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
+}
+
+tasks.coveralls {
+    dependsOn 'connectedAndroidTest'
+    onlyIf { System.env.'CI' }
 }
 
 //jacocoTestReport {
