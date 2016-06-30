@@ -64,9 +64,9 @@ android {
 
 //            signingConfig signingConfigs.debug
 //            minifyEnabled true
-//            proguardFiles getDefaultProguardFile( 'proguard-android.txt' ),
-//                    'proguard-rules.pro',
-//                    'proguard-rules-debug.pro'
+            proguardFiles getDefaultProguardFile( 'proguard-android.txt' ),
+                    'proguard-rules.pro',
+                    'proguard-rules-debug.pro'
 
             testCoverageEnabled = true
 
