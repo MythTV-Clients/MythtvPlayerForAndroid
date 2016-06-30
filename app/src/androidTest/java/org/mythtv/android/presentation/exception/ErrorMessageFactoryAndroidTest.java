@@ -19,17 +19,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith( AndroidJUnit4.class )
-public class ErrorMessageFactoryAndroidTest extends TestCase {
+public class ErrorMessageFactoryAndroidTest {
 
     Context mMockContext;
 
     @Before
     public void setUp() {
-        mMockContext = new RenamingDelegatingContext(InstrumentationRegistry.getInstrumentation().getTargetContext(), "test_");
+        mMockContext = new RenamingDelegatingContext( InstrumentationRegistry.getInstrumentation().getTargetContext(), "test_" );
     }
 
     @Test
-    public void testNetworkConnectionErrorMessage() {
+    public void testNetworkConnectionErrorMessage() throws Exception {
 
         String expectedMessage = mMockContext.getString( R.string.exception_message_no_connection );
         String actualMessage = ErrorMessageFactory.create( mMockContext, new NetworkConnectionException() );
@@ -39,7 +39,7 @@ public class ErrorMessageFactoryAndroidTest extends TestCase {
     }
 
     @Test
-    public void testProgramNotFoundErrorMessage() {
+    public void testProgramNotFoundErrorMessage() throws Exception {
 
         String expectedMessage = mMockContext.getString(R.string.exception_message_program_not_found);
         String actualMessage = ErrorMessageFactory.create( mMockContext, new ProgramNotFoundException() );

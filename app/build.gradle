@@ -157,7 +157,18 @@ android {
 
     testOptions {
 
-        unitTests.returnDefaultValues = true
+        unitTests {
+
+            returnDefaultValues = true
+
+            all {
+
+                testLogging {
+                    events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+                }
+
+            }
+        }
 
     }
 
@@ -199,24 +210,32 @@ dependencies {
 
     provided "javax.annotation:jsr250-api:${javaxAnnotationVersion}"
 
-    androidTestCompile "com.android.support:support-annotations:${androidSupportVersion}"
-    androidTestCompile "org.mockito:mockito-core:${mockitoVersion}"
-    androidTestCompile "com.google.dexmaker:dexmaker:${dexmakerVersion}"
-    androidTestCompile "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}"
-    androidTestCompile "com.android.support.test:runner:${testingSupportRunnerVersion}"
-    androidTestCompile "com.android.support.test:rules:${testingSupportRulesVersion}"
-    androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
-    androidTestCompile "org.robolectric:robolectric:${robolectricVersion}"
-
-    androidTestCompile( "com.android.support:multidex-instrumentation:${multidexVersion}" ) {
-        exclude group: 'com.android.support', module: 'multidex'
-    }
-
+    // Dependencies for local testing
     testCompile "junit:junit:${jUnitVersion}"
     testCompile "org.mockito:mockito-core:${mockitoVersion}"
     testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
     testCompile "org.robolectric:robolectric:${robolectricVersion}"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
+
+    // Android Testing Support Library's runner and rules
+    androidTestCompile "com.android.support.test:runner:${testingSupportRunnerVersion}"
+    androidTestCompile "com.android.support.test:rules:${testingSupportRulesVersion}"
+
+    // Espresso UI Testing dependencies.
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.espressoVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.ext.espressoVersion"
+
+    androidTestCompile "com.android.support:support-v4:${androidSupportVersion}"
+    androidTestCompile "com.android.support:support-annotations:${androidSupportVersion}"
+    androidTestCompile "org.mockito:mockito-core:${mockitoVersion}"
+    androidTestCompile "com.google.dexmaker:dexmaker:${dexmakerVersion}"
+    androidTestCompile "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}"
+    androidTestCompile "org.robolectric:robolectric:${robolectricVersion}"
+
+    androidTestCompile( "com.android.support:multidex-instrumentation:${multidexVersion}" ) {
+        exclude group: 'com.android.support', module: 'multidex'
+    }
 
 }
 

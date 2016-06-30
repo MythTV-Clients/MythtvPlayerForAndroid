@@ -116,7 +116,7 @@ ext {
     assertJVersion = '3.3.0'
     mockitoVersion = '1.10.19'
     dexmakerVersion = '1.2'
-    espressoVersion = '2.2.1'
+    espressoVersion = '2.2.2'
     testingSupportRunnerVersion = '0.4.1'
     testingSupportRulesVersion = '0.5'
     testingSupportuiVersion = '2.1.2'
