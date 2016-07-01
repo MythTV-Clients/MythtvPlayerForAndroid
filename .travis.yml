@@ -17,7 +17,6 @@ branches:
   only:
     - master
     - develop
-    - feature/issue_117_fix_jacoco
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
