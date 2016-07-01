@@ -28,5 +28,5 @@ test:
         parallel: true
     - circle-android wait-for-boot
   override:
-    - ./gradlew connectedAndroidTest -PdisablePreDex
+    - ./gradlew connectedAndroidTest -PdisablePreDex --console=plain
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
