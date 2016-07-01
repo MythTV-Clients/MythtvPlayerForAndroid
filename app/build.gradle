@@ -28,7 +28,7 @@ android {
     def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
-    compileSdkVersion 24
+    compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
     dexOptions {
@@ -41,7 +41,7 @@ android {
     defaultConfig {
 
         minSdkVersion 17
-        targetSdkVersion 24
+        targetSdkVersion 23
 
         multiDexEnabled true
 
