@@ -25,11 +25,11 @@ dependencies:
         - /usr/local/android-sdk-linux/build-tools/23.0.3
 
 test:
-  pre:
-    - emulator -avd circleci-android22 -no-audio -no-window:
-        background: true
-        parallel: true
-    - circle-android wait-for-boot
+#  pre:
+#    - emulator -avd circleci-android22 -no-audio -no-window:
+#        background: true
+#        parallel: true
+#    - circle-android wait-for-boot
   override:
     - ./gradlew test coveralls -PdisablePreDex
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
