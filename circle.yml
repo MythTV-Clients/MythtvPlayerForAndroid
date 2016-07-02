@@ -6,7 +6,7 @@
 
 general:
     artifacts:
-        - /home/ubuntu/AndroidCI/app/build/outputs/apk/
+        - /home/ubuntu/MythtvPlayerForAndroid/app/build/outputs/apk/
 
 machine:
     environment:
@@ -30,5 +30,5 @@ test:
         parallel: true
     - circle-android wait-for-boot
   override:
-    - ./gradlew connectedAndroidTest -PdisablePreDex --console=plain
+    - ./gradlew connectedAndroidTest -PdisablePreDex
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
