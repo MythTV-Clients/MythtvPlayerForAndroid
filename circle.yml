@@ -30,6 +30,6 @@ test:
         parallel: true
     - circle-android wait-for-boot
   override:
-    - ./gradlew test connectedAndroidTest coveralls -PdisablePreDex
+    - ./gradlew test coveralls -PdisablePreDex
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - cp -r app/build/test-results $CIRCLE_TEST_REPORTS
