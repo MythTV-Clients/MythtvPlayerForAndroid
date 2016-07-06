@@ -5,10 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.RenamingDelegatingContext;
 
-import junit.framework.TestCase;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mythtv.android.data.exception.NetworkConnectionException;
@@ -20,7 +17,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith( AndroidJUnit4.class )
-@Ignore
 public class ErrorMessageFactoryAndroidTest {
 
     Context mMockContext;
