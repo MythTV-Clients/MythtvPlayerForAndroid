@@ -34,7 +34,7 @@ android {
     dexOptions {
 
         maxProcessCount 2
-        javaMaxHeapSize "4g"
+        javaMaxHeapSize "1g"
 
     }
 
@@ -49,7 +49,6 @@ android {
         versionCode 1714211
         versionName "2.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        testApplicationId 'org.mythtv.android.test'
 
         resValue "string", "branchName", applicationBranch
         resValue "string", "shaName", applicationSHA1
