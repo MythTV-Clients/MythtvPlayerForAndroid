@@ -487,7 +487,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
             if( item instanceof ProgramModel ) {
 
                 ProgramModel programModel = (ProgramModel) item;
-                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=banner" );
+                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=fanart" );
                 startBackgroundTimer();
 
             }
