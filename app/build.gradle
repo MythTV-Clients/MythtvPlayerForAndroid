@@ -211,6 +211,7 @@ dependencies {
 
     // Dependencies for local testing
     testCompile "junit:junit:${jUnitVersion}"
+    testCompile "org.hamcrest:hamcrest-all:${hamcrestVersion}"
     testCompile "org.mockito:mockito-core:${mockitoVersion}"
     testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
     testCompile "org.robolectric:robolectric:${robolectricVersion}"

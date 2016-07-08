@@ -18,32 +18,42 @@
 
 package org.mythtv.android.presentation.utils;
 
+import android.content.Context;
+import android.util.Log;
+
+import org.mythtv.android.presentation.R;
+
 /**
  * Created by dmfrey on 2/1/16.
  */
 public class ArticleCleaner {
 
+    private static final String TAG = ArticleCleaner.class.getSimpleName();
+
     private ArticleCleaner() { }
 
-    public static String clean( String value ) {
+    public static String clean( final Context context, String value ) {
+        Log.d( TAG, "clean : enter" );
 
         if( null == value || "".equals( value ) ) {
             return value;
         }
 
+        String[] articles = context.getResources().getStringArray( R.array.articles );
         String upper = value.toUpperCase();
-        if( upper.startsWith( "THE " ) ) {
-            value = value.substring( "THE ".length() );
+
+        for( String article : articles ) {
+            Log.d( TAG, "clean : article=" + article + ", value=" + value );
+
+            if( upper.startsWith( article ) ) {
+                Log.d( TAG, "clean : article found" );
+
+                value = value.substring( article.length() ).trim();
+            }
+
         }
 
-        if( upper.startsWith( "AN " ) ) {
-            value = value.substring( "AN ".length() );
-        }
-
-        if( upper.startsWith( "A " ) ) {
-            value = value.substring( "A ".length() );
-        }
-
+        Log.d( TAG, "clean : exit - value=" + value );
         return value;
     }
 
