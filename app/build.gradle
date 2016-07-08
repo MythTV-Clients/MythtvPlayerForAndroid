@@ -147,6 +147,12 @@ android {
 
     }
 
+    testOptions {
+
+        unitTests.returnDefaultValues = true
+
+    }
+
 }
 
 dependencies {
@@ -192,6 +198,11 @@ dependencies {
     androidTestCompile presentationTestDependencies.espresso
     androidTestCompile presentationTestDependencies.robolectric
     testCompile presentationDependencies.leakCanaryNoOp
+
+    testCompile presentationTestDependencies.junit
+    testCompile presentationTestDependencies.mockito
+    testCompile presentationTestDependencies.hamcrest
+    testCompile presentationTestDependencies.robolectric
 
 }
 

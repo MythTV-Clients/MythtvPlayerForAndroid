@@ -263,8 +263,8 @@ public class VideoMovieFragment extends AbstractBaseVideoFragment implements Vid
                     @Override
                     public int compare( VideoMetadataInfoModel lhs, VideoMetadataInfoModel rhs ) {
 
-                        String lhsTitle = ArticleCleaner.clean( lhs.getTitle() );
-                        String rhsTitle = ArticleCleaner.clean( rhs.getTitle() );
+                        String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.getTitle() );
+                        String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.getTitle() );
 
                         return lhsTitle.compareTo( rhsTitle );
                     }
@@ -517,7 +517,7 @@ public class VideoMovieFragment extends AbstractBaseVideoFragment implements Vid
 
         public Category( final String title ) {
 
-            this.key = ArticleCleaner.clean( title ).substring( 0, 1 ).toUpperCase();
+            this.key = ArticleCleaner.clean( getActivity(), title ).substring( 0, 1 ).toUpperCase();
 
         }
 
