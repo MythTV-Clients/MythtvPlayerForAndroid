@@ -25,7 +25,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  */
 
 @RunWith( AndroidJUnit4.class )
-@Ignore
 public class TitleInfoListActivityAndroidTest {
 
     @Rule
