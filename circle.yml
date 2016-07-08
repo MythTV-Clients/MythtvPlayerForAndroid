@@ -26,10 +26,15 @@ dependencies:
 
 test:
   pre:
-    - emulator -avd circleci-android22 -no-audio:
+    # start the emulator
+    - emulator -avd circleci-android22 -no-audio -no-window:
         background: true
         parallel: true
+    # wait for it to have booted
     - circle-android wait-for-boot
+    # unlock the emulator screen
+    - sleep 30
+    - adb shell input keyevent 82
   override:
     - ./gradlew testDevDebugUnitTest coveralls -PdisablePreDex
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
