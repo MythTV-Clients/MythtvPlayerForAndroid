@@ -26,8 +26,10 @@ dependencies:
 
 test:
   pre:
+    - echo no | android create avd -n custom-android22-googleapis -t "android-22" --abi google_apis/armeabi-v7a
+    - android list avd
     # start the emulator
-    - emulator -avd circleci-android22 -no-audio -no-window:
+    - emulator -avd custom-android22-googleapis -no-audio -no-window:
         background: true
         parallel: true
     # wait for it to have booted
@@ -36,6 +38,6 @@ test:
     - sleep 30
     - adb shell input keyevent 82
   override:
-    - ./gradlew testDevDebugUnitTest coveralls -PdisablePreDex
+    - ./gradlew connectedAndroidTest coveralls -PdisablePreDex
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - cp -r app/build/test-results $CIRCLE_TEST_REPORTS
