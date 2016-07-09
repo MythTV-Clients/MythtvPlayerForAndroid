@@ -20,10 +20,21 @@ dependencies:
     pre:
       - touch app/google-services.json
       - echo $GOOGLE_SERVICES_JSON > app/google-services.json
-      - android list sdk --extended
-      - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-23"
-      - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.3"
-      - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
+#      - android list sdk --extended
+#      - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-23"
+#      - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.3"
+#      - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
+
+      - echo y | android update sdk --no-ui --all --filter tools
+      - echo y | android update sdk --no-ui --all --filter platform-tools
+      - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
+      - echo y | android update sdk --no-ui --all --filter extra-android-support
+      - echo y | android update sdk --no-ui --all --filter extra-google-google_play_services
+      - echo y | android update sdk --no-ui --all --filter extra-google-m2repository
+      - echo y | android update sdk --no-ui --all --filter android-23
+      - echo y | android update sdk --no-ui --all --filter build-tools-23.0.3
+      - echo y | android update sdk -a -u -t sys-img-armeabi-v7a-google_apis-23
+      - android list targets
     cache_directories:
       - /usr/local/android-sdk-linux/tools
       - /usr/local/android-sdk-linux/build-tools/23.0.3
@@ -42,14 +53,15 @@ test:
 #    - sleep 30
 #    - adb shell input keyevent 82
     - android list targets
-    - echo no | android create avd -n emulatorwithgoogleapi22 -t 1 --abi armeabi-v7a
-    - echo 'vm.heapSize=512' >> ~/.android/avd/emulatorwithgoogleapi22.ini
-    - echo 'hw.ramSize=1024' >> ~/.android/avd/emulatorwithgoogleapi22.ini
-    - cat ~/.android/avd/emulatorwithgoogleapi22.ini
-    - emulator -avd emulatorwithgoogleapi22 -no-audio -no-window :
+    - echo no | android create avd -n custom-android23-googleapis -t "android-23" --abi google_apis/armeabi-v7a
+#    - echo 'vm.heapSize=512' >> ~/.android/avd/emulatorwithgoogleapi22.ini
+#    - echo 'hw.ramSize=1024' >> ~/.android/avd/emulatorwithgoogleapi22.ini
+#    - cat ~/.android/avd/emulatorwithgoogleapi22.ini
+    - emulator -avd custom-android23-googleapis -no-audio -no-window :
         background: true
         parallel: true
     - circle-android wait-for-boot
+    - sleep 30
     - adb shell input keyevent 82
     - adb shell svc power stayon true
     - adb shell settings put global window_animation_scale 0
