@@ -69,9 +69,7 @@ test:
     - adb shell settings put global animator_duration_scale 0
 
   override:
-    - ./gradlew createDevDebugCoverageReport -PdisablePreDex
-    - ./gradlew test -PdisablePreDex
-    - ./gradlew coveralls -PdisablePreDex
+    - ./gradlew connectedAndroidTest coveralls -PdisablePreDex
 
   post:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
