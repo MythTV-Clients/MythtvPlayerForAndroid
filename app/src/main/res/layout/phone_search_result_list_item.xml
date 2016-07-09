@@ -29,7 +29,7 @@
         android:layout_margin="@dimen/margin"
         android:gravity="center_vertical">
 
-        <org.mythtv.android.view.component.AutoLoadImageView
+        <org.mythtv.android.presentation.view.component.AutoLoadImageView
             android:id="@+id/search_result_item_preview"
             android:layout_width="125dp"
             android:layout_height="75dp"

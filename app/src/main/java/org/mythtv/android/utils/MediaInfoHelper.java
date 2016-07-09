@@ -6,8 +6,8 @@ import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.common.images.WebImage;
 
-import org.mythtv.android.model.ProgramModel;
-import org.mythtv.android.model.VideoMetadataInfoModel;
+import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

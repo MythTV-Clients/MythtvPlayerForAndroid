@@ -48,7 +48,7 @@
 
         <fragment
             android:id="@+id/fragment"
-            android:name="org.mythtv.android.view.fragment.phone.VideoSettingsFragment"
+            android:name="org.mythtv.android.presentation.view.fragment.phone.VideoSettingsFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
