@@ -1,0 +1,41 @@
+#
+# Build configuration for Circle CI
+#
+# See this thread for speeding up and caching directories: https://discuss.circleci.com/t/installing-android-build-tools-23-0-2/924
+#
+
+general:
+    artifacts:
+        - /home/ubuntu/MythtvPlayerForAndroid/app/build/outputs/apk/
+
+machine:
+    environment:
+        ANDROID_HOME: /usr/local/android-sdk-linux
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    java:
+        version: oraclejdk8
+
+
+dependencies:
+    pre:
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,extra-google-m2repository,extra-google-google_play_services,extra-android-support,android-23
+        - echo y | android update sdk --no-ui --all --filter build-tools-23.0.3
+    cache_directories:
+        - /usr/local/android-sdk-linux/tools
+        - /usr/local/android-sdk-linux/build-tools/23.0.3
+
+test:
+  pre:
+    # start the emulator
+    - emulator -avd circleci-android22 -no-audio -no-window:
+        background: true
+        parallel: true
+    # wait for it to have booted
+    - circle-android wait-for-boot
+    # unlock the emulator screen
+    - sleep 30
+    - adb shell input keyevent 82
+  override:
+    - ./gradlew testDevDebugUnitTest coveralls -PdisablePreDex
+    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r app/build/test-results $CIRCLE_TEST_REPORTS

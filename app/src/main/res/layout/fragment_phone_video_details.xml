@@ -29,7 +29,7 @@
         android:layout_margin="@dimen/margin"
         android:gravity="fill_horizontal">
 
-        <org.mythtv.android.view.component.AutoLoadImageView
+        <org.mythtv.android.presentation.view.component.AutoLoadImageView
             android:id="@+id/video_coverart"
             android:layout_width="75dp"
             android:layout_height="125dp"

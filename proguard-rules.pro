@@ -1,0 +1,4 @@
+-keepattributes Signature
+-keepattributes InnerClasses
+-keep
+-dontwarn

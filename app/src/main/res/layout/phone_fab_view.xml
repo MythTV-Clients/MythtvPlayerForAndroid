@@ -25,4 +25,4 @@
     android:layout_gravity="end|bottom"
     android:layout_margin="@dimen/fab_margin"
     android:src="@drawable/ic_autorenew_white_24dp"
-    app:layout_behavior="org.mythtv.android.utils.ScrollAwareFABBehavior" />
+    app:layout_behavior="org.mythtv.android.presentation.utils.ScrollAwareFABBehavior" />

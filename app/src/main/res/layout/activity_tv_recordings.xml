@@ -19,9 +19,8 @@
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:name="org.mythtv.android.view.fragment.tv.RecordingsFragment"
+    android:name="org.mythtv.android.presentation.view.fragment.tv.RecordingsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activity.RecordingsActivity"
     tools:deviceIds="tv"
     tools:ignore="MergeRootFrame" />
