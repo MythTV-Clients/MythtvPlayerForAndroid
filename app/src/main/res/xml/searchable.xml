@@ -21,6 +21,6 @@
     android:label="@string/app_name"
     android:hint="@string/search_hint"
     android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
-    android:searchSuggestAuthority="org.mythtv.android.provider.MythtvSearchSuggestionProvider"
+    android:searchSuggestAuthority="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
     android:searchSuggestSelection=" ?">
 </searchable>

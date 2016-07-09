@@ -9,6 +9,8 @@
 
 # Add any project specific keep options here:
 
+-keepattributes EnclosingMethod
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
@@ -17,50 +19,60 @@
 #}
 
 # Obfuscation parameters:
--dontobfuscate
--useuniqueclassmembernames
--keepattributes SourceFile,LineNumberTable
--allowaccessmodification
+#-dontobfuscate
+#-useuniqueclassmembernames
+#-keepattributes SourceFile,LineNumberTable
+#-allowaccessmodification
 
 # Ignore warnings:
 #-dontwarn org.mockito.**
 #-dontwarn org.junit.**
 #-dontwarn com.robotium.**
--dontwarn org.joda.convert.**
--dontwarn lombok.**
+#-dontwarn org.joda.convert.**
+#-dontwarn lombok.**
 
 # Ignore warnings: We are not using DOM model
--dontwarn com.fasterxml.jackson.databind.ext.DOMSerializer
+#-dontwarn com.fasterxml.jackson.databind.ext.DOMSerializer
 # Ignore warnings: https://github.com/square/okhttp/wiki/FAQs
--dontwarn com.squareup.okhttp.internal.huc.**
+#-dontwarn com.squareup.okhttp.internal.huc.**
 # Ignore warnings: https://github.com/square/okio/issues/60
--dontwarn okio.**
+#-dontwarn okio.**
 # Ignore warnings: https://github.com/square/retrofit/issues/435
 #-dontwarn com.google.appengine.api.urlfetch.**
 
 # Keep GSON stuff
--keep class sun.misc.Unsafe { *; }
--keep class com.google.gson.** { *; }
+#-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.** { *; }
 
 # Keep these for GSON and Jackson
--keepattributes Signature
--keepattributes *Annotation*
--keepattributes EnclosingMethod
+#-keepattributes Signature
+#-keepattributes *Annotation*
+#-keepattributes EnclosingMethod
 
 # Keep Retrofit
--keep class retrofit.** { *; }
--keepclasseswithmembers class * {
-    @retrofit.** *;
-}
--keepclassmembers class * {
-    @retrofit.** *;
-}
+#-keep class retrofit.** { *; }
+#-keepclasseswithmembers class * {
+#    @retrofit.** *;
+#}
+#-keepclassmembers class * {
+#    @retrofit.** *;
+#}
 
 # Keep Picasso
--keep class com.squareup.picasso.** { *; }
--keepclasseswithmembers class * {
-    @com.squareup.picasso.** *;
-}
--keepclassmembers class * {
-    @com.squareup.picasso.** *;
-}
+#-keep class com.squareup.picasso.** { *; }
+#-keepclasseswithmembers class * {
+#    @com.squareup.picasso.** *;
+#}
+#-keepclassmembers class * {
+#    @com.squareup.picasso.** *;
+#}
+
+#-keepattributes InnerClasses
+#-dontoptimize
+
+-dontwarn javax.**
+-dontwarn lombok.**
+-dontwarn org.apache.**
+-dontwarn com.squareup.**
+-dontwarn com.sun.**
+-dontwarn **retrofit**
