@@ -205,5 +205,6 @@
 
     <!-- Introductory Overlay text -->
     <string name="intro_overlay_text">Touch to cast videos to your TV</string>
+    <string name="castErrorLabel">This item can not be displayed on a Google Cast device.</string>
 
 </resources>

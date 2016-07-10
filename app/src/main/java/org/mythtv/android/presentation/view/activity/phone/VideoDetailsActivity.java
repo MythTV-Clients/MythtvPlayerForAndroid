@@ -20,9 +20,9 @@ package org.mythtv.android.presentation.view.activity.phone;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,22 +31,20 @@ import android.view.Window;
 import android.widget.ImageView;
 
 import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.common.images.WebImage;
 
-import org.mythtv.android.utils.MediaInfoHelper;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.R;
+import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
-import org.mythtv.android.presentation.view.fragment.phone.VideoDetailsFragment;
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.VideoModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
+import org.mythtv.android.presentation.view.fragment.phone.CastErrorDialogFragment;
+import org.mythtv.android.presentation.view.fragment.phone.VideoDetailsFragment;
+import org.mythtv.android.utils.MediaInfoHelper;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -260,6 +258,12 @@ public class VideoDetailsActivity extends AbstractBasePhoneActivity implements H
                 Log.d( TAG, "onButtonFabPlay : item=" + item.getContentId() );
 
                 mCastManager.startVideoCastControllerActivity( this, item, 0, true );
+
+            } else {
+
+                FragmentManager fm = getSupportFragmentManager();
+                CastErrorDialogFragment fragment = new CastErrorDialogFragment();
+                fragment.show( fm, "Cast Error Dialog Fragment" );
 
             }
 

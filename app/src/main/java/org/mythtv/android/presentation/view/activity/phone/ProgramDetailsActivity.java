@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -34,16 +35,17 @@ import com.google.android.gms.cast.MediaInfo;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.mythtv.android.utils.MediaInfoHelper;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.R;
+import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
-import org.mythtv.android.presentation.view.fragment.phone.ProgramDetailsFragment;
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.view.fragment.phone.CastErrorDialogFragment;
+import org.mythtv.android.presentation.view.fragment.phone.ProgramDetailsFragment;
+import org.mythtv.android.utils.MediaInfoHelper;
 
 import java.io.UnsupportedEncodingException;
 
@@ -269,6 +271,12 @@ public class ProgramDetailsActivity extends AbstractBasePhoneActivity implements
                 Log.d( TAG, "onButtonFabPlay : item=" + item.getContentId() );
 
                 mCastManager.startVideoCastControllerActivity( this, item, 0, true );
+
+            } else {
+
+                FragmentManager fm = getSupportFragmentManager();
+                CastErrorDialogFragment fragment = new CastErrorDialogFragment();
+                fragment.show( fm, "Cast Error Dialog Fragment" );
 
             }
 

@@ -23,7 +23,22 @@ public class MediaInfoHelper {
 
         try {
 
-            String recordingUrl = buildUrl( masterBackendUrl, programModel.getLiveStreamInfo().getRelativeUrl() );
+            String recordingUrl = "", mimeType = "";
+            if( programModel.getFileName().endsWith( "mp4" ) ) {
+
+                recordingUrl = buildUrl( masterBackendUrl, "/Content/GetFile?FileName=" + URLEncoder.encode( programModel.getFileName(), "UTF-8" ) );
+                mimeType = "video/mp4";
+
+            } else {
+
+                if( null == programModel.getLiveStreamInfo() ) {
+
+                    return null;
+                }
+
+                recordingUrl = buildUrl( masterBackendUrl, programModel.getLiveStreamInfo().getRelativeUrl() );
+                mimeType = "application/x-mpegURL";
+            }
 
             MediaMetadata md = new MediaMetadata();
             md.putString( MediaMetadata.KEY_TITLE, programModel.getTitle() );
@@ -34,7 +49,7 @@ public class MediaInfoHelper {
 
             return new MediaInfo.Builder( recordingUrl )
                     .setStreamType( MediaInfo.STREAM_TYPE_BUFFERED )
-                    .setContentType( "application/x-mpegURL" )
+                    .setContentType( mimeType )
                     .setMetadata( md )
                     .build();
 

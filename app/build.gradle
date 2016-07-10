@@ -28,7 +28,7 @@ android {
     def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion "23.0.3"
 
     dexOptions {
@@ -41,7 +41,7 @@ android {
     defaultConfig {
 
         minSdkVersion 17
-        targetSdkVersion 23
+        targetSdkVersion 24
 
         multiDexEnabled true
 
@@ -193,7 +193,7 @@ dependencies {
     compile "com.android.support:support-annotations:${androidSupportVersion}"
     compile "com.android.support:preference-v14:${androidSupportVersion}"
     compile "com.android.support:mediarouter-v7:${androidSupportVersion}"
-    compile "com.google.android.gms:play-services-cast:${playServicesVersion}"
+    compile "com.google.android.gms:play-services-cast-framework:${playServicesVersion}"
     compile "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     compile "joda-time:joda-time:${jodaVersion}"
     compile "com.google.code.gson:gson:${gsonVersion}"

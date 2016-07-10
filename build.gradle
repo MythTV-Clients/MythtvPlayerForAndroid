@@ -27,7 +27,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.2.0-alpha5'
         classpath 'me.tatarka:gradle-retrolambda:3.2.3'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
@@ -83,14 +83,14 @@ allprojects {
 ext {
 
     //Android
-    androidBuildToolsVersion = "23.0.3"
+    androidBuildToolsVersion = "24"
     androidMinSdkVersion = 17
-    androidTargetSdkVersion = 23
-    androidCompileSdkVersion = 23
+    androidTargetSdkVersion = 24
+    androidCompileSdkVersion = 24
 
     //Android Support Libraries
-    androidSupportVersion = '23.4.0'
-    playServicesVersion = '9.0.0'
+    androidSupportVersion = '24.0.0'
+    playServicesVersion = '9.2.0'
 
     //Libraries
     daggerVersion = '2.4'
