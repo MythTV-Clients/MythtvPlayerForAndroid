@@ -20,19 +20,8 @@ dependencies:
     pre:
       - touch app/google-services.json
       - echo $GOOGLE_SERVICES_JSON > app/google-services.json
-#      - android list sdk --extended
-#      - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-23"
-#      - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.3"
-#      - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
 
-      - echo y | android update sdk --no-ui --all --filter tools
-      - echo y | android update sdk --no-ui --all --filter platform-tools
-      - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
-      - echo y | android update sdk --no-ui --all --filter extra-android-support
-      - echo y | android update sdk --no-ui --all --filter extra-google-google_play_services
-      - echo y | android update sdk --no-ui --all --filter extra-google-m2repository
-      - echo y | android update sdk --no-ui --all --filter android-23
-      - echo y | android update sdk --no-ui --all --filter build-tools-23.0.3
+      - echo y | android update sdk --no-ui --all --filter "tools,android-24,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-android-support,extra-google-m2repository,extra-google-google_play_services"
       - echo y | android update sdk -a -u -t sys-img-armeabi-v7a-google_apis-22
       - android list targets
     cache_directories:
@@ -41,17 +30,6 @@ dependencies:
 
 test:
   pre:
-#    - echo no | android create avd -n custom-android22-googleapis -t "android-22" --abi google_apis/armeabi-v7a
-#    - android list avd
-    # start the emulator
-#    - emulator -avd custom-android22-googleapis -no-audio -no-window:
-#        background: true
-#        parallel: true
-    # wait for it to have booted
-#    - circle-android wait-for-boot
-    # unlock the emulator screen
-#    - sleep 30
-#    - adb shell input keyevent 82
     - android list targets
     - echo no | android create avd -n custom-android22-googleapis -t "android-22" --abi google_apis/armeabi-v7a
     - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android22-googleapis.ini
@@ -74,5 +52,4 @@ test:
   post:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - cp -r app/build/outputs/androidTest-results/ $CIRCLE_TEST_REPORTS
-#    - cp -r app/build/reports/coverage/ $CIRCLE_TEST_REPORTS
     - cp -r app/build/test-results/devDebug/ $CIRCLE_TEST_REPORTS
