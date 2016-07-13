@@ -54,7 +54,19 @@ android {
         resValue "string", "shaName", applicationSHA1
         resValue "string", "tagName", applicationTag
         resValue "string", "versionName", versionName
-        resValue "string", "app_id", "$rootProject.ext.googleCastAppId"
+
+        if( project.hasProperty( "mythtvplayer.google-cast" )
+                && new File( project.property( "mythtvplayer.google-cast" ) + ".gradle" ).exists() ) {
+
+            resValue "string", "app_id", "$rootProject.ext.googleCastAppId"
+
+        } else {
+
+            resValue "string", "app_id", "B5FDDDFA"
+
+        }
+
+
 
     }
 
