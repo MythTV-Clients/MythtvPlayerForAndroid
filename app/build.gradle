@@ -54,6 +54,7 @@ android {
         resValue "string", "shaName", applicationSHA1
         resValue "string", "tagName", applicationTag
         resValue "string", "versionName", versionName
+        resValue "string", "app_id", "$rootProject.ext.googleCastAppId"
 
     }
 
@@ -201,7 +202,8 @@ dependencies {
     compile "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
     compile "xyz.danoz:recyclerviewfastscroller:${recyclerviewfastscrollerVersion}"
     compile "com.android.support:multidex:${multidexVersion}"
-    compile "com.google.android.libraries.cast.companionlibrary:ccl:${cclVersion}"
+    compile "com.googlecode.android-query:android-query:${androidQueryVersion}"
+//    compile "com.google.android.libraries.cast.companionlibrary:ccl:${cclVersion}"
 
     compile "com.android.support:leanback-v17:${androidSupportVersion}"
     compile "com.android.support:preference-leanback-v17:${androidSupportVersion}"

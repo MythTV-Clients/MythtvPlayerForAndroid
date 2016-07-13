@@ -23,8 +23,8 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.Stetho;
-import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
-import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
+//import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
+//import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
@@ -70,25 +70,25 @@ public class AndroidApplication extends Application {
         Stetho.initializeWithDefaults( this );
         LeakCanary.install( this );
 
-        String applicationId = getString( R.string.app_id );
-
-        // Build a CastConfiguration object and initialize VideoCastManager
-        CastConfiguration options = new CastConfiguration.Builder( applicationId )
-                .enableAutoReconnect()
-                .enableDebug()
-                .enableLockScreen()
-                .enableNotification()
-                .enableWifiReconnection()
-                .setCastControllerImmersive( true )
-                .setLaunchOptions( false, Locale.getDefault() )
-                .setNextPrevVisibilityPolicy( CastConfiguration.NEXT_PREV_VISIBILITY_POLICY_DISABLED )
-                .addNotificationAction( CastConfiguration.NOTIFICATION_ACTION_REWIND, false )
-                .addNotificationAction( CastConfiguration.NOTIFICATION_ACTION_PLAY_PAUSE, true )
-                .addNotificationAction( CastConfiguration.NOTIFICATION_ACTION_DISCONNECT, true )
-                .setForwardStep( 10 )
-                .build();
-
-        VideoCastManager.initialize( this, options );
+//        String applicationId = getString( R.string.app_id );
+//
+//        // Build a CastConfiguration object and initialize VideoCastManager
+//        CastConfiguration options = new CastConfiguration.Builder( applicationId )
+//                .enableAutoReconnect()
+//                .enableDebug()
+//                .enableLockScreen()
+//                .enableNotification()
+//                .enableWifiReconnection()
+//                .setCastControllerImmersive( true )
+//                .setLaunchOptions( false, Locale.getDefault() )
+//                .setNextPrevVisibilityPolicy( CastConfiguration.NEXT_PREV_VISIBILITY_POLICY_DISABLED )
+//                .addNotificationAction( CastConfiguration.NOTIFICATION_ACTION_REWIND, false )
+//                .addNotificationAction( CastConfiguration.NOTIFICATION_ACTION_PLAY_PAUSE, true )
+//                .addNotificationAction( CastConfiguration.NOTIFICATION_ACTION_DISCONNECT, true )
+//                .setForwardStep( 10 )
+//                .build();
+//
+//        VideoCastManager.initialize( this, options );
 
 
     }

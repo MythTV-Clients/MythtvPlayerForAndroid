@@ -24,6 +24,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.presentation.model.MediaItemModel;
+import org.mythtv.android.presentation.view.activity.phone.LocalPlayerActivity;
 import org.mythtv.android.presentation.view.activity.phone.MainPhoneActivity;
 import org.mythtv.android.presentation.view.activity.phone.PlayerActivity;
 import org.mythtv.android.presentation.view.activity.phone.ProgramDetailsActivity;
@@ -196,6 +198,20 @@ public class PhoneNavigator {
             Log.d( TAG, "navigateToVideoPlayer : uri=" + uri );
 
             context.startActivity( PlayerActivity.getCallingIntent( context, uri ) );
+
+        }
+
+        Log.d( TAG, "navigateToVideoPlayer : exit" );
+    }
+
+    public void navigateToLocalPlayer(Context context, MediaItemModel mediaItemModel ) {
+        Log.d( TAG, "navigateToLocalPlayer : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToLocalPlayer : context != null" );
+            Log.d( TAG, "navigateToLocalPlayer : mediaItemModel=" + mediaItemModel );
+
+            context.startActivity( LocalPlayerActivity.getCallingIntent( context, mediaItemModel ) );
 
         }
 

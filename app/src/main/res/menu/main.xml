@@ -31,4 +31,5 @@
           android:title="@string/chromecast_label"
           app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
           app:showAsAction="always" />
+
 </menu>

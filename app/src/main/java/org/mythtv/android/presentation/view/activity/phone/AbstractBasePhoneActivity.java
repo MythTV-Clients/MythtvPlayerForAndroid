@@ -44,10 +44,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.gms.cast.ApplicationMetadata;
-import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
-import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumer;
-import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl;
-import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastState;
+import com.google.android.gms.cast.framework.CastStateListener;
+import com.google.android.gms.cast.framework.IntroductoryOverlay;
+//import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
+//import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumer;
+//import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl;
+//import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 
 import org.mythtv.android.presentation.R;
 import org.mythtv.android.presentation.AndroidApplication;
@@ -73,12 +78,17 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
     private static final String TAG = AbstractBasePhoneActivity.class.getSimpleName();
 
-    protected VideoCastManager mCastManager;
-    protected VideoCastConsumer mCastConsumer;
-    protected MenuItem mMediaRouteMenuItem;
-    protected boolean mIsHoneyCombOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-    protected IntroductoryOverlay mOverlay;
+//    protected VideoCastManager mCastManager;
+//    protected VideoCastConsumer mCastConsumer;
+//    protected MenuItem mMediaRouteMenuItem;
+//    protected boolean mIsHoneyCombOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+//    protected IntroductoryOverlay mOverlay;
     protected LiveStreamInfoModel liveStreamInfoModel;
+
+    protected CastContext mCastContext;
+    protected MenuItem mediaRouteMenuItem;
+    protected IntroductoryOverlay mIntroductoryOverlay;
+    protected CastStateListener mCastStateListener;
 
     @Inject
     PhoneNavigator navigator;
@@ -94,7 +104,7 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-        VideoCastManager.checkGooglePlayServices( this );
+//        VideoCastManager.checkGooglePlayServices( this );
 
         this.getApplicationComponent().inject( this );
         setContentView( getLayoutResource() );
@@ -106,59 +116,70 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
         }
 
-        mCastManager = VideoCastManager.getInstance();
-        mCastConsumer = new VideoCastConsumerImpl() {
-
+        mCastStateListener = new CastStateListener() {
             @Override
-            public void onFailed( int resourceId, int statusCode ) {
-
-                String reason = "Not Available";
-                if( resourceId > 0 ) {
-
-                    reason = getString( resourceId );
-
+            public void onCastStateChanged(int newState) {
+                if (newState != CastState.NO_DEVICES_AVAILABLE) {
+                    showIntroductoryOverlay();
                 }
-
-                Log.e( TAG, "Action failed, reason:  " + reason + ", status code: " + statusCode );
             }
-
-            @Override
-            public void onApplicationConnected( ApplicationMetadata appMetadata, String sessionId, boolean wasLaunched ) {
-
-                invalidateOptionsMenu();
-
-            }
-
-            @Override
-            public void onDisconnected() {
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onConnectionSuspended( int cause ) {
-                Log.d( TAG, "onConnectionSuspended() was called with cause: " + cause );
-
-//                com.google.sample.cast.refplayer.utils.Utils.
-//                        showToast( VideoBrowserActivity.this, R.string.connection_temp_lost );
-
-            }
-
-            @Override
-            public void onConnectivityRecovered() {
-//                com.google.sample.cast.refplayer.utils.Utils.
-//                        showToast(VideoBrowserActivity.this, R.string.connection_recovered);
-            }
-
-            @Override
-            public void onCastAvailabilityChanged( boolean castPresent ) {
-
-                if( castPresent && mIsHoneyCombOrAbove ) {
-                    showOverlay();
-                }
-
-            }
-
         };
+
+        mCastContext = CastContext.getSharedInstance( this );
+
+        //        mCastManager = VideoCastManager.getInstance();
+//        mCastConsumer = new VideoCastConsumerImpl() {
+//
+//            @Override
+//            public void onFailed( int resourceId, int statusCode ) {
+//
+//                String reason = "Not Available";
+//                if( resourceId > 0 ) {
+//
+//                    reason = getString( resourceId );
+//
+//                }
+//
+//                Log.e( TAG, "Action failed, reason:  " + reason + ", status code: " + statusCode );
+//            }
+//
+//            @Override
+//            public void onApplicationConnected( ApplicationMetadata appMetadata, String sessionId, boolean wasLaunched ) {
+//
+//                invalidateOptionsMenu();
+//
+//            }
+//
+//            @Override
+//            public void onDisconnected() {
+//                invalidateOptionsMenu();
+//            }
+//
+//            @Override
+//            public void onConnectionSuspended( int cause ) {
+//                Log.d( TAG, "onConnectionSuspended() was called with cause: " + cause );
+//
+////                com.google.sample.cast.refplayer.utils.Utils.
+////                        showToast( VideoBrowserActivity.this, R.string.connection_temp_lost );
+//
+//            }
+//
+//            @Override
+//            public void onConnectivityRecovered() {
+////                com.google.sample.cast.refplayer.utils.Utils.
+////                        showToast(VideoBrowserActivity.this, R.string.connection_recovered);
+//            }
+//
+//            @Override
+//            public void onCastAvailabilityChanged( boolean castPresent ) {
+//
+//                if( castPresent && mIsHoneyCombOrAbove ) {
+//                    showOverlay();
+//                }
+//
+//            }
+//
+//        };
 
         if( toolbar != null ) {
             setSupportActionBar( toolbar );
@@ -181,13 +202,15 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     @Override
     protected void onResume() {
 
-        mCastManager = VideoCastManager.getInstance();
-        if( null != mCastManager ) {
+        mCastContext.addCastStateListener( mCastStateListener );
 
-            mCastManager.addVideoCastConsumer( mCastConsumer );
-            mCastManager.incrementUiCounter();
-
-        }
+//        mCastManager = VideoCastManager.getInstance();
+//        if( null != mCastManager ) {
+//
+//            mCastManager.addVideoCastConsumer( mCastConsumer );
+//            mCastManager.incrementUiCounter();
+//
+//        }
 
         super.onResume();
 
@@ -196,8 +219,10 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     @Override
     protected void onPause() {
 
-        mCastManager.decrementUiCounter();
-        mCastManager.removeVideoCastConsumer(mCastConsumer);
+        mCastContext.removeCastStateListener( mCastStateListener );
+
+//        mCastManager.decrementUiCounter();
+//        mCastManager.removeVideoCastConsumer(mCastConsumer);
 
         super.onPause();
 
@@ -217,7 +242,8 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         searchView.setSearchableInfo( searchManager.getSearchableInfo( cn ) );
         searchView.setIconifiedByDefault( false );
 
-        mMediaRouteMenuItem = mCastManager.addMediaRouterButton( menu, R.id.media_route_menu_item );
+        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton( getApplicationContext(), menu, R.id.media_route_menu_item );
+//        mMediaRouteMenuItem = mCastManager.addMediaRouterButton( menu, R.id.media_route_menu_item );
 
         return super.onCreateOptionsMenu( menu );
     }
@@ -305,49 +331,75 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         return false;
     }
 
-    @TargetApi( Build.VERSION_CODES.HONEYCOMB )
-    private void showOverlay() {
-        if(mOverlay != null) {
-            mOverlay.remove();
+//    @TargetApi( Build.VERSION_CODES.HONEYCOMB )
+//    private void showOverlay() {
+//        if(mOverlay != null) {
+//            mOverlay.remove();
+//        }
+//
+//        new Handler().postDelayed( new Runnable() {
+//
+//            @Override
+//            public void run() {
+//
+//                if( mMediaRouteMenuItem.isVisible() ) {
+//
+//                    mOverlay = new IntroductoryOverlay.Builder( AbstractBasePhoneActivity.this )
+//                            .setMenuItem( mMediaRouteMenuItem )
+//                            .setTitleText( R.string.intro_overlay_text )
+//                            .setSingleTime()
+//                            .setOnDismissed( new IntroductoryOverlay.OnOverlayDismissedListener() {
+//
+//                                @Override
+//                                public void onOverlayDismissed() {
+//                                    Log.d( TAG, "overlay is dismissed" );
+//
+//                                    mOverlay = null;
+//
+//                                }
+//
+//                            }).build();
+//
+//                    mOverlay.show();
+//
+//                }
+//
+//            }
+//
+//        }, 1000 );
+//
+//    }
+
+//    @Override
+//    public boolean dispatchKeyEvent( @NonNull KeyEvent event ) {
+//
+//        return mCastManager.onDispatchVolumeKeyEvent( event, AndroidApplication.VOLUME_INCREMENT ) || super.dispatchKeyEvent( event );
+//    }
+
+    private void showIntroductoryOverlay() {
+        if (mIntroductoryOverlay != null) {
+            mIntroductoryOverlay.remove();
         }
-
-        new Handler().postDelayed( new Runnable() {
-
-            @Override
-            public void run() {
-
-                if( mMediaRouteMenuItem.isVisible() ) {
-
-                    mOverlay = new IntroductoryOverlay.Builder( AbstractBasePhoneActivity.this )
-                            .setMenuItem( mMediaRouteMenuItem )
-                            .setTitleText( R.string.intro_overlay_text )
+        if ((mediaRouteMenuItem != null) && mediaRouteMenuItem.isVisible()) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    mIntroductoryOverlay = new IntroductoryOverlay.Builder(
+                            AbstractBasePhoneActivity.this, mediaRouteMenuItem)
+                            .setTitleText("Introducing Cast")
                             .setSingleTime()
-                            .setOnDismissed( new IntroductoryOverlay.OnOverlayDismissedListener() {
-
-                                @Override
-                                public void onOverlayDismissed() {
-                                    Log.d( TAG, "overlay is dismissed" );
-
-                                    mOverlay = null;
-
-                                }
-
-                            }).build();
-
-                    mOverlay.show();
-
+                            .setOnOverlayDismissedListener(
+                                    new IntroductoryOverlay.OnOverlayDismissedListener() {
+                                        @Override
+                                        public void onOverlayDismissed() {
+                                            mIntroductoryOverlay = null;
+                                        }
+                                    })
+                            .build();
+                    mIntroductoryOverlay.show();
                 }
-
-            }
-
-        }, 1000 );
-
-    }
-
-    @Override
-    public boolean dispatchKeyEvent( @NonNull KeyEvent event ) {
-
-        return mCastManager.onDispatchVolumeKeyEvent( event, AndroidApplication.VOLUME_INCREMENT ) || super.dispatchKeyEvent( event );
+            });
+        }
     }
 
     public void setNavigationMenuItemChecked( int index ) {
