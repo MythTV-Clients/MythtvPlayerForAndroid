@@ -23,7 +23,7 @@ dependencies:
       - echo $GOOGLE_SERVICES_JSON > app/google-services.json
 
       - echo y | android update sdk --no-ui --all --filter "tools,android-24,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-android-support,extra-google-m2repository,extra-google-google_play_services"
-      - echo y | android update sdk -a -u -t sys-img-armeabi-v7a-google_apis-22
+      - echo y | android update sdk -a -u -t sys-img-armeabi-v7a-google_apis-23
     cache_directories:
       - /usr/local/android-sdk-linux/tools
       - /usr/local/android-sdk-linux/build-tools/24.0.0
@@ -31,11 +31,11 @@ dependencies:
 test:
   pre:
     - android list targets
-    - echo no | android create avd -n custom-android22-googleapis -t "android-22" --abi google_apis/armeabi-v7a
-    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android22-googleapis.ini
-    - echo 'hw.ramSize=1024' >> ~/.android/avd/custom-android22-googleapis.ini
-    - cat ~/.android/avd/custom-android22-googleapis.ini
-    - emulator -avd custom-android22-googleapis -no-audio -no-window :
+    - echo no | android create avd -n custom-android23-googleapis -t "android-23" --abi google_apis/armeabi-v7a
+    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android23-googleapis.ini
+    - echo 'hw.ramSize=1024' >> ~/.android/avd/custom-android23-googleapis.ini
+    - cat ~/.android/avd/custom-android23-googleapis.ini
+    - emulator -avd custom-android23-googleapis -no-audio -no-window :
         background: true
         parallel: true
     - circle-android wait-for-boot
