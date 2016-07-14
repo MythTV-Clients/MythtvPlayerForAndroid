@@ -23,6 +23,9 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.NetComponent;
@@ -43,6 +46,8 @@ public abstract class AbstractBaseTvActivity extends Activity {
     @Inject
     TvNavigator navigator;
 
+    protected FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
@@ -50,6 +55,12 @@ public abstract class AbstractBaseTvActivity extends Activity {
         this.getApplicationComponent().inject( this );
         setContentView( getLayoutResource() );
         ButterKnife.bind( this );
+
+        if( !FirebaseApp.getApps( this ).isEmpty() ) {
+
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance( this );
+
+        }
 
     }
 

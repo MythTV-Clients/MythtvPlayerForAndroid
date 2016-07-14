@@ -28,7 +28,7 @@ import android.widget.TextView;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.model.ProgramModel;
 
 import java.util.Collection;

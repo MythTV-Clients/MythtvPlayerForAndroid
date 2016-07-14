@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 /**
  * Created by dmfrey on 4/21/16.

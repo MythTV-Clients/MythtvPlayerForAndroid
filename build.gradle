@@ -91,6 +91,7 @@ ext {
 
     //Android Support Libraries
     androidSupportVersion = '23.4.0'
+    firebaseVersion = '9.2.1'
 
     //Libraries
     daggerVersion = '2.4'

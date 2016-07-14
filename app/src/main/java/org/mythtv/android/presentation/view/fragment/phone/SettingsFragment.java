@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 
 

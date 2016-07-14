@@ -27,7 +27,7 @@ import android.util.Log;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 /*
  * Created by dmfrey on 4/4/15.

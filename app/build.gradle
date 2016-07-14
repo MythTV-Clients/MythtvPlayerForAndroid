@@ -199,6 +199,8 @@ dependencies {
     compile "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
     compile "xyz.danoz:recyclerviewfastscroller:${recyclerviewfastscrollerVersion}"
     compile "com.android.support:multidex:${multidexVersion}"
+    compile "com.google.firebase:firebase-core:$rootProject.ext.firebaseVersion"
+    compile "com.google.firebase:firebase-crash:$rootProject.ext.firebaseVersion"
 
     compile "com.android.support:leanback-v17:${androidSupportVersion}"
     compile "com.android.support:preference-leanback-v17:${androidSupportVersion}"

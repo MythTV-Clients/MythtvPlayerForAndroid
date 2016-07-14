@@ -36,7 +36,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 
 import java.util.ArrayList;

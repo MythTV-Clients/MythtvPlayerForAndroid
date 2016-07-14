@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 public class ProgramDetailsSettingsActivity extends AbstractBasePhoneActivity {
 

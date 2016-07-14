@@ -38,7 +38,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import org.mythtv.android.presentation.R;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.NetComponent;
@@ -69,6 +72,8 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
     @Nullable @Bind( R.id.drawer_layout ) protected DrawerLayout drawerLayout;
 
+    protected FirebaseAnalytics mFirebaseAnalytics;
+
     public abstract int getLayoutResource();
 
     @Override
@@ -78,6 +83,12 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         this.getApplicationComponent().inject( this );
         setContentView( getLayoutResource() );
         ButterKnife.bind( this );
+
+        if( !FirebaseApp.getApps( this ).isEmpty() ) {
+
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance( this );
+
+        }
 
         if( null != navigationView ) {
 

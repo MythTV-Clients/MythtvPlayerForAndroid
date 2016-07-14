@@ -22,7 +22,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 /*
  * Created by dmfrey on 4/7/15.

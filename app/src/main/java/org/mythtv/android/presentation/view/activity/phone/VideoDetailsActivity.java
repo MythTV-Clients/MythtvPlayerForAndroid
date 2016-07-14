@@ -29,7 +29,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.view.fragment.phone.VideoDetailsFragment;
