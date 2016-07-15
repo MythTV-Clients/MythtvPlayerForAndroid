@@ -21,7 +21,7 @@ package org.mythtv.android.presentation.presenter.phone;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.presentation.model.TvCategoryModel;

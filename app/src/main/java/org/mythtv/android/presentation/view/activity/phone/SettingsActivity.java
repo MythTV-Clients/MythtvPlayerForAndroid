@@ -21,7 +21,7 @@ package org.mythtv.android.presentation.view.activity.phone;
 import android.content.Context;
 import android.content.Intent;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 /**
  * Created by dmfrey on 9/2/15.

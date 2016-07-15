@@ -35,6 +35,9 @@ ext {
     //Android Support Libraries
     androidSupportVersion = '23.4.0'
 
+    //Firebase Libraries
+    firebaseVersion = '9.0.2'
+
     //Libraries
     daggerVersion = '2.4'
     butterKnifeVersion = '7.0.1'
@@ -97,7 +100,9 @@ ext {
         multidex:           "com.android.support:multidex:${multidexVersion}",
         recyclerviewfastscroller: "xyz.danoz:recyclerviewfastscroller:${recyclerviewfastscrollerVersion}",
         leakCanaryDebug:    "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
-        leakCanaryNoOp:     "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
+        leakCanaryNoOp:     "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}",
+        fbCore:             "com.google.firebase:firebase-core:${firebaseVersion}",
+        fbCrashReporting:   "com.google.firebase:firebase-crash:${firebaseVersion}"
     ]
 
     presentationTestDependencies = [
@@ -141,6 +146,8 @@ ext {
         lombok:             "org.projectlombok:lombok:${lombokVersion}",
         stetho:             "com.facebook.stetho:stetho:${stethoVersion}",
         stethoOkhttp:       "com.facebook.stetho:stetho-okhttp3:${stethoVersion}",
+        fbCore:             "com.google.firebase:firebase-core:${firebaseVersion}",
+        fbCrashReporting:   "com.google.firebase:firebase-crash:${firebaseVersion}",
         multidex:           "com.android.support:multidex:${multidexVersion}"
     ]
 

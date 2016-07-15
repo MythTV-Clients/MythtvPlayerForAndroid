@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.view.fragment.tv.RecordingsFragment;

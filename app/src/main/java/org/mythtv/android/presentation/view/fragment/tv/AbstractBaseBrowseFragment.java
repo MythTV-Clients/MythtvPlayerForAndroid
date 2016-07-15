@@ -23,7 +23,7 @@ import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.widget.Toast;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
