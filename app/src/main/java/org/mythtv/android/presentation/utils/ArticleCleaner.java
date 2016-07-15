@@ -21,7 +21,7 @@ package org.mythtv.android.presentation.utils;
 import android.content.Context;
 import android.util.Log;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 /**
  * Created by dmfrey on 2/1/16.

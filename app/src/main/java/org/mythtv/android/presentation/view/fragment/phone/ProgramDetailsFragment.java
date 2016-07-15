@@ -39,7 +39,7 @@ import android.widget.TextView;
 
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.CastMemberModel;
 import org.mythtv.android.presentation.model.LiveStreamInfoModel;

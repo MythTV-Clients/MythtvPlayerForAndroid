@@ -20,7 +20,7 @@ package org.mythtv.android.presentation.view.activity.tv;
 
 import android.os.Bundle;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 public class TvVideoSettingsActivity extends AbstractBaseTvActivity {
 

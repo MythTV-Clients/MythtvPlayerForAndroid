@@ -35,7 +35,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import org.mythtv.android.presentation.R;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class SettingsActivity extends Activity {
     private static final int INTERNAL_PLAYER_SETTINGS = 21;
     private static final int EXTERNAL_PLAYER_OVERRIDE_SETTINGS = 20;
     private static final int CONTENT_SETTINGS = 30;
+    private static final int ANALYTICS_SETTINGS = 40;
 
     private static final int OPTION_CHECK_SET_ID = 10;
 
@@ -69,6 +71,7 @@ public class SettingsActivity extends Activity {
     private static PlayerFragment mPlayerFragment;
     private static InternalPlayerFragment mInternalPlayerFragment;
     private static ContentFragment mContentFragment;
+    private static AnalyticsFragment mAnalyticsFragment;
 
     public static Intent getCallingIntent( Context context ) {
 
@@ -89,6 +92,7 @@ public class SettingsActivity extends Activity {
         mPlayerFragment = new PlayerFragment();
         mInternalPlayerFragment = new InternalPlayerFragment();
         mContentFragment = new ContentFragment();
+        mAnalyticsFragment = new AnalyticsFragment();
 
         GuidedStepFragment.addAsRoot( this, mSettingsFragment, android.R.id.content );
 
@@ -157,6 +161,12 @@ public class SettingsActivity extends Activity {
                 case CONTENT_SETTINGS :
 
                     GuidedStepFragment.add( fm, mContentFragment, android.R.id.content );
+
+                    break;
+
+                case ANALYTICS_SETTINGS :
+
+                    GuidedStepFragment.add( fm, mAnalyticsFragment, android.R.id.content );
 
                     break;
 
@@ -743,6 +753,68 @@ public class SettingsActivity extends Activity {
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, updated );
+
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean showAdultContent = getShowAdultContent( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    showAdultContent );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !showAdultContent );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class AnalyticsFragment extends GuidedStepFragment {
+
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_enable_analytics_label );
+            String breadcrumb = getResources().getString( R.string.pref_enable_analytics_title );
+            String description = getResources().getString( R.string.tv_settings_content_title_description );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_ENABLE_ANALYTICS, updated );
+
+            FirebaseAnalytics.getInstance( getActivity() ).setAnalyticsCollectionEnabled( updated );
 
             mSettingsFragment.updateActions( null );
 

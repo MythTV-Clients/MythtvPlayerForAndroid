@@ -9,7 +9,7 @@ import org.joda.time.DateTime;
 import org.junit.runner.RunWith;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
-import org.mythtv.android.presentation.BuildConfig;
+import org.mythtv.android.BuildConfig;
 import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Type;

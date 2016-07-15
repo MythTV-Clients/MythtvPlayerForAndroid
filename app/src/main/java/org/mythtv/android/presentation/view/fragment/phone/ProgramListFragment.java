@@ -28,7 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.presenter.phone.ProgramListPresenter;

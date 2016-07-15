@@ -20,7 +20,7 @@ package org.mythtv.android.presentation.exception;
 
 import android.content.Context;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.data.exception.ProgramNotFoundException;
 

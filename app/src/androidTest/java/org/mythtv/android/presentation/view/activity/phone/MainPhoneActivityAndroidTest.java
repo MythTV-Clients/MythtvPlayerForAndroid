@@ -7,7 +7,7 @@ import android.view.Gravity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;

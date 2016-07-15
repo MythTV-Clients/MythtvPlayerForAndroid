@@ -32,7 +32,7 @@ import android.widget.ImageView;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
 import org.mythtv.android.domain.SettingsKeys;

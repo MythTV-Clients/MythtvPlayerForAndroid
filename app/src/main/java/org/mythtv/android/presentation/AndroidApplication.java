@@ -23,8 +23,10 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.Stetho;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerNetComponent;
@@ -86,6 +88,9 @@ public class AndroidApplication extends Application {
                 .sharedPreferencesModule( sharedPreferencesModule )
                 .netModule( netModule )
                 .build();
+
+        boolean enableFirebaseAnalytics = sharedPreferencesModule.getBooleanFromPreferences( SettingsKeys.KEY_PREF_ENABLE_ANALYTICS );
+        FirebaseAnalytics.getInstance( this ).setAnalyticsCollectionEnabled( enableFirebaseAnalytics );
 
     }
 
