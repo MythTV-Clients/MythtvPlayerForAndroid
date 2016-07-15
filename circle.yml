@@ -48,6 +48,7 @@ test:
 #    - adb shell settings put global animator_duration_scale 0
 
   override:
+    - git checkout app/google-services.json
     - ./gradlew testDevDebugUnitTest -PdisablePreDex --console=plain --info  # connectedDevDebugAndroidTest
 
   post:
