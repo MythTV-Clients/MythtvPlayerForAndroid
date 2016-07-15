@@ -29,19 +29,18 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
+import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
-import org.mythtv.android.presentation.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.VideoModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.view.fragment.phone.VideoDetailsFragment;
 import org.mythtv.android.presentation.utils.MediaInfoHelper;
+import org.mythtv.android.presentation.view.fragment.phone.VideoDetailsFragment;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

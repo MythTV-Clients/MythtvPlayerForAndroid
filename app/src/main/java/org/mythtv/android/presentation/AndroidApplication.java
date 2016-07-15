@@ -23,10 +23,10 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.Stetho;
-//import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
-//import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerNetComponent;
@@ -45,9 +45,6 @@ import java.util.Locale;
  * Created by dmfrey on 8/30/15.
  */
 public class AndroidApplication extends Application {
-
-    public static final double VOLUME_INCREMENT = 0.05;
-    public static final int PRELOAD_TIME_S = 20;
 
     private ApplicationComponent applicationComponent;
     private SharedPreferencesComponent sharedPreferencesComponent;
@@ -69,27 +66,6 @@ public class AndroidApplication extends Application {
 
         Stetho.initializeWithDefaults( this );
         LeakCanary.install( this );
-
-//        String applicationId = getString( R.string.app_id );
-//
-//        // Build a CastConfiguration object and initialize VideoCastManager
-//        CastConfiguration options = new CastConfiguration.Builder( applicationId )
-//                .enableAutoReconnect()
-//                .enableDebug()
-//                .enableLockScreen()
-//                .enableNotification()
-//                .enableWifiReconnection()
-//                .setCastControllerImmersive( true )
-//                .setLaunchOptions( false, Locale.getDefault() )
-//                .setNextPrevVisibilityPolicy( CastConfiguration.NEXT_PREV_VISIBILITY_POLICY_DISABLED )
-//                .addNotificationAction( CastConfiguration.NOTIFICATION_ACTION_REWIND, false )
-//                .addNotificationAction( CastConfiguration.NOTIFICATION_ACTION_PLAY_PAUSE, true )
-//                .addNotificationAction( CastConfiguration.NOTIFICATION_ACTION_DISCONNECT, true )
-//                .setForwardStep( 10 )
-//                .build();
-//
-//        VideoCastManager.initialize( this, options );
-
 
     }
 
@@ -114,6 +90,9 @@ public class AndroidApplication extends Application {
                 .sharedPreferencesModule( sharedPreferencesModule )
                 .netModule( netModule )
                 .build();
+
+        boolean enableFirebaseAnalytics = sharedPreferencesModule.getBooleanFromPreferences( SettingsKeys.KEY_PREF_ENABLE_ANALYTICS );
+        FirebaseAnalytics.getInstance( this ).setAnalyticsCollectionEnabled( enableFirebaseAnalytics );
 
     }
 

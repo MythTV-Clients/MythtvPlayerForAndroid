@@ -3,7 +3,7 @@ package org.mythtv.android.data;
 import java.lang.reflect.*;
 
 import org.junit.runners.model.InitializationError;
-import org.mythtv.android.presentation.BuildConfig;
+import org.mythtv.android.BuildConfig;
 import org.robolectric.annotation.Config;
 import org.robolectric.RobolectricGradleTestRunner;
 

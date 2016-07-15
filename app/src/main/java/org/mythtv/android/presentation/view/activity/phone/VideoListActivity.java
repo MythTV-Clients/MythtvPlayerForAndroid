@@ -29,7 +29,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Window;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.view.fragment.phone.AbstractBaseVideoPagerFragment;
 import org.mythtv.android.presentation.view.fragment.phone.AdultListFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MusicVideoListFragment;

@@ -54,7 +54,7 @@ import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.phone.MusicVideoListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
 import org.mythtv.android.presentation.view.VideoListView;
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
 import org.mythtv.android.presentation.view.activity.tv.VideoDetailsActivity;

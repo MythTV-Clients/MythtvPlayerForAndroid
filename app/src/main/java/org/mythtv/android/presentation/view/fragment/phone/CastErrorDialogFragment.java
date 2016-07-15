@@ -9,7 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 /**
  * Created by dmfrey on 7/9/16.

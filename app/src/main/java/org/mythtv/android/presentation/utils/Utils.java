@@ -25,7 +25,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 import java.util.HashMap;
 

@@ -49,12 +49,11 @@ import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastState;
 import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
-//import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
-//import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumer;
-//import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl;
-//import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 
-import org.mythtv.android.presentation.R;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.NetComponent;
@@ -78,11 +77,6 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
     private static final String TAG = AbstractBasePhoneActivity.class.getSimpleName();
 
-//    protected VideoCastManager mCastManager;
-//    protected VideoCastConsumer mCastConsumer;
-//    protected MenuItem mMediaRouteMenuItem;
-//    protected boolean mIsHoneyCombOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-//    protected IntroductoryOverlay mOverlay;
     protected LiveStreamInfoModel liveStreamInfoModel;
 
     protected CastContext mCastContext;
@@ -98,17 +92,23 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
     @Nullable @Bind( R.id.drawer_layout ) protected DrawerLayout drawerLayout;
 
+    protected FirebaseAnalytics mFirebaseAnalytics;
+
     public abstract int getLayoutResource();
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-//        VideoCastManager.checkGooglePlayServices( this );
-
         this.getApplicationComponent().inject( this );
         setContentView( getLayoutResource() );
         ButterKnife.bind( this );
+
+        if( !FirebaseApp.getApps( this ).isEmpty() ) {
+
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance( this );
+
+        }
 
         if( null != navigationView ) {
 
@@ -126,60 +126,6 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         };
 
         mCastContext = CastContext.getSharedInstance( this );
-
-        //        mCastManager = VideoCastManager.getInstance();
-//        mCastConsumer = new VideoCastConsumerImpl() {
-//
-//            @Override
-//            public void onFailed( int resourceId, int statusCode ) {
-//
-//                String reason = "Not Available";
-//                if( resourceId > 0 ) {
-//
-//                    reason = getString( resourceId );
-//
-//                }
-//
-//                Log.e( TAG, "Action failed, reason:  " + reason + ", status code: " + statusCode );
-//            }
-//
-//            @Override
-//            public void onApplicationConnected( ApplicationMetadata appMetadata, String sessionId, boolean wasLaunched ) {
-//
-//                invalidateOptionsMenu();
-//
-//            }
-//
-//            @Override
-//            public void onDisconnected() {
-//                invalidateOptionsMenu();
-//            }
-//
-//            @Override
-//            public void onConnectionSuspended( int cause ) {
-//                Log.d( TAG, "onConnectionSuspended() was called with cause: " + cause );
-//
-////                com.google.sample.cast.refplayer.utils.Utils.
-////                        showToast( VideoBrowserActivity.this, R.string.connection_temp_lost );
-//
-//            }
-//
-//            @Override
-//            public void onConnectivityRecovered() {
-////                com.google.sample.cast.refplayer.utils.Utils.
-////                        showToast(VideoBrowserActivity.this, R.string.connection_recovered);
-//            }
-//
-//            @Override
-//            public void onCastAvailabilityChanged( boolean castPresent ) {
-//
-//                if( castPresent && mIsHoneyCombOrAbove ) {
-//                    showOverlay();
-//                }
-//
-//            }
-//
-//        };
 
         if( toolbar != null ) {
             setSupportActionBar( toolbar );
@@ -204,14 +150,6 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
         mCastContext.addCastStateListener( mCastStateListener );
 
-//        mCastManager = VideoCastManager.getInstance();
-//        if( null != mCastManager ) {
-//
-//            mCastManager.addVideoCastConsumer( mCastConsumer );
-//            mCastManager.incrementUiCounter();
-//
-//        }
-
         super.onResume();
 
     }
@@ -220,9 +158,6 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     protected void onPause() {
 
         mCastContext.removeCastStateListener( mCastStateListener );
-
-//        mCastManager.decrementUiCounter();
-//        mCastManager.removeVideoCastConsumer(mCastConsumer);
 
         super.onPause();
 
@@ -243,7 +178,6 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         searchView.setIconifiedByDefault( false );
 
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton( getApplicationContext(), menu, R.id.media_route_menu_item );
-//        mMediaRouteMenuItem = mCastManager.addMediaRouterButton( menu, R.id.media_route_menu_item );
 
         return super.onCreateOptionsMenu( menu );
     }
@@ -330,51 +264,6 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
         return false;
     }
-
-//    @TargetApi( Build.VERSION_CODES.HONEYCOMB )
-//    private void showOverlay() {
-//        if(mOverlay != null) {
-//            mOverlay.remove();
-//        }
-//
-//        new Handler().postDelayed( new Runnable() {
-//
-//            @Override
-//            public void run() {
-//
-//                if( mMediaRouteMenuItem.isVisible() ) {
-//
-//                    mOverlay = new IntroductoryOverlay.Builder( AbstractBasePhoneActivity.this )
-//                            .setMenuItem( mMediaRouteMenuItem )
-//                            .setTitleText( R.string.intro_overlay_text )
-//                            .setSingleTime()
-//                            .setOnDismissed( new IntroductoryOverlay.OnOverlayDismissedListener() {
-//
-//                                @Override
-//                                public void onOverlayDismissed() {
-//                                    Log.d( TAG, "overlay is dismissed" );
-//
-//                                    mOverlay = null;
-//
-//                                }
-//
-//                            }).build();
-//
-//                    mOverlay.show();
-//
-//                }
-//
-//            }
-//
-//        }, 1000 );
-//
-//    }
-
-//    @Override
-//    public boolean dispatchKeyEvent( @NonNull KeyEvent event ) {
-//
-//        return mCastManager.onDispatchVolumeKeyEvent( event, AndroidApplication.VOLUME_INCREMENT ) || super.dispatchKeyEvent( event );
-//    }
 
     private void showIntroductoryOverlay() {
         if (mIntroductoryOverlay != null) {

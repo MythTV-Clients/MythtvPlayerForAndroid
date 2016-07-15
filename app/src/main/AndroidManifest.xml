@@ -17,7 +17,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest
-    package="org.mythtv.android.presentation"
+    package="org.mythtv.android"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -63,7 +63,7 @@
         android:required="false" />
 
     <application
-        android:name=".AndroidApplication"
+        android:name=".presentation.AndroidApplication"
         android:allowBackup="true"
         android:banner="@drawable/mythtv_logo"
         android:icon="@drawable/ic_mythtv"
@@ -78,9 +78,11 @@
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="org.mythtv.android.presentation.provider.CastOptionsProvider" />
 
+        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+
         <!-- App Activities -->
         <activity
-            android:name=".view.activity.phone.MainPhoneActivity"
+            android:name=".presentation.view.activity.phone.MainPhoneActivity"
             android:clearTaskOnLaunch="true"
             android:label="@string/app_name"
             android:launchMode="singleTop">
@@ -95,15 +97,15 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.TitleInfoListActivity"
+            android:name=".presentation.view.activity.phone.TitleInfoListActivity"
             android:label="@string/watch_recording"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.MainPhoneActivity">
+            android:parentActivityName=".presentation.view.activity.phone.MainPhoneActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -111,15 +113,15 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.ProgramListActivity"
+            android:name=".presentation.view.activity.phone.ProgramListActivity"
             android:label="@string/watch_recording"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.TitleInfoListActivity">
+            android:parentActivityName=".presentation.view.activity.phone.TitleInfoListActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -127,14 +129,14 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.ProgramDetailsActivity"
+            android:name=".presentation.view.activity.phone.ProgramDetailsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.ProgramListActivity">
+            android:parentActivityName=".presentation.view.activity.phone.ProgramListActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -142,14 +144,14 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.ProgramDetailsSettingsActivity"
+            android:name=".presentation.view.activity.phone.ProgramDetailsSettingsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.ProgramDetailsActivity">
+            android:parentActivityName=".presentation.view.activity.phone.ProgramDetailsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -157,15 +159,15 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.VideoListActivity"
+            android:name=".presentation.view.activity.phone.VideoListActivity"
             android:label="@string/watch_video"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.MainPhoneActivity">
+            android:parentActivityName=".presentation.view.activity.phone.MainPhoneActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -173,15 +175,15 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.VideoSeriesListActivity"
+            android:name=".presentation.view.activity.phone.VideoSeriesListActivity"
             android:label="@string/watch_video"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.VideoListActivity">
+            android:parentActivityName=".presentation.view.activity.phone.VideoListActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -189,14 +191,14 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.VideoDetailsActivity"
+            android:name=".presentation.view.activity.phone.VideoDetailsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.VideoSeriesListActivity">
+            android:parentActivityName=".presentation.view.activity.phone.VideoSeriesListActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -204,14 +206,14 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.VideoDetailsSettingsActivity"
+            android:name=".presentation.view.activity.phone.VideoDetailsSettingsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.VideoDetailsActivity">
+            android:parentActivityName=".presentation.view.activity.phone.VideoDetailsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -219,15 +221,15 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.SettingsActivity"
+            android:name=".presentation.view.activity.phone.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.MainPhoneActivity">
+            android:parentActivityName=".presentation.view.activity.phone.MainPhoneActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -235,15 +237,15 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.view.activity.phone.SearchableActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
 
         </activity>
 
         <activity
-            android:name=".view.activity.phone.RecordingSettingsActivity"
+            android:name=".presentation.view.activity.phone.RecordingSettingsActivity"
             android:label="@string/title_activity_settings"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.SettingsActivity">
+            android:parentActivityName=".presentation.view.activity.phone.SettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -252,10 +254,10 @@
         </activity>
 
         <activity
-            android:name=".view.activity.phone.VideoSettingsActivity"
+            android:name=".presentation.view.activity.phone.VideoSettingsActivity"
             android:label="@string/title_activity_settings"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.activity.phone.SettingsActivity">
+            android:parentActivityName=".presentation.view.activity.phone.SettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -264,7 +266,7 @@
         </activity>
 
         <activity
-            android:name=".view.activity.phone.SearchableActivity">
+            android:name=".presentation.view.activity.phone.SearchableActivity">
 
             <intent-filter>
 
@@ -279,7 +281,7 @@
         </activity>
 
         <activity
-            android:name=".view.activity.phone.PlayerActivity"
+            android:name=".presentation.view.activity.phone.PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleInstance"
@@ -287,7 +289,7 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity
-            android:name=".view.activity.phone.LocalPlayerActivity"
+            android:name=".presentation.view.activity.phone.LocalPlayerActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -300,7 +302,7 @@
         </activity>
 
         <activity
-            android:name=".view.activity.phone.ExpandedControlsActivity"
+            android:name=".presentation.view.activity.phone.ExpandedControlsActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
@@ -315,25 +317,9 @@
 
         </activity>
 
-        <!--<activity-->
-            <!--android:name="com.google.android.libraries.cast.companionlibrary.cast.player.VideoCastControllerActivity"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:launchMode="singleTask"-->
-            <!--android:theme="@style/Theme.CastVideosDark"-->
-            <!--android:parentActivityName=".view.activity.phone.ProgramDetailsActivity"-->
-            <!--android:screenOrientation="portrait" >-->
-            <!--&lt;!&ndash;<meta-data&ndash;&gt;-->
-                <!--&lt;!&ndash;android:name="android.support.PARENT_ACTIVITY"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:value="com.google.sample.cast.refplayer.VideoBrowserActivity" />&ndash;&gt;-->
-
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-
         <!-- AndroidTv activities -->
         <activity
-            android:name=".view.activity.tv.MainTvActivity"
+            android:name=".presentation.view.activity.tv.MainTvActivity"
             android:theme="@style/Theme.Leanback"
             android:configChanges="keyboard|keyboardHidden|navigation">
             <intent-filter>
@@ -346,82 +332,81 @@
         </activity>
 
         <activity
-            android:name=".view.activity.tv.RecordingsActivity"
-            android:parentActivityName=".view.activity.tv.MainTvActivity"
+            android:name=".presentation.view.activity.tv.RecordingsActivity"
+            android:parentActivityName=".presentation.view.activity.tv.MainTvActivity"
             android:theme="@style/Theme.Leanback">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activity.tv.MainTvActivity" />
+                android:value=".presentation.view.activity.tv.MainTvActivity" />
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".presentation.view.activity.SearchableActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.tv.RecordingsDetailsActivity"
+            android:parentActivityName=".presentation.view.activity.tv.MainTvActivity"
+            android:theme="@style/Theme.Leanback">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.tv.MainTvActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.tv.SettingsActivity"
+            android:theme="@style/Theme.Leanback" />
+
+        <activity
+            android:name=".presentation.view.activity.tv.RecordingSettingsActivity"
+            android:theme="@style/Theme.Leanback" />
+
+        <activity
+            android:name=".presentation.view.activity.tv.VideosActivity"
+            android:parentActivityName=".presentation.view.activity.tv.MainTvActivity"
+            android:theme="@style/Theme.Leanback">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.tv.MainTvActivity" />
+
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.tv.VideoCategoryActivity"
+            android:parentActivityName=".presentation.view.activity.tv.VideosActivity"
+            android:theme="@style/Theme.Leanback">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.view.activity.tv.VideosActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".view.activity.SearchableActivity" />
-
         </activity>
 
         <activity
-            android:name=".view.activity.tv.RecordingsDetailsActivity"
-            android:parentActivityName=".view.activity.tv.MainTvActivity"
+            android:name=".presentation.view.activity.tv.VideoDetailsActivity"
+            android:parentActivityName=".presentation.view.activity.tv.VideosActivity"
             android:theme="@style/Theme.Leanback">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activity.tv.MainTvActivity" />
+                android:value=".presentation.view.activity.tv.VideosActivity"/>
 
         </activity>
 
         <activity
-            android:name=".view.activity.tv.SettingsActivity"
+            android:name=".presentation.view.activity.tv.TvVideoSettingsActivity"
             android:theme="@style/Theme.Leanback" />
 
         <activity
-            android:name=".view.activity.tv.RecordingSettingsActivity"
-            android:theme="@style/Theme.Leanback" />
-
-        <activity
-            android:name=".view.activity.tv.VideosActivity"
-            android:parentActivityName=".view.activity.tv.MainTvActivity"
-            android:theme="@style/Theme.Leanback">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activity.tv.MainTvActivity" />
-
-        </activity>
-
-        <activity
-            android:name=".view.activity.tv.VideoCategoryActivity"
-            android:parentActivityName=".view.activity.tv.VideosActivity"
-            android:theme="@style/Theme.Leanback">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activity.tv.VideosActivity" />
-
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value=".view.activity.SearchableActivity" />
-        </activity>
-
-        <activity
-            android:name=".view.activity.tv.VideoDetailsActivity"
-            android:parentActivityName=".view.activity.tv.VideosActivity"
-            android:theme="@style/Theme.Leanback">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activity.tv.VideosActivity"/>
-
-        </activity>
-
-        <activity
-            android:name=".view.activity.tv.TvVideoSettingsActivity"
-            android:theme="@style/Theme.Leanback" />
-            android:theme="@style/Theme.Leanback" />
-
-        <activity
-            android:name=".view.activity.tv.SearchableActivity"
+            android:name=".presentation.view.activity.tv.SearchableActivity"
             android:theme="@style/Theme.Leanback">
 
             <intent-filter>
@@ -437,7 +422,7 @@
         </activity>
 
         <activity
-            android:name=".view.activity.tv.PlaybackOverlayActivity"
+            android:name=".presentation.view.activity.tv.PlaybackOverlayActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
@@ -445,12 +430,6 @@
             android:name="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
             android:authorities="org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider"
             android:exported="false" />
-
-        <!--<receiver android:name="com.google.android.libraries.cast.companionlibrary.remotecontrol.VideoIntentReceiver" />-->
-
-        <!--<service android:name="com.google.android.libraries.cast.companionlibrary.notification.VideoCastNotificationService" />-->
-
-        <!--<service android:name="com.google.android.libraries.cast.companionlibrary.cast.reconnection.ReconnectionService" />-->
 
     </application>
 

@@ -39,7 +39,7 @@ import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.cast.framework.media.uicontroller.UIMediaController;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 public class ExpandedControlsFragment extends Fragment {
 

@@ -44,7 +44,7 @@ import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.phone.SearchResultListPresenter;
 import org.mythtv.android.presentation.view.SearchResultListView;
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.SearchComponent;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
 import org.mythtv.android.presentation.view.activity.tv.RecordingsDetailsActivity;

@@ -33,19 +33,17 @@ import android.widget.ImageView;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.Duration;
+import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
-import org.mythtv.android.presentation.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
-import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.utils.MediaInfoHelper;
 import org.mythtv.android.presentation.view.fragment.phone.CastErrorDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.ProgramDetailsFragment;
-import org.mythtv.android.presentation.utils.MediaInfoHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

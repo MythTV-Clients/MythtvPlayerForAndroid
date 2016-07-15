@@ -8,7 +8,7 @@ import com.google.android.gms.cast.framework.SessionProvider;
 import com.google.android.gms.cast.framework.media.CastMediaOptions;
 import com.google.android.gms.cast.framework.media.NotificationOptions;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.view.activity.phone.ExpandedControlsActivity;
 
 import java.util.List;

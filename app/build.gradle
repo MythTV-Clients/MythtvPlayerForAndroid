@@ -219,7 +219,8 @@ dependencies {
     compile "xyz.danoz:recyclerviewfastscroller:${recyclerviewfastscrollerVersion}"
     compile "com.android.support:multidex:${multidexVersion}"
     compile "com.googlecode.android-query:android-query:${androidQueryVersion}"
-//    compile "com.google.android.libraries.cast.companionlibrary:ccl:${cclVersion}"
+    compile "com.google.firebase:firebase-core:$rootProject.ext.firebaseVersion"
+    compile "com.google.firebase:firebase-crash:$rootProject.ext.firebaseVersion"
 
     compile "com.android.support:leanback-v17:${androidSupportVersion}"
     compile "com.android.support:preference-leanback-v17:${androidSupportVersion}"
@@ -283,3 +284,5 @@ tasks.coveralls {
     dependsOn 'connectedAndroidTest'
     onlyIf { System.env.'CI' }
 }
+
+apply plugin: 'com.google.gms.google-services'

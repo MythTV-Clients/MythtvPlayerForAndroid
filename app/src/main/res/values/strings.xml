@@ -215,4 +215,9 @@
     <string name="transition_image">transition-image</string>
     <string name="loading">Loading&#8230;</string>
 
+    <string name="pref_enable_analytics_label">Analytics &amp; Crash Reporting</string>
+    <string name="pref_enable_analytics_title">Enable Analytics &amp; Crash Reporting</string>
+    <string name="pref_enable_analytics_summary_on">Anonymous Analytics &amp; Crash Reports will be sent</string>
+    <string name="pref_enable_analytics_summary_off">Anonymous Analytics &amp; Crash Reports will not be sent</string>
+
 </resources>

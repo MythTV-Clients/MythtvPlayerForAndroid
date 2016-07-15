@@ -15,8 +15,8 @@ import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
 import org.mythtv.android.domain.SettingsKeys;
-import org.mythtv.android.presentation.BuildConfig;
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.BuildConfig;
+import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.interceptors.UserAgentInterceptor;
 
 import java.io.File;

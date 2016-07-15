@@ -32,6 +32,7 @@ buildscript {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
+        classpath 'com.google.gms:google-services:3.0.0'
     }
 
     // Exclude the version that the android plugin depends on.
@@ -90,7 +91,8 @@ ext {
 
     //Android Support Libraries
     androidSupportVersion = '24.0.0'
-    playServicesVersion = '9.2.0'
+    playServicesVersion = '9.2.1'
+    firebaseVersion = '9.2.1'
 
     //Libraries
     daggerVersion = '2.4'

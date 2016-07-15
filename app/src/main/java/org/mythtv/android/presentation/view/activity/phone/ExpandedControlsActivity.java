@@ -17,7 +17,6 @@
 package org.mythtv.android.presentation.view.activity.phone;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +32,7 @@ import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.Session;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 
-import org.mythtv.android.presentation.R;
+import org.mythtv.android.R;
 
 public class ExpandedControlsActivity extends AppCompatActivity {
 
