@@ -30,16 +30,17 @@ import android.view.Window;
 import android.widget.ImageView;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SettingsKeys;
+import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
-import org.mythtv.android.presentation.view.fragment.phone.VideoDetailsFragment;
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.VideoModule;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
+import org.mythtv.android.presentation.utils.MediaInfoHelper;
+import org.mythtv.android.presentation.view.fragment.phone.VideoDetailsFragment;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -245,31 +246,27 @@ public class VideoDetailsActivity extends AbstractBasePhoneActivity implements H
     void onButtonFabPlay() {
         Log.d( TAG, "onButtonFabPlay : enter" );
 
-        if( null == this.videoMetadataInfoModel.getLiveStreamInfo() || this.videoMetadataInfoModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
-            Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
+        if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
+            Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
 
-            String filename = "";
-            try {
-
-                filename = URLEncoder.encode( videoMetadataInfoModel.getFileName(), "UTF-8" );
-
-            } catch( UnsupportedEncodingException e ) { }
-
-            String videoUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + filename;
-            Log.d( TAG, "onPlayVideo : videoUrl=" + videoUrl );
-
-            navigator.navigateToExternalPlayer( this, videoUrl );
+            navigator.navigateToLocalPlayer( this, MediaInfoHelper.transform( getMasterBackendUrl(), videoMetadataInfoModel ) );
 
         } else {
-            Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
+            Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
 
             try {
-                String videoUrl = getMasterBackendUrl() + URLEncoder.encode( videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8" );
-                videoUrl = videoUrl.replaceAll( "%2F", "/" );
-                videoUrl = videoUrl.replaceAll( "\\+", "%20" );
 
-//                navigator.navigateToInternalPlayer( this, videoUrl, null, PlayerActivity.TYPE_HLS );
-                navigator.navigateToVideoPlayer( this, videoUrl );
+                if( null != videoMetadataInfoModel.getLiveStreamInfo() && videoMetadataInfoModel.getLiveStreamInfo().getPercentComplete() > 2 ) {
+
+                    String videoUrl = MediaInfoHelper.buildUrl( getMasterBackendUrl(), videoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl() );
+                    navigator.navigateToExternalPlayer( this, videoUrl );
+
+                } else {
+
+                    String videoUrl = getMasterBackendUrl() + "/Content/GetFile?FileName=" + videoMetadataInfoModel.getFileName();
+                    navigator.navigateToExternalPlayer( this, videoUrl );
+
+                }
 
             } catch( UnsupportedEncodingException e ) { }
 

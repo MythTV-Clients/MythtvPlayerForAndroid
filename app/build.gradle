@@ -28,8 +28,12 @@ android {
     def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion "23.0.3"
+
+    adbOptions {
+        timeOutInMs 60000 // set timeout to 1 minute
+    }
 
     dexOptions {
 
@@ -41,7 +45,7 @@ android {
     defaultConfig {
 
         minSdkVersion 17
-        targetSdkVersion 23
+        targetSdkVersion 24
 
         multiDexEnabled true
 
@@ -54,6 +58,19 @@ android {
         resValue "string", "shaName", applicationSHA1
         resValue "string", "tagName", applicationTag
         resValue "string", "versionName", versionName
+
+        if( project.hasProperty( "mythtvplayer.google-cast" )
+                && new File( project.property( "mythtvplayer.google-cast" ) + ".gradle" ).exists() ) {
+
+            resValue "string", "app_id", "$rootProject.ext.googleCastAppId"
+
+        } else {
+
+            resValue "string", "app_id", "B5FDDDFA"
+
+        }
+
+
 
     }
 
@@ -192,6 +209,8 @@ dependencies {
     compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2"
     compile "com.android.support:support-annotations:${androidSupportVersion}"
     compile "com.android.support:preference-v14:${androidSupportVersion}"
+    compile "com.android.support:mediarouter-v7:${androidSupportVersion}"
+    compile "com.google.android.gms:play-services-cast-framework:${playServicesVersion}"
     compile "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     compile "joda-time:joda-time:${jodaVersion}"
     compile "com.google.code.gson:gson:${gsonVersion}"
@@ -199,6 +218,7 @@ dependencies {
     compile "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
     compile "xyz.danoz:recyclerviewfastscroller:${recyclerviewfastscrollerVersion}"
     compile "com.android.support:multidex:${multidexVersion}"
+    compile "com.googlecode.android-query:android-query:${androidQueryVersion}"
     compile "com.google.firebase:firebase-core:$rootProject.ext.firebaseVersion"
     compile "com.google.firebase:firebase-crash:$rootProject.ext.firebaseVersion"
 

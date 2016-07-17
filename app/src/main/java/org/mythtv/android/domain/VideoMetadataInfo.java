@@ -62,4 +62,6 @@ public class VideoMetadataInfo {
     private Artwork artwork;
     private Cast cast;
 
+    private LiveStreamInfo liveStreamInfo;
+
 }
