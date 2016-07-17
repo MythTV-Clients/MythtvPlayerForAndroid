@@ -29,7 +29,7 @@ android {
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
     compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "24.0.0"
 
     adbOptions {
         timeOutInMs 60000 // set timeout to 1 minute
@@ -50,8 +50,8 @@ android {
         multiDexEnabled true
 
         applicationId 'org.mythtv.android'
-        versionCode 1714211
-        versionName "2.1.1"
+        versionCode 1714220
+        versionName "2.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         resValue "string", "branchName", applicationBranch
