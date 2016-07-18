@@ -19,10 +19,9 @@
 
 <fragment
     android:id="@+id/fragment"
-    android:name="org.mythtv.android.view.fragment.tv.RecordingDetailsFragment"
+    android:name="org.mythtv.android.presentation.view.fragment.tv.RecordingDetailsFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activity.RecordingsActivity"
     tools:deviceIds="tv"/>

@@ -1,0 +1,6 @@
+1714220
+=============
+- Added Chromecast playback support
+- Added optional Firebase Analytics
+- Crash reports are now reporting directly to Firebase Crash
+- Externalized Articles for internalization support to provide better sorting

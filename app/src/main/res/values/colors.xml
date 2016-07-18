@@ -29,4 +29,25 @@
     <color name="primary_light">#CFD8DC</color>
     <color name="accent">#03A9F4</color>
 
+    <color name="soft_opaque">#30000000</color>
+    <color name="img_soft_opaque">#30FF0000</color>
+    <color name="img_full_opaque">#00000000</color>
+    <color name="black_opaque">#AA000000</color>
+    <color name="black">#000000</color>
+    <color name="orange_transparent">#AAFADCA7</color>
+    <color name="orange">#FADCA7</color>
+    <color name="casting_media_control_bg">#2c393d</color>
+    <color name="yellow">#EEFF41</color>
+    <color name="mr_custom_title">#EEFF41</color>
+    <color name="actionbar">#506a7d</color>
+
+    <color name="pressed_democast">#CC33B5E5</color>
+
+    <!-- Expanded Controls -->
+    <color name="cast_activity_progress_text_color">#E5FFFFFF</color>
+    <color name="cast_activity_line1_text_color">#E5FFFFFF</color>
+    <color name="cast_activity_line2_text_color">#E5AAAAAA</color>
+    <color name="cast_activity_background_color">#4D000000</color>
+    <color name="cast_activity_text_color">#FFFFFF</color>
+
 </resources>

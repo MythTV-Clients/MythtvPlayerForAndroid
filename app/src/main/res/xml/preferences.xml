@@ -103,7 +103,7 @@
 
             <intent
                 android:targetPackage="org.mythtv.android"
-                android:targetClass="org.mythtv.android.view.activity.phone.RecordingSettingsActivity" />
+                android:targetClass="org.mythtv.android.presentation.view.activity.phone.RecordingSettingsActivity" />
 
         </PreferenceScreen>
 
@@ -119,7 +119,7 @@
 
             <intent
                 android:targetPackage="org.mythtv.android"
-                android:targetClass="org.mythtv.android.view.activity.phone.VideoSettingsActivity" />
+                android:targetClass="org.mythtv.android.presentation.view.activity.phone.VideoSettingsActivity" />
 
         </PreferenceScreen>
 
@@ -147,6 +147,19 @@
             android:entries="@array/pref_timeout_entries"
             android:entryValues="@array/pref_timeout_values"
             android:defaultValue="@string/pref_connect_timeout_default" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_enable_analytics_label"
+        android:key="pref_enable_analytics">
+
+        <CheckBoxPreference
+            android:title="@string/pref_enable_analytics_title"
+            android:key="enable_analytics"
+            android:defaultValue="false"
+            android:summaryOn="@string/pref_enable_analytics_summary_on"
+            android:summaryOff="@string/pref_enable_analytics_summary_off" />
 
     </PreferenceCategory>
 
