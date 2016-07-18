@@ -137,17 +137,22 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
 
         }
 
-        SpeechRecognitionCallback mSpeechRecognitionCallback = new SpeechRecognitionCallback() {
+        if( isRealAndroidTvDevice( this ) ) {
 
-            @Override
-            public void recognizeSpeech() {
+            SpeechRecognitionCallback mSpeechRecognitionCallback = new SpeechRecognitionCallback() {
 
-                startActivityForResult( mSearchableFragment.getRecognizerIntent(), REQUEST_SPEECH );
+                @Override
+                public void recognizeSpeech() {
 
-            }
+                    startActivityForResult(mSearchableFragment.getRecognizerIntent(), REQUEST_SPEECH);
 
-        };
-        mSearchableFragment.setSpeechRecognitionCallback( mSpeechRecognitionCallback );
+                }
+
+            };
+
+            mSearchableFragment.setSpeechRecognitionCallback( mSpeechRecognitionCallback );
+
+        }
 
         Log.d( TAG, "initializeActivity : exit" );
     }
