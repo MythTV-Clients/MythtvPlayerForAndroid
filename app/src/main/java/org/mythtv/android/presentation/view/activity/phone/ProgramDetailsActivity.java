@@ -31,6 +31,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.google.android.gms.cast.framework.CastSession;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
@@ -43,6 +45,7 @@ import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.utils.MediaInfoHelper;
 import org.mythtv.android.presentation.view.fragment.phone.CastErrorDialogFragment;
+import org.mythtv.android.presentation.view.fragment.phone.LocalErrorDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.ProgramDetailsFragment;
 
 import java.io.UnsupportedEncodingException;
@@ -271,9 +274,20 @@ public class ProgramDetailsActivity extends AbstractBasePhoneActivity implements
 
             } else {
 
-                FragmentManager fm = getSupportFragmentManager();
-                CastErrorDialogFragment fragment = new CastErrorDialogFragment();
-                fragment.show( fm, "Cast Error Dialog Fragment" );
+                CastSession castSession = mCastContext.getSessionManager().getCurrentCastSession();
+                if( null != castSession && castSession.isConnected() ) {
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    CastErrorDialogFragment fragment = new CastErrorDialogFragment();
+                    fragment.show( fm, "Cast Error Dialog Fragment" );
+
+                } else {
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    LocalErrorDialogFragment fragment = new LocalErrorDialogFragment();
+                    fragment.show( fm, "Playback Error Dialog Fragment" );
+
+                }
 
             }
 
@@ -282,14 +296,14 @@ public class ProgramDetailsActivity extends AbstractBasePhoneActivity implements
 
             try {
 
-                if( programModel.getFileName().endsWith( "mp4" ) ) {
-
-                    String recordingUrl = getMasterBackendUrl() + "/Content/GetFile?FileName=" + URLEncoder.encode( programModel.getFileName(), "UTF-8" );
-                    navigator.navigateToExternalPlayer( this, recordingUrl );
-
-                } else if( null != programModel.getLiveStreamInfo() && programModel.getLiveStreamInfo().getPercentComplete() > 2 ) {
+                if( null != programModel.getLiveStreamInfo() && programModel.getLiveStreamInfo().getPercentComplete() > 2 ) {
 
                     String recordingUrl = MediaInfoHelper.buildUrl( getMasterBackendUrl(), programModel.getLiveStreamInfo().getRelativeUrl() );
+                    navigator.navigateToExternalPlayer( this, recordingUrl );
+
+                } else {
+
+                    String recordingUrl = getMasterBackendUrl() + "/Content/GetFile?FileName=" + URLEncoder.encode( programModel.getFileName(), "UTF-8" );
                     navigator.navigateToExternalPlayer( this, recordingUrl );
 
                 }

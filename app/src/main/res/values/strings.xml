@@ -206,6 +206,7 @@
     <!-- Introductory Overlay text -->
     <string name="intro_overlay_text">Touch to cast videos to your TV</string>
     <string name="castErrorLabel">This item can not be displayed on a Google Cast device.</string>
+    <string name="playbackErrorLabel">This recording can not be played with the Internal Player. Please consider using an External Player, such as VLC for Android, or transcoding the recording to HLS or MP4.</string>
     <string name="ok">OK</string>
     <string name="error">Error</string>
 

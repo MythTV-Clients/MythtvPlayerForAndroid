@@ -263,7 +263,7 @@ public class VideoDetailsActivity extends AbstractBasePhoneActivity implements H
 
                 } else {
 
-                    String videoUrl = getMasterBackendUrl() + "/Content/GetFile?FileName=" + videoMetadataInfoModel.getFileName();
+                    String videoUrl = MediaInfoHelper.buildUrl( getMasterBackendUrl() + "/Content/GetFile?FileName=", videoMetadataInfoModel.getFileName() );
                     navigator.navigateToExternalPlayer( this, videoUrl );
 
                 }
