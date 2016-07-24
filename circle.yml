@@ -49,7 +49,7 @@ test:
 
   override:
     - git checkout app/google-services.json
-    - ./gradlew testDevDebugUnitTest coveralls -PdisablePreDex --console=plain --info  # connectedDevDebugAndroidTest
+    - ./gradlew testDevDebugUnitTest -PdisablePreDex --console=plain --info  # connectedDevDebugAndroidTest
 
   post:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
