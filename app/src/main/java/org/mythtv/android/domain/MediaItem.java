@@ -1,5 +1,7 @@
 package org.mythtv.android.domain;
 
+import org.joda.time.DateTime;
+
 import lombok.Data;
 
 /**
@@ -13,11 +15,19 @@ public class MediaItem {
         PROGRAM, VIDEO
     }
 
+    public enum Artwork {
+        coverart, fanart, banner
+    }
+
     private int id;
     private Media media;
     private String title;
     private String subTitle;
-    private String studio;
+    private String description;
+    private DateTime startDate;
+    private String season;
+    private String episode;
+    private String studio; // video = studio, recording = channel
     private String url;
     private String contentType;
     private long duration;
