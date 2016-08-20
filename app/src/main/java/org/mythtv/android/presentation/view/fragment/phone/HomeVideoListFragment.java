@@ -43,8 +43,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -56,11 +57,13 @@ public class HomeVideoListFragment extends AbstractBaseVideoPagerFragment implem
     @Inject
     HomeVideoListPresenter homeVideoListPresenter;
 
-    @Bind( R.id.rv_videoMetadataInfos )
+    @BindView( R.id.rv_videoMetadataInfos )
     RecyclerView rv_videoMetadataInfos;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private VideosAdapter videoMetadataInfosAdapter;
 
@@ -90,6 +93,8 @@ public class HomeVideoListFragment extends AbstractBaseVideoPagerFragment implem
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_video_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -142,7 +147,7 @@ public class HomeVideoListFragment extends AbstractBaseVideoPagerFragment implem
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }

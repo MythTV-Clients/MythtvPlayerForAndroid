@@ -36,8 +36,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.mythtv.android.R;
-import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.VideoDetailsView;
+import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.phone.VideoDetailsPresenter;
@@ -45,8 +45,9 @@ import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -69,29 +70,31 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
     @Inject
     VideoDetailsPresenter presenter;
 
-    @Bind( R.id.video_coverart )
+    @BindView( R.id.video_coverart )
     AutoLoadImageView iv_coverart;
 
-    @Bind( R.id.video_show_name )
+    @BindView( R.id.video_show_name )
     TextView tv_showname;
 
-    @Bind( R.id.video_episode_name )
+    @BindView( R.id.video_episode_name )
     TextView tv_episodename;
 
-    @Bind( R.id.video_progress )
+    @BindView( R.id.video_progress )
     ProgressBar pb_progress;
 
-    @Bind( R.id.video_description )
+    @BindView( R.id.video_description )
     TextView tv_description;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
 
-    @Bind( R.id.watched_switch )
+    @BindView( R.id.watched_switch )
     SwitchCompat watched;
 
-    @Bind( R.id.hsl_stream_switch )
+    @BindView( R.id.hsl_stream_switch )
     SwitchCompat hls_stream;
+
+    private Unbinder unbinder;
 
     public VideoDetailsFragment() { super(); }
 
@@ -106,6 +109,7 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_video_details, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
 
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
@@ -160,7 +164,7 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }

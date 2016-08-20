@@ -20,12 +20,12 @@ package org.mythtv.android.domain;
 
 import java.util.List;
 
-import lombok.Data;
+//import lombok.Data;
 
 /*
  * Created by dmfrey on 11/12/14.
  */
-@Data
+//@Data
 public class ChannelInfo {
 
     private int chanId;
@@ -50,4 +50,225 @@ public class ChannelInfo {
     private String defaultAuth;
     private List<Program> programs;
 
+    public ChannelInfo() {
+    }
+
+    public ChannelInfo(int chanId, String chanNum, String callSign, String iconURL, String channelName, int mplexId, int serviceId, int aTSCMajorChan, int aTSCMinorChan, String format, String frequencyId, int fineTune, String chanFilters, int sourceId, int inputId, boolean commFree, boolean useEIT, boolean visible, String xMLTVID, String defaultAuth, List<Program> programs) {
+        this.chanId = chanId;
+        this.chanNum = chanNum;
+        this.callSign = callSign;
+        this.iconURL = iconURL;
+        this.channelName = channelName;
+        this.mplexId = mplexId;
+        this.serviceId = serviceId;
+        this.aTSCMajorChan = aTSCMajorChan;
+        this.aTSCMinorChan = aTSCMinorChan;
+        this.format = format;
+        this.frequencyId = frequencyId;
+        this.fineTune = fineTune;
+        this.chanFilters = chanFilters;
+        this.sourceId = sourceId;
+        this.inputId = inputId;
+        this.commFree = commFree;
+        this.useEIT = useEIT;
+        this.visible = visible;
+        this.xMLTVID = xMLTVID;
+        this.defaultAuth = defaultAuth;
+        this.programs = programs;
+    }
+
+    public int getChanId() {
+        return chanId;
+    }
+
+    public void setChanId(int chanId) {
+        this.chanId = chanId;
+    }
+
+    public String getChanNum() {
+        return chanNum;
+    }
+
+    public void setChanNum(String chanNum) {
+        this.chanNum = chanNum;
+    }
+
+    public String getCallSign() {
+        return callSign;
+    }
+
+    public void setCallSign(String callSign) {
+        this.callSign = callSign;
+    }
+
+    public String getIconURL() {
+        return iconURL;
+    }
+
+    public void setIconURL(String iconURL) {
+        this.iconURL = iconURL;
+    }
+
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
+    public int getMplexId() {
+        return mplexId;
+    }
+
+    public void setMplexId(int mplexId) {
+        this.mplexId = mplexId;
+    }
+
+    public int getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(int serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public int getATSCMajorChan() {
+        return aTSCMajorChan;
+    }
+
+    public void setATSCMajorChan(int aTSCMajorChan) {
+        this.aTSCMajorChan = aTSCMajorChan;
+    }
+
+    public int getATSCMinorChan() {
+        return aTSCMinorChan;
+    }
+
+    public void setATSCMinorChan(int aTSCMinorChan) {
+        this.aTSCMinorChan = aTSCMinorChan;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public String getFrequencyId() {
+        return frequencyId;
+    }
+
+    public void setFrequencyId(String frequencyId) {
+        this.frequencyId = frequencyId;
+    }
+
+    public int getFineTune() {
+        return fineTune;
+    }
+
+    public void setFineTune(int fineTune) {
+        this.fineTune = fineTune;
+    }
+
+    public String getChanFilters() {
+        return chanFilters;
+    }
+
+    public void setChanFilters(String chanFilters) {
+        this.chanFilters = chanFilters;
+    }
+
+    public int getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(int sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    public int getInputId() {
+        return inputId;
+    }
+
+    public void setInputId(int inputId) {
+        this.inputId = inputId;
+    }
+
+    public boolean isCommFree() {
+        return commFree;
+    }
+
+    public void setCommFree(boolean commFree) {
+        this.commFree = commFree;
+    }
+
+    public boolean isUseEIT() {
+        return useEIT;
+    }
+
+    public void setUseEIT(boolean useEIT) {
+        this.useEIT = useEIT;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public String getXMLTVID() {
+        return xMLTVID;
+    }
+
+    public void setXMLTVID(String xMLTVID) {
+        this.xMLTVID = xMLTVID;
+    }
+
+    public String getDefaultAuth() {
+        return defaultAuth;
+    }
+
+    public void setDefaultAuth(String defaultAuth) {
+        this.defaultAuth = defaultAuth;
+    }
+
+    public List<Program> getPrograms() {
+        return programs;
+    }
+
+    public void setPrograms(List<Program> programs) {
+        this.programs = programs;
+    }
+
+    @Override
+    public String toString() {
+        return "ChannelInfo{" +
+                "chanId=" + chanId +
+                ", chanNum='" + chanNum + '\'' +
+                ", callSign='" + callSign + '\'' +
+                ", iconURL='" + iconURL + '\'' +
+                ", channelName='" + channelName + '\'' +
+                ", mplexId=" + mplexId +
+                ", serviceId=" + serviceId +
+                ", aTSCMajorChan=" + aTSCMajorChan +
+                ", aTSCMinorChan=" + aTSCMinorChan +
+                ", format='" + format + '\'' +
+                ", frequencyId='" + frequencyId + '\'' +
+                ", fineTune=" + fineTune +
+                ", chanFilters='" + chanFilters + '\'' +
+                ", sourceId=" + sourceId +
+                ", inputId=" + inputId +
+                ", commFree=" + commFree +
+                ", useEIT=" + useEIT +
+                ", visible=" + visible +
+                ", xMLTVID='" + xMLTVID + '\'' +
+                ", defaultAuth='" + defaultAuth + '\'' +
+                ", programs=" + programs +
+                '}';
+    }
 }

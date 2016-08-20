@@ -41,8 +41,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 /**
@@ -64,14 +65,16 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
     @Inject
     TitleInfoListPresenter titleInfoListPresenter;
 
-    @Bind( R.id.rv_titleInfos )
+    @BindView( R.id.rv_titleInfos )
     RecyclerView rv_titleInfos;
 
-    @Bind( R.id.fast_scroller )
+    @BindView( R.id.fast_scroller )
     VerticalRecyclerViewFastScroller fastScroller;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private TitleInfosAdapter titleInfosAdapter;
 
@@ -102,6 +105,8 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_title_info_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         fastScroller.setRecyclerView( rv_titleInfos );
@@ -157,7 +162,7 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }

@@ -42,7 +42,7 @@ import org.mythtv.android.presentation.view.fragment.phone.VideoDetailsFragment;
 
 import java.io.UnsupportedEncodingException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -61,10 +61,10 @@ public class VideoDetailsActivity extends AbstractBasePhoneActivity implements H
 
     private VideoMetadataInfoModel videoMetadataInfoModel;
 
-    @Bind( R.id.backdrop )
+    @BindView( R.id.backdrop )
     ImageView backdrop;
 
-    @Bind( R.id.fab )
+    @BindView( R.id.fab )
     FloatingActionButton fab;
 
     public static Intent getCallingIntent( Context context, int id ) {

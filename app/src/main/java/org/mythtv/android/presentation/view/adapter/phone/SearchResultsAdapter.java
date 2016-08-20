@@ -31,9 +31,9 @@ import android.widget.TextView;
 
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
+import org.mythtv.android.R;
 import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.domain.SettingsKeys;
-import org.mythtv.android.R;
 import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
@@ -41,7 +41,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -158,25 +158,25 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
     static class SearchResultViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.search_result_item_preview )
+        @BindView( R.id.search_result_item_preview )
         AutoLoadImageView imageViewPreview;
 
-        @Bind( R.id.search_result_item_title )
+        @BindView( R.id.search_result_item_title )
         TextView textViewTitle;
 
-        @Bind( R.id.search_result_item_sub_title )
+        @BindView( R.id.search_result_item_sub_title )
         TextView textViewSubTitle;
 
-        @Bind( R.id.search_result_item_date )
+        @BindView( R.id.search_result_item_date )
         TextView textViewDate;
 
-        @Bind( R.id.search_result_item_progress )
+        @BindView( R.id.search_result_item_progress )
         ProgressBar progressBarProgress;
 
-        @Bind( R.id.search_result_item_episode )
+        @BindView( R.id.search_result_item_episode )
         TextView textViewEpisode;
 
-        @Bind( R.id.search_result_item_stream_ready )
+        @BindView( R.id.search_result_item_stream_ready )
         TextView textViewStreamReady;
 
         public SearchResultViewHolder( View itemView ) {

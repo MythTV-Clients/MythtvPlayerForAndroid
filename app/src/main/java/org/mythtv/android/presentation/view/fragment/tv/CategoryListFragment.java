@@ -40,8 +40,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 1/28/16.
@@ -62,8 +63,10 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
     @Inject
     TvCategoryListPresenter tvCategoryListPresenter;
 
-    @Bind( R.id.rv_tv_categories )
+    @BindView( R.id.rv_tv_categories )
     RecyclerView rv_tv_categories;
+
+    private Unbinder unbinder;
 
     private CategoriesAdapter tvCategoryAdapter;
 
@@ -96,6 +99,8 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
 
         View fragmentView = inflater.inflate( R.layout.tv_fragment_category_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -148,7 +153,7 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }

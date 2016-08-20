@@ -38,7 +38,7 @@ import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 import java.util.Collection;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -158,13 +158,13 @@ public class VideoSeriesAdapter extends RecyclerView.Adapter<VideoSeriesAdapter.
 
     static class VideoSeriesViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.video_series_item_banner )
+        @BindView( R.id.video_series_item_banner )
         AutoLoadImageView imageViewBanner;
 
-        @Bind( R.id.video_series_item_episode_title )
+        @BindView( R.id.video_series_item_episode_title )
         TextView textViewEpisodeTitle;
 
-        @Bind( R.id.video_series_item_episode )
+        @BindView( R.id.video_series_item_episode )
         TextView textViewEpisode;
 
         public VideoSeriesViewHolder( View itemView ) {

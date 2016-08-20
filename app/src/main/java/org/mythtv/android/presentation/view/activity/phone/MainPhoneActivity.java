@@ -42,7 +42,7 @@ import org.mythtv.android.presentation.view.fragment.phone.UpcomingListFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -61,13 +61,13 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     private DvrComponent dvrComponent;
 
-    @Bind( R.id.tabs )
+    @BindView( R.id.tabs )
     TabLayout mTabLayout;
 
-    @Bind( R.id.pager )
+    @BindView( R.id.pager )
     ViewPager mPager;
 
-    @Bind( R.id.fab )
+    @BindView( R.id.fab )
     FloatingActionButton mFab;
 
     private MainFragmentPagerAdapter mPagerAdapter;
@@ -90,6 +90,7 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
         mPagerAdapter = new MainFragmentPagerAdapter( getSupportFragmentManager() );
 
+//        mTabLayout = (TabLayout) findViewById( R.id.tabs );
         mTabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
         mPager.setAdapter( mPagerAdapter );
         mPager.setOffscreenPageLimit( 1 );

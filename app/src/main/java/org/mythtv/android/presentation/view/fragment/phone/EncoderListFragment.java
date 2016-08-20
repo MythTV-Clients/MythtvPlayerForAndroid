@@ -40,8 +40,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 1/20/16.
@@ -53,11 +54,13 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     @Inject
     EncoderListPresenter encoderListPresenter;
 
-    @Bind( R.id.rv_encoders )
+    @BindView( R.id.rv_encoders )
     RecyclerView rv_encoders;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private EncodersAdapter encodersAdapter;
 
@@ -76,6 +79,8 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_encoder_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -128,7 +133,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }

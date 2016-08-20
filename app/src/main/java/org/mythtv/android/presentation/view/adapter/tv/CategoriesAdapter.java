@@ -33,7 +33,7 @@ import org.mythtv.android.presentation.model.TvCategoryModel;
 import java.util.Collection;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -144,10 +144,10 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 
     static class TvCategoryViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.tv_item_category )
+        @BindView( R.id.tv_item_category )
         ImageView imageViewCategory;
 
-        @Bind( R.id.tv_item_title )
+        @BindView( R.id.tv_item_title )
         TextView textViewTitle;
 
         public TvCategoryViewHolder( View itemView ) {

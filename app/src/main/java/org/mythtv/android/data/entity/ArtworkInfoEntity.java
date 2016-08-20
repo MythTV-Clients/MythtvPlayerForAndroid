@@ -20,12 +20,12 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Data;
+//import lombok.Data;
 
 /*
  * Created by dmfrey on 11/12/14.
  */
-@Data
+//@Data
 public class ArtworkInfoEntity {
 
     @SerializedName( "URL" )
@@ -39,5 +39,71 @@ public class ArtworkInfoEntity {
 
     @SerializedName( "Type" )
     private String type;
+
+    public ArtworkInfoEntity() {
+    }
+
+    public ArtworkInfoEntity(String url, String fileName, String storageGroup, String type ) {
+
+        this.url = url;
+        this.fileName = fileName;
+        this.storageGroup = storageGroup;
+        this.type = type;
+
+    }
+
+    public String getUrl() {
+
+        return url;
+    }
+
+    public void setUrl( String url ) {
+
+        this.url = url;
+
+    }
+
+    public String getFileName() {
+
+        return fileName;
+    }
+
+    public void setFileName( String fileName ) {
+
+        this.fileName = fileName;
+
+    }
+
+    public String getStorageGroup() {
+
+        return storageGroup;
+    }
+
+    public void setStorageGroup( String storageGroup ) {
+
+        this.storageGroup = storageGroup;
+
+    }
+
+    public String getType() {
+
+        return type;
+    }
+
+    public void setType( String type ) {
+
+        this.type = type;
+
+    }
+
+    @Override
+    public String toString() {
+        return "ArtworkInfoEntity{" +
+                "url='" + url + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", storageGroup='" + storageGroup + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 
 }

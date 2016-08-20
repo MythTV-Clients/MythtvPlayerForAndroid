@@ -18,14 +18,11 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -37,35 +34,34 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastState;
 import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
-
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.NetComponent;
 import org.mythtv.android.presentation.internal.di.components.SharedPreferencesComponent;
+import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.navigation.PhoneNavigator;
 import org.mythtv.android.presentation.view.fragment.phone.AboutDialogFragment;
-import org.mythtv.android.domain.SettingsKeys;
-import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -87,10 +83,10 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     @Inject
     PhoneNavigator navigator;
 
-    @Nullable @Bind( R.id.navigation_view ) protected NavigationView navigationView;
-    @Nullable @Bind( R.id.toolbar ) protected Toolbar toolbar;
+    @Nullable @BindView( R.id.navigation_view ) protected NavigationView navigationView;
+    @Nullable @BindView( R.id.toolbar ) protected Toolbar toolbar;
 
-    @Nullable @Bind( R.id.drawer_layout ) protected DrawerLayout drawerLayout;
+    @Nullable @BindView( R.id.drawer_layout ) protected DrawerLayout drawerLayout;
 
     protected FirebaseAnalytics mFirebaseAnalytics;
 

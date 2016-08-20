@@ -20,12 +20,14 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Data;
+import java.util.Arrays;
+
+//import lombok.Data;
 
 /**
  * Created by dmfrey on 1/18/16.
  */
-@Data
+//@Data
 public class EncoderEntity {
 
     @SerializedName( "Id" )
@@ -54,5 +56,123 @@ public class EncoderEntity {
 
     @SerializedName( "Recording" )
     private ProgramEntity recording;
+
+    public EncoderEntity() {
+    }
+
+    public EncoderEntity(int id, String hostname, boolean local, boolean connected, int state, int sleepStatus, boolean lowOnFreeSpace, InputEntity[] inputs, ProgramEntity recording) {
+        this.id = id;
+        this.hostname = hostname;
+        this.local = local;
+        this.connected = connected;
+        this.state = state;
+        this.sleepStatus = sleepStatus;
+        this.lowOnFreeSpace = lowOnFreeSpace;
+        this.inputs = inputs;
+        this.recording = recording;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+    public boolean isLocal() {
+        return local;
+    }
+
+    public void setLocal(boolean local) {
+        this.local = local;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getSleepStatus() {
+        return sleepStatus;
+    }
+
+    public void setSleepStatus(int sleepStatus) {
+        this.sleepStatus = sleepStatus;
+    }
+
+    public boolean isLowOnFreeSpace() {
+        return lowOnFreeSpace;
+    }
+
+    public void setLowOnFreeSpace(boolean lowOnFreeSpace) {
+        this.lowOnFreeSpace = lowOnFreeSpace;
+    }
+
+    public InputEntity[] getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(InputEntity[] inputs) {
+        this.inputs = inputs;
+    }
+
+    public ProgramEntity getRecording() {
+        return recording;
+    }
+
+    public void setRecording(ProgramEntity recording) {
+        this.recording = recording;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EncoderEntity that = (EncoderEntity) o;
+
+        return id == that.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "EncoderEntity{" +
+                "id=" + id +
+                ", hostname='" + hostname + '\'' +
+                ", local=" + local +
+                ", connected=" + connected +
+                ", state=" + state +
+                ", sleepStatus=" + sleepStatus +
+                ", lowOnFreeSpace=" + lowOnFreeSpace +
+                ", inputs=" + Arrays.toString(inputs) +
+                ", recording=" + recording +
+                '}';
+    }
 
 }

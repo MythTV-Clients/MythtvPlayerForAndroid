@@ -41,8 +41,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -63,11 +64,13 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
     @Inject
     ProgramListPresenter programListPresenter;
 
-    @Bind( R.id.rv_programs )
+    @BindView( R.id.rv_programs )
     RecyclerView rv_programs;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private ProgramsAdapter programsAdapter;
 
@@ -98,6 +101,8 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_program_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -150,7 +155,7 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }
