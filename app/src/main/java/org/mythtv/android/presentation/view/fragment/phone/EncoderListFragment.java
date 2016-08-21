@@ -219,16 +219,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                EncoderListFragment.this.loadEncoderList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> EncoderListFragment.this.loadEncoderList());
 
         Log.d( TAG, "showError : exit" );
     }

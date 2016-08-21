@@ -108,17 +108,12 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
         }
 
-        holder.itemView.setOnClickListener( new View.OnClickListener() {
+        holder.itemView.setOnClickListener(v -> {
 
-            @Override
-            public void onClick( View v ) {
+            if( null != ProgramsAdapter.this.onItemClickListener ) {
+                Log.i( TAG, "onClick : program" + programModel.toString() );
 
-                if( null != ProgramsAdapter.this.onItemClickListener ) {
-                    Log.i( TAG, "onClick : program" + programModel.toString() );
-
-                    ProgramsAdapter.this.onItemClickListener.onProgramItemClicked( programModel );
-
-                }
+                ProgramsAdapter.this.onItemClickListener.onProgramItemClicked( programModel );
 
             }
 

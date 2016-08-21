@@ -43,34 +43,32 @@ public class Utils {
     /**
      * Returns the screen/display size
      */
-    public static Point getDisplaySize(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    public static Point getDisplaySize( Context context ) {
+
+        WindowManager wm = (WindowManager) context.getSystemService( Context.WINDOW_SERVICE );
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
-        display.getSize(size);
+        display.getSize( size );
+
         return size;
     }
 
     /**
      * Returns {@code true} if and only if the screen orientation is portrait.
      */
-    public static boolean isOrientationPortrait(Context context) {
-        return context.getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_PORTRAIT;
+    public static boolean isOrientationPortrait( Context context ) {
+
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
     /**
      * Shows an error dialog with a given text message.
      */
-    public static void showErrorDialog(Context context, String errorString) {
-        new AlertDialog.Builder(context).setTitle(R.string.error)
-                .setMessage(errorString)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                })
+    public static void showErrorDialog( Context context, String errorString ) {
+
+        new AlertDialog.Builder( context ).setTitle( R.string.error )
+                .setMessage( errorString )
+                .setPositiveButton( R.string.ok, ( dialog, id ) -> dialog.cancel() )
                 .create()
                 .show();
     }
@@ -79,58 +77,68 @@ public class Utils {
     /**
      * Shows a (long) toast
      */
-    public static void showToast(Context context, String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    public static void showToast( Context context, String msg ) {
+
+        Toast.makeText( context, msg, Toast.LENGTH_LONG ).show();
+
     }
 
     /**
      * Shows a (long) toast.
      */
-    public static void showToast(Context context, int resourceId) {
-        Toast.makeText(context, context.getString(resourceId), Toast.LENGTH_LONG).show();
+    public static void showToast( Context context, int resourceId ) {
+
+        Toast.makeText( context, context.getString( resourceId ), Toast.LENGTH_LONG ).show();
+
     }
 
-    public static int convertDpToPixel(Context ctx, int dp) {
+    public static int convertDpToPixel( Context ctx, int dp ) {
+
         float density = ctx.getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
+
+        return Math.round( (float) dp * density );
     }
 
     /**
      * Formats time in milliseconds to hh:mm:ss string format.
      */
-    public static String formatMillis(int millis) {
+    public static String formatMillis( int millis ) {
+
         String result = "";
         int hr = millis / 3600000;
         millis %= 3600000;
         int min = millis / 60000;
         millis %= 60000;
         int sec = millis / 1000;
-        if (hr > 0) {
+        if( hr > 0 ) {
             result += hr + ":";
         }
-        if (min >= 0) {
-            if (min > 9) {
+        if( min >= 0 ) {
+            if( min > 9 ) {
                 result += min + ":";
             } else {
                 result += "0" + min + ":";
             }
         }
-        if (sec > 9) {
+        if( sec > 9 ) {
             result += sec;
         } else {
             result += "0" + sec;
         }
+
         return result;
     }
 
-    public static long getDuration(String videoUrl) {
+    public static long getDuration( String videoUrl ) {
+
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            mmr.setDataSource(videoUrl, new HashMap<String, String>());
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
+            mmr.setDataSource( videoUrl, new HashMap<>() );
         } else {
-            mmr.setDataSource(videoUrl);
+            mmr.setDataSource( videoUrl );
         }
-        return Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+
+        return Long.parseLong( mmr.extractMetadata( MediaMetadataRetriever.METADATA_KEY_DURATION ) );
     }
 
 }

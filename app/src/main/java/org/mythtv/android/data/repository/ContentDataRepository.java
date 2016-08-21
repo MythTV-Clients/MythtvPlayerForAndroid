@@ -92,7 +92,7 @@ public class ContentDataRepository implements ContentRepository {
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         return contentDataStore.liveStreamInfoEntityList( filename )
-                .map( liveStreamInfoEntities -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntities ) );
+                .map( model -> LiveStreamInfoEntityDataMapper.transform( model ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )

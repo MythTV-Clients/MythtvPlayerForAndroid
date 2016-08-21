@@ -90,51 +90,45 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
         mPagerAdapter = new MainFragmentPagerAdapter( getSupportFragmentManager() );
 
-//        mTabLayout = (TabLayout) findViewById( R.id.tabs );
         mTabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
         mPager.setAdapter( mPagerAdapter );
         mPager.setOffscreenPageLimit( 1 );
         mTabLayout.setupWithViewPager( mPager );
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
 
-        mFab.setOnClickListener( new View.OnClickListener() {
+        mFab.setOnClickListener( v -> {
 
-            @Override
-            public void onClick( View v ) {
+            switch( mPager.getCurrentItem() ) {
 
-                switch( mPager.getCurrentItem() ) {
+                case 0 :
 
-                    case 0 :
+                    if( null != mPagerAdapter.getItem( 0 ) ) {
 
-                        if( null != mPagerAdapter.getItem( 0 ) ) {
+                        ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
 
-                            ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
+                    }
 
-                        }
+                    break;
 
-                        break;
+                case 1 :
 
-                    case 1 :
+                    if( null != mPagerAdapter.getItem( 1 ) ) {
 
-                        if( null != mPagerAdapter.getItem( 1 ) ) {
+                        ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
 
-                            ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
+                    }
 
-                        }
+                    break;
 
-                        break;
+                case 2 :
 
-                    case 2 :
+                    if( null != mPagerAdapter.getItem( 2 ) ) {
 
-                        if( null != mPagerAdapter.getItem( 2 ) ) {
+                        ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
 
-                            ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
+                    }
 
-                        }
-
-                        break;
-
-                }
+                    break;
 
             }
 

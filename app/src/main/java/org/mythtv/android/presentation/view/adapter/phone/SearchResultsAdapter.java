@@ -109,17 +109,12 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
         }
 
-        holder.itemView.setOnClickListener( new View.OnClickListener() {
+        holder.itemView.setOnClickListener(v -> {
 
-            @Override
-            public void onClick( View v ) {
+            if( null != SearchResultsAdapter.this.onItemClickListener ) {
+                Log.i( TAG, "onClick : searchResult" + searchResultModel.toString() );
 
-                if( null != SearchResultsAdapter.this.onItemClickListener ) {
-                    Log.i( TAG, "onClick : searchResult" + searchResultModel.toString() );
-
-                    SearchResultsAdapter.this.onItemClickListener.onSearchResultItemClicked( searchResultModel );
-
-                }
+                SearchResultsAdapter.this.onItemClickListener.onSearchResultItemClicked( searchResultModel );
 
             }
 

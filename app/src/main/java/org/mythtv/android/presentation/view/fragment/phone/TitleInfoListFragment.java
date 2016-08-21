@@ -181,7 +181,7 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
 
         this.rv_titleInfos.setLayoutManager( new TitleInfosLayoutManager( getActivity() ) );
 
-        this.titleInfosAdapter = new TitleInfosAdapter( getActivity(), new ArrayList<TitleInfoModel>() );
+        this.titleInfosAdapter = new TitleInfosAdapter( getActivity(), new ArrayList<>() );
         this.titleInfosAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_titleInfos.setAdapter( titleInfosAdapter );
 
@@ -253,16 +253,7 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                TitleInfoListFragment.this.loadTitleInfoList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> TitleInfoListFragment.this.loadTitleInfoList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -295,18 +286,13 @@ public class TitleInfoListFragment extends AbstractBaseFragment implements Title
         Log.d( TAG, "loadTitleInfoList : exit" );
     }
 
-    private TitleInfosAdapter.OnItemClickListener onItemClickListener = new TitleInfosAdapter.OnItemClickListener() {
+    private TitleInfosAdapter.OnItemClickListener onItemClickListener = titleInfoModel -> {
 
-                @Override
-                public void onTitleInfoItemClicked( TitleInfoModel titleInfoModel ) {
+        if( null != TitleInfoListFragment.this.titleInfoListPresenter && null != titleInfoModel ) {
 
-                    if( null != TitleInfoListFragment.this.titleInfoListPresenter && null != titleInfoModel ) {
+            TitleInfoListFragment.this.titleInfoListPresenter.onTitleInfoClicked( titleInfoModel );
 
-                        TitleInfoListFragment.this.titleInfoListPresenter.onTitleInfoClicked( titleInfoModel );
-
-                    }
-
-                }
+        }
 
     };
 

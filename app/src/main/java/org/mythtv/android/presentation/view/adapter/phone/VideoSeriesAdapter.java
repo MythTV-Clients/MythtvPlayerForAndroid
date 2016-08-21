@@ -104,14 +104,11 @@ public class VideoSeriesAdapter extends RecyclerView.Adapter<VideoSeriesAdapter.
         }
         holder.textViewEpisodeTitle.setText( ( null != videoMetadataInfoModel.getSubTitle() ) ? videoMetadataInfoModel.getSubTitle() : videoMetadataInfoModel.getTitle() );
         holder.textViewEpisode.setText( SeasonEpisodeFormatter.format( videoMetadataInfoModel ) );
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( null != VideoSeriesAdapter.this.onItemClickListener ) {
+        holder.itemView.setOnClickListener(v -> {
+            if( null != VideoSeriesAdapter.this.onItemClickListener ) {
 
-                    VideoSeriesAdapter.this.onItemClickListener.onVideoMetadataInfoItemClicked( videoMetadataInfoModel );
+                VideoSeriesAdapter.this.onItemClickListener.onVideoMetadataInfoItemClicked( videoMetadataInfoModel );
 
-                }
             }
         });
 

@@ -112,12 +112,9 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
         }
 
-        mCastStateListener = new CastStateListener() {
-            @Override
-            public void onCastStateChanged(int newState) {
-                if (newState != CastState.NO_DEVICES_AVAILABLE) {
-                    showIntroductoryOverlay();
-                }
+        mCastStateListener = newState -> {
+            if( newState != CastState.NO_DEVICES_AVAILABLE ) {
+                showIntroductoryOverlay();
             }
         };
 
@@ -266,23 +263,15 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
             mIntroductoryOverlay.remove();
         }
         if ((mediaRouteMenuItem != null) && mediaRouteMenuItem.isVisible()) {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    mIntroductoryOverlay = new IntroductoryOverlay.Builder(
-                            AbstractBasePhoneActivity.this, mediaRouteMenuItem)
-                            .setTitleText("Introducing Cast")
-                            .setSingleTime()
-                            .setOnOverlayDismissedListener(
-                                    new IntroductoryOverlay.OnOverlayDismissedListener() {
-                                        @Override
-                                        public void onOverlayDismissed() {
-                                            mIntroductoryOverlay = null;
-                                        }
-                                    })
-                            .build();
-                    mIntroductoryOverlay.show();
-                }
+            new Handler().post(() -> {
+                mIntroductoryOverlay = new IntroductoryOverlay.Builder(
+                        AbstractBasePhoneActivity.this, mediaRouteMenuItem)
+                        .setTitleText("Introducing Cast")
+                        .setSingleTime()
+                        .setOnOverlayDismissedListener(
+                                () -> mIntroductoryOverlay = null)
+                        .build();
+                mIntroductoryOverlay.show();
             });
         }
     }

@@ -217,16 +217,7 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                RecentListFragment.this.loadRecentList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> RecentListFragment.this.loadRecentList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -259,17 +250,12 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
         Log.d( TAG, "loadRecentList : exit" );
     }
 
-    private ProgramsAdapter.OnItemClickListener onItemClickListener = new ProgramsAdapter.OnItemClickListener() {
+    private ProgramsAdapter.OnItemClickListener onItemClickListener = programModel -> {
 
-        @Override
-        public void onProgramItemClicked( ProgramModel programModel ) {
+        if( null != RecentListFragment.this.recentListPresenter && null != programModel ) {
+            Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
 
-            if( null != RecentListFragment.this.recentListPresenter && null != programModel ) {
-                Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
-
-                RecentListFragment.this.recentListPresenter.onProgramClicked( programModel );
-
-            }
+            RecentListFragment.this.recentListPresenter.onProgramClicked( programModel );
 
         }
 

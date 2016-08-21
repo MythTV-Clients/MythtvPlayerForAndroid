@@ -188,7 +188,7 @@ public class TelevisionSeriesListFragment extends AbstractBaseFragment implement
 
         this.rv_videoMetadataInfos.setLayoutManager( new VideosLayoutManager( getActivity() ) );
 
-        this.videoSeriesAdapter = new VideoSeriesAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
+        this.videoSeriesAdapter = new VideoSeriesAdapter( getActivity(), new ArrayList<>() );
         this.videoSeriesAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_videoMetadataInfos.setAdapter( videoSeriesAdapter );
 
@@ -260,16 +260,7 @@ public class TelevisionSeriesListFragment extends AbstractBaseFragment implement
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                TelevisionSeriesListFragment.this.loadTelevisionSeriesList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> TelevisionSeriesListFragment.this.loadTelevisionSeriesList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -306,18 +297,13 @@ public class TelevisionSeriesListFragment extends AbstractBaseFragment implement
         Log.d( TAG, "loadTelevisionSeriesList : exit" );
     }
 
-    private VideoSeriesAdapter.OnItemClickListener onItemClickListener = new VideoSeriesAdapter.OnItemClickListener() {
+    private VideoSeriesAdapter.OnItemClickListener onItemClickListener = model -> {
 
-                @Override
-                public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
+        if( null != TelevisionSeriesListFragment.this.televisionSeriesListPresenter && null != model ) {
 
-                    if( null != TelevisionSeriesListFragment.this.televisionSeriesListPresenter && null != videoMetadataInfoModel ) {
+            TelevisionSeriesListFragment.this.televisionSeriesListPresenter.onVideoClicked( model );
 
-                        TelevisionSeriesListFragment.this.televisionSeriesListPresenter.onVideoClicked( videoMetadataInfoModel );
-
-                    }
-
-                }
+        }
 
     };
 

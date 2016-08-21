@@ -168,7 +168,7 @@ public class MusicVideoListFragment extends AbstractBaseVideoPagerFragment imple
 
         this.rv_videoMetadataInfos.setLayoutManager( new VideosLayoutManager( getActivity() ) );
 
-        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
+        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<>() );
         this.videoMetadataInfosAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_videoMetadataInfos.setAdapter( videoMetadataInfosAdapter );
 
@@ -240,16 +240,7 @@ public class MusicVideoListFragment extends AbstractBaseVideoPagerFragment imple
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                MusicVideoListFragment.this.loadMovieList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> MusicVideoListFragment.this.loadMovieList());
 
 
         Log.d( TAG, "showError : exit" );
@@ -283,18 +274,13 @@ public class MusicVideoListFragment extends AbstractBaseVideoPagerFragment imple
         Log.d( TAG, "loadMovieList : exit" );
     }
 
-    private VideosAdapter.OnItemClickListener onItemClickListener = new VideosAdapter.OnItemClickListener() {
+    private VideosAdapter.OnItemClickListener onItemClickListener = model -> {
 
-                @Override
-                public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
+        if( null != MusicVideoListFragment.this.musicVideoListPresenter && null != model ) {
 
-                    if( null != MusicVideoListFragment.this.musicVideoListPresenter && null != videoMetadataInfoModel ) {
+            MusicVideoListFragment.this.musicVideoListPresenter.onVideoClicked(model);
 
-                        MusicVideoListFragment.this.musicVideoListPresenter.onVideoClicked(videoMetadataInfoModel);
-
-                    }
-
-                }
+        }
 
     };
 

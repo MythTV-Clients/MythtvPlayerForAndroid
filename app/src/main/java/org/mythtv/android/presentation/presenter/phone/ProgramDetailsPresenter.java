@@ -346,27 +346,22 @@ public class ProgramDetailsPresenter implements Presenter {
         Log.d( TAG, "getLiveStreamDetails : enter" );
 
         final DynamicUseCase useCase = this.getLiveStreamDetailsUseCase;
-        streamUpdates = new Thread( new Runnable() {
+        streamUpdates = new Thread( () -> {
+            Log.d( TAG, "getLiveStreamDetails.runnable : enter" );
 
-            @Override
-            public void run() {
-                Log.d( TAG, "getLiveStreamDetails.runnable : enter" );
+            try {
 
-                try {
+                Thread.sleep( 5000 );
 
-                    Thread.sleep( 5000 );
+                Map<String, Integer> parameters = Collections.singletonMap( "LIVE_STREAM_ID", liveStreamInfoModel.getId() );
 
-                    Map<String, Integer> parameters = Collections.singletonMap( "LIVE_STREAM_ID", liveStreamInfoModel.getId() );
+                useCase.execute( new LiveStreamSubscriber(), parameters );
 
-                    useCase.execute( new LiveStreamSubscriber(), parameters );
-
-                } catch( InterruptedException e ) {
-                    Log.e( TAG, "getLiveStreamDetails.runnable : error", e );
-                }
-
-                Log.d( TAG, "getLiveStreamDetails.runnable : exit" );
+            } catch( InterruptedException e ) {
+                Log.e( TAG, "getLiveStreamDetails.runnable : error", e );
             }
 
+            Log.d( TAG, "getLiveStreamDetails.runnable : exit" );
         });
         streamUpdates.start();
 

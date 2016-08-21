@@ -172,7 +172,7 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
 
         this.rv_tv_categories.setLayoutManager( new CategoriesLayoutManager( getActivity() ) );
 
-        this.tvCategoryAdapter = new CategoriesAdapter( getActivity(), new ArrayList<TvCategoryModel>() );
+        this.tvCategoryAdapter = new CategoriesAdapter( getActivity(), new ArrayList<>() );
         this.tvCategoryAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_tv_categories.setAdapter( tvCategoryAdapter );
 
@@ -269,16 +269,11 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
         Log.d( TAG, "loadTvCategoryList : exit" );
     }
 
-    private CategoriesAdapter.OnItemClickListener onItemClickListener = new CategoriesAdapter.OnItemClickListener() {
+    private CategoriesAdapter.OnItemClickListener onItemClickListener = tvCategoryModel -> {
 
-        @Override
-        public void onTvCategoryClicked( TvCategoryModel tvCategoryModel ) {
+        if( null != CategoryListFragment.this.tvCategoryListPresenter && null != tvCategoryModel ) {
 
-            if( null != CategoryListFragment.this.tvCategoryListPresenter && null != tvCategoryModel ) {
-
-                CategoryListFragment.this.tvCategoryListPresenter.onTvCategoryClicked( tvCategoryModel );
-
-            }
+            CategoryListFragment.this.tvCategoryListPresenter.onTvCategoryClicked( tvCategoryModel );
 
         }
 

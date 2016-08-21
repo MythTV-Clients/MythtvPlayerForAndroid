@@ -32,16 +32,7 @@ public class LocalErrorDialogFragment extends DialogFragment {
 
         builder
                 .setTitle( R.string.app_name )
-                .setPositiveButton( R.string.close, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick( DialogInterface dialog, int which ) {
-
-                        dialog.dismiss();
-
-                    }
-
-                })
+                .setPositiveButton( R.string.close, (dialog, which) -> dialog.dismiss())
                 .setView( dialogView );
 
         return builder.create();

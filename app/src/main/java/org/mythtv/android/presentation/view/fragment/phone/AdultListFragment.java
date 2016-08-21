@@ -168,7 +168,7 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
 
         this.rv_videoMetadataInfos.setLayoutManager( new VideosLayoutManager( getActivity() ) );
 
-        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
+        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<>() );
         this.videoMetadataInfosAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_videoMetadataInfos.setAdapter( videoMetadataInfosAdapter );
 
@@ -240,16 +240,7 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                AdultListFragment.this.loadAdultList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> AdultListFragment.this.loadAdultList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -282,18 +273,13 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
         Log.d( TAG, "loadAdultList : exit" );
     }
 
-    private VideosAdapter.OnItemClickListener onItemClickListener = new VideosAdapter.OnItemClickListener() {
+    private VideosAdapter.OnItemClickListener onItemClickListener = model -> {
 
-                @Override
-                public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
+        if( null != AdultListFragment.this.adultListPresenter && null != model ) {
 
-                    if( null != AdultListFragment.this.adultListPresenter && null != videoMetadataInfoModel ) {
+            AdultListFragment.this.adultListPresenter.onVideoClicked( model );
 
-                        AdultListFragment.this.adultListPresenter.onVideoClicked(videoMetadataInfoModel);
-
-                    }
-
-                }
+        }
 
     };
 

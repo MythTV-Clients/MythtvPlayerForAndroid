@@ -351,16 +351,7 @@ public class VideoDetailsFragment extends AbstractBaseFragment implements VideoD
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                VideoDetailsFragment.this.loadVideoDetails();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> VideoDetailsFragment.this.loadVideoDetails());
 
         Log.d( TAG, "showError : exit" );
     }

@@ -54,7 +54,7 @@ public class DiskVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getCategory : category=" + category );
 
         return this.videoCache.getCategory( category )
-                .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) )
+                .doOnNext( entities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + entities ) )
                 .doOnError( throwable -> Log.e( TAG, "getCategory : error", throwable ) );
 
     }
@@ -67,37 +67,37 @@ public class DiskVideoDataStore implements VideoDataStore {
 
         return this.videoCache.getCategory( series )
                 .flatMap( Observable::from )
-                .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> {
+                .toSortedList( ( entity1, entity2 ) -> {
 
                     StringBuilder e1 = new StringBuilder();
                     e1.append( "S" );
-                    if( videoMetadataInfoEntity1.getSeason() < 10 ) {
+                    if( entity1.getSeason() < 10 ) {
                         e1.append( "0" );
                     }
-                    e1.append( videoMetadataInfoEntity1.getSeason() );
+                    e1.append( entity1.getSeason() );
 
                     e1.append( "E" );
-                    if( videoMetadataInfoEntity1.getEpisode() < 10 ) {
+                    if( entity1.getEpisode() < 10 ) {
                         e1.append( "0" );
                     }
-                    e1.append( videoMetadataInfoEntity1.getEpisode() );
+                    e1.append( entity1.getEpisode() );
 
                     StringBuilder e2 = new StringBuilder();
                     e2.append( "S" );
-                    if( videoMetadataInfoEntity2.getSeason() < 10 ) {
+                    if( entity2.getSeason() < 10 ) {
                         e2.append( "0" );
                     }
-                    e2.append( videoMetadataInfoEntity2.getSeason() );
+                    e2.append( entity2.getSeason() );
 
                     e2.append( "E" );
-                    if( videoMetadataInfoEntity2.getEpisode() < 10 ) {
+                    if( entity2.getEpisode() < 10 ) {
                         e2.append( "0" );
                     }
-                    e2.append( videoMetadataInfoEntity2.getEpisode() );
+                    e2.append( entity2.getEpisode() );
 
                     return e1.toString().compareTo( e2.toString() );
                 })
-                .doOnNext( videoMetadataInfoEntities -> Log.d( TAG, "getCategory : videoMetadataInfoEntities=" + videoMetadataInfoEntities ) );
+                .doOnNext( entities -> Log.d( TAG, "getCategory : entities=" + entities ) );
     }
 
     @Override

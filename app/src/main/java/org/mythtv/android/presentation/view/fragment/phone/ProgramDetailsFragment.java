@@ -393,16 +393,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                ProgramDetailsFragment.this.loadProgramDetails();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> ProgramDetailsFragment.this.loadProgramDetails());
 
 
         Log.d( TAG, "showError : exit" );

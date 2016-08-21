@@ -175,7 +175,7 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
         ProgramsLayoutManager programsLayoutManager = new ProgramsLayoutManager(getActivity());
         this.rv_programs.setLayoutManager(programsLayoutManager);
 
-        this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
+        this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<>() );
         this.programsAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_programs.setAdapter( programsAdapter );
 
@@ -247,16 +247,7 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                ProgramListFragment.this.loadProgramList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> ProgramListFragment.this.loadProgramList());
 
 
         Log.d( TAG, "showError : exit" );
@@ -290,17 +281,12 @@ public class ProgramListFragment extends AbstractBaseFragment implements Program
         Log.d( TAG, "loadProgramList : exit" );
     }
 
-    private ProgramsAdapter.OnItemClickListener onItemClickListener = new ProgramsAdapter.OnItemClickListener() {
+    private ProgramsAdapter.OnItemClickListener onItemClickListener = programModel -> {
 
-        @Override
-        public void onProgramItemClicked( ProgramModel programModel ) {
+        if( null != ProgramListFragment.this.programListPresenter && null != programModel ) {
+            Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
 
-            if( null != ProgramListFragment.this.programListPresenter && null != programModel ) {
-                Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
-
-                ProgramListFragment.this.programListPresenter.onProgramClicked( programModel );
-
-            }
+            ProgramListFragment.this.programListPresenter.onProgramClicked( programModel );
 
         }
 

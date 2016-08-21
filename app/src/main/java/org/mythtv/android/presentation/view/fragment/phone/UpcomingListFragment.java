@@ -254,16 +254,7 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                UpcomingListFragment.this.loadUpcomingList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> UpcomingListFragment.this.loadUpcomingList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -296,17 +287,12 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
         Log.d( TAG, "loadUpcomingList : exit" );
     }
 
-    private ProgramsAdapter.OnItemClickListener onItemClickListener = new ProgramsAdapter.OnItemClickListener() {
+    private ProgramsAdapter.OnItemClickListener onItemClickListener = programModel -> {
 
-        @Override
-        public void onProgramItemClicked( ProgramModel programModel ) {
+        if( null != UpcomingListFragment.this.upcomingListPresenter && null != programModel ) {
+            Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
 
-            if( null != UpcomingListFragment.this.upcomingListPresenter && null != programModel ) {
-                Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
-
-                UpcomingListFragment.this.upcomingListPresenter.onProgramClicked( programModel );
-
-            }
+            UpcomingListFragment.this.upcomingListPresenter.onProgramClicked( programModel );
 
         }
 

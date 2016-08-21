@@ -61,34 +61,30 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
         GridView gridview = (GridView) findViewById( R.id.gridview );
         gridview.setAdapter( adapter );
 
-        gridview.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+        gridview.setOnItemClickListener( ( parent, v, position, id ) -> {
 
-            public void onItemClick( AdapterView<?> parent, View v, int position, long id ) {
+            switch( position ) {
 
-                switch( position ) {
+                case 0:
+                    Log.d( TAG, "gridview.onclick : position 0" );
 
-                    case 0:
-                        Log.d( TAG, "gridview.onclick : position 0" );
+                    navigator.navigateToRecordings( MainTvActivity.this );
 
-                        navigator.navigateToRecordings( MainTvActivity.this );
+                    break;
 
-                        break;
+                case 1 :
+                    Log.d( TAG, "gridview.onclick : position 1" );
 
-                    case 1 :
-                        Log.d( TAG, "gridview.onclick : position 1" );
+                    navigator.navigateToVideos( MainTvActivity.this );
 
-                        navigator.navigateToVideos( MainTvActivity.this );
+                    break;
 
-                        break;
+                case 2 :
+                    Log.d( TAG, "gridview.onclick : position 2" );
 
-                    case 2 :
-                        Log.d( TAG, "gridview.onclick : position 2" );
+                    navigator.navigateToSettings( MainTvActivity.this );
 
-                        navigator.navigateToSettings( MainTvActivity.this );
-
-                        break;
-
-                }
+                    break;
 
             }
 

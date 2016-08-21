@@ -168,7 +168,7 @@ public class MovieListFragment extends AbstractBaseVideoPagerFragment implements
 
         this.rv_videoMetadataInfos.setLayoutManager( new VideosLayoutManager( getActivity() ) );
 
-        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
+        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<>() );
         this.videoMetadataInfosAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_videoMetadataInfos.setAdapter( videoMetadataInfosAdapter );
 
@@ -240,16 +240,7 @@ public class MovieListFragment extends AbstractBaseVideoPagerFragment implements
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                MovieListFragment.this.loadMovieList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> MovieListFragment.this.loadMovieList());
 
 
         Log.d( TAG, "showError : exit" );
@@ -283,18 +274,13 @@ public class MovieListFragment extends AbstractBaseVideoPagerFragment implements
         Log.d( TAG, "loadMovieList : exit" );
     }
 
-    private VideosAdapter.OnItemClickListener onItemClickListener = new VideosAdapter.OnItemClickListener() {
+    private VideosAdapter.OnItemClickListener onItemClickListener = model -> {
 
-                @Override
-                public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
+        if( null != MovieListFragment.this.movieListPresenter && null != model ) {
 
-                    if( null != MovieListFragment.this.movieListPresenter && null != videoMetadataInfoModel ) {
+            MovieListFragment.this.movieListPresenter.onVideoClicked( model );
 
-                        MovieListFragment.this.movieListPresenter.onVideoClicked( videoMetadataInfoModel );
-
-                    }
-
-                }
+        }
 
     };
 

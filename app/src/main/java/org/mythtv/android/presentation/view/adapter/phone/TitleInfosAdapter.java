@@ -110,14 +110,11 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
         if( titleCount > 0 )
             holder.textViewCount.setText( String.valueOf( titleCount ) );
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( null != TitleInfosAdapter.this.onItemClickListener ) {
+        holder.itemView.setOnClickListener(v -> {
+            if( null != TitleInfosAdapter.this.onItemClickListener ) {
 
-                    TitleInfosAdapter.this.onItemClickListener.onTitleInfoItemClicked( titleInfoModel );
+                TitleInfosAdapter.this.onItemClickListener.onTitleInfoItemClicked( titleInfoModel );
 
-                }
             }
         });
 

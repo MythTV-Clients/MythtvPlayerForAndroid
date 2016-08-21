@@ -197,7 +197,7 @@ public class PhoneSearchResultListFragment extends AbstractBaseFragment implemen
         SearchResultsLayoutManager searchResultsLayoutManager = new SearchResultsLayoutManager(getActivity());
         this.rv_searchResults.setLayoutManager( searchResultsLayoutManager );
 
-        this.searchResultsAdapter = new SearchResultsAdapter( getActivity(), new ArrayList<SearchResultModel>() );
+        this.searchResultsAdapter = new SearchResultsAdapter( getActivity(), new ArrayList<>() );
         this.searchResultsAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_searchResults.setAdapter( searchResultsAdapter );
 
@@ -273,16 +273,7 @@ public class PhoneSearchResultListFragment extends AbstractBaseFragment implemen
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                PhoneSearchResultListFragment.this.loadSearchResultList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> PhoneSearchResultListFragment.this.loadSearchResultList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -316,17 +307,12 @@ public class PhoneSearchResultListFragment extends AbstractBaseFragment implemen
         Log.d( TAG, "loadSearchResultList : exit" );
     }
 
-    private SearchResultsAdapter.OnItemClickListener onItemClickListener = new SearchResultsAdapter.OnItemClickListener() {
+    private SearchResultsAdapter.OnItemClickListener onItemClickListener = searchResultModel -> {
 
-        @Override
-        public void onSearchResultItemClicked( SearchResultModel searchResultModel ) {
+        if( null != PhoneSearchResultListFragment.this.searchResultListListener && null != searchResultModel ) {
+            Log.d( TAG, "onProgramItemClicked : searchResultModel=" + searchResultModel.toString() );
 
-            if( null != PhoneSearchResultListFragment.this.searchResultListListener && null != searchResultModel ) {
-                Log.d( TAG, "onProgramItemClicked : searchResultModel=" + searchResultModel.toString() );
-
-                PhoneSearchResultListFragment.this.searchResultListListener.onSearchResultClicked(searchResultModel );
-
-            }
+            PhoneSearchResultListFragment.this.searchResultListListener.onSearchResultClicked(searchResultModel );
 
         }
 

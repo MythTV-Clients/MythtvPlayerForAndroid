@@ -90,14 +90,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
         final TvCategoryModel tvCategoryModel = this.tvCategoriesCollection.get( position );
         holder.imageViewCategory.setImageResource( tvCategoryModel.getDrawable() );
         holder.textViewTitle.setText( tvCategoryModel.getTitle() );
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( null != CategoriesAdapter.this.onItemClickListener ) {
+        holder.itemView.setOnClickListener(v -> {
+            if( null != CategoriesAdapter.this.onItemClickListener ) {
 
-                    CategoriesAdapter.this.onItemClickListener.onTvCategoryClicked( tvCategoryModel );
+                CategoriesAdapter.this.onItemClickListener.onTvCategoryClicked( tvCategoryModel );
 
-                }
             }
         });
 

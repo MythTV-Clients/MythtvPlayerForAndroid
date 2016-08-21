@@ -102,14 +102,11 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoMetad
 
         }
         holder.textViewTitle.setText( videoMetadataInfoModel.getTitle() );
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( null != VideosAdapter.this.onItemClickListener ) {
+        holder.itemView.setOnClickListener(v -> {
+            if( null != VideosAdapter.this.onItemClickListener ) {
 
-                    VideosAdapter.this.onItemClickListener.onVideoMetadataInfoItemClicked( videoMetadataInfoModel );
+                VideosAdapter.this.onItemClickListener.onVideoMetadataInfoItemClicked( videoMetadataInfoModel );
 
-                }
             }
         });
 

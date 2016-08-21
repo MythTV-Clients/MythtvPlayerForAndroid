@@ -21,6 +21,7 @@ package org.mythtv.android.data.repository;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityDataMapper;
 import org.mythtv.android.data.repository.datasource.VideoDataStore;
 import org.mythtv.android.data.repository.datasource.VideoDataStoreFactory;
@@ -65,7 +66,7 @@ public class VideoDataRepository implements VideoRepository {
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "getVideoList : error", throwable ) )
-                .map( videoMetadataInfoEntities -> VideoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntities ) );
+                .map( entities -> VideoMetadataInfoEntityDataMapper.transform( entities ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
@@ -80,7 +81,7 @@ public class VideoDataRepository implements VideoRepository {
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "getVideoListByContentType : error", throwable ) )
-                .map( videoMetadataInfoEntities -> VideoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntities ) );
+                .map( entities -> VideoMetadataInfoEntityDataMapper.transform( entities ) );
 
     }
 
@@ -96,10 +97,10 @@ public class VideoDataRepository implements VideoRepository {
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "getVideoSeriesListByContentType : error", throwable ) )
                 .flatMap( Observable::from )
-                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( contentType ) )
-                .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
-                .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
-                .map( videoMetadataInfoEntities -> VideoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntities ) );
+                .filter( entity -> entity.getContentType().equals( contentType ) )
+                .distinct( VideoMetadataInfoEntity::getTitle )
+                .toSortedList( ( entity1, entity2 ) -> entity1.getTitle().compareTo( entity2.getTitle() ) )
+                .map( VideoMetadataInfoEntityDataMapper::transform );
 
     }
 
@@ -115,7 +116,7 @@ public class VideoDataRepository implements VideoRepository {
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "getVideoListByContentTypeAndSeries : error", throwable ) )
-                .map( videoMetadataInfoEntities -> VideoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntities ) );
+                .map( entities -> VideoMetadataInfoEntityDataMapper.transform( entities ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
@@ -125,7 +126,7 @@ public class VideoDataRepository implements VideoRepository {
         final VideoDataStore videoDataStore = videoDataStoreFactory.createMasterBackendDataStore();
 
         return videoDataStore.getVideoById( id )
-                .map( videoMetadataInfoEntity -> VideoMetadataInfoEntityDataMapper.transform( videoMetadataInfoEntity ) );
+                .map( entities -> VideoMetadataInfoEntityDataMapper.transform( entities ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
