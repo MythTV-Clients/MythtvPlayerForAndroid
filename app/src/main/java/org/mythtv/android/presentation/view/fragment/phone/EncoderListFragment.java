@@ -153,7 +153,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
 
         this.rv_encoders.setLayoutManager( new EncodersLayoutManager( getActivity() ) );
 
-        this.encodersAdapter = new EncodersAdapter( getActivity(), new ArrayList<EncoderModel>() );
+        this.encodersAdapter = new EncodersAdapter( getActivity(), new ArrayList<>() );
 //        this.encodersAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_encoders.setAdapter( encodersAdapter );
 

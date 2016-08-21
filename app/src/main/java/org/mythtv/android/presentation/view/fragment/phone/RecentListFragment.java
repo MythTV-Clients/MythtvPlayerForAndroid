@@ -151,7 +151,7 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
         ProgramsLayoutManager programsLayoutManager = new ProgramsLayoutManager(getActivity());
         this.rv_programs.setLayoutManager(programsLayoutManager);
 
-        this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
+        this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<>() );
         this.programsAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_programs.setAdapter( programsAdapter );
 

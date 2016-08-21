@@ -18,17 +18,13 @@
 
 package org.mythtv.android.domain.interactor;
 
-import org.mythtv.android.domain.LiveStreamInfo;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.ContentRepository;
 
-import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by dmfrey on 10/25/15.

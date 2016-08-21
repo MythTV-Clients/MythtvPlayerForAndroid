@@ -176,7 +176,7 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
         ProgramsLayoutManager programsLayoutManager = new ProgramsLayoutManager(getActivity());
         this.rv_programs.setLayoutManager(programsLayoutManager);
 
-        this.programsAdapter = new UpcomingProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
+        this.programsAdapter = new UpcomingProgramsAdapter( getActivity(), new ArrayList<>() );
         this.rv_programs.setAdapter( programsAdapter );
 
         Log.d( TAG, "setupUI : exit" );

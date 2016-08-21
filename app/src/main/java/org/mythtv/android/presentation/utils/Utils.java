@@ -16,7 +16,6 @@ package org.mythtv.android.presentation.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.media.MediaMetadataRetriever;

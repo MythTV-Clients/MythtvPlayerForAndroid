@@ -20,7 +20,6 @@ package org.mythtv.android.data.repository;
 
 import android.util.Log;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityDataMapper;
 import org.mythtv.android.data.repository.datasource.VideoDataStore;

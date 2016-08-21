@@ -19,7 +19,7 @@ public class MediaInfoHelper {
 
         try {
 
-            String recordingUrl = "", contentType = "";
+            String recordingUrl, contentType;
             if( programModel.getFileName().endsWith( "mp4" ) ) {
 
                 recordingUrl = buildUrl( masterBackendUrl, "/Content/GetFile?FileName=" + URLEncoder.encode( programModel.getFileName(), "UTF-8" ) );
