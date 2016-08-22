@@ -40,8 +40,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 1/20/16.
@@ -53,11 +54,13 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
     @Inject
     RecentListPresenter recentListPresenter;
 
-    @Bind( R.id.rv_programs )
+    @BindView( R.id.rv_programs )
     RecyclerView rv_programs;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private ProgramsAdapter programsAdapter;
 
@@ -74,6 +77,8 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_program_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -126,7 +131,7 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }
@@ -146,7 +151,7 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
         ProgramsLayoutManager programsLayoutManager = new ProgramsLayoutManager(getActivity());
         this.rv_programs.setLayoutManager(programsLayoutManager);
 
-        this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
+        this.programsAdapter = new ProgramsAdapter( getActivity(), new ArrayList<>() );
         this.programsAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_programs.setAdapter( programsAdapter );
 
@@ -212,16 +217,7 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                RecentListFragment.this.loadRecentList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> RecentListFragment.this.loadRecentList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -254,17 +250,12 @@ public class RecentListFragment extends AbstractBaseFragment implements ProgramL
         Log.d( TAG, "loadRecentList : exit" );
     }
 
-    private ProgramsAdapter.OnItemClickListener onItemClickListener = new ProgramsAdapter.OnItemClickListener() {
+    private ProgramsAdapter.OnItemClickListener onItemClickListener = programModel -> {
 
-        @Override
-        public void onProgramItemClicked( ProgramModel programModel ) {
+        if( null != RecentListFragment.this.recentListPresenter && null != programModel ) {
+            Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
 
-            if( null != RecentListFragment.this.recentListPresenter && null != programModel ) {
-                Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
-
-                RecentListFragment.this.recentListPresenter.onProgramClicked( programModel );
-
-            }
+            RecentListFragment.this.recentListPresenter.onProgramClicked( programModel );
 
         }
 

@@ -20,15 +20,44 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Data;
+import java.util.Arrays;
+
+//import lombok.Data;
 
 /**
  * Created by dmfrey on 1/18/16.
  */
-@Data
+//@Data
 public class InputsEntity {
 
     @SerializedName( "Input" )
     private InputEntity[] inputs;
+
+    public InputsEntity() {
+    }
+
+    public InputsEntity(InputEntity[] inputs ) {
+
+        this.inputs = inputs;
+
+    }
+
+    public InputEntity[] getInputs() {
+
+        return inputs;
+    }
+
+    public void setInputs( InputEntity[] inputs ) {
+
+        this.inputs = inputs;
+
+    }
+
+    @Override
+    public String toString() {
+        return "InputsEntity{" +
+                "inputs=" + Arrays.toString(inputs) +
+                '}';
+    }
 
 }

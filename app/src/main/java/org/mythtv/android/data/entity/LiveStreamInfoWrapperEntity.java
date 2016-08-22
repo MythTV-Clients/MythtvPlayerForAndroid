@@ -20,15 +20,42 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Data;
+//import lombok.Data;
 
 /**
  * Created by dmfrey on 9/18/15.
  */
-@Data
+//@Data
 public class LiveStreamInfoWrapperEntity {
 
     @SerializedName( "LiveStreamInfo" )
     private LiveStreamInfoEntity liveStreamInfo;
+
+    public LiveStreamInfoWrapperEntity() {
+    }
+
+    public LiveStreamInfoWrapperEntity(LiveStreamInfoEntity liveStreamInfo ) {
+
+        this.liveStreamInfo = liveStreamInfo;
+
+    }
+
+    public LiveStreamInfoEntity getLiveStreamInfo() {
+
+        return liveStreamInfo;
+    }
+
+    public void setLiveStreamInfo( LiveStreamInfoEntity liveStreamInfo ) {
+
+        this.liveStreamInfo = liveStreamInfo;
+
+    }
+
+    @Override
+    public String toString() {
+        return "LiveStreamInfoWrapperEntity{" +
+                "liveStreamInfo=" + liveStreamInfo +
+                '}';
+    }
 
 }

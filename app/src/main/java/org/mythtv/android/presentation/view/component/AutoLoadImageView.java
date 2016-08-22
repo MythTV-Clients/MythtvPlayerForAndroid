@@ -175,18 +175,13 @@ public class AutoLoadImageView extends ImageView {
   private void loadBitmap( final Bitmap bitmap ) {
 //      Log.d( TAG, "loadBitmap : enter" );
 
-      ( (Activity) getContext() ).runOnUiThread( new Runnable() {
-
-        @Override
-        public void run() {
+      ( (Activity) getContext() ).runOnUiThread( () -> {
 //          Log.d( TAG, "loadBitmap.run : enter" );
 
-          AutoLoadImageView.this.setVisibility( View.VISIBLE );
-          AutoLoadImageView.this.setImageBitmap( bitmap );
+        AutoLoadImageView.this.setVisibility( View.VISIBLE );
+        AutoLoadImageView.this.setImageBitmap( bitmap );
 
 //          Log.d( TAG, "loadBitmap.run : exit" );
-        }
-
       });
 
 //      Log.d( TAG, "loadBitmap : exit" );
@@ -201,34 +196,24 @@ public class AutoLoadImageView extends ImageView {
     if( this.imagePlaceHolderResourceId != -1 ) {
 //      Log.d( TAG, "loadImagePlaceHolder : imagePlaceHolderResourceId != -1" );
 
-      ( (Activity) getContext() ).runOnUiThread( new Runnable() {
-
-        @Override
-        public void run() {
+      ( (Activity) getContext() ).runOnUiThread( () -> {
 //          Log.d( TAG, "loadImagePlaceHolder.run : enter" );
 
-          AutoLoadImageView.this.setVisibility( View.VISIBLE );
-          AutoLoadImageView.this.setImageResource( AutoLoadImageView.this.imagePlaceHolderResourceId );
+        AutoLoadImageView.this.setVisibility( View.VISIBLE );
+        AutoLoadImageView.this.setImageResource( AutoLoadImageView.this.imagePlaceHolderResourceId );
 
 //          Log.d( TAG, "loadImagePlaceHolder.run : exit" );
-        }
-
       });
 
     } else {
 //      Log.d(TAG, "loadImagePlaceHolder : imagePlaceHolderResourceId == -1");
 
-      ((Activity) getContext()).runOnUiThread( new Runnable() {
-
-        @Override
-        public void run() {
+      ((Activity) getContext()).runOnUiThread( () -> {
 //          Log.d(TAG, "loadImagePlaceHolder.run : enter");
 
-          AutoLoadImageView.this.setVisibility( View.GONE );
+        AutoLoadImageView.this.setVisibility( View.GONE );
 
 //          Log.d(TAG, "loadImagePlaceHolder.run : exit");
-        }
-
       });
 
     }

@@ -25,13 +25,11 @@ import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.mapper.EncoderEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityDataMapper;
-import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityDataMapper;
 import org.mythtv.android.data.repository.datasource.ContentDataStore;
 import org.mythtv.android.data.repository.datasource.ContentDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
-import org.mythtv.android.data.repository.datasource.SearchDataStore;
 import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
 import org.mythtv.android.domain.Encoder;
 import org.mythtv.android.domain.Program;
@@ -44,8 +42,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by dmfrey on 8/27/15.
@@ -98,17 +94,17 @@ public class DvrDataRepository implements DvrRepository {
                 .toList();
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList( null );
 
-        Observable<List<ProgramEntity>> recordedProgramEntityList = Observable.zip( programEntities, liveStreamInfoEntities, ( programEntityList, liveStreamInfoEntityList ) -> {
+        Observable<List<ProgramEntity>> recordedProgramEntityList = Observable.zip( programEntities, liveStreamInfoEntities, ( programEntityList, list ) -> {
 
-            if( null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty() ) {
+            if( null != list && !list.isEmpty() ) {
 
                 for( ProgramEntity programEntity : programEntityList ) {
 
-                    for( LiveStreamInfoEntity liveStreamInfoEntity : liveStreamInfoEntityList ) {
+                    for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
 
                         if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
 
-                            programEntity.setLiveStreamInfoEntity( liveStreamInfoEntityList.get( 0 ) );
+                            programEntity.setLiveStreamInfoEntity( list.get( 0 ) );
 
                         }
 
@@ -133,7 +129,7 @@ public class DvrDataRepository implements DvrRepository {
 
         return recordedProgramEntityList
                 .doOnError( throwable -> Log.e( TAG, "recordedPrograms : error", throwable ) )
-                .map( recordedProgramEntities -> ProgramEntityDataMapper.transform( recordedProgramEntities ) );
+                .map( entities -> ProgramEntityDataMapper.transform( entities ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
@@ -148,7 +144,7 @@ public class DvrDataRepository implements DvrRepository {
 
         Observable<ProgramEntity> programEntity = dvrDataStore.recordedProgramEntityDetails( chanId, startTime );
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntity = programEntity
-                .flatMap(recordedProgramEntity -> contentDataStore.liveStreamInfoEntityList(recordedProgramEntity.getFileName()));
+                .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.getFileName() ) );
 
         Observable<ProgramEntity> recordedProgramEntity = Observable.zip( programEntity, liveStreamInfoEntity, ( programEntity1, liveStreamInfoEntityList ) -> {
 

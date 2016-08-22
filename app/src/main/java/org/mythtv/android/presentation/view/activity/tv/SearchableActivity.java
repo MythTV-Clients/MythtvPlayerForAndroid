@@ -137,16 +137,7 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
 
         }
 
-        SpeechRecognitionCallback mSpeechRecognitionCallback = new SpeechRecognitionCallback() {
-
-            @Override
-            public void recognizeSpeech() {
-
-                startActivityForResult( mSearchableFragment.getRecognizerIntent(), REQUEST_SPEECH );
-
-            }
-
-        };
+        SpeechRecognitionCallback mSpeechRecognitionCallback = () -> startActivityForResult( mSearchableFragment.getRecognizerIntent(), REQUEST_SPEECH );
         mSearchableFragment.setSpeechRecognitionCallback( mSpeechRecognitionCallback );
 
         Log.d( TAG, "initializeActivity : exit" );

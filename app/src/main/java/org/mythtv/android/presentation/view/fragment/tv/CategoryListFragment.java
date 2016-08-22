@@ -40,8 +40,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 1/28/16.
@@ -62,8 +63,10 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
     @Inject
     TvCategoryListPresenter tvCategoryListPresenter;
 
-    @Bind( R.id.rv_tv_categories )
+    @BindView( R.id.rv_tv_categories )
     RecyclerView rv_tv_categories;
+
+    private Unbinder unbinder;
 
     private CategoriesAdapter tvCategoryAdapter;
 
@@ -96,6 +99,8 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
 
         View fragmentView = inflater.inflate( R.layout.tv_fragment_category_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -148,7 +153,7 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }
@@ -167,7 +172,7 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
 
         this.rv_tv_categories.setLayoutManager( new CategoriesLayoutManager( getActivity() ) );
 
-        this.tvCategoryAdapter = new CategoriesAdapter( getActivity(), new ArrayList<TvCategoryModel>() );
+        this.tvCategoryAdapter = new CategoriesAdapter( getActivity(), new ArrayList<>() );
         this.tvCategoryAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_tv_categories.setAdapter( tvCategoryAdapter );
 
@@ -264,16 +269,11 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
         Log.d( TAG, "loadTvCategoryList : exit" );
     }
 
-    private CategoriesAdapter.OnItemClickListener onItemClickListener = new CategoriesAdapter.OnItemClickListener() {
+    private CategoriesAdapter.OnItemClickListener onItemClickListener = tvCategoryModel -> {
 
-        @Override
-        public void onTvCategoryClicked( TvCategoryModel tvCategoryModel ) {
+        if( null != CategoryListFragment.this.tvCategoryListPresenter && null != tvCategoryModel ) {
 
-            if( null != CategoryListFragment.this.tvCategoryListPresenter && null != tvCategoryModel ) {
-
-                CategoryListFragment.this.tvCategoryListPresenter.onTvCategoryClicked( tvCategoryModel );
-
-            }
+            CategoryListFragment.this.tvCategoryListPresenter.onTvCategoryClicked( tvCategoryModel );
 
         }
 

@@ -41,8 +41,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 /**
@@ -68,14 +69,16 @@ public class PhoneSearchResultListFragment extends AbstractBaseFragment implemen
     @Inject
     SearchResultListPresenter searchResultListPresenter;
 
-    @Bind( R.id.rv_search_results )
+    @BindView( R.id.rv_search_results )
     RecyclerView rv_searchResults;
 
-    @Bind( R.id.fast_scroller )
+    @BindView( R.id.fast_scroller )
     VerticalRecyclerViewFastScroller fastScroller;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private SearchResultsAdapter searchResultsAdapter;
 
@@ -114,6 +117,8 @@ public class PhoneSearchResultListFragment extends AbstractBaseFragment implemen
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_search_result_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -166,7 +171,7 @@ public class PhoneSearchResultListFragment extends AbstractBaseFragment implemen
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }
@@ -192,7 +197,7 @@ public class PhoneSearchResultListFragment extends AbstractBaseFragment implemen
         SearchResultsLayoutManager searchResultsLayoutManager = new SearchResultsLayoutManager(getActivity());
         this.rv_searchResults.setLayoutManager( searchResultsLayoutManager );
 
-        this.searchResultsAdapter = new SearchResultsAdapter( getActivity(), new ArrayList<SearchResultModel>() );
+        this.searchResultsAdapter = new SearchResultsAdapter( getActivity(), new ArrayList<>() );
         this.searchResultsAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_searchResults.setAdapter( searchResultsAdapter );
 
@@ -268,16 +273,7 @@ public class PhoneSearchResultListFragment extends AbstractBaseFragment implemen
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                PhoneSearchResultListFragment.this.loadSearchResultList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> PhoneSearchResultListFragment.this.loadSearchResultList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -311,17 +307,12 @@ public class PhoneSearchResultListFragment extends AbstractBaseFragment implemen
         Log.d( TAG, "loadSearchResultList : exit" );
     }
 
-    private SearchResultsAdapter.OnItemClickListener onItemClickListener = new SearchResultsAdapter.OnItemClickListener() {
+    private SearchResultsAdapter.OnItemClickListener onItemClickListener = searchResultModel -> {
 
-        @Override
-        public void onSearchResultItemClicked( SearchResultModel searchResultModel ) {
+        if( null != PhoneSearchResultListFragment.this.searchResultListListener && null != searchResultModel ) {
+            Log.d( TAG, "onProgramItemClicked : searchResultModel=" + searchResultModel.toString() );
 
-            if( null != PhoneSearchResultListFragment.this.searchResultListListener && null != searchResultModel ) {
-                Log.d( TAG, "onProgramItemClicked : searchResultModel=" + searchResultModel.toString() );
-
-                PhoneSearchResultListFragment.this.searchResultListListener.onSearchResultClicked(searchResultModel );
-
-            }
+            PhoneSearchResultListFragment.this.searchResultListListener.onSearchResultClicked(searchResultModel );
 
         }
 

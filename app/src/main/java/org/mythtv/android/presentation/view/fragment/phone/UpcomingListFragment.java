@@ -42,8 +42,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 1/20/16.
@@ -64,11 +65,13 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
     @Inject
     UpcomingListPresenter upcomingListPresenter;
 
-    @Bind( R.id.rv_programs )
+    @BindView( R.id.rv_programs )
     RecyclerView rv_programs;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private UpcomingProgramsAdapter programsAdapter;
 
@@ -99,6 +102,8 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_program_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -151,7 +156,7 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }
@@ -171,7 +176,7 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
         ProgramsLayoutManager programsLayoutManager = new ProgramsLayoutManager(getActivity());
         this.rv_programs.setLayoutManager(programsLayoutManager);
 
-        this.programsAdapter = new UpcomingProgramsAdapter( getActivity(), new ArrayList<ProgramModel>() );
+        this.programsAdapter = new UpcomingProgramsAdapter( getActivity(), new ArrayList<>() );
         this.rv_programs.setAdapter( programsAdapter );
 
         Log.d( TAG, "setupUI : exit" );
@@ -249,16 +254,7 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                UpcomingListFragment.this.loadUpcomingList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> UpcomingListFragment.this.loadUpcomingList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -291,17 +287,12 @@ public class UpcomingListFragment extends AbstractBaseFragment implements Progra
         Log.d( TAG, "loadUpcomingList : exit" );
     }
 
-    private ProgramsAdapter.OnItemClickListener onItemClickListener = new ProgramsAdapter.OnItemClickListener() {
+    private ProgramsAdapter.OnItemClickListener onItemClickListener = programModel -> {
 
-        @Override
-        public void onProgramItemClicked( ProgramModel programModel ) {
+        if( null != UpcomingListFragment.this.upcomingListPresenter && null != programModel ) {
+            Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
 
-            if( null != UpcomingListFragment.this.upcomingListPresenter && null != programModel ) {
-                Log.i( TAG, "onProgramItemClicked : programModel=" + programModel.toString() );
-
-                UpcomingListFragment.this.upcomingListPresenter.onProgramClicked( programModel );
-
-            }
+            UpcomingListFragment.this.upcomingListPresenter.onProgramClicked( programModel );
 
         }
 

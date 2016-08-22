@@ -22,12 +22,14 @@ import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
 
-import lombok.Data;
+import java.util.Arrays;
+
+//import lombok.Data;
 
 /**
  * Created by dmfrey on 8/27/15.
  */
-@Data
+//@Data
 public class VideoMetadataInfoListEntity {
 
     @SerializedName( "StartIndex" )
@@ -56,5 +58,109 @@ public class VideoMetadataInfoListEntity {
 
     @SerializedName( "VideoMetadataInfos" )
     private VideoMetadataInfoEntity[] videoMetadataInfosEntity;
+
+    public VideoMetadataInfoListEntity() {
+    }
+
+    public VideoMetadataInfoListEntity(int startIndex, int count, int currentPage, int totalPages, int totalAvailable, DateTime asOf, String version, int protoVer, VideoMetadataInfoEntity[] videoMetadataInfosEntity ) {
+
+        this.startIndex = startIndex;
+        this.count = count;
+        this.currentPage = currentPage;
+        this.totalPages = totalPages;
+        this.totalAvailable = totalAvailable;
+        this.asOf = asOf;
+        this.version = version;
+        this.protoVer = protoVer;
+        this.videoMetadataInfosEntity = videoMetadataInfosEntity;
+
+    }
+
+    public int getStartIndex() {
+        return startIndex;
+    }
+
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public int getTotalAvailable() {
+        return totalAvailable;
+    }
+
+    public void setTotalAvailable(int totalAvailable) {
+        this.totalAvailable = totalAvailable;
+    }
+
+    public DateTime getAsOf() {
+        return asOf;
+    }
+
+    public void setAsOf(DateTime asOf) {
+        this.asOf = asOf;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public int getProtoVer() {
+        return protoVer;
+    }
+
+    public void setProtoVer(int protoVer) {
+        this.protoVer = protoVer;
+    }
+
+    public VideoMetadataInfoEntity[] getVideoMetadataInfosEntity() {
+        return videoMetadataInfosEntity;
+    }
+
+    public void setVideoMetadataInfosEntity(VideoMetadataInfoEntity[] videoMetadataInfosEntity) {
+        this.videoMetadataInfosEntity = videoMetadataInfosEntity;
+    }
+
+    @Override
+    public String toString() {
+        return "VideoMetadataInfoListEntity{" +
+                "startIndex=" + startIndex +
+                ", count=" + count +
+                ", currentPage=" + currentPage +
+                ", totalPages=" + totalPages +
+                ", totalAvailable=" + totalAvailable +
+                ", asOf=" + asOf +
+                ", version='" + version + '\'' +
+                ", protoVer=" + protoVer +
+                ", videoMetadataInfosEntity=" + Arrays.toString(videoMetadataInfosEntity) +
+                '}';
+    }
 
 }

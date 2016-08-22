@@ -20,15 +20,44 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Data;
+import java.util.Arrays;
+
+//import lombok.Data;
 
 /**
  * Created by dmfrey on 8/27/15.
  */
-@Data
+//@Data
 public class CastEntity {
 
     @SerializedName( "CastMembers" )
     private CastMemberEntity[] castMembers;
+
+    public CastEntity() {
+    }
+
+    public CastEntity(CastMemberEntity[] castMembers ) {
+
+        this.castMembers = castMembers;
+
+    }
+
+    public CastMemberEntity[] getCastMembers() {
+
+        return castMembers;
+    }
+
+    public void setCastMembers( CastMemberEntity[] castMembers ) {
+
+        this.castMembers = castMembers;
+
+    }
+
+    @Override
+    public String toString() {
+        return "CastEntity{" +
+                "castMembers=" + Arrays.toString( castMembers ) +
+                '}';
+    }
 
 }
