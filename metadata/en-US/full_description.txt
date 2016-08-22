@@ -9,3 +9,6 @@ The MythTV Services API does not provide a method to watch LiveTV, therefore, th
 Open issues are here: https://github.com/MythTV-Clients/MythtvPlayerForAndroid/issues
 
 Join the G+ Community to join the discussion regarding the app and for the ability to access beta versions of the app: https://plus.google.com/u/0/communities/104432707624078706786
+
+Chromecast Support is Here!
+You can play any recording that has been HLS transcoded or previously transcode to MP4 on a Chromecast devices. Any video that is in MP4, MKV, Ogg, etc. can also be played. A detailed list of supported media formats can be found at https://developers.google.com/cast/docs/media#media-container-formats.

@@ -258,17 +258,12 @@ public class VideoAdultFragment extends AbstractBaseVideoFragment implements Vid
             for( Category category : videos.keySet() ) {
                 Log.d( TAG, "renderVideoList : category=" + category );
 
-                Collections.sort( videos.get( category ), new Comparator<VideoMetadataInfoModel>() {
+                Collections.sort( videos.get( category ), ( lhs, rhs ) -> {
 
-                    @Override
-                    public int compare( VideoMetadataInfoModel lhs, VideoMetadataInfoModel rhs ) {
+                    String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.getTitle() );
+                    String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.getTitle() );
 
-                        String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.getTitle() );
-                        String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.getTitle() );
-
-                        return lhsTitle.compareTo( rhsTitle );
-                    }
-
+                    return lhsTitle.compareTo( rhsTitle );
                 });
 
                 ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( cardPresenter );
@@ -353,16 +348,7 @@ public class VideoAdultFragment extends AbstractBaseVideoFragment implements Vid
     private void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
-        setOnSearchClickedListener( new View.OnClickListener() {
-
-            @Override
-            public void onClick( View view ) {
-
-                VideoAdultFragment.this.listener.onSearchClicked();
-
-            }
-
-        });
+        setOnSearchClickedListener(view -> VideoAdultFragment.this.listener.onSearchClicked());
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
         setOnItemViewSelectedListener( new ItemViewSelectedListener() );
@@ -469,15 +455,12 @@ public class VideoAdultFragment extends AbstractBaseVideoFragment implements Vid
 
         @Override
         public void run() {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
+            mHandler.post( () -> {
 
-                    if( null != mBackgroundURI ) {
+                if( null != mBackgroundURI ) {
 
-                        updateBackground( mBackgroundURI.toString() );
+                    updateBackground( mBackgroundURI.toString() );
 
-                    }
                 }
             });
 

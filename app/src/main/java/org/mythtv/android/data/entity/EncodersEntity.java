@@ -20,15 +20,44 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Data;
+import java.util.Arrays;
+
+//import lombok.Data;
 
 /**
  * Created by dmfrey on 1/18/16.
  */
-@Data
+//@Data
 public class EncodersEntity {
 
     @SerializedName( "Encoders" )
     private EncoderEntity[] encoders;
+
+    public EncodersEntity() {
+    }
+
+    public EncodersEntity(EncoderEntity[] encoders ) {
+
+        this.encoders = encoders;
+
+    }
+
+    public EncoderEntity[] getEncoders() {
+
+        return encoders;
+    }
+
+    public void setEncoders( EncoderEntity[] encoders ) {
+
+        this.encoders = encoders;
+
+    }
+
+    @Override
+    public String toString() {
+        return "EncodersEntity{" +
+                "encoders=" + Arrays.toString( encoders ) +
+                '}';
+    }
 
 }

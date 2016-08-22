@@ -36,8 +36,6 @@ public class PlayerActivity extends Activity {
 
     private static final String TAG = PlayerActivity.class.getSimpleName();
 
-    public static final String FULL_URL_TAG = "full_url";
-
     public static Intent getCallingIntent( Context context, String uri ) {
 
         return new Intent( context, PlayerActivity.class )
@@ -53,12 +51,12 @@ public class PlayerActivity extends Activity {
 
         Uri fileUri = getIntent().getData();
 
-        VideoView mVideoView = (VideoView) findViewById(R.id.videoView);
+        VideoView mVideoView = (VideoView) findViewById( R.id.videoView );
         mVideoView.setVideoURI( fileUri );
 
-        MediaController mMediaController = new MediaController(this);
-        mMediaController.setAnchorView(mVideoView);
-        mVideoView.setMediaController(mMediaController);
+        MediaController mMediaController = new MediaController( this );
+        mMediaController.setAnchorView( mVideoView );
+        mVideoView.setMediaController( mMediaController );
 
         mVideoView.start();
 

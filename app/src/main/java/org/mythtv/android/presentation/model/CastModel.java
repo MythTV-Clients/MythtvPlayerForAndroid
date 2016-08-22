@@ -19,15 +19,38 @@
 package org.mythtv.android.presentation.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
-import lombok.Data;
+//import lombok.Data;
 
 /**
  * Created by dmfrey on 8/27/15.
  */
-@Data
+//@Data
 public class CastModel implements Serializable {
 
     private CastMemberModel[] castMembers;
+
+    public CastModel() {
+    }
+
+    public CastModel(CastMemberModel[] castMembers) {
+        this.castMembers = castMembers;
+    }
+
+    public CastMemberModel[] getCastMembers() {
+        return castMembers;
+    }
+
+    public void setCastMembers(CastMemberModel[] castMembers) {
+        this.castMembers = castMembers;
+    }
+
+    @Override
+    public String toString() {
+        return "CastModel{" +
+                "castMembers=" + Arrays.toString(castMembers) +
+                '}';
+    }
 
 }

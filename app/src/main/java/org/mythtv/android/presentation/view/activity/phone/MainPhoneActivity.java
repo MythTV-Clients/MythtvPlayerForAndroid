@@ -28,7 +28,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 
 import org.mythtv.android.R;
@@ -42,7 +41,7 @@ import org.mythtv.android.presentation.view.fragment.phone.UpcomingListFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -61,13 +60,13 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     private DvrComponent dvrComponent;
 
-    @Bind( R.id.tabs )
+    @BindView( R.id.tabs )
     TabLayout mTabLayout;
 
-    @Bind( R.id.pager )
+    @BindView( R.id.pager )
     ViewPager mPager;
 
-    @Bind( R.id.fab )
+    @BindView( R.id.fab )
     FloatingActionButton mFab;
 
     private MainFragmentPagerAdapter mPagerAdapter;
@@ -83,7 +82,6 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         Log.d( TAG, "onCreate : enter" );
         Log.i( TAG, "Branch: " + getResources().getString( R.string.branchName ) + ", Tag: " + getResources().getString( R.string.tagName ) + ", Commit: " + getResources().getString( R.string.shaName ) );
 
-
         requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
 
@@ -97,44 +95,39 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         mTabLayout.setupWithViewPager( mPager );
         mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
 
-        mFab.setOnClickListener( new View.OnClickListener() {
+        mFab.setOnClickListener( v -> {
 
-            @Override
-            public void onClick( View v ) {
+            switch( mPager.getCurrentItem() ) {
 
-                switch( mPager.getCurrentItem() ) {
+                case 0 :
 
-                    case 0 :
+                    if( null != mPagerAdapter.getItem( 0 ) ) {
 
-                        if( null != mPagerAdapter.getItem( 0 ) ) {
+                        ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
 
-                            ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
+                    }
 
-                        }
+                    break;
 
-                        break;
+                case 1 :
 
-                    case 1 :
+                    if( null != mPagerAdapter.getItem( 1 ) ) {
 
-                        if( null != mPagerAdapter.getItem( 1 ) ) {
+                        ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
 
-                            ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
+                    }
 
-                        }
+                    break;
 
-                        break;
+                case 2 :
 
-                    case 2 :
+                    if( null != mPagerAdapter.getItem( 2 ) ) {
 
-                        if( null != mPagerAdapter.getItem( 2 ) ) {
+                        ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
 
-                            ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
+                    }
 
-                        }
-
-                        break;
-
-                }
+                    break;
 
             }
 

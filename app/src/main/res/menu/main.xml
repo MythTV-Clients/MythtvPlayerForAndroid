@@ -20,9 +20,16 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item android:id="@+id/search_action"
         android:title="@string/search_title"
         android:icon="@drawable/ic_search_white"
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="android.support.v7.widget.SearchView" />
+
+    <item android:id="@+id/media_route_menu_item"
+          android:title="@string/chromecast_label"
+          app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+          app:showAsAction="always" />
+
 </menu>

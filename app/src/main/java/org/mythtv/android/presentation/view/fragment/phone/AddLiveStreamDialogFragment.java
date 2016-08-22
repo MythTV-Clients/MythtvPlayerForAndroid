@@ -20,7 +20,6 @@ package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -38,26 +37,8 @@ public class AddLiveStreamDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
         builder
                 .setTitle( R.string.add_live_stream_title )
-                .setPositiveButton( R.string.add_live_stream_positive_label, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick( DialogInterface dialog, int which ) {
-
-                        getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_OK, null );
-
-                    }
-
-                })
-                .setNegativeButton( android.R.string.cancel, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick( DialogInterface dialog, int which ) {
-
-                        getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_CANCELED, null );
-
-                    }
-
-                });
+                .setPositiveButton( R.string.add_live_stream_positive_label, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_OK, null ))
+                .setNegativeButton( android.R.string.cancel, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_CANCELED, null ));
 
         return builder.create();
     }

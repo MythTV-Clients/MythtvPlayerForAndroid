@@ -73,8 +73,6 @@ public class FileManager {
 
                 Log.e(TAG, "writeToFile : error, io", e);
 
-            } finally {
-
             }
 
         }

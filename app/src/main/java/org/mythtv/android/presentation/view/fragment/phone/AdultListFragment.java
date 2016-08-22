@@ -43,8 +43,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -56,11 +57,13 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
     @Inject
     AdultListPresenter adultListPresenter;
 
-    @Bind( R.id.rv_videoMetadataInfos )
+    @BindView( R.id.rv_videoMetadataInfos )
     RecyclerView rv_videoMetadataInfos;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private VideosAdapter videoMetadataInfosAdapter;
 
@@ -91,6 +94,8 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_video_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -143,7 +148,7 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }
@@ -163,7 +168,7 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
 
         this.rv_videoMetadataInfos.setLayoutManager( new VideosLayoutManager( getActivity() ) );
 
-        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
+        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<>() );
         this.videoMetadataInfosAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_videoMetadataInfos.setAdapter( videoMetadataInfosAdapter );
 
@@ -235,16 +240,7 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                AdultListFragment.this.loadAdultList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> AdultListFragment.this.loadAdultList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -277,18 +273,13 @@ public class AdultListFragment extends AbstractBaseVideoPagerFragment implements
         Log.d( TAG, "loadAdultList : exit" );
     }
 
-    private VideosAdapter.OnItemClickListener onItemClickListener = new VideosAdapter.OnItemClickListener() {
+    private VideosAdapter.OnItemClickListener onItemClickListener = model -> {
 
-                @Override
-                public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
+        if( null != AdultListFragment.this.adultListPresenter && null != model ) {
 
-                    if( null != AdultListFragment.this.adultListPresenter && null != videoMetadataInfoModel ) {
+            AdultListFragment.this.adultListPresenter.onVideoClicked( model );
 
-                        AdultListFragment.this.adultListPresenter.onVideoClicked(videoMetadataInfoModel);
-
-                    }
-
-                }
+        }
 
     };
 

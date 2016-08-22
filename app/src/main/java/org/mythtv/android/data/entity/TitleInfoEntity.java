@@ -20,12 +20,12 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Data;
+//import lombok.Data;
 
 /*
  * Created by dmfrey on 12/7/14.
  */
-@Data
+//@Data
 public class TitleInfoEntity {
 
     @SerializedName( "Title" )
@@ -36,5 +36,49 @@ public class TitleInfoEntity {
 
     @SerializedName( "Count" )
     private int count;
+
+    public TitleInfoEntity() {
+    }
+
+    public TitleInfoEntity(String title, String inetref, int count ) {
+
+        this.title = title;
+        this.inetref = inetref;
+        this.count = count;
+
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getInetref() {
+        return inetref;
+    }
+
+    public void setInetref(String inetref) {
+        this.inetref = inetref;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    @Override
+    public String toString() {
+        return "TitleInfoEntity{" +
+                "title='" + title + '\'' +
+                ", inetref='" + inetref + '\'' +
+                ", count=" + count +
+                '}';
+    }
 
 }

@@ -30,7 +30,6 @@ import android.support.v17.leanback.widget.DetailsOverviewRowPresenter;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
@@ -246,74 +245,69 @@ public class VideoDetailsFragment extends AbstractBaseDetailsFragment {
         // Hook up transition element.
         detailsPresenter.setSharedElementEnterTransition( getActivity(), VideoDetailsActivity.SHARED_ELEMENT_NAME );
 
-        detailsPresenter.setOnActionClickedListener( new OnActionClickedListener() {
+        detailsPresenter.setOnActionClickedListener( action -> {
 
-            @Override
-            public void onActionClicked( Action action ) {
+            if( action.getId() == ACTION_WATCH ) {
 
-                if( action.getId() == ACTION_WATCH ) {
+                String seasonEpisode = "";
+                if( "TELEVISION".equals( mVideoMetadataInfoModel.getContentType() ) ) {
 
-                    String seasonEpisode = "";
-                    if( "TELEVISION".equals( mVideoMetadataInfoModel.getContentType() ) ) {
+                    seasonEpisode = SeasonEpisodeFormatter.format( mVideoMetadataInfoModel );
 
-                        seasonEpisode = SeasonEpisodeFormatter.format( mVideoMetadataInfoModel );
+                }
 
-                    }
+                String filename = mVideoMetadataInfoModel.getFileName();
+                try {
+                    filename = URLEncoder.encode( mVideoMetadataInfoModel.getFileName(), "UTF-8" );
+                } catch( UnsupportedEncodingException e ) {
 
-                    String filename = mVideoMetadataInfoModel.getFileName();
-                    try {
-                        filename = URLEncoder.encode( mVideoMetadataInfoModel.getFileName(), "UTF-8" );
-                    } catch( UnsupportedEncodingException e ) {
+                }
 
-                    }
+                String masterBackendUrl = getMasterBackendUrl();
+                String externalPlayerUrl = masterBackendUrl + "/Content/GetFile?FileName=" + filename;
 
-                    String masterBackendUrl = getMasterBackendUrl();
-                    String externalPlayerUrl = masterBackendUrl + "/Content/GetFile?FileName=" + filename;
+                if( !getSharedPreferencesModule().getInternalPlayer() ) {
 
-                    if( !getSharedPreferencesModule().getInternalPlayer() ) {
+                    Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
 
-                        Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
-
-                        final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
-                        externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
-                        startActivity( externalPlayer );
-
-                    } else {
-
-                        String url = null;
-                        if( mediaSupported() ) {
-
-                            url = externalPlayerUrl;
-
-                        } else if( liveStreamSupported() ) {
-
-                            url = masterBackendUrl + mVideoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl();
-
-                        }
-
-                        VideoModel videoModel = new VideoModel
-                                .VideoModelBuilder()
-                                    .id( mVideoMetadataInfoModel.getId() )
-                                    .category( mVideoMetadataInfoModel.getContentType() )
-                                    .title( mVideoMetadataInfoModel.getTitle() )
-                                    .description( mVideoMetadataInfoModel.getDescription() + " " + seasonEpisode )
-                                    .videoUrl( url )
-                                    .bgImageUrl( masterBackendUrl + "/Content/GetImageFile?StorageGroup=Fanart&FileName=" + mVideoMetadataInfoModel.getFanart() )
-                                    .cardImageUrl( masterBackendUrl + "/Content/GetImageFile?StorageGroup=Coverart&FileName=" + mVideoMetadataInfoModel.getCoverart() )
-                                    .studio( mVideoMetadataInfoModel.getStudio() )
-                                    .build();
-
-                        Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
-                        intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
-                        startActivity( intent );
-
-                    }
+                    final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
+                    externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
+                    startActivity( externalPlayer );
 
                 } else {
 
-                    Toast.makeText( getActivity(), action.toString(), Toast.LENGTH_SHORT ).show();
+                    String url = null;
+                    if( mediaSupported() ) {
+
+                        url = externalPlayerUrl;
+
+                    } else if( liveStreamSupported() ) {
+
+                        url = masterBackendUrl + mVideoMetadataInfoModel.getLiveStreamInfo().getRelativeUrl();
+
+                    }
+
+                    VideoModel videoModel = new VideoModel
+                            .VideoModelBuilder()
+                                .id( mVideoMetadataInfoModel.getId() )
+                                .category( mVideoMetadataInfoModel.getContentType() )
+                                .title( mVideoMetadataInfoModel.getTitle() )
+                                .description( mVideoMetadataInfoModel.getDescription() + " " + seasonEpisode )
+                                .videoUrl( url )
+                                .bgImageUrl( masterBackendUrl + "/Content/GetImageFile?StorageGroup=Fanart&FileName=" + mVideoMetadataInfoModel.getFanart() )
+                                .cardImageUrl( masterBackendUrl + "/Content/GetImageFile?StorageGroup=Coverart&FileName=" + mVideoMetadataInfoModel.getCoverart() )
+                                .studio( mVideoMetadataInfoModel.getStudio() )
+                                .build();
+
+                    Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
+                    intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
+                    startActivity( intent );
 
                 }
+
+            } else {
+
+                Toast.makeText( getActivity(), action.toString(), Toast.LENGTH_SHORT ).show();
 
             }
 

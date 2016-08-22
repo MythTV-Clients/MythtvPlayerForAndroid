@@ -116,7 +116,7 @@ public class VideoCacheImpl implements VideoCache {
 
         return readFromFile()
                 .flatMap( Observable::from )
-                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getId() == id );
+                .filter( entity -> entity.getId() == id );
 
     }
 
@@ -133,9 +133,9 @@ public class VideoCacheImpl implements VideoCache {
 
         return readFromFile()
                 .flatMap( Observable::from )
-                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
+                .filter( entity -> entity.getContentType().equals( category ) )
 //                .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
-                .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) )
+                .doOnNext( entity -> Log.d( TAG, "getCategory : entity=" + entity ) )
                 .toList();
 
     }
@@ -153,7 +153,7 @@ public class VideoCacheImpl implements VideoCache {
 
         return readFromFile()
                 .flatMap( Observable::from )
-                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getFileName().startsWith( directory ) )
+                .filter( entity -> entity.getFileName().startsWith( directory ) )
                 .toList();
     }
 

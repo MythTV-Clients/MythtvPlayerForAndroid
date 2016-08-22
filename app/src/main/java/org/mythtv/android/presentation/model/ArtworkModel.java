@@ -19,15 +19,38 @@
 package org.mythtv.android.presentation.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
-import lombok.Data;
+//import lombok.Data;
 
 /**
  * Created by dmfrey on 8/27/15.
  */
-@Data
+//@Data
 public class ArtworkModel implements Serializable {
 
     private ArtworkInfoModel[] artworkInfos;
+
+    public ArtworkModel() {
+    }
+
+    public ArtworkModel(ArtworkInfoModel[] artworkInfos) {
+        this.artworkInfos = artworkInfos;
+    }
+
+    public ArtworkInfoModel[] getArtworkInfos() {
+        return artworkInfos;
+    }
+
+    public void setArtworkInfos(ArtworkInfoModel[] artworkInfos) {
+        this.artworkInfos = artworkInfos;
+    }
+
+    @Override
+    public String toString() {
+        return "ArtworkModel{" +
+                "artworkInfos=" + Arrays.toString(artworkInfos) +
+                '}';
+    }
 
 }

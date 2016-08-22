@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaDescription;
 import android.media.MediaMetadata;
-import android.media.MediaPlayer;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -41,7 +40,6 @@ import android.support.v17.leanback.widget.CursorObjectAdapter;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
@@ -170,15 +168,10 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         mQueue = new ArrayList<>();
 
         // Hack to get playback controls to be in focus right away.
-        mVideoView.post( new Runnable() {
+        mVideoView.post( () -> {
 
-            @Override
-            public void run() {
-
-                mVideoView.setFocusable( false );
-                mVideoView.setFocusableInTouchMode( false );
-
-            }
+            mVideoView.setFocusable( false );
+            mVideoView.setFocusableInTouchMode( false );
 
         });
 
@@ -198,12 +191,7 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 //        getLoaderManager().initLoader( QUEUE_VIDEOS_LOADER, args, mCallbacks );
 
         // Set up listeners.
-        setOnItemViewSelectedListener( new OnItemViewSelectedListener() {
-
-            @Override
-            public void onItemSelected( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
-            }
-
+        setOnItemViewSelectedListener((OnItemViewSelectedListener) (itemViewHolder, item, rowViewHolder, row) -> {
         });
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
@@ -397,38 +385,21 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     private void setupCallbacks() {
 
-        mVideoView.setOnErrorListener( new MediaPlayer.OnErrorListener() {
+        mVideoView.setOnErrorListener( ( mp, what, extra ) -> {
 
-            @Override
-            public boolean onError( MediaPlayer mp, int what, int extra ) {
+            mVideoView.stopPlayback();
+            setPlaybackState( PlaybackState.STATE_STOPPED );
 
-                mVideoView.stopPlayback();
-                setPlaybackState( PlaybackState.STATE_STOPPED );
-
-                return false;
-            }
-
+            return false;
         });
 
-        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                if (getPlaybackState() == PlaybackState.STATE_PLAYING) {
-                    mVideoView.start();
-                }
+        mVideoView.setOnPreparedListener( mp -> {
+            if (getPlaybackState() == PlaybackState.STATE_PLAYING) {
+                mVideoView.start();
             }
         });
 
-        mVideoView.setOnCompletionListener( new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion( MediaPlayer mp ) {
-
-                setPlaybackState( PlaybackState.STATE_STOPPED );
-
-            }
-
-        });
+        mVideoView.setOnCompletionListener( mp -> setPlaybackState( PlaybackState.STATE_STOPPED ) );
 
     }
 
@@ -481,13 +452,11 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 //        mSecondaryActionsAdapter.add( mClosedCaptioningAction );
 //        mSecondaryActionsAdapter.add( mMoreActions );
 
-        playbackControlsRowPresenter.setOnActionClickedListener( new OnActionClickedListener() {
+        playbackControlsRowPresenter.setOnActionClickedListener(action -> {
 
-            public void onActionClicked( Action action ) {
+            if( action.getId() == mPlayPauseAction.getId() ) {
 
-                if( action.getId() == mPlayPauseAction.getId() ) {
-
-                    togglePlayback( mPlayPauseAction.getIndex() == PlayPauseAction.PLAY );
+                togglePlayback( mPlayPauseAction.getIndex() == PlayPauseAction.PLAY );
 
 //                } else if( action.getId() == mSkipNextAction.getId() ) {
 //
@@ -497,21 +466,19 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 //
 //                    prev();
 
-                } else if( action.getId() == mFastForwardAction.getId() ) {
+            } else if( action.getId() == mFastForwardAction.getId() ) {
 
-                    fastForward();
+                fastForward();
 
-                } else if( action.getId() == mRewindAction.getId() ) {
+            } else if( action.getId() == mRewindAction.getId() ) {
 
-                    fastRewind();
+                fastRewind();
 
-                }
+            }
 
-                if( action instanceof PlaybackControlsRow.MultiAction ) {
+            if( action instanceof PlaybackControlsRow.MultiAction ) {
 
-                    notifyChanged( action );
-
-                }
+                notifyChanged( action );
 
             }
 
@@ -879,29 +846,24 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         @Override
         public void run() {
 
-            mClickTrackingHandler.post( new Runnable() {
+            mClickTrackingHandler.post( () -> {
 
-                @Override
-                public void run() {
+                if( mClickCount == 0 ) {
 
-                    if( mClickCount == 0 ) {
+                    mFfwRwdSpeed = INITIAL_SPEED;
 
-                        mFfwRwdSpeed = INITIAL_SPEED;
+                } else if( mClickCount == 1 ) {
 
-                    } else if( mClickCount == 1 ) {
+                    mFfwRwdSpeed *= 2;
 
-                        mFfwRwdSpeed *= 2;
+                } else if( mClickCount >= 2 ) {
 
-                    } else if( mClickCount >= 2 ) {
-
-                        mFfwRwdSpeed *= 4;
-
-                    }
-
-                    mClickCount = 0;
-                    mClickTrackingTimer = null;
+                    mFfwRwdSpeed *= 4;
 
                 }
+
+                mClickCount = 0;
+                mClickTrackingTimer = null;
 
             });
 

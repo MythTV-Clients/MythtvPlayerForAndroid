@@ -38,7 +38,7 @@ import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 import java.util.Collection;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -110,14 +110,11 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
         if( titleCount > 0 )
             holder.textViewCount.setText( String.valueOf( titleCount ) );
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( null != TitleInfosAdapter.this.onItemClickListener ) {
+        holder.itemView.setOnClickListener(v -> {
+            if( null != TitleInfosAdapter.this.onItemClickListener ) {
 
-                    TitleInfosAdapter.this.onItemClickListener.onTitleInfoItemClicked( titleInfoModel );
+                TitleInfosAdapter.this.onItemClickListener.onTitleInfoItemClicked( titleInfoModel );
 
-                }
             }
         });
 
@@ -164,13 +161,13 @@ public class TitleInfosAdapter extends RecyclerView.Adapter<TitleInfosAdapter.Ti
 
     static class TitleInfoViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.title_info_item_coverart )
+        @BindView( R.id.title_info_item_coverart )
         AutoLoadImageView imageViewCoverart;
 
-        @Bind( R.id.title_info_item_title )
+        @BindView( R.id.title_info_item_title )
         TextView textViewTitle;
 
-        @Bind( R.id.title_info_item_count )
+        @BindView( R.id.title_info_item_count )
         TextView textViewCount;
 
         public TitleInfoViewHolder( View itemView ) {

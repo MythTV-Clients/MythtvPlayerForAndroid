@@ -19,7 +19,6 @@
 package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -45,16 +44,7 @@ public class AboutDialogFragment extends DialogFragment {
 
         builder
                 .setTitle( R.string.app_name )
-                .setPositiveButton( R.string.close, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick( DialogInterface dialog, int which ) {
-
-                        dialog.dismiss();
-
-                    }
-
-                })
+                .setPositiveButton( R.string.close, (dialog, which) -> dialog.dismiss())
                 .setView( dialogView );
 
         return builder.create();

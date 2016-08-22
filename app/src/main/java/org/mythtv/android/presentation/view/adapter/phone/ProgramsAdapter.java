@@ -40,7 +40,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -108,17 +108,12 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
         }
 
-        holder.itemView.setOnClickListener( new View.OnClickListener() {
+        holder.itemView.setOnClickListener(v -> {
 
-            @Override
-            public void onClick( View v ) {
+            if( null != ProgramsAdapter.this.onItemClickListener ) {
+                Log.i( TAG, "onClick : program" + programModel.toString() );
 
-                if( null != ProgramsAdapter.this.onItemClickListener ) {
-                    Log.i( TAG, "onClick : program" + programModel.toString() );
-
-                    ProgramsAdapter.this.onItemClickListener.onProgramItemClicked( programModel );
-
-                }
+                ProgramsAdapter.this.onItemClickListener.onProgramItemClicked( programModel );
 
             }
 
@@ -157,25 +152,25 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
     static class ProgramViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.program_item_preview )
+        @BindView( R.id.program_item_preview )
         AutoLoadImageView imageViewPreview;
 
-        @Bind( R.id.program_item_title )
+        @BindView( R.id.program_item_title )
         TextView textViewTitle;
 
-        @Bind( R.id.program_item_sub_title )
+        @BindView( R.id.program_item_sub_title )
         TextView textViewSubTitle;
 
-        @Bind( R.id.program_item_date )
+        @BindView( R.id.program_item_date )
         TextView textViewDate;
 
-        @Bind( R.id.program_item_progress )
+        @BindView( R.id.program_item_progress )
         ProgressBar progressBarProgress;
 
-        @Bind( R.id.program_item_episode )
+        @BindView( R.id.program_item_episode )
         TextView textViewEpisode;
 
-        @Bind( R.id.program_item_stream_ready )
+        @BindView( R.id.program_item_stream_ready )
         TextView textViewStreamReady;
 
         public ProgramViewHolder( View itemView ) {

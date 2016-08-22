@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -30,22 +31,27 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.google.android.gms.cast.framework.CastSession;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SettingsKeys;
+import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
 import org.mythtv.android.presentation.internal.di.components.DvrComponent;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
-import org.mythtv.android.presentation.view.fragment.phone.ProgramDetailsFragment;
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.utils.MediaInfoHelper;
+import org.mythtv.android.presentation.view.fragment.phone.CastErrorDialogFragment;
+import org.mythtv.android.presentation.view.fragment.phone.LocalErrorDialogFragment;
+import org.mythtv.android.presentation.view.fragment.phone.ProgramDetailsFragment;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -67,10 +73,10 @@ public class ProgramDetailsActivity extends AbstractBasePhoneActivity implements
 
     private ProgramModel programModel;
 
-    @Bind( R.id.backdrop )
+    @BindView( R.id.backdrop )
     ImageView backdrop;
 
-    @Bind( R.id.fab )
+    @BindView( R.id.fab )
     FloatingActionButton fab;
 
     public static Intent getCallingIntent( Context context, int chanId, DateTime startTime ) {
@@ -259,30 +265,45 @@ public class ProgramDetailsActivity extends AbstractBasePhoneActivity implements
     void onButtonFabPlay() {
         Log.d( TAG, "onButtonFabPlay : enter" );
 
-        if( null == this.programModel.getLiveStreamInfo() || this.programModel.getLiveStreamInfo().getPercentComplete() < 2 ) {
-            Log.d( TAG, "onButtonFabPlay : stream does not exist or is not ready, send to external player" );
+        if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
+            Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
 
-            String recordingUrl = getMasterBackendUrl()  + "/Content/GetFile?FileName=" + programModel.getFileName();
+            if( programModel.getFileName().endsWith( "mp4" ) || null != programModel.getLiveStreamInfo() ) {
 
-            navigator.navigateToExternalPlayer( this, recordingUrl );
+                navigator.navigateToLocalPlayer( this, MediaInfoHelper.transform( getMasterBackendUrl(), programModel ) );
+
+            } else {
+
+                CastSession castSession = mCastContext.getSessionManager().getCurrentCastSession();
+                if( null != castSession && castSession.isConnected() ) {
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    CastErrorDialogFragment fragment = new CastErrorDialogFragment();
+                    fragment.show( fm, "Cast Error Dialog Fragment" );
+
+                } else {
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    LocalErrorDialogFragment fragment = new LocalErrorDialogFragment();
+                    fragment.show( fm, "Playback Error Dialog Fragment" );
+
+                }
+
+            }
 
         } else {
-            Log.d( TAG, "onButtonFabPlay : stream exists and is ready" );
+            Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
 
             try {
 
-                String recordingUrl = getMasterBackendUrl() + URLEncoder.encode( programModel.getLiveStreamInfo().getRelativeUrl(), "UTF-8");
-                recordingUrl = recordingUrl.replaceAll( "%2F", "/" );
-                recordingUrl = recordingUrl.replaceAll( "\\+", "%20" );
+                if( null != programModel.getLiveStreamInfo() && programModel.getLiveStreamInfo().getPercentComplete() > 2 ) {
 
-                if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
-                    Log.d( TAG, "onButtonFabPlay : sending steam to internal player" );
-
-                    navigator.navigateToVideoPlayer( this, recordingUrl );
+                    String recordingUrl = MediaInfoHelper.buildUrl( getMasterBackendUrl(), programModel.getLiveStreamInfo().getRelativeUrl() );
+                    navigator.navigateToExternalPlayer( this, recordingUrl );
 
                 } else {
-                    Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
 
+                    String recordingUrl = getMasterBackendUrl() + "/Content/GetFile?FileName=" + URLEncoder.encode( programModel.getFileName(), "UTF-8" );
                     navigator.navigateToExternalPlayer( this, recordingUrl );
 
                 }
