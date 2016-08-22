@@ -22,9 +22,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnErrorListener;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,10 +34,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -460,12 +454,9 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    updateControllersVisibility(false);
-                    mControllersVisible = false;
-                }
+            mHandler.post( () -> {
+                updateControllersVisibility(false);
+                mControllersVisible = false;
             });
 
         }
@@ -475,75 +466,55 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            mHandler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (mLocation == PlaybackLocation.LOCAL) {
-                        int currentPos = mVideoView.getCurrentPosition();
-                        updateSeekbar(currentPos, mDuration);
-                    }
+            mHandler.post( () -> {
+                if (mLocation == PlaybackLocation.LOCAL) {
+                    int currentPos = mVideoView.getCurrentPosition();
+                    updateSeekbar(currentPos, mDuration);
                 }
             });
         }
     }
 
     private void setupControlsCallbacks() {
-        mVideoView.setOnErrorListener(new OnErrorListener() {
-
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                Log.e(TAG, "OnErrorListener.onError(): VideoView encountered an "
-                        + "error, what: " + what + ", extra: " + extra);
-                String msg;
-                if (extra == MediaPlayer.MEDIA_ERROR_TIMED_OUT) {
-                    msg = getString(R.string.video_error_media_load_timeout);
-                } else if (what == MediaPlayer.MEDIA_ERROR_SERVER_DIED) {
-                    msg = getString(R.string.video_error_server_unaccessible);
-                } else {
-                    msg = getString(R.string.video_error_unknown_error);
-                }
-                Utils.showErrorDialog(LocalPlayerActivity.this, msg);
-                mVideoView.stopPlayback();
-                mPlaybackState = PlaybackState.IDLE;
-                updatePlayButton(mPlaybackState);
-                return true;
+        mVideoView.setOnErrorListener( ( mp, what, extra ) -> {
+            Log.e(TAG, "OnErrorListener.onError(): VideoView encountered an "
+                    + "error, what: " + what + ", extra: " + extra);
+            String msg;
+            if (extra == MediaPlayer.MEDIA_ERROR_TIMED_OUT) {
+                msg = getString(R.string.video_error_media_load_timeout);
+            } else if (what == MediaPlayer.MEDIA_ERROR_SERVER_DIED) {
+                msg = getString(R.string.video_error_server_unaccessible);
+            } else {
+                msg = getString(R.string.video_error_unknown_error);
             }
+            Utils.showErrorDialog(LocalPlayerActivity.this, msg);
+            mVideoView.stopPlayback();
+            mPlaybackState = PlaybackState.IDLE;
+            updatePlayButton(mPlaybackState);
+            return true;
         });
 
-        mVideoView.setOnPreparedListener(new OnPreparedListener() {
-
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                Log.d(TAG, "onPrepared is reached");
-                mDuration = mp.getDuration();
-                mEndText.setText(Utils.formatMillis(mDuration));
-                mSeekbar.setMax(mDuration);
-                restartTrickplayTimer();
-            }
+        mVideoView.setOnPreparedListener( mp -> {
+            Log.d(TAG, "onPrepared is reached");
+            mDuration = mp.getDuration();
+            mEndText.setText(Utils.formatMillis(mDuration));
+            mSeekbar.setMax(mDuration);
+            restartTrickplayTimer();
         });
 
-        mVideoView.setOnCompletionListener(new OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                stopTrickplayTimer();
-                Log.d(TAG, "setOnCompletionListener()");
-                mPlaybackState = PlaybackState.IDLE;
-                updatePlayButton(mPlaybackState);
-            }
+        mVideoView.setOnCompletionListener( mp -> {
+            stopTrickplayTimer();
+            Log.d(TAG, "setOnCompletionListener()");
+            mPlaybackState = PlaybackState.IDLE;
+            updatePlayButton(mPlaybackState);
         });
 
-        mVideoView.setOnTouchListener(new OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!mControllersVisible) {
-                    updateControllersVisibility(true);
-                }
-                startControllersTimer();
-                return false;
+        mVideoView.setOnTouchListener( ( v, event ) -> {
+            if (!mControllersVisible) {
+                updateControllersVisibility(true);
             }
+            startControllersTimer();
+            return false;
         });
 
         mSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -572,13 +543,9 @@ public class LocalPlayerActivity extends AppCompatActivity {
             }
         });
 
-        mPlayPause.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (mLocation == PlaybackLocation.LOCAL) {
-                    togglePlayback();
-                }
+        mPlayPause.setOnClickListener(v -> {
+            if (mLocation == PlaybackLocation.LOCAL) {
+                togglePlayback();
             }
         });
     }
@@ -729,12 +696,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
         mCoverArt = (ImageView) findViewById(R.id.coverArtView);
         ViewCompat.setTransitionName(mCoverArt, getString(R.string.transition_image));
         mPlayCircle = (ImageButton) findViewById(R.id.play_circle);
-        mPlayCircle.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                togglePlayback();
-            }
-        });
+        mPlayCircle.setOnClickListener( v -> togglePlayback() );
     }
 
     private MediaInfo buildMediaInfo() {

@@ -30,23 +30,23 @@ import android.util.Log;
 import android.view.Window;
 
 import org.mythtv.android.R;
-import org.mythtv.android.presentation.view.fragment.phone.AbstractBaseVideoPagerFragment;
-import org.mythtv.android.presentation.view.fragment.phone.AdultListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.MusicVideoListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.TelevisionListFragment;
 import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
+import org.mythtv.android.presentation.view.fragment.phone.AbstractBaseVideoPagerFragment;
+import org.mythtv.android.presentation.view.fragment.phone.AdultListFragment;
 import org.mythtv.android.presentation.view.fragment.phone.HomeVideoListFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MovieListFragment;
+import org.mythtv.android.presentation.view.fragment.phone.MusicVideoListFragment;
+import org.mythtv.android.presentation.view.fragment.phone.TelevisionListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 /**
  * Created by dmfrey on 11/13/15.
@@ -65,10 +65,10 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
     private VideoComponent videoComponent;
 
-    @Bind( R.id.tabs )
+    @BindView( R.id.tabs )
     TabLayout mTabLayout;
 
-    @Bind( R.id.pager )
+    @BindView( R.id.pager )
     ViewPager mPager;
 
     @Override

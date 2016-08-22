@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -89,7 +89,7 @@ public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgra
         holder.textViewTitle.setText( programModel.getTitle() );
         holder.textViewSubTitle.setText( programModel.getSubTitle() );
         holder.textViewDate.setText( programModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
-        holder.textViewDuration.setText( context.getResources().getString( R.string.minutes, Minutes.minutesBetween( programModel.getStartTime(), programModel.getEndTime() ).getMinutes() ) );
+        holder.textViewDuration.setText( context.getResources().getString( R.string.minutes, String.valueOf( Minutes.minutesBetween( programModel.getStartTime(), programModel.getEndTime() ).getMinutes() ) ) );
 
     }
 
@@ -124,16 +124,16 @@ public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgra
 
     static class ProgramViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.program_item_title )
+        @BindView( R.id.program_item_title )
         TextView textViewTitle;
 
-        @Bind( R.id.program_item_sub_title )
+        @BindView( R.id.program_item_sub_title )
         TextView textViewSubTitle;
 
-        @Bind( R.id.program_item_date )
+        @BindView( R.id.program_item_date )
         TextView textViewDate;
 
-        @Bind( R.id.program_item_duration )
+        @BindView( R.id.program_item_duration )
         TextView textViewDuration;
 
         public ProgramViewHolder( View itemView ) {

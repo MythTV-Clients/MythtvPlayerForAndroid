@@ -51,7 +51,7 @@ import org.mythtv.android.presentation.view.fragment.phone.ProgramDetailsFragmen
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -73,10 +73,10 @@ public class ProgramDetailsActivity extends AbstractBasePhoneActivity implements
 
     private ProgramModel programModel;
 
-    @Bind( R.id.backdrop )
+    @BindView( R.id.backdrop )
     ImageView backdrop;
 
-    @Bind( R.id.fab )
+    @BindView( R.id.fab )
     FloatingActionButton fab;
 
     public static Intent getCallingIntent( Context context, int chanId, DateTime startTime ) {

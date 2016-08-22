@@ -281,26 +281,21 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
             int i = 0;
             for( Category category : recordings.keySet() ) {
 
-                Collections.sort( recordings.get( category ), new Comparator<ProgramModel>() {
+                Collections.sort( recordings.get( category ), ( lhs, rhs ) -> {
 
-                    @Override
-                    public int compare( ProgramModel lhs, ProgramModel rhs ) {
+                    int i1 = lhs.getEndTime().compareTo( rhs.getEndTime() );
+                    if( i1 != 0 ) {
 
-                        int i = lhs.getEndTime().compareTo( rhs.getEndTime() );
-                        if( i != 0 ) {
-
-                            return i;
-                        }
-
-                        i = lhs.getSeason().compareTo( rhs.getSeason() );
-                        if( i != 0 ) {
-
-                            return i;
-                        }
-
-                        return lhs.getEpisode().compareTo( rhs.getEpisode() );
+                        return i1;
                     }
 
+                    i1 = lhs.getSeason().compareTo( rhs.getSeason() );
+                    if( i1 != 0 ) {
+
+                        return i1;
+                    }
+
+                    return lhs.getEpisode().compareTo( rhs.getEpisode() );
                 });
 
                 ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( cardPresenter );
@@ -384,16 +379,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
     private void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
-        setOnSearchClickedListener( new View.OnClickListener() {
-
-            @Override
-            public void onClick( View view ) {
-
-                RecordingsFragment.this.listener.onSearchClicked();
-
-            }
-
-        });
+        setOnSearchClickedListener(view -> RecordingsFragment.this.listener.onSearchClicked());
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
         setOnItemViewSelectedListener( new ItemViewSelectedListener() );
@@ -500,15 +486,12 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
 
         @Override
         public void run() {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
+            mHandler.post(() -> {
 
-                    if( null != mBackgroundURI ) {
+                if( null != mBackgroundURI ) {
 
-                        updateBackground( mBackgroundURI.toString() );
+                    updateBackground( mBackgroundURI.toString() );
 
-                    }
                 }
             });
 

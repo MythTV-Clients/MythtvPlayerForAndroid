@@ -34,7 +34,7 @@ import org.mythtv.android.presentation.model.ProgramModel;
 import java.util.Collection;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -193,16 +193,16 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
     static class EncoderViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.encoder_item_recording_image )
+        @BindView( R.id.encoder_item_recording_image )
         ImageView imageViewRecording;
 
-        @Bind( R.id.encoder_item_name )
+        @BindView( R.id.encoder_item_name )
         TextView textViewName;
 
-        @Bind( R.id.encoder_item_recording )
+        @BindView( R.id.encoder_item_recording )
         TextView textViewRecording;
 
-        @Bind( R.id.encoder_item_recording_description )
+        @BindView( R.id.encoder_item_recording_description )
         TextView textViewRecordingDescription;
 
         public EncoderViewHolder( View itemView ) {

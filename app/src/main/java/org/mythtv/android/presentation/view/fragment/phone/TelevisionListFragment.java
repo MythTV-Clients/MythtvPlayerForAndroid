@@ -43,8 +43,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -56,11 +57,13 @@ public class TelevisionListFragment extends AbstractBaseVideoPagerFragment imple
     @Inject
     TelevisionSeriesCategoryListPresenter televisionSeriesCategoryListPresenter;
 
-    @Bind( R.id.rv_videoMetadataInfos )
+    @BindView( R.id.rv_videoMetadataInfos )
     RecyclerView rv_videoMetadataInfos;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private VideosAdapter videoMetadataInfosAdapter;
 
@@ -90,6 +93,8 @@ public class TelevisionListFragment extends AbstractBaseVideoPagerFragment imple
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_video_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -142,7 +147,7 @@ public class TelevisionListFragment extends AbstractBaseVideoPagerFragment imple
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }
@@ -162,7 +167,7 @@ public class TelevisionListFragment extends AbstractBaseVideoPagerFragment imple
 
         this.rv_videoMetadataInfos.setLayoutManager( new VideosLayoutManager( getActivity() ) );
 
-        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<VideoMetadataInfoModel>() );
+        this.videoMetadataInfosAdapter = new VideosAdapter( getActivity(), new ArrayList<>() );
         this.videoMetadataInfosAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_videoMetadataInfos.setAdapter( videoMetadataInfosAdapter );
 
@@ -204,7 +209,7 @@ public class TelevisionListFragment extends AbstractBaseVideoPagerFragment imple
     }
 
     @Override
-    public void renderVideoList(Collection<VideoMetadataInfoModel> videoMetadataInfoModelCollection ) {
+    public void renderVideoList( Collection<VideoMetadataInfoModel> videoMetadataInfoModelCollection ) {
         Log.d( TAG, "renderVideoList : enter" );
 
         if( null != videoMetadataInfoModelCollection ) {
@@ -234,16 +239,7 @@ public class TelevisionListFragment extends AbstractBaseVideoPagerFragment imple
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                TelevisionListFragment.this.loadTelevisionList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> TelevisionListFragment.this.loadTelevisionList());
 
         Log.d( TAG, "showError : exit" );
     }
@@ -276,18 +272,13 @@ public class TelevisionListFragment extends AbstractBaseVideoPagerFragment imple
         Log.d( TAG, "loadTelevisionList : exit" );
     }
 
-    private VideosAdapter.OnItemClickListener onItemClickListener = new VideosAdapter.OnItemClickListener() {
+    private VideosAdapter.OnItemClickListener onItemClickListener = model -> {
 
-                @Override
-                public void onVideoMetadataInfoItemClicked( VideoMetadataInfoModel videoMetadataInfoModel ) {
+        if( null != TelevisionListFragment.this.televisionSeriesCategoryListPresenter && null != model ) {
 
-                    if( null != TelevisionListFragment.this.televisionSeriesCategoryListPresenter && null != videoMetadataInfoModel ) {
+            TelevisionListFragment.this.televisionSeriesCategoryListPresenter.onVideoClicked( model );
 
-                        TelevisionListFragment.this.televisionSeriesCategoryListPresenter.onVideoClicked( videoMetadataInfoModel );
-
-                    }
-
-                }
+        }
 
     };
 

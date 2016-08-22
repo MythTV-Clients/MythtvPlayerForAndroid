@@ -32,9 +32,7 @@ import org.mythtv.android.domain.SearchResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -172,7 +170,7 @@ public class DbSearchDataStore implements SearchDataStore {
             db.beginTransaction();
 
             Observable.from( searchResultEntityCollection )
-                    .distinct( searchResultEntity -> searchResultEntity.getTitle() )
+                    .distinct( SearchResultEntity::getTitle )
                     .flatMap( searchResultEntity -> Observable.just( searchResultEntity.getTitle() ) )
                     .doOnNext( title -> db.delete( SearchResultEntity.TABLE_NAME, "type = ? and title = ?", new String[] { SearchResult.Type.RECORDING.name(), title } ) )
                     .doOnNext( title -> Log.d( TAG, "refreshRecordedPrograms : deleting old recordings for title=" + title ) )

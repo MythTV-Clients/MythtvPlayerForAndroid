@@ -4,13 +4,13 @@ import android.os.Bundle;
 
 import java.util.ArrayList;
 
-import lombok.Data;
+//import lombok.Data;
 
 /**
  * Created by dmfrey on 7/10/16.
  */
 
-@Data
+//@Data
 public class MediaItemModel {
 
     public static final String KEY_TITLE = "title";
@@ -28,6 +28,89 @@ public class MediaItemModel {
     private String contentType;
     private long duration;
     private ArrayList<String> images = new ArrayList<>();
+
+    public MediaItemModel() {
+
+    }
+
+    public MediaItemModel(String title, String subTitle, String studio, String url, String contentType, long duration, ArrayList<String> images) {
+        this.title = title;
+        this.subTitle = subTitle;
+        this.studio = studio;
+        this.url = url;
+        this.contentType = contentType;
+        this.duration = duration;
+        this.images = images;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
+
+    public String getStudio() {
+        return studio;
+    }
+
+    public void setStudio(String studio) {
+        this.studio = studio;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public ArrayList<String> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<String> images) {
+        this.images = images;
+    }
+
+    @Override
+    public String toString() {
+        return "MediaItemModel{" +
+                "title='" + title + '\'' +
+                ", subTitle='" + subTitle + '\'' +
+                ", studio='" + studio + '\'' +
+                ", url='" + url + '\'' +
+                ", contentType='" + contentType + '\'' +
+                ", duration=" + duration +
+                ", images=" + images +
+                '}';
+    }
 
     public Bundle toBundle() {
 

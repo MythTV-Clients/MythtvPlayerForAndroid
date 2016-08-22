@@ -23,12 +23,12 @@ import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import lombok.Data;
+//import lombok.Data;
 
 /*
  * Created by dmfrey on 11/12/14.
  */
-@Data
+//@Data
 public class ProgramEntity {
 
     @SerializedName( "StartTime" )
@@ -116,5 +116,309 @@ public class ProgramEntity {
     private CastEntity cast;
 
     private LiveStreamInfoEntity liveStreamInfoEntity;
+
+    public ProgramEntity() {
+    }
+
+    public ProgramEntity(DateTime startTime, DateTime endTime, String title, String subTitle, String category, String catType, boolean repeat, int videoProps, int audioProps, int subProps, String seriesId, String programId, double stars, long fileSize, DateTime lastModified, int programFlags, String fileName, String hostName, LocalDate airdate, String description, String inetref, int season, int episode, int totalEpisodes, ChannelInfoEntity channel, RecordingInfoEntity recording, ArtworkEntity artwork, CastEntity cast, LiveStreamInfoEntity liveStreamInfoEntity ) {
+
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.title = title;
+        this.subTitle = subTitle;
+        this.category = category;
+        this.catType = catType;
+        this.repeat = repeat;
+        this.videoProps = videoProps;
+        this.audioProps = audioProps;
+        this.subProps = subProps;
+        this.seriesId = seriesId;
+        this.programId = programId;
+        this.stars = stars;
+        this.fileSize = fileSize;
+        this.lastModified = lastModified;
+        this.programFlags = programFlags;
+        this.fileName = fileName;
+        this.hostName = hostName;
+        this.airdate = airdate;
+        this.description = description;
+        this.inetref = inetref;
+        this.season = season;
+        this.episode = episode;
+        this.totalEpisodes = totalEpisodes;
+        this.channel = channel;
+        this.recording = recording;
+        this.artwork = artwork;
+        this.cast = cast;
+        this.liveStreamInfoEntity = liveStreamInfoEntity;
+
+    }
+
+    public DateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(DateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public DateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(DateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getCatType() {
+        return catType;
+    }
+
+    public void setCatType(String catType) {
+        this.catType = catType;
+    }
+
+    public boolean isRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(boolean repeat) {
+        this.repeat = repeat;
+    }
+
+    public int getVideoProps() {
+        return videoProps;
+    }
+
+    public void setVideoProps(int videoProps) {
+        this.videoProps = videoProps;
+    }
+
+    public int getAudioProps() {
+        return audioProps;
+    }
+
+    public void setAudioProps(int audioProps) {
+        this.audioProps = audioProps;
+    }
+
+    public int getSubProps() {
+        return subProps;
+    }
+
+    public void setSubProps(int subProps) {
+        this.subProps = subProps;
+    }
+
+    public String getSeriesId() {
+        return seriesId;
+    }
+
+    public void setSeriesId(String seriesId) {
+        this.seriesId = seriesId;
+    }
+
+    public String getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(String programId) {
+        this.programId = programId;
+    }
+
+    public double getStars() {
+        return stars;
+    }
+
+    public void setStars(double stars) {
+        this.stars = stars;
+    }
+
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public DateTime getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(DateTime lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    public int getProgramFlags() {
+        return programFlags;
+    }
+
+    public void setProgramFlags(int programFlags) {
+        this.programFlags = programFlags;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getHostName() {
+        return hostName;
+    }
+
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
+    }
+
+    public LocalDate getAirdate() {
+        return airdate;
+    }
+
+    public void setAirdate(LocalDate airdate) {
+        this.airdate = airdate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getInetref() {
+        return inetref;
+    }
+
+    public void setInetref(String inetref) {
+        this.inetref = inetref;
+    }
+
+    public int getSeason() {
+        return season;
+    }
+
+    public void setSeason(int season) {
+        this.season = season;
+    }
+
+    public int getEpisode() {
+        return episode;
+    }
+
+    public void setEpisode(int episode) {
+        this.episode = episode;
+    }
+
+    public int getTotalEpisodes() {
+        return totalEpisodes;
+    }
+
+    public void setTotalEpisodes(int totalEpisodes) {
+        this.totalEpisodes = totalEpisodes;
+    }
+
+    public ChannelInfoEntity getChannel() {
+        return channel;
+    }
+
+    public void setChannel(ChannelInfoEntity channel) {
+        this.channel = channel;
+    }
+
+    public RecordingInfoEntity getRecording() {
+        return recording;
+    }
+
+    public void setRecording(RecordingInfoEntity recording) {
+        this.recording = recording;
+    }
+
+    public ArtworkEntity getArtwork() {
+        return artwork;
+    }
+
+    public void setArtwork(ArtworkEntity artwork) {
+        this.artwork = artwork;
+    }
+
+    public CastEntity getCast() {
+        return cast;
+    }
+
+    public void setCast(CastEntity cast) {
+        this.cast = cast;
+    }
+
+    public LiveStreamInfoEntity getLiveStreamInfoEntity() {
+        return liveStreamInfoEntity;
+    }
+
+    public void setLiveStreamInfoEntity(LiveStreamInfoEntity liveStreamInfoEntity) {
+        this.liveStreamInfoEntity = liveStreamInfoEntity;
+    }
+
+    @Override
+    public String toString() {
+        return "ProgramEntity{" +
+                "startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", title='" + title + '\'' +
+                ", subTitle='" + subTitle + '\'' +
+                ", category='" + category + '\'' +
+                ", catType='" + catType + '\'' +
+                ", repeat=" + repeat +
+                ", videoProps=" + videoProps +
+                ", audioProps=" + audioProps +
+                ", subProps=" + subProps +
+                ", seriesId='" + seriesId + '\'' +
+                ", programId='" + programId + '\'' +
+                ", stars=" + stars +
+                ", fileSize=" + fileSize +
+                ", lastModified=" + lastModified +
+                ", programFlags=" + programFlags +
+                ", fileName='" + fileName + '\'' +
+                ", hostName='" + hostName + '\'' +
+                ", airdate=" + airdate +
+                ", description='" + description + '\'' +
+                ", inetref='" + inetref + '\'' +
+                ", season=" + season +
+                ", episode=" + episode +
+                ", totalEpisodes=" + totalEpisodes +
+                ", channel=" + channel +
+                ", recording=" + recording +
+                ", artwork=" + artwork +
+                ", cast=" + cast +
+                ", liveStreamInfoEntity=" + liveStreamInfoEntity +
+                '}';
+    }
 
 }

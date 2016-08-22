@@ -260,37 +260,32 @@ public class VideoTelevisionFragment extends AbstractBaseVideoFragment implement
             for( Category category : videos.keySet() ) {
                 Log.d( TAG, "renderVideoList : category=" + category );
 
-                Collections.sort( videos.get( category ), new Comparator<VideoMetadataInfoModel>() {
+                Collections.sort( videos.get( category ), ( lhs, rhs ) -> {
 
-                    @Override
-                    public int compare( VideoMetadataInfoModel lhs, VideoMetadataInfoModel rhs ) {
+                    String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.getTitle() );
+                    String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.getTitle() );
+                    int comparison = lhsTitle.compareTo( rhsTitle );
+                    if( comparison != 0 ) {
 
-                        String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.getTitle() );
-                        String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.getTitle() );
-                        int comparison = lhsTitle.compareTo( rhsTitle );
-                        if( comparison != 0 ) {
-
-                            return comparison;
-                        }
-
-                        comparison = ( (Integer) lhs.getSeason() ).compareTo( rhs.getSeason() );
-                        if( comparison != 0 ) {
-
-                            return comparison;
-                        }
-
-                        comparison = ( (Integer) lhs.getEpisode() ).compareTo( rhs.getEpisode() );
-                        if( comparison != 0 ) {
-
-                            return comparison;
-                        }
-
-                        String lhsSubTitle = ArticleCleaner.clean( getActivity(), lhs.getSubTitle() );
-                        String rhsSubTitle = ArticleCleaner.clean( getActivity(), rhs.getSubTitle() );
-
-                        return lhsSubTitle.compareTo( rhsSubTitle );
+                        return comparison;
                     }
 
+                    comparison = ( (Integer) lhs.getSeason() ).compareTo( rhs.getSeason() );
+                    if( comparison != 0 ) {
+
+                        return comparison;
+                    }
+
+                    comparison = ( (Integer) lhs.getEpisode() ).compareTo( rhs.getEpisode() );
+                    if( comparison != 0 ) {
+
+                        return comparison;
+                    }
+
+                    String lhsSubTitle = ArticleCleaner.clean( getActivity(), lhs.getSubTitle() );
+                    String rhsSubTitle = ArticleCleaner.clean( getActivity(), rhs.getSubTitle() );
+
+                    return lhsSubTitle.compareTo( rhsSubTitle );
                 });
 
                 ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( cardPresenter );
@@ -375,16 +370,7 @@ public class VideoTelevisionFragment extends AbstractBaseVideoFragment implement
     private void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
-        setOnSearchClickedListener( new View.OnClickListener() {
-
-            @Override
-            public void onClick( View view ) {
-
-                VideoTelevisionFragment.this.listener.onSearchClicked();
-
-            }
-
-        });
+        setOnSearchClickedListener(view -> VideoTelevisionFragment.this.listener.onSearchClicked());
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
         setOnItemViewSelectedListener( new ItemViewSelectedListener() );
@@ -501,15 +487,12 @@ public class VideoTelevisionFragment extends AbstractBaseVideoFragment implement
 
         @Override
         public void run() {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
+            mHandler.post( () -> {
 
-                    if( null != mBackgroundURI ) {
+                if( null != mBackgroundURI ) {
 
-                        updateBackground( mBackgroundURI.toString() );
+                    updateBackground( mBackgroundURI.toString() );
 
-                    }
                 }
             });
 

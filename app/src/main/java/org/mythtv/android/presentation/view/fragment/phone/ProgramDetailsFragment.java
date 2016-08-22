@@ -52,8 +52,9 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -76,41 +77,43 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     @Inject
     ProgramDetailsPresenter presenter;
 
-    @Bind( R.id.recording_coverart )
+    @BindView( R.id.recording_coverart )
     AutoLoadImageView iv_coverart;
 
-    @Bind( R.id.recording_show_name )
+    @BindView( R.id.recording_show_name )
     TextView tv_showname;
 
-    @Bind( R.id.recording_episode_name )
+    @BindView( R.id.recording_episode_name )
     TextView tv_episodename;
 
-    @Bind( R.id.recording_episode_callsign )
+    @BindView( R.id.recording_episode_callsign )
     TextView tv_callsign;
 
-    @Bind( R.id.recording_start_time )
+    @BindView( R.id.recording_start_time )
     TextView tv_starttime;
 
-    @Bind( R.id.recording_episode_channel_number )
+    @BindView( R.id.recording_episode_channel_number )
     TextView tv_channelnumber;
 
-    @Bind( R.id.recording_progress )
+    @BindView( R.id.recording_progress )
     ProgressBar pb_progress;
 
-    @Bind( R.id.recording_description )
+    @BindView( R.id.recording_description )
     TextView tv_description;
 
-    @Bind( R.id.recording_cast )
+    @BindView( R.id.recording_cast )
     TableLayout tl_cast;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
 
-    @Bind( R.id.watched_switch )
+    @BindView( R.id.watched_switch )
     SwitchCompat watched;
 
-    @Bind( R.id.hsl_stream_switch )
+    @BindView( R.id.hsl_stream_switch )
     SwitchCompat hls_stream;
+
+    private Unbinder unbinder;
 
     public ProgramDetailsFragment() { super(); }
 
@@ -125,6 +128,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_program_details, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
 
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
@@ -179,7 +183,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }
@@ -389,16 +393,7 @@ public class ProgramDetailsFragment extends AbstractBaseFragment implements Prog
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                ProgramDetailsFragment.this.loadProgramDetails();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> ProgramDetailsFragment.this.loadProgramDetails());
 
 
         Log.d( TAG, "showError : exit" );

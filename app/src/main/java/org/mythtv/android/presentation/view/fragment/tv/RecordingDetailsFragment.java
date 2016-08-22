@@ -30,7 +30,6 @@ import android.support.v17.leanback.widget.DetailsOverviewRowPresenter;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
@@ -51,10 +50,10 @@ import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.VideoModel;
 import org.mythtv.android.presentation.presenter.tv.DetailsDescriptionPresenter;
-import org.mythtv.android.presentation.view.activity.tv.PlaybackOverlayActivity;
-import org.mythtv.android.presentation.view.activity.tv.RecordingsDetailsActivity;
 import org.mythtv.android.presentation.utils.Utils;
+import org.mythtv.android.presentation.view.activity.tv.PlaybackOverlayActivity;
 import org.mythtv.android.presentation.view.activity.tv.RecordingsActivity;
+import org.mythtv.android.presentation.view.activity.tv.RecordingsDetailsActivity;
 
 /*
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
@@ -243,48 +242,43 @@ public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
         // Hook up transition element.
         detailsPresenter.setSharedElementEnterTransition( getActivity(), RecordingsDetailsActivity.SHARED_ELEMENT_NAME );
 
-        detailsPresenter.setOnActionClickedListener( new OnActionClickedListener() {
+        detailsPresenter.setOnActionClickedListener(action -> {
 
-            @Override
-            public void onActionClicked( Action action ) {
+            if( action.getId() == ACTION_WATCH ) {
 
-                if( action.getId() == ACTION_WATCH ) {
+                String masterBackendUrl = getMasterBackendUrl();
+                if( !getSharedPreferencesModule().getInternalPlayer() ) {
 
-                    String masterBackendUrl = getMasterBackendUrl();
-                    if( !getSharedPreferencesModule().getInternalPlayer() ) {
+                    String externalPlayerUrl = masterBackendUrl + "/Content/GetFile?FileName=" + mProgramModel.getFileName();
+                    Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
 
-                        String externalPlayerUrl = masterBackendUrl + "/Content/GetFile?FileName=" + mProgramModel.getFileName();
-                        Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
-
-                        final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
-                        externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
-                        startActivity( externalPlayer );
-
-                    } else {
-
-                        VideoModel videoModel = new VideoModel
-                                .VideoModelBuilder()
-                                .id( mProgramModel.getId() )
-                                .category( mProgramModel.getCategory() )
-                                .title( mProgramModel.getTitle() )
-                                .description( mProgramModel.getDescription() )
-                                .videoUrl( masterBackendUrl + mProgramModel.getLiveStreamInfo().getRelativeUrl() )
-                                .bgImageUrl( masterBackendUrl + "/Content/GetRecordingArtwork?Inetref=" + mProgramModel.getInetref() + "&Type=banner" )
-                                .cardImageUrl( masterBackendUrl + "/Content/GetPreviewImage?ChanId=" + mProgramModel.getChannel().getChanId() + "&StartTime=" + mProgramModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=1134" )
-                                .studio( mProgramModel.getChannel().getCallSign() )
-                                .build();
-
-                        Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
-                        intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
-                        startActivity( intent );
-
-                    }
+                    final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
+                    externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
+                    startActivity( externalPlayer );
 
                 } else {
 
-                    Toast.makeText( getActivity(), action.toString(), Toast.LENGTH_SHORT ).show();
+                    VideoModel videoModel = new VideoModel
+                            .VideoModelBuilder()
+                            .id( mProgramModel.getId() )
+                            .category( mProgramModel.getCategory() )
+                            .title( mProgramModel.getTitle() )
+                            .description( mProgramModel.getDescription() )
+                            .videoUrl( masterBackendUrl + mProgramModel.getLiveStreamInfo().getRelativeUrl() )
+                            .bgImageUrl( masterBackendUrl + "/Content/GetRecordingArtwork?Inetref=" + mProgramModel.getInetref() + "&Type=banner" )
+                            .cardImageUrl( masterBackendUrl + "/Content/GetPreviewImage?ChanId=" + mProgramModel.getChannel().getChanId() + "&StartTime=" + mProgramModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=1134" )
+                            .studio( mProgramModel.getChannel().getCallSign() )
+                            .build();
+
+                    Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
+                    intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
+                    startActivity( intent );
 
                 }
+
+            } else {
+
+                Toast.makeText( getActivity(), action.toString(), Toast.LENGTH_SHORT ).show();
 
             }
 

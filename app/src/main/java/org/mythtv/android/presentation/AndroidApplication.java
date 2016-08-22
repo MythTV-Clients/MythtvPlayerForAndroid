@@ -37,8 +37,6 @@ import org.mythtv.android.presentation.internal.di.modules.ApplicationModule;
 import org.mythtv.android.presentation.internal.di.modules.NetModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
-import java.util.Locale;
-
 /**
  * Android Main Application
  *

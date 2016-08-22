@@ -18,8 +18,6 @@
 
 package org.mythtv.android.data.entity.mapper;
 
-import android.util.Log;
-
 import org.mythtv.android.data.entity.ArtworkInfoEntity;
 import org.mythtv.android.data.entity.CastMemberEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
