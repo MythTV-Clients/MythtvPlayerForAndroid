@@ -4,13 +4,10 @@ import android.os.Bundle;
 
 import java.util.ArrayList;
 
-//import lombok.Data;
-
 /**
  * Created by dmfrey on 7/10/16.
  */
 
-//@Data
 public class MediaItemModel {
 
     public static final String KEY_TITLE = "title";
