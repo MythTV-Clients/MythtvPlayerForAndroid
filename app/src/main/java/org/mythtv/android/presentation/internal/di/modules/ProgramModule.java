@@ -39,24 +39,22 @@ import dagger.Provides;
 @Module
 public class ProgramModule {
 
-    private int chanId = -1;
-    private DateTime startTime = null;
+    private int recordedId = -1;
 
     public ProgramModule() {}
 
-    public ProgramModule( int chanId, DateTime startTime ) {
+    public ProgramModule( final int recordedId ) {
 
-        this.chanId = chanId;
-        this.startTime = startTime;
+        this.recordedId = recordedId;
 
     }
 
     @Provides
     @PerActivity
     @Named( "programDetails" )
-    UseCase provideGetUserDetailsUseCase( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    UseCase provideGetRecordedProgramDetailsUseCase( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
-        return new GetRecordedProgramDetails( chanId, startTime, dvrRepository, threadExecutor, postExecutionThread );
+        return new GetRecordedProgramDetails( recordedId, dvrRepository, threadExecutor, postExecutionThread );
     }
 
 }

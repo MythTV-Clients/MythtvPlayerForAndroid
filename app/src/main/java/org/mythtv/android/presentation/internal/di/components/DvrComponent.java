@@ -18,14 +18,12 @@
 
 package org.mythtv.android.presentation.internal.di.components;
 
-import org.mythtv.android.presentation.view.fragment.phone.ProgramListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.RecentListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.TitleInfoListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.UpcomingListFragment;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.internal.di.modules.ActivityModule;
 import org.mythtv.android.presentation.internal.di.modules.EncodersModule;
 import org.mythtv.android.presentation.internal.di.modules.LiveStreamModule;
+import org.mythtv.android.presentation.internal.di.modules.MediaItemModule;
+import org.mythtv.android.presentation.internal.di.modules.MediaItemsModule;
 import org.mythtv.android.presentation.internal.di.modules.NetModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramModule;
 import org.mythtv.android.presentation.internal.di.modules.ProgramsModule;
@@ -34,8 +32,6 @@ import org.mythtv.android.presentation.internal.di.modules.RecordedProgramWatche
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.presentation.internal.di.modules.TitleInfosModule;
 import org.mythtv.android.presentation.internal.di.modules.UpcomingProgramsModule;
-import org.mythtv.android.presentation.view.fragment.phone.EncoderListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.ProgramDetailsFragment;
 import org.mythtv.android.presentation.view.fragment.tv.CategoryListFragment;
 import org.mythtv.android.presentation.view.fragment.tv.RecordingsFragment;
 
@@ -48,16 +44,8 @@ import dagger.Component;
  * Created by dmfrey on 8/30/15.
  */
 @PerActivity
-@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, SharedPreferencesModule.class, NetModule.class, TitleInfosModule.class, ProgramsModule.class, ProgramModule.class, UpcomingProgramsModule.class, RecentProgramsModule.class, LiveStreamModule.class, EncodersModule.class, RecordedProgramWatchedStatusModule.class } )
+@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, SharedPreferencesModule.class, NetModule.class, TitleInfosModule.class, MediaItemsModule.class, MediaItemModule.class, ProgramsModule.class, ProgramModule.class, UpcomingProgramsModule.class, RecentProgramsModule.class, LiveStreamModule.class, EncodersModule.class, RecordedProgramWatchedStatusModule.class } )
 public interface DvrComponent {
-
-    // Phone/Tablet fragments
-    void inject( TitleInfoListFragment titleInfoListFragment );
-    void inject( ProgramListFragment programsListFragment );
-    void inject( ProgramDetailsFragment programDetailsFragment );
-    void inject( RecentListFragment recentListFragment );
-    void inject( UpcomingListFragment upcomingListFragment );
-    void inject( EncoderListFragment encoderListFragment );
 
     // TV fragments
     void inject( CategoryListFragment tvCategoryListFragment );

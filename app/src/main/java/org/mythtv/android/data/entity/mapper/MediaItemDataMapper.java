@@ -1,12 +1,13 @@
 package org.mythtv.android.data.entity.mapper;
 
-import static org.mythtv.android.domain.MediaItem.Media;
-
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.mythtv.android.data.entity.ArtworkInfoEntity;
+import org.mythtv.android.data.entity.CastMemberEntity;
+import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
 
 import java.io.UnsupportedEncodingException;
@@ -30,17 +31,50 @@ public class MediaItemDataMapper {
 
         MediaItem mediaItem = new MediaItem();
         mediaItem.setId( programEntity.getRecording().getRecordedId() );
-        mediaItem.setMedia( Media.PROGRAM );
+
+        switch( programEntity.getRecording().getStatus() ) {
+
+            case -3 :
+            case -2 :
+
+                String url = "/Content/GetFile?FileName=" + URLEncoder.encode( programEntity.getFileName(), "UTF-8" );
+                if( null != programEntity.getLiveStreamInfoEntity() ) {
+
+                    url = programEntity.getLiveStreamInfoEntity().getRelativeUrl();
+                    mediaItem.setPercentComplete( programEntity.getLiveStreamInfoEntity().getPercentComplete() );
+                    mediaItem.setLiveStreamId( programEntity.getLiveStreamInfoEntity().getId() );
+                    mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
+
+                }
+
+                mediaItem.setMedia( Media.PROGRAM );
+                mediaItem.setUrl( url );
+                setContentType( mediaItem, url );
+                mediaItem.setPreviewUrl( "/Content/GetPreviewImage?RecordedId=" + programEntity.getRecording().getRecordedId() );
+
+                mediaItem.setWatched( ( programEntity.getProgramFlags() & 0x00000200 ) > 0 );
+                mediaItem.setMarkWatchedUrl( "/Dvr/UpdateRecordedWatchedStatus" );
+
+                mediaItem.setRecording( programEntity.getRecording().getStatus() == -2 );
+
+                break;
+
+            case -1 :
+
+                mediaItem.setMedia( Media.UPCOMING );
+
+                break;
+
+        }
+
         mediaItem.setTitle( programEntity.getTitle() );
         mediaItem.setSubTitle( programEntity.getSubTitle() );
         mediaItem.setDescription( programEntity.getDescription() );
         mediaItem.setStartDate( programEntity.getStartTime() );
+        mediaItem.setProgramFlags( programEntity.getProgramFlags() );
         mediaItem.setSeason( programEntity.getSeason() );
         mediaItem.setEpisode( programEntity.getEpisode() );
         mediaItem.setStudio( programEntity.getChannel().getCallSign() );
-
-        mediaItem.setUrl( "/Content/GetFile?FileName=" + URLEncoder.encode( programEntity.getFileName(), "UTF-8" ) );
-        setContentType( mediaItem, programEntity.getFileName() );
 
         calculateDuration( mediaItem, programEntity.getRecording().getStartTs(), programEntity.getRecording().getEndTs() );
 
@@ -53,7 +87,46 @@ public class MediaItemDataMapper {
             }
 
         }
-        mediaItem.setPreviewUrl( "/Content/GetPreviewImage?RecordedId=" + programEntity.getRecording().getRecordedId() );
+
+        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=1280", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+
+        List<String> castMembers = new ArrayList<>();
+        List<String> characters = new ArrayList<>();
+
+        if( null != programEntity.getCast() ) {
+
+            if( null != programEntity.getCast().getCastMembers() && programEntity.getCast().getCastMembers().length != 0 ) {
+
+                for( CastMemberEntity castMember : programEntity.getCast().getCastMembers() ) {
+
+                    if( !castMembers.contains( castMember.getName() ) ) {
+                        castMembers.add( castMember.getName() );
+                    }
+
+                    if( !characters.contains( castMember.getCharacterName() ) ) {
+                        characters.add( castMember.getCharacterName() );
+                    }
+
+                }
+
+            }
+
+        }
+
+        if( !castMembers.isEmpty() ) {
+            String cast = "";
+            for( String name : castMembers ) {
+                cast += name + " ";
+            }
+            mediaItem.setCastMembers( cast.trim() );
+        }
+        if( !characters.isEmpty() ) {
+            String cast = "";
+            for( String name : characters ) {
+                cast += name + " ";
+            }
+            mediaItem.setCharacters( cast.trim() );
+        }
 
         return mediaItem;
     }
@@ -89,8 +162,15 @@ public class MediaItemDataMapper {
         mediaItem.setEpisode( videoEntity.getEpisode() );
         mediaItem.setStudio( videoEntity.getStudio() );
 
-        mediaItem.setUrl( "/Content/GetFile?FileName=" + URLEncoder.encode( videoEntity.getFileName(), "UTF-8" ) );
-        setContentType( mediaItem, videoEntity.getFileName() );
+        String url = "/Content/GetFile?FileName=" + URLEncoder.encode( videoEntity.getFileName(), "UTF-8" );
+//        if( null != videoEntity.getLiveStreamInfoEntity() ) {
+//
+//            url = videoEntity.getLiveStreamInfoEntity().getRelativeUrl();
+//
+//        }
+
+        mediaItem.setUrl( url );
+        setContentType( mediaItem, url );
 
         mediaItem.setDuration( videoEntity.getLength() );
 
@@ -103,6 +183,11 @@ public class MediaItemDataMapper {
             }
 
         }
+
+        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=1280", String.valueOf( videoEntity.getId() ) ) );
+
+        mediaItem.setWatched( videoEntity.isWatched() );
+        mediaItem.setMarkWatchedUrl( "/Video/UpdateVideoWatchedStatus?Id=%s&Watched=true" );
 
         return mediaItem;
     }
@@ -118,6 +203,110 @@ public class MediaItemDataMapper {
             if( null != mediaItem ) {
 
                 mediaItemList.add( mediaItem );
+
+            }
+
+        }
+
+        return mediaItemList;
+    }
+
+    public static MediaItem transform( MediaItemEntity mediaItemEntity ) {
+
+        MediaItem mediaItem = new MediaItem();
+        mediaItem.setId( mediaItemEntity.getId() );
+        mediaItem.setMedia( mediaItemEntity.getMedia() );
+        mediaItem.setTitle( mediaItemEntity.getTitle() );
+        mediaItem.setSubTitle( mediaItemEntity.getSubTitle() );
+        mediaItem.setDescription( mediaItemEntity.getDescription() );
+        mediaItem.setStartDate( mediaItemEntity.getStartDate() );
+        mediaItem.setProgramFlags( mediaItemEntity.getProgramFlags() );
+        mediaItem.setSeason( mediaItemEntity.getSeason() );
+        mediaItem.setEpisode( mediaItemEntity.getEpisode() );
+        mediaItem.setStudio( mediaItemEntity.getStudio() );
+        mediaItem.setCastMembers( mediaItemEntity.getCastMembers() );
+        mediaItem.setCharacters( mediaItemEntity.getCharacters() );
+        mediaItem.setUrl( mediaItemEntity.getUrl() );
+        mediaItem.setFanartUrl( mediaItemEntity.getFanartUrl() );
+        mediaItem.setCoverartUrl( mediaItemEntity.getCoverartUrl() );
+        mediaItem.setBannerUrl( mediaItemEntity.getBannerUrl() );
+        mediaItem.setPreviewUrl( mediaItemEntity.getPreviewUrl() );
+        mediaItem.setContentType( mediaItemEntity.getContentType() );
+        mediaItem.setDuration( mediaItemEntity.getDuration() );
+        mediaItem.setPercentComplete( mediaItemEntity.getPercentComplete() );
+        mediaItem.setRecording( mediaItemEntity.isRecording() );
+        mediaItem.setLiveStreamId( mediaItemEntity.getLiveStreamId() );
+        mediaItem.setCreateHttpLiveStreamUrl( mediaItemEntity.getCreateHttpLiveStreamUrl() );
+        mediaItem.setRemoveHttpLiveStreamUrl( mediaItemEntity.getRemoveHttpLiveStreamUrl() );
+        mediaItem.setWatched( mediaItemEntity.isWatched() );
+        mediaItem.setMarkWatchedUrl( mediaItemEntity.getMarkWatchedUrl() );
+
+        return mediaItem;
+    }
+
+    public static List<MediaItem> transformMediaItemEntities( Collection<MediaItemEntity> mediaItemEntityCollection ) {
+
+        List<MediaItem> mediaItemList = new ArrayList<>( mediaItemEntityCollection.size() );
+
+        MediaItem mediaItem;
+        for( MediaItemEntity mediaItemEntity : mediaItemEntityCollection ) {
+
+            mediaItem = transform( mediaItemEntity );
+            if( null != mediaItem ) {
+
+                mediaItemList.add( mediaItem );
+
+            }
+
+        }
+
+        return mediaItemList;
+    }
+
+    public static MediaItemEntity transform( MediaItem mediaItem ) {
+
+        MediaItemEntity mediaItemEntity = new MediaItemEntity();
+        mediaItemEntity.setId( mediaItem.getId() );
+        mediaItemEntity.setMedia( mediaItem.getMedia() );
+        mediaItemEntity.setTitle( mediaItem.getTitle() );
+        mediaItemEntity.setSubTitle( mediaItem.getSubTitle() );
+        mediaItemEntity.setDescription( mediaItem.getDescription() );
+        mediaItemEntity.setStartDate( mediaItem.getStartDate() );
+        mediaItemEntity.setProgramFlags( mediaItem.getProgramFlags() );
+        mediaItemEntity.setSeason( mediaItem.getSeason() );
+        mediaItemEntity.setEpisode( mediaItem.getEpisode() );
+        mediaItemEntity.setStudio( mediaItem.getStudio() );
+        mediaItemEntity.setCastMembers( mediaItem.getCastMembers() );
+        mediaItemEntity.setCharacters( mediaItem.getCharacters() );
+        mediaItemEntity.setUrl( mediaItem.getUrl() );
+        mediaItemEntity.setFanartUrl( mediaItem.getFanartUrl() );
+        mediaItemEntity.setCoverartUrl( mediaItem.getCoverartUrl() );
+        mediaItemEntity.setBannerUrl( mediaItem.getBannerUrl() );
+        mediaItemEntity.setPreviewUrl( mediaItem.getPreviewUrl() );
+        mediaItemEntity.setContentType( mediaItem.getContentType() );
+        mediaItemEntity.setDuration( mediaItem.getDuration() );
+        mediaItemEntity.setPercentComplete( mediaItem.getPercentComplete() );
+        mediaItemEntity.setRecording( mediaItem.isRecording() );
+        mediaItemEntity.setLiveStreamId( mediaItem.getLiveStreamId() );
+        mediaItemEntity.setCreateHttpLiveStreamUrl( mediaItem.getCreateHttpLiveStreamUrl() );
+        mediaItemEntity.setRemoveHttpLiveStreamUrl( mediaItem.getRemoveHttpLiveStreamUrl() );
+        mediaItemEntity.setWatched( mediaItem.isWatched() );
+        mediaItemEntity.setMarkWatchedUrl( mediaItem.getMarkWatchedUrl() );
+
+        return mediaItemEntity;
+    }
+
+    public static List<MediaItemEntity> transformMediaItems( Collection<MediaItem> mediaItemCollection ) {
+
+        List<MediaItemEntity> mediaItemList = new ArrayList<>( mediaItemCollection.size() );
+
+        MediaItemEntity mediaItemEntity;
+        for( MediaItem mediaItem : mediaItemCollection ) {
+
+            mediaItemEntity = transform( mediaItem );
+            if( null != mediaItemEntity ) {
+
+                mediaItemList.add( mediaItemEntity );
 
             }
 
@@ -157,6 +346,10 @@ public class MediaItemDataMapper {
         } else if( fileName.endsWith( "m3u8" ) ) {
 
             mediaItem.setContentType( "application/x-mpegURL" );
+
+        } else if( fileName.endsWith( "ts" ) ) {
+
+            mediaItem.setContentType( "video/mp2t" );
 
         }
 

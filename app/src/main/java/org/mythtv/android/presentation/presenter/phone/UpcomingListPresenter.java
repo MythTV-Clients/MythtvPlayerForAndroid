@@ -21,15 +21,16 @@ package org.mythtv.android.presentation.presenter.phone;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.mythtv.android.domain.Program;
+import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
-import org.mythtv.android.presentation.mapper.ProgramModelDataMapper;
+import org.mythtv.android.presentation.mapper.MediaItemModelMapper;
+import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.view.ProgramListView;
+import org.mythtv.android.presentation.view.MediaItemListView;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,24 +41,24 @@ import javax.inject.Named;
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class UpcomingListPresenter extends DefaultSubscriber<List<Program>> implements Presenter {
+public class UpcomingListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 
     private static final String TAG = UpcomingListPresenter.class.getSimpleName();
 
-    private ProgramListView viewListView;
+    private MediaItemListView viewListView;
 
     private final UseCase getUpcomingProgramListUseCase;
-    private final ProgramModelDataMapper programModelDataMapper;
+    private final MediaItemModelMapper mediaItemModelMapper;
 
     @Inject
-    public UpcomingListPresenter( @Named( "upcomingProgramsList" ) UseCase getUpcomingProgramListUseCase, ProgramModelDataMapper programModelDataMapper ) {
+    public UpcomingListPresenter( @Named( "upcomingProgramsList" ) UseCase getUpcomingProgramListUseCase, MediaItemModelMapper mediaItemModelMapper ) {
 
         this.getUpcomingProgramListUseCase = getUpcomingProgramListUseCase;
-        this.programModelDataMapper = programModelDataMapper;
+        this.mediaItemModelMapper = mediaItemModelMapper;
 
     }
 
-    public void setView( @NonNull ProgramListView view ) {
+    public void setView( @NonNull MediaItemListView view ) {
         this.viewListView = view;
     }
 
@@ -101,7 +102,7 @@ public class UpcomingListPresenter extends DefaultSubscriber<List<Program>> impl
     public void onProgramClicked( ProgramModel programModel ) {
         Log.i( TAG, "onProgramClicked : programModel=" + programModel.toString() );
 
-        this.viewListView.viewProgram( programModel );
+//        this.viewListView.viewProgram( programModel );
 
     }
 
@@ -128,10 +129,10 @@ public class UpcomingListPresenter extends DefaultSubscriber<List<Program>> impl
 
     }
 
-    private void showProgramsCollectionInView( Collection<Program> programsCollection ) {
+    private void showProgramsCollectionInView( Collection<MediaItem> programsCollection ) {
 
-        final Collection<ProgramModel> programModelsCollection = this.programModelDataMapper.transform( programsCollection );
-        this.viewListView.renderProgramList( programModelsCollection );
+        final Collection<MediaItemModel> programModelsCollection = this.mediaItemModelMapper.transform( programsCollection );
+        this.viewListView.renderMediaItemList( programModelsCollection );
 
     }
 
@@ -141,7 +142,7 @@ public class UpcomingListPresenter extends DefaultSubscriber<List<Program>> impl
 
     }
 
-    private final class ProgramListSubscriber extends DefaultSubscriber<List<Program>> {
+    private final class ProgramListSubscriber extends DefaultSubscriber<List<MediaItem>> {
 
         @Override
         public void onCompleted() {
@@ -158,7 +159,7 @@ public class UpcomingListPresenter extends DefaultSubscriber<List<Program>> impl
         }
 
         @Override
-        public void onNext( List<Program> programs ) {
+        public void onNext( List<MediaItem> programs ) {
 
             UpcomingListPresenter.this.showProgramsCollectionInView( programs );
 

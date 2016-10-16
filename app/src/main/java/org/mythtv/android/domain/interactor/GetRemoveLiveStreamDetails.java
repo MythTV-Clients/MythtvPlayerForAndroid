@@ -33,7 +33,7 @@ public class GetRemoveLiveStreamDetails extends DynamicUseCase {
 
     private final ContentRepository contentRepository;
 
-    public GetRemoveLiveStreamDetails(final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetRemoveLiveStreamDetails( final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
         this.contentRepository = contentRepository;

@@ -38,15 +38,15 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.mythtv.android.domain.SearchResult;
+import org.mythtv.android.R;
+import org.mythtv.android.domain.Media;
+import org.mythtv.android.presentation.internal.di.components.SearchComponent;
+import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.model.SearchResultModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.phone.SearchResultListPresenter;
-import org.mythtv.android.presentation.view.SearchResultListView;
-import org.mythtv.android.R;
-import org.mythtv.android.presentation.internal.di.components.SearchComponent;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
+import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.tv.RecordingsDetailsActivity;
 import org.mythtv.android.presentation.view.activity.tv.VideoDetailsActivity;
 
@@ -57,7 +57,7 @@ import javax.inject.Inject;
 /**
  * Created by dmfrey on 2/27/16.
  */
-public class TvSearchResultListFragment extends AbstractBaseSearchFragment implements SearchFragment.SearchResultProvider, SearchResultListView {
+public class TvSearchResultListFragment extends AbstractBaseSearchFragment implements SearchFragment.SearchResultProvider, MediaItemListView {
 
     private static final String TAG = TvSearchResultListFragment.class.getSimpleName();
 
@@ -66,11 +66,11 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     private String searchText;
 
     /**
-     * Interface for listening program list events.
+     * Interface for listening media item list events.
      */
-    public interface SearchResultListListener {
+    public interface MediaItemListListener {
 
-        void onSearchResultClicked( final SearchResultModel searchResultModel );
+        void onMediaItemClicked( final MediaItemModel mediaItemModel );
 
     }
 
@@ -80,7 +80,7 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     private ArrayObjectAdapter mRowsAdapter;
     private Handler mHandler = new Handler();
 
-    private SearchResultListListener searchResultListListener;
+    private MediaItemListListener mediaItemListListener;
 
     public TvSearchResultListFragment() {
         super();
@@ -102,8 +102,8 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
         super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        if( activity instanceof SearchResultListListener ) {
-            this.searchResultListListener = (SearchResultListListener) activity;
+        if( activity instanceof MediaItemListListener ) {
+            this.mediaItemListListener = (MediaItemListListener) activity;
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -222,34 +222,34 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     }
 
     @Override
-    public void renderSearchResultList( Collection<SearchResultModel> searchResultModelCollection ) {
-        Log.d( TAG, "renderSearchResultList : enter" );
+    public void renderMediaItemList( Collection<MediaItemModel> mediaItemModelCollection ) {
+        Log.d( TAG, "renderMediaItemList : enter" );
 
-        if( null != searchResultModelCollection ) {
-            Log.d( TAG, "renderSearchResultList : searchResultModelCollection is not null" );
+        if( null != mediaItemModelCollection ) {
+            Log.d( TAG, "renderMediaItemList : mediaItemModelCollection is not null" );
 
             mRowsAdapter.clear();
 
             ArrayObjectAdapter programRowAdapter = new ArrayObjectAdapter( new CardPresenter() );
             ArrayObjectAdapter videoRowAdapter = new ArrayObjectAdapter( new CardPresenter() );
 
-            for( SearchResultModel searchResultModel : searchResultModelCollection ) {
-                Log.d( TAG, "renderSearchResultList : searchResult=" + searchResultModel );
+            for( MediaItemModel mediaItemModel : mediaItemModelCollection ) {
+                Log.d( TAG, "renderMediaItemList : mediaItemModel=" + mediaItemModel );
 
-                if( SearchResult.Type.RECORDING.equals( searchResultModel.getType() ) ) {
+                if( Media.PROGRAM.equals( mediaItemModel.getMedia() ) ) {
 
-                    programRowAdapter.add( searchResultModel );
+                    programRowAdapter.add( mediaItemModel );
 
                 } else {
 
-                    videoRowAdapter.add( searchResultModel );
+                    videoRowAdapter.add( mediaItemModel );
 
                 }
 
             }
 
             if( programRowAdapter.size() > 0 ) {
-                Log.d( TAG, "renderSearchResultList : programRowAdapter has programs" );
+                Log.d( TAG, "renderMediaItemList : programRowAdapter has programs" );
 
                 HeaderItem header = new HeaderItem( 0, getResources().getString( R.string.recording ) + " " + getResources().getString( R.string.search_results ) + " '" + this.searchText + "'" );
                 mRowsAdapter.add( new ListRow( header, programRowAdapter ) );
@@ -257,7 +257,7 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
             }
 
             if( videoRowAdapter.size() > 0 ) {
-                Log.d( TAG, "renderSearchResultList : videoRowAdapter has videos" );
+                Log.d( TAG, "renderMediaItemList : videoRowAdapter has videos" );
 
                 HeaderItem header = new HeaderItem( 1, getResources().getString( R.string.video ) + " " + getResources().getString( R.string.search_results ) + " '" + this.searchText + "'" );
                 mRowsAdapter.add( new ListRow( header, videoRowAdapter ) );
@@ -266,21 +266,21 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
 
         }
 
-        Log.d( TAG, "renderSearchResultList : exit" );
+        Log.d( TAG, "renderMediaItemList : exit" );
     }
 
     @Override
-    public void viewSearchResult( SearchResultModel searchResultModel ) {
-        Log.d( TAG, "viewSearchResult : enter" );
+    public void viewMediaItem( MediaItemModel mediaItemModel ) {
+        Log.d( TAG, "viewMediaItem : enter" );
 
-        if( null != this.searchResultListListener ) {
-            Log.d( TAG, "viewSearchResult : searchResultModel=" + searchResultModel.toString() );
+        if( null != this.mediaItemListListener ) {
+            Log.d( TAG, "viewMediaItem : mediaItemModel=" + mediaItemModel.toString() );
 
-            this.searchResultListListener.onSearchResultClicked( searchResultModel );
+            this.mediaItemListListener.onMediaItemClicked( mediaItemModel );
 
         }
 
-        Log.d( TAG, "viewSearchResult : exit" );
+        Log.d( TAG, "viewMediaItem : exit" );
     }
 
     @Override

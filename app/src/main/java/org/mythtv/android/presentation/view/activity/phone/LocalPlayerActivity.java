@@ -56,6 +56,9 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.SettingsKeys;
+import org.mythtv.android.presentation.AndroidApplication;
+import org.mythtv.android.presentation.internal.di.components.SharedPreferencesComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.utils.Utils;
 
@@ -138,8 +141,8 @@ public class LocalPlayerActivity extends AppCompatActivity {
             setupActionBar();
             boolean shouldStartPlayback = bundle.getBoolean("shouldStart");
             int startPosition = bundle.getInt("startPosition", 0);
-            mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getUrl()));
-            Log.d(TAG, "Setting url of the VideoView to: " + mSelectedMedia.getUrl());
+            mVideoView.setVideoURI(Uri.parse( getMasterBackendUrl() + mSelectedMedia.getUrl() ) );
+            Log.d( TAG, "Setting url of the VideoView to: " + ( getMasterBackendUrl() + mSelectedMedia.getUrl() ) );
             if (shouldStartPlayback) {
                 // this will be the case only if we are coming from the
                 // CastControllerActivity by disconnecting from a device
@@ -248,11 +251,11 @@ public class LocalPlayerActivity extends AppCompatActivity {
                 startControllersTimer();
             } else {
                 stopControllersTimer();
-                setCoverArtStatus(mSelectedMedia.getImages().get(0));
+                setCoverArtStatus( getMasterBackendUrl() + mSelectedMedia.getCoverartUrl());
             }
         } else {
             stopControllersTimer();
-            setCoverArtStatus(mSelectedMedia.getImages().get(0));
+            setCoverArtStatus( getMasterBackendUrl() + mSelectedMedia.getCoverartUrl());
             updateControllersVisibility(false);
         }
     }
@@ -304,8 +307,8 @@ public class LocalPlayerActivity extends AppCompatActivity {
             case IDLE:
                 switch (mLocation) {
                     case LOCAL:
-                        mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getUrl()));
-                        mVideoView.seekTo(0);
+                        mVideoView.setVideoURI( Uri.parse( getMasterBackendUrl() + mSelectedMedia.getUrl() ) );
+                        mVideoView.seekTo( 0 );
                         mVideoView.start();
                         mPlaybackState = PlaybackState.PLAYING;
                         restartTrickplayTimer();
@@ -666,53 +669,73 @@ public class LocalPlayerActivity extends AppCompatActivity {
 //        if (item.getItemId() == R.id.action_settings) {
 //            intent = new Intent(LocalPlayerActivity.this, CastPreference.class);
 //            startActivity(intent);
-        /*} else */ if (item.getItemId() == android.R.id.home) {
-            ActivityCompat.finishAfterTransition(this);
+        /*} else */ if( item.getItemId() == android.R.id.home ) {
+            ActivityCompat.finishAfterTransition( this );
         }
+
         return true;
     }
 
     private void setupActionBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(mSelectedMedia.getTitle());
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById( R.id.toolbar );
+        toolbar.setTitle( mSelectedMedia.getTitle() );
+        setSupportActionBar( toolbar );
+        getSupportActionBar().setDisplayHomeAsUpEnabled( true );
     }
 
     private void loadViews() {
-        mVideoView = (VideoView) findViewById(R.id.videoView1);
-        mTitleView = (TextView) findViewById(R.id.textView1);
-        mDescriptionView = (TextView) findViewById(R.id.textView2);
-        mDescriptionView.setMovementMethod(new ScrollingMovementMethod());
-        mAuthorView = (TextView) findViewById(R.id.textView3);
-        mStartText = (TextView) findViewById(R.id.startText);
-        mStartText.setText(Utils.formatMillis(0));
-        mEndText = (TextView) findViewById(R.id.endText);
-        mSeekbar = (SeekBar) findViewById(R.id.seekBar1);
-        mPlayPause = (ImageView) findViewById(R.id.imageView2);
-        mLoading = (ProgressBar) findViewById(R.id.progressBar1);
-        mControllers = findViewById(R.id.controllers);
-        mContainer = findViewById(R.id.container);
-        mCoverArt = (ImageView) findViewById(R.id.coverArtView);
-        ViewCompat.setTransitionName(mCoverArt, getString(R.string.transition_image));
-        mPlayCircle = (ImageButton) findViewById(R.id.play_circle);
+        mVideoView = (VideoView) findViewById( R.id.videoView1 );
+        mTitleView = (TextView) findViewById( R.id.textView1 );
+        mDescriptionView = (TextView) findViewById( R.id.textView2 );
+        mDescriptionView.setMovementMethod( new ScrollingMovementMethod() );
+        mAuthorView = (TextView) findViewById( R.id.textView3 );
+        mStartText = (TextView) findViewById( R.id.startText );
+        mStartText.setText(Utils.formatMillis( 0 ) );
+        mEndText = (TextView) findViewById( R.id.endText );
+        mSeekbar = (SeekBar) findViewById( R.id.seekBar1 );
+        mPlayPause = (ImageView) findViewById( R.id.imageView2 );
+        mLoading = (ProgressBar) findViewById( R.id.progressBar1 );
+        mControllers = findViewById( R.id.controllers ) ;
+        mContainer = findViewById( R.id.container );
+        mCoverArt = (ImageView) findViewById( R.id.coverArtView );
+        ViewCompat.setTransitionName( mCoverArt, getString(R.string.transition_image) );
+        mPlayCircle = (ImageButton) findViewById( R.id.play_circle );
         mPlayCircle.setOnClickListener( v -> togglePlayback() );
     }
 
     private MediaInfo buildMediaInfo() {
-        MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+        MediaMetadata movieMetadata = new MediaMetadata( MediaMetadata.MEDIA_TYPE_MOVIE );
 
-        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, mSelectedMedia.getStudio());
-        movieMetadata.putString(MediaMetadata.KEY_TITLE, mSelectedMedia.getTitle());
-        movieMetadata.addImage(new WebImage(Uri.parse(mSelectedMedia.getImages().get(0))));
-        movieMetadata.addImage(new WebImage(Uri.parse(mSelectedMedia.getImages().get(1))));
+        movieMetadata.putString( MediaMetadata.KEY_SUBTITLE, mSelectedMedia.getStudio() );
+        movieMetadata.putString( MediaMetadata.KEY_TITLE, mSelectedMedia.getTitle() );
+        movieMetadata.addImage( new WebImage( Uri.parse( getMasterBackendUrl() + mSelectedMedia.getCoverartUrl() ) ) );
+        movieMetadata.addImage( new WebImage( Uri.parse( getMasterBackendUrl() + mSelectedMedia.getCoverartUrl() ) ) );
 
-        return new MediaInfo.Builder(mSelectedMedia.getUrl())
-                .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                .setContentType(mSelectedMedia.getContentType())
-                .setMetadata(movieMetadata)
-                .setStreamDuration(mSelectedMedia.getDuration() * 1000)
+        return new MediaInfo.Builder( getMasterBackendUrl() + mSelectedMedia.getUrl() )
+                .setStreamType( MediaInfo.STREAM_TYPE_BUFFERED )
+                .setContentType( mSelectedMedia.getContentType() )
+                .setMetadata( movieMetadata )
+                .setStreamDuration( mSelectedMedia.getDuration() * 1000 )
                 .build();
+    }
+
+    /**
+     * Get a SharedPreferences component for dependency injection.
+     *
+     * @return {@link SharedPreferencesComponent}
+     */
+    private SharedPreferencesComponent getSharedPreferencesComponent() {
+
+        return ( (AndroidApplication) getApplication() ).getSharedPreferencesComponent();
+    }
+
+    private String getMasterBackendUrl() {
+
+        String host = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "" );
+        String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
+
+        return "http://" + host + ":" + port;
+
     }
 
 }

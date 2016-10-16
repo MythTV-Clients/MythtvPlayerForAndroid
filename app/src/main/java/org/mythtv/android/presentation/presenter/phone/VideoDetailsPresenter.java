@@ -210,6 +210,7 @@ public class VideoDetailsPresenter implements Presenter {
 
     private void showErrorMessage( ErrorBundle errorBundle ) {
 
+        Log.e( TAG, "showErrorMessage : error", errorBundle.getException() );
         String errorMessage = ErrorMessageFactory.create( this.viewDetailsView.getContext(), errorBundle.getException() );
         this.viewDetailsView.showError( errorMessage );
 

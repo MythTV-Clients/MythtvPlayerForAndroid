@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import static org.mythtv.android.domain.MediaItem.Media;
+import org.mythtv.android.domain.Media;
 
 /**
  * Created by dmfrey on 9/5/16.

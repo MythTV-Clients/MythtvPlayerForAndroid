@@ -21,12 +21,16 @@ package org.mythtv.android.data.repository;
 import android.util.Log;
 
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
-import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityDataMapper;
+import org.mythtv.android.data.entity.mapper.MediaItemDataMapper;
+import org.mythtv.android.data.entity.mapper.SeriesDataMapper;
 import org.mythtv.android.data.repository.datasource.VideoDataStore;
 import org.mythtv.android.data.repository.datasource.VideoDataStoreFactory;
-import org.mythtv.android.domain.VideoMetadataInfo;
+import org.mythtv.android.domain.MediaItem;
+import org.mythtv.android.domain.Series;
 import org.mythtv.android.domain.repository.VideoRepository;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,7 +59,7 @@ public class VideoDataRepository implements VideoRepository {
 
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
-    public Observable<List<VideoMetadataInfo>> getVideoList( String folder, String sort, boolean descending, int startIndex, int count ) {
+    public Observable<List<MediaItem>> getVideoList( String folder, String sort, boolean descending, int startIndex, int count ) {
         Log.d( TAG, "getVideoList : enter" );
         Log.d( TAG, "getVideoList : folder=" + folder + ", sort=" + sort + ", descending=" + descending + ", startIndex=" + startIndex + ", count=" + count );
 
@@ -65,12 +69,22 @@ public class VideoDataRepository implements VideoRepository {
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "getVideoList : error", throwable ) )
-                .map( entities -> VideoMetadataInfoEntityDataMapper.transform( entities ) );
+                .map( entities -> {
+                    try {
+
+                        return MediaItemDataMapper.transformVideos( entities );
+
+                    } catch( UnsupportedEncodingException e ) {
+                        Log.e( TAG, "getVideoList : error", e );
+                    }
+
+                    return new ArrayList<>();
+                });
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
-    public Observable<List<VideoMetadataInfo>> getVideoListByContentType( final String contentType ) {
+    public Observable<List<MediaItem>> getVideoListByContentType( final String contentType ) {
         Log.d( TAG, "getVideoListByContentType : enter" );
         Log.d( TAG, "getVideoListByContentType : contentType=" + contentType );
 
@@ -80,12 +94,22 @@ public class VideoDataRepository implements VideoRepository {
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "getVideoListByContentType : error", throwable ) )
-                .map( entities -> VideoMetadataInfoEntityDataMapper.transform( entities ) );
+                .map( entities -> {
+                    try {
+
+                        return MediaItemDataMapper.transformVideos( entities );
+
+                    } catch( UnsupportedEncodingException e ) {
+                        Log.e( TAG, "getVideoListByContentType : error", e );
+                    }
+
+                    return new ArrayList<>();
+                });
 
     }
 
     @Override
-    public Observable<List<VideoMetadataInfo>> getVideoSeriesListByContentType(String contentType) {
+    public Observable<List<Series>> getVideoSeriesListByContentType(String contentType ) {
         Log.d( TAG, "getVideoSeriesListByContentType : enter" );
         Log.d( TAG, "getVideoSeriesListByContentType : contentType=" + contentType );
 
@@ -99,13 +123,13 @@ public class VideoDataRepository implements VideoRepository {
                 .filter( entity -> entity.getContentType().equals( contentType ) )
                 .distinct( VideoMetadataInfoEntity::getTitle )
                 .toSortedList( ( entity1, entity2 ) -> entity1.getTitle().compareTo( entity2.getTitle() ) )
-                .map( VideoMetadataInfoEntityDataMapper::transform );
+                .map( SeriesDataMapper::transformVideos );
 
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
-    public Observable<List<VideoMetadataInfo>> getVideoListByContentTypeAndSeries( String contentType, String series ) {
+    public Observable<List<MediaItem>> getVideoListByContentTypeAndSeries( String contentType, String series ) {
         Log.d( TAG, "getVideoListByContentTypeAndSeries : enter" );
         Log.d( TAG, "getVideoListByContentTypeAndSeries : contentType=" + contentType + ", series=" + series );
 
@@ -115,17 +139,37 @@ public class VideoDataRepository implements VideoRepository {
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "getVideoListByContentTypeAndSeries : error", throwable ) )
-                .map( entities -> VideoMetadataInfoEntityDataMapper.transform( entities ) );
+                .map( entities -> {
+                    try {
+
+                        return MediaItemDataMapper.transformVideos( entities );
+
+                    } catch( UnsupportedEncodingException e ) {
+                        Log.e( TAG, "getVideoListByContentTypeAndSeries : error", e );
+                    }
+
+                    return new ArrayList<>();
+                });
     }
 
     @SuppressWarnings( "Convert2MethodRef" )
     @Override
-    public Observable<VideoMetadataInfo> getVideo( int id ) {
+    public Observable<MediaItem> getVideo( int id ) {
 
         final VideoDataStore videoDataStore = videoDataStoreFactory.createMasterBackendDataStore();
 
         return videoDataStore.getVideoById( id )
-                .map( entities -> VideoMetadataInfoEntityDataMapper.transform( entities ) );
+                .map( entity -> {
+                    try {
+
+                        return MediaItemDataMapper.transform( entity );
+
+                    } catch( UnsupportedEncodingException e ) {
+                        Log.e( TAG, "getVideo : error", e );
+                    }
+
+                    return new MediaItem();
+                });
     }
 
     @SuppressWarnings( "Convert2MethodRef" )

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ MythTV Player An application for Android users to play MythTV Recordings and Videos
+  ~ Copyright (c) 2015. Daniel Frey
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:gravity="fill_horizontal">
+
+        <RelativeLayout
+            android:id="@+id/media_item_image_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="fill_horizontal">
+
+            <org.mythtv.android.presentation.view.component.AutoLoadImageView
+                android:id="@+id/media_item_image"
+                android:layout_width="75dp"
+                android:layout_height="125dp"
+                android:layout_margin="0dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:elevation="15dp" />
+
+            <ProgressBar
+                android:id="@+id/media_item_progress"
+                android:layout_width="75dp"
+                android:layout_height="10dp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:indeterminate="true"
+                android:minHeight="10dp"
+                android:maxHeight="10dp"
+                android:minWidth="100dp"
+                android:maxWidth="100dp"
+                android:progress="0"
+                android:max="100"
+                android:layout_gravity="center"
+                android:layout_marginTop="125dp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/media_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:layout_toRightOf="@+id/media_item_image_layout"
+            android:layout_toEndOf="@+id/media_item_image_layout"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            tools:text="Test Title" />
+
+        <TextView
+            android:id="@+id/media_item_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/media_item_title"
+            android:layout_toRightOf="@+id/media_item_image_layout"
+            android:layout_toEndOf="@+id/media_item_image_layout"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            tools:text="Test Sub Title" />
+
+        <TextView
+            android:id="@+id/media_item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/media_item_sub_title"
+            android:layout_toRightOf="@+id/media_item_image_layout"
+            android:layout_toEndOf="@+id/media_item_image_layout"
+            tools:text="Test Date" />
+
+        <TextView
+            android:id="@+id/media_item_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/media_item_sub_title"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:gravity="end"
+            tools:text="30 Minutes" />
+
+        <TextView
+            android:id="@+id/media_item_episode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:layout_below="@+id/media_item_date"
+            android:layout_toRightOf="@+id/media_item_image_layout"
+            android:layout_toEndOf="@+id/media_item_image_layout"
+            tools:text="test episode" />
+
+        <TextView
+            android:id="@+id/media_item_studio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/media_item_duration"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:gravity="end"
+            tools:text="Test Studio" />
+
+    </RelativeLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/margin"
+        layout="@layout/phone_separator" />
+
+    <TextView
+        android:layout_margin="@dimen/margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/recording_description_label"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+    <TextView
+        android:id="@+id/media_item_description"
+        android:layout_margin="@dimen/margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Test Description" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/margin"
+        layout="@layout/phone_separator" />
+
+    <include
+        layout="@layout/phone_view_progress" />
+
+</LinearLayout>

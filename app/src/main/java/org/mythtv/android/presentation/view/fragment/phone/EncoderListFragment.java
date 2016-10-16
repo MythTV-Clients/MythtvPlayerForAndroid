@@ -28,7 +28,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.EncoderModel;
 import org.mythtv.android.presentation.presenter.phone.EncoderListPresenter;
 import org.mythtv.android.presentation.view.EncoderListView;
@@ -141,7 +141,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     private void initialize() {
         Log.d( TAG, "initialize : enter" );
 
-        this.getComponent( DvrComponent.class ).inject( this );
+        this.getComponent( MediaComponent.class ).inject( this );
         this.encoderListPresenter.setView( this );
 //        this.encoderListPresenter.initialize( contentType );
 

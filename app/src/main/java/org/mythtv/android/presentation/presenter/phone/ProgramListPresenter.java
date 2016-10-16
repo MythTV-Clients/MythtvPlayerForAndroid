@@ -21,14 +21,18 @@ package org.mythtv.android.presentation.presenter.phone;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
+import org.mythtv.android.presentation.mapper.MediaItemModelMapper;
 import org.mythtv.android.presentation.mapper.ProgramModelDataMapper;
+import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.ProgramListView;
 
 import java.util.Collection;
@@ -40,24 +44,24 @@ import javax.inject.Named;
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class ProgramListPresenter extends DefaultSubscriber<List<Program>> implements Presenter {
+public class ProgramListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 
     private static final String TAG = ProgramListPresenter.class.getSimpleName();
 
-    private ProgramListView viewListView;
+    private MediaItemListView viewListView;
 
     private final UseCase getProgramListUseCase;
-    private final ProgramModelDataMapper programModelDataMapper;
+    private final MediaItemModelMapper mediaItemModelMapper;
 
     @Inject
-    public ProgramListPresenter( @Named( "programList" ) UseCase getProgramListUseCase, ProgramModelDataMapper programModelDataMapper ) {
+    public ProgramListPresenter( @Named( "programList" ) UseCase getProgramListUseCase, MediaItemModelMapper mediaItemModelMapper ) {
 
         this.getProgramListUseCase = getProgramListUseCase;
-        this.programModelDataMapper = programModelDataMapper;
+        this.mediaItemModelMapper = mediaItemModelMapper;
 
     }
 
-    public void setView( @NonNull ProgramListView view ) {
+    public void setView( @NonNull MediaItemListView view ) {
         this.viewListView = view;
     }
 
@@ -102,10 +106,10 @@ public class ProgramListPresenter extends DefaultSubscriber<List<Program>> imple
         Log.d( TAG, "loadProgramList : exit" );
     }
 
-    public void onProgramClicked( ProgramModel programModel ) {
-        Log.i( TAG, "onProgramClicked : programModel=" + programModel.toString() );
+    public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
+        Log.i( TAG, "onMediaItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-        this.viewListView.viewProgram( programModel );
+        this.viewListView.viewMediaItem( mediaItemModel );
 
     }
 
@@ -132,53 +136,53 @@ public class ProgramListPresenter extends DefaultSubscriber<List<Program>> imple
 
     }
 
-    private void showProgramsCollectionInView( Collection<Program> programsCollection ) {
-        Log.d( TAG, "showProgramsCollectionInView : enter" );
+    private void showMediaItemsCollectionInView( Collection<MediaItem> mediaItemsCollection ) {
+        Log.d( TAG, "showMediaItemsCollectionInView : enter" );
 
-        final Collection<ProgramModel> programModelsCollection = this.programModelDataMapper.transform( programsCollection );
-        this.viewListView.renderProgramList( programModelsCollection );
+        final Collection<MediaItemModel> mediaItemModelsCollection = this.mediaItemModelMapper.transform( mediaItemsCollection );
+        this.viewListView.renderMediaItemList( mediaItemModelsCollection );
 
-        Log.d( TAG, "showProgramsCollectionInView : exit" );
+        Log.d( TAG, "showMediaItemsCollectionInView : exit" );
     }
 
     private void getProgramList() {
         Log.d( TAG, "getProgramList : enter" );
 
-        this.getProgramListUseCase.execute( new ProgramListSubscriber() );
+        this.getProgramListUseCase.execute( new MediaItemListSubscriber() );
 
         Log.d( TAG, "getProgramList : exit" );
     }
 
-    private final class ProgramListSubscriber extends DefaultSubscriber<List<Program>> {
+    private final class MediaItemListSubscriber extends DefaultSubscriber<List<MediaItem>> {
 
         @Override
         public void onCompleted() {
-            Log.d( TAG, "ProgramListSubscriber.onCompleted : enter" );
+            Log.d( TAG, "MediaItemListSubscriber.onCompleted : enter" );
 
             ProgramListPresenter.this.hideViewLoading();
 
-            Log.d( TAG, "ProgramListSubscriber.onCompleted : exit" );
+            Log.d( TAG, "MediaItemListSubscriber.onCompleted : exit" );
         }
 
         @Override
         public void onError( Throwable e ) {
-            Log.d( TAG, "ProgramListSubscriber.onError : enter" );
-            Log.e( TAG, "ProgramListSubscriber.onError : error", e );
+            Log.d( TAG, "MediaItemListSubscriber.onError : enter" );
+            Log.e( TAG, "MediaItemListSubscriber.onError : error", e );
 
             ProgramListPresenter.this.hideViewLoading();
             ProgramListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
             ProgramListPresenter.this.showViewRetry();
 
-            Log.d( TAG, "ProgramListSubscriber.onError : exit" );
+            Log.d( TAG, "MediaItemListSubscriber.onError : exit" );
         }
 
         @Override
-        public void onNext( List<Program> programs ) {
-            Log.d( TAG, "ProgramListSubscriber.onNext : enter" );
+        public void onNext( List<MediaItem> mediaItems ) {
+            Log.d( TAG, "MediaItemListSubscriber.onNext : enter" );
 
-            ProgramListPresenter.this.showProgramsCollectionInView( programs );
+            ProgramListPresenter.this.showMediaItemsCollectionInView( mediaItems );
 
-            Log.d( TAG, "ProgramListSubscriber.onNext : exit" );
+            Log.d( TAG, "MediaItemListSubscriber.onNext : exit" );
         }
 
     }

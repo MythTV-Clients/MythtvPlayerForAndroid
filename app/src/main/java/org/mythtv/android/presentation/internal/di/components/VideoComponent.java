@@ -27,13 +27,6 @@ import org.mythtv.android.presentation.internal.di.modules.VideoModule;
 import org.mythtv.android.presentation.internal.di.modules.VideoSeriesModule;
 import org.mythtv.android.presentation.internal.di.modules.VideoWatchedStatusModule;
 import org.mythtv.android.presentation.internal.di.modules.VideosModule;
-import org.mythtv.android.presentation.view.fragment.phone.HomeVideoListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.MusicVideoListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.TelevisionSeriesListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.VideoDetailsFragment;
-import org.mythtv.android.presentation.view.fragment.phone.AdultListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.MovieListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.TelevisionListFragment;
 import org.mythtv.android.presentation.view.fragment.tv.VideoAdultFragment;
 import org.mythtv.android.presentation.view.fragment.tv.VideoHomeMovieFragment;
 import org.mythtv.android.presentation.view.fragment.tv.VideoMovieFragment;
@@ -48,15 +41,6 @@ import dagger.Component;
 @PerActivity
 @Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, SharedPreferencesModule.class, NetModule.class, VideosModule.class, VideoModule.class, VideoSeriesModule.class, LiveStreamModule.class, VideoWatchedStatusModule.class } )
 public interface VideoComponent {
-
-    // Phone/Tablet fragments
-    void inject( AdultListFragment videoMovieFragment );
-    void inject( HomeVideoListFragment videoMovieFragment );
-    void inject( MovieListFragment videoMovieFragment );
-    void inject( MusicVideoListFragment videoMovieFragment );
-    void inject( TelevisionListFragment videoMovieFragment );
-    void inject( TelevisionSeriesListFragment videoMovieFragment );
-    void inject( VideoDetailsFragment videoMovieDetailsFragment );
 
     // TV fragments
     void inject( VideoMovieFragment videoMovieFragment );

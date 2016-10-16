@@ -192,7 +192,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( DvrComponent.class ).inject( this );
-        this.programListPresenter.setView( this );
+//        this.programListPresenter.setView( this );
 
         Log.d( TAG, "initialize : exit" );
     }

@@ -18,7 +18,7 @@
 
 package org.mythtv.android.domain.repository;
 
-import org.mythtv.android.domain.SearchResult;
+import org.mythtv.android.domain.MediaItem;
 
 import java.util.List;
 
@@ -29,6 +29,6 @@ import rx.Observable;
  */
 public interface SearchRepository {
 
-    Observable<List<SearchResult>> search( String searchString );
+    Observable<List<MediaItem>> search( String searchString );
 
 }

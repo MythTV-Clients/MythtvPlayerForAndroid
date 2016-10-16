@@ -20,15 +20,16 @@ package org.mythtv.android.presentation.view.adapter.phone;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.joda.time.DateTimeZone;
-import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
+import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 
 import java.util.Collection;
@@ -39,11 +40,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Adapter that manages a collection of {@link ProgramModel}.
+ * Adapter that manages a collection of {@link MediaItemModel}.
  *
  * Created by dmfrey on 8/31/15.
  */
-public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgramsAdapter.ProgramViewHolder> {
+public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgramsAdapter.MediaItemViewHolder> {
 
     private static final String TAG = UpcomingProgramsAdapter.class.getSimpleName();
 
@@ -54,42 +55,44 @@ public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgra
     }
 
     private Context context;
-    private List<ProgramModel> programsCollection;
+    private List<MediaItemModel> mediaItemsCollection;
     private final LayoutInflater layoutInflater;
 
     private OnItemClickListener onItemClickListener;
 
-    public UpcomingProgramsAdapter( Context context, Collection<ProgramModel> programsCollection ) {
+    public UpcomingProgramsAdapter( Context context, Collection<MediaItemModel> programsCollection ) {
 
         this.context = context;
-        this.validateProgramsCollection( programsCollection );
+        this.validateMediaItemsCollection( programsCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.programsCollection = (List<ProgramModel>) programsCollection;
+        this.mediaItemsCollection = (List<MediaItemModel>) programsCollection;
 
     }
 
     @Override
     public int getItemCount() {
 
-        return ( null != this.programsCollection ) ? this.programsCollection.size() : 0;
+        return ( null != this.mediaItemsCollection ) ? this.mediaItemsCollection.size() : 0;
     }
 
     @Override
-    public ProgramViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
+    public MediaItemViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
         View view = this.layoutInflater.inflate( R.layout.phone_upcoming_program_list_item, parent, false );
 
-        return new ProgramViewHolder( view );
+        return new MediaItemViewHolder( view );
     }
 
     @Override
-    public void onBindViewHolder( ProgramViewHolder holder, final int position ) {
+    public void onBindViewHolder( MediaItemViewHolder holder, final int position ) {
 
-        final ProgramModel programModel = this.programsCollection.get(position);
-        holder.textViewTitle.setText( programModel.getTitle() );
-        holder.textViewSubTitle.setText( programModel.getSubTitle() );
-        holder.textViewDate.setText( programModel.getStartTime().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
-        holder.textViewDuration.setText( context.getResources().getString( R.string.minutes, String.valueOf( Minutes.minutesBetween( programModel.getStartTime(), programModel.getEndTime() ).getMinutes() ) ) );
+        final MediaItemModel mediaItemModel = this.mediaItemsCollection.get( position );
+        Log.i( TAG, "onBindViewHolder : mediaItemModel=" + mediaItemModel.toString() );
+
+        holder.textViewTitle.setText( mediaItemModel.getTitle() );
+        holder.textViewSubTitle.setText( mediaItemModel.getSubTitle() );
+        holder.textViewDate.setText( mediaItemModel.getStartDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
+        holder.textViewDuration.setText( context.getResources().getString( R.string.minutes, String.valueOf( mediaItemModel.getDuration() ) ) );
 
     }
 
@@ -99,10 +102,10 @@ public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgra
         return position;
     }
 
-    public void setProgramsCollection( Collection<ProgramModel> programsCollection ) {
+    public void setMediaItemsCollection( Collection<MediaItemModel> mediaItemsCollection ) {
 
-        this.validateProgramsCollection(programsCollection);
-        this.programsCollection = (List<ProgramModel>) programsCollection;
+        this.validateMediaItemsCollection( mediaItemsCollection );
+        this.mediaItemsCollection = (List<MediaItemModel>) mediaItemsCollection;
         this.notifyDataSetChanged();
 
     }
@@ -113,16 +116,16 @@ public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgra
 
     }
 
-    private void validateProgramsCollection( Collection<ProgramModel> programsCollection ) {
+    private void validateMediaItemsCollection( Collection<MediaItemModel> mediaItemssCollection ) {
 
-        if( null == programsCollection ) {
+        if( null == mediaItemssCollection ) {
 
             throw new IllegalArgumentException( "The list cannot be null" );
         }
 
     }
 
-    static class ProgramViewHolder extends RecyclerView.ViewHolder {
+    static class MediaItemViewHolder extends RecyclerView.ViewHolder {
 
         @BindView( R.id.program_item_title )
         TextView textViewTitle;
@@ -136,7 +139,7 @@ public class UpcomingProgramsAdapter extends RecyclerView.Adapter<UpcomingProgra
         @BindView( R.id.program_item_duration )
         TextView textViewDuration;
 
-        public ProgramViewHolder( View itemView ) {
+        public MediaItemViewHolder( View itemView ) {
             super( itemView );
 
             ButterKnife.bind( this, itemView );

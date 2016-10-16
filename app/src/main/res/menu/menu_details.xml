@@ -20,6 +20,27 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_hls_enable"
+        android:title="@string/action_create_hls_stream"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/menu_hls_disable"
+        android:title="@string/action_remove_hls_stream"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/menu_mark_watched"
+        android:title="@string/action_mark_watched"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/menu_mark_unwatched"
+        android:title="@string/action_mark_unwatched"
+        android:visible="false"
+        app:showAsAction="never" />
+
     <item android:id="@+id/menu_settings"
         android:title="@string/action_settings"
         app:showAsAction="never" />

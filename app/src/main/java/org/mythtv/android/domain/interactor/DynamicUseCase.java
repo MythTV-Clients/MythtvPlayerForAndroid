@@ -47,7 +47,7 @@ public abstract class DynamicUseCase extends UseCase {
     @SuppressWarnings( "unchecked" )
     public void execute( Subscriber UseCaseSubscriber, Map parameters ) {
         this.subscription = this.buildUseCaseObservable( parameters )
-                .subscribeOn(Schedulers.from( threadExecutor ) )
+                .subscribeOn( Schedulers.from( threadExecutor ) )
                 .observeOn( postExecutionThread.getScheduler() )
                 .subscribe( UseCaseSubscriber );
     }

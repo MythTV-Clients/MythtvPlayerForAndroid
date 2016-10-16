@@ -28,50 +28,38 @@ public class SeasonEpisodeFormatter {
 
     private SeasonEpisodeFormatter() {}
 
-    public static String format( VideoMetadataInfoModel videoMetadataInfoModel ) {
+    public static String format( int season, int episode ) {
 
-        if( videoMetadataInfoModel.getSeason() == -1 || videoMetadataInfoModel.getEpisode() == -1 ) {
+        if( season <= 0 || episode <= 0 ) {
 
             return "";
         }
 
         StringBuilder sb = new StringBuilder();
         sb.append( "S" );
-        if( videoMetadataInfoModel.getSeason() < 10 ) {
+        if( season < 10 ) {
             sb.append( "0" );
         }
-        sb.append( videoMetadataInfoModel.getSeason() );
+        sb.append( season );
 
         sb.append( "E" );
-        if( videoMetadataInfoModel.getEpisode() < 10 ) {
+        if( episode < 10 ) {
             sb.append( "0" );
         }
-        sb.append( videoMetadataInfoModel.getEpisode() );
+        sb.append( episode );
 
         return sb.toString();
+
+    }
+
+    public static String format( VideoMetadataInfoModel videoMetadataInfoModel ) {
+
+        return format( videoMetadataInfoModel.getSeason(), videoMetadataInfoModel.getEpisode() );
     }
 
     public static String format( SearchResultModel searchResultModel ) {
 
-        if( searchResultModel.getSeason() == -1 || searchResultModel.getEpisode() == -1 ) {
-
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder();
-        sb.append( "S" );
-        if( searchResultModel.getSeason() < 10 ) {
-            sb.append( "0" );
-        }
-        sb.append( searchResultModel.getSeason() );
-
-        sb.append( "E" );
-        if( searchResultModel.getEpisode() < 10 ) {
-            sb.append( "0" );
-        }
-        sb.append( searchResultModel.getEpisode() );
-
-        return sb.toString();
+        return format( searchResultModel.getSeason(), searchResultModel.getEpisode() );
     }
 
 }

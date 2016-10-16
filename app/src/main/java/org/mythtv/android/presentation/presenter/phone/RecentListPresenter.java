@@ -21,15 +21,15 @@ package org.mythtv.android.presentation.presenter.phone;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.mythtv.android.domain.Program;
+import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
-import org.mythtv.android.presentation.mapper.ProgramModelDataMapper;
-import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.view.ProgramListView;
+import org.mythtv.android.presentation.mapper.MediaItemModelMapper;
+import org.mythtv.android.presentation.model.MediaItemModel;
+import org.mythtv.android.presentation.view.MediaItemListView;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,24 +40,24 @@ import javax.inject.Named;
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class RecentListPresenter extends DefaultSubscriber<List<Program>> implements Presenter {
+public class RecentListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 
     private static final String TAG = RecentListPresenter.class.getSimpleName();
 
-    private ProgramListView viewListView;
+    private MediaItemListView viewListView;
 
     private final UseCase getProgramListUseCase;
-    private final ProgramModelDataMapper programModelDataMapper;
+    private final MediaItemModelMapper mediaItemModelMapper;
 
     @Inject
-    public RecentListPresenter( @Named( "recentProgramList" ) UseCase getProgramListUseCase, ProgramModelDataMapper programModelDataMapper ) {
+    public RecentListPresenter( @Named( "recentProgramList" ) UseCase getProgramListUseCase, MediaItemModelMapper mediaItemModelMapper ) {
 
         this.getProgramListUseCase = getProgramListUseCase;
-        this.programModelDataMapper = programModelDataMapper;
+        this.mediaItemModelMapper = mediaItemModelMapper;
 
     }
 
-    public void setView( @NonNull ProgramListView view ) {
+    public void setView( @NonNull MediaItemListView view ) {
         this.viewListView = view;
     }
 
@@ -98,10 +98,10 @@ public class RecentListPresenter extends DefaultSubscriber<List<Program>> implem
 
     }
 
-    public void onProgramClicked( ProgramModel programModel ) {
-        Log.i( TAG, "onProgramClicked : programModel=" + programModel.toString() );
+    public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
+        Log.i( TAG, "onMediaItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-        this.viewListView.viewProgram( programModel );
+        this.viewListView.viewMediaItem( mediaItemModel );
 
     }
 
@@ -128,20 +128,20 @@ public class RecentListPresenter extends DefaultSubscriber<List<Program>> implem
 
     }
 
-    private void showProgramsCollectionInView( Collection<Program> programsCollection ) {
+    private void showMediaItemsCollectionInView( Collection<MediaItem> mediaItemsCollection ) {
 
-        final Collection<ProgramModel> programModelsCollection = this.programModelDataMapper.transform( programsCollection );
-        this.viewListView.renderProgramList( programModelsCollection );
+        final Collection<MediaItemModel> mediaItemModelsCollection = this.mediaItemModelMapper.transform( mediaItemsCollection );
+        this.viewListView.renderMediaItemList( mediaItemModelsCollection );
 
     }
 
     private void getProgramList() {
 
-        this.getProgramListUseCase.execute( new ProgramListSubscriber() );
+        this.getProgramListUseCase.execute( new MediaItemListSubscriber() );
 
     }
 
-    private final class ProgramListSubscriber extends DefaultSubscriber<List<Program>> {
+    private final class MediaItemListSubscriber extends DefaultSubscriber<List<MediaItem>> {
 
         @Override
         public void onCompleted() {
@@ -158,9 +158,9 @@ public class RecentListPresenter extends DefaultSubscriber<List<Program>> implem
         }
 
         @Override
-        public void onNext( List<Program> programs ) {
+        public void onNext( List<MediaItem> mediaItems ) {
 
-            RecentListPresenter.this.showProgramsCollectionInView( programs );
+            RecentListPresenter.this.showMediaItemsCollectionInView( mediaItems );
 
         }
 

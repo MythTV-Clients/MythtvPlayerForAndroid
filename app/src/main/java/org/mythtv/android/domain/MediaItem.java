@@ -8,21 +8,18 @@ import org.joda.time.DateTime;
 
 public class MediaItem {
 
-    private static final String WIDTH_QS = "&Width=%s";
-
-    public enum Media {
-        PROGRAM, VIDEO
-    }
-
     private int id;
     private Media media;
     private String title;
     private String subTitle;
     private String description;
     private DateTime startDate;
+    private int programFlags;
     private int season;
     private int episode;
     private String studio; // video = studio, recording = channel
+    private String castMembers;
+    private String characters;
     private String url;
     private String fanartUrl;
     private String coverartUrl;
@@ -30,6 +27,16 @@ public class MediaItem {
     private String previewUrl;
     private String contentType;
     private long duration;
+    private int percentComplete;
+
+    private boolean recording;
+
+    private int liveStreamId;
+    private String createHttpLiveStreamUrl;
+    private String removeHttpLiveStreamUrl;
+
+    private boolean watched;
+    private String markWatchedUrl;
 
     public MediaItem() {
     }
@@ -100,6 +107,17 @@ public class MediaItem {
 
     }
 
+    public int getProgramFlags() {
+
+        return programFlags;
+    }
+
+    public void setProgramFlags( int programFlags ) {
+
+        this.programFlags = programFlags;
+
+    }
+
     public int getSeason() {
 
         return season;
@@ -133,6 +151,28 @@ public class MediaItem {
 
     }
 
+    public String getCastMembers() {
+
+        return castMembers;
+    }
+
+    public void setCastMembers( String castMembers ) {
+
+        this.castMembers = castMembers;
+
+    }
+
+    public String getCharacters() {
+
+        return characters;
+    }
+
+    public void setCharacters( String characters ) {
+
+        this.characters = characters;
+
+    }
+
     public String getUrl() {
 
         return url;
@@ -140,8 +180,12 @@ public class MediaItem {
 
     public void setUrl( String url ) {
 
-        url = url.replaceAll( " ", "%20" );
-        this.url = url;
+        if( null != url && !"".equals( url ) ) {
+
+            url = url.replaceAll( " ", "%20" );
+            this.url = url;
+
+        }
 
     }
 
@@ -150,21 +194,14 @@ public class MediaItem {
         return fanartUrl;
     }
 
-    public String getFanartUrl( String width ) {
-
-        String url = fanartUrl;
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
     public void setFanartUrl( String fanartUrl ) {
 
-        fanartUrl = fanartUrl.replaceAll( " ", "%20" );
-        this.fanartUrl = fanartUrl;
+        if( null != fanartUrl && !"".equals( fanartUrl ) ) {
+
+            fanartUrl = fanartUrl.replaceAll( " ", "%20" );
+            this.fanartUrl = fanartUrl;
+
+        }
 
     }
 
@@ -173,21 +210,14 @@ public class MediaItem {
         return coverartUrl;
     }
 
-    public String getCoverartUrl( String width ) {
-
-        String url = coverartUrl;
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
     public void setCoverartUrl( String coverartUrl ) {
 
-        coverartUrl = coverartUrl.replaceAll( " ", "%20" );
-        this.coverartUrl = coverartUrl;
+        if( null != coverartUrl && !"".equals( coverartUrl ) ) {
+
+            coverartUrl = coverartUrl.replaceAll( " ", "%20" );
+            this.coverartUrl = coverartUrl;
+
+        }
 
     }
 
@@ -196,22 +226,14 @@ public class MediaItem {
         return bannerUrl;
     }
 
-    public String getBannerUrl( String width ) {
-
-        String url = bannerUrl;
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
     public void setBannerUrl( String bannerUrl ) {
 
-        bannerUrl = bannerUrl.replaceAll( " ", "%20" );
+        if( null != bannerUrl && !"".equals( bannerUrl ) ) {
 
-        this.bannerUrl = bannerUrl;
+            bannerUrl = bannerUrl.replaceAll( " ", "%20" );
+            this.bannerUrl = bannerUrl;
+
+        }
 
     }
 
@@ -220,20 +242,14 @@ public class MediaItem {
         return previewUrl;
     }
 
-    public String getPreviewUrl( String width ) {
-
-        String url = previewUrl;
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
     public void setPreviewUrl( String previewUrl ) {
 
-        this.previewUrl = previewUrl;
+        if( null != previewUrl && !"".equals( previewUrl ) ) {
+
+            previewUrl = previewUrl.replaceAll( " ", "%20" );
+            this.previewUrl = previewUrl;
+
+        }
 
     }
 
@@ -258,9 +274,85 @@ public class MediaItem {
 
     }
 
+    public int getPercentComplete() {
+
+        return percentComplete;
+    }
+
+    public void setPercentComplete( int percentComplete ) {
+
+        this.percentComplete = percentComplete;
+
+    }
+
+    public boolean isRecording() {
+
+        return recording;
+    }
+
+    public void setRecording( boolean recording ) {
+
+        this.recording = recording;
+
+    }
+
+    public int getLiveStreamId() {
+
+        return liveStreamId;
+    }
+
+    public void setLiveStreamId( int liveStreamId ) {
+
+        this.liveStreamId = liveStreamId;
+
+    }
+
+    public String getCreateHttpLiveStreamUrl() {
+
+        return createHttpLiveStreamUrl;
+    }
+
+    public void setCreateHttpLiveStreamUrl( String createHttpLiveStreamUrl ) {
+
+        this.createHttpLiveStreamUrl = createHttpLiveStreamUrl;
+
+    }
+
+    public String getRemoveHttpLiveStreamUrl() {
+
+        return removeHttpLiveStreamUrl;
+    }
+
+    public void setRemoveHttpLiveStreamUrl( String removeHttpLiveStreamUrl ) {
+
+        this.removeHttpLiveStreamUrl = removeHttpLiveStreamUrl;
+
+    }
+
+    public boolean isWatched() {
+
+        return watched;
+    }
+
+    public void setWatched( boolean watched ) {
+
+        this.watched = watched;
+
+    }
+
+    public String getMarkWatchedUrl() {
+
+        return markWatchedUrl;
+    }
+
+    public void setMarkWatchedUrl( String markWatchedUrl ) {
+
+        this.markWatchedUrl = markWatchedUrl;
+
+    }
+
     @Override
     public boolean equals( Object o ) {
-
         if( this == o ) return true;
         if( o == null || getClass() != o.getClass() ) return false;
 
@@ -268,13 +360,12 @@ public class MediaItem {
 
         if( getId() != mediaItem.getId() ) return false;
         return getMedia() == mediaItem.getMedia();
-
     }
 
     @Override
     public int hashCode() {
 
-        int result = getId();
+        int result = (int) (getId() ^ (getId() >>> 32));
         result = 31 * result + getMedia().hashCode();
 
         return result;
@@ -289,9 +380,12 @@ public class MediaItem {
                 ", subTitle='" + subTitle + '\'' +
                 ", description='" + description + '\'' +
                 ", startDate=" + startDate +
+                ", programFlags=" + programFlags +
                 ", season=" + season +
                 ", episode=" + episode +
                 ", studio='" + studio + '\'' +
+                ", castMembers='" + castMembers + '\'' +
+                ", characters='" + characters + '\'' +
                 ", url='" + url + '\'' +
                 ", fanartUrl='" + fanartUrl + '\'' +
                 ", coverartUrl='" + coverartUrl + '\'' +
@@ -299,6 +393,13 @@ public class MediaItem {
                 ", previewUrl='" + previewUrl + '\'' +
                 ", contentType='" + contentType + '\'' +
                 ", duration=" + duration +
+                ", percentComplete=" + percentComplete +
+                ", recording=" + recording +
+                ", liveStreamId=" + liveStreamId +
+                ", createHttpLiveStreamUrl='" + createHttpLiveStreamUrl + '\'' +
+                ", removeHttpLiveStreamUrl='" + removeHttpLiveStreamUrl + '\'' +
+                ", watched=" + watched +
+                ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 '}';
     }
 
