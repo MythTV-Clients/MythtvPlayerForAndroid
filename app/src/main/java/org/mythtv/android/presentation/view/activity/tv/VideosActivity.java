@@ -26,11 +26,11 @@ import android.util.Log;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
-import org.mythtv.android.presentation.internal.di.components.VideoComponent;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.view.fragment.tv.VideosFragment;
 
-public class VideosActivity extends AbstractBaseTvActivity implements HasComponent<VideoComponent>, VideosFragment.MediaListener {
+public class VideosActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent>, VideosFragment.MediaListener {
 
     private static final String TAG = VideosActivity.class.getSimpleName();
 
@@ -39,7 +39,7 @@ public class VideosActivity extends AbstractBaseTvActivity implements HasCompone
         return new Intent( context, VideosActivity.class );
     }
 
-    private VideoComponent videoComponent;
+    private MediaComponent mediaComponent;
 
     @Override
     public int getLayoutResource() {
@@ -57,7 +57,7 @@ public class VideosActivity extends AbstractBaseTvActivity implements HasCompone
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.videoComponent = DaggerVideoComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .build();
 
@@ -65,11 +65,11 @@ public class VideosActivity extends AbstractBaseTvActivity implements HasCompone
     }
 
     @Override
-    public VideoComponent getComponent() {
+    public MediaComponent getComponent() {
         Log.d( TAG, "getComponent : enter" );
 
         Log.d( TAG, "getComponent : exit" );
-        return videoComponent;
+        return mediaComponent;
     }
 
     @Override

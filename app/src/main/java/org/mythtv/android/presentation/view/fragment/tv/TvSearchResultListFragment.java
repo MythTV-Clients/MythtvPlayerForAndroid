@@ -42,13 +42,10 @@ import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
-import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.phone.SearchResultListPresenter;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
 import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
-import org.mythtv.android.presentation.view.activity.tv.VideoDetailsActivity;
 
 import java.util.Collection;
 
@@ -363,32 +360,18 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
         @Override
         public void onItemClicked( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
 
-            if( item instanceof ProgramModel ) {
+            if( item instanceof MediaItemModel ) {
 
-                ProgramModel programModel = (ProgramModel) item;
-//                Log.d( TAG, "Program: " + tv_item.toString() );
+                MediaItemModel mediaItemModel = (MediaItemModel) item;
+//                Log.d( TAG, "mediaItemModel: " + mediaItemModel.toString() );
 
                 Intent intent = new Intent( getActivity(), MediaItemDetailsActivity.class );
-                intent.putExtra( MediaItemDetailsActivity.MEDIA_ITEM, programModel );
-
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        MediaItemDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
-
-                getActivity().startActivity( intent, bundle );
-
-            } else {
-
-                VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
-
-                Intent intent = new Intent( getActivity(), VideoDetailsActivity.class );
-                intent.putExtra( VideoDetailsActivity.VIDEO, videoMetadataInfoModel );
+                intent.putExtra( MediaItemDetailsActivity.MEDIA_ITEM, mediaItemModel );
 
                 Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         getActivity(),
                         ( (ImageCardView) itemViewHolder.view ).getMainImageView(),
-                        VideoDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
+                        MediaItemDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
 
                 getActivity().startActivity( intent, bundle );
 

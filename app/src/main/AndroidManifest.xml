@@ -331,17 +331,6 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.tv.VideoDetailsActivity"
-            android:parentActivityName=".presentation.view.activity.tv.VideosActivity"
-            android:theme="@style/Theme.Leanback">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.tv.VideosActivity"/>
-
-        </activity>
-
-        <activity
             android:name=".presentation.view.activity.tv.TvVideoSettingsActivity"
             android:theme="@style/Theme.Leanback" />
 

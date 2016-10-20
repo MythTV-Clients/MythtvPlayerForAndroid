@@ -18,9 +18,6 @@
 
 package org.mythtv.android.presentation.utils;
 
-import org.mythtv.android.presentation.model.SearchResultModel;
-import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-
 /**
  * Created by dmfrey on 1/13/16.
  */
@@ -50,16 +47,6 @@ public class SeasonEpisodeFormatter {
 
         return sb.toString();
 
-    }
-
-    public static String format( VideoMetadataInfoModel videoMetadataInfoModel ) {
-
-        return format( videoMetadataInfoModel.getSeason(), videoMetadataInfoModel.getEpisode() );
-    }
-
-    public static String format( SearchResultModel searchResultModel ) {
-
-        return format( searchResultModel.getSeason(), searchResultModel.getEpisode() );
     }
 
 }

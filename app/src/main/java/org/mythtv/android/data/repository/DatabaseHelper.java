@@ -24,7 +24,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import org.mythtv.android.data.entity.MediaItemEntity;
-import org.mythtv.android.data.entity.SearchResultEntity;
 
 /**
  * Created by dmfrey on 10/8/15.
@@ -83,7 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void dropTables( SQLiteDatabase db ) {
         Log.v( TAG, "dropTables : enter" );
 
-        String dropSearchResult = SearchResultEntity.DROP_TABLE;
+        String dropSearchResult = "DROP TABLE IF EXISTS search_result;";
         if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
             Log.v( TAG, "dropTables : dropSearchResult=" + dropSearchResult );
         }

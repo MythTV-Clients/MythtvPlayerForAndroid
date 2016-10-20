@@ -33,8 +33,8 @@ import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.SearchResultListPresenter;
 import org.mythtv.android.presentation.view.MediaItemListView;
+import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
 import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
-import org.mythtv.android.presentation.view.adapter.phone.SearchResultsLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -190,8 +190,7 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        SearchResultsLayoutManager searchResultsLayoutManager = new SearchResultsLayoutManager(getActivity());
-        this.rv_mediaItems.setLayoutManager( searchResultsLayoutManager );
+        this.rv_mediaItems.setLayoutManager( new LayoutManager( getActivity() ) );
 
         this.mediaItemsAdapter = new MediaItemsAdapter( getActivity(), new ArrayList<>() );
         this.mediaItemsAdapter.setOnItemClickListener( onItemClickListener );
