@@ -27,6 +27,8 @@ public class GetMediaItemList extends DynamicUseCase {
     public static final String FOLDER_KEY = "folder";
     public static final String SORT_KEY = "sort";
 
+    public static final String TV_KEY = "tv";
+
     private final DvrRepository dvrRepository;
     private final VideoRepository videoRepository;
 
@@ -74,7 +76,14 @@ public class GetMediaItemList extends DynamicUseCase {
 
             case TELEVISION:
 
-                return getVideoSeriesList( parameters );
+                if( parameters.containsKey( TV_KEY ) ) {
+
+                    return videoRepository.getVideoListByContentType( media.name() );
+
+                } else {
+
+                    return getVideoSeriesList(parameters);
+                }
 
             default :
                 throw new IllegalArgumentException( "Key [" + media.name() + "] not found" );

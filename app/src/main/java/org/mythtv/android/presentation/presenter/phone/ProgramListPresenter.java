@@ -22,18 +22,14 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.mythtv.android.domain.MediaItem;
-import org.mythtv.android.domain.Program;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
 import org.mythtv.android.presentation.mapper.MediaItemModelMapper;
-import org.mythtv.android.presentation.mapper.ProgramModelDataMapper;
 import org.mythtv.android.presentation.model.MediaItemModel;
-import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.view.MediaItemListView;
-import org.mythtv.android.presentation.view.ProgramListView;
 
 import java.util.Collection;
 import java.util.List;

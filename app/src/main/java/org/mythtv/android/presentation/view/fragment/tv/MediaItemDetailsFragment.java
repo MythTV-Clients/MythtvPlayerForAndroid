@@ -44,24 +44,22 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
-import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.VideoModel;
 import org.mythtv.android.presentation.presenter.tv.DetailsDescriptionPresenter;
 import org.mythtv.android.presentation.utils.Utils;
+import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
 import org.mythtv.android.presentation.view.activity.tv.PlaybackOverlayActivity;
-import org.mythtv.android.presentation.view.activity.tv.RecordingsActivity;
-import org.mythtv.android.presentation.view.activity.tv.RecordingsDetailsActivity;
 
 /*
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
  * It shows a detailed view of video and its meta plus related videos.
  */
-public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
+public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
-    private static final String TAG = RecordingDetailsFragment.class.getSimpleName();
+    private static final String TAG = MediaItemDetailsFragment.class.getSimpleName();
 
     private static final int ACTION_WATCH = 1;
 
@@ -70,7 +68,7 @@ public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
 
     private static final int NUM_COLS = 10;
 
-    private ProgramModel mProgramModel;
+    private MediaItemModel mediaItemModel;
 
     private ArrayObjectAdapter mAdapter;
     private ClassPresenterSelector mPresenterSelector;
@@ -86,21 +84,16 @@ public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
 
         prepareBackgroundManager();
 
-        mProgramModel = (ProgramModel) getActivity().getIntent().getSerializableExtra(RecordingsDetailsActivity.PROGRAM );
-        if( null != mProgramModel ) {
+        mediaItemModel = (MediaItemModel) getActivity().getIntent().getSerializableExtra( MediaItemDetailsActivity.MEDIA_ITEM );
+        if( null != mediaItemModel ) {
 
             setupAdapter();
             setupDetailsOverviewRow();
             setupDetailsOverviewRowPresenter();
             setupMovieListRow();
             setupMovieListRowPresenter();
-            updateBackground( getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + mProgramModel.getInetref() + "&Type=banner" );
+            updateBackground( getMasterBackendUrl() + mediaItemModel.getFanartUrl() );
             setOnItemViewClickedListener( new ItemViewClickedListener() );
-
-        } else {
-
-            Intent intent = new Intent( getActivity(), RecordingsActivity.class );
-            startActivity(intent);
 
         }
 
@@ -149,82 +142,88 @@ public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
     }
 
     private void setupDetailsOverviewRow() {
-        Log.d( TAG, "setupDetailsOverviewRow : " + mProgramModel.toString());
+        Log.d( TAG, "setupDetailsOverviewRow : " + mediaItemModel.toString());
 
-        final DetailsOverviewRow row = new DetailsOverviewRow( mProgramModel );
+        final DetailsOverviewRow row = new DetailsOverviewRow( mediaItemModel );
         row.setImageDrawable(getResources().getDrawable(R.drawable.default_background));
 
         int width = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_WIDTH );
         int height = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_HEIGHT );
 
-        Glide.with( getActivity() )
-                .load( getMasterBackendUrl() + "/Content/GetPreviewImage?ChanId=" + mProgramModel.getChannel().getChanId() + "&StartTime=" + mProgramModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=1134" )
-//                .centerCrop()
-                .error( R.drawable.default_background )
-                .into( new SimpleTarget<GlideDrawable>( width, height ) {
+        switch( mediaItemModel.getMedia() ) {
 
-                    @Override
-                    public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
-                        Log.d( TAG, "details overview card image url ready: " + resource );
+            case PROGRAM :
 
-                        row.setImageDrawable( resource );
-                        mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
+                Glide.with( getActivity() )
+                        .load( getMasterBackendUrl() + mediaItemModel.getPreviewUrl( String.valueOf( width ) ) )
+                        .error( R.drawable.default_background )
+                        .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
-                    }
+                            @Override
+                            public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
+                                Log.d( TAG, "details overview card image url ready: " + resource );
 
-                });
+                                row.setImageDrawable( resource );
+                                mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
 
-//        if( mediaSupported() || liveStreamSupported() ) {
+                            }
+
+                        });
+                break;
+
+            default :
+
+                Glide.with( getActivity() )
+                        .load( getMasterBackendUrl() + mediaItemModel.getCoverartUrl() )
+                        .error( R.drawable.default_background )
+                        .into( new SimpleTarget<GlideDrawable>( width, height ) {
+
+                            @Override
+                            public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
+                                Log.d( TAG, "details overview card image url ready: " + resource );
+
+                                row.setImageDrawable( resource );
+                                mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
+
+                            }
+
+                        });
+
+                break;
+        }
+
+        if( mediaSupported() || liveStreamSupported() ) {
 
             row.addAction( new Action( ACTION_WATCH, getResources().getString( R.string.watch ) ) );
 
-//        }
+        }
 
         mAdapter.add( row );
 
     }
 
-    private boolean liveStreamSupported() {
+    private boolean mediaSupported() {
 
-        if( null != mProgramModel.getLiveStreamInfo() ) {
+        if( mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mp4" ) ) {
 
-            if( mProgramModel.getLiveStreamInfo().getPercentComplete() > 2 ) {
+            return true;
+        }
 
-                return true;
-            }
+        if( mediaItemModel.getUrl().endsWith( "mkv" ) ) {
 
+            return true;
         }
 
         return false;
     }
 
-    private boolean mediaSupported() {
+    private boolean liveStreamSupported() {
 
-        if( null != mProgramModel.getFileName() && !"".equals( mProgramModel.getFileName() ) ) {
+        if( mediaItemModel.getLiveStreamId() != -1 ) {
 
-            String ext = mProgramModel.getFileName().substring( mProgramModel.getFileName().lastIndexOf( '.' ) + 1 );
-            switch( ext ) {
+            if( mediaItemModel.getPercentComplete() > 2 ) {
 
-                case "mp4" :
-
-                    return true;
-
-                case "mkv" :
-
-                    return true;
-
-                case "webm" :
-
-                    return true;
-
-                case "3gp" :
-
-                    return true;
-
-                default:
-
-                    return false;
-
+                return true;
             }
 
         }
@@ -240,7 +239,7 @@ public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
         detailsPresenter.setStyleLarge( true );
 
         // Hook up transition element.
-        detailsPresenter.setSharedElementEnterTransition( getActivity(), RecordingsDetailsActivity.SHARED_ELEMENT_NAME );
+        detailsPresenter.setSharedElementEnterTransition( getActivity(), MediaItemDetailsActivity.SHARED_ELEMENT_NAME );
 
         detailsPresenter.setOnActionClickedListener(action -> {
 
@@ -249,7 +248,7 @@ public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
                 String masterBackendUrl = getMasterBackendUrl();
                 if( !getSharedPreferencesModule().getInternalPlayer() ) {
 
-                    String externalPlayerUrl = masterBackendUrl + "/Content/GetFile?FileName=" + mProgramModel.getFileName();
+                    String externalPlayerUrl = masterBackendUrl + mediaItemModel.getUrl();
                     Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
 
                     final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
@@ -260,14 +259,14 @@ public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
 
                     VideoModel videoModel = new VideoModel
                             .VideoModelBuilder()
-                            .id( mProgramModel.getId() )
-                            .category( mProgramModel.getCategory() )
-                            .title( mProgramModel.getTitle() )
-                            .description( mProgramModel.getDescription() )
-                            .videoUrl( masterBackendUrl + mProgramModel.getLiveStreamInfo().getRelativeUrl() )
-                            .bgImageUrl( masterBackendUrl + "/Content/GetRecordingArtwork?Inetref=" + mProgramModel.getInetref() + "&Type=banner" )
-                            .cardImageUrl( masterBackendUrl + "/Content/GetPreviewImage?ChanId=" + mProgramModel.getChannel().getChanId() + "&StartTime=" + mProgramModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) + "&Height=1134" )
-                            .studio( mProgramModel.getChannel().getCallSign() )
+                            .id( mediaItemModel.getId() )
+                            .category( mediaItemModel.getMedia().name() )
+                            .title( mediaItemModel.getTitle() )
+                            .description( mediaItemModel.getDescription() )
+                            .videoUrl( masterBackendUrl + mediaItemModel.getUrl() )
+                            .bgImageUrl( masterBackendUrl + mediaItemModel.getBannerUrl() )
+                            .cardImageUrl( masterBackendUrl + mediaItemModel.getPreviewUrl() )
+                            .studio( mediaItemModel.getStudio() )
                             .build();
 
                     Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
@@ -314,20 +313,20 @@ public class RecordingDetailsFragment extends AbstractBaseDetailsFragment {
         @Override
         public void onItemClicked( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
 
-            if( item instanceof ProgramModel ) {
+            if( item instanceof MediaItemModel ) {
 
-                ProgramModel programModel = (ProgramModel) item;
-                Log.d( TAG, "onItemClicked : programModel=" + programModel.toString() );
+                MediaItemModel mediaItemModel = (MediaItemModel) item;
+                Log.d( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-                Intent intent = new Intent( getActivity(), RecordingsDetailsActivity.class );
-                intent.putExtra( getResources().getString( R.string.movie ), mProgramModel );
+                Intent intent = new Intent( getActivity(), MediaItemDetailsActivity.class );
+                intent.putExtra( getResources().getString( R.string.movie ), mediaItemModel );
                 intent.putExtra( getResources().getString( R.string.should_start ), true );
                 startActivity( intent );
 
                 Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         getActivity(),
                         ( (ImageCardView) itemViewHolder.view ).getMainImageView(),
-                        RecordingsDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
+                        MediaItemDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
 
                 getActivity().startActivity( intent, bundle );
 

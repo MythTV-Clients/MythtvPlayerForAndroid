@@ -5,11 +5,13 @@ import android.os.Bundle;
 import org.joda.time.DateTime;
 import org.mythtv.android.domain.Media;
 
+import java.io.Serializable;
+
 /**
  * Created by dmfrey on 7/10/16.
  */
 
-public class MediaItemModel {
+public class MediaItemModel implements Serializable {
 
     private static final String WIDTH_QS = "&Width=%s";
 

@@ -33,7 +33,7 @@ import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModu
 import org.mythtv.android.presentation.internal.di.modules.TitleInfosModule;
 import org.mythtv.android.presentation.internal.di.modules.UpcomingProgramsModule;
 import org.mythtv.android.presentation.view.fragment.tv.CategoryListFragment;
-import org.mythtv.android.presentation.view.fragment.tv.RecordingsFragment;
+import org.mythtv.android.presentation.view.fragment.tv.MediaItemListFragment;
 
 import dagger.Component;
 
@@ -49,6 +49,6 @@ public interface DvrComponent {
 
     // TV fragments
     void inject( CategoryListFragment tvCategoryListFragment );
-    void inject( RecordingsFragment tvRecordingsFragment );
+    void inject( MediaItemListFragment tvMediaItemListFragment);
 
 }

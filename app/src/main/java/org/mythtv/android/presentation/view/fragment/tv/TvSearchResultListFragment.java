@@ -40,14 +40,14 @@ import android.util.Log;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
-import org.mythtv.android.presentation.internal.di.components.SearchComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.ProgramModel;
 import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
 import org.mythtv.android.presentation.presenter.phone.SearchResultListPresenter;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
 import org.mythtv.android.presentation.view.MediaItemListView;
-import org.mythtv.android.presentation.view.activity.tv.RecordingsDetailsActivity;
+import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
 import org.mythtv.android.presentation.view.activity.tv.VideoDetailsActivity;
 
 import java.util.Collection;
@@ -175,7 +175,7 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
         this.searchText = getArguments().getString( ARGUMENT_KEY_SEARCH_TEXT );
 
         Log.d( TAG, "initialize : get component" );
-        this.getComponent( SearchComponent.class ).inject( this );
+        this.getComponent( MediaComponent.class ).inject( this );
 
         Log.d( TAG, "initialize : set view" );
         this.searchResultListPresenter.setView( this );
@@ -368,13 +368,13 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
                 ProgramModel programModel = (ProgramModel) item;
 //                Log.d( TAG, "Program: " + tv_item.toString() );
 
-                Intent intent = new Intent( getActivity(), RecordingsDetailsActivity.class );
-                intent.putExtra( RecordingsDetailsActivity.PROGRAM, programModel );
+                Intent intent = new Intent( getActivity(), MediaItemDetailsActivity.class );
+                intent.putExtra( MediaItemDetailsActivity.MEDIA_ITEM, programModel );
 
                 Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         getActivity(),
                         ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        RecordingsDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
+                        MediaItemDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
 
                 getActivity().startActivity( intent, bundle );
 

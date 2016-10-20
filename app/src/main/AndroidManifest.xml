@@ -287,7 +287,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.tv.RecordingsDetailsActivity"
+            android:name=".presentation.view.activity.tv.MediaItemDetailsActivity"
             android:parentActivityName=".presentation.view.activity.tv.MainTvActivity"
             android:theme="@style/Theme.Leanback">
 

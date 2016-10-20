@@ -24,12 +24,13 @@ import android.os.Bundle;
 import android.util.Log;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
 import org.mythtv.android.presentation.internal.di.components.VideoComponent;
 import org.mythtv.android.presentation.view.fragment.tv.VideosFragment;
 
-public class VideosActivity extends AbstractBaseTvActivity implements HasComponent<VideoComponent>, VideosFragment.CategoryListener {
+public class VideosActivity extends AbstractBaseTvActivity implements HasComponent<VideoComponent>, VideosFragment.MediaListener {
 
     private static final String TAG = VideosActivity.class.getSimpleName();
 
@@ -72,9 +73,9 @@ public class VideosActivity extends AbstractBaseTvActivity implements HasCompone
     }
 
     @Override
-    public void onCategoryClicked( String category ) {
+    public void onCategoryClicked( Media media ) {
 
-        navigator.navigateToVideoCategory( this, category );
+        navigator.navigateToVideoCategory( this, media );
 
     }
 

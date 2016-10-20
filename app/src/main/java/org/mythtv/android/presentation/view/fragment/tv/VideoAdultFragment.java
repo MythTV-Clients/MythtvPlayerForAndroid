@@ -220,7 +220,7 @@ public class VideoAdultFragment extends AbstractBaseVideoFragment implements Vid
         if( null != videoModelCollection ) {
             Log.d( TAG, "renderVideoList : videoModelCollection is not null" );
 
-            ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+            ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
             CardPresenter cardPresenter = new CardPresenter();
 
             Map<Category, List<VideoMetadataInfoModel>> videos = new TreeMap<>( new Comparator<Category>() {
@@ -281,14 +281,7 @@ public class VideoAdultFragment extends AbstractBaseVideoFragment implements Vid
 
             }
 
-//            HeaderItem gridHeader = new HeaderItem( i, "PREFERENCES" );
-//
-//            GridItemPresenter mGridPresenter = new GridItemPresenter();
-//            ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter( mGridPresenter );
-//            gridRowAdapter.add( getResources().getString( R.string.personal_settings ) );
-//            mRowsAdapter.add( new ListRow( gridHeader, gridRowAdapter ) );
-
-            setAdapter(mRowsAdapter);
+            setAdapter( mRowsAdapter );
 
         }
 

@@ -21,7 +21,6 @@ package org.mythtv.android.presentation.view.fragment.tv;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,11 +38,9 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -52,19 +49,21 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import org.mythtv.android.R;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
-import org.mythtv.android.presentation.model.ProgramModel;
+import org.mythtv.android.domain.Media;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.model.MediaItemModel;
+import org.mythtv.android.presentation.presenter.phone.MediaItemListPresenter;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
-import org.mythtv.android.presentation.presenter.phone.ProgramListPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
-import org.mythtv.android.presentation.view.ProgramListView;
-import org.mythtv.android.presentation.view.activity.tv.RecordingsDetailsActivity;
+import org.mythtv.android.presentation.view.MediaItemListView;
+import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -76,15 +75,16 @@ import javax.inject.Inject;
 /**
  * Created by dmfrey on 1/29/16.
  */
-public class RecordingsFragment extends AbstractBaseBrowseFragment implements ProgramListView {
+public class MediaItemListFragment extends AbstractBaseBrowseFragment implements MediaItemListView {
 
-    private static final String TAG = RecordingsFragment.class.getSimpleName();
+    private static final String TAG = MediaItemListFragment.class.getSimpleName();
+
+    public static final String MEDIA_KEY = "media";
+    public static final String TV_KEY = "tv";
 
     private static final int BACKGROUND_UPDATE_DELAY = 300;
-    private static final int GRID_ITEM_WIDTH = 200;
-    private static final int GRID_ITEM_HEIGHT = 200;
-    private static final int NUM_ROWS = 6;
-    private static final int NUM_COLS = 15;
+
+    private Map<String, Object> parameters;
 
     private final Handler mHandler = new Handler();
     private Drawable mDefaultBackground;
@@ -96,24 +96,86 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
     /**
      * Interface for listening program list events.
      */
-    public interface ProgramListListener {
+    public interface MediaItemListListener {
 
         void onSearchClicked();
 
     }
 
     @Inject
-    ProgramListPresenter programListPresenter;
+    MediaItemListPresenter mediaItemListPresenter;
 
-    private ProgramListListener listener;
+    private MediaItemListListener listener;
 
-    public RecordingsFragment() {
+    public MediaItemListFragment() {
         super();
     }
 
-    public static RecordingsFragment newInstance() {
+    public static MediaItemListFragment newInstance(Bundle args ) {
 
-        return new RecordingsFragment();
+        MediaItemListFragment mediaItemListFragment = new MediaItemListFragment();
+        mediaItemListFragment.setArguments( args );
+
+        return mediaItemListFragment;
+    }
+
+    public static class Builder {
+
+        private Media media;
+        private boolean tv;
+
+        public Builder( Media media ) {
+            this.media = media;
+        }
+
+        public Builder tv( boolean tv ) {
+
+            this.tv = tv;
+
+            return this;
+        }
+
+        public Map<String, Object> build() {
+
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put( MEDIA_KEY, media );
+
+            if( tv ) {
+
+                parameters.put( TV_KEY, tv );
+
+            }
+
+            return parameters;
+        }
+
+        public Bundle toBundle() {
+
+            Bundle args = new Bundle();
+            args.putString( MEDIA_KEY, media.name() );
+
+            if( tv ) {
+
+                args.putBoolean( TV_KEY, tv );
+
+            }
+
+            return args;
+        }
+
+        public static Map<String, Object> fromBundle( Bundle args ) {
+
+            Builder builder = new Builder( Media.valueOf( args.getString( MEDIA_KEY ) ) );
+
+            if( args.containsKey( TV_KEY ) ) {
+
+                builder.tv( args.getBoolean( TV_KEY ) );
+
+            }
+
+            return builder.build();
+        }
+
     }
 
     @Override
@@ -121,8 +183,8 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
         super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        if( activity instanceof ProgramListListener ) {
-            this.listener = (ProgramListListener) activity;
+        if( activity instanceof MediaItemListListener) {
+            this.listener = (MediaItemListListener) activity;
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -130,27 +192,29 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        Log.i( TAG, "onCreateView : enter" );
+        Log.d( TAG, "onCreateView : enter" );
+
+        parameters = Builder.fromBundle( getArguments() );
 
         setupUI();
 
-        Log.i( TAG, "onCreateView : exit" );
+        Log.d( TAG, "onCreateView : exit" );
         return super.onCreateView( inflater, container, savedInstanceState );
     }
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState ) {
-        Log.i( TAG, "onActivityCreated : enter" );
+        Log.d( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
 
         prepareBackgroundManager();
 
         this.initialize();
-        this.loadProgramList();
+        this.loadMediaItemList();
 
         setupEventListeners();
 
-        Log.i( TAG, "onActivityCreated : exit" );
+        Log.d( TAG, "onActivityCreated : exit" );
     }
 
     @Override
@@ -158,7 +222,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-        this.programListPresenter.resume();
+        this.mediaItemListPresenter.resume();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -168,7 +232,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-        this.programListPresenter.pause();
+        this.mediaItemListPresenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -184,15 +248,15 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
 
         }
 
-        this.programListPresenter.destroy();
+        this.mediaItemListPresenter.destroy();
 
     }
 
     private void initialize() {
         Log.d( TAG, "initialize : enter" );
 
-        this.getComponent( DvrComponent.class ).inject( this );
-//        this.programListPresenter.setView( this );
+        this.getComponent( MediaComponent.class ).inject( this );
+        this.mediaItemListPresenter.setView( this );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -200,9 +264,45 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        // setBadgeDrawable(getActivity().getResources().getDrawable(
-        // R.drawable.videos_by_google_banner));
-        setTitle( getString( R.string.recordings_browse_title ) ); // Badge, when set, takes precedent
+        switch( (Media) parameters.get( MEDIA_KEY ) ) {
+
+            case PROGRAM :
+
+                setTitle( getString( R.string.recordings_browse_title ) ); // Badge, when set, takes precedent
+
+                break;
+
+            case MOVIE :
+
+                setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 0 ] ); // Badge, when set, takes precedent
+
+                break;
+
+            case TELEVISION :
+
+                setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 1 ] ); // Badge, when set, takes precedent
+
+                break;
+
+            case HOMEVIDEO :
+
+                setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 2 ] ); // Badge, when set, takes precedent
+
+                break;
+
+            case MUSICVIDEO :
+
+                setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 3 ] ); // Badge, when set, takes precedent
+
+                break;
+
+            case ADULT :
+
+                setTitle( getResources().getStringArray( R.array.watch_videos_tabs )[ 4 ] ); // Badge, when set, takes precedent
+
+                break;
+
+        }
 
         // over title
         setHeadersState( HEADERS_ENABLED );
@@ -210,9 +310,6 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
 
         // set fastLane (or headers) background color
         setBrandColor( getResources().getColor( R.color.primary ) );
-
-        // set search icon color
-//        setSearchAffordanceColor( getResources().getColor( R.color.primary_dark ) );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -238,15 +335,16 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
     }
 
     @Override
-    public void renderProgramList( Collection<ProgramModel> programModelCollection ) {
-        Log.d( TAG, "renderProgramList : enter" );
+    public void renderMediaItemList( Collection<MediaItemModel> mediaItemModelCollection ) {
+        Log.d( TAG, "renderMediaItemList : enter" );
 
-        if( null != programModelCollection ) {
+        if( null != mediaItemModelCollection ) {
+            Log.d( TAG, "renderMediaItemList : mediaItemModelCollection is not null" );
 
-            ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+            ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
             CardPresenter cardPresenter = new CardPresenter();
 
-            Map<Category, List<ProgramModel>> recordings = new TreeMap<>( new Comparator<Category>() {
+            Map<Category, List<MediaItemModel>> categories = new TreeMap<>( new Comparator<Category>() {
 
                 @Override
                 public int compare( Category lhs, Category rhs ) {
@@ -256,52 +354,67 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
 
             });
 
-            for( ProgramModel programModel : programModelCollection ) {
+            for( MediaItemModel mediaItemModel : mediaItemModelCollection ) {
+                Log.d( TAG, "renderMediaItemList : mediaItemModel=" + mediaItemModel.toString() );
 
-//                if( "LiveTV".equalsIgnoreCase( programModel.getRecording().getStorageGroup() ) ) {
-//
-//                    break;
-//                }
+                Category category = new Category( mediaItemModel.getTitle(), mediaItemModel.getMedia() );
+                if( !categories.containsKey( category ) ) {
+                    Log.d( TAG, "renderMediaItemList : new category=" + category );
 
-                Category category = new Category( programModel.getTitle() );
-                if( !recordings.containsKey( category ) ) {
-
-                    List<ProgramModel> programModels = new ArrayList<>();
-                    programModels.add( programModel );
-                    recordings.put( category, programModels );
+                    List<MediaItemModel> mediaItemModels = new ArrayList<>();
+                    mediaItemModels.add( mediaItemModel );
+                    categories.put( category, mediaItemModels );
 
                 } else {
+                    Log.d( TAG, "renderMediaItemList : adding to existing category" );
 
-                    recordings.get( category ).add( programModel );
+                    categories.get( category ).add( mediaItemModel );
 
                 }
 
             }
 
+            Log.d( TAG, "renderMediaItemList : build the list row adapters, catgory size=" + categories.size() );
             int i = 0;
-            for( Category category : recordings.keySet() ) {
+            for( Category category : categories.keySet() ) {
+                Log.d( TAG, "renderMediaItemList : category=" + category );
 
-                Collections.sort( recordings.get( category ), ( lhs, rhs ) -> {
+                Collections.sort( categories.get( category ), ( lhs, rhs ) -> {
 
-                    int i1 = lhs.getEndTime().compareTo( rhs.getEndTime() );
-                    if( i1 != 0 ) {
+                    switch( category.media ) {
 
-                        return i1;
+                        case PROGRAM :
+
+//                    int i1 = lhs.getEndTime().compareTo( rhs.getEndTime() );
+//                    if( i1 != 0 ) {
+//
+//                        return i1;
+//                    }
+
+                            int i1 = Integer.compare( lhs.getSeason(), rhs.getSeason() );
+                            if( i1 != 0 ) {
+
+                                return i1;
+                            }
+
+                            return Integer.compare( lhs.getEpisode(), rhs.getEpisode() );
+
+                        default :
+
+                            String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.getTitle() );
+                            String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.getTitle() );
+
+                            return lhsTitle.compareTo( rhsTitle );
+
                     }
 
-                    i1 = lhs.getSeason().compareTo( rhs.getSeason() );
-                    if( i1 != 0 ) {
-
-                        return i1;
-                    }
-
-                    return lhs.getEpisode().compareTo( rhs.getEpisode() );
                 });
 
                 ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( cardPresenter );
-                for( ProgramModel programModel : recordings.get( category ) ) {
+                for( MediaItemModel mediaItemModel : categories.get( category ) ) {
+                    Log.d( TAG, "renderMediaItemList : adding mediaItem '" + mediaItemModel.getTitle() + "' to category '" + category.getKey() + "' list row adapter" );
 
-                    listRowAdapter.add( programModel );
+                    listRowAdapter.add( mediaItemModel );
 
                 }
 
@@ -312,22 +425,15 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
 
             }
 
-//            HeaderItem gridHeader = new HeaderItem( i, "PREFERENCES" );
-//
-//            GridItemPresenter mGridPresenter = new GridItemPresenter();
-//            ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter( mGridPresenter );
-//            gridRowAdapter.add( getResources().getString( R.string.personal_settings ) );
-//            mRowsAdapter.add( new ListRow( gridHeader, gridRowAdapter ) );
-
-            setAdapter(mRowsAdapter);
+            setAdapter( mRowsAdapter );
 
         }
 
-        Log.d( TAG, "renderProgramList : exit" );
+        Log.d( TAG, "renderMediaItemList : exit" );
     }
 
     @Override
-    public void viewProgram( ProgramModel programModel ) {
+    public void viewMediaItem( MediaItemModel mediaItemModel ) {
 
     }
 
@@ -354,14 +460,14 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
     }
 
     /**
-     * Loads all programs.
+     * Loads all media items.
      */
-    private void loadProgramList() {
-        Log.d( TAG, "loadProgramList : enter" );
+    private void loadMediaItemList() {
+        Log.d( TAG, "loadMediaItemList : enter" );
 
-        this.programListPresenter.initialize();
+        this.mediaItemListPresenter.initialize( parameters );
 
-        Log.d( TAG, "loadProgramList : exit" );
+        Log.d( TAG, "loadMediaItemList : exit" );
     }
 
     private void prepareBackgroundManager() {
@@ -379,7 +485,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
     private void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
-        setOnSearchClickedListener(view -> RecordingsFragment.this.listener.onSearchClicked());
+        setOnSearchClickedListener(view -> MediaItemListFragment.this.listener.onSearchClicked());
 
         setOnItemViewClickedListener( new ItemViewClickedListener() );
         setOnItemViewSelectedListener( new ItemViewSelectedListener() );
@@ -432,18 +538,18 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
         @Override
         public void onItemClicked( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
 
-            if( item instanceof ProgramModel ) {
+            if( item instanceof MediaItemModel ) {
 
-                ProgramModel programModel = (ProgramModel) item;
-                Log.d(TAG, "onItemClicked : programModel=" + programModel.toString() );
+                MediaItemModel mediaItemModel = (MediaItemModel) item;
+                Log.d( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-                Intent intent = new Intent( getActivity(), RecordingsDetailsActivity.class );
-                intent.putExtra( RecordingsDetailsActivity.PROGRAM, programModel );
+                Intent intent = new Intent( getActivity(), MediaItemDetailsActivity.class );
+                intent.putExtra( MediaItemDetailsActivity.MEDIA_ITEM, mediaItemModel );
 
                 Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         getActivity(),
                         ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        RecordingsDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
+                        MediaItemDetailsActivity.SHARED_ELEMENT_NAME ).toBundle();
 
                 getActivity().startActivity( intent, bundle );
 
@@ -470,10 +576,10 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
         @Override
         public void onItemSelected( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
 
-            if( item instanceof ProgramModel ) {
+            if( item instanceof MediaItemModel ) {
 
-                ProgramModel programModel = (ProgramModel) item;
-                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + "/Content/GetRecordingArtwork?Inetref=" + programModel.getInetref() + "&Type=fanart" );
+                MediaItemModel mediaItemModel = (MediaItemModel) item;
+                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + mediaItemModel.getFanartUrl() );
                 startBackgroundTimer();
 
             }
@@ -498,51 +604,49 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
         }
     }
 
-    private class GridItemPresenter extends Presenter {
-
-        @Override
-        public ViewHolder onCreateViewHolder( ViewGroup parent ) {
-
-            TextView view = new TextView( parent.getContext() );
-            view.setLayoutParams( new ViewGroup.LayoutParams( GRID_ITEM_WIDTH, GRID_ITEM_HEIGHT ) );
-            view.setFocusable( true );
-            view.setFocusableInTouchMode( true );
-            view.setBackgroundColor( getResources().getColor( R.color.default_background ) );
-            view.setTextColor( Color.WHITE );
-            view.setGravity( Gravity.CENTER );
-
-            return new ViewHolder( view );
-        }
-
-        @Override
-        public void onBindViewHolder( ViewHolder viewHolder, Object item ) {
-            ( (TextView) viewHolder.view ).setText( (String) item );
-        }
-
-        @Override
-        public void onUnbindViewHolder( ViewHolder viewHolder ) {
-        }
-
-    }
-
     private class Category {
 
         private final String key;
         private final String title;
+        private final Media media;
 
-        public Category( final String title ) {
+        public Category( final String title, final Media media ) {
 
-            this.key = ArticleCleaner.clean( getActivity(), title );
-            this.title = title;
+            switch( media ) {
+
+                case PROGRAM :
+                case TELEVISION :
+
+                    this.key = ArticleCleaner.clean( getActivity(), title ).toUpperCase();
+                    this.title = title;
+
+                    break;
+
+                default :
+
+                    this.key = ArticleCleaner.clean( getActivity(), title ).substring( 0, 1 ).toUpperCase();
+                    this.title = key;
+
+                    break;
+            }
+
+            this.media = media;
 
         }
 
         public String getKey() {
+
             return key;
         }
 
         public String getTitle() {
+
             return title;
+        }
+
+        public Media getMedia() {
+
+            return media;
         }
 
         @Override
@@ -574,6 +678,7 @@ public class RecordingsFragment extends AbstractBaseBrowseFragment implements Pr
             return "Category{" +
                     "key='" + key + '\'' +
                     ", title='" + title + '\'' +
+                    ", media=" + media.name() +
                     '}';
         }
 

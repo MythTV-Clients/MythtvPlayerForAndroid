@@ -24,31 +24,26 @@ import android.os.Bundle;
 import android.util.Log;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.ContentType;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
-import org.mythtv.android.presentation.internal.di.components.VideoComponent;
-import org.mythtv.android.presentation.view.fragment.tv.AbstractBaseVideoFragment;
-import org.mythtv.android.presentation.view.fragment.tv.VideoAdultFragment;
-import org.mythtv.android.presentation.view.fragment.tv.VideoHomeMovieFragment;
-import org.mythtv.android.presentation.view.fragment.tv.VideoMovieFragment;
-import org.mythtv.android.presentation.view.fragment.tv.VideoMusicVideoFragment;
-import org.mythtv.android.presentation.view.fragment.tv.VideoTelevisionFragment;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.view.fragment.tv.MediaItemListFragment;
 
-public class VideoCategoryActivity extends AbstractBaseTvActivity implements HasComponent<VideoComponent>, AbstractBaseVideoFragment.VideoListListener {
+public class VideoCategoryActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener {
 
     private static final String TAG = VideoCategoryActivity.class.getSimpleName();
 
-    private static final String INTENT_EXTRA_PARAM_CATEGORY = "org.mythtv.android.INTENT_PARAM_CATEGORY";
-    private static final String INSTANCE_STATE_PARAM_CATEGORY = "org.mythtv.android.STATE_PARAM_CATEGORY";
+    private static final String INTENT_EXTRA_PARAM_MEDIA = "org.mythtv.android.INTENT_PARAM_MEDIA";
+    private static final String INSTANCE_STATE_PARAM_MEDIA = "org.mythtv.android.STATE_PARAM_MEDIA";
 
-    private String category;
-    private VideoComponent videoComponent;
+    private Media media;
+    private MediaComponent mediaComponent;
 
-    public static Intent getCallingIntent( Context context, String category ) {
+    public static Intent getCallingIntent( Context context, Media media ) {
 
         Intent callingIntent = new Intent( context, VideoCategoryActivity.class );
-        callingIntent.putExtra( INTENT_EXTRA_PARAM_CATEGORY, category );
+        callingIntent.putExtra( INTENT_EXTRA_PARAM_MEDIA, media.name() );
 
         return callingIntent;
     }
@@ -74,7 +69,7 @@ public class VideoCategoryActivity extends AbstractBaseTvActivity implements Has
         if( null != outState ) {
             Log.d( TAG, "onSaveInstanceState : outState is not null" );
 
-            outState.putString( INSTANCE_STATE_PARAM_CATEGORY, this.category );
+            outState.putString( INSTANCE_STATE_PARAM_MEDIA, this.media.name() );
 
         }
 
@@ -91,7 +86,7 @@ public class VideoCategoryActivity extends AbstractBaseTvActivity implements Has
         if( null != savedInstanceState ) {
             Log.d( TAG, "onRestoreInstanceState : savedInstanceState != null" );
 
-            this.category = savedInstanceState.getString( INSTANCE_STATE_PARAM_CATEGORY );
+            this.media = Media.valueOf( savedInstanceState.getString( INSTANCE_STATE_PARAM_MEDIA ) );
 
         }
 
@@ -111,43 +106,43 @@ public class VideoCategoryActivity extends AbstractBaseTvActivity implements Has
             if( null != extras ) {
                 Log.d( TAG, "initializeActivity : extras != null" );
 
-                if( extras.containsKey( INTENT_EXTRA_PARAM_CATEGORY ) ) {
+                if( extras.containsKey( INTENT_EXTRA_PARAM_MEDIA ) ) {
 
-                    this.category = getIntent().getStringExtra( INTENT_EXTRA_PARAM_CATEGORY );
+                    this.media = Media.valueOf( getIntent().getStringExtra( INTENT_EXTRA_PARAM_MEDIA ) );
 
                 }
 
             }
 
-            switch( this.category ) {
+            switch( this.media ) {
 
-                case ContentType.MOVIE :
+                case MOVIE :
 
-                    addFragment( R.id.fl_fragment, VideoMovieFragment.newInstance() );
-
-                    break;
-
-                case ContentType.TELEVISION :
-
-                    addFragment( R.id.fl_fragment, VideoTelevisionFragment.newInstance() );
+                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.MOVIE ).toBundle() ) );
 
                     break;
 
-                case ContentType.HOMEVIDEO :
+                case TELEVISION :
 
-                    addFragment( R.id.fl_fragment, VideoHomeMovieFragment.newInstance() );
-
-                    break;
-
-                case ContentType.MUSICVIDEO :
-
-                    addFragment( R.id.fl_fragment, VideoMusicVideoFragment.newInstance() );
+                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.TELEVISION ).tv( true ).toBundle() ) );
 
                     break;
 
-                case ContentType.ADULT :
+                case HOMEVIDEO :
 
-                    addFragment( R.id.fl_fragment, VideoAdultFragment.newInstance() );
+                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.HOMEVIDEO ).toBundle() ) );
+
+                    break;
+
+                case MUSICVIDEO :
+
+                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.MUSICVIDEO ).toBundle() ) );
+
+                    break;
+
+                case ADULT :
+
+                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.ADULT ).toBundle() ) );
 
                     break;
 
@@ -156,7 +151,7 @@ public class VideoCategoryActivity extends AbstractBaseTvActivity implements Has
         } else {
             Log.d( TAG, "initializeActivity : savedInstanceState is not null" );
 
-            this.category = savedInstanceState.getString( INSTANCE_STATE_PARAM_CATEGORY );
+            this.media = Media.valueOf( savedInstanceState.getString( INSTANCE_STATE_PARAM_MEDIA ) );
 
         }
 
@@ -166,7 +161,7 @@ public class VideoCategoryActivity extends AbstractBaseTvActivity implements Has
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.videoComponent = DaggerVideoComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .build();
 
@@ -174,11 +169,11 @@ public class VideoCategoryActivity extends AbstractBaseTvActivity implements Has
     }
 
     @Override
-    public VideoComponent getComponent() {
+    public MediaComponent getComponent() {
         Log.d( TAG, "getComponent : enter" );
 
         Log.d( TAG, "getComponent : exit" );
-        return videoComponent;
+        return mediaComponent;
     }
 
     @Override

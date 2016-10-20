@@ -22,10 +22,10 @@ import org.mythtv.android.R;
 /*
  * Details activity class that loads LeanbackDetailsFragment class
  */
-public class RecordingsDetailsActivity extends Activity {
+public class MediaItemDetailsActivity extends Activity {
 
     public static final String SHARED_ELEMENT_NAME = "hero";
-    public static final String PROGRAM = "Program";
+    public static final String MEDIA_ITEM = "media_item";
 
     /**
      * Called when the activity is first created.
@@ -34,7 +34,7 @@ public class RecordingsDetailsActivity extends Activity {
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-        setContentView( R.layout.activity_tv_recording_details);
+        setContentView( R.layout.activity_tv_recording_details );
 
     }
 
