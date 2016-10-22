@@ -44,6 +44,7 @@ public class MediaItemModelMapper {
         mediaItemModel.setLiveStreamId( mediaItem.getLiveStreamId() );
         mediaItemModel.setCreateHttpLiveStreamUrl( mediaItem.getCreateHttpLiveStreamUrl() );
         mediaItemModel.setRemoveHttpLiveStreamUrl( mediaItem.getRemoveHttpLiveStreamUrl() );
+        mediaItemModel.setGetHttpLiveStreamUrl( mediaItem.getGetHttpLiveStreamUrl() );
         mediaItemModel.setWatched( mediaItem.isWatched() );
         mediaItemModel.setMarkWatchedUrl( mediaItem.getMarkWatchedUrl() );
 

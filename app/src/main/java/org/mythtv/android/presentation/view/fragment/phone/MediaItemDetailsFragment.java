@@ -20,12 +20,18 @@ package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -35,6 +41,9 @@ import android.widget.TextView;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
+import org.mythtv.android.data.entity.LiveStreamInfoEntity;
+import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
+import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemDetailsPresenter;
@@ -42,6 +51,7 @@ import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
 import org.mythtv.android.presentation.view.MediaItemDetailsView;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -49,6 +59,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.FormBody;
+import okhttp3.Request;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by dmfrey on 8/31/15.
@@ -56,6 +70,8 @@ import butterknife.Unbinder;
 public class MediaItemDetailsFragment extends AbstractBaseFragment implements MediaItemDetailsView {
 
     private static final String TAG = MediaItemDetailsFragment.class.getSimpleName();
+    private static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
+    private static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
 
     public interface MediaItemDetailsListener {
 
@@ -65,6 +81,11 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private MediaItemModel mediaItemModel;
     private MediaItemDetailsListener listener;
+
+    MenuItem menuHlsEnable;
+    MenuItem menuHlsDisable;
+    MenuItem menuMarkWatched;
+    MenuItem menuMarkUnwatched;
 
     @Inject
     MediaItemDetailsPresenter presenter;
@@ -125,6 +146,8 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         Log.d( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
 
+        setHasOptionsMenu( true );
+
         this.initialize();
 
         Log.d( TAG, "onActivityCreated : exit" );
@@ -181,7 +204,115 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         this.presenter.destroy();
 
+        this.timer.cancel();
+
+        if( null != this.getLiveStreamTask && this.getLiveStreamTask.getStatus() == AsyncTask.Status.RUNNING ) {
+
+            getLiveStreamTask.cancel( true );
+
+        }
+
         Log.d( TAG, "onDestroy : exit" );
+    }
+
+    @Override
+    public void onActivityResult( int requestCode, int resultCode, Intent data ) {
+        Log.d( TAG, "onActivityResult : enter" );
+        super.onActivityResult( requestCode, resultCode, data );
+
+        switch( requestCode ) {
+
+            case ADD_LIVE_STREAM_DIALOG_RESULT :
+                Log.d( TAG, "onActivityResult : add live stream result returned " + resultCode );
+
+                if( resultCode == RESULT_OK ) {
+                    Log.d( TAG, "onActivityResult : positive button pressed" );
+
+                    new AddLiveStreamTask().execute();
+
+                } else {
+                    Log.d( TAG, "onActivityResult : negative button pressed" );
+
+
+                }
+
+                break;
+
+            case REMOVE_LIVE_STREAM_DIALOG_RESULT :
+                Log.d( TAG, "onActivityResult : remove live stream result returned " + resultCode );
+
+                if( resultCode == RESULT_OK ) {
+                    Log.d( TAG, "onActivityResult : positive button pressed" );
+
+                    new RemoveLiveStreamTask().execute();
+
+                } else {
+                    Log.d( TAG, "onActivityResult : negative button pressed" );
+
+
+                }
+
+                break;
+
+        }
+
+        Log.d( TAG, "onActivityResult : exit" );
+    }
+
+    @Override
+    public void onPrepareOptionsMenu( Menu menu ) {
+        super.onPrepareOptionsMenu( menu );
+
+        menuHlsEnable = menu.findItem( R.id.menu_hls_enable );
+        menuHlsDisable = menu.findItem( R.id.menu_hls_disable );
+        menuMarkWatched = menu.findItem( R.id.menu_mark_watched );
+        menuMarkUnwatched = menu.findItem( R.id.menu_mark_unwatched );
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
+
+        inflater.inflate( R.menu.menu_item_details, menu );
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+
+        switch( item.getItemId() ) {
+
+            case R.id.menu_hls_enable:
+
+                AddLiveStreamDialogFragment addLiveStreamfragment = new AddLiveStreamDialogFragment();
+                addLiveStreamfragment.setTargetFragment( this, ADD_LIVE_STREAM_DIALOG_RESULT );
+                addLiveStreamfragment.show( getFragmentManager(), "AddLiveStreamDialogFragment" );
+
+                return true;
+
+            case R.id.menu_hls_disable:
+
+                RemoveLiveStreamDialogFragment removeLiveStreamFragment = new RemoveLiveStreamDialogFragment();
+                removeLiveStreamFragment.setTargetFragment( this, REMOVE_LIVE_STREAM_DIALOG_RESULT );
+                removeLiveStreamFragment.show( getFragmentManager(), "RemoveLiveStreamDialogFragment" );
+
+                return true;
+
+            case R.id.menu_mark_watched:
+
+                new MarkWatchedTask().execute( true );
+
+                return true;
+
+            case R.id.menu_mark_unwatched:
+
+                new MarkWatchedTask().execute( false );
+
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected( item );
     }
 
     private void initialize() {
@@ -200,10 +331,11 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         Log.d( TAG, "renderMediaItem : enter" );
 
         if( null != mediaItemModel ) {
-            Log.d( TAG, "renderMediaItem : mediaItem is not null" );
+            Log.d( TAG, "renderMediaItem : mediaItem is not null, mediaItemModel=" + mediaItemModel.toString() );
 
             this.mediaItemModel = mediaItemModel;
             listener.onMediaItemLoaded( this.mediaItemModel );
+            updateMenu();
 
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
             actionBar.setTitle( this.mediaItemModel.getSubTitle() );
@@ -225,21 +357,11 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             this.tv_duration.setText( getContext().getResources().getString( R.string.minutes, String.valueOf( this.mediaItemModel.getDuration() ) ) );
             this.tv_description.setText( this.mediaItemModel.getDescription() );
 
-            if( mediaItemModel.getPercentComplete() > 0 ) {
+            updateProgress();
 
-                this.pb_progress.setVisibility( View.VISIBLE );
-                this.pb_progress.setIndeterminate( false );
-                this.pb_progress.setProgress( mediaItemModel.getPercentComplete() );
+            if( mediaItemModel.getLiveStreamId() > 0 && mediaItemModel.getPercentComplete() < 100 ) {
 
-                if( mediaItemModel.getPercentComplete() < 2 ) {
-
-                    this.pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
-
-                } else {
-
-                    this.pb_progress.getProgressDrawable().setColorFilter( getResources().getColor( R.color.accent ), android.graphics.PorterDuff.Mode.SRC_IN );
-
-                }
+                timer.start();
 
             }
 
@@ -339,5 +461,322 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         Log.d( TAG, "updateLiveStream : exit" );
     }
+
+    private void updateMenu() {
+
+        if( !mediaItemModel.isRecording() ) {
+
+            if( mediaItemModel.getLiveStreamId() != 0 ) {
+
+                menuHlsEnable.setVisible( false );
+                menuHlsDisable.setVisible( true );
+
+            } else {
+
+                menuHlsEnable.setVisible( true );
+                menuHlsDisable.setVisible( false );
+
+            }
+
+        }
+
+        if( mediaItemModel.isWatched() ) {
+
+            menuMarkUnwatched.setVisible( true );
+            menuMarkWatched.setVisible( false );
+
+        } else {
+
+            menuMarkUnwatched.setVisible( false );
+            menuMarkWatched.setVisible( true );
+
+        }
+
+    }
+
+    private void updateProgress() {
+
+        if( mediaItemModel.getLiveStreamId() != 0 ) {
+
+            if( mediaItemModel.getPercentComplete() > 0 ) {
+
+                this.pb_progress.setVisibility( View.VISIBLE );
+                this.pb_progress.setIndeterminate( false );
+                this.pb_progress.setProgress( mediaItemModel.getPercentComplete() );
+
+                if( mediaItemModel.getPercentComplete() < 2 ) {
+
+                    this.pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
+
+                } else {
+
+                    this.pb_progress.getProgressDrawable().setColorFilter( getResources().getColor( R.color.accent ), android.graphics.PorterDuff.Mode.SRC_IN );
+
+                }
+
+            }
+
+        } else {
+
+            this.pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
+            this.pb_progress.setVisibility( View.GONE );
+            this.pb_progress.setIndeterminate( true );
+            this.pb_progress.setProgress( 0 );
+
+        }
+
+    }
+
+    private class MarkWatchedTask extends AsyncTask<Boolean, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground( Boolean... params ) {
+
+            String idParam;
+            switch( mediaItemModel.getMedia() ) {
+
+                case PROGRAM:
+
+                    idParam = "RecordedId";
+
+                    break;
+
+                default:
+
+                    idParam = "Id";
+
+                    break;
+            }
+
+            FormBody.Builder builder = new FormBody.Builder();
+            builder.add(idParam, String.valueOf( mediaItemModel.getId() ) );
+            builder.add( "Watched", String.valueOf( params[ 0 ] ) );
+
+            final Request request = new Request.Builder()
+                    .url( getMasterBackendUrl() + mediaItemModel.getMarkWatchedUrl() )
+                    .addHeader( "Accept", "application/json" )
+                    .post( builder.build() )
+                    .build();
+
+            try {
+
+                BooleanJsonMapper mapper = new BooleanJsonMapper();
+                String result = okHttpClient.newCall( request ).execute().body().string();
+                Log.d( TAG, "doInBackground : result=" + result );
+
+                return mapper.transformBoolean( result );
+
+            } catch( IOException e ) {
+
+                Log.e( TAG, "doInBackground : error", e );
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute( Boolean result ) {
+
+            if( null != result ) {
+
+                if (result) {
+
+                    mediaItemModel.setWatched( true );
+                    updateMenu();
+
+                }
+
+            }
+
+        }
+
+    }
+
+    private class AddLiveStreamTask extends AsyncTask<Void, Void, LiveStreamInfoEntity> {
+
+        @Override
+        protected LiveStreamInfoEntity doInBackground( Void... params ) {
+            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+
+            final Request request = new Request.Builder()
+                    .url( getMasterBackendUrl() + mediaItemModel.getCreateHttpLiveStreamUrl() )
+                    .addHeader( "Accept", "application/json" )
+                    .get()
+                    .build();
+
+            try {
+
+                LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
+                String result = okHttpClient.newCall( request ).execute().body().string();
+                Log.d( TAG, "doInBackground : result=" + result );
+
+                return mapper.transformLiveStreamInfoEntity( result );
+
+            } catch( IOException e ) {
+
+                Log.e( TAG, "doInBackground : error", e );
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute( LiveStreamInfoEntity liveStreamInfoEntity ) {
+
+            if( null != liveStreamInfoEntity ) {
+                Log.d( TAG, "onPostExecute : liveStreamInfoEntity=" + liveStreamInfoEntity.toString() );
+
+                mediaItemModel.setLiveStreamId( liveStreamInfoEntity.getId() );
+                mediaItemModel.setPercentComplete( liveStreamInfoEntity.getPercentComplete() );
+                mediaItemModel.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( liveStreamInfoEntity.getId() ) ) );
+                mediaItemModel.setGetHttpLiveStreamUrl( String.format( "/Content/GetLiveStream?Id=%s", String.valueOf( liveStreamInfoEntity.getId() ) ) );
+
+                switch( mediaItemModel.getMedia() ) {
+
+                    case PROGRAM:
+
+                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=1280", String.valueOf( mediaItemModel.getId() ) ) );
+
+                        break;
+
+                    case VIDEO:
+
+                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=1280", String.valueOf( mediaItemModel.getId() ) ) );
+
+                        break;
+
+                }
+
+                updateMenu();
+                updateProgress();
+                timer.start();
+
+            }
+
+        }
+
+    }
+
+    private class RemoveLiveStreamTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground( Void... params ) {
+            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+
+            final Request request = new Request.Builder()
+                    .url( getMasterBackendUrl() + mediaItemModel.getRemoveHttpLiveStreamUrl() )
+                    .addHeader( "Accept", "application/json" )
+                    .get()
+                    .build();
+
+            try {
+
+                BooleanJsonMapper mapper = new BooleanJsonMapper();
+                String result = okHttpClient.newCall( request ).execute().body().string();
+                Log.d( TAG, "doInBackground : result=" + result );
+
+                return mapper.transformBoolean( result );
+
+            } catch( IOException e ) {
+
+                Log.e( TAG, "doInBackground : error", e );
+
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute( Boolean result ) {
+
+            if( null != result ) {
+
+                mediaItemModel.setLiveStreamId( 0 );
+                mediaItemModel.setPercentComplete( 0 );
+                mediaItemModel.setRemoveHttpLiveStreamUrl( "" );
+                mediaItemModel.setGetHttpLiveStreamUrl( "" );
+
+                updateMenu();
+                updateProgress();
+
+            }
+
+        }
+
+    }
+
+    private class GetLiveStreamTask extends AsyncTask<Void, Void, LiveStreamInfoEntity> {
+
+        @Override
+        protected LiveStreamInfoEntity doInBackground( Void... params ) {
+            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+
+            final Request request = new Request.Builder()
+                    .url( getMasterBackendUrl() + mediaItemModel.getGetHttpLiveStreamUrl() )
+                    .addHeader( "Accept", "application/json" )
+                    .get()
+                    .build();
+
+            try {
+
+                LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
+                String result = okHttpClient.newCall( request ).execute().body().string();
+                Log.d( TAG, "doInBackground : result=" + result );
+
+                return mapper.transformLiveStreamInfoEntity( result );
+
+            } catch( IOException e ) {
+
+                Log.e( TAG, "doInBackground : error", e );
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute( LiveStreamInfoEntity liveStreamInfoEntity ) {
+
+            if( null != liveStreamInfoEntity ) {
+
+                mediaItemModel.setPercentComplete( liveStreamInfoEntity.getPercentComplete() );
+
+                if( liveStreamInfoEntity.getPercentComplete() == 100 ) {
+
+                    timer.cancel();
+
+                }
+
+                updateProgress();
+
+            }
+
+        }
+
+    }
+
+    private GetLiveStreamTask getLiveStreamTask = null;
+    private int fifteenMin = 60 * 30000;
+    private CountDownTimer timer = new CountDownTimer( fifteenMin, 5000 ) {
+
+        @Override
+        public void onTick( long millisUntilFinished ) {
+            Log.v( TAG, "onTick : enter" );
+
+            getLiveStreamTask = new GetLiveStreamTask();
+            getLiveStreamTask.execute();
+
+            Log.v( TAG, "onTick : enter" );
+        }
+
+        @Override
+        public void onFinish() {
+
+        }
+
+    };
 
 }

@@ -34,6 +34,7 @@ public class MediaItem {
     private int liveStreamId;
     private String createHttpLiveStreamUrl;
     private String removeHttpLiveStreamUrl;
+    private String getHttpLiveStreamUrl;
 
     private boolean watched;
     private String markWatchedUrl;
@@ -329,6 +330,17 @@ public class MediaItem {
 
     }
 
+    public String getGetHttpLiveStreamUrl() {
+
+        return getHttpLiveStreamUrl;
+    }
+
+    public void setGetHttpLiveStreamUrl( String getHttpLiveStreamUrl ) {
+
+        this.getHttpLiveStreamUrl = getHttpLiveStreamUrl;
+
+    }
+
     public boolean isWatched() {
 
         return watched;
@@ -398,6 +410,7 @@ public class MediaItem {
                 ", liveStreamId=" + liveStreamId +
                 ", createHttpLiveStreamUrl='" + createHttpLiveStreamUrl + '\'' +
                 ", removeHttpLiveStreamUrl='" + removeHttpLiveStreamUrl + '\'' +
+                ", getHttpLiveStreamUrl='" + getHttpLiveStreamUrl + '\'' +
                 ", watched=" + watched +
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 '}';

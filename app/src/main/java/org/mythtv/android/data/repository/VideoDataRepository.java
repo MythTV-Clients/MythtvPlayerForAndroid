@@ -20,9 +20,12 @@ package org.mythtv.android.data.repository;
 
 import android.util.Log;
 
+import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.mapper.MediaItemDataMapper;
 import org.mythtv.android.data.entity.mapper.SeriesDataMapper;
+import org.mythtv.android.data.repository.datasource.ContentDataStore;
+import org.mythtv.android.data.repository.datasource.ContentDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.VideoDataStore;
 import org.mythtv.android.data.repository.datasource.VideoDataStoreFactory;
 import org.mythtv.android.domain.MediaItem;
@@ -49,11 +52,13 @@ public class VideoDataRepository implements VideoRepository {
     private static final String TAG = VideoDataRepository.class.getSimpleName();
 
     private final VideoDataStoreFactory videoDataStoreFactory;
+    private final ContentDataStoreFactory contentDataStoreFactory;
 
     @Inject
-    public VideoDataRepository( VideoDataStoreFactory videoDataStoreFactory ) {
+    public VideoDataRepository( final VideoDataStoreFactory videoDataStoreFactory, final ContentDataStoreFactory contentDataStoreFactory ) {
 
         this.videoDataStoreFactory = videoDataStoreFactory;
+        this.contentDataStoreFactory = contentDataStoreFactory;
 
     }
 
@@ -157,8 +162,26 @@ public class VideoDataRepository implements VideoRepository {
     public Observable<MediaItem> getVideo( int id ) {
 
         final VideoDataStore videoDataStore = videoDataStoreFactory.createMasterBackendDataStore();
+        final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
-        return videoDataStore.getVideoById( id )
+        Observable<VideoMetadataInfoEntity> videoEntity = videoDataStore.getVideoById( id );
+        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntity = videoEntity
+                .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.getFileName() ) );
+
+        Observable<VideoMetadataInfoEntity> video = Observable.zip( videoEntity, liveStreamInfoEntity, ( videoEntity1, liveStreamInfoEntityList ) -> {
+
+            if( null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty() ) {
+
+                videoEntity1.setLiveStreamInfoEntity( liveStreamInfoEntityList.get( 0 ) );
+
+            }
+
+            Log.d( TAG, "getVideo : videoEntity=" + videoEntity1.toString() );
+            return videoEntity1;
+        });
+
+
+        return video
                 .map( entity -> {
                     try {
 

@@ -39,6 +39,7 @@ public class MediaItemModel implements Serializable {
     public static final String KEY_LIVE_STREAM_ID = "live_stream_id";
     public static final String KEY_CREATE_LIVE_STREAM_URL = "create_live_stream_url";
     public static final String KEY_REMOVE_LIVE_STREAM_URL = "remove_live_stream_url";
+    public static final String KEY_GET_LIVE_STREAM_URL = "get_live_stream_url";
     public static final String KEY_WATCHED_STATUS = "watched_status";
     public static final String KEY_MARK_WATCHED_URL = "mark_watched_url";
 
@@ -66,6 +67,7 @@ public class MediaItemModel implements Serializable {
     private int liveStreamId;
     private String createHttpLiveStreamUrl;
     private String removeHttpLiveStreamUrl;
+    private String getHttpLiveStreamUrl;
     private boolean watched;
     private String markWatchedUrl;
 
@@ -375,6 +377,17 @@ public class MediaItemModel implements Serializable {
 
     }
 
+    public String getGetHttpLiveStreamUrl() {
+
+        return getHttpLiveStreamUrl;
+    }
+
+    public void setGetHttpLiveStreamUrl( String getHttpLiveStreamUrl ) {
+
+        this.getHttpLiveStreamUrl = getHttpLiveStreamUrl;
+
+    }
+
     public boolean isWatched() {
 
         return watched;
@@ -424,6 +437,7 @@ public class MediaItemModel implements Serializable {
                 ", liveStreamId=" + liveStreamId +
                 ", createHttpLiveStreamUrl='" + createHttpLiveStreamUrl + '\'' +
                 ", removeHttpLiveStreamUrl='" + removeHttpLiveStreamUrl + '\'' +
+                ", getHttpLiveStreamUrl='" + getHttpLiveStreamUrl + '\'' +
                 ", watched=" + watched +
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 '}';

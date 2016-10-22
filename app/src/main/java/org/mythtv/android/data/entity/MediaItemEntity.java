@@ -14,7 +14,7 @@ public class MediaItemEntity {
     public static final String DROP_TABLE;
     public static final String SQL_SELECT_MATCH = TABLE_NAME + " MATCH ?";
     public static final String SQL_DELETE_ALL = "delete from " + TABLE_NAME + " where type = ?";
-    public static final String SQL_INSERT = "insert into " + TABLE_NAME + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public static final String SQL_INSERT = "insert into " + TABLE_NAME + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     public static final String FIELD_ID = "id";
     public static final String FIELD_MEDIA = "media";
@@ -40,6 +40,7 @@ public class MediaItemEntity {
     public static final String FIELD_LIVE_STREAM_ID = "live_stream_id";
     public static final String FIELD_CREATE_LIVE_STREAM_URL = "create_live_stream_url";
     public static final String FIELD_REMOVE_LIVE_STREAM_URL = "remove_live_stream_url";
+    public static final String FIELD_GET_LIVE_STREAM_URL = "get_live_stream_url";
     public static final String FIELD_WATCHED_STATUS = "watched_status";
     public static final String FIELD_MARK_WATCHED_URL = "mark_watched_url";
 
@@ -72,6 +73,7 @@ public class MediaItemEntity {
         createTable.append( FIELD_LIVE_STREAM_ID ).append( " " ).append( "INTEGER" ).append( ", " );
         createTable.append( FIELD_CREATE_LIVE_STREAM_URL ).append( " " ).append( "TEXT" ).append( ", " );
         createTable.append( FIELD_REMOVE_LIVE_STREAM_URL ).append( " " ).append( "TEXT" ).append( ", " );
+        createTable.append( FIELD_GET_LIVE_STREAM_URL ).append( " " ).append( "TEXT" ).append( ", " );
         createTable.append( FIELD_WATCHED_STATUS ).append( " " ).append( "INTEGER" ).append( ", " );
         createTable.append( FIELD_MARK_WATCHED_URL ).append(" " ).append( "TEXT" );
 
@@ -106,6 +108,7 @@ public class MediaItemEntity {
     private int liveStreamId;
     private String createHttpLiveStreamUrl;
     private String removeHttpLiveStreamUrl;
+    private String getHttpLiveStreamUrl;
     private boolean watched;
     private String markWatchedUrl;
 
@@ -391,6 +394,17 @@ public class MediaItemEntity {
 
     }
 
+    public String getGetHttpLiveStreamUrl() {
+
+        return getHttpLiveStreamUrl;
+    }
+
+    public void setGetHttpLiveStreamUrl( String getHttpLiveStreamUrl ) {
+
+        this.getHttpLiveStreamUrl = getHttpLiveStreamUrl;
+
+    }
+
     public boolean isWatched() {
 
         return watched;
@@ -415,7 +429,7 @@ public class MediaItemEntity {
 
     @Override
     public String toString() {
-        return "MediaItemModel{" +
+        return "MediaItemEntity{" +
                 "id=" + id +
                 ", media=" + media +
                 ", title='" + title + '\'' +
@@ -440,6 +454,7 @@ public class MediaItemEntity {
                 ", liveStreamId=" + liveStreamId +
                 ", createHttpLiveStreamUrl='" + createHttpLiveStreamUrl + '\'' +
                 ", removeHttpLiveStreamUrl='" + removeHttpLiveStreamUrl + '\'' +
+                ", getHttpLiveStreamUrl='" + getHttpLiveStreamUrl + '\'' +
                 ", watched=" + watched +
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 '}';

@@ -20,7 +20,6 @@ package org.mythtv.android.presentation.view.activity.phone;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -35,31 +34,20 @@ import android.widget.ImageView;
 import com.google.android.gms.cast.framework.CastSession;
 
 import org.mythtv.android.R;
-import org.mythtv.android.data.entity.LiveStreamInfoEntity;
-import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
-import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.internal.di.modules.MediaItemModule;
-import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.model.MediaItemModel;
-import org.mythtv.android.presentation.view.fragment.phone.AddLiveStreamDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.CastErrorDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.CastNotReadyDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemDetailsFragment;
-import org.mythtv.android.presentation.view.fragment.phone.RemoveLiveStreamDialogFragment;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 
 /**
  * Created by dmfrey on 9/30/15.
@@ -67,8 +55,6 @@ import okhttp3.Request;
 public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemDetailsFragment.MediaItemDetailsListener {
 
     private static final String TAG = MediaItemDetailsActivity.class.getSimpleName();
-    private static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
-    private static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
 
     private static final String INTENT_EXTRA_PARAM_ID = "org.mythtv.android.INTENT_PARAM_ID";
     private static final String INTENT_EXTRA_PARAM_MEDIA = "org.mythtv.android.INTENT_PARAM_MEDIA";
@@ -88,11 +74,6 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
     FloatingActionButton fab;
 
     MediaItemDetailsFragment fragment;
-
-    MenuItem menuHlsEnable;
-    MenuItem menuHlsDisable;
-    MenuItem menuMarkWatched;
-    MenuItem menuMarkUnwatched;
 
     public static Intent getCallingIntent( Context context, int id, Media media ) {
 
@@ -157,51 +138,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
             Log.d( TAG, "onRestoreInstanceState : id=" + id + ", media=" + media.name() );
         }
 
-        Log.d(TAG, "onRestoreInstanceState : exit");
-    }
-
-    @Override
-    public void onActivityResult( int requestCode, int resultCode, Intent data ) {
-        Log.d( TAG, "onActivityResult : enter" );
-        super.onActivityResult( requestCode, resultCode, data );
-
-        switch( requestCode ) {
-
-            case ADD_LIVE_STREAM_DIALOG_RESULT :
-                Log.d( TAG, "onActivityResult : add live stream result returned " + resultCode );
-
-                if( resultCode == RESULT_OK ) {
-                    Log.d( TAG, "onActivityResult : positive button pressed" );
-
-                    new AddLiveStreamTask().execute();
-
-                } else {
-                    Log.d( TAG, "onActivityResult : negative button pressed" );
-
-
-                }
-
-                break;
-
-            case REMOVE_LIVE_STREAM_DIALOG_RESULT :
-                Log.d( TAG, "onActivityResult : remove live stream result returned " + resultCode );
-
-                if( resultCode == RESULT_OK ) {
-                    Log.d( TAG, "onActivityResult : positive button pressed" );
-
-                    new RemoveLiveStreamTask().execute();
-
-                } else {
-                    Log.d( TAG, "onActivityResult : negative button pressed" );
-
-
-                }
-
-                break;
-
-        }
-
-        Log.d( TAG, "onActivityResult : exit" );
+        Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
     @Override
@@ -210,20 +147,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         MenuInflater inflater = getMenuInflater();
         inflater.inflate( R.menu.menu_details, menu );
 
-        menuHlsEnable = menu.findItem( R.id.menu_hls_enable );
-        menuHlsDisable = menu.findItem( R.id.menu_hls_disable );
-        menuMarkWatched = menu.findItem( R.id.menu_mark_watched );
-        menuMarkUnwatched = menu.findItem( R.id.menu_mark_unwatched );
-
         return super.onCreateOptionsMenu( menu );
-    }
-
-    @Override
-    public boolean onMenuOpened( int featureId, Menu menu ) {
-
-        updateMenu();
-
-        return super.onMenuOpened( featureId, menu );
     }
 
     @Override
@@ -234,34 +158,6 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
             case android.R.id.home:
 
                 NavUtils.navigateUpFromSameTask( this );
-
-                return true;
-
-            case R.id.menu_hls_enable:
-
-                AddLiveStreamDialogFragment addLiveStreamfragment = new AddLiveStreamDialogFragment();
-                addLiveStreamfragment.setTargetFragment( fragment, ADD_LIVE_STREAM_DIALOG_RESULT );
-                addLiveStreamfragment.show( getSupportFragmentManager(), "AddLiveStreamDialogFragment" );
-
-                return true;
-
-            case R.id.menu_hls_disable:
-
-                RemoveLiveStreamDialogFragment removeLiveStreamFragment = new RemoveLiveStreamDialogFragment();
-                removeLiveStreamFragment.setTargetFragment( fragment, REMOVE_LIVE_STREAM_DIALOG_RESULT );
-                removeLiveStreamFragment.show( getSupportFragmentManager(), "RemoveLiveStreamDialogFragment" );
-
-                return true;
-
-            case R.id.menu_mark_watched:
-
-                new MarkWatchedTask().execute( true );
-
-                return true;
-
-            case R.id.menu_mark_unwatched:
-
-                new MarkWatchedTask().execute( false );
 
                 return true;
 
@@ -387,38 +283,6 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         Log.d( TAG, "loadBackdrop : exit" );
     }
 
-    private void updateMenu() {
-
-        if( !mediaItemModel.isRecording() ) {
-
-            if( mediaItemModel.getLiveStreamId() > -1 ) {
-
-                menuHlsEnable.setVisible( true );
-                menuHlsDisable.setVisible( false );
-
-            } else {
-
-                menuHlsEnable.setVisible( false );
-                menuHlsDisable.setVisible( true );
-
-            }
-
-        }
-
-        if( mediaItemModel.isWatched() ) {
-
-            menuMarkUnwatched.setVisible( true );
-            menuMarkWatched.setVisible( false );
-
-        } else {
-
-            menuMarkUnwatched.setVisible( false );
-            menuMarkWatched.setVisible( true );
-
-        }
-
-    }
-
     @OnClick( R.id.fab )
     void onButtonFabPlay() {
         Log.d( TAG, "onButtonFabPlay : enter" );
@@ -483,207 +347,6 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         }
 
         Log.d( TAG, "onButtonFabPlay : exit" );
-    }
-
-    private class MarkWatchedTask extends AsyncTask<Boolean, Void, Boolean> {
-
-
-        @Override
-        protected Boolean doInBackground( Boolean... params ) {
-
-            String idParam;
-            switch( mediaItemModel.getMedia() ) {
-
-                case PROGRAM:
-
-                    idParam = "RecordedId";
-
-                    break;
-
-                default:
-
-                    idParam = "Id";
-
-                    break;
-            }
-
-            FormBody.Builder builder = new FormBody.Builder();
-            builder.add(idParam, String.valueOf( mediaItemModel.getId() ) );
-            builder.add( "Watched", String.valueOf( params[ 0 ] ) );
-
-            OkHttpClient okHttpClient = getNetComponent().okHttpClient();
-
-            final Request request = new Request.Builder()
-                    .url( getMasterBackendUrl() + mediaItemModel.getMarkWatchedUrl() )
-                    .addHeader( "Accept", "application/json" )
-                    .post( builder.build() )
-                    .build();
-
-            try {
-
-                BooleanJsonMapper mapper = new BooleanJsonMapper();
-                String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
-
-                return mapper.transformBoolean( result );
-
-            } catch( IOException e ) {
-
-                Log.e( TAG, "doInBackground : error", e );
-
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute( Boolean result ) {
-
-            if( null != result ) {
-
-                if (result) {
-
-                    mediaItemModel.setWatched( true );
-                    updateMenu();
-                    fragment.reload();
-
-                }
-
-            }
-
-        }
-
-    }
-
-    private class AddLiveStreamTask extends AsyncTask<Void, Void, LiveStreamInfoEntity> {
-
-        @Override
-        protected LiveStreamInfoEntity doInBackground( Void... params ) {
-            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
-
-            OkHttpClient okHttpClient = getNetComponent().okHttpClient();
-
-            final Request request = new Request.Builder()
-                    .url( getMasterBackendUrl() + mediaItemModel.getCreateHttpLiveStreamUrl() )
-                    .addHeader( "Accept", "application/json" )
-                    .get()
-                    .build();
-
-            try {
-
-                LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( getNetComponent().gson() );
-                String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
-
-                return mapper.transformLiveStreamInfoEntity( result );
-
-            } catch( IOException e ) {
-
-                Log.e( TAG, "doInBackground : error", e );
-
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute( LiveStreamInfoEntity liveStreamInfoEntity ) {
-
-            if( null != liveStreamInfoModel ) {
-
-                mediaItemModel.setLiveStreamId( liveStreamInfoEntity.getId() );
-                mediaItemModel.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( liveStreamInfoEntity.getId() ) ) );
-
-                switch( mediaItemModel.getMedia() ) {
-
-                    case PROGRAM:
-
-                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=1280", String.valueOf( mediaItemModel.getId() ) ) );
-
-                        break;
-
-                    case VIDEO:
-
-                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=1280", String.valueOf( mediaItemModel.getId() ) ) );
-
-                        break;
-
-                }
-
-                updateMenu();
-                fragment.reload();
-
-            }
-
-        }
-
-    }
-
-    private class RemoveLiveStreamTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground( Void... params ) {
-            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
-
-            OkHttpClient okHttpClient = getNetComponent().okHttpClient();
-
-            final Request request = new Request.Builder()
-                    .url( getMasterBackendUrl() + mediaItemModel.getRemoveHttpLiveStreamUrl() )
-                    .addHeader( "Accept", "application/json" )
-                    .get()
-                    .build();
-
-            try {
-
-                BooleanJsonMapper mapper = new BooleanJsonMapper();
-                String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
-
-                return mapper.transformBoolean( result );
-
-            } catch( IOException e ) {
-
-                Log.e( TAG, "doInBackground : error", e );
-
-            }
-
-            return null;
-
-        }
-
-        @Override
-        protected void onPostExecute( Boolean result ) {
-
-            if( null != result ) {
-
-                updateMenu();
-                fragment.reload();
-
-            }
-
-        }
-
-    }
-
-    private class GetLiveStreamTask extends AsyncTask<Void, Void, LiveStreamInfoModel> {
-
-        @Override
-        protected LiveStreamInfoModel doInBackground( Void... params ) {
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute( LiveStreamInfoModel liveStreamInfoModel ) {
-
-            if( null != liveStreamInfoModel ) {
-
-                fragment.reload();
-
-            }
-
-        }
-
     }
 
 }

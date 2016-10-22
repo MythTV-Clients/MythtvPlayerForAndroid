@@ -44,6 +44,7 @@ public class MediaItemDataMapper {
                     mediaItem.setPercentComplete( programEntity.getLiveStreamInfoEntity().getPercentComplete() );
                     mediaItem.setLiveStreamId( programEntity.getLiveStreamInfoEntity().getId() );
                     mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
+                    mediaItem.setGetHttpLiveStreamUrl( String.format( "/Content/GetLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
 
                 }
 
@@ -88,7 +89,13 @@ public class MediaItemDataMapper {
 
         }
 
+        if( null != programEntity.getLiveStreamInfoEntity() ) {
+
+            mediaItem.setLiveStreamId(programEntity.getLiveStreamInfoEntity().getId());
+
+        }
         mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=1280", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
 
         List<String> castMembers = new ArrayList<>();
         List<String> characters = new ArrayList<>();
@@ -163,11 +170,15 @@ public class MediaItemDataMapper {
         mediaItem.setStudio( videoEntity.getStudio() );
 
         String url = "/Content/GetFile?FileName=" + URLEncoder.encode( videoEntity.getFileName(), "UTF-8" );
-//        if( null != videoEntity.getLiveStreamInfoEntity() ) {
-//
-//            url = videoEntity.getLiveStreamInfoEntity().getRelativeUrl();
-//
-//        }
+        if( null != videoEntity.getLiveStreamInfoEntity() ) {
+
+            url = videoEntity.getLiveStreamInfoEntity().getRelativeUrl();
+            mediaItem.setPercentComplete( videoEntity.getLiveStreamInfoEntity().getPercentComplete() );
+            mediaItem.setLiveStreamId( videoEntity.getLiveStreamInfoEntity().getId() );
+            mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( videoEntity.getLiveStreamInfoEntity().getId() ) ) );
+            mediaItem.setGetHttpLiveStreamUrl( String.format( "/Content/GetLiveStream?Id=%s", String.valueOf( videoEntity.getLiveStreamInfoEntity().getId() ) ) );
+
+        }
 
         mediaItem.setUrl( url );
         setContentType( mediaItem, url );
