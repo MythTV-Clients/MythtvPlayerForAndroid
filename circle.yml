@@ -17,19 +17,27 @@ machine:
     version: openjdk8
 
 
+#dependencies:
+#  pre:
+#    - touch app/google-services.json
+#    - echo $GOOGLE_SERVICES_JSON > app/google-services.json
+#    - echo y | android update sdk --no-ui --all --filter "tools,android-23,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"
 dependencies:
   pre:
-#    - sudo mkdir -p "$ANDROID_SDK/licenses"
-#    - sudo touch "$ANDROID_SDK/licenses/android-sdk-license"
-#    - sudo touch "$ANDROID_SDK/licenses/android-sdk-preview-license"
-#    - sudo echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_SDK/licenses/android-sdk-license"
-#    - sudo echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_SDK/licenses/android-sdk-preview-license"
     - touch app/google-services.json
     - echo $GOOGLE_SERVICES_JSON > app/google-services.json
-    - echo y | android update sdk --no-ui --all --filter "tools,android-23,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"
-#  cache_directories:
-#    - /usr/local/android-sdk-linux/tools
-#    - /usr/local/android-sdk-linux/build-tools/24.0.0
+    # Android SDK Platform 24
+    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-24" ]; then echo y | android update sdk --no-ui --all --filter "android-24"; fi
+    # Android SDK Build-tools, revision 24.0.1
+    - if [ ! -d "/usr/local/android-sdk-linux/build-tools/24.0.1" ]; then echo y | android update sdk --no-ui --all --filter "build-tools-24.0.1"; fi
+    # Android Support Repository, revision 35 / Local Maven repository for Support Libraries
+    - if [ ! -d "/usr/local/android-sdk-linux/extras/android/m2repository/com/android/support/design/24.1.0" ]; then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"; fi
+
+
+  cache_directories:
+    - /usr/local/android-sdk-linux/platforms/android-24
+    - /usr/local/android-sdk-linux/build-tools/24.0.1
+    - /usr/local/android-sdk-linux/extras/android/m2repository
 
 test:
 #  pre:
