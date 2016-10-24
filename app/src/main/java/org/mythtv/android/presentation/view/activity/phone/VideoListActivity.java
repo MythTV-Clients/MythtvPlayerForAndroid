@@ -30,18 +30,15 @@ import android.util.Log;
 import android.view.Window;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.ContentType;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerVideoComponent;
-import org.mythtv.android.presentation.internal.di.components.VideoComponent;
-import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.view.fragment.phone.AbstractBaseVideoPagerFragment;
-import org.mythtv.android.presentation.view.fragment.phone.AdultListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.HomeVideoListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.MovieListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.MusicVideoListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.TelevisionListFragment;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.model.MediaItemModel;
+import org.mythtv.android.presentation.model.SeriesModel;
+import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment;
+import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +48,7 @@ import butterknife.BindView;
 /**
  * Created by dmfrey on 11/13/15.
  */
-public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<VideoComponent>, AbstractBaseVideoPagerFragment.VideoListListener {
+public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener, SeriesListFragment.SeriesListListener {
 
     private static final String TAG = VideoListActivity.class.getSimpleName();
 
@@ -63,7 +60,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
         return callingIntent;
     }
 
-    private VideoComponent videoComponent;
+    private MediaComponent mediaComponent;
 
     @BindView( R.id.tabs )
     TabLayout mTabLayout;
@@ -130,7 +127,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.videoComponent = DaggerVideoComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .build();
 
@@ -138,11 +135,11 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     }
 
     @Override
-    public VideoComponent getComponent() {
+    public MediaComponent getComponent() {
         Log.d( TAG, "getComponent : enter" );
 
         Log.d( TAG, "getComponent : exit" );
-        return videoComponent;
+        return mediaComponent;
     }
 
     class VideosFragmentPagerAdapter extends FragmentStatePagerAdapter {
@@ -155,15 +152,30 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
         public VideosFragmentPagerAdapter( FragmentManager fm ) {
             super( fm );
 
+            MediaItemListFragment.Builder movieParameters = new MediaItemListFragment.Builder( Media.MOVIE );
+            MediaItemListFragment movieFragment = MediaItemListFragment.newInstance( movieParameters.toBundle() );
+
+            SeriesListFragment.Builder builder = new SeriesListFragment.Builder( Media.VIDEO );
+            SeriesListFragment seriesListFragment = SeriesListFragment.newInstance( builder.toBundle() );
+
+            MediaItemListFragment.Builder homeVideoParameters = new MediaItemListFragment.Builder( Media.HOMEVIDEO );
+            MediaItemListFragment homeVideoFragment = MediaItemListFragment.newInstance( homeVideoParameters.toBundle() );
+
+            MediaItemListFragment.Builder musicVideoParameters = new MediaItemListFragment.Builder( Media.MUSICVIDEO );
+            MediaItemListFragment musicVideoFragment = MediaItemListFragment.newInstance( musicVideoParameters.toBundle() );
+
             tabs = getResources().getStringArray( R.array.watch_videos_tabs );
-            fragments.add( Fragment.instantiate( VideoListActivity.this, MovieListFragment.class.getName(), null ) );
-            fragments.add( Fragment.instantiate( VideoListActivity.this, TelevisionListFragment.class.getName(), null ) );
-            fragments.add( Fragment.instantiate( VideoListActivity.this, HomeVideoListFragment.class.getName(), null ) );
-            fragments.add( Fragment.instantiate( VideoListActivity.this, MusicVideoListFragment.class.getName(), null ) );
+            fragments.add( movieFragment );
+            fragments.add( seriesListFragment );
+            fragments.add( homeVideoFragment );
+            fragments.add( musicVideoFragment );
 
             if( showAdultTab ) {
 
-                fragments.add( Fragment.instantiate( VideoListActivity.this, AdultListFragment.class.getName(), null ) );
+                MediaItemListFragment.Builder adultParameters = new MediaItemListFragment.Builder( Media.ADULT );
+                MediaItemListFragment adultFragment = MediaItemListFragment.newInstance( adultParameters.toBundle() );
+
+                fragments.add( adultFragment );
 
             }
 
@@ -198,21 +210,21 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     }
 
     @Override
-    public void onVideoClicked( VideoMetadataInfoModel videoMetadataInfoModel, String contentType ) {
-        Log.d( TAG, "onVideoClicked : enter" );
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel ) {
+        Log.d( TAG, "onMediaItemClicked : enter" );
 
-        Log.i( TAG, "onVideoClicked : videoMetadataInfoModel=" + videoMetadataInfoModel.toString() );
-        if( ContentType.TELEVISION.equals( contentType ) ) {
+        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia() );
 
-            navigator.navigateToVideoSeries( this, videoMetadataInfoModel.getTitle() );
+        Log.d( TAG, "onMediaItemClicked : exit" );
+    }
 
-        } else {
+    @Override
+    public void onSeriesClicked( final SeriesModel seriesModel ) {
+        Log.d( TAG, "onMediaItemClicked : enter" );
 
-            navigator.navigateToVideo( this, videoMetadataInfoModel.getId(), null, videoMetadataInfoModel.getFileName(), videoMetadataInfoModel.getHostName() );
+        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.getTitle(), null, null );
 
-        }
-
-        Log.d( TAG, "onVideoClicked : exit" );
+        Log.d( TAG, "onMediaItemClicked : exit" );
     }
 
 }

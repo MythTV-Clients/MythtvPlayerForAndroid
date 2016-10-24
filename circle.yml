@@ -14,19 +14,30 @@ machine:
     ADB_INSTALL_TIMEOUT: 60
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3072M -XX:+HeapDumpOnOutOfMemoryError"'
   java:
-    version: oraclejdk8
+    version: openjdk8
 
 
+#dependencies:
+#  pre:
+#    - touch app/google-services.json
+#    - echo $GOOGLE_SERVICES_JSON > app/google-services.json
+#    - echo y | android update sdk --no-ui --all --filter "tools,android-23,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"
 dependencies:
-    pre:
-      - touch app/google-services.json
-      - echo $GOOGLE_SERVICES_JSON > app/google-services.json
+  pre:
+    - touch app/google-services.json
+    - echo $GOOGLE_SERVICES_JSON > app/google-services.json
+    # Android SDK Platform 24
+    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-24" ]; then echo y | android update sdk --no-ui --all --filter "android-24"; fi
+    # Android SDK Build-tools, revision 24.0.2
+    - if [ ! -d "/usr/local/android-sdk-linux/build-tools/24.0.2" ]; then echo y | android update sdk --no-ui --all --filter "build-tools-24.0.2"; fi
+    # Android Support Repository, revision 35 / Local Maven repository for Support Libraries
+    - if [ ! -d "/usr/local/android-sdk-linux/extras/android/m2repository/com/android/support/design/24.1.0" ]; then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"; fi
 
-      - echo y | android update sdk --no-ui --all --filter "tools,android-24,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-android-support,extra-google-m2repository,extra-google-google_play_services"
-#      - echo y | android update sdk -a -u -t sys-img-armeabi-v7a-google_apis-22
-    cache_directories:
-      - /usr/local/android-sdk-linux/tools
-      - /usr/local/android-sdk-linux/build-tools/24.0.0
+
+  cache_directories:
+    - /usr/local/android-sdk-linux/platforms/android-24
+    - /usr/local/android-sdk-linux/build-tools/24.0.2
+    - /usr/local/android-sdk-linux/extras/android/m2repository
 
 test:
 #  pre:
@@ -46,6 +57,9 @@ test:
 #    - adb shell settings put global window_animation_scale 0
 #    - adb shell settings put global transition_animation_scale 0
 #    - adb shell settings put global animator_duration_scale 0
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
   override:
     - git checkout app/google-services.json

@@ -21,13 +21,15 @@ package org.mythtv.android.data.repository.datasource;
 import android.util.Log;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
-import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
+import org.mythtv.android.data.entity.mapper.MediaItemDataMapper;
 import org.mythtv.android.data.net.DvrApi;
+import org.mythtv.android.domain.MediaItem;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -41,19 +43,7 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
     private static final String TAG = MasterBackendDvrDataStore.class.getSimpleName();
 
     private final DvrApi api;
-    private final ProgramCache recordedProgramCache;
     private final SearchDataStoreFactory searchDataStoreFactory;
-
-    private final Action1<ProgramEntity> saveToCacheAction =
-            programEntity -> {
-
-                if( null != programEntity ) {
-
-                    MasterBackendDvrDataStore.this.recordedProgramCache.put( programEntity );
-
-                }
-
-            };
 
     private final Action1<List<TitleInfoEntity>> removeStaleTitleInfosDbAction =
             titleInfoEntities -> {
@@ -80,16 +70,26 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
                     Observable
                             .from( programEntities )
                             .toList()
-                            .map( SearchResultEntityDataMapper::transformPrograms )
+                            .map( entities -> {
+
+                                try {
+
+                                    return MediaItemDataMapper.transformPrograms( programEntities );
+
+                                } catch( UnsupportedEncodingException e ) {
+                                    Log.e( TAG, "saveRecordedProgramsToDbAction : error", e );
+                                }
+
+                                return new ArrayList<MediaItem>();
+                            })
                             .subscribe( searchDataStore::refreshRecordedProgramData );
                 }
 
             };
 
-    public MasterBackendDvrDataStore( DvrApi api, ProgramCache recordedProgramCache, SearchDataStoreFactory searchDataStoreFactory ) {
+    public MasterBackendDvrDataStore( DvrApi api, SearchDataStoreFactory searchDataStoreFactory ) {
 
         this.api = api;
-        this.recordedProgramCache = recordedProgramCache;
         this.searchDataStoreFactory = searchDataStoreFactory;
 
     }
@@ -120,13 +120,12 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
     }
 
     @Override
-    public Observable<ProgramEntity> recordedProgramEntityDetails( int chanId, DateTime startTime ) {
+    public Observable<ProgramEntity> recordedProgramEntityDetails( final int recordedId ) {
         Log.d( TAG, "recordedProgramEntityDetails : enter" );
 
-        Log.d( TAG, "recordedProgramEntityList : chanId=" + chanId + ", startTime=" + startTime );
+        Log.d( TAG, "recordedProgramEntityList : recordedId=" + recordedId );
 
-        return this.api.recordedProgramById( chanId, startTime )
-                .doOnNext( saveToCacheAction )
+        return this.api.recordedProgramById( recordedId, -1, null )
                 .doOnError( e -> Log.e( TAG, "recordedProgramEntityList : error", e ) );
     }
 

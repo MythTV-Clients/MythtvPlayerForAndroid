@@ -54,4 +54,6 @@ public class SettingsKeys {
 
     public static final String KEY_PREF_ENABLE_ANALYTICS = "enable_analytics";
 
+    private SettingsKeys() { }
+
 }

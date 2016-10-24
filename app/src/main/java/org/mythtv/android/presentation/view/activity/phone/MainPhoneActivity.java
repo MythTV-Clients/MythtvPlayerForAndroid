@@ -31,12 +31,13 @@ import android.util.Log;
 import android.view.Window;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.fragment.phone.EncoderListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.RecentListFragment;
-import org.mythtv.android.presentation.view.fragment.phone.UpcomingListFragment;
+import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ import butterknife.BindView;
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasComponent<DvrComponent> {
+public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener {
 
     private static final String TAG = MainPhoneActivity.class.getSimpleName();
 
@@ -58,7 +59,7 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         return callingIntent;
     }
 
-    private DvrComponent dvrComponent;
+    private MediaComponent mediaComponent;
 
     @BindView( R.id.tabs )
     TabLayout mTabLayout;
@@ -103,7 +104,7 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
                     if( null != mPagerAdapter.getItem( 0 ) ) {
 
-                        ( (RecentListFragment) mPagerAdapter.getItem( 0 ) ).reload();
+                        ( (MediaItemListFragment) mPagerAdapter.getItem( 0 ) ).reload();
 
                     }
 
@@ -123,7 +124,7 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
                     if( null != mPagerAdapter.getItem( 2 ) ) {
 
-                        ( (UpcomingListFragment) mPagerAdapter.getItem( 2 ) ).reload();
+                        ( (MediaItemListFragment) mPagerAdapter.getItem( 2 ) ).reload();
 
                     }
 
@@ -154,7 +155,7 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.dvrComponent = DaggerDvrComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .build();
 
@@ -162,11 +163,22 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
     }
 
     @Override
-    public DvrComponent getComponent() {
+    public MediaComponent getComponent() {
         Log.d( TAG, "getComponent : enter" );
 
         Log.d( TAG, "getComponent : exit" );
-        return dvrComponent;
+        return mediaComponent;
+    }
+
+    @Override
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel ) {
+        Log.d( TAG, "onMediaItemClicked : enter" );
+
+        if( null != mediaItemModel && !mediaItemModel.getMedia().equals( Media.UPCOMING ) ) {
+            navigator.navigateToMediaItem(this, mediaItemModel.getId(), mediaItemModel.getMedia());
+        }
+
+        Log.d( TAG, "onMediaItemClicked : exit" );
     }
 
     class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
@@ -177,10 +189,16 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         public MainFragmentPagerAdapter( FragmentManager fm ) {
             super( fm );
 
+            MediaItemListFragment.Builder recentParameters = new MediaItemListFragment.Builder( Media.RECENT );
+            MediaItemListFragment recentFragment = MediaItemListFragment.newInstance( recentParameters.toBundle() );
+
+            MediaItemListFragment.Builder upcomingParameters = new MediaItemListFragment.Builder( Media.UPCOMING );
+            MediaItemListFragment upcomingFragment = MediaItemListFragment.newInstance( upcomingParameters.toBundle() );
+
             tabs = getResources().getStringArray( R.array.main_tabs );
-            fragments.add( Fragment.instantiate( MainPhoneActivity.this, RecentListFragment.class.getName(), null ) );
+            fragments.add( recentFragment );
             fragments.add( Fragment.instantiate( MainPhoneActivity.this, EncoderListFragment.class.getName(), null ) );
-            fragments.add( Fragment.instantiate( MainPhoneActivity.this, UpcomingListFragment.class.getName(), null ) );
+            fragments.add( upcomingFragment );
 
             notifyDataSetChanged();
         }

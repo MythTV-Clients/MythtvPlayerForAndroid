@@ -37,8 +37,6 @@ import javax.inject.Singleton;
 @Singleton
 public class ProgramEntityDataMapper {
 
-    private static final String TAG = ProgramEntityDataMapper.class.getSimpleName();
-
     private ProgramEntityDataMapper() { }
 
     public static Program transform( ProgramEntity programEntity ) {
@@ -78,7 +76,6 @@ public class ProgramEntityDataMapper {
             }
 
             if( null != programEntity.getRecording() ) {
-//                Log.i( TAG, "transform : recording=" + programEntity.getRecording() );
 
                 program.setRecording( RecordingInfoEntityDataMapper.transform( programEntity.getRecording() ) );
 

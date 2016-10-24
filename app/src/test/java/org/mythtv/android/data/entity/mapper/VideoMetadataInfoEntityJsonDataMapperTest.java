@@ -31,9 +31,6 @@ public class VideoMetadataInfoEntityJsonDataMapperTest extends ApplicationTestCa
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    @Mock
-    private Gson mockGson;
-
     @Before
     public void setUp() {
 

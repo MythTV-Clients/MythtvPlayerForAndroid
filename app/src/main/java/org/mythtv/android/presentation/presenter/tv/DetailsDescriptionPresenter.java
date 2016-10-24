@@ -16,39 +16,22 @@ package org.mythtv.android.presentation.presenter.tv;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
-import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
+import org.mythtv.android.presentation.model.MediaItemModel;
 
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
-    protected void onBindDescription(ViewHolder viewHolder, Object item) {
+    protected void onBindDescription( ViewHolder viewHolder, Object item ) {
 
         if( null != item ) {
 
-            if( item instanceof ProgramModel) {
-                ProgramModel programModel = (ProgramModel) item;
+            if( item instanceof MediaItemModel ) {
 
-                viewHolder.getTitle().setText( programModel.getTitle() );
-                viewHolder.getSubtitle().setText( programModel.getSubTitle() );
-                viewHolder.getBody().setText( programModel.getDescription() );
+                MediaItemModel mediaItemModel = (MediaItemModel) item;
 
-            }
-
-            if( item instanceof VideoMetadataInfoModel ) {
-                VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
-
-                String seasonEpisode = "";
-                if( "TELEVISION".equals( videoMetadataInfoModel.getContentType() ) ) {
-
-                    seasonEpisode = SeasonEpisodeFormatter.format( videoMetadataInfoModel );
-
-                }
-
-                viewHolder.getTitle().setText( videoMetadataInfoModel.getTitle() );
-                viewHolder.getSubtitle().setText( String.format( "%s %s", videoMetadataInfoModel.getSubTitle(), seasonEpisode ) );
-                viewHolder.getBody().setText( videoMetadataInfoModel.getDescription() );
+                viewHolder.getTitle().setText( mediaItemModel.getTitle() );
+                viewHolder.getSubtitle().setText( mediaItemModel.getSubTitle() );
+                viewHolder.getBody().setText( mediaItemModel.getDescription() );
 
             }
 

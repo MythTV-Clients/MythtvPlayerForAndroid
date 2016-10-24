@@ -4,9 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -39,7 +43,10 @@ public class GetRecentProgramListTest {
     @Test
     public void testGetRecentProgramListUseCaseObservableHappyCase() {
 
-        getRecentProgramList.buildUseCaseObservable();
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put( GetMediaItemList.MEDIA_KEY, Media.RECENT.name() );
+
+        getRecentProgramList.buildUseCaseObservable( parameters );
 
         verify( mockDvrRepository ).recent();
         verifyNoMoreInteractions( mockDvrRepository );

@@ -185,7 +185,7 @@ public class DvrApiImpl implements DvrApi {
     }
 
     @Override
-    public Observable<ProgramEntity> recordedProgramById( int chanId, DateTime startTime ) {
+    public Observable<ProgramEntity> recordedProgramById( final int recordedId, final int chanId, final DateTime startTime ) {
 
         return Observable.create( new Observable.OnSubscribe<ProgramEntity>() {
 
@@ -196,7 +196,7 @@ public class DvrApiImpl implements DvrApi {
 
                     try {
 
-                        String responseProgramDetails = getRecordedProgramDetailsFromApi( chanId, startTime );
+                        String responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId, chanId, startTime );
                         if( null != responseProgramDetails ) {
 
                             subscriber.onNext( programEntityJsonMapper.transformProgramEntity( responseProgramDetails ) );
@@ -384,7 +384,7 @@ public class DvrApiImpl implements DvrApi {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
-        sb.append(RECORDED_LIST_BASE_URL);
+        sb.append( RECORDED_LIST_BASE_URL );
         sb.append( "?" );
         sb.append( String.format( DESCENDING_QS, descending ) );
 
@@ -434,19 +434,36 @@ public class DvrApiImpl implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String getRecordedProgramDetailsFromApi( int chanId, DateTime startTime ) throws MalformedURLException {
+    private String getRecordedProgramDetailsFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
 
-        String apiUrl = String.format(RECORDED_BASE_URL, chanId, fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() );
+        sb.append( RECORDED_BASE_URL );
+        sb.append( "?" );
 
-        Log.i( TAG, "getRecordedProgramDetailsFromApi : apiUrl=" + ( getMasterBackendUrl() + apiUrl ) );
-        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + apiUrl ).requestSyncCall();
+        if( recordedId != -1 ) {
+
+            sb.append( String.format( RECORDED_ID_QS, recordedId ) );
+
+        }
+
+        if( chanId != -1 && null != startTime ) {
+
+            sb.append( String.format( CHAN_ID_QS, chanId ) );
+            sb.append( "&" );
+            fmt.print( startTime.withZone( DateTimeZone.UTC ) );
+
+        }
+
+        Log.i( TAG, "getRecordedProgramDetailsFromApi : apiUrl=" + sb.toString() );
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private String getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
-        sb.append(UPCOMING_LIST_BASE_URL);
+        sb.append( UPCOMING_LIST_BASE_URL );
         sb.append( "?" );
         sb.append( String.format( SHOW_ALL_QS, showAll ) );
 

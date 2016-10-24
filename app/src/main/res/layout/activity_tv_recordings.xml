@@ -16,11 +16,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:name="org.mythtv.android.presentation.view.fragment.tv.RecordingsFragment"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:deviceIds="tv"
-    tools:ignore="MergeRootFrame" />
+    android:layout_height="match_parent" />

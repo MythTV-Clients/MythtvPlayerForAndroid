@@ -129,6 +129,8 @@ public class VideoMetadataInfoEntity {
     @SerializedName( "Cast" )
     private CastEntity cast;
 
+    private LiveStreamInfoEntity liveStreamInfoEntity;
+
     public VideoMetadataInfoEntity() {
     }
 
@@ -434,6 +436,17 @@ public class VideoMetadataInfoEntity {
         this.cast = cast;
     }
 
+    public LiveStreamInfoEntity getLiveStreamInfoEntity() {
+
+        return liveStreamInfoEntity;
+    }
+
+    public void setLiveStreamInfoEntity( LiveStreamInfoEntity liveStreamInfoEntity ) {
+
+        this.liveStreamInfoEntity = liveStreamInfoEntity;
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -486,6 +499,7 @@ public class VideoMetadataInfoEntity {
                 ", trailer='" + trailer + '\'' +
                 ", artwork=" + artwork +
                 ", cast=" + cast +
+                ", liveStreamInfoEntity=" + liveStreamInfoEntity +
                 '}';
     }
 

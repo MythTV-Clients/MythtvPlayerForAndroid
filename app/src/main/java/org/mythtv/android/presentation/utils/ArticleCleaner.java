@@ -43,6 +43,7 @@ public class ArticleCleaner {
         String upper = value.toUpperCase();
 
         for( String article : articles ) {
+            article = article + " ";
             Log.d( TAG, "clean : article=" + article + ", value=" + value );
 
             if( upper.startsWith( article ) ) {

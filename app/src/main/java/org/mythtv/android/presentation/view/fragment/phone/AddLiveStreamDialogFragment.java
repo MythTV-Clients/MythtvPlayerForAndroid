@@ -37,8 +37,8 @@ public class AddLiveStreamDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
         builder
                 .setTitle( R.string.add_live_stream_title )
-                .setPositiveButton( R.string.add_live_stream_positive_label, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_OK, null ))
-                .setNegativeButton( android.R.string.cancel, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_CANCELED, null ));
+                .setPositiveButton( R.string.add_live_stream_positive_label, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent() ) )
+                .setNegativeButton( android.R.string.cancel, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_CANCELED, getActivity().getIntent() ) );
 
         return builder.create();
     }

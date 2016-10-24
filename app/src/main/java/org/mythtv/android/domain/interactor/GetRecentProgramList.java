@@ -22,6 +22,8 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -29,11 +31,10 @@ import rx.Observable;
 /**
  * Created by dmfrey on 8/26/15.
  */
-public class GetRecentProgramList extends UseCase {
+public class GetRecentProgramList extends DynamicUseCase {
 
     private final DvrRepository dvrRepository;
 
-    @Inject
     public GetRecentProgramList( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
@@ -42,7 +43,7 @@ public class GetRecentProgramList extends UseCase {
     }
 
     @Override
-    public Observable buildUseCaseObservable() {
+    public Observable buildUseCaseObservable( Map parameters ) {
 
         return this.dvrRepository.recent();
     }

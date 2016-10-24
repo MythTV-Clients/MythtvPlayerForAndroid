@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.view.activity.tv.RecordingsActivity;
 import org.mythtv.android.presentation.view.activity.tv.SearchableActivity;
 import org.mythtv.android.presentation.view.activity.tv.SettingsActivity;
@@ -76,12 +77,12 @@ public class TvNavigator {
         Log.d( TAG, "navigateToVideos : exit" );
     }
 
-    public void navigateToVideoCategory( Context context, String category ) {
+    public void navigateToVideoCategory( Context context, Media media ) {
         Log.d( TAG, "navigateToVideoCategory : enter" );
 
         if( null != context ) {
 
-            Intent intentToLaunch = VideoCategoryActivity.getCallingIntent( context, category );
+            Intent intentToLaunch = VideoCategoryActivity.getCallingIntent( context, media );
             context.startActivity( intentToLaunch );
 
         }

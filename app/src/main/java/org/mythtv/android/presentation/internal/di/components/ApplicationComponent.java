@@ -46,7 +46,7 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject( AbstractBasePhoneActivity baseActivity );
-    void inject(AbstractBaseTvActivity baseActivity );
+    void inject( AbstractBaseTvActivity baseActivity );
 
     //Exposed to sub-graphs.
     Context context();

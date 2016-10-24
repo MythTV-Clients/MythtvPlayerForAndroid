@@ -162,5 +162,9 @@
     <string name="pref_enable_analytics_title">Enable Analytics &amp; Crash Reporting</string>
     <string name="pref_enable_analytics_summary_on">Anonymous Analytics &amp; Crash Reports will be sent</string>
     <string name="pref_enable_analytics_summary_off">Anonymous Analytics &amp; Crash Reports will not be sent</string>
+    <string name="action_create_hls_stream">Create HTTP Live Stream</string>
+    <string name="action_remove_hls_stream">Remove HTTP Live Stream</string>
+    <string name="action_mark_watched">Mark Watched</string>
+    <string name="action_mark_unwatched">Mark Unwatched</string>
 
 </resources>

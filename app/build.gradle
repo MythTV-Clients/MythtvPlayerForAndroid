@@ -17,8 +17,6 @@
  */
 
 apply plugin: 'com.android.application'
-//apply plugin: 'com.neenbedankt.android-apt'
-//apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 
@@ -29,7 +27,7 @@ android {
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.2"
 
     adbOptions {
         timeOutInMs 60000 // set timeout to 1 minute
@@ -96,6 +94,7 @@ android {
 
         release {
 
+            shrinkResources true
             minifyEnabled true // Enables code shrinking for the release build type.
             proguardFiles getDefaultProguardFile( 'proguard-android.txt' ), 'proguard-rules.pro'
 
@@ -198,12 +197,8 @@ android {
 
 dependencies {
 
-//    apt "com.google.dagger:dagger-compiler:${daggerVersion}"
     compile "com.google.dagger:dagger:${daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
-//    provided "org.projectlombok:lombok:${lombokVersion}"
-//    apt "org.projectlombok:lombok:${lombokVersion}"
-//    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     compile "com.jakewharton:butterknife:${butterKnifeVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
@@ -281,10 +276,6 @@ configurations.compile.dependencies.each { compileDependency ->
         configurations.androidTestCompile.exclude module: "${compileDependency.getName()}"
     }
 }
-
-//retrolambda {
-//    jvmArgs '-noverify'
-//}
 
 coveralls {
     jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"

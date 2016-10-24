@@ -27,6 +27,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature
         android:name="android.software.leanback"
@@ -118,7 +119,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.phone.ProgramListActivity"
+            android:name=".presentation.view.activity.phone.SeriesListActivity"
             android:label="@string/watch_recording"
             android:launchMode="singleTop"
             android:parentActivityName=".presentation.view.activity.phone.TitleInfoListActivity">
@@ -134,28 +135,13 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.phone.ProgramDetailsActivity"
+            android:name=".presentation.view.activity.phone.MediaItemDetailsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".presentation.view.activity.phone.ProgramListActivity">
+            android:parentActivityName=".presentation.view.activity.phone.SeriesListActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.presentation.view.activity.phone.ProgramListActivity" />
-
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
-
-        </activity>
-
-        <activity
-            android:name=".presentation.view.activity.phone.ProgramDetailsSettingsActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".presentation.view.activity.phone.ProgramDetailsActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.presentation.view.activity.phone.ProgramDetailsActivity" />
+                android:value="org.mythtv.android.presentation.view.activity.phone.SeriesListActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -172,52 +158,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.mythtv.android.presentation.view.activity.phone.MainPhoneActivity" />
-
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
-
-        </activity>
-
-        <activity
-            android:name=".presentation.view.activity.phone.VideoSeriesListActivity"
-            android:label="@string/watch_video"
-            android:launchMode="singleTop"
-            android:parentActivityName=".presentation.view.activity.phone.VideoListActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.presentation.view.activity.phone.VideoListActivity" />
-
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
-
-        </activity>
-
-        <activity
-            android:name=".presentation.view.activity.phone.VideoDetailsActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".presentation.view.activity.phone.VideoSeriesListActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.presentation.view.activity.phone.VideoSeriesListActivity" />
-
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
-
-        </activity>
-
-        <activity
-            android:name=".presentation.view.activity.phone.VideoDetailsSettingsActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".presentation.view.activity.phone.VideoDetailsActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.mythtv.android.presentation.view.activity.phone.VideoDetailsActivity" />
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -347,7 +287,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.tv.RecordingsDetailsActivity"
+            android:name=".presentation.view.activity.tv.MediaItemDetailsActivity"
             android:parentActivityName=".presentation.view.activity.tv.MainTvActivity"
             android:theme="@style/Theme.Leanback">
 
@@ -388,17 +328,6 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".view.activity.SearchableActivity" />
-        </activity>
-
-        <activity
-            android:name=".presentation.view.activity.tv.VideoDetailsActivity"
-            android:parentActivityName=".presentation.view.activity.tv.VideosActivity"
-            android:theme="@style/Theme.Leanback">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.view.activity.tv.VideosActivity"/>
-
         </activity>
 
         <activity

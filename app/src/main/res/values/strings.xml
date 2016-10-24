@@ -130,7 +130,7 @@
     <string name="encoder_state_recording">recording</string>
     <string name="encoder_state_changing_state" translatable="false">changing state</string>
 
-    <string name="minutes" translatable="false">%1$s Minutes</string>
+    <string name="minutes" translatable="false">%1$s Min</string>
 
     <string name="retry" translatable="false">Retry</string>
     <string name="drawer_item_home" translatable="false">Home</string>
@@ -196,6 +196,7 @@
 
     <!-- Introductory Overlay text -->
     <string name="castErrorLabel">This item can not be displayed on a Google Cast device.</string>
+    <string name="castNotReadyLabel">This item is not yet ready for casting, please try again later.</string>
     <string name="playbackErrorLabel">This recording can not be played with the Internal Player. Please consider using an External Player, such as VLC for Android, or transcoding the recording to HLS or MP4.</string>
     <string name="ok">OK</string>
     <string name="error">Error</string>
@@ -210,5 +211,9 @@
     <string name="pref_enable_analytics_title">Enable Analytics &amp; Crash Reporting</string>
     <string name="pref_enable_analytics_summary_on">Anonymous Analytics &amp; Crash Reports will be sent</string>
     <string name="pref_enable_analytics_summary_off">Anonymous Analytics &amp; Crash Reports will not be sent</string>
+    <string name="action_create_hls_stream">Create HTTP Live Stream</string>
+    <string name="action_remove_hls_stream">Remove HTTP Live Stream</string>
+    <string name="action_mark_watched">Mark Watched</string>
+    <string name="action_mark_unwatched">Mark Unwatched</string>
 
 </resources>

@@ -50,17 +50,11 @@
 
             </android.support.design.widget.AppBarLayout>
 
-            <fragment
-                android:id="@+id/fragment"
-                android:name="org.mythtv.android.presentation.view.fragment.phone.TitleInfoListFragment"
+            <FrameLayout
+                android:id="@+id/fl_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="64dp"
-                android:layout_marginLeft="64dp"
-                android:layout_marginRight="64dp"
-                android:layout_marginStart="64dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:layout="@layout/fragment_phone_title_info_list" />
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         </android.support.design.widget.CoordinatorLayout>
 
