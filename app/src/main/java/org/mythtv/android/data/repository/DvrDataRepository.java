@@ -142,14 +142,17 @@ public class DvrDataRepository implements DvrRepository {
         Observable<ProgramEntity> programEntity = dvrDataStore.recordedProgramEntityDetails( recordedId );
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntity = programEntity
                 .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.getFileName() ) );
+        Observable<Long> bookmark = dvrDataStore.getBookmark( recordedId, "Duration" );
 
-        Observable<ProgramEntity> recordedProgramEntity = Observable.zip( programEntity, liveStreamInfoEntity, ( programEntity1, liveStreamInfoEntityList ) -> {
+        Observable<ProgramEntity> recordedProgramEntity = Observable.zip( programEntity, liveStreamInfoEntity, bookmark, ( programEntity1, liveStreamInfoEntityList, bookmark1 ) -> {
 
             if( null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty() ) {
 
                 programEntity1.setLiveStreamInfoEntity( liveStreamInfoEntityList.get( 0 ) );
 
             }
+
+            programEntity1.setBookmark( bookmark1 );
 
             Log.d( TAG, "recordedProgram : programEntity=" + programEntity1.toString() );
             return programEntity1;

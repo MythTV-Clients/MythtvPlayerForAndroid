@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.net.DvrApi;
@@ -48,7 +49,7 @@ public class DvrDataStoreFactory {
     private final DvrApi api;
 
     @Inject
-    public DvrDataStoreFactory( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, Gson gson, SearchDataStoreFactory searchDataStoreFactory ) {
+    public DvrDataStoreFactory( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final Gson gson, final SearchDataStoreFactory searchDataStoreFactory ) {
         Log.d( TAG, "initialize : enter" );
 
         if( null == context || null == sharedPreferences || null == okHttpClient || null == gson || null == searchDataStoreFactory ) {
@@ -58,7 +59,7 @@ public class DvrDataStoreFactory {
 
         this.searchDataStoreFactory = searchDataStoreFactory;
 
-        api = new DvrApiImpl( context.getApplicationContext(), sharedPreferences, okHttpClient, new TitleInfoEntityJsonMapper( gson ), new ProgramEntityJsonMapper( gson ), new EncoderEntityJsonMapper( gson ), new BooleanJsonMapper() );
+        api = new DvrApiImpl( context.getApplicationContext(), sharedPreferences, okHttpClient, new TitleInfoEntityJsonMapper( gson ), new ProgramEntityJsonMapper( gson ), new EncoderEntityJsonMapper( gson ), new BooleanJsonMapper(), new LongJsonMapper() );
 
         Log.d( TAG, "initialize : exit" );
     }

@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import okhttp3.CacheControl;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -113,6 +114,7 @@ public class ApiConnection implements Callable<String> {
                 .url( this.url )
                 .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
                 .get()
+                .cacheControl( CacheControl.FORCE_NETWORK )
                 .build();
 
         try {
@@ -120,7 +122,9 @@ public class ApiConnection implements Callable<String> {
             this.response = okHttpClient.newCall( request ).execute().body().string();
 
 //            Logging my be causes of OutOfMemory
-//            Log.d( TAG, "connectToApi : response=" + this.response );
+            if( this.url.toString().contains( "GetSavedBookmark" ) ) {
+                Log.d( TAG, "connectToApi : response=" + this.response );
+            }
 
         } catch( IOException e ) {
 

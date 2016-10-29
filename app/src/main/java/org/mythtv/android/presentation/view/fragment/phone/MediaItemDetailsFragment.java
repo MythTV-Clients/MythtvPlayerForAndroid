@@ -34,6 +34,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -92,6 +93,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     @BindView( R.id.media_item_image )
     AutoLoadImageView iv_image;
+
+    @BindView( R.id.media_item_bookmark )
+    ImageView iv_bookmark;
 
     @BindView( R.id.media_item_title )
     TextView tv_title;
@@ -349,6 +353,16 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             }
 
             this.iv_image.setImageUrl( getMasterBackendUrl() + this.mediaItemModel.getCoverartUrl() );
+            if( mediaItemModel.getBookmark() > 0 ) {
+
+                this.iv_bookmark.setVisibility( View.VISIBLE );
+
+            } else {
+
+                this.iv_bookmark.setVisibility( View.GONE );
+
+            }
+
             this.tv_title.setText( this.mediaItemModel.getTitle() );
             this.tv_sub_title.setText( this.mediaItemModel.getSubTitle() );
             this.tv_studio.setText( this.mediaItemModel.getStudio() );
@@ -463,6 +477,11 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     }
 
     private void updateMenu() {
+
+        if( null == menuHlsDisable || null == menuHlsEnable || null == menuMarkUnwatched || null == menuMarkWatched ) {
+
+            return;
+        }
 
         if( !mediaItemModel.isRecording() ) {
 

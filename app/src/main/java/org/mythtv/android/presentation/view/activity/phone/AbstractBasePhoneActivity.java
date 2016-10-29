@@ -53,7 +53,6 @@ import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.NetComponent;
 import org.mythtv.android.presentation.internal.di.components.SharedPreferencesComponent;
-import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.navigation.PhoneNavigator;
 import org.mythtv.android.presentation.view.fragment.phone.AboutDialogFragment;
 
@@ -70,8 +69,6 @@ import butterknife.ButterKnife;
 public abstract class AbstractBasePhoneActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = AbstractBasePhoneActivity.class.getSimpleName();
-
-    protected LiveStreamInfoModel liveStreamInfoModel;
 
     protected CastContext mCastContext;
     protected MenuItem mediaRouteMenuItem;

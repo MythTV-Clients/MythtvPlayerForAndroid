@@ -42,6 +42,8 @@ public class MediaItemModel implements Serializable {
     public static final String KEY_GET_LIVE_STREAM_URL = "get_live_stream_url";
     public static final String KEY_WATCHED_STATUS = "watched_status";
     public static final String KEY_MARK_WATCHED_URL = "mark_watched_url";
+    public static final String KEY_UPDATE_SAVED_BOOKMARK_URL = "update_saved_bookmark_url";
+    public static final String KEY_BOOKMARK = "bookmark";
 
     private int id;
     private Media media;
@@ -70,6 +72,8 @@ public class MediaItemModel implements Serializable {
     private String getHttpLiveStreamUrl;
     private boolean watched;
     private String markWatchedUrl;
+    private String updateSavedBookmarkUrl;
+    private long bookmark;
 
     public MediaItemModel() { }
 
@@ -410,6 +414,28 @@ public class MediaItemModel implements Serializable {
 
     }
 
+    public String getUpdateSavedBookmarkUrl() {
+
+        return updateSavedBookmarkUrl;
+    }
+
+    public void setUpdateSavedBookmarkUrl( String updateSavedBookmarkUrl ) {
+
+        this.updateSavedBookmarkUrl = updateSavedBookmarkUrl;
+
+    }
+
+    public long getBookmark() {
+
+        return bookmark;
+    }
+
+    public void setBookmark( long bookmark ) {
+
+        this.bookmark = bookmark;
+
+    }
+
     @Override
     public String toString() {
         return "MediaItemModel{" +
@@ -440,6 +466,8 @@ public class MediaItemModel implements Serializable {
                 ", getHttpLiveStreamUrl='" + getHttpLiveStreamUrl + '\'' +
                 ", watched=" + watched +
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
+                ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
+                ", bookmark=" + bookmark +
                 '}';
     }
 
@@ -517,6 +545,12 @@ public class MediaItemModel implements Serializable {
             wrapper.putString( KEY_MARK_WATCHED_URL, markWatchedUrl );
         }
 
+        if( null != updateSavedBookmarkUrl && !"".equals( updateSavedBookmarkUrl ) ) {
+            wrapper.putString( KEY_UPDATE_SAVED_BOOKMARK_URL, updateSavedBookmarkUrl );
+        }
+
+        wrapper.putLong( KEY_BOOKMARK, bookmark );
+
         return wrapper;
     }
 
@@ -593,6 +627,10 @@ public class MediaItemModel implements Serializable {
         if( wrapper.containsKey( KEY_MARK_WATCHED_URL ) ) {
             media.setMarkWatchedUrl( wrapper.getString( KEY_MARK_WATCHED_URL ) );
         }
+        if( wrapper.containsKey( KEY_UPDATE_SAVED_BOOKMARK_URL ) ) {
+            media.setUpdateSavedBookmarkUrl( wrapper.getString( KEY_UPDATE_SAVED_BOOKMARK_URL ) );
+        }
+        media.setBookmark( wrapper.getLong( KEY_BOOKMARK ) );
 
         return media;
     }

@@ -117,6 +117,8 @@ public class ProgramEntity {
 
     private LiveStreamInfoEntity liveStreamInfoEntity;
 
+    private long bookmark;
+
     public ProgramEntity() {
     }
 
@@ -382,8 +384,21 @@ public class ProgramEntity {
         return liveStreamInfoEntity;
     }
 
-    public void setLiveStreamInfoEntity(LiveStreamInfoEntity liveStreamInfoEntity) {
+    public void setLiveStreamInfoEntity( LiveStreamInfoEntity liveStreamInfoEntity ) {
+
         this.liveStreamInfoEntity = liveStreamInfoEntity;
+
+    }
+
+    public long getBookmark() {
+
+        return bookmark;
+    }
+
+    public void setBookmark( long bookmark ) {
+
+        this.bookmark = bookmark;
+
     }
 
     @Override
@@ -418,6 +433,7 @@ public class ProgramEntity {
                 ", artwork=" + artwork +
                 ", cast=" + cast +
                 ", liveStreamInfoEntity=" + liveStreamInfoEntity +
+                ", bookmark=" + bookmark +
                 '}';
     }
 

@@ -135,6 +135,9 @@ public class MediaItemDataMapper {
             mediaItem.setCharacters( cast.trim() );
         }
 
+        mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        mediaItem.setBookmark( programEntity.getBookmark() );
+
         return mediaItem;
     }
 
@@ -330,6 +333,7 @@ public class MediaItemDataMapper {
 
         long duration = new Duration( startTime, endTime ).getStandardMinutes();
         mediaItem.setDuration( duration );
+
     }
 
     private static void setContentType( MediaItem mediaItem, String fileName ) {

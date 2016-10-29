@@ -39,6 +39,7 @@ public interface DvrApi {
     String UPCOMING_LIST_BASE_URL = "/Dvr/GetUpcomingList";
     String ENCODER_LIST_BASE_URL = "/Dvr/GetEncoderList";
     String UPDATE_RECORDED_WATCHED_STATUS_URL = "/Dvr/UpdateRecordedWatchedStatus";
+    String BOOKMARK_BASE_URL = "/Dvr/GetSavedBookmark";
 
     String DESCENDING_QS = "Descending=%s";
     String START_INDEX_QS = "StartIndex=%s";
@@ -53,6 +54,7 @@ public interface DvrApi {
     String RECORD_ID_QS = "RecordId=%s";
     String REC_STATUS_QS = "RecStatus=%s";
     String WATCHED_QS = "Watched=%s";
+    String OFFSET_TYPE_QS = "OffsetType=%s";
 
     Observable<List<TitleInfoEntity>> titleInfoEntityList();
 
@@ -75,6 +77,8 @@ public interface DvrApi {
      * @return true  - if status was successfully updated
      *         false - if status was not updated
      */
-    Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched );
+    Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
+
+    Observable<Long> getBookmark( final int recordedId, final int chanId, final DateTime startTime, final String offsetType );
 
 }

@@ -39,6 +39,9 @@ public class MediaItem {
     private boolean watched;
     private String markWatchedUrl;
 
+    private String updateSavedBookmarkUrl;
+    private long bookmark;
+
     public MediaItem() {
     }
 
@@ -363,6 +366,28 @@ public class MediaItem {
 
     }
 
+    public String getUpdateSavedBookmarkUrl() {
+
+        return updateSavedBookmarkUrl;
+    }
+
+    public void setUpdateSavedBookmarkUrl( String updateSavedBookmarkUrl ) {
+
+        this.updateSavedBookmarkUrl = updateSavedBookmarkUrl;
+
+    }
+
+    public long getBookmark() {
+
+        return bookmark;
+    }
+
+    public void setBookmark(long bookmark ) {
+
+        this.bookmark = bookmark;
+
+    }
+
     @Override
     public boolean equals( Object o ) {
         if( this == o ) return true;
@@ -413,6 +438,8 @@ public class MediaItem {
                 ", getHttpLiveStreamUrl='" + getHttpLiveStreamUrl + '\'' +
                 ", watched=" + watched +
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
+                ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
+                ", bookmark=" + bookmark +
                 '}';
     }
 
