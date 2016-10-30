@@ -91,7 +91,7 @@ public class VideoDataRepository implements VideoRepository {
 
                         if( liveStreamInfoEntity.getSourceFile().endsWith( videoEntity.getFileName() ) ) {
 
-                            videoEntity.setLiveStreamInfoEntity( list.get( 0 ) );
+                            videoEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
                         }
 
@@ -148,7 +148,7 @@ public class VideoDataRepository implements VideoRepository {
 
                         if( liveStreamInfoEntity.getSourceFile().endsWith( videoEntity.getFileName() ) ) {
 
-                            videoEntity.setLiveStreamInfoEntity( list.get( 0 ) );
+                            videoEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
                         }
 
@@ -225,7 +225,7 @@ public class VideoDataRepository implements VideoRepository {
 
                         if( liveStreamInfoEntity.getSourceFile().endsWith( videoEntity.getFileName() ) ) {
 
-                            videoEntity.setLiveStreamInfoEntity( list.get( 0 ) );
+                            videoEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
                         }
 

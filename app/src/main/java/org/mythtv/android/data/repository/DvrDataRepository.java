@@ -98,7 +98,7 @@ public class DvrDataRepository implements DvrRepository {
 
                         if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
 
-                            programEntity.setLiveStreamInfoEntity( list.get( 0 ) );
+                            programEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
                         }
 
@@ -210,7 +210,7 @@ public class DvrDataRepository implements DvrRepository {
 
                         if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
 
-                            programEntity.setLiveStreamInfoEntity( list.get( 0 ) );
+                            programEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
                         }
 
