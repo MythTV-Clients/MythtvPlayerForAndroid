@@ -482,6 +482,15 @@ public class LocalPlayerActivity extends AppCompatActivity {
         remoteMediaClient.load( buildMediaInfo(), autoPlay, position );
         remoteMediaClient.addProgressListener( progressListener, 60000 );
 
+        if( mSelectedMedia.getBookmark() > 0 ) {
+
+            remoteMediaClient.seek( mSelectedMedia.getBookmark() );
+
+//            long seekPosition = ( mSelectedMedia.getBookmark() / 1000 / 60 );
+//            mSeekbar.setProgress( (int) seekPosition, true );
+
+        }
+
         Intent intent = new Intent( this, ExpandedControlsActivity.class );
         startActivity( intent );
 
