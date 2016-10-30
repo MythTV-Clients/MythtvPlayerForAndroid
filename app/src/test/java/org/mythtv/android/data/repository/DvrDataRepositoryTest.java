@@ -15,7 +15,6 @@ import org.mythtv.android.data.repository.datasource.ContentDataStore;
 import org.mythtv.android.data.repository.datasource.ContentDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
-import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
 import org.mythtv.android.domain.Program;
 
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     private DvrDataRepository dvrDataRepository;
 
     @Mock private DvrDataStoreFactory mockDvrDataStoreFactory;
-    @Mock private SearchDataStoreFactory mockSearchDataStoreFactory;
     @Mock private ContentDataStoreFactory mockContentDataStoreFactory;
     @Mock private DvrDataStore mockDvrDataStore;
     @Mock private ContentDataStore mockContentDataStore;
@@ -47,7 +45,7 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockSearchDataStoreFactory, mockContentDataStoreFactory );
+        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockContentDataStoreFactory );
 
         given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockDvrDataStore );
         given( mockContentDataStoreFactory.create() ).willReturn( mockContentDataStore );
