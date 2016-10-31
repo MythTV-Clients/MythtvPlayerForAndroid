@@ -20,6 +20,7 @@ package org.mythtv.android.presentation.view.adapter.phone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -186,6 +187,31 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
                 holder.image.setImageUrl( null );
 
                 break;
+
+        }
+
+        if( mediaItemModel.getLiveStreamId() > 0 ) {
+
+            holder.progress.setVisibility( View.VISIBLE );
+            holder.progress.setIndeterminate( false );
+            holder.progress.setProgress( mediaItemModel.getPercentComplete() );
+
+            if( mediaItemModel.getPercentComplete() < 2 ) {
+
+                holder.progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
+
+            } else {
+
+                holder.progress.getProgressDrawable().setColorFilter( this.context.getResources().getColor( R.color.accent ), android.graphics.PorterDuff.Mode.SRC_IN );
+
+            }
+
+        } else {
+
+            holder.progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
+            holder.progress.setVisibility( View.GONE );
+            holder.progress.setIndeterminate( true );
+            holder.progress.setProgress( 0 );
 
         }
 

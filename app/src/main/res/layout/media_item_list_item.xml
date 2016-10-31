@@ -29,13 +29,38 @@
         android:layout_margin="@dimen/margin"
         android:gravity="center_vertical">
 
-        <org.mythtv.android.presentation.view.component.AutoLoadImageView
-            android:id="@+id/media_item_image"
-            android:layout_width="125dp"
-            android:layout_height="75dp"
-            android:scaleType="fitXY"
-            android:layout_marginRight="@dimen/outer_margin"
-            android:layout_marginEnd="@dimen/outer_margin" />
+        <RelativeLayout
+            android:id="@+id/media_item_image_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="fill_horizontal">
+
+            <org.mythtv.android.presentation.view.component.AutoLoadImageView
+                android:id="@+id/media_item_image"
+                android:layout_width="125dp"
+                android:layout_height="75dp"
+                android:scaleType="fitXY" />
+
+            <ProgressBar
+                android:id="@+id/media_item_progress"
+                android:layout_width="125dp"
+                android:layout_height="10dp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:indeterminate="true"
+                android:minHeight="10dp"
+                android:maxHeight="10dp"
+                android:minWidth="125dp"
+                android:maxWidth="125dp"
+                android:progress="0"
+                android:max="100"
+                android:layout_gravity="center"
+                android:layout_below="@+id/media_item_image"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/media_item_title"
@@ -44,8 +69,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:layout_toRightOf="@+id/media_item_image"
-            android:layout_toEndOf="@+id/media_item_image"
+            android:layout_toRightOf="@+id/media_item_image_layout"
+            android:layout_toEndOf="@+id/media_item_image_layout"
             tools:text="test title" />
 
         <TextView
@@ -57,8 +82,8 @@
             android:gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
             android:layout_below="@+id/media_item_title"
-            android:layout_toRightOf="@+id/media_item_image"
-            android:layout_toEndOf="@+id/media_item_image"
+            android:layout_toRightOf="@+id/media_item_image_layout"
+            android:layout_toEndOf="@+id/media_item_image_layout"
             tools:text="test sub title" />
 
         <TextView
@@ -67,8 +92,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/media_item_sub_title"
-            android:layout_toRightOf="@+id/media_item_image"
-            android:layout_toEndOf="@+id/media_item_image"
+            android:layout_toRightOf="@+id/media_item_image_layout"
+            android:layout_toEndOf="@+id/media_item_image_layout"
             tools:text="test date" />
 
         <TextView
@@ -88,8 +113,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/media_item_date"
-            android:layout_toRightOf="@+id/media_item_image"
-            android:layout_toEndOf="@+id/media_item_image"
+            android:layout_toRightOf="@+id/media_item_image_layout"
+            android:layout_toEndOf="@+id/media_item_image_layout"
             tools:text="test episode" />
 
         <TextView
@@ -102,21 +127,6 @@
             android:layout_alignParentEnd="true"
             android:gravity="right|end"
             tools:text="test studio" />
-
-        <ProgressBar
-            android:id="@+id/media_item_progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_below="@+id/media_item_image"
-            android:indeterminate="true"
-            android:minHeight="10dp"
-            android:maxHeight="10dp"
-            android:minWidth="125dp"
-            android:maxWidth="125dp"
-            android:progress="0"
-            android:max="100"
-            android:visibility="gone" />
 
     </RelativeLayout>
 

@@ -30,7 +30,6 @@ import org.mythtv.android.data.repository.datasource.ContentDataStore;
 import org.mythtv.android.data.repository.datasource.ContentDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
-import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
 import org.mythtv.android.domain.Encoder;
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.Series;
@@ -54,14 +53,12 @@ public class DvrDataRepository implements DvrRepository {
     private static final String TAG = DvrDataRepository.class.getSimpleName();
 
     private final DvrDataStoreFactory dvrDataStoreFactory;
-    private final SearchDataStoreFactory searchDataStoreFactory;
     private final ContentDataStoreFactory contentDataStoreFactory;
 
     @Inject
-    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, SearchDataStoreFactory searchDataStoreFactory, ContentDataStoreFactory contentDataStoreFactory ) {
+    public DvrDataRepository( DvrDataStoreFactory dvrDataStoreFactory, ContentDataStoreFactory contentDataStoreFactory ) {
 
         this.dvrDataStoreFactory = dvrDataStoreFactory;
-        this.searchDataStoreFactory = searchDataStoreFactory;
         this.contentDataStoreFactory = contentDataStoreFactory;
 
     }
@@ -88,9 +85,7 @@ public class DvrDataRepository implements DvrRepository {
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
-        Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup )
-                .flatMap( Observable::from )
-                .toList();
+        Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList( null );
 
         Observable<List<ProgramEntity>> recordedProgramEntityList = Observable.zip( programEntities, liveStreamInfoEntities, ( programEntityList, list ) -> {
@@ -103,7 +98,7 @@ public class DvrDataRepository implements DvrRepository {
 
                         if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
 
-                            programEntity.setLiveStreamInfoEntity( list.get( 0 ) );
+                            programEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
                         }
 
@@ -142,14 +137,17 @@ public class DvrDataRepository implements DvrRepository {
         Observable<ProgramEntity> programEntity = dvrDataStore.recordedProgramEntityDetails( recordedId );
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntity = programEntity
                 .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.getFileName() ) );
+        Observable<Long> bookmark = dvrDataStore.getBookmark( recordedId, "Duration" );
 
-        Observable<ProgramEntity> recordedProgramEntity = Observable.zip( programEntity, liveStreamInfoEntity, ( programEntity1, liveStreamInfoEntityList ) -> {
+        Observable<ProgramEntity> recordedProgramEntity = Observable.zip( programEntity, liveStreamInfoEntity, bookmark, ( programEntity1, liveStreamInfoEntityList, bookmark1 ) -> {
 
             if( null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty() ) {
 
                 programEntity1.setLiveStreamInfoEntity( liveStreamInfoEntityList.get( 0 ) );
 
             }
+
+            programEntity1.setBookmark( bookmark1 );
 
             Log.d( TAG, "recordedProgram : programEntity=" + programEntity1.toString() );
             return programEntity1;
@@ -197,9 +195,35 @@ public class DvrDataRepository implements DvrRepository {
         Log.d( TAG, "recent : enter" );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
+        final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
+
+        Observable<List<ProgramEntity>> programEntities = dvrDataStore.recordedProgramEntityList( true, 1, 50, null, null, null );
+        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList( null );
+
+        Observable<List<ProgramEntity>> recordedProgramEntityList = Observable.zip( programEntities, liveStreamInfoEntities, ( programEntityList, list ) -> {
+
+            if( null != list && !list.isEmpty() ) {
+
+                for( ProgramEntity programEntity : programEntityList ) {
+
+                    for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
+
+                        if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
+
+                            programEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
+
+                        }
+
+                    }
+
+                }
+            }
+
+            return programEntityList;
+        });
 
         // Limit results to 50, then remove anything in the LiveTV storage group and only take 10 for the final results
-        return dvrDataStore.recordedProgramEntityList( true, 1, 50, null, null, null )
+        return recordedProgramEntityList
                 .flatMap( Observable::from )
                 .filter( programEntity -> !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) )
                 .take( 10 )

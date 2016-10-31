@@ -69,10 +69,42 @@ public class VideoDataRepository implements VideoRepository {
         Log.d( TAG, "getVideoList : folder=" + folder + ", sort=" + sort + ", descending=" + descending + ", startIndex=" + startIndex + ", count=" + count );
 
         final VideoDataStore videoDataStore = videoDataStoreFactory.createMasterBackendDataStore();
+        final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
-        return videoDataStore.getVideos( folder, sort, descending, startIndex, count )
+        Observable<List<VideoMetadataInfoEntity>> videoEntities = videoDataStore.getVideos( folder, sort, descending, startIndex, count )
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
+                .flatMap( Observable::from )
+                .toList();
+
+        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList( null )
+                .subscribeOn( Schedulers.io() )
+                .observeOn( AndroidSchedulers.mainThread() );
+
+        Observable<List<VideoMetadataInfoEntity>> videos = Observable.zip( videoEntities, liveStreamInfoEntities, ( videoEntityList, list ) -> {
+
+            if( null != list && !list.isEmpty() ) {
+
+                for( VideoMetadataInfoEntity videoEntity : videoEntityList ) {
+
+                    for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
+
+                        if( liveStreamInfoEntity.getSourceFile().endsWith( videoEntity.getFileName() ) ) {
+
+                            videoEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return videoEntityList;
+        });
+
+        return videos
                 .doOnError( throwable -> Log.e( TAG, "getVideoList : error", throwable ) )
                 .map( entities -> {
                     try {
@@ -94,10 +126,42 @@ public class VideoDataRepository implements VideoRepository {
         Log.d( TAG, "getVideoListByContentType : contentType=" + contentType );
 
         final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore( contentType );
+        final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
-        return videoDataStore.getCategory( contentType )
+        Observable<List<VideoMetadataInfoEntity>> videoEntities = videoDataStore.getCategory( contentType )
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
+                .flatMap( Observable::from )
+                .toList();
+
+        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList( null )
+                .subscribeOn( Schedulers.io() )
+                .observeOn( AndroidSchedulers.mainThread() );
+
+        Observable<List<VideoMetadataInfoEntity>> videos = Observable.zip( videoEntities, liveStreamInfoEntities, ( videoEntityList, list ) -> {
+
+            if( null != list && !list.isEmpty() ) {
+
+                for( VideoMetadataInfoEntity videoEntity : videoEntityList ) {
+
+                    for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
+
+                        if( liveStreamInfoEntity.getSourceFile().endsWith( videoEntity.getFileName() ) ) {
+
+                            videoEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return videoEntityList;
+        });
+
+        return videos
                 .doOnError( throwable -> Log.e( TAG, "getVideoListByContentType : error", throwable ) )
                 .map( entities -> {
                     try {
@@ -114,7 +178,7 @@ public class VideoDataRepository implements VideoRepository {
     }
 
     @Override
-    public Observable<List<Series>> getVideoSeriesListByContentType(String contentType ) {
+    public Observable<List<Series>> getVideoSeriesListByContentType( String contentType ) {
         Log.d( TAG, "getVideoSeriesListByContentType : enter" );
         Log.d( TAG, "getVideoSeriesListByContentType : contentType=" + contentType );
 
@@ -139,10 +203,42 @@ public class VideoDataRepository implements VideoRepository {
         Log.d( TAG, "getVideoListByContentTypeAndSeries : contentType=" + contentType + ", series=" + series );
 
         final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore( contentType );
+        final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
-        return videoDataStore.getSeriesInCategory( contentType, series )
+        Observable<List<VideoMetadataInfoEntity>> videoEntities = videoDataStore.getSeriesInCategory( contentType, series )
                 .subscribeOn( Schedulers.io() )
                 .observeOn( AndroidSchedulers.mainThread() )
+                .flatMap( Observable::from )
+                .toList();
+
+        Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntities = contentDataStore.liveStreamInfoEntityList( null )
+                .subscribeOn( Schedulers.io() )
+                .observeOn( AndroidSchedulers.mainThread() );
+
+        Observable<List<VideoMetadataInfoEntity>> videos = Observable.zip( videoEntities, liveStreamInfoEntities, ( videoEntityList, list ) -> {
+
+            if( null != list && !list.isEmpty() ) {
+
+                for( VideoMetadataInfoEntity videoEntity : videoEntityList ) {
+
+                    for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
+
+                        if( liveStreamInfoEntity.getSourceFile().endsWith( videoEntity.getFileName() ) ) {
+
+                            videoEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return videoEntityList;
+        });
+
+        return videos
                 .doOnError( throwable -> Log.e( TAG, "getVideoListByContentTypeAndSeries : error", throwable ) )
                 .map( entities -> {
                     try {

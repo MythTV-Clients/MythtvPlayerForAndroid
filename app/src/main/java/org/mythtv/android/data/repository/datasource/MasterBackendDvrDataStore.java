@@ -87,7 +87,7 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
 
             };
 
-    public MasterBackendDvrDataStore( DvrApi api, SearchDataStoreFactory searchDataStoreFactory ) {
+    public MasterBackendDvrDataStore( final DvrApi api, final SearchDataStoreFactory searchDataStoreFactory ) {
 
         this.api = api;
         this.searchDataStoreFactory = searchDataStoreFactory;
@@ -104,7 +104,7 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
     }
 
     @Override
-    public Observable<List<ProgramEntity>> recordedProgramEntityList( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
+    public Observable<List<ProgramEntity>> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) {
         Log.d( TAG, "recordedProgramEntityList : enter" );
 
         Log.d( TAG, "recordedProgramEntityList : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup );
@@ -130,7 +130,7 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
     }
 
     @Override
-    public Observable<List<ProgramEntity>> upcomingProgramEntityList( int startIndex, int count, boolean showAll, int recordId, int recStatus ) {
+    public Observable<List<ProgramEntity>> upcomingProgramEntityList( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) {
         Log.d( TAG, "upcomingProgramEntityList : enter" );
 
         Log.d( TAG, "recordedProgramEntityList : startIndex=" + startIndex + ", count=" + count + ", showAll=" + showAll + ", recordId=" + recordId + ", recStatus=" + recStatus );
@@ -146,12 +146,21 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
     }
 
     @Override
-    public Observable<Boolean> updateWatchedStatus( int chanId, DateTime startTime, boolean watched ) {
+    public Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) {
         Log.d( TAG, "updateWatchedStatus : enter" );
 
         Log.d( TAG, "updateWatchedStatus : chanId=" + chanId + ", startTime=" + startTime + ", watched=" + watched );
 
         return this.api.updateWatchedStatus( chanId, startTime, watched );
+    }
+
+    @Override
+    public Observable<Long> getBookmark( final int recordedId, final String offsetType ) {
+        Log.d( TAG, "getBookmark : enter" );
+
+        Log.d( TAG, "getBookmark : recordedId=" + recordedId + ", offsetType=" + offsetType );
+
+        return this.api.getBookmark( recordedId, -1, null, offsetType );
     }
 
 }

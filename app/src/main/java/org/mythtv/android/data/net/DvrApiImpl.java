@@ -33,6 +33,7 @@ import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
@@ -41,7 +42,6 @@ import org.mythtv.android.domain.SettingsKeys;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,10 +66,11 @@ public class DvrApiImpl implements DvrApi {
     private final ProgramEntityJsonMapper programEntityJsonMapper;
     private final EncoderEntityJsonMapper encoderEntityJsonMapper;
     private final BooleanJsonMapper booleanJsonMapper;
+    private final LongJsonMapper longJsonMapper;
 
-    public DvrApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, ProgramEntityJsonMapper programEntityJsonMapper, EncoderEntityJsonMapper encoderEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
+    public DvrApiImpl( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, final ProgramEntityJsonMapper programEntityJsonMapper, final EncoderEntityJsonMapper encoderEntityJsonMapper, final BooleanJsonMapper booleanJsonMapper, final LongJsonMapper longJsonMapper ) {
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper ) {
+        if( null == context || null == sharedPreferences || null == okHttpClient || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper || null == longJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
@@ -81,6 +82,7 @@ public class DvrApiImpl implements DvrApi {
         this.programEntityJsonMapper = programEntityJsonMapper;
         this.encoderEntityJsonMapper = encoderEntityJsonMapper;
         this.booleanJsonMapper = booleanJsonMapper;
+        this.longJsonMapper = longJsonMapper;
 
     }
 
@@ -327,7 +329,7 @@ public class DvrApiImpl implements DvrApi {
     }
 
     @Override
-    public Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched ) {
+    public Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) {
 
         return Observable.create( new Observable.OnSubscribe<Boolean>() {
 
@@ -362,13 +364,62 @@ public class DvrApiImpl implements DvrApi {
                     }
 
                 } else {
-                    Log.d( TAG, "encoderEntityList.call : network is not connected" );
+                    Log.d( TAG, "updateWatchedStatus.call : network is not connected" );
 
                     subscriber.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d( TAG, "encoderEntityList.call : exit" );
+                Log.d( TAG, "updateWatchedStatus.call : exit" );
+            }
+
+        });
+
+    }
+
+    @Override
+    public Observable<Long> getBookmark( final int recordedId, final int chanId, final DateTime startTime, final String offsetType) {
+
+        return Observable.create( new Observable.OnSubscribe<Long>() {
+
+            @Override
+            public void call( Subscriber<? super Long> subscriber ) {
+                Log.d( TAG, "getBookmark.call : enter" );
+
+                if( isThereInternetConnection() ) {
+                    Log.d(TAG, "getBookmark.call : network is connected");
+
+                    try {
+
+                        String response = getBookmarkFromApi( recordedId, chanId, startTime, offsetType );
+                        if( null != response ) {
+                            Log.d( TAG, "getBookmark.call : retrieved status update" );
+
+                            subscriber.onNext( longJsonMapper.transformLong( response ) );
+                            subscriber.onCompleted();
+
+                        } else {
+                            Log.d( TAG, "getBookmark.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "getBookmark.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d( TAG, "getBookmark.call : network is not connected" );
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d( TAG, "getBookmark.call : exit" );
             }
 
         });
@@ -514,6 +565,38 @@ public class DvrApiImpl implements DvrApi {
 
         Log.i( TAG, "postUpdateWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ) );
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ).requestSyncCall( parameters );
+    }
+
+    private String getBookmarkFromApi( final int recordedId, final int chanId, final DateTime startTime, final String offsetType ) throws MalformedURLException {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() );
+        sb.append( BOOKMARK_BASE_URL );
+        sb.append( "?" );
+
+        if( recordedId != -1 ) {
+
+            sb.append( String.format( RECORDED_ID_QS, recordedId ) );
+
+        }
+
+        if( chanId != -1 && null != startTime ) {
+
+            sb.append( String.format( CHAN_ID_QS, chanId ) );
+            sb.append( "&" );
+            fmt.print( startTime.withZone( DateTimeZone.UTC ) );
+
+        }
+
+        if( null != offsetType && !"".equals( offsetType ) ) {
+
+            sb.append( "&" );
+            sb.append( String.format( OFFSET_TYPE_QS, offsetType ) );
+
+        }
+
+        Log.i( TAG, "getBookmarkFromApi : apiUrl=" + sb.toString() );
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private boolean isThereInternetConnection() {
