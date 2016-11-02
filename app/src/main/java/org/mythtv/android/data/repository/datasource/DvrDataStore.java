@@ -19,6 +19,7 @@
 package org.mythtv.android.data.repository.datasource;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.CommercialBreakEntity;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
@@ -45,5 +46,7 @@ public interface DvrDataStore {
     Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
 
     Observable<Long> getBookmark( final int recordedId, final String offsetType );
+
+    Observable<List<CommercialBreakEntity>> getComercialBreaks( final int recordedId, final String offsetType );
 
 }

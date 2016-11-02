@@ -22,12 +22,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 
-//import lombok.Data;
-
 /**
  * Created by dmfrey on 1/18/16.
  */
-//@Data
 public class EncodersEntity {
 
     @SerializedName( "Encoders" )
@@ -36,7 +33,7 @@ public class EncodersEntity {
     public EncodersEntity() {
     }
 
-    public EncodersEntity(EncoderEntity[] encoders ) {
+    public EncodersEntity( EncoderEntity[] encoders ) {
 
         this.encoders = encoders;
 

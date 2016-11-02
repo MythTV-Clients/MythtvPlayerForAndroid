@@ -21,6 +21,7 @@ package org.mythtv.android.data.repository;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.CommercialBreakEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.mapper.EncoderEntityDataMapper;
@@ -138,8 +139,9 @@ public class DvrDataRepository implements DvrRepository {
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntity = programEntity
                 .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.getFileName() ) );
         Observable<Long> bookmark = dvrDataStore.getBookmark( recordedId, "Duration" );
+        Observable<List<CommercialBreakEntity>> breaks = dvrDataStore.getComercialBreaks( recordedId, "Duration" );
 
-        Observable<ProgramEntity> recordedProgramEntity = Observable.zip( programEntity, liveStreamInfoEntity, bookmark, ( programEntity1, liveStreamInfoEntityList, bookmark1 ) -> {
+        Observable<ProgramEntity> recordedProgramEntity = Observable.zip( programEntity, liveStreamInfoEntity, bookmark, breaks, ( programEntity1, liveStreamInfoEntityList, bookmark1, breaks1 ) -> {
 
             if( null != liveStreamInfoEntityList && !liveStreamInfoEntityList.isEmpty() ) {
 
@@ -148,6 +150,7 @@ public class DvrDataRepository implements DvrRepository {
             }
 
             programEntity1.setBookmark( bookmark1 );
+            programEntity1.setBreaks( breaks1 );
 
             Log.d( TAG, "recordedProgram : programEntity=" + programEntity1.toString() );
             return programEntity1;

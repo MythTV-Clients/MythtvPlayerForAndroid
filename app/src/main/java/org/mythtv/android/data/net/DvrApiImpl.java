@@ -28,10 +28,13 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.mythtv.android.data.entity.CommercialBreakEntity;
+import org.mythtv.android.data.entity.CuttingEntity;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
+import org.mythtv.android.data.entity.mapper.CutListEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
@@ -67,10 +70,11 @@ public class DvrApiImpl implements DvrApi {
     private final EncoderEntityJsonMapper encoderEntityJsonMapper;
     private final BooleanJsonMapper booleanJsonMapper;
     private final LongJsonMapper longJsonMapper;
+    private final CutListEntityJsonMapper cutListJsonMapper;
 
-    public DvrApiImpl( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, final ProgramEntityJsonMapper programEntityJsonMapper, final EncoderEntityJsonMapper encoderEntityJsonMapper, final BooleanJsonMapper booleanJsonMapper, final LongJsonMapper longJsonMapper ) {
+    public DvrApiImpl( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, final ProgramEntityJsonMapper programEntityJsonMapper, final EncoderEntityJsonMapper encoderEntityJsonMapper, final BooleanJsonMapper booleanJsonMapper, final LongJsonMapper longJsonMapper, final CutListEntityJsonMapper cutListJsonMapper ) {
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper || null == longJsonMapper ) {
+        if( null == context || null == sharedPreferences || null == okHttpClient || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper || null == longJsonMapper || null == cutListJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
@@ -83,6 +87,7 @@ public class DvrApiImpl implements DvrApi {
         this.encoderEntityJsonMapper = encoderEntityJsonMapper;
         this.booleanJsonMapper = booleanJsonMapper;
         this.longJsonMapper = longJsonMapper;
+        this.cutListJsonMapper = cutListJsonMapper;
 
     }
 
@@ -426,6 +431,55 @@ public class DvrApiImpl implements DvrApi {
 
     }
 
+    @Override
+    public Observable<List<CommercialBreakEntity>> getRecordedCommBreakList(int recordedId, int chanId, DateTime startTime, String offsetType ) {
+
+        return Observable.create( new Observable.OnSubscribe<List<CommercialBreakEntity>>() {
+
+            @Override
+            public void call( Subscriber<? super List<CommercialBreakEntity>> subscriber ) {
+                Log.d( TAG, "getRecordedCommBreakList.call : enter" );
+
+                if( isThereInternetConnection() ) {
+                    Log.d(TAG, "getBookmark.call : network is connected");
+
+                    try {
+
+                        String response = getRecordedCommBreakListApi( recordedId, chanId, startTime, offsetType );
+                        if( null != response ) {
+                            Log.d( TAG, "getRecordedCommBreakList.call : retrieved status update" );
+
+                            subscriber.onNext( cutListJsonMapper.transformCutListEntityCollection( response ) );
+                            subscriber.onCompleted();
+
+                        } else {
+                            Log.d( TAG, "getRecordedCommBreakList.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "getRecordedCommBreakList.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d( TAG, "getRecordedCommBreakList.call : network is not connected" );
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d( TAG, "getRecordedCommBreakList.call : exit" );
+            }
+
+        });
+
+    }
+
     private String getTitleInfoEntitiesFromApi() throws MalformedURLException {
 
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + TITLE_INFO_LIST_URL ).requestSyncCall();
@@ -596,6 +650,38 @@ public class DvrApiImpl implements DvrApi {
         }
 
         Log.i( TAG, "getBookmarkFromApi : apiUrl=" + sb.toString() );
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
+    }
+
+    private String getRecordedCommBreakListApi( final int recordedId, final int chanId, final DateTime startTime, final String offsetType ) throws MalformedURLException {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() );
+        sb.append( RECORDED_COMM_BREAK_URL );
+        sb.append( "?" );
+
+        if( recordedId != -1 ) {
+
+            sb.append( String.format( RECORDED_ID_QS, recordedId ) );
+
+        }
+
+        if( chanId != -1 && null != startTime ) {
+
+            sb.append( String.format( CHAN_ID_QS, chanId ) );
+            sb.append( "&" );
+            fmt.print( startTime.withZone( DateTimeZone.UTC ) );
+
+        }
+
+        if( null != offsetType && !"".equals( offsetType ) ) {
+
+            sb.append( "&" );
+            sb.append( String.format( OFFSET_TYPE_QS, offsetType ) );
+
+        }
+
+        Log.i( TAG, "getRecordedCommBreakListApi : apiUrl=" + sb.toString() );
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 

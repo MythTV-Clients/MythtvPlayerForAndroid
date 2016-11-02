@@ -6,6 +6,8 @@ import org.joda.time.DateTime;
 import org.mythtv.android.domain.Media;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dmfrey on 7/10/16.
@@ -44,6 +46,7 @@ public class MediaItemModel implements Serializable {
     public static final String KEY_MARK_WATCHED_URL = "mark_watched_url";
     public static final String KEY_UPDATE_SAVED_BOOKMARK_URL = "update_saved_bookmark_url";
     public static final String KEY_BOOKMARK = "bookmark";
+    public static final String KEY_BREAKS = "breaks";
 
     private int id;
     private Media media;
@@ -74,6 +77,7 @@ public class MediaItemModel implements Serializable {
     private String markWatchedUrl;
     private String updateSavedBookmarkUrl;
     private long bookmark;
+    private List<CommercialBreakModel> breaks;
 
     public MediaItemModel() { }
 
@@ -436,6 +440,17 @@ public class MediaItemModel implements Serializable {
 
     }
 
+    public List<CommercialBreakModel> getBreaks() {
+
+        return breaks;
+    }
+
+    public void setBreaks( List<CommercialBreakModel> breaks ) {
+
+        this.breaks = breaks;
+
+    }
+
     @Override
     public String toString() {
         return "MediaItemModel{" +
@@ -468,6 +483,7 @@ public class MediaItemModel implements Serializable {
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
                 ", bookmark=" + bookmark +
+                ", breaks=" + breaks +
                 '}';
     }
 
@@ -551,6 +567,10 @@ public class MediaItemModel implements Serializable {
 
         wrapper.putLong( KEY_BOOKMARK, bookmark );
 
+        if( null != breaks ) {
+            ArrayList parcel = new ArrayList( breaks );
+            wrapper.putParcelableArrayList( KEY_BREAKS, parcel );
+        }
         return wrapper;
     }
 
@@ -631,6 +651,10 @@ public class MediaItemModel implements Serializable {
             media.setUpdateSavedBookmarkUrl( wrapper.getString( KEY_UPDATE_SAVED_BOOKMARK_URL ) );
         }
         media.setBookmark( wrapper.getLong( KEY_BOOKMARK ) );
+
+        if( wrapper.containsKey( KEY_BREAKS ) ) {
+            media.setBreaks( wrapper.getParcelableArrayList( KEY_BREAKS ) );
+        }
 
         return media;
     }

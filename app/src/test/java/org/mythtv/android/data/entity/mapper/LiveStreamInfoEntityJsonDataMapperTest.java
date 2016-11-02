@@ -27,7 +27,7 @@ public class LiveStreamInfoEntityJsonDataMapperTest extends ApplicationTestCase 
     private static final String JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST = "{\"LiveStreamInfoList\": {\"LiveStreamInfos\": [{\"Id\": \"128\", \"Width\": \"1280\", \"Height\": \"720\", \"Bitrate\": \"2000000\", \"AudioBitrate\": \"128000\", \"SegmentSize\": \"4\", \"MaxSegments\": \"0\", \"StartSegment\": \"1\", \"CurrentSegment\": \"434\", \"SegmentCount\": \"434\", \"PercentComplete\": \"100\", \"Created\": \"2015-10-17T03:03:30Z\", \"LastModified\": \"2015-10-17T03:03:30Z\", \"RelativeURL\": \"\\/StorageGroup\\/Streaming\\/2006_20151017003100.ts.1280x720_2000kV_128kA.m3u8\", \"FullURL\": \"http:\\/\\/192.168.10.200:6544\\/StorageGroup\\/Streaming\\/2006_20151017003100.ts.1280x720_2000kV_128kA.m3u8\", \"StatusStr\": \"Completed\", \"StatusInt\": \"3\", \"StatusMessage\": \"Transcoding Completed\", \"SourceFile\": \"\\/var\\/lib\\/mythtv\\/recordings\\/2006_20151017003100.ts\", \"SourceHost\": \"mythcenter\", \"SourceWidth\": \"1280\", \"SourceHeight\": \"720\", \"AudioOnlyBitrate\": \"64000\"},{\"Id\": \"110\", \"Width\": \"1280\", \"Height\": \"720\", \"Bitrate\": \"800000\", \"AudioBitrate\": \"64000\", \"SegmentSize\": \"4\", \"MaxSegments\": \"0\", \"StartSegment\": \"1\", \"CurrentSegment\": \"1304\", \"SegmentCount\": \"1304\", \"PercentComplete\": \"100\", \"Created\": \"2015-04-27T03:56:34Z\", \"LastModified\": \"2015-04-27T03:56:34Z\", \"RelativeURL\": \"\\/StorageGroup\\/Streaming\\/Animal House.mkv.1280x720_800kV_64kA.m3u8\", \"FullURL\": \"http:\\/\\/192.168.10.200:6544\\/StorageGroup\\/Streaming\\/Animal House.mkv.1280x720_800kV_64kA.m3u8\", \"StatusStr\": \"Completed\", \"StatusInt\": \"3\", \"StatusMessage\": \"Transcoding Completed\", \"SourceFile\": \"\\/var\\/lib\\/mythtv\\/videos\\/library\\/Movies\\/Animal House\\/Animal House.mkv\", \"SourceHost\": \"mythcenter\", \"SourceWidth\": \"1920\", \"SourceHeight\": \"1088\", \"AudioOnlyBitrate\": \"64000\"}]}}";
     private static final String JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST_BAD = "{\"LiveStreamInfoList\": {\"LiveStreamInfos\": [{\"Id\": \"128\", \"Width\": \"1280\", \"Height\": \"720\", \"Bitrate\": \"2000000\", \"AudioBitrate\": \"128000\", \"SegmentSize\": \"4\", \"MaxSegments\": \"0\", \"StartSegment\": \"1\", \"CurrentSegment\": \"434\", \"SegmentCount\": \"434\", \"PercentComplete\": \"100\", \"Created\": \"2015-10-17T03:03:30Z\", \"LastModified\": \"2015-10-17T03:03:30Z\", \"RelativeURL\": \"\\/StorageGroup\\/Streaming\\/2006_20151017003100.ts.1280x720_2000kV_128kA.m3u8\", \"FullURL\": \"http:\\/\\/192.168.10.200:6544\\/StorageGroup\\/Streaming\\/2006_20151017003100.ts.1280x720_2000kV_128kA.m3u8\", \"StatusStr\": \"Completed\", \"StatusInt\": \"3\", \"StatusMessage\": \"Transcoding Completed\", \"SourceFile\": \"\\/var\\/lib\\/mythtv\\/recordings\\/2006_20151017003100.ts\", \"SourceHost\": \"mythcenter\", \"SourceWidth\": \"1280\", \"SourceHeight\": \"720\", \"AudioOnlyBitrate\": \"64000\"},{\"Id\": \"110\", \"Width\": \"1280\", \"Height\": \"720\", \"Bitrate\": \"800000\", \"AudioBitrate\": \"64000\", \"SegmentSize\": \"4\", \"MaxSegments\": \"0\", \"StartSegment\": \"1\", \"CurrentSegment\": \"1304\", \"SegmentCount\": \"1304\", \"PercentComplete\": \"100\", \"Created\": \"2015-04-27T03:56:34Z\", \"LastModified\": \"2015-04-27T03:56:34Z\", \"RelativeURL\": \"\\/StorageGroup\\/Streaming\\/Animal House.mkv.1280x720_800kV_64kA.m3u8\", \"FullURL\": \"http:\\/\\/192.168.10.200:6544\\/StorageGroup\\/Streaming\\/Animal House.mkv.1280x720_800kV_64kA.m3u8\", \"StatusStr\": \"Completed\", \"StatusInt\": \"3\", \"StatusMessage\": \"Transcoding Completed\", \"SourceFile\": \"\\/var\\/lib\\/mythtv\\/videos\\/library\\/Movies\\/Animal House\\/Animal House.mkv\", \"SourceHost\": \"mythcenter\", \"SourceWidth\": \"1920\", \"SourceHeight\": \"1088\", \"AudioOnlyBitrate\": ";
 
-    private LiveStreamInfoEntityJsonMapper LiveStreamInfoEntityJsonMapper;
+    private LiveStreamInfoEntityJsonMapper mapper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -39,14 +39,14 @@ public class LiveStreamInfoEntityJsonDataMapperTest extends ApplicationTestCase 
     @Before
     public void setUp() {
 
-        LiveStreamInfoEntityJsonMapper = new LiveStreamInfoEntityJsonMapper( gson );
+        mapper = new LiveStreamInfoEntityJsonMapper( gson );
 
     }
 
     @Test
     public void testTransformLiveStreamInfoEntityHappyCase() {
 
-        LiveStreamInfoEntity liveStreamInfoEntity = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO );
+        LiveStreamInfoEntity liveStreamInfoEntity = mapper.transformLiveStreamInfoEntity( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO );
 
         assertThat( liveStreamInfoEntity.getId(), is( 128 ) );
         assertThat( liveStreamInfoEntity.getWidth(), is( 1280 ) );
@@ -77,14 +77,14 @@ public class LiveStreamInfoEntityJsonDataMapperTest extends ApplicationTestCase 
     @Test( expected = JsonSyntaxException.class )
     public void testTransformLiveStreamInfoEntityBadJson() {
 
-        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_BAD );
+        mapper.transformLiveStreamInfoEntity( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_BAD );
 
     }
 
     @Test
     public void testTransformLiveStreamInfoEntityCollectionHappyCase() {
 
-        Collection<LiveStreamInfoEntity> LiveStreamInfoEntityCollection = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST );
+        Collection<LiveStreamInfoEntity> LiveStreamInfoEntityCollection = mapper.transformLiveStreamInfoEntityCollection( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST );
 
         assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).getId(), is( 128 ) );
         assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).getWidth(), is( 1280 ) );
@@ -99,7 +99,7 @@ public class LiveStreamInfoEntityJsonDataMapperTest extends ApplicationTestCase 
     @Test( expected = JsonSyntaxException.class )
     public void testTransformLiveStreamInfoEntityCollectionBadJson() {
 
-        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST_BAD );
+        mapper.transformLiveStreamInfoEntityCollection( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST_BAD );
 
     }
 

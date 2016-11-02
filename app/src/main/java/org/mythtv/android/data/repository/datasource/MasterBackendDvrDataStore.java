@@ -21,6 +21,7 @@ package org.mythtv.android.data.repository.datasource;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.CommercialBreakEntity;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
@@ -161,6 +162,15 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
         Log.d( TAG, "getBookmark : recordedId=" + recordedId + ", offsetType=" + offsetType );
 
         return this.api.getBookmark( recordedId, -1, null, offsetType );
+    }
+
+    @Override
+    public Observable<List<CommercialBreakEntity>> getComercialBreaks( int recordedId, String offsetType ) {
+        Log.d( TAG, "getComercialBreaks : enter" );
+
+        Log.d( TAG, "getComercialBreaks : recordedId=" + recordedId + ", offsetType=" + offsetType );
+
+        return this.api.getRecordedCommBreakList( recordedId, -1, null, offsetType );
     }
 
 }

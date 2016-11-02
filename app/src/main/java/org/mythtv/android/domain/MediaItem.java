@@ -2,6 +2,8 @@ package org.mythtv.android.domain;
 
 import org.joda.time.DateTime;
 
+import java.util.List;
+
 /**
  * Created by dmfrey on 7/10/16.
  */
@@ -41,6 +43,8 @@ public class MediaItem {
 
     private String updateSavedBookmarkUrl;
     private long bookmark;
+
+    private List<CommercialBreak> breaks;
 
     public MediaItem() {
     }
@@ -388,6 +392,17 @@ public class MediaItem {
 
     }
 
+    public List<CommercialBreak> getBreaks() {
+
+        return breaks;
+    }
+
+    public void setBreaks( List<CommercialBreak> breaks ) {
+
+        this.breaks = breaks;
+
+    }
+
     @Override
     public boolean equals( Object o ) {
         if( this == o ) return true;
@@ -440,6 +455,7 @@ public class MediaItem {
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
                 ", bookmark=" + bookmark +
+                ", breaks=" + breaks +
                 '}';
     }
 

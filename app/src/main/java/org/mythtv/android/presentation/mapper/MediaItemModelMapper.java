@@ -1,7 +1,9 @@
 package org.mythtv.android.presentation.mapper;
 
+import org.mythtv.android.domain.CommercialBreak;
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.presentation.internal.di.PerActivity;
+import org.mythtv.android.presentation.model.CommercialBreakModel;
 import org.mythtv.android.presentation.model.MediaItemModel;
 
 import java.util.ArrayList;
@@ -49,6 +51,18 @@ public class MediaItemModelMapper {
         mediaItemModel.setMarkWatchedUrl( mediaItem.getMarkWatchedUrl() );
         mediaItemModel.setUpdateSavedBookmarkUrl( mediaItem.getUpdateSavedBookmarkUrl() );
         mediaItemModel.setBookmark( mediaItem.getBookmark() );
+
+        List<CommercialBreakModel> breaks = new ArrayList<>();
+        if( null != mediaItem.getBreaks() ) {
+
+            for( CommercialBreak commercialBreak : mediaItem.getBreaks() ) {
+
+                breaks.add( CommercialBreakModel.fromCommercialBreak( commercialBreak ) );
+
+            }
+
+        }
+        mediaItemModel.setBreaks( breaks );
 
         return mediaItemModel;
     }

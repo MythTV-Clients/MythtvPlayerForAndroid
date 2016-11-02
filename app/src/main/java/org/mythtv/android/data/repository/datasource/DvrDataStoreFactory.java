@@ -25,6 +25,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
+import org.mythtv.android.data.entity.mapper.CutListEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
@@ -59,7 +60,7 @@ public class DvrDataStoreFactory {
 
         this.searchDataStoreFactory = searchDataStoreFactory;
 
-        api = new DvrApiImpl( context.getApplicationContext(), sharedPreferences, okHttpClient, new TitleInfoEntityJsonMapper( gson ), new ProgramEntityJsonMapper( gson ), new EncoderEntityJsonMapper( gson ), new BooleanJsonMapper(), new LongJsonMapper() );
+        api = new DvrApiImpl( context.getApplicationContext(), sharedPreferences, okHttpClient, new TitleInfoEntityJsonMapper( gson ), new ProgramEntityJsonMapper( gson ), new EncoderEntityJsonMapper( gson ), new BooleanJsonMapper(), new LongJsonMapper(), new CutListEntityJsonMapper( gson ));
 
         Log.d( TAG, "initialize : exit" );
     }

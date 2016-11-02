@@ -4,9 +4,11 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.mythtv.android.data.entity.ArtworkInfoEntity;
 import org.mythtv.android.data.entity.CastMemberEntity;
+import org.mythtv.android.data.entity.CommercialBreakEntity;
 import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
+import org.mythtv.android.domain.CommercialBreak;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
 
@@ -138,6 +140,20 @@ public class MediaItemDataMapper {
         mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
         mediaItem.setBookmark( programEntity.getBookmark() );
 
+        if( null != programEntity.getBreaks() ) {
+
+            List<CommercialBreak> breaks = new ArrayList<>();
+
+            for( CommercialBreakEntity commercialBreakEntity : programEntity.getBreaks() ) {
+
+                breaks.add( commercialBreakEntity.toCommercialBreak() );
+
+            }
+
+            mediaItem.setBreaks( breaks );
+
+        }
+
         return mediaItem;
     }
 
@@ -202,6 +218,8 @@ public class MediaItemDataMapper {
 
         mediaItem.setWatched( videoEntity.isWatched() );
         mediaItem.setMarkWatchedUrl( "/Video/UpdateVideoWatchedStatus?Id=%s&Watched=true" );
+
+        mediaItem.setBreaks( new ArrayList<>() );
 
         return mediaItem;
     }

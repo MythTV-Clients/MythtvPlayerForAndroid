@@ -23,6 +23,8 @@ import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import java.util.List;
+
 //import lombok.Data;
 
 /*
@@ -118,6 +120,8 @@ public class ProgramEntity {
     private LiveStreamInfoEntity liveStreamInfoEntity;
 
     private long bookmark;
+
+    private List<CommercialBreakEntity> breaks;
 
     public ProgramEntity() {
     }
@@ -401,6 +405,17 @@ public class ProgramEntity {
 
     }
 
+    public List<CommercialBreakEntity> getBreaks() {
+
+        return breaks;
+    }
+
+    public void setBreaks( List<CommercialBreakEntity> breaks ) {
+
+        this.breaks = breaks;
+
+    }
+
     @Override
     public String toString() {
         return "ProgramEntity{" +
@@ -434,6 +449,7 @@ public class ProgramEntity {
                 ", cast=" + cast +
                 ", liveStreamInfoEntity=" + liveStreamInfoEntity +
                 ", bookmark=" + bookmark +
+                ", breaks=" + breaks +
                 '}';
     }
 

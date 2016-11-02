@@ -19,6 +19,7 @@
 package org.mythtv.android.data.net;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.CommercialBreakEntity;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
@@ -40,6 +41,7 @@ public interface DvrApi {
     String ENCODER_LIST_BASE_URL = "/Dvr/GetEncoderList";
     String UPDATE_RECORDED_WATCHED_STATUS_URL = "/Dvr/UpdateRecordedWatchedStatus";
     String BOOKMARK_BASE_URL = "/Dvr/GetSavedBookmark";
+    String RECORDED_COMM_BREAK_URL = "/Dvr/GetRecordedCommBreak";
 
     String DESCENDING_QS = "Descending=%s";
     String START_INDEX_QS = "StartIndex=%s";
@@ -80,5 +82,7 @@ public interface DvrApi {
     Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
 
     Observable<Long> getBookmark( final int recordedId, final int chanId, final DateTime startTime, final String offsetType );
+
+    Observable<List<CommercialBreakEntity>> getRecordedCommBreakList(final int recordedId, final int chanId, final DateTime startTime, final String offsetType );
 
 }
