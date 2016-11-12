@@ -61,6 +61,7 @@ import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.SharedPreferencesComponent;
+import org.mythtv.android.presentation.model.CommercialBreakModel;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.utils.Utils;
 
@@ -70,6 +71,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -80,17 +83,46 @@ import okhttp3.Request;
 public class LocalPlayerActivity extends AppCompatActivity {
 
     private static final String TAG = "LocalPlayerActivity";
-    private VideoView mVideoView;
-    private TextView mTitleView;
-    private TextView mDescriptionView;
-    private TextView mStartText;
-    private TextView mEndText;
-    private SeekBar mSeekbar;
-    private ImageView mPlayPause;
-    private ProgressBar mLoading;
-    private View mControllers;
-    private View mContainer;
-    private ImageView mCoverArt;
+
+    @BindView( R.id.videoView1 )
+    VideoView mVideoView;
+
+    @BindView( R.id.textView1 )
+    TextView mTitleView;
+
+    @BindView( R.id.textView2 )
+    TextView mDescriptionView;
+
+    @BindView( R.id.startText )
+    TextView mStartText;
+
+    @BindView( R.id.endText )
+    TextView mEndText;
+
+    @BindView( R.id.seekBar1 )
+    SeekBar mSeekbar;
+
+    @BindView( R.id.imageView2 )
+    ImageView mPlayPause;
+
+    @BindView( R.id.progressBar1 )
+    ProgressBar mLoading;
+
+    @BindView( R.id.controllers )
+    View mControllers;
+
+    @BindView( R.id.container )
+    View mContainer;
+
+    @BindView( R.id.coverArtView )
+    ImageView mCoverArt;
+
+    @BindView( R.id.textView3 )
+    TextView mAuthorView;
+
+    @BindView( R.id.play_circle )
+    ImageButton mPlayCircle;
+
     private Timer mSeekbarTimer;
     private Timer mControllersTimer;
     private Timer mBookmarkTimer;
@@ -101,8 +133,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
     private MediaItemModel mSelectedMedia;
     private boolean mControllersVisible;
     private int mDuration;
-    private TextView mAuthorView;
-    private ImageButton mPlayCircle;
     private PlaybackLocation mLocation;
     private CastContext mCastContext;
     private CastSession mCastSession;
@@ -137,9 +167,12 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
+        Log.v( TAG, "onCreate : enter" );
         super.onCreate( savedInstanceState );
 
         setContentView( R.layout.local_player_activity );
+
+        ButterKnife.bind( this );
 
         okHttpClient = ( (AndroidApplication) getApplication() ).getNetComponent().okHttpClient();
 
@@ -156,17 +189,20 @@ public class LocalPlayerActivity extends AppCompatActivity {
         // see what we need to play and where
         Bundle bundle = getIntent().getExtras();
         if( null != bundle ) {
+            Log.v( TAG, "onCreate : bundle != null" );
 
             mSelectedMedia = MediaItemModel.fromBundle( getIntent().getBundleExtra( "media" ) );
 
             setupActionBar();
+            setBookmark();
 
             boolean shouldStartPlayback = bundle.getBoolean( "shouldStart" );
 
             mVideoView.setVideoURI( Uri.parse( getMasterBackendUrl() + mSelectedMedia.getUrl() ) );
-            Log.d( TAG, "Setting url of the VideoView to: " + ( getMasterBackendUrl() + mSelectedMedia.getUrl() ) );
+            Log.d( TAG, "onCreate : Setting url of the VideoView to [" + ( getMasterBackendUrl() + mSelectedMedia.getUrl() ) + "]" );
 
             if( shouldStartPlayback ) {
+                Log.d( TAG, "onCreate : auto start playback" );
 
                 // this will be the case only if we are coming from the
                 // CastControllerActivity by disconnecting from a device
@@ -174,34 +210,40 @@ public class LocalPlayerActivity extends AppCompatActivity {
                 updatePlaybackLocation( PlaybackLocation.LOCAL );
                 updatePlayButton( mPlaybackState );
 
-                if( mSelectedMedia.getBookmark() > 0 ) {
-
-                    long startPosition = mSelectedMedia.getBookmark();
-                    mVideoView.seekTo( (int) startPosition );
-
-                }
+//                if( mSelectedMedia.getBookmark() > 0 ) {
+//                    Log.d( TAG, "onCreate : setting bookmark, bookmark=" + mSelectedMedia.getBookmark() );
+//
+//                    long startPosition = mSelectedMedia.getBookmark();
+//                    mVideoView.seekTo( (int) startPosition );
+//                    mSeekbar.setProgress( (int) startPosition );
+//
+//                }
 
                 mVideoView.start();
                 startControllersTimer();
 
             } else {
+                Log.v( TAG, "onCreate : don't auto start playback" );
 
                 // we should load the video but pause it
                 // and show the album art.
                 if( null != mCastSession && mCastSession.isConnected() ) {
+                    Log.v( TAG, "onCreate : playback is REMOTE" );
 
                     updatePlaybackLocation( PlaybackLocation.REMOTE );
 
                 } else {
+                    Log.v( TAG, "onCreate : playback is LOCAL" );
 
                     updatePlaybackLocation( PlaybackLocation.LOCAL );
 
-                    if( mSelectedMedia.getBookmark() > 0 ) {
-
-                        long startPosition = mSelectedMedia.getBookmark();
-                        mVideoView.seekTo( (int) startPosition );
-
-                    }
+//                    if( mSelectedMedia.getBookmark() > 0 ) {
+//                        Log.d( TAG, "onCreate : setting bookmark, bookmark=" + mSelectedMedia.getBookmark() );
+//
+//                        long startPosition = mSelectedMedia.getBookmark();
+//                        mVideoView.seekTo( (int) startPosition );
+//
+//                    }
 
                 }
 
@@ -218,9 +260,12 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         }
 
+        Log.v( TAG, "onCreate : exit" );
     }
 
     private void setupCastListener() {
+        Log.v( TAG, "setupCastListener : enter" );
+
         mSessionManagerListener = new SessionManagerListener<CastSession>() {
 
             @Override
@@ -313,9 +358,19 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         };
 
+        Log.v( TAG, "setupCastListener : exit" );
     }
 
+    /**
+     * Sets various metadata based on the playback location
+     * {@code PlaybackLocation}
+     *   - LOCAL : playing on device
+     *   - REMOTE : playing on cast device
+     *
+     * @param location
+     */
     private void updatePlaybackLocation( PlaybackLocation location ) {
+        Log.v( TAG, "updatePlaybackLocation : enter" );
 
         mLocation = location;
         if( location == PlaybackLocation.LOCAL ) {
@@ -340,9 +395,11 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         }
 
+        Log.v( TAG, "updatePlaybackLocation : exit" );
     }
 
     private void play( int position ) {
+        Log.v( TAG, "play : enter" );
 
         startControllersTimer();
 
@@ -371,15 +428,18 @@ public class LocalPlayerActivity extends AppCompatActivity {
         restartTrickplayTimer();
         restartBookmarkTimer();;
 
+        Log.v( TAG, "play : exit" );
     }
 
     private void togglePlayback() {
+        Log.v( TAG, "togglePlayback : enter" );
 
         stopControllersTimer();
 
         switch( mPlaybackState ) {
 
             case PAUSED :
+                Log.v( TAG, "togglePlayback : PAUSED" );
 
                 switch( mLocation ) {
 
@@ -411,6 +471,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
                 break;
 
             case PLAYING :
+                Log.v( TAG, "togglePlayback : PLAYING" );
 
                 mPlaybackState = PlaybackState.PAUSED;
                 mVideoView.pause();
@@ -418,6 +479,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
                 break;
 
             case IDLE :
+                Log.v( TAG, "togglePlayback : IDLE" );
 
                 switch( mLocation ) {
 
@@ -425,12 +487,12 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
                         mVideoView.setVideoURI( Uri.parse( getMasterBackendUrl() + mSelectedMedia.getUrl() ) );
 
-                        if( mSelectedMedia.getBookmark() > 0 ) {
-
-                            long seek = mSelectedMedia.getBookmark();
-                            mVideoView.seekTo( (int) seek );
-
-                        }
+//                        if( mSelectedMedia.getBookmark() > 0 ) {
+//
+//                            long seek = mSelectedMedia.getBookmark();
+//                            mVideoView.seekTo( (int) seek );
+//
+//                        }
 
                         mVideoView.start();
                         mPlaybackState = PlaybackState.PLAYING;
@@ -464,39 +526,58 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         updatePlayButton( mPlaybackState );
 
+        Log.v( TAG, "togglePlayback : exit" );
     }
 
     private void loadRemoteMedia( long position, boolean autoPlay ) {
+        Log.v( TAG, "loadRemoteMedia : enter" );
 
         if( null == mCastSession ) {
 
+            Log.v( TAG, "loadRemoteMedia : exit, mCastSession not connected!" );
             return;
         }
 
         RemoteMediaClient remoteMediaClient = mCastSession.getRemoteMediaClient();
         if( null == remoteMediaClient ) {
 
+            Log.v( TAG, "loadRemoteMedia : remoteMediaClient not connected!" );
             return;
         }
 
         remoteMediaClient.load( buildMediaInfo(), autoPlay, position );
         remoteMediaClient.addProgressListener( progressListener, 60000 );
 
-        if( mSelectedMedia.getBookmark() > 0 ) {
-
-            remoteMediaClient.seek( mSelectedMedia.getBookmark() );
-
+//        if( mSelectedMedia.getBookmark() > 0 ) {
+//
+//            remoteMediaClient.seek( mSelectedMedia.getBookmark() );
+//
 //            long seekPosition = ( mSelectedMedia.getBookmark() / 1000 / 60 );
 //            mSeekbar.setProgress( (int) seekPosition, true );
-
-        }
+//
+//        }
 
         Intent intent = new Intent( this, ExpandedControlsActivity.class );
         startActivity( intent );
 
+        Log.v( TAG, "loadRemoteMedia : exit" );
+    }
+
+    private void setBookmark() {
+        Log.v( TAG, "setBookmark : enter" );
+
+        if( mSelectedMedia.getBookmark() > 0 ) {
+            Log.d( TAG, "setBookmark : setting bookmark to " + mSelectedMedia.getBookmark() );
+
+            mSeekbar.setProgress( (int) mSelectedMedia.getBookmark() );
+
+        }
+
+        Log.v( TAG, "setBookmark : exit" );
     }
 
     private void setCoverArtStatus( String url ) {
+        Log.v( TAG, "setCoverArtStatus : enter" );
 
         if( null != url ) {
 
@@ -511,69 +592,77 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         }
 
+        Log.v( TAG, "setCoverArtStatus : exit" );
     }
 
     private void stopTrickplayTimer() {
-        Log.d( TAG, "Stopped TrickPlay Timer" );
+        Log.v( TAG, "stopTrickplayTimer : enter" );
 
         if( null != mSeekbarTimer ) {
+            Log.d( TAG, "stopTrickplayTimer : cancelling mSeekbarTimer" );
 
             mSeekbarTimer.cancel();
 
         }
 
+        Log.v( TAG, "stopTrickplayTimer : exit" );
     }
 
     private void stopBookmarkTimer() {
-        Log.d( TAG, "Stopped Bookmark Timer" );
+        Log.v( TAG, "stopBookmarkTimer : enter" );
 
         if( null != mBookmarkTimer ) {
+            Log.d( TAG, "stopBookmarkTimer : cancelling mBookmarkTimer" );
 
             mBookmarkTimer.cancel();
 
         }
 
+        Log.v( TAG, "stopBookmarkTimer : exit" );
     }
 
     private void restartTrickplayTimer() {
+        Log.v( TAG, "restartTrickplayTimer : enter" );
 
         stopTrickplayTimer();
 
         mSeekbarTimer = new Timer();
         mSeekbarTimer.scheduleAtFixedRate( new UpdateSeekbarTask(), 100, 1000 );
-        Log.d( TAG, "Restarted TrickPlay Timer" );
 
+        Log.v( TAG, "restartTrickplayTimer : exit" );
     }
 
     private void restartBookmarkTimer() {
+        Log.v( TAG, "restartBookmarkTimer : enter" );
 
         stopBookmarkTimer();
 
         mBookmarkTimer = new Timer();
         mBookmarkTimer.scheduleAtFixedRate( new UpdateBookmarkTimerTask(), 1000, 60000 );
-        Log.d( TAG, "Restarted Bookmark Timer" );
 
+        Log.v( TAG, "restartBookmarkTimer : exit" );
     }
 
     private void stopControllersTimer() {
+        Log.v( TAG, "stopControllersTimer : enter" );
 
         if( null != mControllersTimer ) {
+            Log.d( TAG, "stopControllersTimer : cancelling mControllersTimer" );
 
             mControllersTimer.cancel();
 
         }
 
+        Log.v( TAG, "stopControllersTimer : exit" );
     }
 
     private void startControllersTimer() {
+        Log.v( TAG, "startControllersTimer : enter" );
 
-        if( null != mControllersTimer ) {
-
-            mControllersTimer.cancel();
-
-        }
+        stopControllersTimer();
 
         if( mLocation == PlaybackLocation.REMOTE ) {
+            Log.v( TAG, "startControllersTimer : exit, playback is REMOTE" );
 
             return;
         }
@@ -581,10 +670,12 @@ public class LocalPlayerActivity extends AppCompatActivity {
         mControllersTimer = new Timer();
         mControllersTimer.schedule( new HideControllersTask(), 5000 );
 
+        Log.v( TAG, "startControllersTimer : exit" );
     }
 
     // should be called from the main thread
     private void updateControllersVisibility( boolean show ) {
+        Log.v( TAG, "updateControllersVisibility : enter" );
 
         if( show ) {
 
@@ -603,27 +694,21 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         }
 
+        Log.v( TAG, "updateControllersVisibility : exit" );
     }
 
     @Override
     protected void onPause() {
-        Log.d( TAG, "onPause() was called" );
+        Log.v( TAG, "onPause : enter" );
         super.onPause();
 
         if( mLocation == PlaybackLocation.LOCAL ) {
+            Log.v( TAG, "onPause : playback is LOCAL" );
 
-            if( null != mSeekbarTimer ) {
+            stopTrickplayTimer();
+            mSeekbarTimer = null;
 
-                mSeekbarTimer.cancel();
-                mSeekbarTimer = null;
-
-            }
-
-            if( null != mControllersTimer ) {
-
-                mControllersTimer.cancel();
-
-            }
+            stopControllersTimer();
 
             // since we are playing locally, we need to stop the playback of
             // video (if user is not watching, pause it!)
@@ -633,45 +718,47 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         }
 
-        if( null != mBookmarkTimer ) {
+        stopBookmarkTimer();
+        mBookmarkTimer = null;
 
-            mBookmarkTimer.cancel();
-            mBookmarkTimer = null;
-
-        }
-
+        Log.d( TAG, "onPause : removing cast session manager listener" );
         mCastContext.getSessionManager().removeSessionManagerListener( mSessionManagerListener, CastSession.class );
 
+        Log.v( TAG, "onPause : exit" );
     }
 
     @Override
     protected void onStop() {
-        Log.d( TAG, "onStop() was called" );
+        Log.v( TAG, "onStop : enter" );
         super.onStop();
 
+        Log.v( TAG, "onStop : exit" );
     }
 
     @Override
     protected void onDestroy() {
-        Log.d( TAG, "onDestroy() is called" );
+        Log.v( TAG, "onDestroy : enter" );
 
         stopControllersTimer();
         stopTrickplayTimer();
+        stopBookmarkTimer();
 
         super.onDestroy();
 
+        Log.v( TAG, "onDestroy : exit" );
     }
 
     @Override
     protected void onStart() {
-        Log.d( TAG, "onStart was called" );
+        Log.v( TAG, "onStart : enter" );
         super.onStart();
 
+        Log.v( TAG, "onStart : exit" );
     }
 
     @Override
     protected void onResume() {
-        Log.d( TAG, "onResume() was called" );
+        Log.v( TAG, "onResume : enter" );
 
         mCastContext.getSessionManager().addSessionManagerListener( mSessionManagerListener, CastSession.class );
 
@@ -687,18 +774,21 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         super.onResume();
 
+        Log.v( TAG, "onResume : exit" );
     }
 
     private class HideControllersTask extends TimerTask {
 
         @Override
         public void run() {
+            Log.v( TAG, "HideControllersTask.run : enter" );
 
             mHandler.post( () -> {
                 updateControllersVisibility( false );
                 mControllersVisible = false;
             });
 
+            Log.v( TAG, "HideControllersTask.run : exit" );
         }
     }
 
@@ -706,18 +796,53 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         @Override
         public void run() {
+            Log.v( TAG, "UpdateSeekbarTask.run : enter" );
+
+            if( !mSelectedMedia.getMedia().equals( Media.PROGRAM ) ) {
+
+                Log.v( TAG, "UpdateSeekbarTask.doInBackground : exit, not for videos" );
+                return;
+            }
 
             mHandler.post( () -> {
 
                 if( mLocation == PlaybackLocation.LOCAL ) {
+                    Log.d( TAG, "UpdateSeekbarTask.run : playback is LOCAL" );
 
                     int currentPos = mVideoView.getCurrentPosition();
+                    boolean next = false;
+
+                    for( CommercialBreakModel commercialBreakModel : mSelectedMedia.getBreaks() ) {
+
+                        if( next ) {
+                            Log.i( TAG, "UpdateSeekbarTask.run : move to start of next commercial break" );
+
+                            currentPos = (int) commercialBreakModel.getStart();
+                            mVideoView.seekTo( currentPos );
+
+                        }
+
+                        if( currentPos < commercialBreakModel.getEnd() ) {
+                            Log.d( TAG, "UpdateSeekbarTask : next commercialBreak not reached, currentPos=" + currentPos + "duration=" + mDuration + ", commercialBreakModel" + commercialBreakModel.toString() );
+
+                            break;
+
+                        } else {
+                            Log.d( TAG, "UpdateSeekbarTask : next commercialBreak, currentPos=" + currentPos + "duration=" + mDuration + ", commercialBreakModel" + commercialBreakModel.toString() );
+
+                            next = true;
+
+                        }
+
+                    }
+
                     updateSeekbar( currentPos, mDuration );
 
                 }
 
             });
 
+            Log.v( TAG, "UpdateSeekbarTask.run : exit" );
         }
 
     }
@@ -726,10 +851,18 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         @Override
         public void run() {
+            Log.v( TAG, "UpdateBookmarkTimerTask.run : enter" );
+
+            if( !mSelectedMedia.getMedia().equals( Media.PROGRAM ) ) {
+
+                Log.v( TAG, "UpdateBookmarkTimerTask.doInBackground : exit, not for videos" );
+                return;
+            }
 
             mHandler.post( () -> {
 
                 if( mLocation == PlaybackLocation.LOCAL ) {
+                    Log.d( TAG, "UpdateBookmarkTimerTask.run : playback is LOCAL" );
 
                     long currentPos = mVideoView.getCurrentPosition();
                     new UpdateBookmarkAsyncTask().execute( currentPos );
@@ -738,6 +871,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
             });
 
+            Log.v( TAG, "UpdateBookmarkTimerTask.run : exit" );
         }
 
     }
@@ -748,6 +882,13 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground( Long... params ) {
+            Log.v( TAG, "UpdateBookmarkAsyncTask.doInBackground : enter" );
+
+            if( !mSelectedMedia.getMedia().equals( Media.PROGRAM ) ) {
+
+                Log.v( TAG, "UpdateBookmarkAsyncTask.doInBackground : exit, not for videos" );
+                return null;
+            }
 
             long currentPos = params[ 0 ];
             Log.d( TAG, "UpdateBookmarkAsyncTask.doInBackground : url=" + ( getMasterBackendUrl() + mSelectedMedia.getUpdateSavedBookmarkUrl() ) );
@@ -774,20 +915,22 @@ public class LocalPlayerActivity extends AppCompatActivity {
             try {
 
                 String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
+                Log.d( TAG, "UpdateBookmarkAsyncTask.doInBackground : result=" + result );
 
             } catch( IOException e ) {
 
-                Log.e( TAG, "doInBackground : error", e );
+                Log.e( TAG, "UpdateBookmarkAsyncTask.doInBackground : error", e );
 
             }
 
+            Log.v( TAG, "UpdateBookmarkAsyncTask.doInBackground : exit" );
             return null;
         }
 
     }
 
     private void setupControlsCallbacks() {
+        Log.v( TAG, "setupControlsCallbacks : enter" );
 
         mVideoView.setOnErrorListener( ( mp, what, extra ) -> {
             Log.e( TAG, "OnErrorListener.onError(): VideoView encountered an " + "error, what: " + what + ", extra: " + extra );
@@ -817,15 +960,24 @@ public class LocalPlayerActivity extends AppCompatActivity {
         });
 
         mVideoView.setOnPreparedListener( mp -> {
-            Log.d( TAG, "onPrepared is reached" );
+            Log.d( TAG, "mVideoView.onPrepared : enter" );
 
             mDuration = mp.getDuration();
             mEndText.setText( Utils.formatMillis( mDuration ) );
             mSeekbar.setMax( mDuration );
 
+            if( mSelectedMedia.getBookmark() > 0 ) {
+                Log.d( TAG, "mVideoView.onPrepared : updating bookmark, bookmark=" + mSelectedMedia.getBookmark() + ", mDuration=" + mDuration );
+
+                mVideoView.seekTo( (int) mSelectedMedia.getBookmark() );
+                mSeekbar.setProgress( (int) mSelectedMedia.getBookmark() );
+
+            }
+
             restartTrickplayTimer();
             restartBookmarkTimer();
 
+            Log.d( TAG, "mVideoView.onPrepared : exit" );
         });
 
         mVideoView.setOnCompletionListener( mp -> {
@@ -900,19 +1052,22 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         });
 
+        Log.v( TAG, "setupControlsCallbacks : exit" );
     }
 
     private void updateSeekbar( int position, int duration ) {
+        Log.v( TAG, "updateSeekbar : enter" );
 
         mSeekbar.setProgress( position );
         mSeekbar.setMax( duration );
         mStartText.setText( Utils.formatMillis( position ) );
         mEndText.setText( Utils.formatMillis( duration ) );
 
+        Log.v( TAG, "updateSeekbar : exit" );
     }
 
     private void updatePlayButton( PlaybackState state ) {
-        Log.d( TAG, "Controls: PlayBackState: " + state );
+        Log.v( TAG, "updatePlayButton : enter, PlayBackState=" + state );
 
         boolean isConnected = ( null != mCastSession ) && ( mCastSession.isConnected() || mCastSession.isConnecting() );
 
@@ -960,11 +1115,13 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         }
 
+        Log.v( TAG, "updatePlayButton : exit" );
     }
 
     @SuppressLint( "NewApi" )
     @Override
     public void onConfigurationChanged( Configuration newConfig ) {
+        Log.v( TAG, "onConfigurationChanged : enter" );
         super.onConfigurationChanged( newConfig );
 
         getSupportActionBar().show();
@@ -1000,9 +1157,11 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         }
 
+        Log.v( TAG, "onConfigurationChanged : exit" );
     }
 
     private void updateMetadata( boolean visible ) {
+        Log.v( TAG, "updateMetadata : enter" );
 
         Point displaySize;
         if( !visible ) {
@@ -1033,21 +1192,25 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         }
 
+        Log.v( TAG, "updateMetadata : exit" );
     }
 
     @Override
     public boolean onCreateOptionsMenu( Menu menu ) {
+        Log.v( TAG, "onCreateOptionsMenu : enter" );
         super.onCreateOptionsMenu( menu );
 
         getMenuInflater().inflate( R.menu.main, menu );
 
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton( getApplicationContext(), menu, R.id.media_route_menu_item );
 
+        Log.v( TAG, "onCreateOptionsMenu : exit" );
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
+        Log.v( TAG, "onOptionsItemSelected : enter" );
 
         Intent intent;
 //        if (item.getItemId() == R.id.action_settings) {
@@ -1057,41 +1220,51 @@ public class LocalPlayerActivity extends AppCompatActivity {
             ActivityCompat.finishAfterTransition( this );
         }
 
+        Log.v( TAG, "onOptionsItemSelected : exit" );
         return true;
     }
 
     private void setupActionBar() {
+        Log.v( TAG, "setupActionBar : enter" );
 
         Toolbar toolbar = (Toolbar) findViewById( R.id.toolbar );
         toolbar.setTitle( mSelectedMedia.getTitle() );
         setSupportActionBar( toolbar );
         getSupportActionBar().setDisplayHomeAsUpEnabled( true );
 
+        Log.v( TAG, "setupActionBar : exit" );
     }
 
     private void loadViews() {
+        Log.v( TAG, "loadViews : enter" );
 
-        mVideoView = (VideoView) findViewById( R.id.videoView1 );
-        mTitleView = (TextView) findViewById( R.id.textView1 );
-        mDescriptionView = (TextView) findViewById( R.id.textView2 );
         mDescriptionView.setMovementMethod( new ScrollingMovementMethod() );
-        mAuthorView = (TextView) findViewById( R.id.textView3 );
-        mStartText = (TextView) findViewById( R.id.startText );
-        mStartText.setText(Utils.formatMillis( 0 ) );
-        mEndText = (TextView) findViewById( R.id.endText );
-        mSeekbar = (SeekBar) findViewById( R.id.seekBar1 );
-        mPlayPause = (ImageView) findViewById( R.id.imageView2 );
-        mLoading = (ProgressBar) findViewById( R.id.progressBar1 );
-        mControllers = findViewById( R.id.controllers ) ;
-        mContainer = findViewById( R.id.container );
-        mCoverArt = (ImageView) findViewById( R.id.coverArtView );
-        ViewCompat.setTransitionName( mCoverArt, getString(R.string.transition_image) );
-        mPlayCircle = (ImageButton) findViewById( R.id.play_circle );
+        mStartText.setText( Utils.formatMillis( 0 ) );
+        ViewCompat.setTransitionName( mCoverArt, getString(R.string.transition_image ) );
+
+//        mVideoView = (VideoView) findViewById( R.id.videoView1 );
+//        mTitleView = (TextView) findViewById( R.id.textView1 );
+//        mDescriptionView = (TextView) findViewById( R.id.textView2 );
+//        mDescriptionView.setMovementMethod( new ScrollingMovementMethod() );
+//        mAuthorView = (TextView) findViewById( R.id.textView3 );
+//        mStartText = (TextView) findViewById( R.id.startText );
+//        mStartText.setText( Utils.formatMillis( 0 ) );
+//        mEndText = (TextView) findViewById( R.id.endText );
+//        mSeekbar = (SeekBar) findViewById( R.id.seekBar1 );
+//        mPlayPause = (ImageView) findViewById( R.id.imageView2 );
+//        mLoading = (ProgressBar) findViewById( R.id.progressBar1 );
+//        mControllers = findViewById( R.id.controllers ) ;
+//        mContainer = findViewById( R.id.container );
+//        mCoverArt = (ImageView) findViewById( R.id.coverArtView );
+//        ViewCompat.setTransitionName( mCoverArt, getString(R.string.transition_image) );
+//        mPlayCircle = (ImageButton) findViewById( R.id.play_circle );
         mPlayCircle.setOnClickListener( v -> togglePlayback() );
 
+        Log.v( TAG, "loadViews : exit" );
     }
 
     private MediaInfo buildMediaInfo() {
+        Log.v( TAG, "buildMediaInfo : enter" );
 
         MediaMetadata movieMetadata = new MediaMetadata( MediaMetadata.MEDIA_TYPE_MOVIE );
 
@@ -1100,6 +1273,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
         movieMetadata.addImage( new WebImage( Uri.parse( getMasterBackendUrl() + mSelectedMedia.getCoverartUrl() ) ) );
         movieMetadata.addImage( new WebImage( Uri.parse( getMasterBackendUrl() + mSelectedMedia.getCoverartUrl() ) ) );
 
+        Log.v( TAG, "buildMediaInfo : exit" );
         return new MediaInfo.Builder( getMasterBackendUrl() + mSelectedMedia.getUrl() )
                 .setStreamType( MediaInfo.STREAM_TYPE_BUFFERED )
                 .setContentType( mSelectedMedia.getContentType() )
