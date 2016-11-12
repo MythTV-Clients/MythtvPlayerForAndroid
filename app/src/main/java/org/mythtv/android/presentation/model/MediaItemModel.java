@@ -568,7 +568,7 @@ public class MediaItemModel implements Serializable {
         wrapper.putLong( KEY_BOOKMARK, bookmark );
 
         if( null != breaks ) {
-            ArrayList parcel = new ArrayList( breaks );
+            ArrayList parcel = new ArrayList<>( breaks );
             wrapper.putParcelableArrayList( KEY_BREAKS, parcel );
         }
         return wrapper;
