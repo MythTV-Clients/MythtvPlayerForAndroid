@@ -26,8 +26,8 @@ android {
     def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     adbOptions {
         timeOutInMs 60000 // set timeout to 1 minute
@@ -43,7 +43,7 @@ android {
     defaultConfig {
 
         minSdkVersion 17
-        targetSdkVersion 24
+        targetSdkVersion 25
 
         jackOptions {
 
@@ -211,7 +211,7 @@ dependencies {
     compile "io.reactivex:rxjava:${rxJavaVersion}"
     compile "io.reactivex:rxandroid:${rxAndroidVersion}"
     compile "com.squareup.picasso:picasso:${picassoVersion}"
-    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2"
+    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
     compile "com.android.support:support-annotations:${androidSupportVersion}"
     compile "com.android.support:preference-v14:${androidSupportVersion}"
     compile "com.android.support:mediarouter-v7:${androidSupportVersion}"
@@ -226,6 +226,7 @@ dependencies {
     compile "com.googlecode.android-query:android-query:${androidQueryVersion}"
     compile "com.google.firebase:firebase-core:${firebaseVersion}"
     compile "com.google.firebase:firebase-crash:${firebaseVersion}"
+    compile "com.google.android.exoplayer:exoplayer:${exoplayerVersion}"
 
     compile "com.android.support:leanback-v17:${androidSupportVersion}"
     compile "com.android.support:preference-leanback-v17:${androidSupportVersion}"
