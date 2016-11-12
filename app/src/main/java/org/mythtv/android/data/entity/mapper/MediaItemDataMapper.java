@@ -96,7 +96,7 @@ public class MediaItemDataMapper {
             mediaItem.setLiveStreamId(programEntity.getLiveStreamInfoEntity().getId());
 
         }
-        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=1280", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
         mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
 
         List<String> castMembers = new ArrayList<>();
@@ -214,7 +214,7 @@ public class MediaItemDataMapper {
 
         }
 
-        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=1280", String.valueOf( videoEntity.getId() ) ) );
+        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=960", String.valueOf( videoEntity.getId() ) ) );
 
         mediaItem.setWatched( videoEntity.isWatched() );
         mediaItem.setMarkWatchedUrl( "/Video/UpdateVideoWatchedStatus?Id=%s&Watched=true" );
