@@ -21,12 +21,10 @@ package org.mythtv.android.presentation.view.activity.phone;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 
 import org.mythtv.android.R;
@@ -40,15 +38,12 @@ import org.mythtv.android.presentation.model.SeriesModel;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment;
 import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 
 /**
  * Created by dmfrey on 11/13/15.
  */
-public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener, SeriesListFragment.SeriesListListener {
+public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener, SeriesListFragment.SeriesListListener {
 
     private static final String TAG = VideoListActivity.class.getSimpleName();
 
@@ -60,13 +55,19 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
         return callingIntent;
     }
 
+    private MediaItemListFragment movieFragment;
+    private SeriesListFragment seriesListFragment;
+    private MediaItemListFragment homeVideoFragment;
+    private MediaItemListFragment musicVideoFragment;
+    private MediaItemListFragment adultFragment;
+
     private MediaComponent mediaComponent;
 
     @BindView( R.id.tabs )
     TabLayout mTabLayout;
 
-    @BindView( R.id.pager )
-    ViewPager mPager;
+    @BindView( R.id.fab )
+    FloatingActionButton mFab;
 
     @Override
     public int getLayoutResource() {
@@ -84,10 +85,10 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
         this.initializeInjector();
 
         mTabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
-        mPager.setAdapter( new VideosFragmentPagerAdapter( getSupportFragmentManager() ) );
-        mPager.setOffscreenPageLimit( 1 );
-        mTabLayout.setupWithViewPager( mPager );
-        mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
+        mTabLayout.addOnTabSelectedListener( this );
+        setupTabs();
+
+        mFab.setOnClickListener( this );
 
         Log.d( TAG, "onCreate : exit" );
     }
@@ -101,29 +102,142 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     }
 
     @Override
-    public void onBackPressed() {
-        Log.d( TAG, "onBackPressed : enter" );
+    public void onClick( View view ) {
+        Log.v( TAG, "onClick : enter" );
 
-        if( mPager.getCurrentItem() == 0 ) {
-            Log.d( TAG, "onBackPressed : navigating home" );
+        switch( mTabLayout.getSelectedTabPosition() ) {
 
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
+            case 0 :
 
-            navigator.navigateToHome( this );
+                movieFragment.reload();
 
-        } else {
-            Log.d( TAG, "onBackPressed : navigating to previous tab" );
+                break;
 
-            // Otherwise, select the previous step.
-            mPager.setCurrentItem( mPager.getCurrentItem() - 1 );
+            case 1 :
+
+                seriesListFragment.reload();
+
+                break;
+
+            case 2 :
+
+                homeVideoFragment.reload();
+
+                break;
+
+            case 3 :
+
+                musicVideoFragment.reload();
+
+                break;
+
+            case 4 :
+
+                adultFragment.reload();
+
+                break;
 
         }
 
-        Log.d( TAG, "onBackPressed : exit" );
+        Log.v( TAG, "onClick : exit" );
     }
 
+    @Override
+    public void onTabSelected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabSelected : enter" );
+
+        setSelectedTab( tab.getPosition() );
+
+        Log.v( TAG, "onTabSelected : exit" );
+    }
+
+    @Override
+    public void onTabReselected( TabLayout.Tab tab ) {
+
+    }
+
+    @Override
+    public void onTabUnselected( TabLayout.Tab tab ) {
+
+    }
+
+    private void setupTabs() {
+        Log.v( TAG, "setupTabs : enter" );
+
+        MediaItemListFragment.Builder movieParameters = new MediaItemListFragment.Builder( Media.MOVIE );
+        movieFragment = MediaItemListFragment.newInstance( movieParameters.toBundle() );
+
+        SeriesListFragment.Builder builder = new SeriesListFragment.Builder( Media.VIDEO );
+        seriesListFragment = SeriesListFragment.newInstance( builder.toBundle() );
+
+        MediaItemListFragment.Builder homeVideoParameters = new MediaItemListFragment.Builder( Media.HOMEVIDEO );
+        homeVideoFragment = MediaItemListFragment.newInstance( homeVideoParameters.toBundle() );
+
+        MediaItemListFragment.Builder musicVideoParameters = new MediaItemListFragment.Builder( Media.MUSICVIDEO );
+        musicVideoFragment = MediaItemListFragment.newInstance( musicVideoParameters.toBundle() );
+
+        mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 0 ] ), true );
+        mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 1 ] ) );
+        mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 2 ] ) );
+        mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 3 ] ) );
+
+        boolean showAdultTab = getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, false );
+        if( showAdultTab ) {
+
+            MediaItemListFragment.Builder adultParameters = new MediaItemListFragment.Builder( Media.ADULT );
+            adultFragment = MediaItemListFragment.newInstance( adultParameters.toBundle() );
+
+            mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 4 ] ) );
+
+        }
+
+        Log.v( TAG, "setupTabs : exit" );
+    }
+
+    private void setSelectedTab( int position ) {
+        Log.v( TAG, "setSelectedTab : enter" );
+
+        switch( position ) {
+
+            case 0 :
+                Log.v( TAG, "onTabSelected : showing 'movieFragment'" );
+
+                replaceFragment( R.id.frame_container, movieFragment );
+
+                break;
+
+            case 1 :
+                Log.v( TAG, "onTabSelected : showing 'seriesListFragment'" );
+
+                replaceFragment( R.id.frame_container, seriesListFragment );
+
+                break;
+
+            case 2 :
+                Log.v( TAG, "onTabSelected : showing 'homeVideoFragment'" );
+
+                replaceFragment( R.id.frame_container, homeVideoFragment );
+
+                break;
+
+            case 3 :
+                Log.v( TAG, "onTabSelected : showing 'musicVideoFragment'" );
+
+                replaceFragment( R.id.frame_container, musicVideoFragment );
+
+                break;
+
+            case 4 :
+                Log.v( TAG, "onTabSelected : showing 'adultFragment'" );
+
+                replaceFragment( R.id.frame_container, adultFragment );
+
+                break;
+
+        }
+
+        Log.v( TAG, "setSelectedTab : exit" );
+    }
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
@@ -140,73 +254,6 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
         Log.d( TAG, "getComponent : exit" );
         return mediaComponent;
-    }
-
-    class VideosFragmentPagerAdapter extends FragmentStatePagerAdapter {
-
-        String[] tabs;
-        List<Fragment> fragments = new ArrayList<>();
-
-        boolean showAdultTab = getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, false );
-
-        public VideosFragmentPagerAdapter( FragmentManager fm ) {
-            super( fm );
-
-            MediaItemListFragment.Builder movieParameters = new MediaItemListFragment.Builder( Media.MOVIE );
-            MediaItemListFragment movieFragment = MediaItemListFragment.newInstance( movieParameters.toBundle() );
-
-            SeriesListFragment.Builder builder = new SeriesListFragment.Builder( Media.VIDEO );
-            SeriesListFragment seriesListFragment = SeriesListFragment.newInstance( builder.toBundle() );
-
-            MediaItemListFragment.Builder homeVideoParameters = new MediaItemListFragment.Builder( Media.HOMEVIDEO );
-            MediaItemListFragment homeVideoFragment = MediaItemListFragment.newInstance( homeVideoParameters.toBundle() );
-
-            MediaItemListFragment.Builder musicVideoParameters = new MediaItemListFragment.Builder( Media.MUSICVIDEO );
-            MediaItemListFragment musicVideoFragment = MediaItemListFragment.newInstance( musicVideoParameters.toBundle() );
-
-            tabs = getResources().getStringArray( R.array.watch_videos_tabs );
-            fragments.add( movieFragment );
-            fragments.add( seriesListFragment );
-            fragments.add( homeVideoFragment );
-            fragments.add( musicVideoFragment );
-
-            if( showAdultTab ) {
-
-                MediaItemListFragment.Builder adultParameters = new MediaItemListFragment.Builder( Media.ADULT );
-                MediaItemListFragment adultFragment = MediaItemListFragment.newInstance( adultParameters.toBundle() );
-
-                fragments.add( adultFragment );
-
-            }
-
-            notifyDataSetChanged();
-
-        }
-
-        @Override
-        public Fragment getItem( int position ) {
-            Log.v( TAG, "getItem : position=" + position );
-
-            return fragments.get( position );
-        }
-
-        @Override
-        public CharSequence getPageTitle( int position ) {
-
-            return tabs[ position ];
-        }
-
-        @Override
-        public int getCount() {
-
-            if( showAdultTab ) {
-
-                return 5;
-            }
-
-            return 4;
-        }
-
     }
 
     @Override

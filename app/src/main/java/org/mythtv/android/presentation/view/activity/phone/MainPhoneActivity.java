@@ -23,11 +23,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 
 import org.mythtv.android.R;
@@ -39,15 +36,12 @@ import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.fragment.phone.EncoderListFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 
 /**
  * Created by dmfrey on 8/31/15.
  */
-public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener {
+public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener {
 
     private static final String TAG = MainPhoneActivity.class.getSimpleName();
 
@@ -59,18 +53,18 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         return callingIntent;
     }
 
+
+    private MediaItemListFragment recentFragment;
+    private EncoderListFragment encodersFragment;
+    private MediaItemListFragment upcomingFragment;
+
     private MediaComponent mediaComponent;
 
     @BindView( R.id.tabs )
     TabLayout mTabLayout;
 
-    @BindView( R.id.pager )
-    ViewPager mPager;
-
     @BindView( R.id.fab )
     FloatingActionButton mFab;
-
-    private MainFragmentPagerAdapter mPagerAdapter;
 
     @Override
     public int getLayoutResource() {
@@ -88,51 +82,11 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
         this.initializeInjector();
 
-        mPagerAdapter = new MainFragmentPagerAdapter( getSupportFragmentManager() );
-
         mTabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
-        mPager.setAdapter( mPagerAdapter );
-        mPager.setOffscreenPageLimit( 1 );
-        mTabLayout.setupWithViewPager( mPager );
-        mPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( mTabLayout ) );
+        mTabLayout.addOnTabSelectedListener( this );
+        setupTabs();
 
-        mFab.setOnClickListener( v -> {
-
-            switch( mPager.getCurrentItem() ) {
-
-                case 0 :
-
-                    if( null != mPagerAdapter.getItem( 0 ) ) {
-
-                        ( (MediaItemListFragment) mPagerAdapter.getItem( 0 ) ).reload();
-
-                    }
-
-                    break;
-
-                case 1 :
-
-                    if( null != mPagerAdapter.getItem( 1 ) ) {
-
-                        ( (EncoderListFragment) mPagerAdapter.getItem( 1 ) ).reload();
-
-                    }
-
-                    break;
-
-                case 2 :
-
-                    if( null != mPagerAdapter.getItem( 2 ) ) {
-
-                        ( (MediaItemListFragment) mPagerAdapter.getItem( 2 ) ).reload();
-
-                    }
-
-                    break;
-
-            }
-
-        });
+        mFab.setOnClickListener( this );
 
         Log.d( TAG, "onCreate : exit" );
     }
@@ -152,6 +106,54 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     }
 
+    @Override
+    public void onClick( View view ) {
+        Log.v( TAG, "onClick : enter" );
+
+        switch( mTabLayout.getSelectedTabPosition() ) {
+
+            case 0 :
+
+                recentFragment.reload();
+
+                break;
+
+            case 1 :
+
+                encodersFragment.reload();
+
+                break;
+
+            case 2 :
+
+                upcomingFragment.reload();
+
+                break;
+
+        }
+
+        Log.v( TAG, "onClick : exit" );
+    }
+
+    @Override
+    public void onTabSelected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabSelected : enter" );
+
+        setSelectedTab( tab.getPosition() );
+
+        Log.v( TAG, "onTabSelected : exit" );
+    }
+
+    @Override
+    public void onTabReselected( TabLayout.Tab tab ) {
+
+    }
+
+    @Override
+    public void onTabUnselected( TabLayout.Tab tab ) {
+
+    }
+
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
@@ -160,6 +162,55 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );
+    }
+
+    private void setupTabs() {
+        Log.v( TAG, "setupTabs : enter" );
+
+        MediaItemListFragment.Builder recentParameters = new MediaItemListFragment.Builder( Media.RECENT );
+        recentFragment = MediaItemListFragment.newInstance( recentParameters.toBundle() );
+
+        encodersFragment = EncoderListFragment.newInstance();
+
+        MediaItemListFragment.Builder upcomingParameters = new MediaItemListFragment.Builder( Media.UPCOMING );
+        upcomingFragment = MediaItemListFragment.newInstance( upcomingParameters.toBundle() );
+
+        mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.main_tabs )[ 0 ] ), true );
+        mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.main_tabs )[ 1 ] ) );
+        mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.main_tabs )[ 2 ] ) );
+
+        Log.v( TAG, "setupTabs : exit" );
+    }
+
+    private void setSelectedTab( int position ) {
+        Log.v( TAG, "setSelectedTab : enter" );
+
+        switch( position ) {
+
+            case 0 :
+                Log.v( TAG, "onTabSelected : showing 'recentFragment'" );
+
+                replaceFragment( R.id.frame_container, recentFragment );
+
+                break;
+
+            case 1 :
+                Log.v( TAG, "onTabSelected : showing 'encodersFragment'" );
+
+                replaceFragment( R.id.frame_container, encodersFragment );
+
+                break;
+
+            case 2 :
+                Log.v( TAG, "onTabSelected : showing 'upcomingFragment'" );
+
+                replaceFragment( R.id.frame_container, upcomingFragment );
+
+                break;
+
+        }
+
+        Log.v( TAG, "setSelectedTab : exit" );
     }
 
     @Override
@@ -175,53 +226,12 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         Log.d( TAG, "onMediaItemClicked : enter" );
 
         if( null != mediaItemModel && !mediaItemModel.getMedia().equals( Media.UPCOMING ) ) {
-            navigator.navigateToMediaItem(this, mediaItemModel.getId(), mediaItemModel.getMedia());
+
+            navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia() );
+
         }
 
         Log.d( TAG, "onMediaItemClicked : exit" );
-    }
-
-    class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
-
-        String[] tabs;
-        List<Fragment> fragments = new ArrayList<>();
-
-        public MainFragmentPagerAdapter( FragmentManager fm ) {
-            super( fm );
-
-            MediaItemListFragment.Builder recentParameters = new MediaItemListFragment.Builder( Media.RECENT );
-            MediaItemListFragment recentFragment = MediaItemListFragment.newInstance( recentParameters.toBundle() );
-
-            MediaItemListFragment.Builder upcomingParameters = new MediaItemListFragment.Builder( Media.UPCOMING );
-            MediaItemListFragment upcomingFragment = MediaItemListFragment.newInstance( upcomingParameters.toBundle() );
-
-            tabs = getResources().getStringArray( R.array.main_tabs );
-            fragments.add( recentFragment );
-            fragments.add( Fragment.instantiate( MainPhoneActivity.this, EncoderListFragment.class.getName(), null ) );
-            fragments.add( upcomingFragment );
-
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public Fragment getItem( int position ) {
-            Log.v( TAG, "getItem : position=" + position );
-
-            return fragments.get( position );
-        }
-
-        @Override
-        public CharSequence getPageTitle( int position ) {
-
-            return tabs[ position ];
-        }
-
-        @Override
-        public int getCount() {
-
-            return 3;
-        }
-
     }
 
 }

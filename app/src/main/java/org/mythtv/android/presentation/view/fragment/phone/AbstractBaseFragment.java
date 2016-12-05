@@ -20,7 +20,7 @@ package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.View;
 
 import com.google.gson.Gson;

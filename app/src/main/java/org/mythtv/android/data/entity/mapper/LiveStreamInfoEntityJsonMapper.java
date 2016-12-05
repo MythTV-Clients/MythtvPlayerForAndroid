@@ -26,6 +26,7 @@ import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoListEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoWrapperEntity;
 
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +50,7 @@ public class LiveStreamInfoEntityJsonMapper {
 
     }
 
-    public LiveStreamInfoEntity transformLiveStreamInfoEntity( String liveStreamInfoJsonResponse ) throws JsonSyntaxException {
+    public LiveStreamInfoEntity transformLiveStreamInfoEntity( Reader liveStreamInfoJsonResponse ) throws JsonSyntaxException {
 
 //        Log.i( TAG, "transformLiveStreamInfoEntity : liveStreamInfoJsonResponse=" + liveStreamInfoJsonResponse );
         Type liveStreamInfoWrapperEntityType = new TypeToken<LiveStreamInfoWrapperEntity>() {}.getType();
@@ -58,7 +59,7 @@ public class LiveStreamInfoEntityJsonMapper {
         return liveStreamInfoWrapperEntity.getLiveStreamInfo();
     }
 
-    public List<LiveStreamInfoEntity> transformLiveStreamInfoEntityCollection( String liveStreamInfoListJsonResponse ) throws JsonSyntaxException {
+    public List<LiveStreamInfoEntity> transformLiveStreamInfoEntityCollection( Reader liveStreamInfoListJsonResponse ) throws JsonSyntaxException {
 
 //        Log.i( TAG, "transformLiveStreamInfoEntityCollection : " + liveStreamInfoListJsonResponse );
         Type liveStreamInfoListEntityType = new TypeToken<LiveStreamInfoListEntity>() {}.getType();

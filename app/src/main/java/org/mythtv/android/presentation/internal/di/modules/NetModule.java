@@ -12,16 +12,14 @@ import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
-import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.BuildConfig;
 import org.mythtv.android.R;
+import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
+import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
 import org.mythtv.android.presentation.internal.di.interceptors.UserAgentInterceptor;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -29,6 +27,7 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by dmfrey on 5/9/16.
@@ -71,14 +70,18 @@ public class NetModule {
     @Singleton
     OkHttpClient provideOkHttpClient( Context context, SharedPreferences sharedPreferences, Cache cache ) {
 
-        final int readTimeout = Integer.parseInt( sharedPreferences.getString( SettingsKeys.KEY_PREF_READ_TIMEOUT, "10000" ) );
-        final int connectTimeout = Integer.parseInt( sharedPreferences.getString( SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, "10000" ) );
+//        final int readTimeout = Integer.parseInt( sharedPreferences.getString( SettingsKeys.KEY_PREF_READ_TIMEOUT, "10000" ) );
+//        final int connectTimeout = Integer.parseInt( sharedPreferences.getString( SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, "10000" ) );
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel( HttpLoggingInterceptor.Level.HEADERS );
 
         return new OkHttpClient.Builder()
-                .readTimeout( readTimeout, TimeUnit.MILLISECONDS )
-                .connectTimeout( connectTimeout, TimeUnit.MILLISECONDS )
+//                .readTimeout( 0, TimeUnit.MILLISECONDS )
+//                .connectTimeout( 0, TimeUnit.MILLISECONDS )
                 .cache( cache )
                 .addNetworkInterceptor( new StethoInterceptor() )
+                .addInterceptor( loggingInterceptor )
                 .addInterceptor( new UserAgentInterceptor( context.getResources().getString( R.string.app_name )+ "/" + BuildConfig.VERSION_NAME ) )
                 .build();
     }

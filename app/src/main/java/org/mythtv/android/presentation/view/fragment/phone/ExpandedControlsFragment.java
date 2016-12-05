@@ -217,6 +217,11 @@ public class ExpandedControlsFragment extends Fragment {
             mSubtitleTextView.setText(getResources().getString(R.string.loading));
         }
 
+        @Override
+        public void onAdBreakStatusUpdated() {
+
+        }
+
     }
 
     private void updateToolbarTitle() {

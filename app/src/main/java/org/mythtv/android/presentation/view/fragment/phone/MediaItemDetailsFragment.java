@@ -53,6 +53,7 @@ import org.mythtv.android.presentation.view.MediaItemDetailsView;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -580,8 +581,8 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             try {
 
                 BooleanJsonMapper mapper = new BooleanJsonMapper();
-                String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
+                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+//                Log.d( TAG, "doInBackground : result=" + result );
 
                 return mapper.transformBoolean( result );
 
@@ -627,8 +628,8 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             try {
 
                 LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
-                String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
+                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+//                Log.d( TAG, "doInBackground : result=" + result );
 
                 return mapper.transformLiveStreamInfoEntity( result );
 
@@ -656,13 +657,13 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
                     case PROGRAM:
 
-                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=1280", String.valueOf( mediaItemModel.getId() ) ) );
+                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( mediaItemModel.getId() ) ) );
 
                         break;
 
                     case VIDEO:
 
-                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=1280", String.valueOf( mediaItemModel.getId() ) ) );
+                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=960", String.valueOf( mediaItemModel.getId() ) ) );
 
                         break;
 
@@ -693,8 +694,8 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             try {
 
                 BooleanJsonMapper mapper = new BooleanJsonMapper();
-                String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
+                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+//                Log.d( TAG, "doInBackground : result=" + result );
 
                 return mapper.transformBoolean( result );
 
@@ -742,8 +743,8 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             try {
 
                 LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
-                String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
+                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+//                Log.d( TAG, "doInBackground : result=" + result );
 
                 return mapper.transformLiveStreamInfoEntity( result );
 

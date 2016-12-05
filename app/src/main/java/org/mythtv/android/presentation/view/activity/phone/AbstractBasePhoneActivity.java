@@ -25,9 +25,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -243,7 +243,7 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
             case R.id.navigation_item_about :
                 Log.i( TAG, "onNavigationItemSelected : about clicked" );
 
-                FragmentManager fm = getSupportFragmentManager();
+                FragmentManager fm = getFragmentManager();
                 AboutDialogFragment fragment = new AboutDialogFragment();
                 fragment.show( fm, "About Dialog Fragment" );
 
@@ -278,17 +278,37 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     }
 
     /**
+     * Replaces a {@link Fragment} to this activity's layout.
+     *
+     * @param containerViewId The container view to where add the fragment.
+     * @param fragment The fragment to be added.
+     */
+    protected void replaceFragment( int containerViewId, Fragment fragment ) {
+        Log.v( TAG, "replaceFragment : enter" );
+
+        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
+        fragmentTransaction.replace( containerViewId, fragment );
+        fragmentTransaction.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
+        fragmentTransaction.commit();
+
+        Log.v( TAG, "replaceFragment : exit" );
+    }
+
+    /**
      * Adds a {@link Fragment} to this activity's layout.
      *
      * @param containerViewId The container view to where add the fragment.
      * @param fragment The fragment to be added.
      */
     protected void addFragment( int containerViewId, Fragment fragment ) {
+        Log.v( TAG, "addFragment : enter" );
 
-        FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
         fragmentTransaction.add( containerViewId, fragment );
+        fragmentTransaction.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
         fragmentTransaction.commit();
 
+        Log.v( TAG, "addFragment : exit" );
     }
 
     /**

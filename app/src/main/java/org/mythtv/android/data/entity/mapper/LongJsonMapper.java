@@ -24,6 +24,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.Reader;
+
 import javax.inject.Inject;
 
 /**
@@ -42,7 +44,7 @@ public class LongJsonMapper {
 
     }
 
-    public long transformLong( String longJsonResponse ) throws JsonSyntaxException {
+    public long transformLong( Reader longJsonResponse ) throws JsonSyntaxException {
 
         Log.i( TAG, "transformLong : longJsonResponse=" + longJsonResponse );
         JsonObject rootObject = parser.parse( longJsonResponse ).getAsJsonObject();

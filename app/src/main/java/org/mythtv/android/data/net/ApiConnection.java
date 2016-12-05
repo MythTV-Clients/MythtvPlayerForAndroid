@@ -22,20 +22,21 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import okhttp3.CacheControl;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by dmfrey on 8/27/15.
  */
-public class ApiConnection implements Callable<String> {
+public class ApiConnection implements Callable<Reader> {
 
     private static final String TAG = ApiConnection.class.getSimpleName();
 
@@ -48,7 +49,7 @@ public class ApiConnection implements Callable<String> {
     private OkHttpClient okHttpClient;
 
     private URL url;
-    private String response;
+    private Reader response;
 
     private ApiConnection( OkHttpClient okHttpClient, String url ) throws MalformedURLException {
 
@@ -71,7 +72,7 @@ public class ApiConnection implements Callable<String> {
      * @return A string response
      */
     @Nullable
-    public String requestSyncCall() {
+    public Reader requestSyncCall() {
 
         connectToApi();
 
@@ -87,7 +88,7 @@ public class ApiConnection implements Callable<String> {
      * @return A string response
      */
     @Nullable
-    public String requestSyncCall( Map<String, String> parameters ) {
+    public Reader requestSyncCall( Map<String, String> parameters ) {
 
         FormBody.Builder builder = new FormBody.Builder();
 
@@ -114,12 +115,15 @@ public class ApiConnection implements Callable<String> {
                 .url( this.url )
                 .addHeader( ACCEPT_LABEL, ACCEPT_VALUE_JSON )
                 .get()
-                .cacheControl( CacheControl.FORCE_NETWORK )
+//                .cacheControl( CacheControl.FORCE_NETWORK )
                 .build();
 
         try {
 
-            this.response = okHttpClient.newCall( request ).execute().body().string();
+            Response call = okHttpClient.newCall( request ).execute();
+            this.response = call.body().charStream();
+            Log.d( TAG, "connectToApi : cacheResponse - " + call.cacheResponse() );
+            Log.d( TAG, "connectToApi : networkResponse - " + call.networkResponse() );
 
 //            Logging my be causes of OutOfMemory
             if( this.url.toString().contains( "GetSavedBookmark" ) ) {
@@ -146,7 +150,10 @@ public class ApiConnection implements Callable<String> {
 
         try {
 
-            this.response = okHttpClient.newCall( request ).execute().body().string();
+            Response call = okHttpClient.newCall( request ).execute();
+            this.response = call.body().charStream();
+            Log.d( TAG, "connectToApi : cacheResponse - " + call.cacheResponse() );
+            Log.d( TAG, "connectToApi : networkResponse - " + call.networkResponse() );
 
 //            Logging my be causes of OutOfMemory
 //            Log.d( TAG, "connectToApi : response=" + this.response );
@@ -160,7 +167,7 @@ public class ApiConnection implements Callable<String> {
     }
 
     @Override
-    public String call() throws Exception {
+    public Reader call() throws Exception {
 
         return requestSyncCall();
     }
