@@ -26,6 +26,7 @@ import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.EncoderListEntity;
 import org.mythtv.android.data.entity.EncoderWrapperEntity;
 
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +49,7 @@ public class EncoderEntityJsonMapper {
 
     }
 
-    public EncoderEntity transformEncoderEntity(String encoderJsonResponse ) throws JsonSyntaxException {
+    public EncoderEntity transformEncoderEntity( Reader encoderJsonResponse ) throws JsonSyntaxException {
 
 //        Log.i( TAG, "transformEncoderEntity : encoderJsonResponse=" + encoderJsonResponse );
         Type encoderWrapperEntityType = new TypeToken<EncoderWrapperEntity>() {}.getType();
@@ -57,7 +58,7 @@ public class EncoderEntityJsonMapper {
         return encoderWrapperEntity.getEncoder();
     }
 
-    public List<EncoderEntity> transformEncoderEntityCollection( String encoderListJsonResponse ) throws JsonSyntaxException {
+    public List<EncoderEntity> transformEncoderEntityCollection( Reader encoderListJsonResponse ) throws JsonSyntaxException {
 
 //        Log.i( TAG, "transformEncoderEntityCollection : " + encoderListJsonResponse );
         Type encoderListEntityType = new TypeToken<EncoderListEntity>() {}.getType();

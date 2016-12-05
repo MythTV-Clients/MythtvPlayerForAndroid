@@ -68,7 +68,7 @@ public class VideoDataRepository implements VideoRepository {
         Log.d( TAG, "getVideoList : enter" );
         Log.d( TAG, "getVideoList : folder=" + folder + ", sort=" + sort + ", descending=" + descending + ", startIndex=" + startIndex + ", count=" + count );
 
-        final VideoDataStore videoDataStore = videoDataStoreFactory.createMasterBackendDataStore();
+        final VideoDataStore videoDataStore = videoDataStoreFactory.create();
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         Observable<List<VideoMetadataInfoEntity>> videoEntities = videoDataStore.getVideos( folder, sort, descending, startIndex, count )

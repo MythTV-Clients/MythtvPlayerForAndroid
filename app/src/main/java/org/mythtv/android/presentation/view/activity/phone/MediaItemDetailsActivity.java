@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
+import android.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -306,7 +306,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
                         } else {
 
-                            FragmentManager fm = getSupportFragmentManager();
+                            FragmentManager fm = getFragmentManager();
                             CastNotReadyDialogFragment fragment = new CastNotReadyDialogFragment();
                             fragment.show( fm, "Cast Not Ready Dialog Fragment" );
 
@@ -317,7 +317,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
                         CastSession castSession = mCastContext.getSessionManager().getCurrentCastSession();
                         if( null != castSession && castSession.isConnected() ) {
 
-                            FragmentManager fm = getSupportFragmentManager();
+                            FragmentManager fm = getFragmentManager();
                             CastErrorDialogFragment fragment = new CastErrorDialogFragment();
                             fragment.show( fm, "Cast Error Dialog Fragment" );
 

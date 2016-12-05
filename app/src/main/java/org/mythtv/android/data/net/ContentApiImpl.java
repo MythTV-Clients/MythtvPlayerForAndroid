@@ -34,6 +34,7 @@ import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.domain.SettingsKeys;
 
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -86,7 +87,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = addLiveStreamFromApi( storageGroup, filename, hostname );
+                        Reader responseLiveStreamInfo = addLiveStreamFromApi( storageGroup, filename, hostname );
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseLiveStreamInfo ) );
@@ -128,7 +129,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = addRecordingLiveStreamFromApi( recordedId, chanId, startTime );
+                        Reader responseLiveStreamInfo = addRecordingLiveStreamFromApi( recordedId, chanId, startTime );
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseLiveStreamInfo ) );
@@ -170,7 +171,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = addVideoLiveStreamFromApi( id );
+                        Reader responseLiveStreamInfo = addVideoLiveStreamFromApi( id );
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseLiveStreamInfo ) );
@@ -214,7 +215,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfoEntities = getLiveStreamInfoEntitiesFromApi( filename );
+                        Reader responseLiveStreamInfoEntities = getLiveStreamInfoEntitiesFromApi( filename );
                         if( null != responseLiveStreamInfoEntities ) {
                             Log.d(TAG, "LiveStreamInfoEntityList.call : retrieved LiveStream info entities");
 
@@ -261,7 +262,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = getLiveStreamInfoFromApi( id );
+                        Reader responseLiveStreamInfo = getLiveStreamInfoFromApi( id );
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseLiveStreamInfo ) );
@@ -303,7 +304,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = removeLiveStreamInfoFromApi( id );
+                        Reader responseLiveStreamInfo = removeLiveStreamInfoFromApi( id );
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( booleanJsonMapper.transformBoolean(responseLiveStreamInfo) );
@@ -345,7 +346,7 @@ public class ContentApiImpl implements ContentApi {
 
                     try {
 
-                        String responseLiveStreamInfo = stopLiveStreamInfoFromApi(id);
+                        Reader responseLiveStreamInfo = stopLiveStreamInfoFromApi(id);
                         if( null != responseLiveStreamInfo ) {
 
                             subscriber.onNext( booleanJsonMapper.transformBoolean( responseLiveStreamInfo ) );
@@ -375,7 +376,7 @@ public class ContentApiImpl implements ContentApi {
 
     }
 
-    private String addLiveStreamFromApi( final String storageGroup, final String filename, final String hostname ) throws MalformedURLException {
+    private Reader addLiveStreamFromApi( final String storageGroup, final String filename, final String hostname ) throws MalformedURLException {
 
         List<String> params = new ArrayList<>();
 
@@ -443,7 +444,7 @@ public class ContentApiImpl implements ContentApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String addRecordingLiveStreamFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
+    private Reader addRecordingLiveStreamFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
 
         List<String> params = new ArrayList<>();
 
@@ -488,7 +489,7 @@ public class ContentApiImpl implements ContentApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String addVideoLiveStreamFromApi( final int id ) throws MalformedURLException {
+    private Reader addVideoLiveStreamFromApi( final int id ) throws MalformedURLException {
 
         List<String> params = new ArrayList<>();
 
@@ -521,7 +522,7 @@ public class ContentApiImpl implements ContentApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String getLiveStreamInfoEntitiesFromApi( String filename ) throws MalformedURLException {
+    private Reader getLiveStreamInfoEntitiesFromApi( String filename ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
@@ -550,7 +551,7 @@ public class ContentApiImpl implements ContentApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String getLiveStreamInfoFromApi( int id ) throws MalformedURLException {
+    private Reader getLiveStreamInfoFromApi( int id ) throws MalformedURLException {
 
         String apiUrl = String.format(LIVE_STREAM_INFO_URL, id );
         Log.d( TAG, "getLiveStreamInfoFromApi : url=" + apiUrl );
@@ -558,7 +559,7 @@ public class ContentApiImpl implements ContentApi {
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
-    private String removeLiveStreamInfoFromApi( int id ) throws MalformedURLException {
+    private Reader removeLiveStreamInfoFromApi( int id ) throws MalformedURLException {
 
         String apiUrl = String.format(REMOVE_LIVE_STREAM_URL, id );
         Log.d( TAG, "removeLiveStreamInfoFromApi : url=" + apiUrl );
@@ -566,7 +567,7 @@ public class ContentApiImpl implements ContentApi {
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
-    private String stopLiveStreamInfoFromApi( int id ) throws MalformedURLException {
+    private Reader stopLiveStreamInfoFromApi( int id ) throws MalformedURLException {
 
         String apiUrl = String.format(STOP_LIVE_STREAM_URL, id );
         Log.d( TAG, "stopLiveStreamInfoFromApi : url=" + apiUrl );

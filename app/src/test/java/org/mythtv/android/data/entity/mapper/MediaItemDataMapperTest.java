@@ -7,15 +7,16 @@ import org.junit.rules.ExpectedException;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
+
+import java.io.StringReader;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import org.mythtv.android.domain.Media;
 
 /**
  * Created by dmfrey on 9/5/16.
@@ -43,7 +44,7 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
     @Test
     public void testTransformProgram() throws Exception {
 
-        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( JSON_RESPONSE_DVR_GET_RECORDED );
+        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( new StringReader( JSON_RESPONSE_DVR_GET_RECORDED ) );
         assertThat( programEntity, not( nullValue() ) );
 
         MediaItem mediaItem = MediaItemDataMapper.transform( programEntity );
@@ -70,7 +71,7 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
     @Test
     public void testTransformVideo() throws Exception {
 
-        VideoMetadataInfoEntity videoMetadataInfoEntity = videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( JSON_RESPONSE_VIDEO_GET_VIDEO );
+        VideoMetadataInfoEntity videoMetadataInfoEntity = videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( new StringReader( JSON_RESPONSE_VIDEO_GET_VIDEO ) );
         assertThat( videoMetadataInfoEntity, not( nullValue() ) );
 
         MediaItem mediaItem = MediaItemDataMapper.transform( videoMetadataInfoEntity );
