@@ -27,7 +27,7 @@ dependencies:
     - touch app/google-services.json
     - echo $GOOGLE_SERVICES_JSON > app/google-services.json
     # Accept Android Developer License
-    - if [ ! -d "$HOME/.android" ]; then mkdir -p "$HOME/.android/licenses/gitandroid-sdk-license"; fi
+    - if [ ! -d "$HOME/.android/license" ]; then mkdir -p "$HOME/.android/license"; fi
     - if [ ! -e "$HOME/.android/license/android-sdk-license" ]; then echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$HOME/.android/license/android-sdk-license"; fi
     - if [ ! -e "$HOME/.android/license/android-sdk-preview-license" ]; then echo "79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "$HOME/.android/license/android-sdk-preview-license"; fi
     - if [ ! -e "$HOME/.android/license/intel-android-extra-license" ]; then echo "d975f751698a77b662f1254ddbeed3901e976f5a" > "$HOME/.android/license/intel-android-extra-license"; fi
