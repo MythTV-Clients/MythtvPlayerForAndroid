@@ -27,10 +27,10 @@ dependencies:
     - touch app/google-services.json
     - echo $GOOGLE_SERVICES_JSON > app/google-services.json
     # Accept Android Developer License
-    - mkdir -p "/usr/local/android-sdk-linux/licenses"
-    - echo |set /p="8933bad161af4178b1185d1a37fbf41ea5269c55" > "/usr/local/android-sdk-linux/android-sdk-license"
-    - echo |set /p="79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license"
-    - echo |set /p="d975f751698a77b662f1254ddbeed3901e976f5a" > "/usr/local/android-sdk-linux/licenses/intel-android-extra-license"
+    - if [ ! -d "/usr/local/android-sdk-linux/licenses" ]; then mkdir -p "/usr/local/android-sdk-linux/licenses"; fi
+    - if [ ! -e "/usr/local/android-sdk-linux/licenses/android-sdk-license" ]; then echo |set /p="8933bad161af4178b1185d1a37fbf41ea5269c55" > "/usr/local/android-sdk-linux/android-sdk-license"; fi
+    - if [ ! -e "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license" ]; then echo |set /p="79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license"; fi
+    - if [ ! -e "/usr/local/android-sdk-linux/licenses/intel-android-extra-license" ]; then echo |set /p="d975f751698a77b662f1254ddbeed3901e976f5a" > "/usr/local/android-sdk-linux/licenses/intel-android-extra-license"; fi
     # Android SDK Platform 25
     - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-25" ]; then echo y | android update sdk --no-ui --all --filter "android-25"; fi
     # Android SDK Build-tools, revision 25.0.1
@@ -42,6 +42,7 @@ dependencies:
     - /usr/local/android-sdk-linux/platforms/android-25
     - /usr/local/android-sdk-linux/build-tools/25.0.1
     - /usr/local/android-sdk-linux/extras/android/m2repository
+    - /usr/local/android-sdk-linux/licenses
 
 test:
 #  pre:
