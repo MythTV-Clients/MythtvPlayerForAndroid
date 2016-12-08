@@ -29,6 +29,7 @@ dependencies:
     # Accept Android Developer License
     - mkdir -p "/usr/local/android-sdk-linux/licenses"
     - echo |set /p="8933bad161af4178b1185d1a37fbf41ea5269c55" > "/usr/local/android-sdk-linux/android-sdk-license"
+    - echo |set /p="79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
     # Android SDK Platform 25
     - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-25" ]; then echo y | android update sdk --no-ui --all --filter "android-25"; fi
     # Android SDK Build-tools, revision 25.0.1
