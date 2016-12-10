@@ -41,7 +41,7 @@
                 android:id="@+id/media_item_image"
                 android:layout_width="125dp"
                 android:layout_height="75dp"
-                android:scaleType="fitXY" />
+                android:src="@drawable/ic_movie_black_24dp"/>
 
             <ProgressBar
                 android:id="@+id/media_item_progress"
