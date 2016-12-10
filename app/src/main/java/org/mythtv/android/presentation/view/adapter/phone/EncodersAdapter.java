@@ -77,13 +77,10 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
     @Override
     public EncoderViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
-//        Log.d( TAG, "onCreateViewHolder : enter" );
 
         View view = this.layoutInflater.inflate( R.layout.phone_encoder_list_item, parent, false );
-        EncoderViewHolder encoderViewHolder = new EncoderViewHolder( view );
 
-//        Log.d( TAG, "onCreateViewHolder : exit" );
-        return encoderViewHolder;
+        return new EncoderViewHolder( view );
     }
 
     @Override
@@ -124,33 +121,20 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
     }
 
     public void setEncodersCollection( Collection<EncoderModel> encodersCollection ) {
-//        Log.d( TAG, "setEncodersCollection : enter" );
 
         this.validateEncodersCollection( encodersCollection );
         this.encodersCollection = (List<EncoderModel>) encodersCollection;
         this.notifyDataSetChanged();
 
-//        Log.d( TAG, "setTitleInfosCollection : exit");
-    }
-
-    public void setOnItemClickListener( OnItemClickListener onItemClickListener ) {
-//        Log.d( TAG, "setOnItemClickListener : enter" );
-
-        OnItemClickListener onItemClickListener1 = onItemClickListener;
-
-//        Log.d( TAG, "setOnItemClickListener : exit" );
     }
 
     private void validateEncodersCollection( Collection<EncoderModel> encodersCollection ) {
-//        Log.d(TAG, "validateEncodersCollection : enter");
 
         if( null == encodersCollection ) {
-//            Log.w( TAG, "validateEncodersCollection : encodersCollection is null" );
 
             throw new IllegalArgumentException( "The list cannot be null" );
         }
 
-//        Log.d( TAG, "validateEncodersCollection : exit" );
     }
 
     private int translateState( int state ) {

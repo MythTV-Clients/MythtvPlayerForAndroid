@@ -22,8 +22,6 @@ import android.content.Context;
 
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.data.cache.VideoCacheImpl;
-import org.mythtv.android.data.cache.ProgramCache;
-import org.mythtv.android.data.cache.ProgramCacheImpl;
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.executor.JobExecutor;
 import org.mythtv.android.data.repository.ContentDataRepository;
@@ -77,13 +75,6 @@ public class ApplicationModule {
     PostExecutionThread providePostExecutionThread( UIThread uiThread ) {
 
         return uiThread;
-    }
-
-    @Provides
-    @Singleton
-    ProgramCache provideRecordedProgramCache( ProgramCacheImpl recordedProgramCache ) {
-
-        return recordedProgramCache;
     }
 
     @Provides

@@ -1040,7 +1040,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         getMenuInflater().inflate( R.menu.main, menu );
 
-        MenuItem mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
+        CastButtonFactory.setUpMediaRouteButton( getApplicationContext(), menu, R.id.media_route_menu_item );
 
         return true;
     }
@@ -1048,12 +1048,10 @@ public class LocalPlayerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-        Intent intent;
-//        if (item.getItemId() == R.id.action_settings) {
-//            intent = new Intent(LocalPlayerActivity.this, CastPreference.class);
-//            startActivity(intent);
-        /*} else */ if( item.getItemId() == android.R.id.home ) {
+        if( item.getItemId() == android.R.id.home ) {
+
             ActivityCompat.finishAfterTransition( this );
+
         }
 
         return true;

@@ -145,10 +145,11 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof SeriesListListener) {
             this.seriesListListener = (SeriesListListener) activity;
         }
@@ -250,7 +251,6 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -260,7 +260,6 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
-        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }

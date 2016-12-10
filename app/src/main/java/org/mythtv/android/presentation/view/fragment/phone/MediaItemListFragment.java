@@ -278,10 +278,11 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaItemListFragment.MediaItemListListener) {
             this.mediaItemListListener = (MediaItemListFragment.MediaItemListListener) activity;
         }
@@ -383,7 +384,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -393,7 +393,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
-        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }

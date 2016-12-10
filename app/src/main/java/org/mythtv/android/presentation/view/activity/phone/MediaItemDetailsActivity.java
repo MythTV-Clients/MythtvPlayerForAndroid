@@ -18,17 +18,16 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.ImageView;
 
 import com.google.android.gms.cast.framework.CastSession;
@@ -94,8 +93,6 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
-
-        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
 
         super.onCreate( savedInstanceState );
 

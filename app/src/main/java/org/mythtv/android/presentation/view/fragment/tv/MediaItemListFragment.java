@@ -179,10 +179,11 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaItemListListener) {
             this.listener = (MediaItemListListener) activity;
         }

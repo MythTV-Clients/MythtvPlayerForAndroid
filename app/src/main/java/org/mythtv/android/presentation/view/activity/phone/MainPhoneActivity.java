@@ -25,7 +25,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -77,7 +76,6 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         Log.d( TAG, "onCreate : enter" );
         Log.i( TAG, "Branch: " + getResources().getString( R.string.branchName ) + ", Tag: " + getResources().getString( R.string.tagName ) + ", Commit: " + getResources().getString( R.string.shaName ) );
 
-        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
 
         this.initializeInjector();

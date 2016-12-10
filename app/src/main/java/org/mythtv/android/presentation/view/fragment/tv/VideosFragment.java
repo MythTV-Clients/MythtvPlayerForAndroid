@@ -19,6 +19,7 @@
 package org.mythtv.android.presentation.view.fragment.tv;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.widget.GuidanceStylist;
@@ -55,9 +56,11 @@ public class VideosFragment extends AbstractBaseGuidedStepFragment {
     private MediaListener mediaListener;
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
+        Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaListener) {
             this.mediaListener = (MediaListener) activity;
         }

@@ -95,10 +95,11 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaItemListListener ) {
             this.mediaItemListListener = (MediaItemListListener) activity;
         }

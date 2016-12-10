@@ -159,10 +159,11 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaItemDetailsListener ) {
 
             this.listener = (MediaItemDetailsListener) activity;
@@ -390,7 +391,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -400,7 +400,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
-        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -468,13 +467,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     @Override
     public void updateLiveStream( MediaItemModel mediaItem ) {
-        Log.d( TAG, "updateLiveStream : enter" );
-
-        if( null != mediaItem ) {
-
-        }
-
-        Log.d( TAG, "updateLiveStream : exit" );
+//        Log.d( TAG, "updateLiveStream : enter" );
+//
+//        Log.d( TAG, "updateLiveStream : exit" );
     }
 
     private void updateMenu() {

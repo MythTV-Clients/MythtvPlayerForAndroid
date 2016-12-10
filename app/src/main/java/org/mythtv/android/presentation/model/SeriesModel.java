@@ -18,6 +18,8 @@
 
 package org.mythtv.android.presentation.model;
 
+import android.support.annotation.NonNull;
+
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.utils.DomainUtils;
 
@@ -81,11 +83,9 @@ public class SeriesModel implements Comparable<SeriesModel> {
     }
 
     @Override
-    public int compareTo( SeriesModel another ) {
+    public int compareTo( @NonNull SeriesModel another ) {
 
-        final int BEFORE = -1;
         final int EQUAL = 0;
-        final int AFTER = 1;
 
         if( this == another ) return EQUAL;
 

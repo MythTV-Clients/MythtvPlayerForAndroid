@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -124,7 +123,6 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
 
-        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
 
         this.initializeActivity( savedInstanceState );

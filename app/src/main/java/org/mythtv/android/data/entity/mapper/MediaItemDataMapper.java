@@ -135,7 +135,7 @@ public class MediaItemDataMapper {
             mediaItem.setCharacters( cast.trim() );
         }
 
-        mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark?RecordedId=%s1", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
         mediaItem.setBookmark( programEntity.getBookmark() );
 
         return mediaItem;

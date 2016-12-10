@@ -121,6 +121,7 @@ public class SettingsActivity extends Activity {
 
     public static class SettingsFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -212,6 +213,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -330,6 +332,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendUrlFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -393,6 +396,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendPortFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -456,6 +460,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendReadTimeoutFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -533,6 +538,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendConnectTimeoutFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -610,6 +616,7 @@ public class SettingsActivity extends Activity {
 
     public static class PlayerFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -669,6 +676,7 @@ public class SettingsActivity extends Activity {
 
     public static class InternalPlayerFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -729,6 +737,7 @@ public class SettingsActivity extends Activity {
 
     public static class ContentFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -789,6 +798,7 @@ public class SettingsActivity extends Activity {
 
     public static class AnalyticsFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 

@@ -82,12 +82,13 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
     }
 
     @Override
-    public void onAttach( Activity activity ) {
+    public void onAttach( Context context ) {
         Log.d( TAG, "onAttach : enter" );
-        super.onAttach( activity );
+        super.onAttach( context );
 
+        Activity activity = getActivity();
         if( activity instanceof TvCategoryListListener ) {
-            this.tvCategoryListListener = (TvCategoryListListener) activity;
+            this.tvCategoryListListener = (TvCategoryListListener) context;
         }
 
         Log.d( TAG, "onAttach : exit" );

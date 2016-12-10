@@ -46,40 +46,37 @@ public class MediaItemEntity {
 
     static {
 
-        StringBuilder createTable = new StringBuilder();
+        String createTable = ("CREATE VIRTUAL TABLE " + TABLE_NAME + " using fts3 (") +
+                FIELD_ID + " " + "INTEGER" + ", " +
+                FIELD_MEDIA + " " + "TEXT" + ", " +
+                FIELD_TITLE + " " + "TEXT" + ", " +
+                FIELD_SUBTITLE + " " + "TEXT" + ", " +
+                FIELD_DESCRIPTION + " " + "TEXT" + ", " +
+                FIELD_START_DATE + " " + "INTEGER" + ", " +
+                FIELD_PROGRAM_FLAGS + " " + "INTEGER" + ", " +
+                FIELD_SEASON + " " + "INTEGER" + ", " +
+                FIELD_EPISODE + " " + "INTEGER" + ", " +
+                FIELD_STUDIO + " " + "TEXT" + ", " +
+                FIELD_CAST_MEMBERS + " " + "TEXT" + ", " +
+                FIELD_CHARACTERS + " " + "TEXT" + ", " +
+                FIELD_URL + " " + "TEXT" + ", " +
+                FIELD_FANART_URL + " " + "TEXT" + ", " +
+                FIELD_COVERART_URL + " " + "TEXT" + ", " +
+                FIELD_BANNER_URL + " " + "TEXT" + ", " +
+                FIELD_PREVIEW_URL + " " + "TEXT" + ", " +
+                FIELD_CONTENT_TYPE + " " + "TEXT" + ", " +
+                FIELD_DURATION + " " + "INTEGER" + ", " +
+                FIELD_RECORDING + " " + "INTEGER" + ", " +
+                FIELD_LIVE_STREAM_PERCENT_COMPLETE + " " + "INTEGER" + ", " +
+                FIELD_LIVE_STREAM_ID + " " + "INTEGER" + ", " +
+                FIELD_CREATE_LIVE_STREAM_URL + " " + "TEXT" + ", " +
+                FIELD_REMOVE_LIVE_STREAM_URL + " " + "TEXT" + ", " +
+                FIELD_GET_LIVE_STREAM_URL + " " + "TEXT" + ", " +
+                FIELD_WATCHED_STATUS + " " + "INTEGER" + ", " +
+                FIELD_MARK_WATCHED_URL + " " + "TEXT" +
+                ");";
 
-        createTable.append( "CREATE VIRTUAL TABLE " + TABLE_NAME + " using fts3 (" );
-        createTable.append( FIELD_ID ).append( " " ).append( "INTEGER" ).append( ", ");
-        createTable.append( FIELD_MEDIA ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_TITLE ).append( " " ).append( "TEXT" ).append( ", ");
-        createTable.append( FIELD_SUBTITLE ).append( " " ).append( "TEXT" ).append( ", ");
-        createTable.append( FIELD_DESCRIPTION ).append( " " ).append( "TEXT" ).append( ", ");
-        createTable.append( FIELD_START_DATE ).append( " " ).append( "INTEGER" ).append( ", " );
-        createTable.append( FIELD_PROGRAM_FLAGS ).append( " " ).append( "INTEGER" ).append( ", " );
-        createTable.append( FIELD_SEASON ).append( " " ).append( "INTEGER" ).append( ", " );
-        createTable.append( FIELD_EPISODE ).append( " " ).append( "INTEGER" ).append( ", " );
-        createTable.append( FIELD_STUDIO ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_CAST_MEMBERS ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_CHARACTERS ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_URL ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_FANART_URL ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_COVERART_URL ).append( " ").append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_BANNER_URL ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_PREVIEW_URL ).append( " " ).append( "TEXT" ).append( ", ");
-        createTable.append( FIELD_CONTENT_TYPE ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_DURATION ).append( " " ).append( "INTEGER" ).append( ", " );
-        createTable.append( FIELD_RECORDING ).append( " " ).append( "INTEGER" ).append( ", " );
-        createTable.append( FIELD_LIVE_STREAM_PERCENT_COMPLETE ).append( " " ).append( "INTEGER" ).append( ", " );
-        createTable.append( FIELD_LIVE_STREAM_ID ).append( " " ).append( "INTEGER" ).append( ", " );
-        createTable.append( FIELD_CREATE_LIVE_STREAM_URL ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_REMOVE_LIVE_STREAM_URL ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_GET_LIVE_STREAM_URL ).append( " " ).append( "TEXT" ).append( ", " );
-        createTable.append( FIELD_WATCHED_STATUS ).append( " " ).append( "INTEGER" ).append( ", " );
-        createTable.append( FIELD_MARK_WATCHED_URL ).append(" " ).append( "TEXT" );
-
-        createTable.append( ");" );
-
-        CREATE_TABLE = createTable.toString();
+        CREATE_TABLE = createTable;
 
         DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
     }

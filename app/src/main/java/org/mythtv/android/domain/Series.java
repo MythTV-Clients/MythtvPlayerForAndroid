@@ -18,6 +18,8 @@
 
 package org.mythtv.android.domain;
 
+import android.support.annotation.NonNull;
+
 import org.mythtv.android.domain.utils.DomainUtils;
 
 /*
@@ -80,11 +82,9 @@ public class Series implements Comparable<Series> {
     }
 
     @Override
-    public int compareTo( Series another ) {
+    public int compareTo( @NonNull Series another ) {
 
-        final int BEFORE = -1;
         final int EQUAL = 0;
-        final int AFTER = 1;
 
         if( this == another ) return EQUAL;
 

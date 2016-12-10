@@ -18,7 +18,6 @@
 
 package org.mythtv.android.domain.interactor;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;

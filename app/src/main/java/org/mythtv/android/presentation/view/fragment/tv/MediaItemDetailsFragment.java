@@ -204,17 +204,8 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private boolean mediaSupported() {
 
-        if( mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mp4" ) ) {
+        return mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mkv" );
 
-            return true;
-        }
-
-        if( mediaItemModel.getUrl().endsWith( "mkv" ) ) {
-
-            return true;
-        }
-
-        return false;
     }
 
     private boolean liveStreamSupported() {
