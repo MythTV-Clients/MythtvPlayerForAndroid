@@ -19,6 +19,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'com.github.ben-manes.versions'
 
 android {
 
@@ -201,7 +202,7 @@ dependencies {
     compile "io.reactivex:rxjava:${project.ext.rxJavaVersion}"
     compile "io.reactivex:rxandroid:${project.ext.rxAndroidVersion}"
     compile "com.squareup.picasso:picasso:${project.ext.picassoVersion}"
-    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2"
+    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
     compile "com.android.support:support-annotations:${project.ext.supportVersion}"
     compile "com.android.support:preference-v14:${project.ext.supportVersion}"
     compile "com.android.support:mediarouter-v7:${project.ext.supportVersion}"

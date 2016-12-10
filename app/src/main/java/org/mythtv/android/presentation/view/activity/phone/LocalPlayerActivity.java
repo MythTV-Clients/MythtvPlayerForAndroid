@@ -96,7 +96,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
     private Timer mBookmarkTimer;
     private PlaybackState mPlaybackState;
     private final Handler mHandler = new Handler();
-    private final float mAspectRatio = 72f / 128;
     private AQuery mAquery;
     private MediaItemModel mSelectedMedia;
     private boolean mControllersVisible;
@@ -107,7 +106,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
     private CastContext mCastContext;
     private CastSession mCastSession;
     private SessionManagerListener<CastSession> mSessionManagerListener;
-    private MenuItem mediaRouteMenuItem;
 
     private OkHttpClient okHttpClient;
 
@@ -369,7 +367,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
         }
 
         restartTrickplayTimer();
-        restartBookmarkTimer();;
+        restartBookmarkTimer();
 
     }
 
@@ -1026,7 +1024,8 @@ public class LocalPlayerActivity extends AppCompatActivity {
             mTitleView.setVisibility( View.VISIBLE );
             mAuthorView.setVisibility( View.VISIBLE );
             displaySize = Utils.getDisplaySize( this );
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( displaySize.x, (int) ( displaySize.x * mAspectRatio ) );
+            float mAspectRatio = 72f / 128;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( displaySize.x, (int) ( displaySize.x * mAspectRatio) );
             lp.addRule( RelativeLayout.BELOW, R.id.toolbar );
             mVideoView.setLayoutParams( lp );
             mVideoView.invalidate();
@@ -1041,7 +1040,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         getMenuInflater().inflate( R.menu.main, menu );
 
-        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton( getApplicationContext(), menu, R.id.media_route_menu_item );
+        MenuItem mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
 
         return true;
     }

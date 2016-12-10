@@ -50,10 +50,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:layout_below="@+id/series_item_artwork"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:gravity="right|end"
-            android:layout_toRightOf="@+id/series_item_title"
+            android:gravity="end"
             android:layout_toEndOf="@+id/series_item_title"
             android:layout_margin="@dimen/margin"
             tools:text="10" />

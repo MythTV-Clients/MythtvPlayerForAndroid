@@ -61,7 +61,6 @@
     <string name="pref_internal_player">Interner Player</string>
     <string name="pref_internal_player_summary_off">Wiedergabe durch externen Player</string>
     <string name="pref_internal_player_summary_on">Wiedergabe durch internen Player</string>
-    <string name="pref_external_player">Externer Player</string>
     <string name="pref_parental_control_level">Altersfreigabestufe</string>
     <string name="pref_parental_controls">Altersfreigabe</string>
     <string name="pref_rating_g">G – für alle Altersstufen geeignet</string>
@@ -80,7 +79,6 @@
     <string name="pref_show_adult_tab_summary_on">Pornos werden angezeigt</string>
     <string name="pref_video_display_preferences">Wiedergabeeinstellungen</string>
     <!-- not checked, unknown occurence -->
-    <string name="ready_to_stream">Bereit zum Streamen</string>
     <string name="recording">Aufnahme</string>
     <string name="search_hint">Suche Show, Film, Schauspieler, Persönlichkeit, Kanal</string> <!-- not checked, unknown occurence -->
     <string name="search_results">Suchergebnisse</string>
@@ -132,12 +130,6 @@
     <string name="remove_live_stream_positive_label">Remove</string>
     <string name="add_live_stream_positive_label">Create</string>
     <string name="add_live_stream_title">Create Live Stream?</string>
-    <string name="http_live_stream">HTTP Live Stream %1$s</string>
-    <string name="http_live_stream_unavailable">HTTP Live Stream Unavailable</string>
-    <string name="http_live_stream_available">HTTP Live Stream Available on %1$s</string>
-    <string name="unavailable">Unavailable</string>
-    <string name="watched">Gesehen</string>
-    <string name="unwatched">Ungesehen</string>
 
     <string name="pref_timeouts">Master Backend Timeouts</string>
     <string name="pref_timeouts_summary">Timeout settings for connecting to the Master Backend. This is an advanced feature and is not normally needed to change. If you are seeing errors because you have a large library, consider increasing these values. Only set it to \'No Limit\' unless no other options work.</string>
@@ -166,5 +158,19 @@
     <string name="action_remove_hls_stream">Remove HTTP Live Stream</string>
     <string name="action_mark_watched">Mark Watched</string>
     <string name="action_mark_unwatched">Mark Unwatched</string>
+    <string name="cd_background">background</string>
+    <string name="cd_coverart">coverart</string>
+    <string name="cd_bookmark">bookmark</string>
+    <string name="cd_image_view_button_1">image view button 1</string>
+    <string name="cd_image_view_button_2">image_view_button_2</string>
+    <string name="cd_image_view_button_3">image_view_button_2</string>
+    <string name="cd_image_view_button_4">image view button 4</string>
+    <string name="cd_image_view_button_5">image view button 5</string>
+    <string name="castNotReadyLabel">This item is not yet ready for casting, please try again later.</string>
+    <string name="cd_play">play</string>
+    <string name="loading">loading</string>
+    <string name="video_error_media_load_timeout">Media loading timed out</string>
+    <string name="video_error_server_unaccessible">Media server was not reachable</string>
+    <string name="video_error_unknown_error">Failed to load video</string>
 
 </resources>

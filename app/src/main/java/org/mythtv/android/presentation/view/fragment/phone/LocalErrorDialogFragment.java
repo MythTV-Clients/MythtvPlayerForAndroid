@@ -1,5 +1,6 @@
 package org.mythtv.android.presentation.view.fragment.phone;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,7 +23,7 @@ public class LocalErrorDialogFragment extends DialogFragment {
     public Dialog onCreateDialog( Bundle savedInstanceState ) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View dialogView = inflater.inflate( R.layout.fragment_phone_cast_error, null );
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate( R.layout.fragment_phone_cast_error, null );
 
         TextView errorMessage = (TextView) dialogView.findViewById( R.id.error_message );
         errorMessage.setText( getResources().getString( R.string.playbackErrorLabel ) );

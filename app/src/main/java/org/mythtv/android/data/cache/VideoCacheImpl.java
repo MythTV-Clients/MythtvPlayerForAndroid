@@ -21,7 +21,6 @@ package org.mythtv.android.data.cache;
 import android.content.Context;
 import android.util.Log;
 
-import org.mythtv.android.data.cache.serializer.VideoEntityJsonSerializer;
 import org.mythtv.android.data.cache.serializer.VideoListEntityJsonSerializer;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoListEntity;
@@ -52,7 +51,6 @@ public class VideoCacheImpl implements VideoCache {
 
     private final Context context;
     private final File cacheDir;
-    private final VideoEntityJsonSerializer videoEntityJsonSerializer;
     private final VideoListEntityJsonSerializer videoListEntityJsonSerializer;
     private final FileManager fileManager;
     private final ThreadExecutor threadExecutor;
@@ -61,21 +59,20 @@ public class VideoCacheImpl implements VideoCache {
      * Constructor of the class {@link VideoCacheImpl}.
      *
      * @param context A
-     * @param videoEntityJsonSerializer {@link VideoEntityJsonSerializer} for object serialization.
+     * @param videoListEntityJsonSerializer {@link VideoListEntityJsonSerializer} for object serialization.
      * @param fileManager {@link FileManager} for saving serialized objects to the file system.
      */
     @Inject
-    public VideoCacheImpl(Context context, VideoEntityJsonSerializer videoEntityJsonSerializer, VideoListEntityJsonSerializer videoListEntityJsonSerializer, FileManager fileManager, ThreadExecutor executor ) {
+    VideoCacheImpl(Context context, VideoListEntityJsonSerializer videoListEntityJsonSerializer, FileManager fileManager, ThreadExecutor executor) {
         Log.d( TAG, "initialize : enter" );
 
-        if( context == null || videoEntityJsonSerializer == null || videoListEntityJsonSerializer == null || fileManager == null || executor == null ) {
+        if( context == null || videoListEntityJsonSerializer == null || fileManager == null || executor == null ) {
 
             throw new IllegalArgumentException( "Invalid null parameter" );
         }
 
         this.context = context.getApplicationContext();
         this.cacheDir = new File( this.context.getCacheDir().getPath() + File.separator + "videos" );
-        this.videoEntityJsonSerializer = videoEntityJsonSerializer;
         this.videoListEntityJsonSerializer = videoListEntityJsonSerializer;
         this.fileManager = fileManager;
         this.threadExecutor = executor;
