@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
-import org.mythtv.android.data.cache.serializer.VideoEntityJsonSerializer;
 import org.mythtv.android.data.cache.serializer.VideoListEntityJsonSerializer;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.domain.executor.ThreadExecutor;
@@ -49,7 +48,7 @@ public class VideoCacheTest extends ApplicationTestCase {
 
         fileManager = new FileManager();
 
-        videoCache = new VideoCacheImpl( context, new VideoEntityJsonSerializer( this.gson ), new VideoListEntityJsonSerializer( this.gson ), fileManager, mockThreadExecutor );
+        videoCache = new VideoCacheImpl( context, new VideoListEntityJsonSerializer( this.gson ), fileManager, mockThreadExecutor );
 
     }
 
