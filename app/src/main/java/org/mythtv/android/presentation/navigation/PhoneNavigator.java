@@ -135,7 +135,7 @@ public class PhoneNavigator {
         Log.d( TAG, "navigateToInternalPlayer : exit" );
     }
 
-    public void navigateToLocalPlayer(Context context, MediaItemModel mediaItemModel ) {
+    public void navigateToLocalPlayer( Context context, MediaItemModel mediaItemModel ) {
         Log.d( TAG, "navigateToLocalPlayer : enter" );
 
         if( null != context ) {

@@ -157,14 +157,6 @@ public class MediaItemDetailsPresenter implements Presenter {
         Log.d( TAG, "getDetails : exit" );
     }
 
-    private void notifyInView( String message ) {
-        Log.d( TAG, "notifyInView : enter" );
-
-        this.viewDetailsView.showMessage( message );
-
-        Log.d( TAG, "notifyInView : exit" );
-    }
-
     private final class MediaItemDetailsSubscriber extends DefaultSubscriber<MediaItem> {
 
         @Override

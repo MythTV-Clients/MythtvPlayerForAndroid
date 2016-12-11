@@ -68,7 +68,7 @@ public class VideoCacheImpl implements VideoCache {
      * @param fileManager {@link FileManager} for saving serialized objects to the file system.
      */
     @Inject
-    VideoCacheImpl(Context context, VideoListEntityJsonSerializer videoListEntityJsonSerializer, FileManager fileManager, ThreadExecutor executor) {
+    VideoCacheImpl( Context context, VideoListEntityJsonSerializer videoListEntityJsonSerializer, FileManager fileManager, ThreadExecutor executor ) {
         Log.d( TAG, "initialize : enter" );
 
         if( context == null || videoListEntityJsonSerializer == null || fileManager == null || executor == null ) {
@@ -140,23 +140,6 @@ public class VideoCacheImpl implements VideoCache {
                 .doOnNext( entity -> Log.d( TAG, "getCategory : entity=" + entity ) )
                 .toList();
 
-    }
-
-    @Override
-    public Observable<List<VideoMetadataInfoEntity>> getDirectory( final String directory ) {
-        Log.d( TAG, "getDirectory : enter" );
-        Log.d( TAG, "getDirectory : directory=" + directory );
-
-        if( !isCached() ) {
-            Log.d( TAG, "getDirectory : exit, not cached on disk" );
-
-            return Observable.empty();
-        }
-
-        return readFromFile()
-                .flatMap( Observable::from )
-                .filter( entity -> entity.getFileName().startsWith( directory ) )
-                .toList();
     }
 
     @Override

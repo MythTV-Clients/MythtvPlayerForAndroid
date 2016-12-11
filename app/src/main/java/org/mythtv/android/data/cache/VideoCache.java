@@ -40,8 +40,6 @@ public interface VideoCache {
 
     Observable<List<VideoMetadataInfoEntity>> getCategory( String category );
 
-    Observable<List<VideoMetadataInfoEntity>> getDirectory( String directory );
-
     boolean isCached();
 
     boolean isExpired();

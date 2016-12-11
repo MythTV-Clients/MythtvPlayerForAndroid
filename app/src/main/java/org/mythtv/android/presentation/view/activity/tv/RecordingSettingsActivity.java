@@ -30,8 +30,6 @@ import org.mythtv.android.R;
  */
 public class RecordingSettingsActivity extends AbstractBaseTvActivity {
 
-    private static final String TAG = RecordingSettingsActivity.class.getSimpleName();
-
     @Override
     public int getLayoutResource() {
         return R.layout.activity_phone_recording_settings;

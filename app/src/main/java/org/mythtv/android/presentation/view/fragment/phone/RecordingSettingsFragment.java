@@ -63,38 +63,6 @@ public class RecordingSettingsFragment extends PreferenceFragment implements OnS
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-//        AllProgramsEvent recordingGroupsEvent = MainApplication.getInstance().getDvrApiService().requestAllRecordingGroups( new RequestAllRecordedProgramsEvent( null, null, null ) );
-//        if( recordingGroupsEvent.isEntityFound() ) {
-//
-//            List<String> recordingGroups = new ArrayList<>();
-//            for( ProgramDetails details : recordingGroupsEvent.getDetails() ) {
-//
-//                Program program = Program.fromDetails( details );
-//                recordingGroups.add( program.getRecording().getRecGroup() );
-//            }
-//
-//            String[] groups = recordingGroups.toArray( new String[ recordingGroups.size() ]);
-//            mDefaultRecordingGroup.setEntries( groups );
-//            mDefaultRecordingGroup.setEntryValues( groups );
-//
-//        }
-//
-//        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener( this );
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-//        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener( this );
-
-    }
-
-    @Override
     public void onSharedPreferenceChanged( SharedPreferences sharedPreferences, String key ) {
 
     }

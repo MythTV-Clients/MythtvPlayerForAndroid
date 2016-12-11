@@ -41,19 +41,10 @@ import org.mythtv.android.domain.SettingsKeys;
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private static final String TAG = SettingsFragment.class.getSimpleName();
-
     @Override
     public void onCreatePreferences( Bundle bundle, String s ) {
 
         addPreferencesFromResource( R.xml.preferences );
-
-    }
-
-    @Override
-    public void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
-
 
     }
 

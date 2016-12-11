@@ -18,9 +18,6 @@
 
 package org.mythtv.android.presentation.model;
 
-//import lombok.Data;
-//import lombok.RequiredArgsConstructor;
-
 /**
  *
  *
@@ -29,21 +26,22 @@ package org.mythtv.android.presentation.model;
  *
  * Created on 1/28/16.
  */
-//@Data
-//@RequiredArgsConstructor( suppressConstructorProperties = true )
 public class TvCategoryModel {
 
     private final int position;
     private final String title;
     private final Integer drawable;
 
-    public TvCategoryModel(int position, String title, Integer drawable) {
+    public TvCategoryModel( int position, String title, Integer drawable ) {
+
         this.position = position;
         this.title = title;
         this.drawable = drawable;
+
     }
 
     public int getPosition() {
+
         return position;
     }
 

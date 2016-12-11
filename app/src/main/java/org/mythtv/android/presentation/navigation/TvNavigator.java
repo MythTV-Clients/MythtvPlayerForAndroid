@@ -50,12 +50,6 @@ public class TvNavigator {
         //empty
     }
 
-    public void navigateToHome( Context context ) {
-        Log.d( TAG, "navigateToHome : enter" );
-
-        Log.d( TAG, "navigateToHome : exit" );
-    }
-
     public void navigateToRecordings( Context context ) {
         Log.d( TAG, "navigateToRecordings : enter" );
 

@@ -18,8 +18,6 @@
 
 package org.mythtv.android.domain;
 
-//import lombok.Data;
-
 /**
  *
  *
@@ -28,7 +26,6 @@ package org.mythtv.android.domain;
  *
  * Created on 1/18/16.
  */
-//@Data
 public class Input {
 
     private int id;

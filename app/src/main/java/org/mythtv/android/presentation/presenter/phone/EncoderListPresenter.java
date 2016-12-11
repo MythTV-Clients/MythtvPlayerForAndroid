@@ -100,12 +100,6 @@ public class EncoderListPresenter extends DefaultSubscriber<List<Encoder>> imple
 
     }
 
-    public void onEncoderClicked( EncoderModel encoderModel ) {
-
-//        this.viewListView.viewEncoder( encoderModel );
-
-    }
-
     private void showViewLoading() {
         this.viewListView.showLoading();
     }

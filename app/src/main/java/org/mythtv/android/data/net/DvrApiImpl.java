@@ -618,8 +618,8 @@ public class DvrApiImpl implements DvrApi {
 
     private String getMasterBackendUrl() {
 
-        String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+        String host = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         String masterBackend = "http://" + host + ":" + port;
         Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
@@ -627,7 +627,7 @@ public class DvrApiImpl implements DvrApi {
         return masterBackend;
     }
 
-    private String getFromPreferences( Context context, String key ) {
+    private String getFromPreferences( String key ) {
 
         return sharedPreferences.getString( key, "" );
     }

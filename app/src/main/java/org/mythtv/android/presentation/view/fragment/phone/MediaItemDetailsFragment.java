@@ -470,13 +470,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         Log.d( TAG, "loadMediaItemDetails : exit" );
     }
 
-    @Override
-    public void updateLiveStream( MediaItemModel mediaItem ) {
-//        Log.d( TAG, "updateLiveStream : enter" );
-//
-//        Log.d( TAG, "updateLiveStream : exit" );
-    }
-
     private void updateMenu() {
 
         if( null == menuHlsDisable || null == menuHlsEnable || null == menuMarkUnwatched || null == menuMarkWatched ) {

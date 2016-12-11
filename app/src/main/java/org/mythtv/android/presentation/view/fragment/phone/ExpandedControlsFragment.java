@@ -49,8 +49,6 @@ import org.mythtv.android.R;
  */
 public class ExpandedControlsFragment extends Fragment {
 
-    private static final String TAG = "ExpandedControlsFrgmnt";
-
     private TextView mSubtitleTextView;
     private UIMediaController mUIMediaController;
     private final RemoteMediaClient.Listener mPostRemoteMediaClientListener =

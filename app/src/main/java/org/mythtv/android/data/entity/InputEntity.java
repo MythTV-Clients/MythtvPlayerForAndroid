@@ -20,8 +20,6 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-//import lombok.Data;
-
 /**
  *
  *
@@ -30,7 +28,6 @@ import com.google.gson.annotations.SerializedName;
  *
  * Created on 1/18/16.
  */
-//@Data
 public class InputEntity {
 
     @SerializedName( "Id" )

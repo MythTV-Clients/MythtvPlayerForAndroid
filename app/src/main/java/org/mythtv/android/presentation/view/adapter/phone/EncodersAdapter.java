@@ -48,12 +48,6 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
     private static final String TAG = EncodersAdapter.class.getSimpleName();
 
-    public interface OnItemClickListener {
-
-        void onTitleInfoItemClicked( EncoderModel encoderModel );
-
-    }
-
     private Context context;
     private List<EncoderModel> encodersCollection;
     private final LayoutInflater layoutInflater;

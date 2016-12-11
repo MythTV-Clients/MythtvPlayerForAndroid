@@ -264,11 +264,6 @@ public class MediaItemEntity {
         return fanartUrl;
     }
 
-    public String getFanartUrl( String width ) {
-
-        return fanartUrl;
-    }
-
     public void setFanartUrl( String fanartUrl ) {
 
         this.fanartUrl = fanartUrl;
@@ -276,11 +271,6 @@ public class MediaItemEntity {
     }
 
     public String getCoverartUrl() {
-
-        return coverartUrl;
-    }
-
-    public String getCoverartUrl( String width ) {
 
         return coverartUrl;
     }
@@ -296,11 +286,6 @@ public class MediaItemEntity {
         return bannerUrl;
     }
 
-    public String getBannerUrl( String width ) {
-
-        return bannerUrl;
-    }
-
     public void setBannerUrl( String bannerUrl ) {
 
         this.bannerUrl = bannerUrl;
@@ -308,11 +293,6 @@ public class MediaItemEntity {
     }
 
     public String getPreviewUrl() {
-
-        return previewUrl;
-    }
-
-    public String getPreviewUrl( String width ) {
 
         return previewUrl;
     }
@@ -349,7 +329,9 @@ public class MediaItemEntity {
     }
 
     public void setPercentComplete( int percentComplete ) {
+
         this.percentComplete = percentComplete;
+
     }
 
     public boolean isRecording() {

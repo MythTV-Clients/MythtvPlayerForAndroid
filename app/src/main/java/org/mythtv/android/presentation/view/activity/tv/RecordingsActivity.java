@@ -56,7 +56,7 @@ public class RecordingsActivity extends AbstractBaseTvActivity implements HasCom
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-        this.initializeActivity( savedInstanceState );
+        this.initializeActivity();
         this.initializeInjector();
 
     }
@@ -64,7 +64,7 @@ public class RecordingsActivity extends AbstractBaseTvActivity implements HasCom
     /**
      * Initializes this activity.
      */
-    private void initializeActivity( Bundle savedInstanceState ) {
+    private void initializeActivity() {
         Log.d( TAG, "initializeActivity : enter" );
 
         MediaItemListFragment.Builder recordingsParameters = new MediaItemListFragment.Builder( Media.PROGRAM );

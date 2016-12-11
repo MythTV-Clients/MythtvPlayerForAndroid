@@ -38,11 +38,4 @@ public interface MediaItemDetailsView extends LoadDataView {
      */
     void renderMediaItem( MediaItemModel mediaItem );
 
-    /**
-     * Update the live streaming buttons
-     *
-     * @param mediaItem The {@link MediaItemModel} that will be shown.
-     */
-    void updateLiveStream( MediaItemModel mediaItem );
-
 }

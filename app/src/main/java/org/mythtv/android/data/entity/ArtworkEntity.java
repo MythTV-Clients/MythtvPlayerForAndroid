@@ -22,8 +22,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 
-//import lombok.Data;
-
 /**
  *
  *
@@ -32,7 +30,6 @@ import java.util.Arrays;
  *
  * Created on 8/27/15.
  */
-//@Data
 public class ArtworkEntity {
 
     @SerializedName( "ArtworkInfos" )

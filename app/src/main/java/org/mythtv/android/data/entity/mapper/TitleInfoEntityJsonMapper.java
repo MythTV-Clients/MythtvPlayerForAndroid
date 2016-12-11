@@ -42,8 +42,6 @@ import javax.inject.Inject;
  */
 public class TitleInfoEntityJsonMapper {
 
-    private static final String TAG = TitleInfoEntityJsonMapper.class.getSimpleName();
-
     private final Gson gson;
 
     @Inject

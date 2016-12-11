@@ -18,8 +18,6 @@
 
 package org.mythtv.android.presentation.model;
 
-//import lombok.Data;
-
 /**
  *
  *
@@ -28,7 +26,6 @@ package org.mythtv.android.presentation.model;
  *
  * Created on 1/18/16.
  */
-//@Data
 public class InputModel {
 
     private int id;

@@ -43,8 +43,6 @@ import javax.inject.Inject;
  */
 public class VideoMetadataInfoEntityJsonMapper {
 
-    private static final String TAG = VideoMetadataInfoEntityJsonMapper.class.getSimpleName();
-
     private final Gson gson;
 
     @Inject
@@ -55,9 +53,7 @@ public class VideoMetadataInfoEntityJsonMapper {
     }
 
     public VideoMetadataInfoEntity transformVideoMetadataInfoEntity( Reader videoMetadataInfoJsonResponse ) throws JsonSyntaxException {
-//        Log.d( TAG, "transformVideoMetadataInfoEntity : enter" );
 
-//        Log.d( TAG, "transformVideoMetadataInfoEntity : videoMetadataInfoJsonResponse=" + videoMetadataInfoJsonResponse );
         Type videoMetadataInfoWrapperEntityType = new TypeToken<VideoMetadataInfoWrapperEntity>() {}.getType();
         VideoMetadataInfoWrapperEntity videoMetadataInfoWrapperEntity = this.gson.fromJson( videoMetadataInfoJsonResponse, videoMetadataInfoWrapperEntityType );
 

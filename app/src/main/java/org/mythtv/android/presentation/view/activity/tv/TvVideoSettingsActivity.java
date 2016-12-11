@@ -30,8 +30,6 @@ import org.mythtv.android.R;
  */
 public class TvVideoSettingsActivity extends AbstractBaseTvActivity {
 
-    private static final String TAG = TvVideoSettingsActivity.class.getSimpleName();
-
     @Override
     public int getLayoutResource() {
         return R.layout.activity_tv_video_settings;

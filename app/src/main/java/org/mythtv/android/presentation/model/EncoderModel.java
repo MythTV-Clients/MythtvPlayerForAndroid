@@ -20,8 +20,6 @@ package org.mythtv.android.presentation.model;
 
 import java.util.List;
 
-//import lombok.Data;
-
 /**
  *
  *
@@ -30,7 +28,6 @@ import java.util.List;
  *
  * Created on 1/18/16.
  */
-//@Data
 public class EncoderModel {
 
     private int id;

@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v17.leanback.app.SearchFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
@@ -80,7 +79,6 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     SearchResultListPresenter searchResultListPresenter;
 
     private ArrayObjectAdapter mRowsAdapter;
-    private Handler mHandler = new Handler();
 
     private MediaItemListListener mediaItemListListener;
 

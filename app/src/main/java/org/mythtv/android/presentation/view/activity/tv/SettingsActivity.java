@@ -903,33 +903,6 @@ public class SettingsActivity extends Activity {
 
     }
 
-//    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, int editInputType, String desc, String editDesc ) {
-//
-//        actions.add( new GuidedAction.Builder( context )
-//                .id( id )
-//                .title( title )
-//                .editTitle( editTitle )
-//                .editInputType( editInputType )
-//                .description( desc )
-//                .editDescription( editDesc )
-//                .editable( true )
-//                .build() );
-//
-//    }
-
-//    private static void addEditableDescriptionAction( Context context, List<GuidedAction> actions, long id, String title, String desc, String editDescription, int descriptionEditInputType ) {
-//
-//        actions.add( new GuidedAction.Builder( context )
-//                .id( id )
-//                .title( title )
-//                .description( desc )
-//                .editDescription( editDescription )
-//                .descriptionEditInputType( descriptionEditInputType )
-//                .descriptionEditable( true )
-//                .build() );
-//
-//    }
-
     private static void addCheckedAction( Context context, List<GuidedAction> actions, int iconResId, String title, String desc, boolean checked ) {
 
         GuidedAction guidedAction = new GuidedAction.Builder( context )

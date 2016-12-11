@@ -106,7 +106,7 @@ public class VideoDataStoreFactory {
         return new MasterBackendVideoDataStore( api, this.videoCache, this.searchDataStoreFactory );
     }
 
-    public VideoDataStore createCategoryDataStore( String category ) {
+    public VideoDataStore createCategoryDataStore() {
         Log.d( TAG, "createCategoryDataStore : enter" );
 
         VideoDataStore videoDataStore;

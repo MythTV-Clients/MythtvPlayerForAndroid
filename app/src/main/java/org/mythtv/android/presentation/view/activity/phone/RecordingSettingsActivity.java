@@ -45,10 +45,4 @@ public class RecordingSettingsActivity extends AbstractBasePhoneActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
 }

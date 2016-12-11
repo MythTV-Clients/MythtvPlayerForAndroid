@@ -36,8 +36,6 @@ import javax.inject.Inject;
  */
 public class BooleanJsonMapper {
 
-    private static final String TAG = BooleanJsonMapper.class.getSimpleName();
-
     private final JsonParser parser;
 
     @Inject
@@ -49,7 +47,6 @@ public class BooleanJsonMapper {
 
     public Boolean transformBoolean( Reader booleanJsonResponse ) throws JsonSyntaxException {
 
-//        Log.i( TAG, "transformBoolean : booleanJsonResponse=" + booleanJsonResponse );
         JsonObject rootObject = parser.parse( booleanJsonResponse ).getAsJsonObject();
 
         return rootObject.get( "bool" ).getAsBoolean();

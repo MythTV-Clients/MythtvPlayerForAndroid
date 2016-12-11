@@ -38,7 +38,6 @@ import java.lang.reflect.Type;
  */
 public class DateTimeSerializer implements JsonSerializer<DateTime> {
 
-    private static final String TAG = DateTimeSerializer.class.getSimpleName();
     private static final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     @Override

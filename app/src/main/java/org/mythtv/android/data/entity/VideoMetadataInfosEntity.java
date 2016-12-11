@@ -22,8 +22,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 
-//import lombok.Data;
-
 /**
  *
  *
@@ -32,7 +30,6 @@ import java.util.Arrays;
  *
  * Created on 9/7/15.
  */
-//@Data
 public class VideoMetadataInfosEntity {
 
     @SerializedName( "VideoMetadataInfos" )
@@ -41,7 +38,7 @@ public class VideoMetadataInfosEntity {
     public VideoMetadataInfosEntity() {
     }
 
-    public VideoMetadataInfosEntity(VideoMetadataInfoEntity[] videoMetadataInfoEntities ) {
+    public VideoMetadataInfosEntity( VideoMetadataInfoEntity[] videoMetadataInfoEntities ) {
 
         this.videoMetadataInfoEntities = videoMetadataInfoEntities;
 

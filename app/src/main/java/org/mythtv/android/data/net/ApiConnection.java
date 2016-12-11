@@ -45,9 +45,6 @@ public class ApiConnection implements Callable<Reader> {
 
     private static final String TAG = ApiConnection.class.getSimpleName();
 
-    private static final String CONTENT_TYPE_LABEL = "Content-Type";
-    private static final String CONTENT_TYPE_VALUE_JSON = "application/json; charset=utf-8";
-
     private static final String ACCEPT_LABEL = "Accept";
     private static final String ACCEPT_VALUE_JSON = "application/json";
 

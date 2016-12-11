@@ -595,16 +595,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
      */
     private void addOtherRows() {
 
-//        mVideoCursorAdapter = new CursorObjectAdapter( new CardPresenter() );
-//        mVideoCursorAdapter.setMapper( new VideoCursorMapper() );
-//
-//        Bundle args = new Bundle();
-//        args.putString( VideoContract.VideoEntry.COLUMN_CATEGORY, mSelectedVideo.category );
-//        getLoaderManager().initLoader( RECOMMENDED_VIDEOS_LOADER, args, this );
-//
-//        HeaderItem header = new HeaderItem( getString( R.string.related_movies ) );
-//        mRowsAdapter.add( new ListRow( header, mVideoCursorAdapter ) );
-
     }
 
     private int getUpdatePeriod() {
