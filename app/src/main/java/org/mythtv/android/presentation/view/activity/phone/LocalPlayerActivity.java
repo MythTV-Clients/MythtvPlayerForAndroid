@@ -75,8 +75,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
+ *
  * Activity for the local media player.
- */
+ *
+ * @author dmfrey
+\ */
 public class LocalPlayerActivity extends AppCompatActivity {
 
     private static final String TAG = "LocalPlayerActivity";

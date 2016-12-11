@@ -40,7 +40,12 @@ import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
 import butterknife.BindView;
 
 /**
- * Created by dmfrey on 11/13/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/13/15.
  */
 public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener, SeriesListFragment.SeriesListListener {
 

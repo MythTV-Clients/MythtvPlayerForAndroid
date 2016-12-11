@@ -28,7 +28,12 @@ import javax.inject.Inject;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 11/13/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/13/15.
  */
 public class GetVideoSeriesList extends UseCase {
 

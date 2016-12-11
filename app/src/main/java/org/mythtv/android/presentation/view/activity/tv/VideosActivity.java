@@ -30,6 +30,12 @@ import org.mythtv.android.presentation.internal.di.components.DaggerMediaCompone
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.view.fragment.tv.VideosFragment;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class VideosActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent>, VideosFragment.MediaListener {
 
     private static final String TAG = VideosActivity.class.getSimpleName();

@@ -40,7 +40,9 @@ import dagger.Component;
  * A scope {@link PerActivity} component.
  * Injects user specific Fragments.
  *
- * Created by dmfrey on 9/18/16.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @PerActivity
 @Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, SharedPreferencesModule.class, NetModule.class, MediaItemsModule.class, MediaItemModule.class, TitleInfosModule.class, EncodersModule.class, SearchResultsModule.class } )

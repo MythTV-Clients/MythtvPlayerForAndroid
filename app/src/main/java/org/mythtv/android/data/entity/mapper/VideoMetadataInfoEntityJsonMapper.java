@@ -34,7 +34,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class VideoMetadataInfoEntityJsonMapper {
 

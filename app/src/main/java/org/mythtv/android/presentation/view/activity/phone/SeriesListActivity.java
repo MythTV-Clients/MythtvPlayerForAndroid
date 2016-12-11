@@ -34,7 +34,9 @@ import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment
 /**
  * Activity that shows a list of programs.
  *
- * Created by dmfrey on 9/1/15.
+ * @author dmfrey
+ *
+ * Created on 9/1/15.
  */
 public class SeriesListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener {
 

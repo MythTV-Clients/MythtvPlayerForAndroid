@@ -40,7 +40,9 @@ import butterknife.ButterKnife;
 /**
  * Adapter that manages a collection of {@link ProgramModel}.
  *
- * Created by dmfrey on 1/21/16.
+ * @author dmfrey
+ *
+ * Created on 1/21/16.
  */
 public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.EncoderViewHolder> {
 

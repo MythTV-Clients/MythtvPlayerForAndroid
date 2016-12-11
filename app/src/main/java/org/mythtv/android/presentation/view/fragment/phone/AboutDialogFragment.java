@@ -30,7 +30,12 @@ import android.view.View;
 import org.mythtv.android.R;
 
 /**
- * Created by dmfrey on 5/5/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 5/5/16.
  */
 public class AboutDialogFragment extends DialogFragment {
 

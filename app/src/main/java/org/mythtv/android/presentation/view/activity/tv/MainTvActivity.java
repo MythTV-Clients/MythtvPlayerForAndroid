@@ -35,6 +35,12 @@ import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class MainTvActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent> {
 
     private static final String TAG = MainTvActivity.class.getSimpleName();

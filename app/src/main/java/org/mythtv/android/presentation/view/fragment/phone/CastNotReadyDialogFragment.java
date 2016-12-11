@@ -12,7 +12,12 @@ import android.view.View;
 import org.mythtv.android.R;
 
 /**
- * Created by dmfrey on 7/9/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 7/9/16.
  */
 
 public class CastNotReadyDialogFragment extends DialogFragment {

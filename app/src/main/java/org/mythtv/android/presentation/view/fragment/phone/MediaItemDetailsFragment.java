@@ -67,7 +67,12 @@ import okhttp3.Request;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by dmfrey on 8/31/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
 public class MediaItemDetailsFragment extends AbstractBaseFragment implements MediaItemDetailsView {
 

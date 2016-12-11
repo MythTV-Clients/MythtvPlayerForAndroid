@@ -43,7 +43,12 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by dmfrey on 11/9/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/9/15.
  */
 public class VideoApiImpl implements VideoApi {
 

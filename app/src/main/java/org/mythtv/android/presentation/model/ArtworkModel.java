@@ -24,7 +24,12 @@ import java.util.Arrays;
 //import lombok.Data;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 //@Data
 public class ArtworkModel implements Serializable {

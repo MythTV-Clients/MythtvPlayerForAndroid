@@ -24,7 +24,12 @@ import android.util.Log;
 import org.mythtv.android.R;
 
 /**
- * Created by dmfrey on 2/1/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 2/1/16.
  */
 public class ArticleCleaner {
 

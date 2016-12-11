@@ -23,7 +23,12 @@ import com.google.gson.annotations.SerializedName;
 //import lombok.Data;
 
 /**
- * Created by dmfrey on 11/1/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/1/15.
  */
 //@Data
 public class VideoMetadataInfoListWrapperEntity {

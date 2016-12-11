@@ -27,7 +27,12 @@ import javax.inject.Inject;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 2/27/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 2/27/16.
  */
 public class GetVideoSeriesCategoryContentTypeList extends UseCase {
 

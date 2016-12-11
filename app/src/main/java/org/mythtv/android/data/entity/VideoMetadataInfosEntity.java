@@ -25,7 +25,12 @@ import java.util.Arrays;
 //import lombok.Data;
 
 /**
- * Created by dmfrey on 9/7/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/7/15.
  */
 //@Data
 public class VideoMetadataInfosEntity {

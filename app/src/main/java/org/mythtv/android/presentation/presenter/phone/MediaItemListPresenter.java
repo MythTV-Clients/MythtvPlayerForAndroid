@@ -39,7 +39,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * Created by dmfrey on 9/15/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/15/16.
  */
 public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 

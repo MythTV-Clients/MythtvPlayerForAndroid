@@ -43,7 +43,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dmfrey on 1/28/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 public class SettingsActivity extends Activity {
 

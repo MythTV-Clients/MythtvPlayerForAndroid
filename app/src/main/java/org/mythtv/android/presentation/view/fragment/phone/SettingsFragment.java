@@ -31,9 +31,13 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 
-
-/*
- * Created by dmfrey on 4/7/15.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/7/15.
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
 

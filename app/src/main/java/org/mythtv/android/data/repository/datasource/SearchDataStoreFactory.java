@@ -28,7 +28,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Created by dmfrey on 10/10/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/10/15.
  */
 @Singleton
 public class SearchDataStoreFactory {

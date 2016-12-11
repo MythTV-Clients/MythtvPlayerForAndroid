@@ -52,7 +52,12 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class DvrApiImpl implements DvrApi {
 

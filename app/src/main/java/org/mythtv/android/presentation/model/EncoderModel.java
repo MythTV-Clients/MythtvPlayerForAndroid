@@ -23,7 +23,12 @@ import java.util.List;
 //import lombok.Data;
 
 /**
- * Created by dmfrey on 1/18/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/18/16.
  */
 //@Data
 public class EncoderModel {

@@ -40,7 +40,12 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by dmfrey on 10/8/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/8/15.
  */
 public class DbSearchDataStore implements SearchDataStore {
 

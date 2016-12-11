@@ -53,9 +53,12 @@ import org.mythtv.android.presentation.utils.Utils;
 import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
 import org.mythtv.android.presentation.view.activity.tv.PlaybackOverlayActivity;
 
-/*
+/**
+ *
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
  * It shows a detailed view of video and its meta plus related videos.
+ *
+ * @author dmfrey
  */
 public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 

@@ -52,7 +52,12 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 2/27/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 2/27/16.
  */
 public class TvSearchResultListFragment extends AbstractBaseSearchFragment implements SearchFragment.SearchResultProvider, MediaItemListView {
 

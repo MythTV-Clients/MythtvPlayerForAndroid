@@ -3,7 +3,12 @@ package org.mythtv.android.domain;
 import org.joda.time.DateTime;
 
 /**
- * Created by dmfrey on 7/10/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 7/10/16.
  */
 
 public class MediaItem {

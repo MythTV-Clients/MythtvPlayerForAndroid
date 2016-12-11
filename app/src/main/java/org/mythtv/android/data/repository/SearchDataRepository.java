@@ -33,7 +33,12 @@ import javax.inject.Singleton;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 10/10/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/10/15.
  */
 @Singleton
 public class SearchDataRepository implements SearchRepository {

@@ -49,7 +49,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by dmfrey on 9/30/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/30/15.
  */
 public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemDetailsFragment.MediaItemDetailsListener {
 

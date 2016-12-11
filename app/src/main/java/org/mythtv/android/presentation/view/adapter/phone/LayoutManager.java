@@ -22,9 +22,12 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 
 /**
+ *
  * Layout manager to position items inside a {@link android.support.v7.widget.RecyclerView}.
  *
- * Created by dmfrey on 8/31/15.
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
 public class LayoutManager extends LinearLayoutManager {
 

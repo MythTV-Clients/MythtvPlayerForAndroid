@@ -27,7 +27,12 @@ import android.support.v7.app.AlertDialog;
 import org.mythtv.android.R;
 
 /**
- * Created by dmfrey on 4/21/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/21/16.
  */
 public class RemoveLiveStreamDialogFragment extends DialogFragment {
 

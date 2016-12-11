@@ -30,7 +30,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
- * Created by dmfrey on 5/9/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 5/9/16.
  */
 @Module
 public class NetModule {

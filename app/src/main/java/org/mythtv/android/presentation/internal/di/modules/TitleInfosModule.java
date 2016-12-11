@@ -30,7 +30,9 @@ import dagger.Provides;
 /**
  * Dagger module that provides programs related collaborators.
  *
- * Created by dmfrey on 9/9/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Module
 public class TitleInfosModule {

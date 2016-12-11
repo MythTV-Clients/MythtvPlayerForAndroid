@@ -20,12 +20,14 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-//import lombok.Data;
-
-/*
- * Created by dmfrey on 12/7/14.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 12/7/14.
  */
-//@Data
 public class TitleInfoEntity {
 
     @SerializedName( "Title" )

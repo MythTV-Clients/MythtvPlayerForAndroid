@@ -22,8 +22,13 @@ import android.support.annotation.NonNull;
 
 import org.mythtv.android.domain.utils.DomainUtils;
 
-/*
- * Created by dmfrey on 9/23/16.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/23/16.
  */
 public class Series implements Comparable<Series> {
 

@@ -23,7 +23,12 @@ import org.joda.time.DateTime;
 //import lombok.Data;
 
 /**
- * Created by dmfrey on 10/8/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/8/15.
  */
 //@Data
 public class SearchResult {

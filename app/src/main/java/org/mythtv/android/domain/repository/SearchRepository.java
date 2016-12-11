@@ -25,7 +25,12 @@ import java.util.List;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 10/8/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/8/15.
  */
 public interface SearchRepository {
 

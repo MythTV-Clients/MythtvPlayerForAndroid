@@ -23,10 +23,13 @@ import org.mythtv.android.presentation.model.SeriesModel;
 import java.util.Collection;
 
 /**
+ *
  * Interface representing a View in a model view presenter (MVP) pattern.
  * In this case is used as a view representing a list of {@link SeriesModel}.
  *
- * Created by dmfrey on 9/24/19.
+ * @author dmfrey
+ *
+ * Created on 9/24/19.
  */
 public interface SeriesListView extends LoadDataView {
 

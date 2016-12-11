@@ -21,7 +21,12 @@ package org.mythtv.android.data.exception;
 import org.mythtv.android.domain.exception.ErrorBundle;
 
 /**
- * Created by dmfrey on 8/26/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 public class RepositoryErrorBundle implements ErrorBundle {
 

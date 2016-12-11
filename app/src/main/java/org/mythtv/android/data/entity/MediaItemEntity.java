@@ -4,7 +4,12 @@ import org.joda.time.DateTime;
 import org.mythtv.android.domain.Media;
 
 /**
- * Created by dmfrey on 7/10/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 7/10/16.
  */
 
 public class MediaItemEntity {

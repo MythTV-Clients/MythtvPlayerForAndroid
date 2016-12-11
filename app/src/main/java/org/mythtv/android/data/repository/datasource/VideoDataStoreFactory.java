@@ -36,7 +36,12 @@ import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 
 /**
- * Created by dmfrey on 11/3/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/3/15.
  */
 @Singleton
 public class VideoDataStoreFactory {

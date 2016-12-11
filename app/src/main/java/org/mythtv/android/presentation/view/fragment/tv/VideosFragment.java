@@ -32,7 +32,12 @@ import org.mythtv.android.domain.Media;
 import java.util.List;
 
 /**
- * Created by dmfrey on 2/4/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 2/4/16.
  */
 public class VideosFragment extends AbstractBaseGuidedStepFragment {
 

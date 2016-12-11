@@ -38,7 +38,12 @@ import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment
 import butterknife.BindView;
 
 /**
- * Created by dmfrey on 8/31/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
 public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener {
 

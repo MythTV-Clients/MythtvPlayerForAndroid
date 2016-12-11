@@ -65,7 +65,9 @@ import butterknife.ButterKnife;
 /**
  * Base {@link android.app.Activity} class for every Activity in this application.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/30/15.
  */
 public abstract class AbstractBasePhoneActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 

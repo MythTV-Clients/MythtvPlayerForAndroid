@@ -29,8 +29,13 @@ import android.widget.VideoView;
 
 import org.mythtv.android.R;
 
-/*
- * Created by dmfrey on 4/4/15.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/4/15.
  */
 public class PlayerActivity extends Activity {
 

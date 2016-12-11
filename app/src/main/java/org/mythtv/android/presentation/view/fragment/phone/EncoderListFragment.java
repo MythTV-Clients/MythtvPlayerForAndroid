@@ -45,7 +45,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by dmfrey on 1/20/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/20/16.
  */
 public class EncoderListFragment extends AbstractBaseFragment implements EncoderListView {
 

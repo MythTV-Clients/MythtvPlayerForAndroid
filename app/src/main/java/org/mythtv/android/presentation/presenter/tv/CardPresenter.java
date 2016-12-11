@@ -29,9 +29,11 @@ import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.MediaItemModel;
 
-/*
+/**
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
  * It contains an Image CardView
+ *
+ * @author dmfrey
  */
 public class CardPresenter extends Presenter {
 

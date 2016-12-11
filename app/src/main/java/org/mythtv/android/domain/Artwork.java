@@ -23,7 +23,12 @@ package org.mythtv.android.domain;
 import java.util.Arrays;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 //@Data
 public class Artwork {

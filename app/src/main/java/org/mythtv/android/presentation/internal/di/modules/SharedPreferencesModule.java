@@ -30,7 +30,12 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by dmfrey on 3/1/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 3/1/16.
  */
 @Module
 public class SharedPreferencesModule {

@@ -21,7 +21,9 @@ package org.mythtv.android.presentation.presenter.phone;
 /**
  * Interface representing a Presenter in a model view presenter (MVP) pattern.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/30/15.
  */
 public interface Presenter {
 

@@ -22,6 +22,12 @@ import android.os.Bundle;
 
 import org.mythtv.android.R;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class TvVideoSettingsActivity extends AbstractBaseTvActivity {
 
     private static final String TAG = TvVideoSettingsActivity.class.getSimpleName();

@@ -19,7 +19,12 @@
 package org.mythtv.android.domain;
 
 /**
- * Created by dmfrey on 9/2/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/2/15.
  */
 public class SettingsKeys {
 

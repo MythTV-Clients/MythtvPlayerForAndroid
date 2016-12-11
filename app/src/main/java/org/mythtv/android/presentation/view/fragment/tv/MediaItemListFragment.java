@@ -73,7 +73,12 @@ import java.util.TreeMap;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 1/29/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/29/16.
  */
 public class MediaItemListFragment extends AbstractBaseBrowseFragment implements MediaItemListView {
 

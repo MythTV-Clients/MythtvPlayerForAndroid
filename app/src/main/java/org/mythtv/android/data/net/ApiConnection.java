@@ -34,7 +34,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class ApiConnection implements Callable<Reader> {
 

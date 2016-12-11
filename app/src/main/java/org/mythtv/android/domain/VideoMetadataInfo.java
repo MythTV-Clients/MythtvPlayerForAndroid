@@ -20,12 +20,14 @@ package org.mythtv.android.domain;
 
 import org.joda.time.DateTime;
 
-//import lombok.Data;
-
-/*
- * Created by dmfrey on 10/30/15.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/30/15.
  */
-//@Data
 public class VideoMetadataInfo {
 
     private Integer id;

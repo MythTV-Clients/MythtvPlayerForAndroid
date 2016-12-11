@@ -23,12 +23,14 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
-//import lombok.Data;
-
-/*
- * Created by dmfrey on 11/12/14.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/12/14.
  */
-//@Data
 public class Program {
 
     private long id;

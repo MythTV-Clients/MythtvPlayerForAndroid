@@ -24,6 +24,10 @@ import android.os.Parcelable;
 
 /**
  * VideoModel is an immutable object that holds the various metadata associated with a single video.
+ *
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 public final class VideoModel implements Parcelable {
     public final long id;

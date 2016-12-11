@@ -12,7 +12,12 @@ import java.util.Map;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 9/17/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/17/16.
  */
 
 public class GetMediaItemList extends DynamicUseCase {

@@ -19,8 +19,11 @@ import android.os.Bundle;
 
 import org.mythtv.android.R;
 
-/*
+/**
+ *
  * Details activity class that loads LeanbackDetailsFragment class
+ *
+ * @author dmfrey
  */
 public class MediaItemDetailsActivity extends Activity {
 

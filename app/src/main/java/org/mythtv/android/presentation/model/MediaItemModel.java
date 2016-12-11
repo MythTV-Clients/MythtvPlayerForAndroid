@@ -8,7 +8,12 @@ import org.mythtv.android.domain.Media;
 import java.io.Serializable;
 
 /**
- * Created by dmfrey on 7/10/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 7/10/16.
  */
 
 public class MediaItemModel implements Serializable {

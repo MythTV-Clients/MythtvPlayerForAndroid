@@ -44,7 +44,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by dmfrey on 11/3/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/3/15.
  */
 @Singleton
 public class VideoDataRepository implements VideoRepository {

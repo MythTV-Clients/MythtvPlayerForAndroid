@@ -23,10 +23,13 @@ import org.mythtv.android.presentation.model.MediaItemModel;
 import java.util.Collection;
 
 /**
+ *
  * Interface representing a View in a model view presenter (MVP) pattern.
  * In this case is used as a view representing a list of {@link MediaItemModel}.
  *
- * Created by dmfrey on 9/7/16.
+ * @author dmfrey
+ *
+ * Created on 9/7/16.
  */
 public interface MediaItemListView extends LoadDataView {
 

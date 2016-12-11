@@ -36,7 +36,12 @@ import javax.inject.Singleton;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 11/3/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/3/15.
  */
 @Singleton
 public class VideoCacheImpl implements VideoCache {

@@ -41,6 +41,12 @@ import com.google.android.gms.cast.framework.media.uicontroller.UIMediaControlle
 
 import org.mythtv.android.R;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class ExpandedControlsFragment extends Fragment {
 
     private static final String TAG = "ExpandedControlsFrgmnt";

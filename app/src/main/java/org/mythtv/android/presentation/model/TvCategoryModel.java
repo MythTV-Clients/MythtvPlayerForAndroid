@@ -22,7 +22,12 @@ package org.mythtv.android.presentation.model;
 //import lombok.RequiredArgsConstructor;
 
 /**
- * Created by dmfrey on 1/28/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 //@Data
 //@RequiredArgsConstructor( suppressConstructorProperties = true )

@@ -46,7 +46,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by dmfrey on 10/12/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/12/15.
  */
 public class MediaItemSearchResultListFragment extends AbstractBaseFragment implements MediaItemListView {
 

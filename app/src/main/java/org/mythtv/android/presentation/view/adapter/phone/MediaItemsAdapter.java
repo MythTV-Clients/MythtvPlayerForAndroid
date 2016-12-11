@@ -48,9 +48,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ *
  * Adapter that manages a collection of {@link MediaItemModel}.
  *
- * Created by dmfrey on 8/31/15.
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
 public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.MediaItemViewHolder> {
 

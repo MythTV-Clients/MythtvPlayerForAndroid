@@ -15,7 +15,12 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by dmfrey on 10/12/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/12/15.
  */
 @Module
 public class SearchResultsModule {

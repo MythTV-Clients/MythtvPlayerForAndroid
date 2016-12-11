@@ -14,7 +14,12 @@ import dagger.Component;
 import okhttp3.OkHttpClient;
 
 /**
- * Created by dmfrey on 5/9/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 5/9/16.
  */
 @Singleton
 @Component( modules = { ApplicationModule.class, SharedPreferencesModule.class, NetModule.class } )

@@ -39,7 +39,9 @@ import dagger.Component;
 /**
  * A component whose lifetime is the life of the application.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Singleton // Constraints this component to one-per-application or un-scoped bindings.
 @Component( modules = { ApplicationModule.class, SharedPreferencesModule.class, NetModule.class } )
