@@ -61,6 +61,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.CacheControl;
 import okhttp3.FormBody;
 import okhttp3.Request;
 
@@ -568,6 +569,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             final Request request = new Request.Builder()
                     .url( getMasterBackendUrl() + mediaItemModel.getMarkWatchedUrl() )
                     .addHeader( "Accept", "application/json" )
+                    .cacheControl( CacheControl.FORCE_NETWORK )
                     .post( builder.build() )
                     .build();
 
@@ -615,6 +617,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             final Request request = new Request.Builder()
                     .url( getMasterBackendUrl() + mediaItemModel.getCreateHttpLiveStreamUrl() )
                     .addHeader( "Accept", "application/json" )
+                    .cacheControl( CacheControl.FORCE_NETWORK )
                     .get()
                     .build();
 
@@ -681,6 +684,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             final Request request = new Request.Builder()
                     .url( getMasterBackendUrl() + mediaItemModel.getRemoveHttpLiveStreamUrl() )
                     .addHeader( "Accept", "application/json" )
+                    .cacheControl( CacheControl.FORCE_NETWORK )
                     .get()
                     .build();
 

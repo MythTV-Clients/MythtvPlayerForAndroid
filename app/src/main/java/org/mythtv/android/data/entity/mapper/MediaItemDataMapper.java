@@ -96,11 +96,11 @@ public class MediaItemDataMapper {
 
         if( null != programEntity.getLiveStreamInfoEntity() ) {
 
-            mediaItem.setLiveStreamId(programEntity.getLiveStreamInfoEntity().getId());
+            mediaItem.setLiveStreamId( programEntity.getLiveStreamInfoEntity().getId() );
+            mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
 
         }
         mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
-        mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
 
         List<String> castMembers = new ArrayList<>();
         List<String> characters = new ArrayList<>();

@@ -315,7 +315,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         super.onActivityCreated( savedInstanceState );
 
         this.initialize();
-        this.loadMediaItemList();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -324,6 +323,8 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void onResume() {
         Log.d( TAG, "onResume : enter" );
         super.onResume();
+
+        this.loadMediaItemList();
 
         this.mediaItemListPresenter.resume();
 
