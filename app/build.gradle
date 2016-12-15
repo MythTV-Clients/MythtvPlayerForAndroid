@@ -28,7 +28,7 @@ android {
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     adbOptions {
 
