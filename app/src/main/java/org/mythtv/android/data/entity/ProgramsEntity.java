@@ -24,8 +24,6 @@ import org.joda.time.DateTime;
 
 import java.util.Arrays;
 
-//import lombok.Data;
-
 /**
  *
  *
@@ -34,7 +32,6 @@ import java.util.Arrays;
  *
  * Created on 9/7/15.
  */
-//@Data
 public class ProgramsEntity {
 
     @SerializedName( "StartIndex" )

@@ -750,36 +750,40 @@ public class LocalPlayerActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground( Long... params ) {
 
-            long currentPos = params[ 0 ];
-            Log.d( TAG, "UpdateBookmarkAsyncTask.doInBackground : url=" + ( getMasterBackendUrl() + mSelectedMedia.getUpdateSavedBookmarkUrl() ) );
+            if(  mSelectedMedia.getMedia().equals(Media.PROGRAM)) {
 
-            String id = mSelectedMedia.getMedia().equals( Media.PROGRAM ) ? "RecordedId" : "Id";
+                long currentPos = params[0];
+                Log.d(TAG, "UpdateBookmarkAsyncTask.doInBackground : url=" + (getMasterBackendUrl() + mSelectedMedia.getUpdateSavedBookmarkUrl()));
 
-            Map<String, String> parameters = new HashMap<>();
-            parameters.put( id, String.valueOf( mSelectedMedia.getId() ) );
-            parameters.put( "OffsetType", "Duration" );
-            parameters.put( "Offset", String.valueOf( currentPos ) );
+                String id = mSelectedMedia.getMedia().equals(Media.PROGRAM) ? "RecordedId" : "Id";
 
-            FormBody.Builder builder = new FormBody.Builder();
-            for( String key : parameters.keySet() ) {
-                Log.d( TAG, "UpdateBookmarkAsyncTask.doInBackground : key=" + key + ", value=" + parameters.get( key ) );
-                builder.add( key, parameters.get( key ) );
-            }
+                Map<String, String> parameters = new HashMap<>();
+                parameters.put(id, String.valueOf(mSelectedMedia.getId()));
+                parameters.put("OffsetType", "Duration");
+                parameters.put("Offset", String.valueOf(currentPos));
 
-            final Request request = new Request.Builder()
-                    .url( getMasterBackendUrl() + mSelectedMedia.getUpdateSavedBookmarkUrl() )
-                    .addHeader( "Accept", "application/json" )
-                    .post( builder.build() )
-                    .build();
+                FormBody.Builder builder = new FormBody.Builder();
+                for (String key : parameters.keySet()) {
+                    Log.d(TAG, "UpdateBookmarkAsyncTask.doInBackground : key=" + key + ", value=" + parameters.get(key));
+                    builder.add(key, parameters.get(key));
+                }
 
-            try {
+                final Request request = new Request.Builder()
+                        .url(getMasterBackendUrl() + mSelectedMedia.getUpdateSavedBookmarkUrl())
+                        .addHeader("Accept", "application/json")
+                        .post(builder.build())
+                        .build();
 
-                String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
+                try {
 
-            } catch( IOException e ) {
+                    String result = okHttpClient.newCall(request).execute().body().string();
+                    Log.d(TAG, "doInBackground : result=" + result);
 
-                Log.e( TAG, "doInBackground : error", e );
+                } catch (IOException e) {
+
+                    Log.e(TAG, "doInBackground : error", e);
+
+                }
 
             }
 
