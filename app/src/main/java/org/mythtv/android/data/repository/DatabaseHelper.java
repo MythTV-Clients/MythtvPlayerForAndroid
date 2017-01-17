@@ -26,7 +26,12 @@ import android.util.Log;
 import org.mythtv.android.data.entity.MediaItemEntity;
 
 /**
- * Created by dmfrey on 10/8/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/8/15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 

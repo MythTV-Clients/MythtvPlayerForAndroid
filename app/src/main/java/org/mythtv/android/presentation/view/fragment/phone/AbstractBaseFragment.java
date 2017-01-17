@@ -34,9 +34,12 @@ import org.mythtv.android.presentation.internal.di.components.SharedPreferencesC
 import okhttp3.OkHttpClient;
 
 /**
+ *
  * Base {@link android.app.Fragment} class for every fragment in this application.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/30/15.
  */
 public abstract class AbstractBaseFragment extends Fragment {
 

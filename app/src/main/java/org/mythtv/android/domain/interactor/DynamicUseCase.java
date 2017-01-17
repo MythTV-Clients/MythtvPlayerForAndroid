@@ -28,7 +28,12 @@ import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by dmfrey on 4/12/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/12/16.
  */
 public abstract class DynamicUseCase extends UseCase {
 

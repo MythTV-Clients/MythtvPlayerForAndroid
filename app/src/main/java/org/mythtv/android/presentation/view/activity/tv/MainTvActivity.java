@@ -35,6 +35,12 @@ import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class MainTvActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent> {
 
     private static final String TAG = MainTvActivity.class.getSimpleName();
@@ -112,10 +118,8 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
 
     private class Category {
 
-        String title;
-        Integer drawable;
-
-        Category() { }
+        final String title;
+        final Integer drawable;
 
         Category( String title, Integer drawable ) {
 
@@ -129,21 +133,9 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
             return title;
         }
 
-        public void setTitle( String title ) {
-
-            this.title = title;
-
-        }
-
         public Integer getDrawable() {
 
             return drawable;
-        }
-
-        public void setDrawable( Integer drawable ) {
-
-            this.drawable = drawable;
-
         }
 
     }
@@ -151,7 +143,6 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
     private class CategoryAdapter extends BaseAdapter {
 
         private final Context mContext;
-        private final LayoutInflater mInflater;
 
         String[] titles = new String[] {
                 getResources().getString( R.string.drawer_item_watch_recordings ),
@@ -165,10 +156,10 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
                 R.drawable.tv_setting
         };
 
-        public CategoryAdapter( Context context ) {
+        CategoryAdapter( Context context ) {
 
             mContext = context;
-            mInflater = getLayoutInflater();
+
         }
 
         @Override

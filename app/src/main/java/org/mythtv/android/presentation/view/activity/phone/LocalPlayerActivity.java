@@ -75,8 +75,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
+ *
  * Activity for the local media player.
- */
+ *
+ * @author dmfrey
+\ */
 public class LocalPlayerActivity extends AppCompatActivity {
 
     private static final String TAG = "LocalPlayerActivity";
@@ -96,7 +99,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
     private Timer mBookmarkTimer;
     private PlaybackState mPlaybackState;
     private final Handler mHandler = new Handler();
-    private final float mAspectRatio = 72f / 128;
     private AQuery mAquery;
     private MediaItemModel mSelectedMedia;
     private boolean mControllersVisible;
@@ -107,7 +109,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
     private CastContext mCastContext;
     private CastSession mCastSession;
     private SessionManagerListener<CastSession> mSessionManagerListener;
-    private MenuItem mediaRouteMenuItem;
 
     private OkHttpClient okHttpClient;
 
@@ -369,7 +370,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
         }
 
         restartTrickplayTimer();
-        restartBookmarkTimer();;
+        restartBookmarkTimer();
 
     }
 
@@ -749,36 +750,40 @@ public class LocalPlayerActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground( Long... params ) {
 
-            long currentPos = params[ 0 ];
-            Log.d( TAG, "UpdateBookmarkAsyncTask.doInBackground : url=" + ( getMasterBackendUrl() + mSelectedMedia.getUpdateSavedBookmarkUrl() ) );
+            if(  mSelectedMedia.getMedia().equals(Media.PROGRAM)) {
 
-            String id = mSelectedMedia.getMedia().equals( Media.PROGRAM ) ? "RecordedId" : "Id";
+                long currentPos = params[0];
+                Log.d(TAG, "UpdateBookmarkAsyncTask.doInBackground : url=" + (getMasterBackendUrl() + mSelectedMedia.getUpdateSavedBookmarkUrl()));
 
-            Map<String, String> parameters = new HashMap<>();
-            parameters.put( id, String.valueOf( mSelectedMedia.getId() ) );
-            parameters.put( "OffsetType", "Duration" );
-            parameters.put( "Offset", String.valueOf( currentPos ) );
+                String id = mSelectedMedia.getMedia().equals(Media.PROGRAM) ? "RecordedId" : "Id";
 
-            FormBody.Builder builder = new FormBody.Builder();
-            for( String key : parameters.keySet() ) {
-                Log.d( TAG, "UpdateBookmarkAsyncTask.doInBackground : key=" + key + ", value=" + parameters.get( key ) );
-                builder.add( key, parameters.get( key ) );
-            }
+                Map<String, String> parameters = new HashMap<>();
+                parameters.put(id, String.valueOf(mSelectedMedia.getId()));
+                parameters.put("OffsetType", "Duration");
+                parameters.put("Offset", String.valueOf(currentPos));
 
-            final Request request = new Request.Builder()
-                    .url( getMasterBackendUrl() + mSelectedMedia.getUpdateSavedBookmarkUrl() )
-                    .addHeader( "Accept", "application/json" )
-                    .post( builder.build() )
-                    .build();
+                FormBody.Builder builder = new FormBody.Builder();
+                for (String key : parameters.keySet()) {
+                    Log.d(TAG, "UpdateBookmarkAsyncTask.doInBackground : key=" + key + ", value=" + parameters.get(key));
+                    builder.add(key, parameters.get(key));
+                }
 
-            try {
+                final Request request = new Request.Builder()
+                        .url(getMasterBackendUrl() + mSelectedMedia.getUpdateSavedBookmarkUrl())
+                        .addHeader("Accept", "application/json")
+                        .post(builder.build())
+                        .build();
 
-                String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
+                try {
 
-            } catch( IOException e ) {
+                    String result = okHttpClient.newCall(request).execute().body().string();
+                    Log.d(TAG, "doInBackground : result=" + result);
 
-                Log.e( TAG, "doInBackground : error", e );
+                } catch (IOException e) {
+
+                    Log.e(TAG, "doInBackground : error", e);
+
+                }
 
             }
 
@@ -1026,7 +1031,8 @@ public class LocalPlayerActivity extends AppCompatActivity {
             mTitleView.setVisibility( View.VISIBLE );
             mAuthorView.setVisibility( View.VISIBLE );
             displaySize = Utils.getDisplaySize( this );
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( displaySize.x, (int) ( displaySize.x * mAspectRatio ) );
+            float mAspectRatio = 72f / 128;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( displaySize.x, (int) ( displaySize.x * mAspectRatio) );
             lp.addRule( RelativeLayout.BELOW, R.id.toolbar );
             mVideoView.setLayoutParams( lp );
             mVideoView.invalidate();
@@ -1041,7 +1047,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         getMenuInflater().inflate( R.menu.main, menu );
 
-        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton( getApplicationContext(), menu, R.id.media_route_menu_item );
+        CastButtonFactory.setUpMediaRouteButton( getApplicationContext(), menu, R.id.media_route_menu_item );
 
         return true;
     }
@@ -1049,12 +1055,10 @@ public class LocalPlayerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-        Intent intent;
-//        if (item.getItemId() == R.id.action_settings) {
-//            intent = new Intent(LocalPlayerActivity.this, CastPreference.class);
-//            startActivity(intent);
-        /*} else */ if( item.getItemId() == android.R.id.home ) {
+        if( item.getItemId() == android.R.id.home ) {
+
             ActivityCompat.finishAfterTransition( this );
+
         }
 
         return true;

@@ -3,7 +3,12 @@ package org.mythtv.android.domain;
 import org.joda.time.DateTime;
 
 /**
- * Created by dmfrey on 7/10/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 7/10/16.
  */
 
 public class MediaItem {
@@ -390,19 +395,18 @@ public class MediaItem {
 
     @Override
     public boolean equals( Object o ) {
-        if( this == o ) return true;
-        if( o == null || getClass() != o.getClass() ) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         MediaItem mediaItem = (MediaItem) o;
 
-        if( getId() != mediaItem.getId() ) return false;
-        return getMedia() == mediaItem.getMedia();
+        return getId() == mediaItem.getId() && getMedia() == mediaItem.getMedia();
     }
 
     @Override
     public int hashCode() {
 
-        int result = (int) (getId() ^ (getId() >>> 32));
+        int result = getId() ^ (getId() >>> 31);
         result = 31 * result + getMedia().hashCode();
 
         return result;

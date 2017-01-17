@@ -46,7 +46,12 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by dmfrey on 10/17/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/17/15.
  */
 public class ContentApiImpl implements ContentApi {
 

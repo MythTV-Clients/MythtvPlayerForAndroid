@@ -35,7 +35,12 @@ import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemSearchResultListFragment;
 
 /**
- * Created by dmfrey on 10/14/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/14/15.
  */
 public class SearchableActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemSearchResultListFragment.MediaItemListListener {
 

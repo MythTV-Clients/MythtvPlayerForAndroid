@@ -19,7 +19,12 @@ import java.util.List;
 import javax.inject.Singleton;
 
 /**
- * Created by dmfrey on 9/3/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/3/16.
  */
 
 @Singleton
@@ -91,11 +96,11 @@ public class MediaItemDataMapper {
 
         if( null != programEntity.getLiveStreamInfoEntity() ) {
 
-            mediaItem.setLiveStreamId(programEntity.getLiveStreamInfoEntity().getId());
+            mediaItem.setLiveStreamId( programEntity.getLiveStreamInfoEntity().getId() );
+            mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
 
         }
-        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=1280", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
-        mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
 
         List<String> castMembers = new ArrayList<>();
         List<String> characters = new ArrayList<>();
@@ -135,7 +140,7 @@ public class MediaItemDataMapper {
             mediaItem.setCharacters( cast.trim() );
         }
 
-        mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark?RecordedId=%s1", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
         mediaItem.setBookmark( programEntity.getBookmark() );
 
         return mediaItem;
@@ -198,7 +203,7 @@ public class MediaItemDataMapper {
 
         }
 
-        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=1280", String.valueOf( videoEntity.getId() ) ) );
+        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=960", String.valueOf( videoEntity.getId() ) ) );
 
         mediaItem.setWatched( videoEntity.isWatched() );
         mediaItem.setMarkWatchedUrl( "/Video/UpdateVideoWatchedStatus?Id=%s&Watched=true" );

@@ -21,11 +21,14 @@ package org.mythtv.android.presentation.view;
 import android.content.Context;
 
 /**
+ *
  * Interface representing a View that will use to load data.
  *
- * Created by dmfrey on 8/31/15.
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
-public interface LoadDataView {
+interface LoadDataView {
 
     /**
      * Show a view with a progress bar indicating a loading process.

@@ -27,7 +27,12 @@ import java.util.Map;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 8/26/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 public class GetRemoveLiveStreamDetails extends DynamicUseCase {
 

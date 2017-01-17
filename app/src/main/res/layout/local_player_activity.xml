@@ -24,33 +24,35 @@
             android:id="@+id/videoView1"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
             android:layout_below="@+id/toolbar"
             android:layout_centerInParent="true"/>
 
     <RelativeLayout
             android:layout_alignBottom="@+id/videoView1"
-            android:layout_alignLeft="@+id/videoView1"
-            android:layout_alignRight="@+id/videoView1"
+            android:layout_alignStart="@+id/videoView1"
+            android:layout_alignEnd="@+id/videoView1"
             android:layout_alignTop="@+id/videoView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
         <ImageView
-                android:id="@+id/coverArtView"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:scaleType="fitXY"
-                android:visibility="gone"/>
+            android:id="@+id/coverArtView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            android:contentDescription="@string/cd_coverart" />
 
         <ImageButton
-                android:id="@+id/play_circle"
-                android:src="@drawable/ic_play_circle_white_80dp"
-                android:layout_centerInParent="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            android:id="@+id/play_circle"
+            android:src="@drawable/ic_play_circle_white_80dp"
+            android:layout_centerInParent="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/cd_play"/>
 
     </RelativeLayout>
 
@@ -59,8 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/videoView1"
-            android:layout_alignLeft="@+id/videoView1"
-            android:layout_alignRight="@+id/videoView1"
+            android:layout_alignStart="@+id/videoView1"
+            android:layout_alignEnd="@+id/videoView1"
             android:layout_alignTop="@+id/videoView1"
             android:visibility="visible"
             android:background="@drawable/player_bg_gradient_dark">
@@ -82,32 +84,33 @@
                 android:layout_alignParentBottom="true">
 
             <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:src="@drawable/ic_av_pause_dark"/>
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_av_pause_dark"
+                android:contentDescription="@string/cd_image_view_button_2"/>
 
             <TextView
                     android:id="@+id/startText"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/imageView2"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/imageView2"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="0:00"
+                    android:text="@string/player_timer"
                     android:textColor="@color/white"/>
 
             <TextView
                     android:id="@+id/endText"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="0:00"
+                    android:text="@string/player_timer"
                     android:textColor="@color/white"/>
 
             <SeekBar
@@ -118,8 +121,8 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@+id/endText"
-                    android:layout_toRightOf="@+id/startText"/>
+                    android:layout_toStartOf="@+id/endText"
+                    android:layout_toEndOf="@+id/startText"/>
         </RelativeLayout>
     </RelativeLayout>
 
@@ -127,7 +130,7 @@
             android:id="@+id/textView1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/videoView1"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -139,8 +142,8 @@
             android:id="@+id/textView3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textView1"
-            android:layout_alignRight="@+id/textView1"
+            android:layout_alignStart="@+id/textView1"
+            android:layout_alignEnd="@+id/textView1"
             android:layout_below="@+id/textView1"
             android:layout_marginTop="2dp"
             android:lines="1"
@@ -151,8 +154,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/textView1"
-            android:layout_alignRight="@+id/textView1"
+            android:layout_alignStart="@+id/textView1"
+            android:layout_alignEnd="@+id/textView1"
             android:layout_below="@+id/textView3"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"

@@ -30,6 +30,12 @@ import org.mythtv.android.presentation.internal.di.components.DaggerMediaCompone
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.view.fragment.tv.MediaItemListFragment;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class RecordingsActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener {
 
     private static final String TAG = RecordingsActivity.class.getSimpleName();
@@ -50,7 +56,7 @@ public class RecordingsActivity extends AbstractBaseTvActivity implements HasCom
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-        this.initializeActivity( savedInstanceState );
+        this.initializeActivity();
         this.initializeInjector();
 
     }
@@ -58,7 +64,7 @@ public class RecordingsActivity extends AbstractBaseTvActivity implements HasCom
     /**
      * Initializes this activity.
      */
-    private void initializeActivity( Bundle savedInstanceState ) {
+    private void initializeActivity() {
         Log.d( TAG, "initializeActivity : enter" );
 
         MediaItemListFragment.Builder recordingsParameters = new MediaItemListFragment.Builder( Media.PROGRAM );

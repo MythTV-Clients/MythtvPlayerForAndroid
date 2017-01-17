@@ -19,6 +19,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'com.github.ben-manes.versions'
 
 android {
 
@@ -26,8 +27,8 @@ android {
     def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
     def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
-    compileSdkVersion project.ext.compileSdkVersion
-    buildToolsVersion project.ext.buildToolsVersion
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     adbOptions {
 
@@ -44,8 +45,8 @@ android {
 
     defaultConfig {
 
-        minSdkVersion project.ext.minSdkVersion
-        targetSdkVersion project.ext.targetSdkVersion
+        minSdkVersion 17
+        targetSdkVersion 25
 
         jackOptions {
 
@@ -77,14 +78,11 @@ android {
         }
 
 
-
     }
 
     buildTypes {
 
         debug {
-
-//            signingConfig signingConfigs.debug
 
             testCoverageEnabled = true
 
@@ -113,8 +111,6 @@ android {
         }
 
         prod {
-
-//            minSdkVersion 17
 
         }
 
@@ -153,19 +149,6 @@ android {
 
     }
 
-//    signingConfigs {
-//
-//        debug {
-//
-//            storeFile file( '../buildsystem/debug.keystore' )
-//            storePassword 'android'
-//            keyAlias 'androiddebugkey'
-//            keyPassword 'android'
-//
-//        }
-//
-//    }
-
     testOptions {
 
         unitTests {
@@ -201,7 +184,7 @@ dependencies {
     compile "io.reactivex:rxjava:${project.ext.rxJavaVersion}"
     compile "io.reactivex:rxandroid:${project.ext.rxAndroidVersion}"
     compile "com.squareup.picasso:picasso:${project.ext.picassoVersion}"
-    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2"
+    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
     compile "com.android.support:support-annotations:${project.ext.supportVersion}"
     compile "com.android.support:preference-v14:${project.ext.supportVersion}"
     compile "com.android.support:mediarouter-v7:${project.ext.supportVersion}"

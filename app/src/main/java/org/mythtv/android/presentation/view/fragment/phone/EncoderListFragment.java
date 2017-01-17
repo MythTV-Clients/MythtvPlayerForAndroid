@@ -45,7 +45,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by dmfrey on 1/20/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/20/16.
  */
 public class EncoderListFragment extends AbstractBaseFragment implements EncoderListView {
 
@@ -154,7 +159,6 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         this.rv_encoders.setLayoutManager( new LayoutManager( getActivity() ) );
 
         this.encodersAdapter = new EncodersAdapter( getActivity(), new ArrayList<>() );
-//        this.encodersAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_encoders.setAdapter( encodersAdapter );
 
         Log.d( TAG, "setupUI : exit" );
@@ -165,7 +169,6 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -175,7 +178,6 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
-        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }

@@ -34,7 +34,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="fill_horizontal">
 
@@ -42,7 +41,7 @@
                 android:id="@+id/media_item_image"
                 android:layout_width="125dp"
                 android:layout_height="75dp"
-                android:scaleType="fitXY" />
+                android:src="@drawable/ic_movie_black_24dp"/>
 
             <ProgressBar
                 android:id="@+id/media_item_progress"
@@ -69,7 +68,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:layout_toRightOf="@+id/media_item_image_layout"
             android:layout_toEndOf="@+id/media_item_image_layout"
             tools:text="test title" />
 
@@ -82,7 +80,6 @@
             android:gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
             android:layout_below="@+id/media_item_title"
-            android:layout_toRightOf="@+id/media_item_image_layout"
             android:layout_toEndOf="@+id/media_item_image_layout"
             tools:text="test sub title" />
 
@@ -92,7 +89,6 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/media_item_sub_title"
-            android:layout_toRightOf="@+id/media_item_image_layout"
             android:layout_toEndOf="@+id/media_item_image_layout"
             tools:text="test date" />
 
@@ -102,9 +98,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/media_item_sub_title"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:gravity="right|end"
+            android:gravity="end"
             tools:text="test duration" />
 
         <TextView
@@ -113,7 +108,6 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/media_item_date"
-            android:layout_toRightOf="@+id/media_item_image_layout"
             android:layout_toEndOf="@+id/media_item_image_layout"
             tools:text="test episode" />
 
@@ -123,9 +117,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:layout_below="@+id/media_item_duration"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:gravity="right|end"
+            android:gravity="end"
             tools:text="test studio" />
 
     </RelativeLayout>
@@ -133,7 +126,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground"
-        android:id="@+id/view" />
+        android:background="?android:attr/selectableItemBackground" />
 
 </android.support.v7.widget.CardView>

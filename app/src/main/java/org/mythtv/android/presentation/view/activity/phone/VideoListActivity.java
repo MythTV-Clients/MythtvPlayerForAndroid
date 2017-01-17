@@ -25,7 +25,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -41,7 +40,12 @@ import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
 import butterknife.BindView;
 
 /**
- * Created by dmfrey on 11/13/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/13/15.
  */
 public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener, SeriesListFragment.SeriesListListener {
 
@@ -79,7 +83,6 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
 
-        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
 
         this.initializeInjector();

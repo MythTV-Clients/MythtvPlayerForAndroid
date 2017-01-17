@@ -34,11 +34,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 1/18/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/18/16.
  */
 public class EncoderEntityJsonMapper {
-
-    private static final String TAG = EncoderEntityJsonMapper.class.getSimpleName();
 
     private final Gson gson;
 
@@ -51,7 +54,6 @@ public class EncoderEntityJsonMapper {
 
     public EncoderEntity transformEncoderEntity( Reader encoderJsonResponse ) throws JsonSyntaxException {
 
-//        Log.i( TAG, "transformEncoderEntity : encoderJsonResponse=" + encoderJsonResponse );
         Type encoderWrapperEntityType = new TypeToken<EncoderWrapperEntity>() {}.getType();
         EncoderWrapperEntity encoderWrapperEntity = this.gson.fromJson( encoderJsonResponse, encoderWrapperEntityType );
 
@@ -60,10 +62,8 @@ public class EncoderEntityJsonMapper {
 
     public List<EncoderEntity> transformEncoderEntityCollection( Reader encoderListJsonResponse ) throws JsonSyntaxException {
 
-//        Log.i( TAG, "transformEncoderEntityCollection : " + encoderListJsonResponse );
         Type encoderListEntityType = new TypeToken<EncoderListEntity>() {}.getType();
         EncoderListEntity encoderListEntity = this.gson.fromJson( encoderListJsonResponse, encoderListEntityType );
-//        Log.i( TAG, "transformEncoderEntityCollection : encoderListJsonResponse=" + encoderListEntity.toString() );
 
         return Arrays.asList( encoderListEntity.getEncoders().getEncoders() );
     }

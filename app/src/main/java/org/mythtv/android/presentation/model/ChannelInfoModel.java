@@ -21,12 +21,14 @@ package org.mythtv.android.presentation.model;
 import java.io.Serializable;
 import java.util.List;
 
-//import lombok.Data;
-
-/*
- * Created by dmfrey on 11/12/14.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/12/14.
  */
-//@Data
 public class ChannelInfoModel implements Serializable {
 
     private Integer chanId;

@@ -37,7 +37,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by dmfrey on 1/28/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.TvCategoryViewHolder> {
 
@@ -66,26 +71,20 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 
     @Override
     public int getItemCount() {
-//        Log.d( TAG, "getItemCount : enter" );
 
-//        Log.d( TAG, "getItemCount : exit" );
         return ( null != this.tvCategoriesCollection ) ? this.tvCategoriesCollection.size() : 0;
     }
 
     @Override
     public TvCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
-//        Log.d( TAG, "onCreateViewHolder : enter" );
 
         View view = this.layoutInflater.inflate( R.layout.tv_item, parent, false );
-        TvCategoryViewHolder tvCategoryViewHolder = new TvCategoryViewHolder( view );
 
-//        Log.d( TAG, "onCreateViewHolder : exit" );
-        return tvCategoryViewHolder;
+        return new TvCategoryViewHolder( view );
     }
 
     @Override
     public void onBindViewHolder( TvCategoryViewHolder holder, final int position ) {
-//        Log.d( TAG, "onBindViewHolder : enter" );
 
         final TvCategoryModel tvCategoryModel = this.tvCategoriesCollection.get( position );
         holder.imageViewCategory.setImageResource( tvCategoryModel.getDrawable() );
@@ -98,7 +97,6 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
             }
         });
 
-//        Log.d( TAG, "onBindViewHolder : exit" );
     }
 
     @Override

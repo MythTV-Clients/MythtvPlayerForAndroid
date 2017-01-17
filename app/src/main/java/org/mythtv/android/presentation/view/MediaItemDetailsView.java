@@ -21,10 +21,13 @@ package org.mythtv.android.presentation.view;
 import org.mythtv.android.presentation.model.MediaItemModel;
 
 /**
+ *
  * Interface representing a View in a model view presenter (MVP) pattern.
  * In this case is used as a view representing a program.
  *
- * Created by dmfrey on 9/9/16.
+ * @author dmfrey
+ *
+ * Created on 9/9/16.
  */
 public interface MediaItemDetailsView extends LoadDataView {
 
@@ -34,12 +37,5 @@ public interface MediaItemDetailsView extends LoadDataView {
      * @param mediaItem The {@link MediaItemModel} that will be shown.
      */
     void renderMediaItem( MediaItemModel mediaItem );
-
-    /**
-     * Update the live streaming buttons
-     *
-     * @param mediaItem The {@link MediaItemModel} that will be shown.
-     */
-    void updateLiveStream( MediaItemModel mediaItem );
 
 }

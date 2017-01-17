@@ -41,9 +41,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ *
  * Adapter that manages a collection of {@link SeriesModel}.
  *
- * Created by dmfrey on 8/31/15.
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
 public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder> {
 

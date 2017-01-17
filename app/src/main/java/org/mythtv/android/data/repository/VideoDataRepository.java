@@ -44,7 +44,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by dmfrey on 11/3/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/3/15.
  */
 @Singleton
 public class VideoDataRepository implements VideoRepository {
@@ -125,7 +130,7 @@ public class VideoDataRepository implements VideoRepository {
         Log.d( TAG, "getVideoListByContentType : enter" );
         Log.d( TAG, "getVideoListByContentType : contentType=" + contentType );
 
-        final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore( contentType );
+        final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore();
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         Observable<List<VideoMetadataInfoEntity>> videoEntities = videoDataStore.getCategory( contentType )
@@ -182,7 +187,7 @@ public class VideoDataRepository implements VideoRepository {
         Log.d( TAG, "getVideoSeriesListByContentType : enter" );
         Log.d( TAG, "getVideoSeriesListByContentType : contentType=" + contentType );
 
-        final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore( contentType );
+        final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore();
 
         return videoDataStore.getCategory( contentType )
                 .subscribeOn( Schedulers.io() )
@@ -202,7 +207,7 @@ public class VideoDataRepository implements VideoRepository {
         Log.d( TAG, "getVideoListByContentTypeAndSeries : enter" );
         Log.d( TAG, "getVideoListByContentTypeAndSeries : contentType=" + contentType + ", series=" + series );
 
-        final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore( contentType );
+        final VideoDataStore videoDataStore = videoDataStoreFactory.createCategoryDataStore();
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         Observable<List<VideoMetadataInfoEntity>> videoEntities = videoDataStore.getSeriesInCategory( contentType, series )

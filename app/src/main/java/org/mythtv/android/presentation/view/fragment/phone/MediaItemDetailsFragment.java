@@ -61,13 +61,19 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.CacheControl;
 import okhttp3.FormBody;
 import okhttp3.Request;
 
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by dmfrey on 8/31/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
 public class MediaItemDetailsFragment extends AbstractBaseFragment implements MediaItemDetailsView {
 
@@ -159,10 +165,11 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaItemDetailsListener ) {
 
             this.listener = (MediaItemDetailsListener) activity;
@@ -390,7 +397,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -400,7 +406,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
-        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -464,17 +469,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         }
 
         Log.d( TAG, "loadMediaItemDetails : exit" );
-    }
-
-    @Override
-    public void updateLiveStream( MediaItemModel mediaItem ) {
-        Log.d( TAG, "updateLiveStream : enter" );
-
-        if( null != mediaItem ) {
-
-        }
-
-        Log.d( TAG, "updateLiveStream : exit" );
     }
 
     private void updateMenu() {
@@ -575,6 +569,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             final Request request = new Request.Builder()
                     .url( getMasterBackendUrl() + mediaItemModel.getMarkWatchedUrl() )
                     .addHeader( "Accept", "application/json" )
+                    .cacheControl( CacheControl.FORCE_NETWORK )
                     .post( builder.build() )
                     .build();
 
@@ -622,6 +617,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             final Request request = new Request.Builder()
                     .url( getMasterBackendUrl() + mediaItemModel.getCreateHttpLiveStreamUrl() )
                     .addHeader( "Accept", "application/json" )
+                    .cacheControl( CacheControl.FORCE_NETWORK )
                     .get()
                     .build();
 
@@ -688,6 +684,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             final Request request = new Request.Builder()
                     .url( getMasterBackendUrl() + mediaItemModel.getRemoveHttpLiveStreamUrl() )
                     .addHeader( "Accept", "application/json" )
+                    .cacheControl( CacheControl.FORCE_NETWORK )
                     .get()
                     .build();
 

@@ -35,7 +35,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * Created by dmfrey on 8/31/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
 public class MediaItemDetailsPresenter implements Presenter {
 
@@ -150,14 +155,6 @@ public class MediaItemDetailsPresenter implements Presenter {
         this.getMediaItemDetailsUseCase.execute( new MediaItemDetailsSubscriber() );
 
         Log.d( TAG, "getDetails : exit" );
-    }
-
-    private void notifyInView( String message ) {
-        Log.d( TAG, "notifyInView : enter" );
-
-        this.viewDetailsView.showMessage( message );
-
-        Log.d( TAG, "notifyInView : exit" );
     }
 
     private final class MediaItemDetailsSubscriber extends DefaultSubscriber<MediaItem> {

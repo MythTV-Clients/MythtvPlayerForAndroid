@@ -18,6 +18,8 @@
 
 package org.mythtv.android.data.executor;
 
+import android.support.annotation.NonNull;
+
 import org.mythtv.android.domain.executor.ThreadExecutor;
 
 import java.util.concurrent.BlockingQueue;
@@ -30,7 +32,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Created by dmfrey on 8/26/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Singleton
 public class JobExecutor implements ThreadExecutor {
@@ -47,7 +54,7 @@ public class JobExecutor implements ThreadExecutor {
     private final ThreadPoolExecutor threadPoolExecutor;
 
     @Inject
-    public JobExecutor() {
+    JobExecutor() {
 
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
         ThreadFactory threadFactory = new JobThreadFactory();
@@ -56,12 +63,7 @@ public class JobExecutor implements ThreadExecutor {
     }
 
     @Override
-    public void execute( Runnable runnable ) {
-
-        if( null == runnable ) {
-
-            throw new IllegalArgumentException( "Runnable to execute cannot be null" );
-        }
+    public void execute( @NonNull Runnable runnable ) {
 
         this.threadPoolExecutor.execute(runnable);
 
@@ -73,7 +75,7 @@ public class JobExecutor implements ThreadExecutor {
         private int counter = 0;
 
         @Override
-        public Thread newThread( Runnable runnable ) {
+        public Thread newThread( @NonNull Runnable runnable ) {
 
             return new Thread( runnable, THREAD_NAME + counter++ );
         }

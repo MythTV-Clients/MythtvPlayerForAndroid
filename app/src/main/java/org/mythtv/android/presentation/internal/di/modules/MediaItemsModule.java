@@ -35,7 +35,9 @@ import dagger.Provides;
 /**
  * Dagger module that provides mediaItems related collaborators.
  *
- * Created by dmfrey on 9/15/16.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Module
 public class MediaItemsModule {

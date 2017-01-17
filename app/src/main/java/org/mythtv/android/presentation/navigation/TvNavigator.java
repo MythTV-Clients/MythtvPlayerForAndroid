@@ -33,7 +33,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Created by dmfrey on 1/28/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 @Singleton
 public class TvNavigator {
@@ -43,12 +48,6 @@ public class TvNavigator {
     @Inject
     public TvNavigator() {
         //empty
-    }
-
-    public void navigateToHome( Context context ) {
-        Log.d( TAG, "navigateToHome : enter" );
-
-        Log.d( TAG, "navigateToHome : exit" );
     }
 
     public void navigateToRecordings( Context context ) {

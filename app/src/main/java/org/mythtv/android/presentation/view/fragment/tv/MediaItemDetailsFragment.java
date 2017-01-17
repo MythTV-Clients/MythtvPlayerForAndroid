@@ -53,9 +53,12 @@ import org.mythtv.android.presentation.utils.Utils;
 import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
 import org.mythtv.android.presentation.view.activity.tv.PlaybackOverlayActivity;
 
-/*
+/**
+ *
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
  * It shows a detailed view of video and its meta plus related videos.
+ *
+ * @author dmfrey
  */
 public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
@@ -65,8 +68,6 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private static final int DETAIL_THUMB_WIDTH = 274;
     private static final int DETAIL_THUMB_HEIGHT = 274;
-
-    private static final int NUM_COLS = 10;
 
     private MediaItemModel mediaItemModel;
 
@@ -97,11 +98,6 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
         }
 
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     private void prepareBackgroundManager() {
@@ -204,17 +200,8 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private boolean mediaSupported() {
 
-        if( mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mp4" ) ) {
+        return mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mkv" );
 
-            return true;
-        }
-
-        if( mediaItemModel.getUrl().endsWith( "mkv" ) ) {
-
-            return true;
-        }
-
-        return false;
     }
 
     private boolean liveStreamSupported() {
@@ -288,18 +275,6 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private void setupMovieListRow() {
 
-//        String subcategories[] = {getString(R.string.related_movies)};
-//        List<Movie> list = MovieList.list;
-//
-//        Collections.shuffle(list);
-//        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new CardPresenter());
-//        for (int j = 0; j < NUM_COLS; j++) {
-//            listRowAdapter.add(list.get(j % 5));
-//        }
-//
-//        HeaderItem header = new HeaderItem(0, subcategories[0]);
-//        mAdapter.add(new ListRow(header, listRowAdapter));
-
     }
 
     private void setupMovieListRowPresenter() {
@@ -344,9 +319,9 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
         return "http://" + host + ":" + port;
     }
 
-    protected String getFromPreferences(Context context, String key ) {
+    protected String getFromPreferences( Context context, String key ) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getString( key, "" );
     }

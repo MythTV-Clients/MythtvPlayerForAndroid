@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -35,7 +34,9 @@ import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment
 /**
  * Activity that shows a list of programs.
  *
- * Created by dmfrey on 9/1/15.
+ * @author dmfrey
+ *
+ * Created on 9/1/15.
  */
 public class SeriesListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener {
 
@@ -124,7 +125,6 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
 
-        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
 
         this.initializeActivity( savedInstanceState );

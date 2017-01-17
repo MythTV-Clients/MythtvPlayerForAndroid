@@ -28,7 +28,12 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by dmfrey on 1/19/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/19/16.
  */
 @Module
 public class EncodersModule {

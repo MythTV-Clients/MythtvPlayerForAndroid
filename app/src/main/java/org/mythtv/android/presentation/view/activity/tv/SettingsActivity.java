@@ -43,7 +43,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dmfrey on 1/28/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 public class SettingsActivity extends Activity {
 
@@ -121,6 +126,7 @@ public class SettingsActivity extends Activity {
 
     public static class SettingsFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -212,6 +218,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -330,6 +337,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendUrlFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -393,6 +401,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendPortFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -456,6 +465,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendReadTimeoutFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -533,6 +543,7 @@ public class SettingsActivity extends Activity {
 
     public static class MasterBackendConnectTimeoutFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -610,6 +621,7 @@ public class SettingsActivity extends Activity {
 
     public static class PlayerFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -669,6 +681,7 @@ public class SettingsActivity extends Activity {
 
     public static class InternalPlayerFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -729,6 +742,7 @@ public class SettingsActivity extends Activity {
 
     public static class ContentFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -789,6 +803,7 @@ public class SettingsActivity extends Activity {
 
     public static class AnalyticsFragment extends GuidedStepFragment {
 
+        @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
@@ -887,33 +902,6 @@ public class SettingsActivity extends Activity {
                 .build() );
 
     }
-
-//    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, int editInputType, String desc, String editDesc ) {
-//
-//        actions.add( new GuidedAction.Builder( context )
-//                .id( id )
-//                .title( title )
-//                .editTitle( editTitle )
-//                .editInputType( editInputType )
-//                .description( desc )
-//                .editDescription( editDesc )
-//                .editable( true )
-//                .build() );
-//
-//    }
-
-//    private static void addEditableDescriptionAction( Context context, List<GuidedAction> actions, long id, String title, String desc, String editDescription, int descriptionEditInputType ) {
-//
-//        actions.add( new GuidedAction.Builder( context )
-//                .id( id )
-//                .title( title )
-//                .description( desc )
-//                .editDescription( editDescription )
-//                .descriptionEditInputType( descriptionEditInputType )
-//                .descriptionEditable( true )
-//                .build() );
-//
-//    }
 
     private static void addCheckedAction( Context context, List<GuidedAction> actions, int iconResId, String title, String desc, boolean checked ) {
 

@@ -18,6 +18,12 @@ import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
 import org.mythtv.android.presentation.model.MediaItemModel;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override

@@ -36,7 +36,12 @@ import rx.Observable;
 import rx.functions.Action1;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class MasterBackendDvrDataStore implements DvrDataStore {
 

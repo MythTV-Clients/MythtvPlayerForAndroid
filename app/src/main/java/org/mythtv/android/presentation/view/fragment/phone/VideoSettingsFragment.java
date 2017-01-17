@@ -24,8 +24,13 @@ import android.util.Log;
 
 import org.mythtv.android.R;
 
-/*
- * Created by dmfrey on 4/7/15.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/7/15.
  */
 public class VideoSettingsFragment extends PreferenceFragment {
 

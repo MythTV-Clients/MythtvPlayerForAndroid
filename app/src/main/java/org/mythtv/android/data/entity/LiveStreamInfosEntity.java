@@ -22,12 +22,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 
-//import lombok.Data;
-
 /**
- * Created by dmfrey on 10/17/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/17/15.
  */
-//@Data
 public class LiveStreamInfosEntity {
 
     @SerializedName( "LiveStreamInfos" )

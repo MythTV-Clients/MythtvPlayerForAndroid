@@ -30,7 +30,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
- * Created by dmfrey on 5/9/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 5/9/16.
  */
 @Module
 public class NetModule {
@@ -45,9 +50,8 @@ public class NetModule {
 
         final File cacheDir = new File( context.getCacheDir(), "HttpResponseCache" );
         final int cacheSize = 100 * 1024 * 1024; // 100 MiB
-        Cache cache = new Cache( cacheDir, cacheSize );
 
-        return cache;
+        return new Cache( cacheDir, cacheSize );
     }
 
     @Provides

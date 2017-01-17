@@ -22,12 +22,14 @@ import org.joda.time.DateTime;
 
 import java.io.Serializable;
 
-//import lombok.Data;
-
-/*
- * Created by dmfrey on 10/17/15.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/17/15.
  */
-//@Data
 public class LiveStreamInfoModel implements Serializable {
 
     private int id;

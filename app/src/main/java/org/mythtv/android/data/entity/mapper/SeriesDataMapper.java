@@ -12,7 +12,12 @@ import java.util.List;
 import javax.inject.Singleton;
 
 /**
- * Created by dmfrey on 9/24/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/24/16.
  */
 @Singleton
 public class SeriesDataMapper {

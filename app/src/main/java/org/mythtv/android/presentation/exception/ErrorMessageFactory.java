@@ -25,7 +25,12 @@ import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.data.exception.ProgramNotFoundException;
 
 /**
- * Created by dmfrey on 8/30/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/30/15.
  */
 public class ErrorMessageFactory {
 

@@ -34,11 +34,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class VideoMetadataInfoEntityJsonMapper {
-
-    private static final String TAG = VideoMetadataInfoEntityJsonMapper.class.getSimpleName();
 
     private final Gson gson;
 
@@ -50,9 +53,7 @@ public class VideoMetadataInfoEntityJsonMapper {
     }
 
     public VideoMetadataInfoEntity transformVideoMetadataInfoEntity( Reader videoMetadataInfoJsonResponse ) throws JsonSyntaxException {
-//        Log.d( TAG, "transformVideoMetadataInfoEntity : enter" );
 
-//        Log.d( TAG, "transformVideoMetadataInfoEntity : videoMetadataInfoJsonResponse=" + videoMetadataInfoJsonResponse );
         Type videoMetadataInfoWrapperEntityType = new TypeToken<VideoMetadataInfoWrapperEntity>() {}.getType();
         VideoMetadataInfoWrapperEntity videoMetadataInfoWrapperEntity = this.gson.fromJson( videoMetadataInfoJsonResponse, videoMetadataInfoWrapperEntityType );
 

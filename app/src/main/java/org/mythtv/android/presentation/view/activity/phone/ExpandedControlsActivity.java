@@ -34,6 +34,11 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 
 import org.mythtv.android.R;
 
+/**
+ *
+ *
+ * @author dmfrey
+ */
 public class ExpandedControlsActivity extends AppCompatActivity {
 
     private static final String TAG = "ExpandedControlsActvty";

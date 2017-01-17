@@ -40,7 +40,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * Created by dmfrey on 10/14/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/14/15.
  */
 public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 

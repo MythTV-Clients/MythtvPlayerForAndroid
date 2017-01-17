@@ -49,7 +49,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by dmfrey on 1/20/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/20/16.
  */
 public class MediaItemListFragment extends AbstractBaseFragment implements MediaItemListView {
 
@@ -278,10 +283,11 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaItemListFragment.MediaItemListListener) {
             this.mediaItemListListener = (MediaItemListFragment.MediaItemListListener) activity;
         }
@@ -309,7 +315,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         super.onActivityCreated( savedInstanceState );
 
         this.initialize();
-        this.loadMediaItemList();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -318,6 +323,8 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void onResume() {
         Log.d( TAG, "onResume : enter" );
         super.onResume();
+
+        this.loadMediaItemList();
 
         this.mediaItemListPresenter.resume();
 
@@ -383,7 +390,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -393,7 +399,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
-        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }

@@ -19,7 +19,12 @@
 package org.mythtv.android.presentation.utils;
 
 /**
- * Created by dmfrey on 1/13/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/13/16.
  */
 public class SeasonEpisodeFormatter {
 

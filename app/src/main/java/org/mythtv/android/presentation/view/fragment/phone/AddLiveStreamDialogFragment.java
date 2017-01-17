@@ -19,15 +19,20 @@
 package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.os.Bundle;
 import android.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import android.os.Bundle;
 
 import org.mythtv.android.R;
 
 /**
- * Created by dmfrey on 4/21/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/21/16.
  */
 public class AddLiveStreamDialogFragment extends DialogFragment {
 

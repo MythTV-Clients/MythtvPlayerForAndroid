@@ -18,10 +18,17 @@
 
 package org.mythtv.android.domain;
 
+import android.support.annotation.NonNull;
+
 import org.mythtv.android.domain.utils.DomainUtils;
 
-/*
- * Created by dmfrey on 9/23/16.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/23/16.
  */
 public class Series implements Comparable<Series> {
 
@@ -80,11 +87,9 @@ public class Series implements Comparable<Series> {
     }
 
     @Override
-    public int compareTo( Series another ) {
+    public int compareTo( @NonNull Series another ) {
 
-        final int BEFORE = -1;
         final int EQUAL = 0;
-        final int AFTER = 1;
 
         if( this == another ) return EQUAL;
 

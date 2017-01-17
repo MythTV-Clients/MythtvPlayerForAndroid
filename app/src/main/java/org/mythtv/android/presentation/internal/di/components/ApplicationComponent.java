@@ -20,16 +20,15 @@ package org.mythtv.android.presentation.internal.di.components;
 
 import android.content.Context;
 
-import org.mythtv.android.presentation.internal.di.modules.ApplicationModule;
-import org.mythtv.android.presentation.view.activity.phone.AbstractBasePhoneActivity;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.ContentRepository;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.domain.repository.SearchRepository;
 import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.presentation.internal.di.modules.ApplicationModule;
 import org.mythtv.android.presentation.internal.di.modules.NetModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
+import org.mythtv.android.presentation.view.activity.phone.AbstractBasePhoneActivity;
 import org.mythtv.android.presentation.view.activity.tv.AbstractBaseTvActivity;
 
 import javax.inject.Singleton;
@@ -39,7 +38,9 @@ import dagger.Component;
 /**
  * A component whose lifetime is the life of the application.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Singleton // Constraints this component to one-per-application or un-scoped bindings.
 @Component( modules = { ApplicationModule.class, SharedPreferencesModule.class, NetModule.class } )
@@ -54,7 +55,6 @@ public interface ApplicationComponent {
     PostExecutionThread postExecutionThread();
     DvrRepository dvrRepository();
     SearchRepository searchRepository();
-    ContentRepository contentRepository();
     VideoRepository videoRepository();
 
 }

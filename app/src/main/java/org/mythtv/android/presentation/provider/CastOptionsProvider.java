@@ -14,7 +14,12 @@ import org.mythtv.android.presentation.view.activity.phone.ExpandedControlsActiv
 import java.util.List;
 
 /**
- * Created by dmfrey on 7/10/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 7/10/16.
  */
 
 public class CastOptionsProvider implements OptionsProvider {

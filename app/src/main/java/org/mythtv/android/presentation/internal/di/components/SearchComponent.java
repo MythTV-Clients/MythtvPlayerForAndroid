@@ -29,7 +29,12 @@ import org.mythtv.android.presentation.view.fragment.tv.TvSearchResultListFragme
 import dagger.Component;
 
 /**
- * Created by dmfrey on 10/12/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/12/15.
  */
 @PerActivity
 @Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, SharedPreferencesModule.class, NetModule.class, SearchResultsModule.class } )

@@ -39,7 +39,9 @@ import javax.inject.Singleton;
 /**
  * Class used to navigate through the application.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Singleton
 public class PhoneNavigator {
@@ -133,7 +135,7 @@ public class PhoneNavigator {
         Log.d( TAG, "navigateToInternalPlayer : exit" );
     }
 
-    public void navigateToLocalPlayer(Context context, MediaItemModel mediaItemModel ) {
+    public void navigateToLocalPlayer( Context context, MediaItemModel mediaItemModel ) {
         Log.d( TAG, "navigateToLocalPlayer : enter" );
 
         if( null != context ) {

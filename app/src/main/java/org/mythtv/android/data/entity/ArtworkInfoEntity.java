@@ -20,12 +20,9 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-//import lombok.Data;
-
 /*
  * Created by dmfrey on 11/12/14.
  */
-//@Data
 public class ArtworkInfoEntity {
 
     @SerializedName( "URL" )

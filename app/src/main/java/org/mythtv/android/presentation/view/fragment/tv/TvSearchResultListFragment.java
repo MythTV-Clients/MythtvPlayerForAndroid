@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v17.leanback.app.SearchFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
@@ -52,7 +51,12 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 2/27/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 2/27/16.
  */
 public class TvSearchResultListFragment extends AbstractBaseSearchFragment implements SearchFragment.SearchResultProvider, MediaItemListView {
 
@@ -75,7 +79,6 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     SearchResultListPresenter searchResultListPresenter;
 
     private ArrayObjectAdapter mRowsAdapter;
-    private Handler mHandler = new Handler();
 
     private MediaItemListListener mediaItemListListener;
 
@@ -95,10 +98,11 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaItemListListener ) {
             this.mediaItemListListener = (MediaItemListListener) activity;
         }

@@ -34,11 +34,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 10/17/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/17/15.
  */
 public class LiveStreamInfoEntityJsonMapper {
-
-    private static final String TAG = LiveStreamInfoEntityJsonMapper.class.getSimpleName();
 
     private final Gson gson;
 
@@ -52,7 +55,6 @@ public class LiveStreamInfoEntityJsonMapper {
 
     public LiveStreamInfoEntity transformLiveStreamInfoEntity( Reader liveStreamInfoJsonResponse ) throws JsonSyntaxException {
 
-//        Log.i( TAG, "transformLiveStreamInfoEntity : liveStreamInfoJsonResponse=" + liveStreamInfoJsonResponse );
         Type liveStreamInfoWrapperEntityType = new TypeToken<LiveStreamInfoWrapperEntity>() {}.getType();
         LiveStreamInfoWrapperEntity liveStreamInfoWrapperEntity = this.gson.fromJson( liveStreamInfoJsonResponse, liveStreamInfoWrapperEntityType );
 
@@ -61,10 +63,8 @@ public class LiveStreamInfoEntityJsonMapper {
 
     public List<LiveStreamInfoEntity> transformLiveStreamInfoEntityCollection( Reader liveStreamInfoListJsonResponse ) throws JsonSyntaxException {
 
-//        Log.i( TAG, "transformLiveStreamInfoEntityCollection : " + liveStreamInfoListJsonResponse );
         Type liveStreamInfoListEntityType = new TypeToken<LiveStreamInfoListEntity>() {}.getType();
         LiveStreamInfoListEntity liveStreamInfoListEntity = gson.fromJson( liveStreamInfoListJsonResponse, liveStreamInfoListEntityType );
-//        Log.i( TAG, "transformLiveStreamInfoEntityCollection : liveStreamInfoListEntity=" + liveStreamInfoListEntity.toString() );
 
         return Arrays.asList( liveStreamInfoListEntity.getLiveStreamInfos().getLiveStreamInfos() );
     }

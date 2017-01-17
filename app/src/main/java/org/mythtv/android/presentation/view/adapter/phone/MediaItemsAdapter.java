@@ -21,7 +21,9 @@ package org.mythtv.android.presentation.view.adapter.phone;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,9 +48,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ *
  * Adapter that manages a collection of {@link MediaItemModel}.
  *
- * Created by dmfrey on 8/31/15.
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
 public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.MediaItemViewHolder> {
 
@@ -63,6 +68,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     private Context context;
     private List<MediaItemModel> mediaItemsCollection;
     private final LayoutInflater layoutInflater;
+    private final Drawable brokenMovie;
 
     private OnItemClickListener onItemClickListener;
 
@@ -72,6 +78,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         this.validateMediaItemsCollection( programsCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         this.mediaItemsCollection = (List<MediaItemModel>) programsCollection;
+
+        brokenMovie = ContextCompat.getDrawable( context, R.drawable.ic_movie_black_24dp );
 
     }
 
@@ -97,6 +105,11 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
         switch( mediaItemModel.getMedia() ) {
 
+            case MUSICVIDEO :
+            case HOMEVIDEO :
+
+                break;
+
             case PROGRAM :
 
                 if( null != mediaItemModel.getPreviewUrl() && !"".equals( mediaItemModel.getPreviewUrl() ) ) {
@@ -105,28 +118,16 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
                 } else {
 
-                    holder.image.setImageUrl( null );
+                    holder.image.setImageDrawable( brokenMovie );
 
                 }
 
                 break;
 
             case UPCOMING :
-
-                if( null != mediaItemModel.getFanartUrl() && !"".equals( mediaItemModel.getFanartUrl() ) ) {
-
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getFanartUrl( "250" ) );
-
-                } else {
-
-                    holder.image.setImageUrl( null );
-
-                }
-
-                break;
-
             case VIDEO :
             case MOVIE :
+            case ADULT :
 
                 if( null != mediaItemModel.getFanartUrl() && !"".equals( mediaItemModel.getFanartUrl() ) ) {
 
@@ -134,49 +135,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
                 } else {
 
-                    holder.image.setImageUrl( null );
-
-                }
-
-                break;
-
-            case HOMEVIDEO :
-
-                if( null != mediaItemModel.getCoverartUrl() && !"".equals( mediaItemModel.getCoverartUrl() ) ) {
-
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getCoverartUrl( "250" ) );
-
-                } else {
-
-                    holder.image.setImageUrl( null );
-
-                }
-
-                break;
-
-            case MUSICVIDEO :
-
-                if( null != mediaItemModel.getCoverartUrl() && !"".equals( mediaItemModel.getCoverartUrl() ) ) {
-
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getCoverartUrl( "250" ) );
-
-                } else {
-
-                    holder.image.setImageUrl( null );
-
-                }
-
-                break;
-
-            case ADULT :
-
-                if( null != mediaItemModel.getCoverartUrl() && !"".equals( mediaItemModel.getCoverartUrl() ) ) {
-
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getCoverartUrl( "250" ) );
-
-                } else {
-
-                    holder.image.setImageUrl( null );
+                    holder.image.setImageDrawable( brokenMovie );
 
                 }
 
@@ -184,7 +143,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
             default :
 
-                holder.image.setImageUrl( null );
+                holder.image.setImageDrawable( brokenMovie );
 
                 break;
 

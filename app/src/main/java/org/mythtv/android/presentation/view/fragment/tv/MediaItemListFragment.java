@@ -73,7 +73,12 @@ import java.util.TreeMap;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 1/29/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/29/16.
  */
 public class MediaItemListFragment extends AbstractBaseBrowseFragment implements MediaItemListView {
 
@@ -179,10 +184,11 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaItemListListener) {
             this.listener = (MediaItemListListener) activity;
         }
@@ -210,9 +216,6 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
         prepareBackgroundManager();
 
         this.initialize();
-        this.loadMediaItemList();
-
-        setupEventListeners();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -221,6 +224,10 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     public void onResume() {
         Log.d( TAG, "onResume : enter" );
         super.onResume();
+
+        this.loadMediaItemList();
+
+        setupEventListeners();
 
         this.mediaItemListPresenter.resume();
 

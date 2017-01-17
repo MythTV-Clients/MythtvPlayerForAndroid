@@ -36,7 +36,12 @@ import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
 import org.mythtv.android.presentation.view.fragment.tv.TvSearchResultListFragment;
 
 /**
- * Created by dmfrey on 2/27/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 2/27/16.
  */
 public class SearchableActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent>, TvSearchResultListFragment.MediaItemListListener {
 

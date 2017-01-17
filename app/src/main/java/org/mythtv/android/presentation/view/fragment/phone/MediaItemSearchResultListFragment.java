@@ -46,7 +46,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by dmfrey on 10/12/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/12/15.
  */
 public class MediaItemSearchResultListFragment extends AbstractBaseFragment implements MediaItemListView {
 
@@ -96,10 +101,11 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof MediaItemListListener ) {
             this.mediaItemListListener = (MediaItemListListener) activity;
         }
@@ -204,7 +210,6 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
         Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -214,7 +219,6 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
-        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }

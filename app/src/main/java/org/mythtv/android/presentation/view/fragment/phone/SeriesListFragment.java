@@ -49,7 +49,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by dmfrey on 1/20/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/20/16.
  */
 public class SeriesListFragment extends AbstractBaseFragment implements SeriesListView {
 
@@ -145,10 +150,11 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     }
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
         Log.d( TAG, "onAttach : enter" );
 
+        Activity activity = getActivity();
         if( activity instanceof SeriesListListener) {
             this.seriesListListener = (SeriesListListener) activity;
         }
@@ -250,7 +256,6 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -260,7 +265,6 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
-        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }

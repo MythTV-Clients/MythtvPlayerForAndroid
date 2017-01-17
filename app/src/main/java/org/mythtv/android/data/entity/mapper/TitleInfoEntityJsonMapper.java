@@ -33,11 +33,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class TitleInfoEntityJsonMapper {
-
-    private static final String TAG = TitleInfoEntityJsonMapper.class.getSimpleName();
 
     private final Gson gson;
 
