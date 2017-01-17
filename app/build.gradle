@@ -90,8 +90,9 @@ android {
 
         release {
 
-            shrinkResources true
+            shrinkResources false
             minifyEnabled true // Enables code shrinking for the release build type.
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile( 'proguard-android.txt' ), 'proguard-rules.txt'
 
         }
