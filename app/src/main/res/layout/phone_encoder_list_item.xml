@@ -41,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:layout_toRightOf="@+id/encoder_item_recording_image"
             android:layout_toEndOf="@+id/encoder_item_recording_image"
             android:ellipsize="end"
             android:layout_margin="@dimen/margin"

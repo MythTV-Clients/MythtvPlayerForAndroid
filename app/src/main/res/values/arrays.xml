@@ -17,7 +17,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string-array name="main_tabs">
         <item>Recent</item>
@@ -167,7 +167,7 @@
         <item>0</item>
     </string-array>
 
-    <string-array name="articles">
+    <string-array name="articles" tools:ignore="InconsistentArrays">
         <item>THE </item>
         <item>AN </item>
         <item>A </item>

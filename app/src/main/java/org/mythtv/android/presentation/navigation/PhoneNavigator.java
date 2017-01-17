@@ -23,20 +23,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import org.joda.time.DateTime;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.activity.phone.LocalPlayerActivity;
 import org.mythtv.android.presentation.view.activity.phone.MainPhoneActivity;
-import org.mythtv.android.presentation.view.activity.phone.PlayerActivity;
-import org.mythtv.android.presentation.view.activity.phone.ProgramDetailsActivity;
-import org.mythtv.android.presentation.view.activity.phone.ProgramDetailsSettingsActivity;
-import org.mythtv.android.presentation.view.activity.phone.ProgramListActivity;
+import org.mythtv.android.presentation.view.activity.phone.MediaItemDetailsActivity;
+import org.mythtv.android.presentation.view.activity.phone.SeriesListActivity;
 import org.mythtv.android.presentation.view.activity.phone.SettingsActivity;
 import org.mythtv.android.presentation.view.activity.phone.TitleInfoListActivity;
-import org.mythtv.android.presentation.view.activity.phone.VideoDetailsActivity;
-import org.mythtv.android.presentation.view.activity.phone.VideoDetailsSettingsActivity;
 import org.mythtv.android.presentation.view.activity.phone.VideoListActivity;
-import org.mythtv.android.presentation.view.activity.phone.VideoSeriesListActivity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -44,7 +39,9 @@ import javax.inject.Singleton;
 /**
  * Class used to navigate through the application.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Singleton
 public class PhoneNavigator {
@@ -83,43 +80,30 @@ public class PhoneNavigator {
         Log.d( TAG, "navigateToTitleInfos : exit" );
     }
 
-    public void navigateToPrograms( Context context, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
-        Log.d( TAG, "navigateToPrograms : enter" );
+    public void navigateToSeries( Context context, Media media, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
+        Log.d( TAG, "navigateToSeries : enter" );
 
         if( null != context ) {
-            Log.d( TAG, "navigateToPrograms : context != null" );
+            Log.d( TAG, "navigateToSeries : context != null" );
 
-            context.startActivity( ProgramListActivity.getCallingIntent( context, descending, startIndex, count, titleRegEx, recGroup, storageGroup ) );
+            context.startActivity( SeriesListActivity.getCallingIntent( context, media, descending, startIndex, count, titleRegEx, recGroup, storageGroup ) );
 
         }
 
-        Log.d( TAG, "navigateToPrograms : exit" );
+        Log.d( TAG, "navigateToSeries : exit" );
     }
 
-    public void navigateToProgram( Context context, int chanId, DateTime startTime ) {
-        Log.d( TAG, "navigateToProgram : enter" );
+    public void navigateToMediaItem( final Context context, final int id, final Media media ) {
+        Log.d( TAG, "navigateToMediaItem : enter" );
 
         if( null != context ) {
-            Log.d( TAG, "navigateToProgram : context != null" );
+            Log.d( TAG, "navigateToMediaItem : context != null" );
 
-            context.startActivity( ProgramDetailsActivity.getCallingIntent( context, chanId, startTime ) );
+            context.startActivity( MediaItemDetailsActivity.getCallingIntent( context, id, media ) );
 
         }
 
-        Log.d( TAG, "navigateToProgram : exit" );
-    }
-
-    public void navigateToProgramSettings( Context context ) {
-        Log.d( TAG, "navigateToProgramSettings : enter" );
-
-        if( null != context ) {
-            Log.d( TAG, "navigateToProgramSettings : context != null" );
-
-            context.startActivity( ProgramDetailsSettingsActivity.getCallingIntent( context ) );
-
-        }
-
-        Log.d( TAG, "navigateToProgramSettings : exit" );
+        Log.d( TAG, "navigateToMediaItem : exit" );
     }
 
     public void navigateToVideos( Context context ) {
@@ -135,54 +119,15 @@ public class PhoneNavigator {
         Log.d( TAG, "navigateToVideos : exit" );
     }
 
-    public void navigateToVideoSeries( Context context, String series ) {
-        Log.d( TAG, "navigateToVideoSeries : enter" );
-
-        if( null != context ) {
-            Log.d( TAG, "navigateToVideoSeries : context != null" );
-
-            context.startActivity( VideoSeriesListActivity.getCallingIntent( context, series ) );
-
-        }
-
-        Log.d( TAG, "navigateToVideoSeries : exit" );
-    }
-
-    public void navigateToVideo( Context context, int id, String storeageGroup, String filename, String hostname ) {
-        Log.d( TAG, "navigateToVideo : enter" );
-
-        if( null != context ) {
-            Log.d(TAG, "navigateToVideo : context != null");
-
-            context.startActivity( VideoDetailsActivity.getCallingIntent( context, id ) );
-
-        }
-
-        Log.d( TAG, "navigateToVideo : exit" );
-    }
-
-    public void navigateToVideoSettings( Context context ) {
-        Log.d( TAG, "navigateToVideoSettings : enter" );
-
-        if( null != context ) {
-            Log.d( TAG, "navigateToVideoSettings : context != null" );
-
-            context.startActivity( VideoDetailsSettingsActivity.getCallingIntent( context ) );
-
-        }
-
-        Log.d( TAG, "navigateToVideoSettings : exit" );
-    }
-
-    public void navigateToExternalPlayer( Context context, String uri ) {
+    public void navigateToExternalPlayer( Context context, String uri, String contentType ) {
         Log.d( TAG, "navigateToExternalPlayer : enter" );
 
         if( null != context ) {
             Log.d( TAG, "navigateToExternalPlayer : context != null" );
-            Log.d( TAG, "navigateToExternalPlayer : uri=" + uri );
+            Log.d( TAG, "navigateToExternalPlayer : uri=" + uri + ", contentType=" + contentType );
 
             Intent intentToLaunch = new Intent( Intent.ACTION_VIEW );
-            intentToLaunch.setDataAndType( Uri.parse( uri ), "video/*" );
+            intentToLaunch.setDataAndType( Uri.parse( uri ), contentType );
             context.startActivity( intentToLaunch );
 
         }
@@ -190,21 +135,7 @@ public class PhoneNavigator {
         Log.d( TAG, "navigateToInternalPlayer : exit" );
     }
 
-    public void navigateToVideoPlayer( Context context, String uri ) {
-        Log.d( TAG, "navigateToVideoPlayer : enter" );
-
-        if( null != context ) {
-            Log.d( TAG, "navigateToVideoPlayer : context != null" );
-            Log.d( TAG, "navigateToVideoPlayer : uri=" + uri );
-
-            context.startActivity( PlayerActivity.getCallingIntent( context, uri ) );
-
-        }
-
-        Log.d( TAG, "navigateToVideoPlayer : exit" );
-    }
-
-    public void navigateToLocalPlayer(Context context, MediaItemModel mediaItemModel ) {
+    public void navigateToLocalPlayer( Context context, MediaItemModel mediaItemModel ) {
         Log.d( TAG, "navigateToLocalPlayer : enter" );
 
         if( null != context ) {

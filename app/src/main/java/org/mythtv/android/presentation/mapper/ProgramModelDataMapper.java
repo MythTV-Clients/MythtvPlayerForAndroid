@@ -39,6 +39,10 @@ import javax.inject.Inject;
 /**
  * Mapper class used to transform {@link Program} (in the domain layer) to {@link ProgramModel} in the
  * presentation layer.
+ *
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @PerActivity
 public class ProgramModelDataMapper {

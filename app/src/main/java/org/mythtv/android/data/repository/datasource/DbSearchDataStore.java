@@ -25,22 +25,27 @@ import android.database.sqlite.SQLiteStatement;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.mythtv.android.data.entity.SearchResultEntity;
+import org.joda.time.DateTime;
+import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.exception.DatabaseException;
-import org.mythtv.android.domain.SearchResult;
+import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.MediaItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by dmfrey on 10/8/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/8/15.
  */
 public class DbSearchDataStore implements SearchDataStore {
 
@@ -55,7 +60,7 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
-    public Observable<List<SearchResultEntity>> search( String searchString ) {
+    public Observable<List<MediaItem>> search(String searchString ) {
         Log.d( TAG, "search : enter" );
 
         searchString = "*" + searchString + "*";
@@ -64,10 +69,10 @@ public class DbSearchDataStore implements SearchDataStore {
         final String query = searchString;
         Log.d( TAG, "search : query=" + query );
 
-        return Observable.create( new Observable.OnSubscribe<List<SearchResultEntity>>() {
+        return Observable.create( new Observable.OnSubscribe<List<MediaItem>>() {
 
             @Override
-            public void call( Subscriber<? super List<SearchResultEntity>> subscriber ) {
+            public void call( Subscriber<? super List<MediaItem>> subscriber ) {
                 Log.d( TAG, "search.call : enter" );
 
                 Cursor cursor;
@@ -76,46 +81,52 @@ public class DbSearchDataStore implements SearchDataStore {
 
                 try {
 
-                    List<SearchResultEntity> searchResultEntities = new ArrayList<>();
+                    List<MediaItem> mediaItems = new ArrayList<>();
 
-                    builder.setTables( "search_result" );
+                    builder.setTables( MediaItemEntity.TABLE_NAME );
 
-                    String selection = SearchResultEntity.SQL_SELECT_MATCH;
+                    String selection = MediaItemEntity.SQL_SELECT_MATCH;
                     String[] selectionArgs = new String[] { query };
 
-                    SearchResultEntity searchResultEntity;
-                    cursor = builder.query( db, null, selection, selectionArgs, null, null, "START_TIME DESC, TITLE" );
+                    MediaItem mediaItem;
+                    cursor = builder.query( db, null, selection, selectionArgs, null, null, MediaItemEntity.FIELD_START_DATE + " DESC, " + MediaItemEntity.FIELD_TITLE );
                     while( cursor.moveToNext() ) {
 
-                        searchResultEntity = new SearchResultEntity();
-                        searchResultEntity.setStartTime( cursor.getLong( cursor.getColumnIndex( "START_TIME" ) ) );
-                        searchResultEntity.setTitle( cursor.getString( cursor.getColumnIndex( "TITLE" ) ) );
-                        searchResultEntity.setSubTitle( cursor.getString( cursor.getColumnIndex( "SUB_TITLE" ) ) );
-                        searchResultEntity.setCategory( cursor.getString( cursor.getColumnIndex( "CATEGORY" ) ) );
-                        searchResultEntity.setDescription( cursor.getString( cursor.getColumnIndex( "DESCRIPTION" ) ) );
-                        searchResultEntity.setInetref( cursor.getString( cursor.getColumnIndex( "INETREF" ) ) );
-                        searchResultEntity.setSeason( cursor.getInt( cursor.getColumnIndex( "SEASON" ) ) );
-                        searchResultEntity.setEpisode( cursor.getInt( cursor.getColumnIndex( "EPISODE" ) ) );
-                        searchResultEntity.setChanId( cursor.getInt( cursor.getColumnIndex( "CHAN_ID" ) ) );
-                        searchResultEntity.setChannelNumber( cursor.getString( cursor.getColumnIndex( "CHAN_NUM" ) ) );
-                        searchResultEntity.setCallsign( cursor.getString( cursor.getColumnIndex( "CALLSIGN" ) ) );
-                        searchResultEntity.setCastMembers( cursor.getString( cursor.getColumnIndex( "CAST_MEMBER_NAMES" ) ) );
-                        searchResultEntity.setCharacters( cursor.getString( cursor.getColumnIndex( "CAST_MEMBER_CHARACTERS" ) ) );
-                        searchResultEntity.setVideoId( cursor.getInt( cursor.getColumnIndex( "VIDEO_ID" ) ) );
-                        searchResultEntity.setRating( cursor.getString( cursor.getColumnIndex( "RATING" ) ) );
-                        searchResultEntity.setStorageGroup( cursor.getString( cursor.getColumnIndex( "STORAGE_GROUP" ) ) );
-                        searchResultEntity.setContentType( cursor.getString( cursor.getColumnIndex( "CONTENT_TYPE" ) ) );
-                        searchResultEntity.setFilename( cursor.getString( cursor.getColumnIndex( "FILENAME" ) ) );
-                        searchResultEntity.setHostname( cursor.getString( cursor.getColumnIndex( "HOSTNAME" ) ) );
-                        searchResultEntity.setType( cursor.getString( cursor.getColumnIndex( "TYPE" ) ) );
+                        mediaItem = new MediaItem();
+                        mediaItem.setId( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_ID ) ) );
+                        mediaItem.setMedia( Media.valueOf( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_MEDIA ) ) ) );
+                        mediaItem.setTitle( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_TITLE ) ) );
+                        mediaItem.setSubTitle( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_SUBTITLE ) ) );
+                        mediaItem.setDescription( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_DESCRIPTION ) ) );
+                        mediaItem.setStartDate( new DateTime( cursor.getLong( cursor.getColumnIndex( MediaItemEntity.FIELD_START_DATE ) ) ) );
+                        mediaItem.setProgramFlags( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_PROGRAM_FLAGS ) ) );
+                        mediaItem.setSeason( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_SEASON ) ) );
+                        mediaItem.setEpisode( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_EPISODE ) ) );
+                        mediaItem.setStudio( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_STUDIO ) ) );
+                        mediaItem.setCastMembers( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CAST_MEMBERS ) ) );
+                        mediaItem.setCharacters( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CHARACTERS ) ) );
+                        mediaItem.setUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_URL ) ) );
+                        mediaItem.setFanartUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_FANART_URL ) ) );
+                        mediaItem.setCoverartUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_COVERART_URL ) ) );
+                        mediaItem.setBannerUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_BANNER_URL ) ) );
+                        mediaItem.setPreviewUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_PREVIEW_URL ) ) );
+                        mediaItem.setContentType( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CONTENT_TYPE ) ) );
+                        mediaItem.setDuration( cursor.getLong( cursor.getColumnIndex( MediaItemEntity.FIELD_DURATION ) ) );
+                        mediaItem.setPercentComplete( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_LIVE_STREAM_PERCENT_COMPLETE ) ) );
+                        mediaItem.setRecording( ( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_RECORDING ) ) != 0 ) );
+                        mediaItem.setLiveStreamId( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_LIVE_STREAM_ID ) ) );
+                        mediaItem.setCreateHttpLiveStreamUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CREATE_LIVE_STREAM_URL ) ) );
+                        mediaItem.setRemoveHttpLiveStreamUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CREATE_LIVE_STREAM_URL ) ) );
+                        mediaItem.setWatched( ( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_CREATE_LIVE_STREAM_URL ) ) != 0 ) );
+                        mediaItem.setMarkWatchedUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CREATE_LIVE_STREAM_URL ) ) );
 
 //                        Log.d( TAG, "search.call : searchResultEntity=" + searchResultEntity.toString() );
-                        searchResultEntities.add( searchResultEntity );
+                        mediaItems.add( mediaItem );
 
                     }
                     cursor.close();
 
-                    subscriber.onNext( searchResultEntities );
+                    subscriber.onNext( mediaItems );
                     subscriber.onCompleted();
 
                 } catch( Exception e ) {
@@ -142,7 +153,7 @@ public class DbSearchDataStore implements SearchDataStore {
             db.beginTransaction();
 
             List<String> values = new ArrayList<>();
-            values.add( SearchResult.Type.RECORDING.name() );
+            values.add( Media.PROGRAM.name() );
 
             List<String> parameters = new ArrayList<>();
             for( TitleInfoEntity entity : titleInfoEntityCollection ) {
@@ -152,7 +163,7 @@ public class DbSearchDataStore implements SearchDataStore {
 
             }
 
-            db.delete( SearchResultEntity.TABLE_NAME, "type = ? and not title in (" + TextUtils.join( ",", parameters ) + ")", values.toArray( new String[ values.size() ] ) );
+            db.delete( MediaItemEntity.TABLE_NAME, MediaItemEntity.FIELD_MEDIA + " = ? and not " + MediaItemEntity.FIELD_TITLE + " in (" + TextUtils.join( ",", parameters ) + ")", values.toArray( new String[ values.size() ] ) );
 
             db.setTransactionSuccessful();
             db.endTransaction();
@@ -163,72 +174,78 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
-    public void refreshRecordedProgramData( Collection<SearchResultEntity> searchResultEntityCollection ) {
+    public void refreshRecordedProgramData( Collection<MediaItem> mediaItemEntityCollection ) {
         Log.d( TAG, "refreshRecordedProgramData : enter" );
 
-        if( null != searchResultEntityCollection && !searchResultEntityCollection.isEmpty() ) {
-            Log.d( TAG, "refreshRecordedProgramData : searchResultEntityCollection is not empty" );
+        if( null != mediaItemEntityCollection && !mediaItemEntityCollection.isEmpty() ) {
+            Log.d( TAG, "refreshRecordedProgramData : mediaItemEntityCollection is not empty" );
 
             db.beginTransaction();
 
-            Observable.from( searchResultEntityCollection )
-                    .distinct( searchResultEntity -> searchResultEntity.getTitle() )
-                    .flatMap( searchResultEntity -> Observable.just( searchResultEntity.getTitle() ) )
-                    .doOnNext( title -> db.delete( SearchResultEntity.TABLE_NAME, "type = ? and title = ?", new String[] { SearchResult.Type.RECORDING.name(), title } ) )
+            Observable.from( mediaItemEntityCollection )
+                    .distinct( MediaItem::getTitle )
+                    .flatMap( mediaItemEntity -> Observable.just( mediaItemEntity.getTitle() ) )
+                    .doOnNext( title -> db.delete( MediaItemEntity.TABLE_NAME, MediaItemEntity.FIELD_MEDIA + " = ? and " + MediaItemEntity.FIELD_TITLE + " = ?", new String[] { Media.PROGRAM.name(), title } ) )
                     .doOnNext( title -> Log.d( TAG, "refreshRecordedPrograms : deleting old recordings for title=" + title ) )
                     .subscribe();
 
-            processCollection( searchResultEntityCollection );
+            processCollection( mediaItemEntityCollection );
         }
 
         Log.d( TAG, "refreshRecordedProgramData : exit" );
     }
 
     @Override
-    public void refreshVideoData( Collection<SearchResultEntity> searchResultEntityCollection ) {
+    public void refreshVideoData( Collection<MediaItem> mediaItemEntityCollection ) {
         Log.d( TAG, "refreshVideoData : enter" );
 
-        if( null != searchResultEntityCollection && !searchResultEntityCollection.isEmpty() ) {
-            Log.d( TAG, "refreshVideoData : searchResultEntityCollection is not empty" );
+        if( null != mediaItemEntityCollection && !mediaItemEntityCollection.isEmpty() ) {
+            Log.d( TAG, "refreshVideoData : mediaItemEntityCollection is not empty" );
 
             db.beginTransaction();
 
             Log.d( TAG, "refreshVideoData : deleting old videos" );
-            db.delete( SearchResultEntity.TABLE_NAME, "type = ?", new String[] { SearchResult.Type.VIDEO.name() } );
+            db.delete( MediaItemEntity.TABLE_NAME, MediaItemEntity.FIELD_MEDIA + " = ?", new String[] { Media.VIDEO.name() } );
 
-            processCollection( searchResultEntityCollection );
+            processCollection( mediaItemEntityCollection );
         }
 
         Log.d( TAG, "refreshVideoData : exit" );
     }
 
-    private void processCollection( Collection<SearchResultEntity> searchResultEntityCollection ) {
+    private void processCollection( Collection<MediaItem> mediaItemEntityCollection ) {
 
-        SQLiteStatement statement = db.compileStatement( SearchResultEntity.SQL_INSERT );
-        for( SearchResultEntity searchResultEntity : searchResultEntityCollection ) {
+        SQLiteStatement statement = db.compileStatement( MediaItemEntity.SQL_INSERT );
+        for( MediaItem mediaItemEntity : mediaItemEntityCollection ) {
 //            Log.d(TAG, "processCollection : searchResultEntity=" + searchResultEntity.toString());
 
             statement.clearBindings();
-            statement.bindLong( 1, searchResultEntity.getStartTime() );
-            statement.bindString( 2, null != searchResultEntity.getTitle() ? searchResultEntity.getTitle() : "" );
-            statement.bindString( 3, null != searchResultEntity.getSubTitle() ? searchResultEntity.getSubTitle() : "" );
-            statement.bindString( 4, null != searchResultEntity.getCategory() ? searchResultEntity.getCategory() : "" );
-            statement.bindString( 5, null != searchResultEntity.getDescription() ? searchResultEntity.getDescription() : "" );
-            statement.bindString( 6, null != searchResultEntity.getInetref() ? searchResultEntity.getInetref() : "" );
-            statement.bindLong( 7, searchResultEntity.getSeason() );
-            statement.bindLong( 8, searchResultEntity.getEpisode() );
-            statement.bindLong( 9, searchResultEntity.getChanId() );
-            statement.bindString( 10, null != searchResultEntity.getChannelNumber() ? searchResultEntity.getChannelNumber() : "" );
-            statement.bindString( 11, null != searchResultEntity.getCallsign() ? searchResultEntity.getCallsign() : "" );
-            statement.bindString( 12, null != searchResultEntity.getCastMembers() ? searchResultEntity.getCastMembers() : "" );
-            statement.bindString( 13, null != searchResultEntity.getCharacters() ? searchResultEntity.getCharacters() : "" );
-            statement.bindLong( 14, searchResultEntity.getVideoId() );
-            statement.bindString( 15, null != searchResultEntity.getRating() ? searchResultEntity.getRating() : "" );
-            statement.bindString( 16, null != searchResultEntity.getContentType() ? searchResultEntity.getContentType() : "" );
-            statement.bindString( 17, null != searchResultEntity.getStorageGroup() ? searchResultEntity.getStorageGroup() : "" );
-            statement.bindString( 18, searchResultEntity.getFilename() );
-            statement.bindString( 19, searchResultEntity.getHostname() );
-            statement.bindString( 20, searchResultEntity.getType() );
+            statement.bindLong( 1, mediaItemEntity.getId() );
+            statement.bindString( 2, mediaItemEntity.getMedia().name() );
+            statement.bindString( 3, null != mediaItemEntity.getTitle() ? mediaItemEntity.getTitle() : "" );
+            statement.bindString( 4, null != mediaItemEntity.getSubTitle() ? mediaItemEntity.getSubTitle() : "" );
+            statement.bindString( 5, null != mediaItemEntity.getDescription() ? mediaItemEntity.getDescription() : "" );
+            statement.bindLong( 6, null != mediaItemEntity.getStartDate() ? mediaItemEntity.getStartDate().getMillis() : -1 );
+            statement.bindLong( 7, mediaItemEntity.getProgramFlags() );
+            statement.bindLong( 8, mediaItemEntity.getSeason() );
+            statement.bindLong( 9, mediaItemEntity.getEpisode() );
+            statement.bindString( 10, null != mediaItemEntity.getStudio() ? mediaItemEntity.getStudio() : "" );
+            statement.bindString( 11, null != mediaItemEntity.getCastMembers() ? mediaItemEntity.getCastMembers() : "" );
+            statement.bindString( 12, null != mediaItemEntity.getCharacters() ? mediaItemEntity.getCharacters() : "" );
+            statement.bindString( 13, null != mediaItemEntity.getUrl() ? mediaItemEntity.getUrl() : "" );
+            statement.bindString( 14, null != mediaItemEntity.getFanartUrl() ? mediaItemEntity.getFanartUrl() : "" );
+            statement.bindString( 15, null != mediaItemEntity.getCoverartUrl() ? mediaItemEntity.getCoverartUrl() : "" );
+            statement.bindString( 16, null != mediaItemEntity.getBannerUrl() ? mediaItemEntity.getBannerUrl() : "" );
+            statement.bindString( 17, null != mediaItemEntity.getPreviewUrl() ? mediaItemEntity.getPreviewUrl() : "" );
+            statement.bindString( 18, null != mediaItemEntity.getContentType() ? mediaItemEntity.getContentType() : "" );
+            statement.bindLong( 19, mediaItemEntity.getDuration() );
+            statement.bindLong( 20, mediaItemEntity.getPercentComplete() );
+            statement.bindLong( 21, mediaItemEntity.isRecording() ? 1 : 0 );
+            statement.bindLong( 22, mediaItemEntity.getLiveStreamId() );
+            statement.bindString( 23, null != mediaItemEntity.getCreateHttpLiveStreamUrl() ? mediaItemEntity.getCreateHttpLiveStreamUrl() : "" );
+            statement.bindString( 24, null != mediaItemEntity.getRemoveHttpLiveStreamUrl() ? mediaItemEntity.getRemoveHttpLiveStreamUrl() : "" );
+            statement.bindLong( 25, mediaItemEntity.isWatched() ? 1 : 0 );
+            statement.bindString( 26, null != mediaItemEntity.getMarkWatchedUrl() ? mediaItemEntity.getMarkWatchedUrl() : "" );
             statement.executeInsert();
 
         }

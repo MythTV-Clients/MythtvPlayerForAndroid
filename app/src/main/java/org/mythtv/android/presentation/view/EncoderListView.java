@@ -23,10 +23,13 @@ import org.mythtv.android.presentation.model.EncoderModel;
 import java.util.Collection;
 
 /**
+ *
  * Interface representing a View in a model view presenter (MVP) pattern.
  * In this case is used as a view representing a list of {@link EncoderModel}.
  *
- * Created by dmfrey on 11/13/15.
+ * @author dmfrey
+ *
+ * Created on 11/13/15.
  */
 public interface EncoderListView extends LoadDataView {
 

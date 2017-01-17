@@ -37,7 +37,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * Created by dmfrey on 8/31/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/31/15.
  */
 public class EncoderListPresenter extends DefaultSubscriber<List<Encoder>> implements Presenter {
 
@@ -92,12 +97,6 @@ public class EncoderListPresenter extends DefaultSubscriber<List<Encoder>> imple
         this.hideViewRetry();
         this.showViewLoading();
         this.getEncoderList();
-
-    }
-
-    public void onEncoderClicked( EncoderModel encoderModel ) {
-
-//        this.viewListView.viewEncoder( encoderModel );
 
     }
 

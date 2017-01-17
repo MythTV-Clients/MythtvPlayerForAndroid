@@ -23,20 +23,10 @@
     android:orientation="vertical"
     android:layout_margin="@dimen/outer_margin">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/outer_margin"
-        android:layout_marginBottom="32dp">
-
-        <TextView
-            android:id="@+id/error_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/castErrorLabel"
-            android:layout_centerVertical="true" />
-
-    </RelativeLayout>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/castErrorLabel" />
 
 </LinearLayout>

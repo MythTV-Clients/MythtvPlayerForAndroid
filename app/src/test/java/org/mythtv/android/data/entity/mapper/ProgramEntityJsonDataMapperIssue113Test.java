@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import rx.Observable;
@@ -36,8 +34,6 @@ import static org.junit.Assert.assertThat;
  * Created by dmfrey on 9/18/15.
  */
 public class ProgramEntityJsonDataMapperIssue113Test {
-
-    private ProgramEntityJsonMapper programEntityJsonMapper;
 
     private Gson gson;
 
@@ -57,8 +53,6 @@ public class ProgramEntityJsonDataMapperIssue113Test {
                 .registerTypeAdapter( dateTimeType, new DateTimeDeserializer() )
                 .create();
 
-        programEntityJsonMapper = new ProgramEntityJsonMapper( gson );
-
     }
 
     @Test
@@ -76,38 +70,6 @@ public class ProgramEntityJsonDataMapperIssue113Test {
         assertThat( programListEntity.getPrograms().getCount(), equalTo( 5287 ) );
         assertThat( programListEntity.getPrograms().getPrograms(), not( nullValue() ) );
         assertThat( programListEntity.getPrograms().getPrograms().length, equalTo( 5287 ) );
-
-//        for( ProgramEntity programEntity : programListEntity.getPrograms().getPrograms() ) {
-//
-//            if( null == programEntity.getStartTime() ) {
-//                System.out.println( "StartTime not set! - " + programEntity.getStartTime() + " " + programEntity.getChannel().getChanId() );
-//            }
-//            if( null == programEntity.getChannel() ) {
-//                System.out.println( "Channel not set! - " + programEntity.getStartTime() + " " + programEntity.getChannel().getChanId() );
-//            }
-//            if( null == programEntity.getRecording() ) {
-//                System.out.println( "Recording not set! - " + programEntity.getStartTime() + " " + programEntity.getChannel().getChanId() );
-//            }
-//            if( null == programEntity.getTitle() ) {
-//                System.out.println( "Title not set! - " + programEntity.getStartTime() + " " + programEntity.getChannel().getChanId() );
-//            }
-//            if( null == programEntity.getSubTitle() ) {
-//                System.out.println( "SubTitle not set! - " + programEntity.getStartTime() + " " + programEntity.getChannel().getChanId() );
-//            }
-//            if( null == programEntity.getDescription() ) {
-//                System.out.println( "Description not set! - " + programEntity.getStartTime() + " " + programEntity.getChannel().getChanId() );
-//            }
-//            if( null == programEntity.getInetref() ) {
-//                System.out.println( "Intetref not set! - " + programEntity.getStartTime() + " " + programEntity.getChannel().getChanId() );
-//            }
-//            if( 0 == programEntity.getSeason() ) {
-//                System.out.println( "Season not set! - " + programEntity.getStartTime() + " " + programEntity.getChannel().getChanId() );
-//            }
-//            if( 0 == programEntity.getEpisode() ) {
-//                System.out.println( "Episode not set! - " + programEntity.getStartTime() + " " + programEntity.getChannel().getChanId() );
-//            }
-//
-//        }
 
     }
 

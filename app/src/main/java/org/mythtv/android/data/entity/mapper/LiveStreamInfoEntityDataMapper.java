@@ -28,7 +28,12 @@ import java.util.List;
 import javax.inject.Singleton;
 
 /**
- * Created by dmfrey on 10/17/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/17/15.
  */
 @Singleton
 public class LiveStreamInfoEntityDataMapper {

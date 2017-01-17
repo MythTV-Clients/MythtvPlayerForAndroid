@@ -19,7 +19,12 @@
 package org.mythtv.android.domain;
 
 /**
- * Created by dmfrey on 11/10/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/10/15.
  */
 public class ContentType {
 

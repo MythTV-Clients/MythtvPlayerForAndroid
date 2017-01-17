@@ -37,12 +37,13 @@ import org.mythtv.android.presentation.internal.di.modules.ApplicationModule;
 import org.mythtv.android.presentation.internal.di.modules.NetModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
-import java.util.Locale;
-
 /**
+ *
  * Android Main Application
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/30/15.
  */
 public class AndroidApplication extends Application {
 

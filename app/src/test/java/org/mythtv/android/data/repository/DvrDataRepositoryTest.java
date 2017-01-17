@@ -1,5 +1,11 @@
 package org.mythtv.android.data.repository;
 
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
@@ -9,33 +15,23 @@ import org.mythtv.android.data.repository.datasource.ContentDataStore;
 import org.mythtv.android.data.repository.datasource.ContentDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
-import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
 import org.mythtv.android.domain.Program;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
 import rx.Observable;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 
 public class DvrDataRepositoryTest extends ApplicationTestCase {
 
-    private static final int FAKE_CHAN_ID = 999;
-    private static final DateTime FAKE_START_TIME = new DateTime();
+    private static final int FAKE_RECORDED_ID = 999;
 
     private DvrDataRepository dvrDataRepository;
 
     @Mock private DvrDataStoreFactory mockDvrDataStoreFactory;
-    @Mock private SearchDataStoreFactory mockSearchDataStoreFactory;
     @Mock private ContentDataStoreFactory mockContentDataStoreFactory;
     @Mock private DvrDataStore mockDvrDataStore;
     @Mock private ContentDataStore mockContentDataStore;
@@ -49,9 +45,8 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockSearchDataStoreFactory, mockContentDataStoreFactory );
+        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockContentDataStoreFactory );
 
-        given( mockDvrDataStoreFactory.create( anyInt(), any( DateTime.class ) ) ).willReturn( mockDvrDataStore );
         given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockDvrDataStore );
         given( mockContentDataStoreFactory.create() ).willReturn( mockContentDataStore );
         given( mockContentDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockContentDataStore );
@@ -102,12 +97,12 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     public void testGetRecordedProgramHappyCase() {
 
         ProgramEntity programEntity = new ProgramEntity();
-        given( mockDvrDataStore.recordedProgramEntityDetails( FAKE_CHAN_ID, FAKE_START_TIME ) ).willReturn( Observable.just( programEntity ) );
+        given( mockDvrDataStore.recordedProgramEntityDetails( FAKE_RECORDED_ID ) ).willReturn( Observable.just( programEntity ) );
 
-        dvrDataRepository.recordedProgram( FAKE_CHAN_ID, FAKE_START_TIME );
+        dvrDataRepository.recordedProgram( FAKE_RECORDED_ID );
 
         verify( mockDvrDataStoreFactory ).createMasterBackendDataStore();
-        verify( mockDvrDataStore ).recordedProgramEntityDetails( FAKE_CHAN_ID, FAKE_START_TIME );
+        verify( mockDvrDataStore ).recordedProgramEntityDetails( FAKE_RECORDED_ID );
 
     }
 

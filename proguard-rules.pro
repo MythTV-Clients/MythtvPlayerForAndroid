@@ -1,5 +1,0 @@
--keepattributes Signature
--keepattributes InnerClasses
--keepattributes EnclosingMethod
--keep
--dontwarn

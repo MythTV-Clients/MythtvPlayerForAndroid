@@ -32,7 +32,9 @@ import dagger.Component;
  * Subtypes of ActivityComponent should be decorated with annotation:
  * {@link org.mythtv.android.presentation.internal.di.PerActivity}
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @PerActivity
 @Component( dependencies = ApplicationComponent.class, modules = ActivityModule.class )

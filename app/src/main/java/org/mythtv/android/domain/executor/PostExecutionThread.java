@@ -25,7 +25,9 @@ import rx.Scheduler;
  * Useful to encapsulate a UI Thread for example, since some job will be done in background, an
  * implementation of this interface will change context and update the UI.
  *
- * Created by dmfrey on 8/26/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 public interface PostExecutionThread {
 

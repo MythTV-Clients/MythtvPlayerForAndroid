@@ -21,15 +21,15 @@ package org.mythtv.android.presentation.presenter.phone;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.mythtv.android.domain.SearchResult;
+import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
-import org.mythtv.android.presentation.mapper.SearchResultModelDataMapper;
-import org.mythtv.android.presentation.model.SearchResultModel;
-import org.mythtv.android.presentation.view.SearchResultListView;
+import org.mythtv.android.presentation.mapper.MediaItemModelMapper;
+import org.mythtv.android.presentation.model.MediaItemModel;
+import org.mythtv.android.presentation.view.MediaItemListView;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,27 +40,32 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * Created by dmfrey on 10/14/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/14/15.
  */
-public class SearchResultListPresenter extends DefaultSubscriber<List<SearchResult>> implements Presenter {
+public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 
     private static final String TAG = SearchResultListPresenter.class.getSimpleName();
 
     private String searchText;
-    private SearchResultListView viewListView;
+    private MediaItemListView viewListView;
 
     private final DynamicUseCase getSearchResultListUseCase;
-    private final SearchResultModelDataMapper searchResultModelDataMapper;
+    private final MediaItemModelMapper mediaItemModelMapper;
 
     @Inject
-    public SearchResultListPresenter( @Named( "searchResultList" ) DynamicUseCase getSearchResultListUseCase, SearchResultModelDataMapper searchResultModelDataMapper ) {
+    public SearchResultListPresenter( @Named( "searchResultList" ) DynamicUseCase getSearchResultListUseCase, MediaItemModelMapper mediaItemModelMapper ) {
 
         this.getSearchResultListUseCase = getSearchResultListUseCase;
-        this.searchResultModelDataMapper = searchResultModelDataMapper;
+        this.mediaItemModelMapper = mediaItemModelMapper;
 
     }
 
-    public void setView( @NonNull SearchResultListView view ) {
+    public void setView( @NonNull MediaItemListView view ) {
         this.viewListView = view;
     }
 
@@ -103,10 +108,10 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<SearchResu
 
     }
 
-    public void onSearchResultClicked( SearchResultModel searchResultModel ) {
-        Log.i( TAG, "onSearchResultClicked : searchResultModel=" + searchResultModel.toString() );
+    public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
+        Log.i( TAG, "onMediaItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-        this.viewListView.viewSearchResult( searchResultModel );
+        this.viewListView.viewMediaItem( mediaItemModel );
 
     }
 
@@ -133,10 +138,10 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<SearchResu
 
     }
 
-    private void showSearchResultsCollectionInView( Collection<SearchResult> searchResultsCollection ) {
+    private void showSearchResultsCollectionInView( Collection<MediaItem> mediaItemsCollection ) {
 
-        final Collection<SearchResultModel> searchResultModelsCollection = this.searchResultModelDataMapper.transform( searchResultsCollection );
-        this.viewListView.renderSearchResultList( searchResultModelsCollection );
+        final Collection<MediaItemModel> mediaItemModelsCollection = this.mediaItemModelMapper.transform( mediaItemsCollection );
+        this.viewListView.renderMediaItemList( mediaItemModelsCollection );
 
     }
 
@@ -149,7 +154,7 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<SearchResu
 
     }
 
-    private final class SearchResultListSubscriber extends DefaultSubscriber<List<SearchResult>> {
+    private final class SearchResultListSubscriber extends DefaultSubscriber<List<MediaItem>> {
 
         @Override
         public void onCompleted() {
@@ -166,9 +171,9 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<SearchResu
         }
 
         @Override
-        public void onNext( List<SearchResult> searchResults ) {
+        public void onNext( List<MediaItem> mediaItems  ) {
 
-            SearchResultListPresenter.this.showSearchResultsCollectionInView( searchResults );
+            SearchResultListPresenter.this.showSearchResultsCollectionInView( mediaItems );
 
         }
 

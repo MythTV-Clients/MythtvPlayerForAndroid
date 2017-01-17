@@ -20,15 +20,46 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Data;
+import java.util.Arrays;
 
 /**
- * Created by dmfrey on 9/7/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/7/15.
  */
-@Data
 public class TitleInfosEntity {
 
     @SerializedName( "TitleInfos" )
     private TitleInfoEntity[] titleInfos;
+
+    public TitleInfosEntity() {
+    }
+
+    public TitleInfosEntity(TitleInfoEntity[] titleInfos ) {
+
+        this.titleInfos = titleInfos;
+
+    }
+
+    public TitleInfoEntity[] getTitleInfos() {
+
+        return titleInfos;
+    }
+
+    public void setTitleInfos( TitleInfoEntity[] titleInfos ) {
+
+        this.titleInfos = titleInfos;
+
+    }
+
+    @Override
+    public String toString() {
+        return "TitleInfosEntity{" +
+                "titleInfos=" + Arrays.toString(titleInfos) +
+                '}';
+    }
 
 }

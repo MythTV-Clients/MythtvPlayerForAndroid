@@ -37,7 +37,12 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 
 /**
- * Created by dmfrey on 1/28/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 public abstract class AbstractBaseTvActivity extends Activity {
 

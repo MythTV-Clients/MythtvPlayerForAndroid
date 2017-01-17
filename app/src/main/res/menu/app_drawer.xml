@@ -19,9 +19,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group
-        android:id="@+id/menu_top"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/navigation_item_home"
@@ -40,9 +38,7 @@
 
     </group>
 
-    <group
-        android:id="@+id/menu_bottom"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/navigation_item_watch_settings"

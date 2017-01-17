@@ -68,7 +68,7 @@ public class DvrApiImplTest extends ApplicationTestCase {
     @Test
     public void testRecordedProgramEntityList() throws Exception{
 
-        Observable<List<ProgramEntity>> recordedProgramEntityList = api.recordedProgramEntityList(true, 1, 1, null, null, null);
+        Observable<List<ProgramEntity>> recordedProgramEntityList = api.recordedProgramEntityList( true, 1, 1, null, null, null );
         assertThat( recordedProgramEntityList, not( nullValue() ) );
 
     }
@@ -76,7 +76,7 @@ public class DvrApiImplTest extends ApplicationTestCase {
     @Test
     public void testRecordedProgramEntity() throws Exception{
 
-        Observable<ProgramEntity> recordedProgramEntity = api.recordedProgramById(1, new DateTime());
+        Observable<ProgramEntity> recordedProgramEntity = api.recordedProgramById( 1, 1, new DateTime() );
         assertThat( recordedProgramEntity, not( nullValue() ) );
 
     }

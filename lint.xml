@@ -25,4 +25,8 @@
         <ignore regexp="Try-with-resources requires API level 19"/>
     </issue>
 
+    <issue id="Typos">
+        <ignore path="app" />
+    </issue>
+
 </lint>

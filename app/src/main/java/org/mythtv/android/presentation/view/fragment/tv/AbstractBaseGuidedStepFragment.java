@@ -27,9 +27,12 @@ import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
+ *
  * Base {@link Fragment} class for every fragment in this application.
  *
- * Created by dmfrey on 2/4/16.
+ * @author dmfrey
+ *
+ * Created on 2/4/16.
  */
 public abstract class AbstractBaseGuidedStepFragment extends GuidedStepFragment {
 

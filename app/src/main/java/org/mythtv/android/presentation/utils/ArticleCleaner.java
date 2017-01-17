@@ -24,7 +24,12 @@ import android.util.Log;
 import org.mythtv.android.R;
 
 /**
- * Created by dmfrey on 2/1/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 2/1/16.
  */
 public class ArticleCleaner {
 
@@ -43,6 +48,7 @@ public class ArticleCleaner {
         String upper = value.toUpperCase();
 
         for( String article : articles ) {
+            article = article + " ";
             Log.d( TAG, "clean : article=" + article + ", value=" + value );
 
             if( upper.startsWith( article ) ) {

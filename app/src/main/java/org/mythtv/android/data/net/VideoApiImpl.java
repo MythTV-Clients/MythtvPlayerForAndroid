@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
@@ -31,6 +30,7 @@ import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.domain.SettingsKeys;
 
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -43,7 +43,12 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by dmfrey on 11/9/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/9/15.
  */
 public class VideoApiImpl implements VideoApi {
 
@@ -86,7 +91,7 @@ public class VideoApiImpl implements VideoApi {
 
                     try {
 
-                        String responseVideoEntities = getVideoEntitiesFromApi( folder, sort, descending, startIndex, count );
+                        Reader responseVideoEntities = getVideoEntitiesFromApi( folder, sort, descending, startIndex, count );
                         if( null != responseVideoEntities ) {
                             Log.d( TAG, "getVideoList.call : retrieved video entities" );
 
@@ -133,7 +138,7 @@ public class VideoApiImpl implements VideoApi {
 
                     try {
 
-                        String responseVideoDetails = getVideoDetailsFromApi( id );
+                        Reader responseVideoDetails = getVideoDetailsFromApi( id );
                         if( null != responseVideoDetails ) {
 
                             subscriber.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( responseVideoDetails ) );
@@ -183,7 +188,7 @@ public class VideoApiImpl implements VideoApi {
 
                     try {
 
-                        String response = postUpdateWatchedStatus( videoId, watched );
+                        Reader response = postUpdateWatchedStatus( videoId, watched );
                         if( null != response ) {
                             Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
 
@@ -218,7 +223,7 @@ public class VideoApiImpl implements VideoApi {
 
     }
 
-    private String getVideoEntitiesFromApi( final String folder, final String sort, final boolean descending, final int startIndex, final int count ) throws MalformedURLException {
+    private Reader getVideoEntitiesFromApi( final String folder, final String sort, final boolean descending, final int startIndex, final int count ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
@@ -270,7 +275,7 @@ public class VideoApiImpl implements VideoApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String getVideoDetailsFromApi( int id ) throws MalformedURLException {
+    private Reader getVideoDetailsFromApi( int id ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
@@ -281,7 +286,7 @@ public class VideoApiImpl implements VideoApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String postUpdateWatchedStatus( final int videoId, final boolean watched ) throws MalformedURLException {
+    private Reader postUpdateWatchedStatus( final int videoId, final boolean watched ) throws MalformedURLException {
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put( "Id", String.valueOf( videoId ) );
@@ -304,8 +309,8 @@ public class VideoApiImpl implements VideoApi {
 
     private String getMasterBackendUrl() {
 
-        String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+        String host = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         String masterBackend = "http://" + host + ":" + port;
         Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
@@ -313,14 +318,9 @@ public class VideoApiImpl implements VideoApi {
         return masterBackend;
     }
 
-    private String getFromPreferences( Context context, String key ) {
+    private String getFromPreferences( String key ) {
 
         return sharedPreferences.getString( key, "" );
-    }
-
-    private int getIntFromPreferences( Context context, String key, int defaultValue ) {
-
-        return Integer.parseInt( sharedPreferences.getString( key, String.valueOf( defaultValue ) ) );
     }
 
 }

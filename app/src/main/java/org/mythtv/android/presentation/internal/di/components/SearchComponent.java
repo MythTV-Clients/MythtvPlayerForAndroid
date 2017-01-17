@@ -23,19 +23,24 @@ import org.mythtv.android.presentation.internal.di.modules.ActivityModule;
 import org.mythtv.android.presentation.internal.di.modules.NetModule;
 import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
-import org.mythtv.android.presentation.view.fragment.phone.PhoneSearchResultListFragment;
+import org.mythtv.android.presentation.view.fragment.phone.MediaItemSearchResultListFragment;
 import org.mythtv.android.presentation.view.fragment.tv.TvSearchResultListFragment;
 
 import dagger.Component;
 
 /**
- * Created by dmfrey on 10/12/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/12/15.
  */
 @PerActivity
 @Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, SharedPreferencesModule.class, NetModule.class, SearchResultsModule.class } )
 public interface SearchComponent {
 
-    void inject( PhoneSearchResultListFragment phoneSearchResultListFragment);
+    void inject( MediaItemSearchResultListFragment mediaItemSearchResultListFragment);
     void inject( TvSearchResultListFragment tvSearchResultListFragment);
 
 }

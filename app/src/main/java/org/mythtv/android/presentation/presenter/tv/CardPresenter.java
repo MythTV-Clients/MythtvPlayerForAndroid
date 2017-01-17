@@ -25,18 +25,15 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 
-import org.joda.time.DateTimeZone;
 import org.mythtv.android.R;
-import org.mythtv.android.domain.SearchResult;
 import org.mythtv.android.domain.SettingsKeys;
-import org.mythtv.android.presentation.model.ProgramModel;
-import org.mythtv.android.presentation.model.SearchResultModel;
-import org.mythtv.android.presentation.model.VideoMetadataInfoModel;
-import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
+import org.mythtv.android.presentation.model.MediaItemModel;
 
-/*
+/**
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
  * It contains an Image CardView
+ *
+ * @author dmfrey
  */
 public class CardPresenter extends Presenter {
 
@@ -81,84 +78,39 @@ public class CardPresenter extends Presenter {
         cardView.setFocusable( true);
         cardView.setFocusableInTouchMode( true );
         updateCardBackgroundColor( cardView, false );
+
         return new ViewHolder( cardView );
     }
 
     @Override
     public void onBindViewHolder( Presenter.ViewHolder viewHolder, Object item ) {
 
-        if( item instanceof ProgramModel ) {
+        if( item instanceof MediaItemModel) {
+            Log.d( TAG, "onBindView : item=" + item.toString() );
 
-            ProgramModel programModel = (ProgramModel) item;
+            MediaItemModel mediaItemModel = (MediaItemModel) item;
             ImageCardView cardView = (ImageCardView) viewHolder.view;
-            cardView.setTitleText( programModel.getSubTitle() );
-            cardView.setContentText( programModel.getDescription() );
+            cardView.setTitleText( ( null == mediaItemModel.getSubTitle() || "".equals( mediaItemModel.getSubTitle() ) ) ? mediaItemModel.getTitle() : mediaItemModel.getSubTitle() );
+            cardView.setContentText( mediaItemModel.getDescription() );
             cardView.setMainImageDimensions( CARD_WIDTH, CARD_HEIGHT );
-            Glide.with( viewHolder.view.getContext() )
-                    .load( getMasterBackendUrl( viewHolder.view.getContext() ) + "/Content/GetPreviewImage?ChanId=" + programModel.getChannel().getChanId() + "&StartTime=" + programModel.getRecording().getStartTs().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) )
-//                    .centerCrop()
-                    .error( mDefaultCardImage )
-                    .into( cardView.getMainImageView() );
 
-        }
+            switch( mediaItemModel.getMedia() ) {
 
-        if (item instanceof VideoMetadataInfoModel) {
+                case PROGRAM :
 
-            VideoMetadataInfoModel videoMetadataInfoModel = (VideoMetadataInfoModel) item;
+                    Glide.with( viewHolder.view.getContext() )
+                            .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.getPreviewUrl() )
+                            .error( mDefaultCardImage )
+                            .into( cardView.getMainImageView() );
+                    break;
 
-            String seasonEpisode = "";
-            if( "TELEVISION".equals( videoMetadataInfoModel.getContentType() ) ) {
+                default :
 
-                seasonEpisode = SeasonEpisodeFormatter.format(videoMetadataInfoModel);
-
-            }
-
-            ImageCardView cardView = (ImageCardView) viewHolder.view;
-            cardView.setTitleText( videoMetadataInfoModel.getTitle() + " " + seasonEpisode );
-            cardView.setContentText( videoMetadataInfoModel.getDescription() );
-            cardView.setMainImageDimensions( CARD_WIDTH, CARD_HEIGHT );
-            Glide.with( viewHolder.view.getContext() )
-                    .load( getMasterBackendUrl( viewHolder.view.getContext() ) + "/Content/GetImageFile?StorageGroup=Coverart&FileName=" + videoMetadataInfoModel.getCoverart() )
-//                    .centerCrop()
-                    .error( mDefaultCardImage )
-                    .into( cardView.getMainImageView() );
-
-        }
-
-        if( item instanceof SearchResultModel ) {
-
-            SearchResultModel searchResultModel = (SearchResultModel) item;
-            if( SearchResult.Type.RECORDING.equals( searchResultModel.getType() ) ) {
-
-                ImageCardView cardView = (ImageCardView) viewHolder.view;
-                cardView.setTitleText( searchResultModel.getSubTitle() );
-                cardView.setContentText( searchResultModel.getDescription() );
-                cardView.setMainImageDimensions( CARD_WIDTH, CARD_HEIGHT );
-                Glide.with( viewHolder.view.getContext() )
-                        .load( getMasterBackendUrl( viewHolder.view.getContext() ) + "/Content/GetPreviewImage?ChanId=" + searchResultModel.getChanId() + "&StartTime=" + searchResultModel.getStartTime().withZone( DateTimeZone.UTC ).toString( "yyyy-MM-dd'T'HH:mm:ss" ) )
-//                    .centerCrop()
-                        .error( mDefaultCardImage )
-                        .into( cardView.getMainImageView() );
-
-            } else {
-
-                String seasonEpisode = "";
-                if( "TELEVISION".equals( searchResultModel.getContentType() ) ) {
-
-                    seasonEpisode = SeasonEpisodeFormatter.format( searchResultModel );
-
-                }
-
-                ImageCardView cardView = (ImageCardView) viewHolder.view;
-                cardView.setTitleText( searchResultModel.getTitle() + " " + seasonEpisode );
-                cardView.setContentText( searchResultModel.getDescription() );
-                cardView.setMainImageDimensions( CARD_WIDTH, CARD_HEIGHT );
-                Glide.with( viewHolder.view.getContext() )
-                        .load( getMasterBackendUrl( viewHolder.view.getContext() ) + "/Content/GetVideoArtwork?Id=" + searchResultModel.getVideoId() + "&Type=coverart" )
-//                    .centerCrop()
-                        .error( mDefaultCardImage )
-                        .into( cardView.getMainImageView() );
-
+                    Glide.with( viewHolder.view.getContext() )
+                            .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.getFanartUrl() )
+                            .error( mDefaultCardImage )
+                            .into( cardView.getMainImageView() );
+                    break;
             }
 
         }

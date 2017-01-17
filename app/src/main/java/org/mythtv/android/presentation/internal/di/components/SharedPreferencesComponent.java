@@ -11,7 +11,12 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 /**
- * Created by dmfrey on 5/9/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 5/9/16.
  */
 @Singleton
 @Component( modules = { ApplicationModule.class, SharedPreferencesModule.class } )

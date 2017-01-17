@@ -41,9 +41,13 @@ import com.google.android.gms.cast.framework.media.uicontroller.UIMediaControlle
 
 import org.mythtv.android.R;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class ExpandedControlsFragment extends Fragment {
-
-    private static final String TAG = "ExpandedControlsFrgmnt";
 
     private TextView mSubtitleTextView;
     private UIMediaController mUIMediaController;
@@ -98,8 +102,7 @@ public class ExpandedControlsFragment extends Fragment {
         ProgressBar loading = (ProgressBar) rootView.findViewById(R.id.loading_indicator);
         mSubtitleTextView = (TextView) rootView.findViewById(R.id.subtitle_textview);
 
-        mUIMediaController.bindImageViewToImageOfCurrentItem((ImageView) backgroundImageView,
-                -1, R.drawable.ab_transparent_democast);
+        mUIMediaController.bindImageViewToImageOfCurrentItem( backgroundImageView, -1, R.drawable.ab_transparent_democast );
         mUIMediaController.bindViewToLoadingIndicator(loading);
     }
 
@@ -216,6 +219,11 @@ public class ExpandedControlsFragment extends Fragment {
         @Override
         public void onSendingRemoteMediaRequest() {
             mSubtitleTextView.setText(getResources().getString(R.string.loading));
+        }
+
+        @Override
+        public void onAdBreakStatusUpdated() {
+
         }
 
     }

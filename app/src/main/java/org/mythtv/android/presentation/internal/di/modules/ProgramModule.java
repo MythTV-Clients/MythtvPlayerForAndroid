@@ -18,7 +18,6 @@
 
 package org.mythtv.android.presentation.internal.di.modules;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.interactor.GetRecordedProgramDetails;
@@ -34,29 +33,29 @@ import dagger.Provides;
 /**
  * Dagger module that provides program related collaborators.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Module
 public class ProgramModule {
 
-    private int chanId = -1;
-    private DateTime startTime = null;
+    private int recordedId = -1;
 
     public ProgramModule() {}
 
-    public ProgramModule( int chanId, DateTime startTime ) {
+    public ProgramModule( final int recordedId ) {
 
-        this.chanId = chanId;
-        this.startTime = startTime;
+        this.recordedId = recordedId;
 
     }
 
     @Provides
     @PerActivity
     @Named( "programDetails" )
-    UseCase provideGetUserDetailsUseCase( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    UseCase provideGetRecordedProgramDetailsUseCase( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
-        return new GetRecordedProgramDetails( chanId, startTime, dvrRepository, threadExecutor, postExecutionThread );
+        return new GetRecordedProgramDetails( recordedId, dvrRepository, threadExecutor, postExecutionThread );
     }
 
 }

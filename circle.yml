@@ -14,19 +14,39 @@ machine:
     ADB_INSTALL_TIMEOUT: 60
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3072M -XX:+HeapDumpOnOutOfMemoryError"'
   java:
-    version: oraclejdk8
+    version: openjdk8
 
 
+#dependencies:
+#  pre:
+#    - touch app/google-services.json
+#    - echo $GOOGLE_SERVICES_JSON > app/google-services.json
+#    - echo y | android update sdk --no-ui --all --filter "tools,android-23,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"
 dependencies:
-    pre:
-      - touch app/google-services.json
-      - echo $GOOGLE_SERVICES_JSON > app/google-services.json
+  pre:
+    - touch app/google-services.json
+    - echo $GOOGLE_SERVICES_JSON > app/google-services.json
+    # Accept Android Developer License
+    - if [ ! -d "$HOME/.android/license" ]; then mkdir -p "$HOME/.android/license"; fi
+    - if [ ! -e "$HOME/.android/license/android-sdk-license" ]; then echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$HOME/.android/license/android-sdk-license"; fi
+    - if [ ! -e "$HOME/.android/license/android-sdk-preview-license" ]; then echo "79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "$HOME/.android/license/android-sdk-preview-license"; fi
+    - if [ ! -e "$HOME/.android/license/intel-android-extra-license" ]; then echo "d975f751698a77b662f1254ddbeed3901e976f5a" > "$HOME/.android/license/intel-android-extra-license"; fi
+    - if [ ! -d "/usr/local/android-sdk-linux/licenses" ]; then mkdir -p "/usr/local/android-sdk-linux/licenses"; fi
+    - if [ ! -e "/usr/local/android-sdk-linux/licenses/android-sdk-license" ]; then echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "/usr/local/android-sdk-linux/licenses/android-sdk-license"; fi
+    - if [ ! -e "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license" ]; then echo "79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license"; fi
+    - if [ ! -e "/usr/local/android-sdk-linux/licenses/intel-android-extra-license" ]; then echo "d975f751698a77b662f1254ddbeed3901e976f5a" > "/usr/local/android-sdk-linux/licenses/intel-android-extra-license"; fi
+    # Android SDK Platform 25
+    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-25" ]; then echo y | android update sdk --no-ui --all --filter "android-25"; fi
+    # Android SDK Build-tools, revision 25.0.1
+    - if [ ! -d "/usr/local/android-sdk-linux/build-tools/25.0.1" ]; then echo y | android update sdk --no-ui --all --filter "build-tools-25.0.1"; fi
+    # Android Support Repository, revision 35 / Local Maven repository for Support Libraries
+    - if [ ! -d "/usr/local/android-sdk-linux/extras/android/m2repository/com/android/support/design/25.0.1" ]; then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"; fi
 
-      - echo y | android update sdk --no-ui --all --filter "tools,android-24,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-android-support,extra-google-m2repository,extra-google-google_play_services"
-#      - echo y | android update sdk -a -u -t sys-img-armeabi-v7a-google_apis-22
-    cache_directories:
-      - /usr/local/android-sdk-linux/tools
-      - /usr/local/android-sdk-linux/build-tools/24.0.0
+  cache_directories:
+    - /usr/local/android-sdk-linux/platforms/android-25
+    - /usr/local/android-sdk-linux/build-tools/25.0.1
+    - /usr/local/android-sdk-linux/extras/android/m2repository
+    - /usr/local/android-sdk-linux/licenses
 
 test:
 #  pre:
@@ -46,6 +66,9 @@ test:
 #    - adb shell settings put global window_animation_scale 0
 #    - adb shell settings put global transition_animation_scale 0
 #    - adb shell settings put global animator_duration_scale 0
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
   override:
     - git checkout app/google-services.json
