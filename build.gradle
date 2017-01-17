@@ -108,7 +108,8 @@ allprojects {
     19 - 20   | 4.4 - 4.4.4    | KitKat
     21 - 22   | 5.0 - 5.1.1    | Lollipop
     23        | 6.0 - 6.0.1    | Marshmellow
-    24?       | 7.0?           | N?
+    24        | 7.0 - 7.0.1    | Nougat
+    25        | 7.1?           | Nougat
 
     Android Screen Size Table
     --------------------------
