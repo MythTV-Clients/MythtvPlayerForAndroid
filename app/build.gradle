@@ -20,6 +20,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
 
@@ -47,12 +48,6 @@ android {
 
         minSdkVersion 17
         targetSdkVersion 25
-
-        jackOptions {
-
-            enabled true
-
-        }
 
         multiDexEnabled true
 
@@ -83,6 +78,8 @@ android {
 
         debug {
 
+            shrinkResources false
+            minifyEnabled false
             testCoverageEnabled = true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -90,7 +87,7 @@ android {
 
         release {
 
-            shrinkResources false
+            shrinkResources true
             minifyEnabled true // Enables code shrinking for the release build type.
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -250,6 +247,10 @@ configurations.compile.dependencies.each { compileDependency ->
     configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
         configurations.androidTestCompile.exclude module: "${compileDependency.getName()}"
     }
+}
+
+retrolambda {
+    jvmArgs '-noverify'
 }
 
 coveralls {

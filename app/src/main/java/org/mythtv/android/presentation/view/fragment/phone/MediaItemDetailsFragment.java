@@ -39,6 +39,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.JsonSyntaxException;
+
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
@@ -745,7 +747,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
                 return mapper.transformLiveStreamInfoEntity( result );
 
-            } catch( IOException e ) {
+            } catch( JsonSyntaxException | IOException e ) {
 
                 Log.e( TAG, "doInBackground : error", e );
 
