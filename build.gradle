@@ -30,6 +30,7 @@ buildscript {
         classpath 'com.google.gms:google-services:3.0.0'
         classpath "com.google.guava:guava:19.0"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
+        classpath 'com.google.firebase:firebase-plugins:1.0.4'
     }
 
 }
@@ -124,8 +125,8 @@ allprojects {
 
     ext {
         androidApplicationId = 'org.mythtv.android'
-        androidVersionCode = 1714211
-        androidVersionName = "2.1.1"
+        androidVersionCode = 1714300
+        androidVersionName = "3.0.0"
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId = 'org.mythtv.android.test'
     }

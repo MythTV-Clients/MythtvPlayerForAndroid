@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "494255597027-3km4tlkvnqdf4o4fb5hiuau2pqnv61om.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.mythtv.android",
+            "certificate_hash": "5D335EF6D8A8CCD7716B3C55519C252509460E58"
+          }
+        },
+        {
+          "client_id": "494255597027-p9h1tf1aeu0fk0lntiecleg3lc8o5h8c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.mythtv.android",
+            "certificate_hash": "02157AF49D3FA4A2DC9756A6A4044CA150DF8FC0"
+          }
+        },
+        {
           "client_id": "494255597027-jjj4b91pln54jehltga6veao4l8sqsit.apps.googleusercontent.com",
           "client_type": 3
         }
