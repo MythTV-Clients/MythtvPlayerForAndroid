@@ -122,6 +122,13 @@ allprojects {
 
  */
 
+    ext {
+        androidApplicationId = 'org.mythtv.android'
+        androidVersionCode = 1714211
+        androidVersionName = "2.1.1"
+        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        testApplicationId = 'org.mythtv.android.test'
+    }
 
 if( project.hasProperty( "mythtvplayer.google-cast" )
         && new File( project.property( "mythtvplayer.google-cast" ) + ".gradle" ).exists() ) {
