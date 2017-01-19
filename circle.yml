@@ -18,11 +18,6 @@ machine:
     version: openjdk8
 
 
-#dependencies:
-#  pre:
-#    - touch app/google-services.json
-#    - echo $GOOGLE_SERVICES_JSON > app/google-services.json
-#    - echo y | android update sdk --no-ui --all --filter "tools,android-23,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"
 dependencies:
   pre:
     - touch app/google-services.json
@@ -73,9 +68,11 @@ test:
 
   override:
     - git checkout app/google-services.json
-    - ./gradlew connectedDevDebugAndroidTest -PdisablePreDex --console=plain --info
+    - ADB_INSTALL_TIMEOUT=10 ./gradlew connectedDevDebugAndroidTest -PdisablePreDex --console=plain --info
+        timeout: 360
 
   post:
-    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r app/build/outputs $CIRCLE_TEST_REPORTS
 #    - cp -r app/build/outputs/androidTest-results/ $CIRCLE_TEST_REPORTS
-    - cp -r app/build/test-results/devDebug/ $CIRCLE_TEST_REPORTS
+#    - cp -r app/build/outputs/code-coverage/ $CIRCLE_TEST_REPORTS
+    - cp -r app/build/test-results/testDevDebugUnitTest/devDebug/ $CIRCLE_TEST_REPORTS
