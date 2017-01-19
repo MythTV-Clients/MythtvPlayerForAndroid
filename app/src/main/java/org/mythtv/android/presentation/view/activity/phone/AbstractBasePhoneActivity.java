@@ -29,6 +29,7 @@ import android.support.design.widget.NavigationView;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -39,6 +40,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
@@ -88,6 +90,8 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
     protected FirebaseAnalytics mFirebaseAnalytics;
 
+    private View rootView;
+
     public abstract int getLayoutResource();
 
     @Override
@@ -97,6 +101,8 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         this.getApplicationComponent().inject( this );
         setContentView( getLayoutResource() );
         ButterKnife.bind( this );
+
+        rootView = findViewById(android.R.id.content);
 
         if( !FirebaseApp.getApps( this ).isEmpty() ) {
 
@@ -350,6 +356,22 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
 
         return "http://" + host + ":" + port;
+
+    }
+
+    /**
+     * Shows a {@link android.support.design.widget.Snackbar} message.
+     *
+     * @param message A string representing a message to be shown.
+     * @param retryMessage A string representing the retry message to be shown
+     * @param retryOnClickListener An onClickListener to handle retries
+     */
+    protected void showToastMessage( String message, String retryMessage, View.OnClickListener retryOnClickListener ) {
+
+        Snackbar
+                .make( rootView, message, Snackbar.LENGTH_LONG )
+                .setAction( retryMessage, retryOnClickListener )
+                .show();
 
     }
 

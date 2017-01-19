@@ -58,7 +58,7 @@ public abstract class AbstractBaseFragment extends Fragment {
     }
 
     /**
-     * Shows a {@link android.widget.Toast} message.
+     * Shows a {@link android.support.design.widget.Snackbar} message.
      *
      * @param message A string representing a message to be shown.
      * @param retryMessage A string representing the retry message to be shown
