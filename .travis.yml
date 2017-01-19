@@ -50,16 +50,6 @@ android:
     - sys-img-armeabi-v7a-android-24
     - sys-img-armeabi-v7a-google_apis-23
     - sys-img-armeabi-v7a-android-23
-    - sys-img-armeabi-v7a-google_apis-22
-    - sys-img-armeabi-v7a-android-22
-    - sys-img-armeabi-v7a-google_apis-21
-    - sys-img-armeabi-v7a-android-21
-    - sys-img-armeabi-v7a-google_apis-19
-    - sys-img-armeabi-v7a-android-19
-    - sys-img-armeabi-v7a-google_apis-18
-    - sys-img-armeabi-v7a-android-18
-    - sys-img-armeabi-v7a-google_apis-17
-    - sys-img-armeabi-v7a-android-17
 
   licenses:
     - 'android-sdk-preview-license-.+'
