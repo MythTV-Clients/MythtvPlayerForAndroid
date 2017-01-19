@@ -9,7 +9,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     description = "Generate unified Jacoco code coverage report"
 
     reports {
-        xml.enabled = false
+        xml.enabled = true
         html.enabled = true
         csv.enabled = false
         xml.destination = "${buildDir}/reports/jacocoTestReport.xml"
