@@ -83,8 +83,7 @@ test:
         parallel: true
     - circle-android wait-for-boot
     - git checkout app/google-services.json
-    - ADB_INSTALL_TIMEOUT=10 ./gradlew testDevDebugUnitTest connectedDevDebugAndroidTest createDevDebugCoverageReport -PdisablePreDex --console=plain --info:
-        timeout: 360
+    - ADB_INSTALL_TIMEOUT=10 ./gradlew testDevDebugUnitTest connectedDevDebugAndroidTest createDevDebugCoverageReport -PdisablePreDex --console=plain --info
 
   post:
     - test ! -d app/build/outputs || cp -r app/build/outputs $CIRCLE_TEST_ARTIFACTS
