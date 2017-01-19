@@ -293,11 +293,11 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
             Log.d( TAG, "onButtonFabPlay : sending stream to internal player" );
 
-            switch( mediaItemModel.getMedia() ) {
+            try {
 
-                case PROGRAM:
+                switch( mediaItemModel.getMedia() ) {
 
-                    try {
+                    case PROGRAM:
 
                         if( mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "m4v" ) ) {
 
@@ -334,21 +334,23 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
                         }
 
-                    } catch( Exception e ) {
-                        Log.e( TAG, "onButtonFabPlay : error", e );
-                        FirebaseCrash.logcat( Log.ERROR, TAG, "onButtonFabPlay : mediaItemModel=" + mediaItemModel.toString() );
-                        FirebaseCrash.report( e );
+                        break;
 
-                        showToastMessage( "HLS for this video is no longer available", null, null );
-                    }
+                    default:
 
-                    break;
+                        navigator.navigateToLocalPlayer( this, mediaItemModel );
 
-                default:
+                        break;
 
-                    navigator.navigateToLocalPlayer( this, mediaItemModel );
+                }
 
-                    break;
+            } catch( Exception e ) {
+                Log.e( TAG, "onButtonFabPlay : error", e );
+
+                FirebaseCrash.logcat( Log.ERROR, TAG, "onButtonFabPlay : mediaItemModel=" + mediaItemModel.toString() );
+                FirebaseCrash.report( e );
+
+                showToastMessage( "HLS for this video is no longer available", null, null );
 
             }
 
