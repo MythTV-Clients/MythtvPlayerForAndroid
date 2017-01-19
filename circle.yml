@@ -13,6 +13,7 @@ machine:
     ANDROID_HOME: /usr/local/android-sdk-linux
     ADB_INSTALL_TIMEOUT: 60
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
+    QEMU_AUDIO_DRV: none
   java:
     version: openjdk8
 
@@ -50,13 +51,13 @@ dependencies:
 
 test:
   pre:
-    - android list targets
-    - echo no | android create avd -n custom-android23-googleapis -t "android-23" --abi google_apis/armeabi-v7a
-    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android23-googleapis.ini
-    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android23-googleapis.ini
-    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android23-googleapis.ini
-    - cat ~/.android/avd/custom-android23-googleapis.ini
-    - emulator -avd custom-android23-googleapis -no-audio -no-window :
+#    - android list targets
+#    - echo no | android create avd -n custom-android23-googleapis -t "android-23" --abi google_apis/armeabi-v7a
+#    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android23-googleapis.ini
+#    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android23-googleapis.ini
+#    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android23-googleapis.ini
+#    - cat ~/.android/avd/custom-android23-googleapis.ini
+    - emulator -avd circleci-android24 -no-window :
         background: true
         parallel: true
     - circle-android wait-for-boot
