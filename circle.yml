@@ -13,7 +13,7 @@ machine:
     ANDROID_HOME: /usr/local/android-sdk-linux
     ADB_INSTALL_TIMEOUT: 60
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
-    QEMU_AUDIO_DRV: none
+#    QEMU_AUDIO_DRV: none
   java:
     version: openjdk8
 
@@ -52,7 +52,7 @@ test:
 #    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android23-googleapis.ini
 #    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android23-googleapis.ini
 #    - cat ~/.android/avd/custom-android23-googleapis.ini
-    - emulator -avd circleci-android24 -no-window :
+    - emulator -avd circleci-android24 -no-audio -no-window :
         background: true
         parallel: true
     - circle-android wait-for-boot
