@@ -68,7 +68,7 @@ test:
 
   override:
     - git checkout app/google-services.json
-    - ADB_INSTALL_TIMEOUT=10 ./gradlew connectedDevDebugAndroidTest -PdisablePreDex --console=plain --info
+    - ADB_INSTALL_TIMEOUT=10 ./gradlew connectedDevDebugAndroidTest -PdisablePreDex --console=plain --info:
         timeout: 360
 
   post:
