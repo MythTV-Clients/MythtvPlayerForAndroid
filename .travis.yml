@@ -17,6 +17,7 @@ branches:
   only:
     - master
     - develop
+    - feature/issue_223
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -57,4 +58,4 @@ script:
   - echo "Travis branch is $TRAVIS_BRANCH"
   - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"
 
-  - ./gradlew testDevDebugUnitTest coveralls -PdisablePreDex
+  - ./gradlew testDevDebugUnitTest connectedDevDebugAndroidTest createDevDebugCoverageReport coveralls -PdisablePreDex
