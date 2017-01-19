@@ -52,7 +52,7 @@ test:
 #    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android23-googleapis.ini
 #    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android23-googleapis.ini
 #    - cat ~/.android/avd/custom-android23-googleapis.ini
-    - emulator -avd circleci-android24 -no-audio -no-window :
+    - emulator -avd circleci-android24 -no-window :
         background: true
         parallel: true
     - circle-android wait-for-boot
