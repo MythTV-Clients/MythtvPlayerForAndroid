@@ -17,7 +17,7 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco'
+apply from: '../jacoco.gradle'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'me.tatarka.retrolambda'
@@ -155,8 +155,8 @@ android {
 
             all {
 
-                testLogging {
-                    events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+                jacoco {
+                    includeNoLocationClasses = true
                 }
 
             }
