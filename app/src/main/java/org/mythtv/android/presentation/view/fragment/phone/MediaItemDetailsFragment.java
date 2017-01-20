@@ -549,6 +549,8 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private class MarkWatchedTask extends AsyncTask<Boolean, Void, Boolean> {
 
+        private boolean status;
+
         @Override
         protected Boolean doInBackground( Boolean... params ) {
 
@@ -568,9 +570,11 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
                     break;
             }
 
+            status = params[ 0 ];
+
             FormBody.Builder builder = new FormBody.Builder();
             builder.add(idParam, String.valueOf( mediaItemModel.getId() ) );
-            builder.add( "Watched", String.valueOf( params[ 0 ] ) );
+            builder.add( "Watched", String.valueOf( status ) );
 
             final Request request = new Request.Builder()
                     .url( getMasterBackendUrl() + mediaItemModel.getMarkWatchedUrl() )
@@ -603,7 +607,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
                 if (result) {
 
-                    mediaItemModel.setWatched( true );
+                    mediaItemModel.setWatched( status );
                     updateMenu();
 
                 }
