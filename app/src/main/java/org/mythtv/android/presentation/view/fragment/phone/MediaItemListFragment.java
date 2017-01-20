@@ -31,11 +31,12 @@ import android.widget.RelativeLayout;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.model.ErrorModel;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemListPresenter;
 import org.mythtv.android.presentation.view.MediaItemListView;
-import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
+import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -491,9 +492,30 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     private MediaItemsAdapter.OnItemClickListener onItemClickListener = mediaItemModel -> {
 
         if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
-            Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-            MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel );
+            if( mediaItemModel.isValid() ) {
+                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel );
+
+            } else {
+                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
+
+                String fields = "";
+                for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
+
+                    if( !"".equals( fields ) ) {
+                        fields += ", ";
+                    }
+
+                    fields += errorModel.getField();
+
+                }
+
+                String message = "Thus episode has corrupt data: " + fields;
+                showToastMessage( message, null, null );
+
+            }
 
         }
 

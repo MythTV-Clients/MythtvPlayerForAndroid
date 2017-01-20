@@ -7,6 +7,7 @@ import org.mythtv.android.data.entity.CastMemberEntity;
 import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
+import org.mythtv.android.domain.Error;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
 
@@ -36,6 +37,22 @@ public class MediaItemDataMapper {
 
         MediaItem mediaItem = new MediaItem();
         mediaItem.setId( programEntity.getRecording().getRecordedId() );
+
+        if( null == programEntity.getStartTime() ) {
+            mediaItem.getValidationErrors().add( new Error( "StartTime", "StartTime is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        }
+
+        if( null == programEntity.getEndTime() ) {
+            mediaItem.getValidationErrors().add( new Error( "EndTime", "EndTime is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        }
+
+        if( null != programEntity.getChannel() && programEntity.getChannel().getChanId() != -1  ) {
+            mediaItem.getValidationErrors().add( new Error( "ChanId", "Channel Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        }
+
+        if( null != programEntity.getRecording() && programEntity.getRecording().getRecordedId() != -1  ) {
+            mediaItem.getValidationErrors().add( new Error( "RecordedId", "Recorded Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        }
 
         switch( programEntity.getRecording().getStatus() ) {
 

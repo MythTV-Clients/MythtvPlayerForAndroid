@@ -2,6 +2,9 @@ package org.mythtv.android.domain;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  *
@@ -46,6 +49,8 @@ public class MediaItem {
 
     private String updateSavedBookmarkUrl;
     private long bookmark;
+
+    private List<Error> validationErrors = new ArrayList<>();
 
     public MediaItem() {
     }
@@ -393,6 +398,16 @@ public class MediaItem {
 
     }
 
+    public List<Error> getValidationErrors() {
+
+        return validationErrors;
+    }
+
+    public boolean isValid() {
+
+        return validationErrors.isEmpty();
+    }
+
     @Override
     public boolean equals( Object o ) {
         if (this == o) return true;
@@ -444,6 +459,7 @@ public class MediaItem {
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
                 ", bookmark=" + bookmark +
+                ", validationErrors=" + validationErrors +
                 '}';
     }
 
