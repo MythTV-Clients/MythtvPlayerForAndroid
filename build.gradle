@@ -30,6 +30,9 @@ buildscript {
         classpath 'com.google.gms:google-services:3.0.0'
         classpath "com.google.guava:guava:19.0"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
+        classpath 'com.google.firebase:firebase-plugins:1.0.4'
+        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
+        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
     }
 
 }
@@ -124,8 +127,8 @@ allprojects {
 
     ext {
         androidApplicationId = 'org.mythtv.android'
-        androidVersionCode = 1714211
-        androidVersionName = "2.1.1"
+        androidVersionCode = 1714301
+        androidVersionName = "3.0.1"
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId = 'org.mythtv.android.test'
     }
@@ -151,5 +154,5 @@ subprojects {
 
 task wrapper( type: Wrapper ) {
     description 'Creates the gradle wrapper.'
-    gradleVersion '2.14.1'
+    gradleVersion '3.3'
 }

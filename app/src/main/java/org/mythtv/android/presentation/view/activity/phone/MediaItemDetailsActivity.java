@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.google.android.gms.cast.framework.CastSession;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -292,52 +293,64 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
             Log.d( TAG, "onButtonFabPlay : sending stream to internal player" );
 
-            switch( mediaItemModel.getMedia() ) {
+            try {
 
-                case PROGRAM:
+                switch( mediaItemModel.getMedia() ) {
 
-                    if( mediaItemModel.getUrl().endsWith( "mp4" ) ) {
+                    case PROGRAM:
 
-                        navigator.navigateToLocalPlayer( this, mediaItemModel );
-
-                    } else if( mediaItemModel.getUrl().endsWith( "m3u8" ) ) {
-
-                        if( mediaItemModel.getPercentComplete() > 2 ) {
+                        if( mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "m4v" ) ) {
 
                             navigator.navigateToLocalPlayer( this, mediaItemModel );
 
-                        } else {
+                        } else if( mediaItemModel.getUrl().endsWith( "m3u8" ) ) {
 
-                            FragmentManager fm = getFragmentManager();
-                            CastNotReadyDialogFragment fragment = new CastNotReadyDialogFragment();
-                            fragment.show( fm, "Cast Not Ready Dialog Fragment" );
+                            if( mediaItemModel.getPercentComplete() > 2 ) {
 
-                        }
+                                navigator.navigateToLocalPlayer( this, mediaItemModel );
 
-                    } else {
+                            } else {
 
-                        CastSession castSession = mCastContext.getSessionManager().getCurrentCastSession();
-                        if( null != castSession && castSession.isConnected() ) {
+                                FragmentManager fm = getFragmentManager();
+                                CastNotReadyDialogFragment fragment = new CastNotReadyDialogFragment();
+                                fragment.show( fm, "Cast Not Ready Dialog Fragment" );
 
-                            FragmentManager fm = getFragmentManager();
-                            CastErrorDialogFragment fragment = new CastErrorDialogFragment();
-                            fragment.show( fm, "Cast Error Dialog Fragment" );
+                            }
 
                         } else {
 
-                            navigator.navigateToExternalPlayer( this, ( getMasterBackendUrl() + mediaItemModel.getUrl() ), mediaItemModel.getContentType() );
+                            CastSession castSession = mCastContext.getSessionManager().getCurrentCastSession();
+                            if( null != castSession && castSession.isConnected() ) {
+
+                                FragmentManager fm = getFragmentManager();
+                                CastErrorDialogFragment fragment = new CastErrorDialogFragment();
+                                fragment.show( fm, "Cast Error Dialog Fragment" );
+
+                            } else {
+
+                                navigator.navigateToExternalPlayer( this, ( getMasterBackendUrl() + mediaItemModel.getUrl()), mediaItemModel.getContentType() );
+
+                            }
 
                         }
 
-                    }
+                        break;
 
-                    break;
+                    default:
 
-                default:
+                        navigator.navigateToLocalPlayer( this, mediaItemModel );
 
-                    navigator.navigateToLocalPlayer( this, mediaItemModel );
+                        break;
 
-                    break;
+                }
+
+            } catch( Exception e ) {
+                Log.e( TAG, "onButtonFabPlay : error", e );
+
+                FirebaseCrash.logcat( Log.ERROR, TAG, "onButtonFabPlay : mediaItemModel=" + mediaItemModel.toString() );
+                FirebaseCrash.report( e );
+
+                showToastMessage( "HLS for this video is no longer available", null, null );
 
             }
 

@@ -39,6 +39,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.JsonSyntaxException;
+
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
@@ -532,10 +534,14 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         } else {
 
-            this.pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
-            this.pb_progress.setVisibility( View.GONE );
-            this.pb_progress.setIndeterminate( true );
-            this.pb_progress.setProgress( 0 );
+            if( null != this.pb_progress ) {
+
+                this.pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
+                this.pb_progress.setVisibility( View.GONE );
+                this.pb_progress.setIndeterminate( true );
+                this.pb_progress.setProgress( 0 );
+
+            }
 
         }
 
@@ -745,7 +751,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
                 return mapper.transformLiveStreamInfoEntity( result );
 
-            } catch( IOException e ) {
+            } catch( JsonSyntaxException | IOException e ) {
 
                 Log.e( TAG, "doInBackground : error", e );
 
