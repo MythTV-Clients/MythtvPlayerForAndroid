@@ -17,7 +17,7 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco'
+apply from: '../jacoco.gradle'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'me.tatarka.retrolambda'
@@ -33,7 +33,7 @@ android {
 
     adbOptions {
 
-        timeOutInMs 60000 // set timeout to 1 minute
+        timeOutInMs 600000 // set timeout to 1 minute
 
     }
 
@@ -155,8 +155,8 @@ android {
 
             all {
 
-                testLogging {
-                    events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+                jacoco {
+                    includeNoLocationClasses = true
                 }
 
             }
