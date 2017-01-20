@@ -76,14 +76,14 @@ test:
 #    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
   override:
-    - echo no | android create avd -n custom-android24-googleapis -t "android-24" --abi google_apis/armeabi-v7a
-    - android list avd
-    - emulator -avd custom-android24-googleapis -no-window:
-        background: true
-        parallel: true
-    - circle-android wait-for-boot
+#    - echo no | android create avd -n custom-android24-googleapis -t "android-24" --abi google_apis/armeabi-v7a
+#    - android list avd
+#    - emulator -avd custom-android24-googleapis -no-window:
+#        background: true
+#        parallel: true
+#    - circle-android wait-for-boot
     - git checkout app/google-services.json
-    - ADB_INSTALL_TIMEOUT=10 ./gradlew testDevDebugUnitTest connectedDevDebugAndroidTest createDevDebugCoverageReport -PdisablePreDex --console=plain --info
+    - ./gradlew testDevDebugUnitTest connectedDevDebugAndroidTest createDevDebugCoverageReport -PdisablePreDex --console=plain --info
 
   post:
     - test ! -d app/build/outputs || cp -r app/build/outputs $CIRCLE_TEST_ARTIFACTS
