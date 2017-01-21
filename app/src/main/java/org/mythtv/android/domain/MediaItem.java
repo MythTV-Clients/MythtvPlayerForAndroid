@@ -47,6 +47,8 @@ public class MediaItem {
     private String updateSavedBookmarkUrl;
     private long bookmark;
 
+    private String inetref;
+
     public MediaItem() {
     }
 
@@ -393,6 +395,17 @@ public class MediaItem {
 
     }
 
+    public String getInetref() {
+
+        return inetref;
+    }
+
+    public void setInetref( String inetref ) {
+
+        this.inetref = inetref;
+
+    }
+
     @Override
     public boolean equals( Object o ) {
         if (this == o) return true;
@@ -444,6 +457,7 @@ public class MediaItem {
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
                 ", bookmark=" + bookmark +
+                ", inetref='" + inetref + '\'' +
                 '}';
     }
 
