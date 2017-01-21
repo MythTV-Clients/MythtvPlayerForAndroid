@@ -501,19 +501,28 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
             } else {
                 Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
 
-                String fields = "";
-                for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
+                if( null == mediaItemModel.getMedia() ) {
 
-                    if( !"".equals( fields ) ) {
-                        fields += ", ";
+                    String message = "Media Type could not be determined";
+                    showToastMessage( message, null, null );
+
+                } else {
+
+                    String fields = "";
+                    for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
+
+                        if( !"".equals( fields ) ) {
+                            fields += ", ";
+                        }
+
+                        fields += errorModel.getField();
+
                     }
 
-                    fields += errorModel.getField();
+                    String message = "Thus episode has corrupt data: " + fields;
+                    showToastMessage( message, null, null );
 
                 }
-
-                String message = "Thus episode has corrupt data: " + fields;
-                showToastMessage( message, null, null );
 
             }
 

@@ -248,6 +248,12 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
+        if( null == mediaItemModel.getMedia() ) {
+            Log.d( TAG, "loadBackdrop : exit, media not set" );
+
+            return;
+        }
+
         String backdropUrl = null;
         switch( mediaItemModel.getMedia() ) {
 
