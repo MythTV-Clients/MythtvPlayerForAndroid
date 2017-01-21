@@ -25,13 +25,14 @@ public class SeriesModelMapper {
     @Inject
     public SeriesModelMapper() { }
 
-    public SeriesModel transform(Series series ) {
+    public SeriesModel transform( Series series ) {
 
         SeriesModel seriesModel = new SeriesModel();
         seriesModel.setTitle( series.getTitle() );
         seriesModel.setMedia( series.getMedia() );
         seriesModel.setArtworkUrl( series.getArtworkUrl() );
         seriesModel.setCount( series.getCount() );
+        seriesModel.setInetref( series.getInetref() );
 
         return seriesModel;
     }

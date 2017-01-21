@@ -31,6 +31,7 @@ public class SeriesDataMapper {
         series.setMedia( Media.PROGRAM );
         series.setCount( titleInfoEntity.getCount() );
         series.setArtworkUrl( "/Content/GetRecordingArtwork?Inetref=" + titleInfoEntity.getInetref() + "&Type=banner&Height=100" );
+        series.setInetref( titleInfoEntity.getInetref() );
 
         return series;
     }
