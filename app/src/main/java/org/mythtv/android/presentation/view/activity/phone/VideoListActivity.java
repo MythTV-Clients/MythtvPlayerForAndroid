@@ -272,7 +272,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     public void onSeriesClicked( final SeriesModel seriesModel ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.getTitle(), null, null );
+        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.getTitle(), null, null, seriesModel.getInetref() );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

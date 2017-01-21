@@ -37,6 +37,7 @@ public class SeriesModel implements Comparable<SeriesModel> {
     private Media media;
     private String artworkUrl;
     private int count;
+    private String inetref;
 
     public SeriesModel() { }
 
@@ -77,13 +78,24 @@ public class SeriesModel implements Comparable<SeriesModel> {
         this.count = count;
     }
 
+    public String getInetref() {
+        return inetref;
+    }
+
+    public void setInetref( String inetref ) {
+
+        this.inetref = inetref;
+
+    }
+
     @Override
     public String toString() {
-        return "Series{" +
+        return "SeriesModel{" +
                 "title='" + title + '\'' +
                 ", media=" + media +
                 ", artworkUrl='" + artworkUrl + '\'' +
                 ", count=" + count +
+                ", inetref='" + inetref + '\'' +
                 '}';
     }
 
@@ -98,6 +110,9 @@ public class SeriesModel implements Comparable<SeriesModel> {
         String thatTitle = DomainUtils.removeArticles( another.title.toUpperCase() );
 
         int comparison = thisTitle.compareTo( thatTitle );
+        if( comparison != EQUAL ) return comparison;
+
+        comparison = inetref.compareTo( another.inetref );
         if( comparison != EQUAL ) return comparison;
 
         return EQUAL;
