@@ -54,6 +54,7 @@ public class MediaItemModelMapper {
         mediaItemModel.setMarkWatchedUrl( mediaItem.getMarkWatchedUrl() );
         mediaItemModel.setUpdateSavedBookmarkUrl( mediaItem.getUpdateSavedBookmarkUrl() );
         mediaItemModel.setBookmark( mediaItem.getBookmark() );
+        mediaItemModel.setInetref( mediaItem.getInetref() );
 
         return mediaItemModel;
     }

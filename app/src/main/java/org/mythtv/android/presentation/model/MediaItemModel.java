@@ -49,6 +49,7 @@ public class MediaItemModel implements Serializable {
     public static final String KEY_MARK_WATCHED_URL = "mark_watched_url";
     public static final String KEY_UPDATE_SAVED_BOOKMARK_URL = "update_saved_bookmark_url";
     public static final String KEY_BOOKMARK = "bookmark";
+    public static final String KEY_INETREF = "inetref";
 
     private int id;
     private Media media;
@@ -79,6 +80,7 @@ public class MediaItemModel implements Serializable {
     private String markWatchedUrl;
     private String updateSavedBookmarkUrl;
     private long bookmark;
+    private String inetref;
 
     public MediaItemModel() { }
 
@@ -339,7 +341,9 @@ public class MediaItemModel implements Serializable {
     }
 
     public void setPercentComplete( int percentComplete ) {
+
         this.percentComplete = percentComplete;
+
     }
 
     public boolean isRecording() {
@@ -441,6 +445,17 @@ public class MediaItemModel implements Serializable {
 
     }
 
+    public String getInetref() {
+
+        return inetref;
+    }
+
+    public void setInetref( String inetref ) {
+
+        this.inetref = inetref;
+
+    }
+
     @Override
     public String toString() {
         return "MediaItemModel{" +
@@ -473,6 +488,7 @@ public class MediaItemModel implements Serializable {
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
                 ", bookmark=" + bookmark +
+                ", inetref='" + inetref + '\'' +
                 '}';
     }
 
@@ -556,6 +572,10 @@ public class MediaItemModel implements Serializable {
 
         wrapper.putLong( KEY_BOOKMARK, bookmark );
 
+        if( null != inetref && !"".equals( inetref ) ) {
+            wrapper.putString( KEY_INETREF, inetref );
+        }
+
         return wrapper;
     }
 
@@ -636,6 +656,9 @@ public class MediaItemModel implements Serializable {
             media.setUpdateSavedBookmarkUrl( wrapper.getString( KEY_UPDATE_SAVED_BOOKMARK_URL ) );
         }
         media.setBookmark( wrapper.getLong( KEY_BOOKMARK ) );
+        if( wrapper.containsKey( KEY_INETREF ) ) {
+            media.setInetref( wrapper.getString( KEY_INETREF ) );
+        }
 
         return media;
     }

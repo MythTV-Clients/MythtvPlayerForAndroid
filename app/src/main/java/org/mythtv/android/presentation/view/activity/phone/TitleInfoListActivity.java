@@ -125,7 +125,7 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
         Log.d( TAG, "onSeriesClicked : enter" );
 
         Log.d( TAG, "onSeriesClicked : seriesModel=" + seriesModel );
-        navigator.navigateToSeries( this, Media.PROGRAM, true, -1, -1, seriesModel.getTitle(), null, null );
+        navigator.navigateToSeries( this, Media.PROGRAM, true, -1, -1, seriesModel.getTitle(), null, null, seriesModel.getInetref() );
 
         Log.d( TAG, "onSeriesClicked : exit" );
     }
