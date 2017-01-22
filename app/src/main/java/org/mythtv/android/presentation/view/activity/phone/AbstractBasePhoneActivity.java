@@ -389,10 +389,15 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
      * @param retryMessage A string representing the retry message to be shown
      * @param retryOnClickListener An onClickListener to handle retries
      */
-    protected void showToastMessage( String message, String retryMessage, View.OnClickListener retryOnClickListener ) {
+    protected void showToastMessage( View view, String message, String retryMessage, View.OnClickListener retryOnClickListener ) {
+
+        View v = view;
+        if( null == v ) {
+            v = rootView;
+        }
 
         Snackbar
-                .make( rootView, message, Snackbar.LENGTH_LONG )
+                .make( v, message, Snackbar.LENGTH_LONG )
                 .setAction( retryMessage, retryOnClickListener )
                 .show();
 
