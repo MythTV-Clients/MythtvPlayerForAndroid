@@ -41,6 +41,7 @@ import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -68,6 +69,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public static final String TITLE_REGEX_KEY = "title_regex";
     public static final String REC_GROUP_KEY = "rec_group";
     public static final String STORAGE_GROUP_KEY = "storage_group";
+    public static final String INETREF_KEY = "inetref";
     public static final String FOLDER_KEY = "folder";
     public static final String SORT_KEY = "sort";
 
@@ -116,6 +118,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         private String titleRegEx;
         private String recGroup;
         private String storageGroup;
+        private String inetref;
         private String folder;
         private String sort;
 
@@ -150,6 +153,11 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
         public Builder storageGroup( String storageGroup ) {
             this.storageGroup = storageGroup;
+            return this;
+        }
+
+        public Builder inetref( String inetref ) {
+            this.inetref = inetref;
             return this;
         }
 
@@ -192,6 +200,10 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
                 parameters.put( STORAGE_GROUP_KEY, storageGroup );
             }
 
+            if( null != inetref ) {
+                parameters.put( INETREF_KEY, inetref );
+            }
+
             if( null != folder ) {
                 parameters.put( FOLDER_KEY, folder );
             }
@@ -232,6 +244,10 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
                 args.putString( STORAGE_GROUP_KEY, storageGroup );
             }
 
+            if( null != inetref ) {
+                args.putString( INETREF_KEY, inetref );
+            }
+
             if( null != folder ) {
                 args.putString( FOLDER_KEY, folder );
             }
@@ -269,6 +285,10 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
             if( args.containsKey( STORAGE_GROUP_KEY ) ) {
                 builder.storageGroup( args.getString( STORAGE_GROUP_KEY ) );
+            }
+
+            if( args.containsKey( INETREF_KEY ) ) {
+                builder.inetref( args.getString( INETREF_KEY ) );
             }
 
             if( args.containsKey( FOLDER_KEY ) ) {
@@ -430,6 +450,28 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "renderMediaItemList : enter" );
 
         if( null != mediaItemModelCollection ) {
+
+            if( parameters.containsKey( INETREF_KEY ) ) {
+
+                String inetref = (String) parameters.get( INETREF_KEY );
+                List<MediaItemModel> filtered = new ArrayList<>();
+                for( MediaItemModel mediaItemModel : mediaItemModelCollection ) {
+
+                    if( mediaItemModel.getInetref().equals( inetref ) ) {
+
+                        filtered.add( mediaItemModel );
+
+                    }
+
+                }
+
+                if( !filtered.isEmpty() ) {
+
+                    mediaItemModelCollection = filtered;
+
+                }
+
+            }
 
             this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
 

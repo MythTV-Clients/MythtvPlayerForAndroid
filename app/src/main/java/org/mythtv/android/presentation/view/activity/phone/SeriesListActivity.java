@@ -63,7 +63,10 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
     private static final String INTENT_EXTRA_PARAM_STORAGE_GROUP = "org.mythtv.android.INTENT_PARAM_STORAGE_GROUP";
     private static final String INSTANCE_STATE_PARAM_STORAGE_GROUP = "org.mythtv.android.STATE_PARAM_STORAGE_GROUP";
 
-    public static Intent getCallingIntent( Context context, Media media, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup  ) {
+    private static final String INTENT_EXTRA_PARAM_INETREF = "org.mythtv.android.INTENT_PARAM_INETREF";
+    private static final String INSTANCE_STATE_PARAM_INETREF = "org.mythtv.android.STATE_PARAM_INETREF";
+
+    public static Intent getCallingIntent( Context context, Media media, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup, String inetref  ) {
 
         Intent callingIntent = new Intent( context, SeriesListActivity.class );
         callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
@@ -106,13 +109,19 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
         }
 
+        if( null != inetref && !"".equals( inetref ) ) {
+
+            callingIntent.putExtra( INTENT_EXTRA_PARAM_INETREF, inetref );
+
+        }
+
         return callingIntent;
     }
 
     private Media media;
     private boolean descending = true;
     private int startIndex = -1, count = -1;
-    private String titleRegEx = null, recGroup = null, storageGroup = null;
+    private String titleRegEx = null, recGroup = null, storageGroup = null, inetref = null;
     private MediaComponent mediaComponent;
 
     @Override
@@ -179,6 +188,13 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
             }
 
+            if( null != this.inetref && !"".equals( this.inetref ) ) {
+                Log.d( TAG, "onSaveInstanceState : saving inetref" );
+
+                outState.putString( INSTANCE_STATE_PARAM_INETREF, this.inetref );
+
+            }
+
         }
 
         super.onSaveInstanceState( outState );
@@ -239,6 +255,14 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
             }
 
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_INETREF ) ) {
+                Log.d( TAG, "onRestoreInstanceState : restoring inetref" );
+
+                this.inetref = savedInstanceState.getString( INSTANCE_STATE_PARAM_INETREF );
+                Log.d( TAG, "onRestoreInstanceState : restored inetref=" + this.inetref );
+
+            }
+
         }
 
         Log.d( TAG, "onRestoreInstanceState : exit" );
@@ -296,15 +320,23 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
                 }
 
+                if( extras.containsKey( INTENT_EXTRA_PARAM_INETREF ) ) {
+
+                    this.inetref = extras.getString( INTENT_EXTRA_PARAM_INETREF );
+                    Log.d( TAG, "initializeActivity : restored inetref=" + this.inetref + ", from extras" );
+
+                }
+
             }
 
-            Log.d( TAG, "initializeActivity : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup );
+            Log.d( TAG, "initializeActivity : descending=" + descending + ", startIndex=" + startIndex + ", count=" + count + ", titleRegEx=" + titleRegEx + ", recGroup=" + recGroup + ", storageGroup=" + storageGroup + ", inetref=" + inetref );
             MediaItemListFragment.Builder parameters = new MediaItemListFragment.Builder( media )
                                                                     .startIndex( startIndex )
                                                                     .count( count )
                                                                     .titleRegEx( titleRegEx )
                                                                     .recGroup( recGroup )
-                                                                    .storageGroup( storageGroup );
+                                                                    .storageGroup( storageGroup )
+                                                                    .inetref( inetref );
             MediaItemListFragment fragment = MediaItemListFragment.newInstance( parameters.toBundle() );
 
             addFragment( R.id.fl_fragment, fragment );
@@ -349,6 +381,13 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
                 this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
                 Log.d( TAG, "initializeActivity : restored storageGroup=" + this.storageGroup + ", from savedInstanceState" );
+
+            }
+
+            if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_INETREF ) ) {
+
+                this.inetref = savedInstanceState.getString( INSTANCE_STATE_PARAM_INETREF );
+                Log.d( TAG, "initializeActivity : restored inetref=" + this.inetref + ", from savedInstanceState" );
 
             }
 

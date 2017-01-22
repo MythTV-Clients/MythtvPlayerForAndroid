@@ -92,6 +92,7 @@ public class MediaItemDataMapper {
 
         mediaItem.setTitle( programEntity.getTitle() );
         mediaItem.setSubTitle( programEntity.getSubTitle() );
+        mediaItem.setInetref( programEntity.getInetref() );
         mediaItem.setDescription( programEntity.getDescription() );
         mediaItem.setStartDate( programEntity.getStartTime() );
         mediaItem.setProgramFlags( programEntity.getProgramFlags() );

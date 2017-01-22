@@ -19,12 +19,14 @@
 package org.mythtv.android.presentation.view.activity.tv;
 
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.util.Log;
+
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
@@ -142,8 +144,21 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
 
         }
 
-        SpeechRecognitionCallback mSpeechRecognitionCallback = () -> startActivityForResult( mSearchableFragment.getRecognizerIntent(), REQUEST_SPEECH );
-        mSearchableFragment.setSpeechRecognitionCallback( mSpeechRecognitionCallback );
+        mSearchableFragment.setSpeechRecognitionCallback( () -> {
+
+            try {
+
+                startActivityForResult( mSearchableFragment.getRecognizerIntent(), REQUEST_SPEECH );
+
+            } catch( ActivityNotFoundException e ) {
+                Log.e( TAG, "initializeActivity : error", e );
+
+                FirebaseCrash.logcat( Log.WARN, TAG, "initializeActivity : activity not found, most likely from a FireTV device" );
+                FirebaseCrash.report( e );
+
+            }
+
+        });
 
         Log.d( TAG, "initializeActivity : exit" );
     }

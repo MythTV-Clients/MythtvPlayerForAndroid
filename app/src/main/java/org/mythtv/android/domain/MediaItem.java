@@ -49,6 +49,7 @@ public class MediaItem {
 
     private String updateSavedBookmarkUrl;
     private long bookmark;
+    private String inetref;
 
     private List<Error> validationErrors = new ArrayList<>();
 
@@ -398,6 +399,17 @@ public class MediaItem {
 
     }
 
+    public String getInetref() {
+
+        return inetref;
+    }
+
+    public void setInetref( String inetref ) {
+
+        this.inetref = inetref;
+
+    }
+
     public List<Error> getValidationErrors() {
 
         return validationErrors;
@@ -459,6 +471,7 @@ public class MediaItem {
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
                 ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
                 ", bookmark=" + bookmark +
+                ", inetref='" + inetref + '\'' +
                 ", validationErrors=" + validationErrors +
                 '}';
     }
