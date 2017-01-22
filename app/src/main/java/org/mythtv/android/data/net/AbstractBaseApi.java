@@ -61,5 +61,4 @@ public abstract class AbstractBaseApi {
         return sharedPreferences.getString( key, "" );
     }
 
-
 }

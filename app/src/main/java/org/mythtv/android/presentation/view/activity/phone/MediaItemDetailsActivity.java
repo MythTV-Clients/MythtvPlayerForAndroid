@@ -170,6 +170,12 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
                 return true;
 
+            case R.id.menu_troubleshoot:
+
+                navigator.navigateToTroubleshoot( this );
+
+                return true;
+
         }
 
         return super.onOptionsItemSelected( item );

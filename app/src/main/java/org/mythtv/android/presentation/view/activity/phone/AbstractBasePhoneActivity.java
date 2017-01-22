@@ -18,6 +18,9 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,9 +29,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -63,6 +63,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
 
 /**
  * Base {@link android.app.Activity} class for every Activity in this application.
@@ -79,6 +80,8 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     protected MenuItem mediaRouteMenuItem;
     protected IntroductoryOverlay mIntroductoryOverlay;
     protected CastStateListener mCastStateListener;
+
+    protected OkHttpClient okHttpClient;
 
     @Inject
     PhoneNavigator navigator;
@@ -102,7 +105,9 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         setContentView( getLayoutResource() );
         ButterKnife.bind( this );
 
-        rootView = findViewById(android.R.id.content);
+        okHttpClient = getNetComponent().okHttpClient();
+
+        rootView = findViewById( android.R.id.content );
 
         if( !FirebaseApp.getApps( this ).isEmpty() ) {
 
@@ -257,6 +262,13 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
                 fragment.show( fm, "About Dialog Fragment" );
 
                 return true;
+
+            case R.id.navigation_item_troubleshoot :
+                Log.i( TAG, "onNavigationItemSelected : about clicked" );
+
+                navigator.navigateToTroubleshoot( this );
+
+                return true;
         }
 
         return false;
@@ -348,6 +360,17 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     protected NetComponent getNetComponent() {
 
         return ( (AndroidApplication) getApplication() ).getNetComponent();
+    }
+
+    protected String getMasterBackendHost() {
+
+        return getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "" );
+
+    }
+
+    protected String getMasterBackendPort() {
+
+        return getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
     }
 
     protected String getMasterBackendUrl() {
