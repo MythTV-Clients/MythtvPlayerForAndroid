@@ -23,4 +23,6 @@
 
     <include layout="@layout/content_troubleshoot" />
 
+    <include layout="@layout/phone_fab_view" />
+
 </android.support.design.widget.CoordinatorLayout>

@@ -6,12 +6,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -25,6 +29,7 @@ import java.io.Reader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.CacheControl;
 import okhttp3.Request;
 
@@ -64,6 +69,16 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     @BindView( R.id.services_connected_image )
     ImageView servicesConnectedImage;
+
+    @BindView( R.id.fab )
+    FloatingActionButton fab;
+
+    private AirplaneModeConnectedAsyncTask airplaneModeConnectedAsyncTask;
+    private NetworkConnectedAsyncTask networkConnectedAsyncTask;
+    private PingConnectedAsyncTask pingConnectedAsyncTask;
+    private ServicesConnectedAsyncTask servicesConnectedAsyncTask;
+
+    private Animation pulse;
 
     public static Intent getCallingIntent( Context context ) {
 
@@ -126,9 +141,9 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     private void initializeActivity( Bundle savedInstanceState ) {
         Log.d( TAG, "initializeActivity : enter" );
 
-        resetImages();
+        pulse = AnimationUtils.loadAnimation( this, R.anim.pulse );
 
-        new AirplaneModeConnectedAsyncTask().execute();
+        startAirplaneModeCheckCheck();
 
         Log.d( TAG, "initializeActivity : exit" );
     }
@@ -146,6 +161,9 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     private void setImage( ImageView imageView, int resource ) {
         Log.v( TAG, "setImage : enter" );
+
+        pulse.cancel();
+        pulse.reset();
 
         imageView.setImageDrawable( getResources().getDrawable( resource, null ) );
 
@@ -202,12 +220,36 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         return false;
     }
 
+    @OnClick( R.id.fab )
+    void onButtonFabPlay() {
+
+        resetImages();
+
+        startAirplaneModeCheckCheck();
+
+    }
+
+    private void startAirplaneModeCheckCheck() {
+
+        resetImages();
+
+        if( null != airplaneModeConnectedAsyncTask && airplaneModeConnectedAsyncTask.getStatus().equals( AsyncTask.Status.RUNNING ) ) {
+
+            airplaneModeConnectedAsyncTask.cancel( true );
+
+        }
+
+        airplaneModeConnectedImage.startAnimation( pulse );
+
+        airplaneModeConnectedAsyncTask = new AirplaneModeConnectedAsyncTask();
+        new Handler().postDelayed(() -> airplaneModeConnectedAsyncTask.execute(), 3000 );
+
+    }
+
     private class AirplaneModeConnectedAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground( Void... params ) {
-
-            resetImages();
 
             return isAirplaneModeOn();
         }
@@ -219,15 +261,15 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 setImage( airplaneModeConnectedImage, R.drawable.ic_airplanemode_active_black_24dp );
 
-                showToastMessage( "Device is not in Airplane Model", null, null );
+                showToastMessage( fab, getString( R.string.troubleshoot_device_in_airplane_mode ), getResources().getString( R.string.retry ), v -> new AirplaneModeConnectedAsyncTask().execute() );
 
             } else {
 
                 setImage( airplaneModeConnectedImage, R.drawable.ic_airplanemode_inactive_black_24dp );
 
-                showToastMessage( "Device is in Airplane Model", getResources().getString( R.string.retry ), v -> new AirplaneModeConnectedAsyncTask().execute() );
+                showToastMessage( fab, getString( R.string.troubleshoot_device_not_in_airplane_mode ), null, null );
 
-                new NetworkConnectedAsyncTask().execute();
+                startNetworkConnectionCheck();
 
             }
 
@@ -241,7 +283,16 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         setImage( pingConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
         setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
-        new NetworkConnectedAsyncTask().execute();
+        if( null != networkConnectedAsyncTask && networkConnectedAsyncTask.getStatus().equals( AsyncTask.Status.RUNNING ) ) {
+
+            networkConnectedAsyncTask.cancel( true );
+
+        }
+
+        networkConnectedImage.startAnimation( pulse );
+
+        networkConnectedAsyncTask = new NetworkConnectedAsyncTask();
+        new Handler().postDelayed(() -> networkConnectedAsyncTask.execute(), 2000 );
 
     }
 
@@ -260,7 +311,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 setImage( networkConnectedImage, R.drawable.ic_network_check_black_24dp );
 
-                showToastMessage( "Network is connected", null, null );
+                showToastMessage( fab, getString( R.string.troubleshoot_network_connected ), null, null );
 
                 startPingConnectionCheck();
 
@@ -268,7 +319,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 setImage( networkConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
-                showToastMessage( "Network is not connected", getResources().getString( R.string.retry ), v -> new NetworkConnectedAsyncTask().execute() );
+                showToastMessage( fab, getString( R.string.troubleshoot_network_not_connected ), getResources().getString( R.string.retry ), v -> new NetworkConnectedAsyncTask().execute() );
 
             }
 
@@ -281,7 +332,16 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         setImage( pingConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
         setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
-        new PingConnectedAsyncTask().execute();
+        if( null != pingConnectedAsyncTask && pingConnectedAsyncTask.getStatus().equals( AsyncTask.Status.RUNNING ) ) {
+
+            pingConnectedAsyncTask.cancel( true );
+
+        }
+
+        pingConnectedImage.startAnimation( pulse );
+
+        pingConnectedAsyncTask = new PingConnectedAsyncTask();
+        new Handler().postDelayed(() -> pingConnectedAsyncTask.execute(), 2000 );
 
     }
 
@@ -300,7 +360,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 setImage( pingConnectedImage, R.drawable.ic_signal_wifi_4_bar_black_24dp );
 
-                showToastMessage( "Master Backend Ping is succeeded", null, null );
+                showToastMessage( fab, getString( R.string.troubleshoot_ping_succeeded ), null, null );
 
                 startServicesConnectionCheck();
 
@@ -308,7 +368,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 setImage( pingConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
-                showToastMessage( "Master Backend Ping failed", getResources().getString( R.string.retry ), v -> new PingConnectedAsyncTask().execute() );
+                showToastMessage( fab, getString( R.string.troubleshoot_ping_failed ), getResources().getString( R.string.retry ), v -> new PingConnectedAsyncTask().execute() );
 
             }
 
@@ -320,7 +380,16 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
         setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
-        new ServicesConnectedAsyncTask().execute();
+        if( null != servicesConnectedAsyncTask &&  servicesConnectedAsyncTask.getStatus().equals( AsyncTask.Status.RUNNING ) ) {
+
+            servicesConnectedAsyncTask.cancel( true );
+
+        }
+
+        servicesConnectedImage.startAnimation( pulse );
+
+        servicesConnectedAsyncTask = new ServicesConnectedAsyncTask();
+        new Handler().postDelayed(() -> servicesConnectedAsyncTask.execute(), 2000 );
 
     }
 
@@ -360,13 +429,13 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 setImage( servicesConnectedImage, R.drawable.ic_computer_black_24dp );
 
-                showToastMessage( "MythTV Services API is connected", null, null );
+                showToastMessage( fab, getString( R.string.troubleshoot_services_connected ), null, null );
 
             } else {
 
                 setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
-                showToastMessage( "MythTV Services API unreachable", getResources().getString( R.string.retry ), v -> new ServicesConnectedAsyncTask().execute() );
+                showToastMessage( fab, getString( R.string.troubleshoot_services_not_connected ), getResources().getString( R.string.retry ), v -> new ServicesConnectedAsyncTask().execute() );
 
             }
 

@@ -356,7 +356,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
                 FirebaseCrash.logcat( Log.ERROR, TAG, "onButtonFabPlay : mediaItemModel=" + mediaItemModel.toString() );
                 FirebaseCrash.report( e );
 
-                showToastMessage( "HLS for this video is no longer available", null, null );
+                showToastMessage( null, "HLS for this video is no longer available", null, null );
 
             }
 
