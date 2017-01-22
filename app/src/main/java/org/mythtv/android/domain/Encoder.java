@@ -20,12 +20,14 @@ package org.mythtv.android.domain;
 
 import java.util.List;
 
-import lombok.Data;
-
 /**
- * Created by dmfrey on 1/18/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/18/16.
  */
-@Data
 public class Encoder {
 
     private int id;
@@ -37,5 +39,107 @@ public class Encoder {
     private boolean lowOnFreeSpace;
     private List<Input> inputs;
     private Program recording;
+
+    public Encoder() {
+    }
+
+    public Encoder(int id, String hostname, boolean local, boolean connected, int state, int sleepStatus, boolean lowOnFreeSpace, List<Input> inputs, Program recording) {
+        this.id = id;
+        this.hostname = hostname;
+        this.local = local;
+        this.connected = connected;
+        this.state = state;
+        this.sleepStatus = sleepStatus;
+        this.lowOnFreeSpace = lowOnFreeSpace;
+        this.inputs = inputs;
+        this.recording = recording;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+    public boolean isLocal() {
+        return local;
+    }
+
+    public void setLocal(boolean local) {
+        this.local = local;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getSleepStatus() {
+        return sleepStatus;
+    }
+
+    public void setSleepStatus(int sleepStatus) {
+        this.sleepStatus = sleepStatus;
+    }
+
+    public boolean isLowOnFreeSpace() {
+        return lowOnFreeSpace;
+    }
+
+    public void setLowOnFreeSpace(boolean lowOnFreeSpace) {
+        this.lowOnFreeSpace = lowOnFreeSpace;
+    }
+
+    public List<Input> getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(List<Input> inputs) {
+        this.inputs = inputs;
+    }
+
+    public Program getRecording() {
+        return recording;
+    }
+
+    public void setRecording(Program recording) {
+        this.recording = recording;
+    }
+
+    @Override
+    public String toString() {
+        return "Encoder{" +
+                "id=" + id +
+                ", hostname='" + hostname + '\'' +
+                ", local=" + local +
+                ", connected=" + connected +
+                ", state=" + state +
+                ", sleepStatus=" + sleepStatus +
+                ", lowOnFreeSpace=" + lowOnFreeSpace +
+                ", inputs=" + inputs +
+                ", recording=" + recording +
+                '}';
+    }
 
 }

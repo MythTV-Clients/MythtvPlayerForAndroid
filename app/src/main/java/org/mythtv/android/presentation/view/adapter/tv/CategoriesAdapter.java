@@ -33,11 +33,16 @@ import org.mythtv.android.presentation.model.TvCategoryModel;
 import java.util.Collection;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by dmfrey on 1/28/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.TvCategoryViewHolder> {
 
@@ -66,42 +71,32 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 
     @Override
     public int getItemCount() {
-//        Log.d( TAG, "getItemCount : enter" );
 
-//        Log.d( TAG, "getItemCount : exit" );
         return ( null != this.tvCategoriesCollection ) ? this.tvCategoriesCollection.size() : 0;
     }
 
     @Override
     public TvCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
-//        Log.d( TAG, "onCreateViewHolder : enter" );
 
         View view = this.layoutInflater.inflate( R.layout.tv_item, parent, false );
-        TvCategoryViewHolder tvCategoryViewHolder = new TvCategoryViewHolder( view );
 
-//        Log.d( TAG, "onCreateViewHolder : exit" );
-        return tvCategoryViewHolder;
+        return new TvCategoryViewHolder( view );
     }
 
     @Override
     public void onBindViewHolder( TvCategoryViewHolder holder, final int position ) {
-//        Log.d( TAG, "onBindViewHolder : enter" );
 
         final TvCategoryModel tvCategoryModel = this.tvCategoriesCollection.get( position );
         holder.imageViewCategory.setImageResource( tvCategoryModel.getDrawable() );
         holder.textViewTitle.setText( tvCategoryModel.getTitle() );
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( null != CategoriesAdapter.this.onItemClickListener ) {
+        holder.itemView.setOnClickListener(v -> {
+            if( null != CategoriesAdapter.this.onItemClickListener ) {
 
-                    CategoriesAdapter.this.onItemClickListener.onTvCategoryClicked( tvCategoryModel );
+                CategoriesAdapter.this.onItemClickListener.onTvCategoryClicked( tvCategoryModel );
 
-                }
             }
         });
 
-//        Log.d( TAG, "onBindViewHolder : exit" );
     }
 
     @Override
@@ -144,10 +139,10 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 
     static class TvCategoryViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.tv_item_category )
+        @BindView( R.id.tv_item_category )
         ImageView imageViewCategory;
 
-        @Bind( R.id.tv_item_title )
+        @BindView( R.id.tv_item_title )
         TextView textViewTitle;
 
         public TvCategoryViewHolder( View itemView ) {

@@ -34,23 +34,19 @@ import org.mythtv.android.presentation.model.ProgramModel;
 import java.util.Collection;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Adapter that manages a collection of {@link ProgramModel}.
  *
- * Created by dmfrey on 1/21/16.
+ * @author dmfrey
+ *
+ * Created on 1/21/16.
  */
 public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.EncoderViewHolder> {
 
     private static final String TAG = EncodersAdapter.class.getSimpleName();
-
-    public interface OnItemClickListener {
-
-        void onTitleInfoItemClicked( EncoderModel encoderModel );
-
-    }
 
     private Context context;
     private List<EncoderModel> encodersCollection;
@@ -77,13 +73,10 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
     @Override
     public EncoderViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
-//        Log.d( TAG, "onCreateViewHolder : enter" );
 
         View view = this.layoutInflater.inflate( R.layout.phone_encoder_list_item, parent, false );
-        EncoderViewHolder encoderViewHolder = new EncoderViewHolder( view );
 
-//        Log.d( TAG, "onCreateViewHolder : exit" );
-        return encoderViewHolder;
+        return new EncoderViewHolder( view );
     }
 
     @Override
@@ -124,33 +117,20 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
     }
 
     public void setEncodersCollection( Collection<EncoderModel> encodersCollection ) {
-//        Log.d( TAG, "setEncodersCollection : enter" );
 
         this.validateEncodersCollection( encodersCollection );
         this.encodersCollection = (List<EncoderModel>) encodersCollection;
         this.notifyDataSetChanged();
 
-//        Log.d( TAG, "setTitleInfosCollection : exit");
-    }
-
-    public void setOnItemClickListener( OnItemClickListener onItemClickListener ) {
-//        Log.d( TAG, "setOnItemClickListener : enter" );
-
-        OnItemClickListener onItemClickListener1 = onItemClickListener;
-
-//        Log.d( TAG, "setOnItemClickListener : exit" );
     }
 
     private void validateEncodersCollection( Collection<EncoderModel> encodersCollection ) {
-//        Log.d(TAG, "validateEncodersCollection : enter");
 
         if( null == encodersCollection ) {
-//            Log.w( TAG, "validateEncodersCollection : encodersCollection is null" );
 
             throw new IllegalArgumentException( "The list cannot be null" );
         }
 
-//        Log.d( TAG, "validateEncodersCollection : exit" );
     }
 
     private int translateState( int state ) {
@@ -193,16 +173,16 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
     static class EncoderViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind( R.id.encoder_item_recording_image )
+        @BindView( R.id.encoder_item_recording_image )
         ImageView imageViewRecording;
 
-        @Bind( R.id.encoder_item_name )
+        @BindView( R.id.encoder_item_name )
         TextView textViewName;
 
-        @Bind( R.id.encoder_item_recording )
+        @BindView( R.id.encoder_item_recording )
         TextView textViewRecording;
 
-        @Bind( R.id.encoder_item_recording_description )
+        @BindView( R.id.encoder_item_recording_description )
         TextView textViewRecordingDescription;
 
         public EncoderViewHolder( View itemView ) {

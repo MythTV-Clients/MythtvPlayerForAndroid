@@ -30,7 +30,12 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by dmfrey on 3/1/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 3/1/16.
  */
 @Module
 public class SharedPreferencesModule {
@@ -75,32 +80,9 @@ public class SharedPreferencesModule {
         return sharedPreferences.getString( key, "" );
     }
 
-    public void putStringToPreferences( String key, String value ) {
-
-        sharedPreferences.edit().putString( key, value ).apply();
-
-    }
-
-    public int getIntFromPreferences( String key, int defaultValue ) {
-
-        return sharedPreferences.getInt( key, defaultValue );
-    }
-
-    public void putIntToPreferences( String key, int value ) {
-
-        sharedPreferences.edit().putInt( key, value ).apply();
-
-    }
-
     public boolean getBooleanFromPreferences( String key ) {
 
         return sharedPreferences.getBoolean( key, false );
-    }
-
-    public void putBooleanToPreferences( String key, boolean value ) {
-
-        sharedPreferences.edit().putBoolean( key, value ).apply();
-
     }
 
 }

@@ -1,78 +1,102 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in /Applications/Android Studio.app/sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the ProGuard
-# include property in project.properties.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
 
-# Add any project specific keep options here:
+# AQuery
+-dontwarn com.androidquery.auth.**
+-dontwarn oauth.signpost.**
 
+# Butterknife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+# Retrofit
+-dontwarn retrofit.**
+-keep class retrofit.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+# OkHTTP3
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+-dontnote okhttp3.**
+
+# Okio
+-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn okio.**
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+    **[] $VALUES;
+    public *;
+}
+
+# GSON
+-keepattributes Signature
+-keepattributes *Annotation*
 -keepattributes EnclosingMethod
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Joda
+-dontwarn org.joda.convert.**
+-dontwarn org.joda.time.**
+-keep class org.joda.time.** { *; }
+-keep interface org.joda.time.** { *; }
 
-# Obfuscation parameters:
-#-dontobfuscate
-#-useuniqueclassmembernames
-#-keepattributes SourceFile,LineNumberTable
-#-allowaccessmodification
+# Picasso
+-dontwarn com.squareup.okhttp.**
 
-# Ignore warnings:
-#-dontwarn org.mockito.**
-#-dontwarn org.junit.**
-#-dontwarn com.robotium.**
-#-dontwarn org.joda.convert.**
-#-dontwarn lombok.**
+# Retrolambda
+-dontwarn java.lang.invoke.*
 
-# Ignore warnings: We are not using DOM model
-#-dontwarn com.fasterxml.jackson.databind.ext.DOMSerializer
-# Ignore warnings: https://github.com/square/okhttp/wiki/FAQs
-#-dontwarn com.squareup.okhttp.internal.huc.**
-# Ignore warnings: https://github.com/square/okio/issues/60
-#-dontwarn okio.**
-# Ignore warnings: https://github.com/square/retrofit/issues/435
-#-dontwarn com.google.appengine.api.urlfetch.**
+# RxJava
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
+}
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+    public static ** test();
+}
+-dontwarn sun.misc.Unsafe
+-dontwarn org.w3c.dom.bootstrap.DOMImplementationRegistry
 
-# Keep GSON stuff
-#-keep class sun.misc.Unsafe { *; }
-#-keep class com.google.gson.** { *; }
+#-dontwarn com.google.android.gms.**
+##-dontwarn org.w3c.dom.**
+#-dontwarn org.joda.time.**
+#-dontwarn org.shaded.apache.**
+#-dontwarn org.ietf.jgss.**
+#-dontwarn com.firebase.**
+#-dontnote com.firebase.client.core.GaePlatform
 
-# Keep these for GSON and Jackson
 #-keepattributes Signature
 #-keepattributes *Annotation*
-#-keepattributes EnclosingMethod
+#-keepattributes InnerClasses,EnclosingMethod
 
-# Keep Retrofit
-#-keep class retrofit.** { *; }
-#-keepclasseswithmembers class * {
-#    @retrofit.** *;
-#}
-#-keepclassmembers class * {
-#    @retrofit.** *;
-#}
+#-keep class org.mythtv.android.** { *; }
 
-# Keep Picasso
-#-keep class com.squareup.picasso.** { *; }
-#-keepclasseswithmembers class * {
-#    @com.squareup.picasso.** *;
-#}
-#-keepclassmembers class * {
-#    @com.squareup.picasso.** *;
-#}
+# Basic ProGuard rules for Firebase Android SDK 2.0.0+
+#-keep class com.firebase.** { *; }
 
-#-keepattributes InnerClasses
-#-dontoptimize
-
--dontwarn javax.**
--dontwarn lombok.**
--dontwarn org.apache.**
--dontwarn com.squareup.**
--dontwarn com.sun.**
--dontwarn **retrofit**
+#-keepnames class com.fasterxml.jackson.** { *; }
+#-keepnames class javax.servlet.** { *; }
+#-keepnames class org.ietf.jgss.** { *; }

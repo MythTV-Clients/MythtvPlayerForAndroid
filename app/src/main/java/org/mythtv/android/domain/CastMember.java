@@ -18,17 +18,71 @@
 
 package org.mythtv.android.domain;
 
-import lombok.Data;
-
-/*
- * Created by dmfrey on 11/12/14.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/12/14.
  */
-@Data
 public class CastMember {
 
     private String name;
     private String characterName;
     private String role;
     private String translatedRole;
+
+    public CastMember() {
+    }
+
+    public CastMember(String name, String characterName, String role, String translatedRole) {
+        this.name = name;
+        this.characterName = characterName;
+        this.role = role;
+        this.translatedRole = translatedRole;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCharacterName() {
+        return characterName;
+    }
+
+    public void setCharacterName(String characterName) {
+        this.characterName = characterName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getTranslatedRole() {
+        return translatedRole;
+    }
+
+    public void setTranslatedRole(String translatedRole) {
+        this.translatedRole = translatedRole;
+    }
+
+    @Override
+    public String toString() {
+        return "CastMember{" +
+                "name='" + name + '\'' +
+                ", characterName='" + characterName + '\'' +
+                ", role='" + role + '\'' +
+                ", translatedRole='" + translatedRole + '\'' +
+                '}';
+    }
 
 }

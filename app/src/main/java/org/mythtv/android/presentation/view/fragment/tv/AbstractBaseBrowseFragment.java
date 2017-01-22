@@ -28,9 +28,12 @@ import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
+ *
  * Base {@link Fragment} class for every fragment in this application.
  *
- * Created by dmfrey on 1/28/16.
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 public abstract class AbstractBaseBrowseFragment extends BrowseFragment {
 
@@ -68,7 +71,7 @@ public abstract class AbstractBaseBrowseFragment extends BrowseFragment {
     /**
      * Get a SharedPreferences module for dependency injection.
      *
-     * @return {@link org.mythtv.android.internal.di.modules.SharedPreferencesModule}
+     * @return {@link org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule}
      */
     protected SharedPreferencesModule getSharedPreferencesModule() {
 

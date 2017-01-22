@@ -1,0 +1,4 @@
+1714300
+=============
+- Various bug fixes and performance enhancements
+- Dropped support for mythtv backend v0.27, so that the backend services api can be normalized, various incompatible changes to the api between mythtv versions prompted this change

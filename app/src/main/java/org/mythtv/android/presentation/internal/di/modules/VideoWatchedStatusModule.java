@@ -33,7 +33,9 @@ import dagger.Provides;
 /**
  * Dagger module that updates a video's watched status.
  *
- * Created by dmfrey on 4/18/16.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Module
 public class VideoWatchedStatusModule {

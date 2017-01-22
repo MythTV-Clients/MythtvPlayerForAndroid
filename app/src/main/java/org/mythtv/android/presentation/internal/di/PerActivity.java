@@ -29,7 +29,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * conform to the life of the activity to be memorized in the
  * correct component.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Scope
 @Retention( RUNTIME )

@@ -22,9 +22,13 @@ import android.os.Bundle;
 
 import org.mythtv.android.R;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class RecordingSettingsActivity extends AbstractBaseTvActivity {
-
-    private static final String TAG = RecordingSettingsActivity.class.getSimpleName();
 
     @Override
     public int getLayoutResource() {

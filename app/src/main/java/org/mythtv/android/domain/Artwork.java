@@ -18,14 +18,39 @@
 
 package org.mythtv.android.domain;
 
-import lombok.Data;
+import java.util.Arrays;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
-@Data
 public class Artwork {
 
     private ArtworkInfo[] artworkInfos;
 
+    public Artwork() {
+    }
+
+    public Artwork(ArtworkInfo[] artworkInfos) {
+        this.artworkInfos = artworkInfos;
+    }
+
+    public ArtworkInfo[] getArtworkInfos() {
+        return artworkInfos;
+    }
+
+    public void setArtworkInfos(ArtworkInfo[] artworkInfos) {
+        this.artworkInfos = artworkInfos;
+    }
+
+    @Override
+    public String toString() {
+        return "Artwork{" +
+                "artworkInfos=" + Arrays.toString(artworkInfos) +
+                '}';
+    }
 }

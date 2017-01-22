@@ -22,9 +22,12 @@ import android.util.Log;
 
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
-import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
+import org.mythtv.android.data.entity.mapper.MediaItemDataMapper;
 import org.mythtv.android.data.net.VideoApi;
+import org.mythtv.android.domain.MediaItem;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -33,7 +36,12 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by dmfrey on 11/9/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/9/15.
  */
 public class MasterBackendVideoDataStore implements VideoDataStore {
 
@@ -44,27 +52,38 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
     private final SearchDataStoreFactory searchDataStoreFactory;
 
     private final Action1<List<VideoMetadataInfoEntity>> saveVideosToCacheAction =
-            videoMetadataInfoEntities -> {
+            entities -> {
 
-                if( null != videoMetadataInfoEntities ) {
+                if( null != entities ) {
 
-                    MasterBackendVideoDataStore.this.videoCache.put( videoMetadataInfoEntities );
+                    MasterBackendVideoDataStore.this.videoCache.put( entities );
 
                 }
 
             };
 
     private final Action1<List<VideoMetadataInfoEntity>> saveVideosToDbAction =
-            videoMetadataInfoEntities -> {
+            videoEntities -> {
 
-                if( null != videoMetadataInfoEntities ) {
+                if( null != videoEntities ) {
 
                     final SearchDataStore searchDataStore = MasterBackendVideoDataStore.this.searchDataStoreFactory.createWriteSearchDataStore();
 
                     Observable
-                        .from( videoMetadataInfoEntities )
+                        .from( videoEntities )
                         .toList()
-                        .map( SearchResultEntityDataMapper::transformVideos )
+                        .map( entities -> {
+
+                            try {
+
+                                return MediaItemDataMapper.transformVideos( entities );
+
+                            } catch( UnsupportedEncodingException e ) {
+                                Log.e( TAG, "saveVideosToDbAction : error", e );
+                            }
+
+                            return new ArrayList<MediaItem>();
+                        })
                         .subscribe( searchDataStore::refreshVideoData );
                 }
 
@@ -103,9 +122,9 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
                 .doOnNext( saveVideosToCacheAction )
                 .doOnNext( saveVideosToDbAction )
                 .flatMap( Observable::from )
-                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
-                .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> videoMetadataInfoEntity1.getTitle().compareTo( videoMetadataInfoEntity2.getTitle() ) )
-                .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) );
+                .filter( entity -> entity.getContentType().equals( category ) )
+                .toSortedList( ( entity1, entity2 ) -> entity1.getTitle().compareTo( entity2.getTitle() ) )
+                .doOnNext( entity -> Log.d( TAG, "getCategory : entity=" + entity ) );
 
     }
 
@@ -117,39 +136,39 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         return this.api.getVideoList( null, null, false, -1, -1 )
                 .flatMap( Observable::from )
-                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getContentType().equals( category ) )
-                .filter( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle().equals( series ) )
-                .toSortedList( ( videoMetadataInfoEntity1, videoMetadataInfoEntity2 ) -> {
+                .filter( entity -> entity.getContentType().equals( category ) )
+                .filter( entity -> entity.getTitle().equals( series ) )
+                .toSortedList( ( entity1, entity2 ) -> {
 
                     StringBuilder e1 = new StringBuilder();
                     e1.append( "S" );
-                    if( videoMetadataInfoEntity1.getSeason() < 10 ) {
+                    if( entity1.getSeason() < 10 ) {
                         e1.append( "0" );
                     }
-                    e1.append( videoMetadataInfoEntity1.getSeason() );
+                    e1.append( entity1.getSeason() );
 
                     e1.append( "E" );
-                    if( videoMetadataInfoEntity1.getEpisode() < 10 ) {
+                    if( entity1.getEpisode() < 10 ) {
                         e1.append( "0" );
                     }
-                    e1.append( videoMetadataInfoEntity1.getEpisode() );
+                    e1.append( entity1.getEpisode() );
 
                     StringBuilder e2 = new StringBuilder();
                     e2.append( "S" );
-                    if( videoMetadataInfoEntity2.getSeason() < 10 ) {
+                    if( entity2.getSeason() < 10 ) {
                         e2.append( "0" );
                     }
-                    e2.append( videoMetadataInfoEntity2.getSeason() );
+                    e2.append( entity2.getSeason() );
 
                     e2.append( "E" );
-                    if( videoMetadataInfoEntity2.getEpisode() < 10 ) {
+                    if( entity2.getEpisode() < 10 ) {
                         e2.append( "0" );
                     }
-                    e2.append( videoMetadataInfoEntity2.getEpisode() );
+                    e2.append( entity2.getEpisode() );
 
                     return e1.toString().compareTo( e2.toString() );
                 })
-                .doOnNext( videoMetadataInfoEntity -> Log.d( TAG, "getSeriesInCategory : videoMetadataInfoEntity=" + videoMetadataInfoEntity ) );
+                .doOnNext( entity -> Log.d( TAG, "getSeriesInCategory : entity=" + entity ) );
 
     }
 
@@ -161,7 +180,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getVideoById : exit" );
         return this.api.getVideoById( id )
-                .doOnNext( videoMetadataInfoEntity ->  Log.i( TAG, "getVideoById : video=" + videoMetadataInfoEntity ) );
+                .doOnNext( entity ->  Log.i( TAG, "getVideoById : entity=" + entity ) );
     }
 
     @Override

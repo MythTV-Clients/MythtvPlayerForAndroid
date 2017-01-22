@@ -20,17 +20,71 @@ package org.mythtv.android.presentation.model;
 
 import java.io.Serializable;
 
-import lombok.Data;
-
-/*
- * Created by dmfrey on 11/12/14.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/12/14.
  */
-@Data
 public class ArtworkInfoModel implements Serializable {
 
     private String url;
     private String fileName;
     private String storageGroup;
     private String type;
+
+    public ArtworkInfoModel() {
+    }
+
+    public ArtworkInfoModel(String url, String fileName, String storageGroup, String type) {
+        this.url = url;
+        this.fileName = fileName;
+        this.storageGroup = storageGroup;
+        this.type = type;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getStorageGroup() {
+        return storageGroup;
+    }
+
+    public void setStorageGroup(String storageGroup) {
+        this.storageGroup = storageGroup;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "ArtworkInfoModel{" +
+                "url='" + url + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", storageGroup='" + storageGroup + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 
 }

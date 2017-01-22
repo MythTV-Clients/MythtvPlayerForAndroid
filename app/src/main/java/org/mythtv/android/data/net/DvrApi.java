@@ -28,17 +28,23 @@ import java.util.List;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public interface DvrApi {
 
     String TITLE_INFO_LIST_URL = "/Dvr/GetTitleInfoList";
 
     String RECORDED_LIST_BASE_URL = "/Dvr/GetRecordedList";
-    String RECORDED_BASE_URL = "/Dvr/GetRecorded?ChanId=%s&StartTime=%s";
+    String RECORDED_BASE_URL = "/Dvr/GetRecorded";
     String UPCOMING_LIST_BASE_URL = "/Dvr/GetUpcomingList";
     String ENCODER_LIST_BASE_URL = "/Dvr/GetEncoderList";
     String UPDATE_RECORDED_WATCHED_STATUS_URL = "/Dvr/UpdateRecordedWatchedStatus";
+    String BOOKMARK_BASE_URL = "/Dvr/GetSavedBookmark";
 
     String DESCENDING_QS = "Descending=%s";
     String START_INDEX_QS = "StartIndex=%s";
@@ -46,16 +52,20 @@ public interface DvrApi {
     String TITLE_REG_EX_QS = "TitleRegEx=%s";
     String REC_GROUP_QS = "RecGroup=%s";
     String STORAGE_GROUP_QS = "StorageGroup=%s";
+    String RECORDED_ID_QS = "RecordedId=%s";
+    String CHAN_ID_QS = "ChanId=%s";
+    String START_TIME_QS = "StartTime=%s";
     String SHOW_ALL_QS = "ShowAll=%s";
     String RECORD_ID_QS = "RecordId=%s";
     String REC_STATUS_QS = "RecStatus=%s";
     String WATCHED_QS = "Watched=%s";
+    String OFFSET_TYPE_QS = "OffsetType=%s";
 
     Observable<List<TitleInfoEntity>> titleInfoEntityList();
 
     Observable<List<ProgramEntity>> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup );
 
-    Observable<ProgramEntity> recordedProgramById( final int chanId, final DateTime startTime );
+    Observable<ProgramEntity> recordedProgramById( final int recordedId, final int chanId, final DateTime startTime );
 
     Observable<List<ProgramEntity>> upcomingProgramEntityList( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus );
 
@@ -72,6 +82,8 @@ public interface DvrApi {
      * @return true  - if status was successfully updated
      *         false - if status was not updated
      */
-    Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched );
+    Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
+
+    Observable<Long> getBookmark( final int recordedId, final int chanId, final DateTime startTime, final String offsetType );
 
 }

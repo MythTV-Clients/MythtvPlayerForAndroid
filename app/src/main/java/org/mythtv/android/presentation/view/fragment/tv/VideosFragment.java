@@ -19,6 +19,7 @@
 package org.mythtv.android.presentation.view.fragment.tv;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.widget.GuidanceStylist;
@@ -26,12 +27,17 @@ import android.support.v17.leanback.widget.GuidedAction;
 import android.util.Log;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.ContentType;
+import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
 /**
- * Created by dmfrey on 2/4/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 2/4/16.
  */
 public class VideosFragment extends AbstractBaseGuidedStepFragment {
 
@@ -46,20 +52,22 @@ public class VideosFragment extends AbstractBaseGuidedStepFragment {
     /**
      * Interface for listening category list events.
      */
-    public interface CategoryListener {
+    public interface MediaListener {
 
-        void onCategoryClicked( final String category );
+        void onCategoryClicked( final Media media );
 
     }
 
-    private CategoryListener categoryListener;
+    private MediaListener mediaListener;
 
     @Override
-    public void onAttach( Activity activity ) {
-        super.onAttach( activity );
+    public void onAttach( Context context ) {
+        super.onAttach( context );
+        Log.d( TAG, "onAttach : enter" );
 
-        if( activity instanceof CategoryListener ) {
-            this.categoryListener = (CategoryListener) activity;
+        Activity activity = getActivity();
+        if( activity instanceof MediaListener) {
+            this.mediaListener = (MediaListener) activity;
         }
 
     }
@@ -126,31 +134,31 @@ public class VideosFragment extends AbstractBaseGuidedStepFragment {
 
             case MOVIES :
 
-               categoryListener.onCategoryClicked( ContentType.MOVIE );
+               mediaListener.onCategoryClicked( Media.MOVIE );
 
                 break;
 
             case TELEVISION :
 
-                categoryListener.onCategoryClicked( ContentType.TELEVISION );
+                mediaListener.onCategoryClicked( Media.TELEVISION );
 
                 break;
 
             case HOME_MOVIES :
 
-                categoryListener.onCategoryClicked( ContentType.HOMEVIDEO );
+                mediaListener.onCategoryClicked( Media.HOMEVIDEO );
 
                 break;
 
             case MUSIC_VIDEOS :
 
-                categoryListener.onCategoryClicked( ContentType.MUSICVIDEO );
+                mediaListener.onCategoryClicked( Media.MUSICVIDEO );
 
                 break;
 
             case ADULT :
 
-                categoryListener.onCategoryClicked( ContentType.ADULT );
+                mediaListener.onCategoryClicked( Media.ADULT );
 
                 break;
 

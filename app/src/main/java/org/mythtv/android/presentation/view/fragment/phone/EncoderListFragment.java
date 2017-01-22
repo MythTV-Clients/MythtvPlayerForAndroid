@@ -28,23 +28,29 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.EncoderModel;
 import org.mythtv.android.presentation.presenter.phone.EncoderListPresenter;
 import org.mythtv.android.presentation.view.EncoderListView;
 import org.mythtv.android.presentation.view.adapter.phone.EncodersAdapter;
-import org.mythtv.android.presentation.view.adapter.phone.EncodersLayoutManager;
+import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
- * Created by dmfrey on 1/20/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/20/16.
  */
 public class EncoderListFragment extends AbstractBaseFragment implements EncoderListView {
 
@@ -53,11 +59,13 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     @Inject
     EncoderListPresenter encoderListPresenter;
 
-    @Bind( R.id.rv_encoders )
+    @BindView( R.id.rv_encoders )
     RecyclerView rv_encoders;
 
-    @Bind( R.id.rl_progress )
+    @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
+
+    private Unbinder unbinder;
 
     private EncodersAdapter encodersAdapter;
 
@@ -76,6 +84,8 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
 
         View fragmentView = inflater.inflate( R.layout.fragment_phone_encoder_list, container, false );
         ButterKnife.bind( this, fragmentView );
+        unbinder = ButterKnife.bind( this, fragmentView );
+
         setupUI();
 
         Log.d( TAG, "onCreateView : exit" );
@@ -128,7 +138,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "onDestroyView : enter" );
         super.onDestroyView();
 
-        ButterKnife.unbind( this );
+        unbinder.unbind();
 
         Log.d( TAG, "onDestroyView : exit" );
     }
@@ -136,7 +146,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     private void initialize() {
         Log.d( TAG, "initialize : enter" );
 
-        this.getComponent( DvrComponent.class ).inject( this );
+        this.getComponent( MediaComponent.class ).inject( this );
         this.encoderListPresenter.setView( this );
 //        this.encoderListPresenter.initialize( contentType );
 
@@ -146,10 +156,9 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.rv_encoders.setLayoutManager( new EncodersLayoutManager( getActivity() ) );
+        this.rv_encoders.setLayoutManager( new LayoutManager( getActivity() ) );
 
-        this.encodersAdapter = new EncodersAdapter( getActivity(), new ArrayList<EncoderModel>() );
-//        this.encodersAdapter.setOnItemClickListener( onItemClickListener );
+        this.encodersAdapter = new EncodersAdapter( getActivity(), new ArrayList<>() );
         this.rv_encoders.setAdapter( encodersAdapter );
 
         Log.d( TAG, "setupUI : exit" );
@@ -160,7 +169,6 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "showLoading : enter" );
 
         this.rl_progress.setVisibility( View.VISIBLE );
-        this.getActivity().setProgressBarIndeterminateVisibility( true );
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -170,7 +178,6 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "hideLoading : enter" );
 
         this.rl_progress.setVisibility( View.GONE );
-        this.getActivity().setProgressBarIndeterminateVisibility( false );
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -214,16 +221,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), new View.OnClickListener() {
-
-            @Override
-            public void onClick( View v ) {
-
-                EncoderListFragment.this.loadEncoderList();
-
-            }
-
-        });
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> EncoderListFragment.this.loadEncoderList());
 
         Log.d( TAG, "showError : exit" );
     }

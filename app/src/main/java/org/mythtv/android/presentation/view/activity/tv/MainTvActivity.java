@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -33,14 +32,20 @@ import android.widget.TextView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 
-public class MainTvActivity extends AbstractBaseTvActivity implements HasComponent<DvrComponent> {
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
+public class MainTvActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent> {
 
     private static final String TAG = MainTvActivity.class.getSimpleName();
 
-    private DvrComponent dvrComponent;
+    private MediaComponent mediaComponent;
 
     @Override
     public int getLayoutResource() {
@@ -61,34 +66,30 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
         GridView gridview = (GridView) findViewById( R.id.gridview );
         gridview.setAdapter( adapter );
 
-        gridview.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+        gridview.setOnItemClickListener( ( parent, v, position, id ) -> {
 
-            public void onItemClick( AdapterView<?> parent, View v, int position, long id ) {
+            switch( position ) {
 
-                switch( position ) {
+                case 0:
+                    Log.d( TAG, "gridview.onclick : position 0" );
 
-                    case 0:
-                        Log.d( TAG, "gridview.onclick : position 0" );
+                    navigator.navigateToRecordings( MainTvActivity.this );
 
-                        navigator.navigateToRecordings( MainTvActivity.this );
+                    break;
 
-                        break;
+                case 1 :
+                    Log.d( TAG, "gridview.onclick : position 1" );
 
-                    case 1 :
-                        Log.d( TAG, "gridview.onclick : position 1" );
+                    navigator.navigateToVideos( MainTvActivity.this );
 
-                        navigator.navigateToVideos( MainTvActivity.this );
+                    break;
 
-                        break;
+                case 2 :
+                    Log.d( TAG, "gridview.onclick : position 2" );
 
-                    case 2 :
-                        Log.d( TAG, "gridview.onclick : position 2" );
+                    navigator.navigateToSettings( MainTvActivity.this );
 
-                        navigator.navigateToSettings( MainTvActivity.this );
-
-                        break;
-
-                }
+                    break;
 
             }
 
@@ -100,7 +101,7 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.dvrComponent = DaggerDvrComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .build();
 
@@ -108,19 +109,17 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
     }
 
     @Override
-    public DvrComponent getComponent() {
+    public MediaComponent getComponent() {
         Log.d( TAG, "getComponent : enter" );
 
         Log.d( TAG, "getComponent : exit" );
-        return dvrComponent;
+        return mediaComponent;
     }
 
     private class Category {
 
-        String title;
-        Integer drawable;
-
-        Category() { }
+        final String title;
+        final Integer drawable;
 
         Category( String title, Integer drawable ) {
 
@@ -134,21 +133,9 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
             return title;
         }
 
-        public void setTitle( String title ) {
-
-            this.title = title;
-
-        }
-
         public Integer getDrawable() {
 
             return drawable;
-        }
-
-        public void setDrawable( Integer drawable ) {
-
-            this.drawable = drawable;
-
         }
 
     }
@@ -156,7 +143,6 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
     private class CategoryAdapter extends BaseAdapter {
 
         private final Context mContext;
-        private final LayoutInflater mInflater;
 
         String[] titles = new String[] {
                 getResources().getString( R.string.drawer_item_watch_recordings ),
@@ -170,10 +156,10 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
                 R.drawable.tv_setting
         };
 
-        public CategoryAdapter( Context context ) {
+        CategoryAdapter( Context context ) {
 
             mContext = context;
-            mInflater = getLayoutInflater();
+
         }
 
         @Override
@@ -199,7 +185,7 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
 
             Category category = getItem( position );
 
-            ViewHolder holder = null;
+            ViewHolder holder;
 
             if( null == convertView ) {
 

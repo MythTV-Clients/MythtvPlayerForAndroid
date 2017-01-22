@@ -20,15 +20,46 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Data;
+import java.util.Arrays;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
-@Data
 public class ArtworkEntity {
 
     @SerializedName( "ArtworkInfos" )
     private ArtworkInfoEntity[] artworkInfos;
+
+    public ArtworkEntity() {
+    }
+
+    public ArtworkEntity(ArtworkInfoEntity[] artworkInfos ) {
+
+        this.artworkInfos = artworkInfos;
+
+    }
+
+    public ArtworkInfoEntity[] getArtworkInfos() {
+
+        return artworkInfos;
+    }
+
+    public void setArtworkInfos( ArtworkInfoEntity[] artworkInfos ) {
+
+        this.artworkInfos = artworkInfos;
+
+    }
+
+    @Override
+    public String toString() {
+        return "ArtworkEntity{" +
+                "artworkInfos=" + Arrays.toString( artworkInfos ) +
+                '}';
+    }
 
 }

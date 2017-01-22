@@ -26,19 +26,24 @@ import android.provider.SearchRecentSuggestions;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.util.Log;
 
-import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
-import org.mythtv.android.presentation.model.SearchResultModel;
-import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
 import org.mythtv.android.R;
-import org.mythtv.android.presentation.internal.di.components.DaggerSearchComponent;
-import org.mythtv.android.presentation.internal.di.components.SearchComponent;
+import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
+import org.mythtv.android.presentation.model.MediaItemModel;
+import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
 import org.mythtv.android.presentation.view.fragment.tv.TvSearchResultListFragment;
 
 /**
- * Created by dmfrey on 2/27/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 2/27/16.
  */
-public class SearchableActivity extends AbstractBaseTvActivity implements HasComponent<SearchComponent>, TvSearchResultListFragment.SearchResultListListener {
+public class SearchableActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent>, TvSearchResultListFragment.MediaItemListListener {
 
     private static final String TAG = SearchableActivity.class.getSimpleName();
 
@@ -50,7 +55,7 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
     }
 
     private String searchText;
-    private SearchComponent searchComponent;
+    private MediaComponent mediaComponent;
 
     private static final int REQUEST_SPEECH = 1;
     TvSearchResultListFragment mSearchableFragment;
@@ -74,7 +79,7 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
 
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
-        Log.d(TAG, "onSaveInstanceState : enter");
+        Log.d( TAG, "onSaveInstanceState : enter" );
 
         if( null != outState ) {
             Log.d( TAG, "onSaveInstanceState : outState is not null" );
@@ -139,18 +144,7 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
 
         if( isRealAndroidTvDevice( this ) ) {
 
-            SpeechRecognitionCallback mSpeechRecognitionCallback = new SpeechRecognitionCallback() {
-
-                @Override
-                public void recognizeSpeech() {
-
-                    startActivityForResult(mSearchableFragment.getRecognizerIntent(), REQUEST_SPEECH);
-
-                }
-
-            };
-
-            mSearchableFragment.setSpeechRecognitionCallback( mSpeechRecognitionCallback );
+            mSearchableFragment.setSpeechRecognitionCallback( () -> startActivityForResult( mSearchableFragment.getRecognizerIntent(), REQUEST_SPEECH ) );
 
         }
 
@@ -160,7 +154,7 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.searchComponent = DaggerSearchComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .searchResultsModule( new SearchResultsModule() )
                 .build();
@@ -169,30 +163,30 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
     }
 
     @Override
-    public SearchComponent getComponent() {
+    public MediaComponent getComponent() {
 
-        return searchComponent;
+        return mediaComponent;
     }
 
     @Override
-    public void onSearchResultClicked( SearchResultModel searchResultModel ) {
-        Log.d( TAG, "onSearchResultClicked : enter" );
+    public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
+        Log.d( TAG, "onMediaItemClicked : enter" );
 
-        switch( searchResultModel.getType() ) {
+        switch( mediaItemModel.getMedia() ) {
 
-            case RECORDING:
-                Log.d( TAG, "onSearchResultClicked : recording clicked" );
+            case PROGRAM:
+                Log.d( TAG, "onMediaItemClicked : recording clicked" );
 
                 break;
 
             case VIDEO:
-                Log.d( TAG, "onSearchResultClicked : video clicked" );
+                Log.d( TAG, "onMediaItemClicked : video clicked" );
 
                 break;
 
         }
 
-        Log.d( TAG, "onSearchResultClicked : exit" );
+        Log.d( TAG, "onMediaItemClicked : exit" );
     }
 
 }

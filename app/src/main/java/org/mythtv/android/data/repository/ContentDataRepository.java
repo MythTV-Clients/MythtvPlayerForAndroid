@@ -35,7 +35,12 @@ import javax.inject.Singleton;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 @Singleton
 public class ContentDataRepository implements ContentRepository {
@@ -92,7 +97,7 @@ public class ContentDataRepository implements ContentRepository {
         final ContentDataStore contentDataStore = this.contentDataStoreFactory.createMasterBackendDataStore();
 
         return contentDataStore.liveStreamInfoEntityList( filename )
-                .map( liveStreamInfoEntities -> LiveStreamInfoEntityDataMapper.transform( liveStreamInfoEntities ) );
+                .map( model -> LiveStreamInfoEntityDataMapper.transform( model ) );
     }
 
     @SuppressWarnings( "Convert2MethodRef" )

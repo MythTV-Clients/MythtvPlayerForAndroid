@@ -28,7 +28,12 @@ import java.util.List;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public interface DvrDataStore {
 
@@ -36,12 +41,14 @@ public interface DvrDataStore {
 
     Observable<List<ProgramEntity>> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup );
 
-    Observable<ProgramEntity> recordedProgramEntityDetails( final int chanId, final DateTime startTime );
+    Observable<ProgramEntity> recordedProgramEntityDetails( final int recordedId );
 
     Observable<List<ProgramEntity>> upcomingProgramEntityList( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus );
 
     Observable<List<EncoderEntity>> encoderEntityList();
 
-    Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched );
+    Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
+
+    Observable<Long> getBookmark( final int recordedId, final String offsetType );
 
 }

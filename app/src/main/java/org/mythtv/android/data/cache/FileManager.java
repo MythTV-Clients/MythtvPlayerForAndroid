@@ -19,7 +19,12 @@
 package org.mythtv.android.data.cache;
 
 /**
- * Created by dmfrey on 8/26/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 
 import android.content.Context;
@@ -72,8 +77,6 @@ public class FileManager {
             } catch( IOException e ) {
 
                 Log.e(TAG, "writeToFile : error, io", e);
-
-            } finally {
 
             }
 

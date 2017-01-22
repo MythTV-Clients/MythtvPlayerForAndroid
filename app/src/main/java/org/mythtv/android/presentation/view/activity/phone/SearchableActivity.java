@@ -26,25 +26,30 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import org.mythtv.android.R;
-import org.mythtv.android.presentation.view.fragment.phone.PhoneSearchResultListFragment;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerSearchComponent;
-import org.mythtv.android.presentation.internal.di.components.SearchComponent;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
-import org.mythtv.android.presentation.model.SearchResultModel;
+import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
+import org.mythtv.android.presentation.view.fragment.phone.MediaItemSearchResultListFragment;
 
 /**
- * Created by dmfrey on 10/14/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/14/15.
  */
-public class SearchableActivity extends AbstractBasePhoneActivity implements HasComponent<SearchComponent>, PhoneSearchResultListFragment.SearchResultListListener {
+public class SearchableActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemSearchResultListFragment.MediaItemListListener {
 
     private static final String TAG = SearchableActivity.class.getSimpleName();
 
     private static final String INSTANCE_STATE_PARAM_SEARCH_TEXT = "org.mythtv.android.STATE_PARAM_SEARCH_TEXT";
 
     private String searchText;
-    private SearchComponent searchComponent;
+    private MediaComponent mediaComponent;
 
     @Override
     public int getLayoutResource() {
@@ -127,7 +132,7 @@ public class SearchableActivity extends AbstractBasePhoneActivity implements Has
         if( null == intent  ) {
             Log.d( TAG, "initializeActivity : intent == null" );
 
-            addFragment( R.id.fl_fragment, PhoneSearchResultListFragment.newInstance( this.searchText ) );
+            addFragment( R.id.fl_fragment, MediaItemSearchResultListFragment.newInstance( this.searchText ) );
 
         } else {
             Log.d( TAG, "initializeActivity : intent != null" );
@@ -138,7 +143,7 @@ public class SearchableActivity extends AbstractBasePhoneActivity implements Has
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions( this, MythtvSearchSuggestionProvider.AUTHORITY, MythtvSearchSuggestionProvider.MODE );
             suggestions.saveRecentQuery( searchText, null );
 
-            addFragment( R.id.fl_fragment, PhoneSearchResultListFragment.newInstance( this.searchText ) );
+            addFragment( R.id.fl_fragment, MediaItemSearchResultListFragment.newInstance( this.searchText ) );
 
         }
 
@@ -148,7 +153,7 @@ public class SearchableActivity extends AbstractBasePhoneActivity implements Has
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.searchComponent = DaggerSearchComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .searchResultsModule( new SearchResultsModule() )
                 .build();
@@ -157,33 +162,18 @@ public class SearchableActivity extends AbstractBasePhoneActivity implements Has
     }
 
     @Override
-    public SearchComponent getComponent() {
+    public MediaComponent getComponent() {
 
-        return searchComponent;
+        return mediaComponent;
     }
 
     @Override
-    public void onSearchResultClicked( SearchResultModel searchResultModel ) {
-        Log.d( TAG, "onSearchResultClicked : enter" );
+    public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
+        Log.d( TAG, "onMediaItemClicked : enter" );
 
-        switch( searchResultModel.getType() ) {
+        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia() );
 
-            case RECORDING:
-                Log.d( TAG, "onSearchResultClicked : recording clicked" );
-
-                navigator.navigateToProgram( this, searchResultModel.getChanId(), searchResultModel.getStartTime() );
-
-                break;
-
-            case VIDEO:
-                Log.d( TAG, "onSearchResultClicked : video clicked" );
-
-                navigator.navigateToVideo( this, searchResultModel.getVideoId(), searchResultModel.getStorageGroup(), searchResultModel.getFilename(), searchResultModel.getHostname() );
-
-                break;
-
-        }
-
+        Log.d( TAG, "onMediaItemClicked : exit" );
     }
 
 }

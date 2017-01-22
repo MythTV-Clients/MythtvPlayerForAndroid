@@ -26,9 +26,12 @@ import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 
 /**
+ *
  * Base {@link SearchFragment} class for every fragment in this application.
  *
- * Created by dmfrey on 2/27/16.
+ * @author dmfrey
+ *
+ * Created on 2/27/16.
  */
 public abstract class AbstractBaseSearchFragment extends SearchFragment {
 

@@ -20,19 +20,31 @@ package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.View;
 
-import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
+import com.google.gson.Gson;
+
 import org.mythtv.android.domain.SettingsKeys;
+import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.components.NetComponent;
+import org.mythtv.android.presentation.internal.di.components.SharedPreferencesComponent;
+
+import okhttp3.OkHttpClient;
 
 /**
+ *
  * Base {@link android.app.Fragment} class for every fragment in this application.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/30/15.
  */
 public abstract class AbstractBaseFragment extends Fragment {
+
+    protected OkHttpClient okHttpClient;
+    protected Gson gson;
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
@@ -40,10 +52,13 @@ public abstract class AbstractBaseFragment extends Fragment {
 
         setRetainInstance( true );
 
+        okHttpClient = getNetComponent().okHttpClient();
+        gson = getNetComponent().gson();
+
     }
 
     /**
-     * Shows a {@link android.widget.Toast} message.
+     * Shows a {@link android.support.design.widget.Snackbar} message.
      *
      * @param message A string representing a message to be shown.
      * @param retryMessage A string representing the retry message to be shown
@@ -69,8 +84,8 @@ public abstract class AbstractBaseFragment extends Fragment {
 
     protected String getMasterBackendUrl() {
 
-        String host = getSharedPreferencesModule().getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getSharedPreferencesModule().getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
+        String host = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "" );
+        String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
 
         return "http://" + host + ":" + port;
     }
@@ -78,11 +93,21 @@ public abstract class AbstractBaseFragment extends Fragment {
     /**
      * Get a SharedPreferences module for dependency injection.
      *
-     * @return {@link SharedPreferencesModule}
+     * @return {@link SharedPreferencesComponent}
      */
-    protected SharedPreferencesModule getSharedPreferencesModule() {
+    protected SharedPreferencesComponent getSharedPreferencesComponent() {
 
-        return new SharedPreferencesModule( getActivity() );
+        return ( (AndroidApplication) getActivity().getApplication() ).getSharedPreferencesComponent();
+    }
+
+    /**
+     * Get a Net module for dependency injection.
+     *
+     * @return {@link NetComponent}
+     */
+    protected NetComponent getNetComponent() {
+
+        return ( (AndroidApplication) getActivity().getApplication() ).getNetComponent();
     }
 
 }
