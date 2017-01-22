@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-import android.support.v17.leanback.widget.SpeechRecognitionCallback;
 import android.util.Log;
 
 import org.mythtv.android.R;
