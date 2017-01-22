@@ -296,6 +296,14 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
     void onButtonFabPlay() {
         Log.d( TAG, "onButtonFabPlay : enter" );
 
+        if( null == mediaItemModel || !mediaItemModel.isValid() ) {
+            Log.d( TAG, "onButtonFabPlay : exit, mediaItemModel is not valid" );
+
+            showToastMessage( "Entry is not valid and cannot be played.", null, null );
+
+            return;
+        }
+
         if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
             Log.d( TAG, "onButtonFabPlay : sending stream to internal player" );
 
