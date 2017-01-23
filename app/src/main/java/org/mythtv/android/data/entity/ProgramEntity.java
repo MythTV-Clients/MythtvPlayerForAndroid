@@ -23,12 +23,14 @@ import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-//import lombok.Data;
-
-/*
- * Created by dmfrey on 11/12/14.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/12/14.
  */
-//@Data
 public class ProgramEntity {
 
     @SerializedName( "StartTime" )
@@ -116,6 +118,8 @@ public class ProgramEntity {
     private CastEntity cast;
 
     private LiveStreamInfoEntity liveStreamInfoEntity;
+
+    private long bookmark;
 
     public ProgramEntity() {
     }
@@ -382,8 +386,21 @@ public class ProgramEntity {
         return liveStreamInfoEntity;
     }
 
-    public void setLiveStreamInfoEntity(LiveStreamInfoEntity liveStreamInfoEntity) {
+    public void setLiveStreamInfoEntity( LiveStreamInfoEntity liveStreamInfoEntity ) {
+
         this.liveStreamInfoEntity = liveStreamInfoEntity;
+
+    }
+
+    public long getBookmark() {
+
+        return bookmark;
+    }
+
+    public void setBookmark( long bookmark ) {
+
+        this.bookmark = bookmark;
+
     }
 
     @Override
@@ -418,6 +435,7 @@ public class ProgramEntity {
                 ", artwork=" + artwork +
                 ", cast=" + cast +
                 ", liveStreamInfoEntity=" + liveStreamInfoEntity +
+                ", bookmark=" + bookmark +
                 '}';
     }
 

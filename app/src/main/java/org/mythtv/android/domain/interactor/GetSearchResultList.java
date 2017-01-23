@@ -29,7 +29,12 @@ import javax.inject.Inject;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 10/12/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/12/15.
  */
 public class GetSearchResultList extends DynamicUseCase {
 

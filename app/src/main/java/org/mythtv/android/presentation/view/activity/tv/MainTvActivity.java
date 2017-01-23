@@ -32,14 +32,20 @@ import android.widget.TextView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 
-public class MainTvActivity extends AbstractBaseTvActivity implements HasComponent<DvrComponent> {
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
+public class MainTvActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent> {
 
     private static final String TAG = MainTvActivity.class.getSimpleName();
 
-    private DvrComponent dvrComponent;
+    private MediaComponent mediaComponent;
 
     @Override
     public int getLayoutResource() {
@@ -95,7 +101,7 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.dvrComponent = DaggerDvrComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .build();
 
@@ -103,19 +109,17 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
     }
 
     @Override
-    public DvrComponent getComponent() {
+    public MediaComponent getComponent() {
         Log.d( TAG, "getComponent : enter" );
 
         Log.d( TAG, "getComponent : exit" );
-        return dvrComponent;
+        return mediaComponent;
     }
 
     private class Category {
 
-        String title;
-        Integer drawable;
-
-        Category() { }
+        final String title;
+        final Integer drawable;
 
         Category( String title, Integer drawable ) {
 
@@ -129,21 +133,9 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
             return title;
         }
 
-        public void setTitle( String title ) {
-
-            this.title = title;
-
-        }
-
         public Integer getDrawable() {
 
             return drawable;
-        }
-
-        public void setDrawable( Integer drawable ) {
-
-            this.drawable = drawable;
-
         }
 
     }
@@ -151,7 +143,6 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
     private class CategoryAdapter extends BaseAdapter {
 
         private final Context mContext;
-        private final LayoutInflater mInflater;
 
         String[] titles = new String[] {
                 getResources().getString( R.string.drawer_item_watch_recordings ),
@@ -165,10 +156,10 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
                 R.drawable.tv_setting
         };
 
-        public CategoryAdapter( Context context ) {
+        CategoryAdapter( Context context ) {
 
             mContext = context;
-            mInflater = getLayoutInflater();
+
         }
 
         @Override

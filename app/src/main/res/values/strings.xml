@@ -32,7 +32,6 @@
     <string name="should_start" translatable="false">shouldStart</string>
 
     <string name="search_hint">Search Show, Movie, Actor, Character, Channel</string>
-    <string name="ready_to_stream">Ready to Stream</string>
 
     <string name="drawer_item_watch_recordings">Watch Recordings</string>
     <string name="drawer_item_watch_videos">Watch Videos</string>
@@ -66,7 +65,6 @@
     <string name="pref_internal_player">Internal Player</string>
     <string name="pref_internal_player_summary_on">Playback will be handled by the Internal Player</string>
     <string name="pref_internal_player_summary_off">Playback will be handled by an External Player</string>
-    <string name="pref_external_player">External Player</string>
     <string name="pref_hls_video_width_title_summary">HLS transcode video width</string>
     <string name="pref_hls_video_height_title_summary">HLS transcode video height</string>
     <string name="pref_hls_video_bitrate_title_summary">HLS transcode video bitrate</string>
@@ -99,7 +97,6 @@
     <string name="pref_enable_parental_controls_summary_off">Parental Controls are disabled</string>
     <string name="pref_parental_control_level">Select highest Parental Control level displayed</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="settings_description" translatable="false" />
     <string name="recording_preferences">Recording Settings</string>
     <string name="recording_preferences_summary">Modify Recordings Display and Filters</string>
     <string name="pref_set_default_recording_group">Recording Group Settings [setting unavailable at this time]</string>
@@ -113,10 +110,6 @@
     <string name="exception_message_no_connection">Can\'t connect to mythbackend</string>
     <string name="exception_message_program_not_found" translatable="false">Cannot retrieve program data. Check your internet connection</string>
     <string name="recording_description_label" translatable="false">Details:</string>
-    <string name="recording_cast_label" translatable="false">Cast:</string>
-    <string name="recording_cast_name" translatable="false">Name</string>
-    <string name="recording_cast_character" translatable="false">Character</string>
-    <string name="recording_cast_role" translatable="false">Role</string>
 
     <string name="encoder" translatable="false">Encoder %1$s [%2$s] is %3$s</string>
     <string name="encoder_state_error" translatable="false">in an errored state</string>
@@ -130,7 +123,7 @@
     <string name="encoder_state_recording">recording</string>
     <string name="encoder_state_changing_state" translatable="false">changing state</string>
 
-    <string name="minutes" translatable="false">%1$s Minutes</string>
+    <string name="minutes" translatable="false">%1$s Min</string>
 
     <string name="retry" translatable="false">Retry</string>
     <string name="drawer_item_home" translatable="false">Home</string>
@@ -167,12 +160,6 @@
     <string name="remove_live_stream_positive_label">Remove</string>
     <string name="add_live_stream_positive_label">Create</string>
     <string name="add_live_stream_title">Create Live Stream?</string>
-    <string name="http_live_stream">HTTP Live Stream %1$s</string>
-    <string name="http_live_stream_unavailable">HTTP Live Stream Unavailable</string>
-    <string name="http_live_stream_available">HTTP Live Stream Available on %1$s</string>
-    <string name="unavailable">Unavailable</string>
-    <string name="watched">Watched</string>
-    <string name="unwatched">Unwatched</string>
 
     <string name="pref_timeouts">Master Backend Timeouts</string>
     <string name="pref_timeouts_summary">Timeout settings for connecting to the Master Backend. This is an advanced feature and is not normally needed to change. If you are seeing errors because you have a large library, consider increasing these values. Only set it to \'No Timeout\' if no other values work.</string>
@@ -196,19 +183,33 @@
 
     <!-- Introductory Overlay text -->
     <string name="castErrorLabel">This item can not be displayed on a Google Cast device.</string>
-    <string name="playbackErrorLabel">This recording can not be played with the Internal Player. Please consider using an External Player, such as VLC for Android, or transcoding the recording to HLS or MP4.</string>
+    <string name="castNotReadyLabel">This item is not yet ready for casting, please try again later.</string>
     <string name="ok">OK</string>
     <string name="error">Error</string>
 
     <string name="video_error_media_load_timeout">Media loading timed out</string>
     <string name="video_error_server_unaccessible">Media server was not reachable</string>
     <string name="video_error_unknown_error">Failed to load video</string>
-    <string name="transition_image">transition-image</string>
+    <string name="transition_image" translatable="false">transition-image</string>
     <string name="loading">Loading&#8230;</string>
 
     <string name="pref_enable_analytics_label">Analytics &amp; Crash Reporting</string>
     <string name="pref_enable_analytics_title">Enable Analytics &amp; Crash Reporting</string>
     <string name="pref_enable_analytics_summary_on">Anonymous Analytics &amp; Crash Reports will be sent</string>
     <string name="pref_enable_analytics_summary_off">Anonymous Analytics &amp; Crash Reports will not be sent</string>
+    <string name="action_create_hls_stream">Create HTTP Live Stream</string>
+    <string name="action_remove_hls_stream">Remove HTTP Live Stream</string>
+    <string name="action_mark_watched">Mark Watched</string>
+    <string name="action_mark_unwatched">Mark Unwatched</string>
+    <string name="cd_background">background</string>
+    <string name="cd_coverart">coverart</string>
+    <string name="cd_play">play</string>
+    <string name="cd_bookmark">bookmark</string>
+    <string name="cd_image_view_button_1">image view button 1</string>
+    <string name="cd_image_view_button_2">image_view_button_2</string>
+    <string name="cd_image_view_button_3">image_view_button_2</string>
+    <string name="cd_image_view_button_4">image view button 4</string>
+    <string name="cd_image_view_button_5">image view button 5</string>
+    <string name="player_timer" translatable="false">0:00</string>
 
 </resources>

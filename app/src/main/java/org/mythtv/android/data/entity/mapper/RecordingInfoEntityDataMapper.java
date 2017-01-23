@@ -28,7 +28,12 @@ import java.util.List;
 import javax.inject.Singleton;
 
 /**
- * Created by dmfrey on 1/18/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/18/16.
  */
 @Singleton
 public class RecordingInfoEntityDataMapper {

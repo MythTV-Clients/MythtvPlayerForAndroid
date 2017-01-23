@@ -22,6 +22,12 @@ import android.os.Bundle;
 
 import org.mythtv.android.R;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class RecordingSettingsActivity extends AbstractBasePhoneActivity {
 
     private static final String TAG = RecordingSettingsActivity.class.getSimpleName();
@@ -36,12 +42,6 @@ public class RecordingSettingsActivity extends AbstractBasePhoneActivity {
         super.onCreate( savedInstanceState );
 
         setTitle( getResources().getString( R.string.recording_preferences ) );
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
     }
 

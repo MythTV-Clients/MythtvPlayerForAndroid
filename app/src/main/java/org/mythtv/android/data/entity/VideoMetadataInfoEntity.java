@@ -22,12 +22,14 @@ import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
 
-//import lombok.Data;
-
-/*
- * Created by dmfrey on 10/30/15.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/30/15.
  */
-//@Data
 public class VideoMetadataInfoEntity {
 
     @SerializedName( "Id" )
@@ -128,6 +130,8 @@ public class VideoMetadataInfoEntity {
 
     @SerializedName( "Cast" )
     private CastEntity cast;
+
+    private LiveStreamInfoEntity liveStreamInfoEntity;
 
     public VideoMetadataInfoEntity() {
     }
@@ -434,6 +438,17 @@ public class VideoMetadataInfoEntity {
         this.cast = cast;
     }
 
+    public LiveStreamInfoEntity getLiveStreamInfoEntity() {
+
+        return liveStreamInfoEntity;
+    }
+
+    public void setLiveStreamInfoEntity( LiveStreamInfoEntity liveStreamInfoEntity ) {
+
+        this.liveStreamInfoEntity = liveStreamInfoEntity;
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -486,6 +501,7 @@ public class VideoMetadataInfoEntity {
                 ", trailer='" + trailer + '\'' +
                 ", artwork=" + artwork +
                 ", cast=" + cast +
+                ", liveStreamInfoEntity=" + liveStreamInfoEntity +
                 '}';
     }
 

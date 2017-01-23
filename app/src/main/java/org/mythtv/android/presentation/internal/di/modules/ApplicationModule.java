@@ -22,8 +22,6 @@ import android.content.Context;
 
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.data.cache.VideoCacheImpl;
-import org.mythtv.android.data.cache.ProgramCache;
-import org.mythtv.android.data.cache.ProgramCacheImpl;
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.executor.JobExecutor;
 import org.mythtv.android.data.repository.ContentDataRepository;
@@ -46,7 +44,9 @@ import dagger.Provides;
 /**
  * Dagger module that provides objects which will live during the application lifecycle.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Module
 public class ApplicationModule {
@@ -77,13 +77,6 @@ public class ApplicationModule {
     PostExecutionThread providePostExecutionThread( UIThread uiThread ) {
 
         return uiThread;
-    }
-
-    @Provides
-    @Singleton
-    ProgramCache provideRecordedProgramCache( ProgramCacheImpl recordedProgramCache ) {
-
-        return recordedProgramCache;
     }
 
     @Provides

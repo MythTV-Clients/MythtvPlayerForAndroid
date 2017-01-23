@@ -22,9 +22,12 @@ import android.util.Log;
 
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
-import org.mythtv.android.data.entity.mapper.SearchResultEntityDataMapper;
+import org.mythtv.android.data.entity.mapper.MediaItemDataMapper;
 import org.mythtv.android.data.net.VideoApi;
+import org.mythtv.android.domain.MediaItem;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -33,7 +36,12 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by dmfrey on 11/9/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/9/15.
  */
 public class MasterBackendVideoDataStore implements VideoDataStore {
 
@@ -55,16 +63,27 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
             };
 
     private final Action1<List<VideoMetadataInfoEntity>> saveVideosToDbAction =
-            entities -> {
+            videoEntities -> {
 
-                if( null != entities ) {
+                if( null != videoEntities ) {
 
                     final SearchDataStore searchDataStore = MasterBackendVideoDataStore.this.searchDataStoreFactory.createWriteSearchDataStore();
 
                     Observable
-                        .from( entities )
+                        .from( videoEntities )
                         .toList()
-                        .map( SearchResultEntityDataMapper::transformVideos )
+                        .map( entities -> {
+
+                            try {
+
+                                return MediaItemDataMapper.transformVideos( entities );
+
+                            } catch( UnsupportedEncodingException e ) {
+                                Log.e( TAG, "saveVideosToDbAction : error", e );
+                            }
+
+                            return new ArrayList<MediaItem>();
+                        })
                         .subscribe( searchDataStore::refreshVideoData );
                 }
 

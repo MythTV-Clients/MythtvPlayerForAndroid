@@ -26,6 +26,7 @@ import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoListWrapperEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoWrapperEntity;
 
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
@@ -33,11 +34,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class VideoMetadataInfoEntityJsonMapper {
-
-    private static final String TAG = VideoMetadataInfoEntityJsonMapper.class.getSimpleName();
 
     private final Gson gson;
 
@@ -48,17 +52,15 @@ public class VideoMetadataInfoEntityJsonMapper {
 
     }
 
-    public VideoMetadataInfoEntity transformVideoMetadataInfoEntity( String videoMetadataInfoJsonResponse ) throws JsonSyntaxException {
-//        Log.d( TAG, "transformVideoMetadataInfoEntity : enter" );
+    public VideoMetadataInfoEntity transformVideoMetadataInfoEntity( Reader videoMetadataInfoJsonResponse ) throws JsonSyntaxException {
 
-//        Log.d( TAG, "transformVideoMetadataInfoEntity : videoMetadataInfoJsonResponse=" + videoMetadataInfoJsonResponse );
         Type videoMetadataInfoWrapperEntityType = new TypeToken<VideoMetadataInfoWrapperEntity>() {}.getType();
         VideoMetadataInfoWrapperEntity videoMetadataInfoWrapperEntity = this.gson.fromJson( videoMetadataInfoJsonResponse, videoMetadataInfoWrapperEntityType );
 
         return videoMetadataInfoWrapperEntity.getVideoMetadataInfo();
     }
 
-    public List<VideoMetadataInfoEntity> transformVideoMetadataInfoEntityCollection( String videoMetadataInfoListJsonResponse ) throws JsonSyntaxException {
+    public List<VideoMetadataInfoEntity> transformVideoMetadataInfoEntityCollection( Reader videoMetadataInfoListJsonResponse ) throws JsonSyntaxException {
 
         Type videoMetadataInfoListEntityType = new TypeToken<VideoMetadataInfoListWrapperEntity>() {}.getType();
         VideoMetadataInfoListWrapperEntity videoMetadataInfoListEntity = gson.fromJson( videoMetadataInfoListJsonResponse, videoMetadataInfoListEntityType );

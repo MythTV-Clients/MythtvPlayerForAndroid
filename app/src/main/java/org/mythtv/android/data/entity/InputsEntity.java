@@ -22,12 +22,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 
-//import lombok.Data;
-
 /**
- * Created by dmfrey on 1/18/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/18/16.
  */
-//@Data
 public class InputsEntity {
 
     @SerializedName( "Input" )

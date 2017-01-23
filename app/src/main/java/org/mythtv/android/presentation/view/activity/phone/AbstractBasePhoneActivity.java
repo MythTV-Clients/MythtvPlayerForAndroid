@@ -23,11 +23,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -38,6 +40,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
@@ -53,7 +56,6 @@ import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.NetComponent;
 import org.mythtv.android.presentation.internal.di.components.SharedPreferencesComponent;
-import org.mythtv.android.presentation.model.LiveStreamInfoModel;
 import org.mythtv.android.presentation.navigation.PhoneNavigator;
 import org.mythtv.android.presentation.view.fragment.phone.AboutDialogFragment;
 
@@ -65,13 +67,13 @@ import butterknife.ButterKnife;
 /**
  * Base {@link android.app.Activity} class for every Activity in this application.
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/30/15.
  */
 public abstract class AbstractBasePhoneActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = AbstractBasePhoneActivity.class.getSimpleName();
-
-    protected LiveStreamInfoModel liveStreamInfoModel;
 
     protected CastContext mCastContext;
     protected MenuItem mediaRouteMenuItem;
@@ -88,6 +90,8 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
 
     protected FirebaseAnalytics mFirebaseAnalytics;
 
+    private View rootView;
+
     public abstract int getLayoutResource();
 
     @Override
@@ -97,6 +101,8 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         this.getApplicationComponent().inject( this );
         setContentView( getLayoutResource() );
         ButterKnife.bind( this );
+
+        rootView = findViewById(android.R.id.content);
 
         if( !FirebaseApp.getApps( this ).isEmpty() ) {
 
@@ -193,8 +199,8 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     }
 
     @Override
-    public boolean onNavigationItemSelected( MenuItem menuItem ) {
-        Log.i(TAG, "onNavigationItemSelected : enter");
+    public boolean onNavigationItemSelected( @NonNull MenuItem menuItem ) {
+        Log.i( TAG, "onNavigationItemSelected : enter" );
 
         menuItem.setChecked( true );
         drawerLayout.closeDrawers();
@@ -246,7 +252,7 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
             case R.id.navigation_item_about :
                 Log.i( TAG, "onNavigationItemSelected : about clicked" );
 
-                FragmentManager fm = getSupportFragmentManager();
+                FragmentManager fm = getFragmentManager();
                 AboutDialogFragment fragment = new AboutDialogFragment();
                 fragment.show( fm, "About Dialog Fragment" );
 
@@ -281,17 +287,37 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     }
 
     /**
+     * Replaces a {@link Fragment} to this activity's layout.
+     *
+     * @param containerViewId The container view to where add the fragment.
+     * @param fragment The fragment to be added.
+     */
+    protected void replaceFragment( int containerViewId, Fragment fragment ) {
+        Log.v( TAG, "replaceFragment : enter" );
+
+        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
+        fragmentTransaction.replace( containerViewId, fragment );
+        fragmentTransaction.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
+        fragmentTransaction.commit();
+
+        Log.v( TAG, "replaceFragment : exit" );
+    }
+
+    /**
      * Adds a {@link Fragment} to this activity's layout.
      *
      * @param containerViewId The container view to where add the fragment.
      * @param fragment The fragment to be added.
      */
     protected void addFragment( int containerViewId, Fragment fragment ) {
+        Log.v( TAG, "addFragment : enter" );
 
-        FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
         fragmentTransaction.add( containerViewId, fragment );
+        fragmentTransaction.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
         fragmentTransaction.commit();
 
+        Log.v( TAG, "addFragment : exit" );
     }
 
     /**
@@ -330,6 +356,22 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
         String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
 
         return "http://" + host + ":" + port;
+
+    }
+
+    /**
+     * Shows a {@link android.support.design.widget.Snackbar} message.
+     *
+     * @param message A string representing a message to be shown.
+     * @param retryMessage A string representing the retry message to be shown
+     * @param retryOnClickListener An onClickListener to handle retries
+     */
+    protected void showToastMessage( String message, String retryMessage, View.OnClickListener retryOnClickListener ) {
+
+        Snackbar
+                .make( rootView, message, Snackbar.LENGTH_LONG )
+                .setAction( retryMessage, retryOnClickListener )
+                .show();
 
     }
 

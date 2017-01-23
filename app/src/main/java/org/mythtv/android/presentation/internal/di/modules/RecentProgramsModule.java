@@ -33,7 +33,9 @@ import dagger.Provides;
 /**
  * Dagger module that provides programs related collaborators.
  *
- * Created by dmfrey on 1/24/16.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 @Module
 public class RecentProgramsModule {

@@ -1,0 +1,6 @@
+1714220
+=============
+- Unterstützung für Wiedergabe auf Chromecast
+- optionale Firebase Analytics hinzugefügt
+- Abstürze werden nun direkt zu Firebase Crash berichtet
+- Artikel zur Übersetzung ausgegliedert um die Sortierung zu verbessern

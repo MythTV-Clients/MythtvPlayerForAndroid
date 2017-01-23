@@ -21,7 +21,6 @@ package org.mythtv.android.data.cache;
 import android.content.Context;
 import android.util.Log;
 
-import org.mythtv.android.data.cache.serializer.VideoEntityJsonSerializer;
 import org.mythtv.android.data.cache.serializer.VideoListEntityJsonSerializer;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoListEntity;
@@ -37,7 +36,12 @@ import javax.inject.Singleton;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 11/3/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/3/15.
  */
 @Singleton
 public class VideoCacheImpl implements VideoCache {
@@ -52,7 +56,6 @@ public class VideoCacheImpl implements VideoCache {
 
     private final Context context;
     private final File cacheDir;
-    private final VideoEntityJsonSerializer videoEntityJsonSerializer;
     private final VideoListEntityJsonSerializer videoListEntityJsonSerializer;
     private final FileManager fileManager;
     private final ThreadExecutor threadExecutor;
@@ -61,21 +64,20 @@ public class VideoCacheImpl implements VideoCache {
      * Constructor of the class {@link VideoCacheImpl}.
      *
      * @param context A
-     * @param videoEntityJsonSerializer {@link VideoEntityJsonSerializer} for object serialization.
+     * @param videoListEntityJsonSerializer {@link VideoListEntityJsonSerializer} for object serialization.
      * @param fileManager {@link FileManager} for saving serialized objects to the file system.
      */
     @Inject
-    public VideoCacheImpl(Context context, VideoEntityJsonSerializer videoEntityJsonSerializer, VideoListEntityJsonSerializer videoListEntityJsonSerializer, FileManager fileManager, ThreadExecutor executor ) {
+    VideoCacheImpl( Context context, VideoListEntityJsonSerializer videoListEntityJsonSerializer, FileManager fileManager, ThreadExecutor executor ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( context == null || videoEntityJsonSerializer == null || videoListEntityJsonSerializer == null || fileManager == null || executor == null ) {
+        if( context == null || videoListEntityJsonSerializer == null || fileManager == null || executor == null ) {
 
             throw new IllegalArgumentException( "Invalid null parameter" );
         }
 
         this.context = context.getApplicationContext();
         this.cacheDir = new File( this.context.getCacheDir().getPath() + File.separator + "videos" );
-        this.videoEntityJsonSerializer = videoEntityJsonSerializer;
         this.videoListEntityJsonSerializer = videoListEntityJsonSerializer;
         this.fileManager = fileManager;
         this.threadExecutor = executor;
@@ -138,23 +140,6 @@ public class VideoCacheImpl implements VideoCache {
                 .doOnNext( entity -> Log.d( TAG, "getCategory : entity=" + entity ) )
                 .toList();
 
-    }
-
-    @Override
-    public Observable<List<VideoMetadataInfoEntity>> getDirectory( final String directory ) {
-        Log.d( TAG, "getDirectory : enter" );
-        Log.d( TAG, "getDirectory : directory=" + directory );
-
-        if( !isCached() ) {
-            Log.d( TAG, "getDirectory : exit, not cached on disk" );
-
-            return Observable.empty();
-        }
-
-        return readFromFile()
-                .flatMap( Observable::from )
-                .filter( entity -> entity.getFileName().startsWith( directory ) )
-                .toList();
     }
 
     @Override

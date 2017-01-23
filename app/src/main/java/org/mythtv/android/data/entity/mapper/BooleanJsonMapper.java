@@ -22,14 +22,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.Reader;
+
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 10/17/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/17/15.
  */
 public class BooleanJsonMapper {
-
-    private static final String TAG = BooleanJsonMapper.class.getSimpleName();
 
     private final JsonParser parser;
 
@@ -40,9 +45,8 @@ public class BooleanJsonMapper {
 
     }
 
-    public Boolean transformBoolean( String booleanJsonResponse ) throws JsonSyntaxException {
+    public Boolean transformBoolean( Reader booleanJsonResponse ) throws JsonSyntaxException {
 
-//        Log.i( TAG, "transformBoolean : booleanJsonResponse=" + booleanJsonResponse );
         JsonObject rootObject = parser.parse( booleanJsonResponse ).getAsJsonObject();
 
         return rootObject.get( "bool" ).getAsBoolean();

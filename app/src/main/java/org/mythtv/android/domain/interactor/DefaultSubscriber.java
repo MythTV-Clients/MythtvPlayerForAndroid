@@ -21,7 +21,9 @@ package org.mythtv.android.domain.interactor;
 /**
  * Default subscriber base class to be used whenever you want default error handling.
  *
- * Created by dmfrey on 8/26/15.
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 public class DefaultSubscriber<T> extends rx.Subscriber<T> {
 

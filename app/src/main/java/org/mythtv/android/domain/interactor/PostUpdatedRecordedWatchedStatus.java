@@ -28,7 +28,12 @@ import java.util.Map;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 4/9/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/9/16.
  */
 public class PostUpdatedRecordedWatchedStatus extends DynamicUseCase {
 

@@ -28,7 +28,12 @@ import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by dmfrey on 4/12/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/12/16.
  */
 public abstract class DynamicUseCase extends UseCase {
 
@@ -47,7 +52,7 @@ public abstract class DynamicUseCase extends UseCase {
     @SuppressWarnings( "unchecked" )
     public void execute( Subscriber UseCaseSubscriber, Map parameters ) {
         this.subscription = this.buildUseCaseObservable( parameters )
-                .subscribeOn(Schedulers.from( threadExecutor ) )
+                .subscribeOn( Schedulers.from( threadExecutor ) )
                 .observeOn( postExecutionThread.getScheduler() )
                 .subscribe( UseCaseSubscriber );
     }

@@ -31,25 +31,20 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 
-
-/*
- * Created by dmfrey on 4/7/15.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/7/15.
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
-
-    private static final String TAG = SettingsFragment.class.getSimpleName();
 
     @Override
     public void onCreatePreferences( Bundle bundle, String s ) {
 
         addPreferencesFromResource( R.xml.preferences );
-
-    }
-
-    @Override
-    public void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
-
 
     }
 

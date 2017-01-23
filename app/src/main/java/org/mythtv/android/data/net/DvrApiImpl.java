@@ -33,15 +33,16 @@ import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 import org.mythtv.android.domain.SettingsKeys;
 
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,12 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class DvrApiImpl implements DvrApi {
 
@@ -66,10 +72,11 @@ public class DvrApiImpl implements DvrApi {
     private final ProgramEntityJsonMapper programEntityJsonMapper;
     private final EncoderEntityJsonMapper encoderEntityJsonMapper;
     private final BooleanJsonMapper booleanJsonMapper;
+    private final LongJsonMapper longJsonMapper;
 
-    public DvrApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, ProgramEntityJsonMapper programEntityJsonMapper, EncoderEntityJsonMapper encoderEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
+    public DvrApiImpl( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, final ProgramEntityJsonMapper programEntityJsonMapper, final EncoderEntityJsonMapper encoderEntityJsonMapper, final BooleanJsonMapper booleanJsonMapper, final LongJsonMapper longJsonMapper ) {
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper ) {
+        if( null == context || null == sharedPreferences || null == okHttpClient || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper || null == longJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
@@ -81,6 +88,7 @@ public class DvrApiImpl implements DvrApi {
         this.programEntityJsonMapper = programEntityJsonMapper;
         this.encoderEntityJsonMapper = encoderEntityJsonMapper;
         this.booleanJsonMapper = booleanJsonMapper;
+        this.longJsonMapper = longJsonMapper;
 
     }
 
@@ -94,19 +102,19 @@ public class DvrApiImpl implements DvrApi {
                 Log.d(TAG, "titleInfoEntityList.call : enter");
 
                 if( isThereInternetConnection() ) {
-                    Log.d(TAG, "titleInfoEntityList.call : network is connected");
+                    Log.d( TAG, "titleInfoEntityList.call : network is connected" );
 
                     try {
 
-                        String responseRecordedProgramEntities = getTitleInfoEntitiesFromApi();
+                        Reader responseRecordedProgramEntities = getTitleInfoEntitiesFromApi();
                         if( null != responseRecordedProgramEntities ) {
-                            Log.d(TAG, "titleInfoEntityList.call : retrieved title info entities");
+                            Log.d( TAG, "titleInfoEntityList.call : retrieved title info entities" );
 
                             subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( responseRecordedProgramEntities ) );
                             subscriber.onCompleted();
 
                         } else {
-                            Log.d(TAG, "titleInfoEntityList.call : failed to retrieve title info entities");
+                            Log.d( TAG, "titleInfoEntityList.call : failed to retrieve title info entities" );
 
                             subscriber.onError( new NetworkConnectionException() );
 
@@ -149,7 +157,7 @@ public class DvrApiImpl implements DvrApi {
 
                     try {
 
-                        String responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
+                        Reader responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
                         if( null != responseRecordedProgramEntities ) {
                             Log.d( TAG, "recordedProgramEntityList.call : retrieved program entities" );
 
@@ -185,7 +193,7 @@ public class DvrApiImpl implements DvrApi {
     }
 
     @Override
-    public Observable<ProgramEntity> recordedProgramById( int chanId, DateTime startTime ) {
+    public Observable<ProgramEntity> recordedProgramById( final int recordedId, final int chanId, final DateTime startTime ) {
 
         return Observable.create( new Observable.OnSubscribe<ProgramEntity>() {
 
@@ -196,7 +204,7 @@ public class DvrApiImpl implements DvrApi {
 
                     try {
 
-                        String responseProgramDetails = getRecordedProgramDetailsFromApi( chanId, startTime );
+                        Reader responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId, chanId, startTime );
                         if( null != responseProgramDetails ) {
 
                             subscriber.onNext( programEntityJsonMapper.transformProgramEntity( responseProgramDetails ) );
@@ -242,7 +250,7 @@ public class DvrApiImpl implements DvrApi {
 
                     try {
 
-                        String responseUpcomingProgramEntities = getUpcomingProgramEntitiesFromApi( startIndex, count, showAll, recordId, recStatus );
+                        Reader responseUpcomingProgramEntities = getUpcomingProgramEntitiesFromApi( startIndex, count, showAll, recordId, recStatus );
                         if( null != responseUpcomingProgramEntities ) {
                             Log.d( TAG, "upcomingEntityList.call : retrieved program entities" );
 
@@ -291,7 +299,7 @@ public class DvrApiImpl implements DvrApi {
 
                     try {
 
-                        String responseEncoderEntities = getEncoderEntitiesFromApi();
+                        Reader responseEncoderEntities = getEncoderEntitiesFromApi();
                         if( null != responseEncoderEntities ) {
                             Log.d(TAG, "encoderEntityList.call : retrieved encoder entities");
 
@@ -327,7 +335,7 @@ public class DvrApiImpl implements DvrApi {
     }
 
     @Override
-    public Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched ) {
+    public Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) {
 
         return Observable.create( new Observable.OnSubscribe<Boolean>() {
 
@@ -336,11 +344,11 @@ public class DvrApiImpl implements DvrApi {
                 Log.d( TAG, "updateWatchedStatus.call : enter" );
 
                 if( isThereInternetConnection() ) {
-                    Log.d(TAG, "updateWatchedStatus.call : network is connected");
+                    Log.d( TAG, "updateWatchedStatus.call : network is connected" );
 
                     try {
 
-                        String response = postUpdateWatchedStatus( chanId, startTime, watched );
+                        Reader response = postUpdateWatchedStatus( chanId, startTime, watched );
                         if( null != response ) {
                             Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
 
@@ -362,29 +370,78 @@ public class DvrApiImpl implements DvrApi {
                     }
 
                 } else {
-                    Log.d( TAG, "encoderEntityList.call : network is not connected" );
+                    Log.d( TAG, "updateWatchedStatus.call : network is not connected" );
 
                     subscriber.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d( TAG, "encoderEntityList.call : exit" );
+                Log.d( TAG, "updateWatchedStatus.call : exit" );
             }
 
         });
 
     }
 
-    private String getTitleInfoEntitiesFromApi() throws MalformedURLException {
+    @Override
+    public Observable<Long> getBookmark( final int recordedId, final int chanId, final DateTime startTime, final String offsetType) {
+
+        return Observable.create( new Observable.OnSubscribe<Long>() {
+
+            @Override
+            public void call( Subscriber<? super Long> subscriber ) {
+                Log.d( TAG, "getBookmark.call : enter" );
+
+                if( isThereInternetConnection() ) {
+                    Log.d(TAG, "getBookmark.call : network is connected");
+
+                    try {
+
+                        Reader response = getBookmarkFromApi( recordedId, chanId, startTime, offsetType );
+                        if( null != response ) {
+                            Log.d( TAG, "getBookmark.call : retrieved status update" );
+
+                            subscriber.onNext( longJsonMapper.transformLong( response ) );
+                            subscriber.onCompleted();
+
+                        } else {
+                            Log.d( TAG, "getBookmark.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "getBookmark.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d( TAG, "getBookmark.call : network is not connected" );
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d( TAG, "getBookmark.call : exit" );
+            }
+
+        });
+
+    }
+
+    private Reader getTitleInfoEntitiesFromApi() throws MalformedURLException {
 
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + TITLE_INFO_LIST_URL ).requestSyncCall();
     }
 
-    private String getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
+    private Reader getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
-        sb.append(RECORDED_LIST_BASE_URL);
+        sb.append( RECORDED_LIST_BASE_URL );
         sb.append( "?" );
         sb.append( String.format( DESCENDING_QS, descending ) );
 
@@ -434,19 +491,36 @@ public class DvrApiImpl implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String getRecordedProgramDetailsFromApi( int chanId, DateTime startTime ) throws MalformedURLException {
-
-        String apiUrl = String.format(RECORDED_BASE_URL, chanId, fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
-
-        Log.i( TAG, "getRecordedProgramDetailsFromApi : apiUrl=" + ( getMasterBackendUrl() + apiUrl ) );
-        return ApiConnection.create( okHttpClient, getMasterBackendUrl() + apiUrl ).requestSyncCall();
-    }
-
-    private String getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
+    private Reader getRecordedProgramDetailsFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
-        sb.append(UPCOMING_LIST_BASE_URL);
+        sb.append( RECORDED_BASE_URL );
+        sb.append( "?" );
+
+        if( recordedId != -1 ) {
+
+            sb.append( String.format( RECORDED_ID_QS, recordedId ) );
+
+        }
+
+        if( chanId != -1 && null != startTime ) {
+
+            sb.append( String.format( CHAN_ID_QS, chanId ) );
+            sb.append( "&" );
+            fmt.print( startTime.withZone( DateTimeZone.UTC ) );
+
+        }
+
+        Log.i( TAG, "getRecordedProgramDetailsFromApi : apiUrl=" + sb.toString() );
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
+    }
+
+    private Reader getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() );
+        sb.append( UPCOMING_LIST_BASE_URL );
         sb.append( "?" );
         sb.append( String.format( SHOW_ALL_QS, showAll ) );
 
@@ -482,13 +556,13 @@ public class DvrApiImpl implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String getEncoderEntitiesFromApi() throws MalformedURLException {
+    private Reader getEncoderEntitiesFromApi() throws MalformedURLException {
 
         Log.i( TAG, "getEncoderEntitiesFromApi : url=" + ( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ) );
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + ENCODER_LIST_BASE_URL ).requestSyncCall();
     }
 
-    private String postUpdateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
+    private Reader postUpdateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put( "ChanId", String.valueOf( chanId ) );
@@ -497,6 +571,38 @@ public class DvrApiImpl implements DvrApi {
 
         Log.i( TAG, "postUpdateWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ) );
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ).requestSyncCall( parameters );
+    }
+
+    private Reader getBookmarkFromApi( final int recordedId, final int chanId, final DateTime startTime, final String offsetType ) throws MalformedURLException {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() );
+        sb.append( BOOKMARK_BASE_URL );
+        sb.append( "?" );
+
+        if( recordedId != -1 ) {
+
+            sb.append( String.format( RECORDED_ID_QS, recordedId ) );
+
+        }
+
+        if( chanId != -1 && null != startTime ) {
+
+            sb.append( String.format( CHAN_ID_QS, chanId ) );
+            sb.append( "&" );
+            fmt.print( startTime.withZone( DateTimeZone.UTC ) );
+
+        }
+
+        if( null != offsetType && !"".equals( offsetType ) ) {
+
+            sb.append( "&" );
+            sb.append( String.format( OFFSET_TYPE_QS, offsetType ) );
+
+        }
+
+        Log.i( TAG, "getBookmarkFromApi : apiUrl=" + sb.toString() );
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
     private boolean isThereInternetConnection() {
@@ -512,8 +618,8 @@ public class DvrApiImpl implements DvrApi {
 
     private String getMasterBackendUrl() {
 
-        String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+        String host = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         String masterBackend = "http://" + host + ":" + port;
         Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
@@ -521,7 +627,7 @@ public class DvrApiImpl implements DvrApi {
         return masterBackend;
     }
 
-    private String getFromPreferences( Context context, String key ) {
+    private String getFromPreferences( String key ) {
 
         return sharedPreferences.getString( key, "" );
     }
