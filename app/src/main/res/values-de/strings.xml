@@ -171,5 +171,6 @@
     <string name="video_error_media_load_timeout">Media loading timed out</string>
     <string name="video_error_server_unaccessible">Media server was not reachable</string>
     <string name="video_error_unknown_error">Failed to load video</string>
+    <string name="media_item_details_corrupt_data">Data is corrupt, check backend</string>
 
 </resources>

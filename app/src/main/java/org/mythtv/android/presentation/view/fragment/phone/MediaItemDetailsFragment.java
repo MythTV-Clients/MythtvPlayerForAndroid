@@ -790,6 +790,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
                 }
 
+            } else {
+
+                showToastMessage( getString(R.string.media_item_details_corrupt_data), null, null );
             }
 
             return null;
