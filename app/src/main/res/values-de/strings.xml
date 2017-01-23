@@ -186,5 +186,8 @@
     <string name="troubleshoot_ping_failed">Master Backend Ping failed</string>
     <string name="troubleshoot_services_connected">MythTV Services API is connected</string>
     <string name="troubleshoot_services_not_connected">MythTV Services API unreachable</string>
+    <string name="backend_language_verified_label">Backend Language is UTF-8</string>
+    <string name="backend_lang_is_utf8">Backend Language is UTF-8</string>
+    <string name="backend_lang_is_not_utf8">Backend Language is not UTF-8</string>
 
 </resources>

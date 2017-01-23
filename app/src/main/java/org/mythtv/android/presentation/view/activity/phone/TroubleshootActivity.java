@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import com.google.firebase.crash.FirebaseCrash;
 
 import org.mythtv.android.R;
+import org.mythtv.android.data.entity.mapper.BackendLangJsonMapper;
 import org.mythtv.android.data.entity.mapper.StringJsonMapper;
 
 import java.io.IOException;
@@ -70,6 +71,12 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     @BindView( R.id.services_connected_image )
     ImageView servicesConnectedImage;
 
+    @BindView( R.id.backend_lang_container )
+    LinearLayout backendLangContainer;
+
+    @BindView( R.id.backend_lang_image )
+    ImageView backendLangImage;
+
     @BindView( R.id.fab )
     FloatingActionButton fab;
 
@@ -77,6 +84,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     private NetworkConnectedAsyncTask networkConnectedAsyncTask;
     private PingConnectedAsyncTask pingConnectedAsyncTask;
     private ServicesConnectedAsyncTask servicesConnectedAsyncTask;
+    private BackendLangVerificationAsyncTask backendLangVerificationAsyncTask;
 
     private Animation pulse;
 
@@ -155,6 +163,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         networkConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
         pingConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
         servicesConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+        backendLangImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
 
         Log.v( TAG, "resetImages : enter" );
     }
@@ -261,7 +270,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 setImage( airplaneModeConnectedImage, R.drawable.ic_airplanemode_active_black_24dp );
 
-                showToastMessage( fab, getString( R.string.troubleshoot_device_in_airplane_mode ), getResources().getString( R.string.retry ), v -> new AirplaneModeConnectedAsyncTask().execute() );
+                showToastMessage( fab, getString( R.string.troubleshoot_device_in_airplane_mode ), getResources().getString( R.string.retry ), v -> startAirplaneModeCheckCheck() );
 
             } else {
 
@@ -319,7 +328,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 setImage( networkConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
-                showToastMessage( fab, getString( R.string.troubleshoot_network_not_connected ), getResources().getString( R.string.retry ), v -> new NetworkConnectedAsyncTask().execute() );
+                showToastMessage( fab, getString( R.string.troubleshoot_network_not_connected ), getResources().getString( R.string.retry ), v -> startNetworkConnectionCheck() );
 
             }
 
@@ -368,7 +377,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 setImage( pingConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
-                showToastMessage( fab, getString( R.string.troubleshoot_ping_failed ), getResources().getString( R.string.retry ), v -> new PingConnectedAsyncTask().execute() );
+                showToastMessage( fab, getString( R.string.troubleshoot_ping_failed ), getResources().getString( R.string.retry ), v -> startPingConnectionCheck() );
 
             }
 
@@ -379,6 +388,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     private void startServicesConnectionCheck() {
 
         setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( backendLangImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
         if( null != servicesConnectedAsyncTask &&  servicesConnectedAsyncTask.getStatus().equals( AsyncTask.Status.RUNNING ) ) {
 
@@ -431,11 +441,80 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 showToastMessage( fab, getString( R.string.troubleshoot_services_connected ), null, null );
 
+                startBackendLangVerificationCheck();
+
             } else {
 
                 setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
-                showToastMessage( fab, getString( R.string.troubleshoot_services_not_connected ), getResources().getString( R.string.retry ), v -> new ServicesConnectedAsyncTask().execute() );
+                showToastMessage( fab, getString( R.string.troubleshoot_services_not_connected ), getResources().getString( R.string.retry ), v -> startServicesConnectionCheck() );
+
+            }
+
+        }
+
+    }
+
+    private void startBackendLangVerificationCheck() {
+
+        setImage( backendLangImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+
+        if( null != backendLangVerificationAsyncTask && backendLangVerificationAsyncTask.getStatus().equals( AsyncTask.Status.RUNNING ) ) {
+
+            backendLangVerificationAsyncTask.cancel( true );
+
+        }
+
+        backendLangImage.startAnimation( pulse );
+
+        backendLangVerificationAsyncTask = new BackendLangVerificationAsyncTask();
+        new Handler().postDelayed(() -> backendLangVerificationAsyncTask.execute(), 2000 );
+
+    }
+
+    private class BackendLangVerificationAsyncTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground( Void... params ) {
+
+            final Request request = new Request.Builder()
+                    .url( getMasterBackendUrl() + "/Myth/GetBackendInfo" )
+                    .addHeader( "Accept", "application/json" )
+                    .cacheControl( CacheControl.FORCE_NETWORK )
+                    .get()
+                    .build();
+
+            try {
+
+                BackendLangJsonMapper mapper = new BackendLangJsonMapper();
+                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+                Log.d( TAG, "doInBackground : result=" + result );
+
+                return mapper.transformString( result );
+
+            } catch( IOException e ) {
+
+                Log.e( TAG, "doInBackground : error", e );
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute( String result ) {
+
+            if( null != result && result.endsWith( ".UTF-8" ) ) {
+
+                setImage( backendLangImage, R.drawable.ic_description_black_24dp );
+
+                showToastMessage( fab, getString( R.string.backend_lang_is_utf8 ), null, null );
+
+            } else {
+
+                setImage( backendLangImage, R.drawable.ic_warning_black_24dp );
+
+                showToastMessage( fab, getString( R.string.backend_lang_is_not_utf8 ), getResources().getString( R.string.retry ), v -> startBackendLangVerificationCheck() );
 
             }
 
