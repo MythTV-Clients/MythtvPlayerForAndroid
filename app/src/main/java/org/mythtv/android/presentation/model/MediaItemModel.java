@@ -472,7 +472,7 @@ public class MediaItemModel implements Serializable {
 
     public boolean isValid() {
 
-        return null == media || validationErrors.isEmpty();
+        return null != media && validationErrors.isEmpty();
     }
 
     @Override

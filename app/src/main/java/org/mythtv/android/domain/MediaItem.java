@@ -417,7 +417,7 @@ public class MediaItem {
 
     public boolean isValid() {
 
-        return null == media || validationErrors.isEmpty();
+        return null != media && validationErrors.isEmpty();
     }
 
     @Override
