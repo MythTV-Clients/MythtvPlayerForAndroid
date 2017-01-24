@@ -35,23 +35,26 @@ public class MediaItemDataMapper {
 
     public static MediaItem transform( ProgramEntity programEntity ) throws UnsupportedEncodingException {
 
+        boolean dateValidationError = false;
         MediaItem mediaItem = new MediaItem();
         mediaItem.setId( programEntity.getRecording().getRecordedId() );
 
-        if( null == programEntity.getStartTime() ) {
-            mediaItem.getValidationErrors().add( new Error( "StartTime", "StartTime is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        if( null == programEntity.getRecording().getStartTs() ) {
+            mediaItem.getValidationErrors().add( new Error( "StartTs", "StartTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            dateValidationError = true;
         }
 
-        if( null == programEntity.getEndTime() ) {
-            mediaItem.getValidationErrors().add( new Error( "EndTime", "EndTime is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        if( null == programEntity.getRecording().getEndTs() ) {
+            mediaItem.getValidationErrors().add( new Error( "EndTs", "EndTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            dateValidationError = true;
         }
 
-        if( null != programEntity.getChannel() && programEntity.getChannel().getChanId() != -1  ) {
-            mediaItem.getValidationErrors().add( new Error( "ChanId", "Channel Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
-        }
-
-        if( null != programEntity.getRecording() && programEntity.getRecording().getRecordedId() != -1  ) {
+        if( programEntity.getRecording().getRecordedId() == -1  ) {
             mediaItem.getValidationErrors().add( new Error( "RecordedId", "Recorded Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        }
+
+        if( programEntity.getChannel().getChanId() == -1  ) {
+            mediaItem.getValidationErrors().add( new Error( "ChanId", "Channel Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
         }
 
         switch( programEntity.getRecording().getStatus() ) {
@@ -94,13 +97,15 @@ public class MediaItemDataMapper {
         mediaItem.setSubTitle( programEntity.getSubTitle() );
         mediaItem.setInetref( programEntity.getInetref() );
         mediaItem.setDescription( programEntity.getDescription() );
-        mediaItem.setStartDate( programEntity.getStartTime() );
+        mediaItem.setStartDate(programEntity.getStartTime());
         mediaItem.setProgramFlags( programEntity.getProgramFlags() );
         mediaItem.setSeason( programEntity.getSeason() );
         mediaItem.setEpisode( programEntity.getEpisode() );
         mediaItem.setStudio( programEntity.getChannel().getCallSign() );
 
-        calculateDuration( mediaItem, programEntity.getRecording().getStartTs(), programEntity.getRecording().getEndTs() );
+        if( !dateValidationError ) {
+            calculateDuration( mediaItem, programEntity.getRecording().getStartTs(), programEntity.getRecording().getEndTs() );
+        }
 
         if( null != programEntity.getArtwork() ) {
 
