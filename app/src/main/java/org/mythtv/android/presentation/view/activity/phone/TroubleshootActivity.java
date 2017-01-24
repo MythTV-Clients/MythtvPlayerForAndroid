@@ -23,6 +23,7 @@ import com.google.firebase.crash.FirebaseCrash;
 
 import org.mythtv.android.R;
 import org.mythtv.android.data.entity.mapper.BackendLangJsonMapper;
+import org.mythtv.android.data.entity.mapper.BackendVersionJsonMapper;
 import org.mythtv.android.data.entity.mapper.StringJsonMapper;
 
 import java.io.IOException;
@@ -71,6 +72,12 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     @BindView( R.id.services_connected_image )
     ImageView servicesConnectedImage;
 
+    @BindView( R.id.backend_version_container )
+    LinearLayout backendVersionContainer;
+
+    @BindView( R.id.backend_version_image )
+    ImageView backendVersionImage;
+
     @BindView( R.id.backend_lang_container )
     LinearLayout backendLangContainer;
 
@@ -84,6 +91,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     private NetworkConnectedAsyncTask networkConnectedAsyncTask;
     private PingConnectedAsyncTask pingConnectedAsyncTask;
     private ServicesConnectedAsyncTask servicesConnectedAsyncTask;
+    private BackendVersionVerificationAsyncTask backendVersionVerificationAsyncTask;
     private BackendLangVerificationAsyncTask backendLangVerificationAsyncTask;
 
     private Animation pulse;
@@ -163,6 +171,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         networkConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
         pingConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
         servicesConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+        backendVersionImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
         backendLangImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
 
         Log.v( TAG, "resetImages : enter" );
@@ -441,13 +450,105 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 showToastMessage( fab, getString( R.string.troubleshoot_services_connected ), null, null );
 
-                startBackendLangVerificationCheck();
+                startBackendVersionVerificationCheck();
 
             } else {
 
                 setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
                 showToastMessage( fab, getString( R.string.troubleshoot_services_not_connected ), getResources().getString( R.string.retry ), v -> startServicesConnectionCheck() );
+
+            }
+
+        }
+
+    }
+
+    private void startBackendVersionVerificationCheck() {
+
+        setImage( backendVersionImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( backendLangImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+
+        if( null != backendVersionVerificationAsyncTask && backendVersionVerificationAsyncTask.getStatus().equals( AsyncTask.Status.RUNNING ) ) {
+
+            backendVersionVerificationAsyncTask.cancel( true );
+
+        }
+
+        backendVersionImage.startAnimation( pulse );
+
+        backendVersionVerificationAsyncTask = new BackendVersionVerificationAsyncTask();
+        new Handler().postDelayed(() -> backendVersionVerificationAsyncTask.execute(), 2000 );
+
+    }
+
+    private class BackendVersionVerificationAsyncTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground( Void... params ) {
+
+            final Request request = new Request.Builder()
+                    .url( getMasterBackendUrl() + "/Myth/GetBackendInfo" )
+                    .addHeader( "Accept", "application/json" )
+                    .cacheControl( CacheControl.FORCE_NETWORK )
+                    .get()
+                    .build();
+
+            try {
+
+                BackendVersionJsonMapper mapper = new BackendVersionJsonMapper();
+                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+                Log.d( TAG, "doInBackground : result=" + result );
+
+                return mapper.transformString( result );
+
+            } catch( IOException e ) {
+
+                Log.e( TAG, "doInBackground : error", e );
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute( String result ) {
+
+            if( null != result ) {
+
+                float minimumVersion = Float.parseFloat( getResources().getString( R.string.minimum_mythtv_version ) );
+                Log.d( TAG, "onPostExcecute : minimumVersion=" + minimumVersion );
+
+                if( result.startsWith( "v" ) ) {
+                    result = result.substring( 1 );
+                }
+
+                result = result.substring( 0, result.indexOf( "-" ) );
+                Log.d( TAG, "onPostExcecute : result=" + result );
+
+                float version = Float.parseFloat( result );
+
+                if( version >= minimumVersion ) {
+
+                    setImage( backendVersionImage, R.drawable.ic_description_black_24dp );
+
+                    showToastMessage( fab, getString( R.string.backend_version_check_passed ), null, null );
+
+                    startBackendLangVerificationCheck();
+
+                } else {
+
+                    setImage( backendVersionImage, R.drawable.ic_warning_black_24dp );
+
+                    showToastMessage( fab, getString( R.string.backend_version_check_failed, getResources().getString( R.string.minimum_mythtv_version ) ), getResources().getString( R.string.retry ), v -> startBackendVersionVerificationCheck() );
+
+                }
+
+            } else {
+
+                setImage( backendVersionImage, R.drawable.ic_warning_black_24dp );
+
+                showToastMessage( fab, getString( R.string.backend_version_check_failed, getResources().getString( R.string.minimum_mythtv_version ) ), getResources().getString( R.string.retry ), v -> startBackendVersionVerificationCheck() );
 
             }
 

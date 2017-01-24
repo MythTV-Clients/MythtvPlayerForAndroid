@@ -126,11 +126,39 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/backend_lang_container"
+        android:id="@+id/backend_version_container"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/services_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/backend_version_verified_label"
+            android:layout_weight="0.9" />
+
+        <ImageView
+            android:id="@+id/backend_version_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_weight="0.1"
+            android:tint="@color/primary_dark"
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/backend_lang_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/backend_version_container"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp">
 

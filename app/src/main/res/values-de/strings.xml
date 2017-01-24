@@ -189,5 +189,8 @@
     <string name="backend_language_verified_label">Backend Language is UTF-8</string>
     <string name="backend_lang_is_utf8">Backend Language is UTF-8</string>
     <string name="backend_lang_is_not_utf8">Backend Language is not UTF-8</string>
+    <string name="backend_version_check_failed">MythTV version v%s or greater is required</string>
+    <string name="backend_version_check_passed">MythTV version meets minimum version</string>
+    <string name="backend_version_verified_label">MythTV Version v0.28 or greater</string>
 
 </resources>
