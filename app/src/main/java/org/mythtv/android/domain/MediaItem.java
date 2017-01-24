@@ -473,6 +473,7 @@ public class MediaItem {
                 ", bookmark=" + bookmark +
                 ", inetref='" + inetref + '\'' +
                 ", validationErrors=" + validationErrors +
+                ", isValid=" + isValid() +
                 '}';
     }
 

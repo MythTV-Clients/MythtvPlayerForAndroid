@@ -509,6 +509,7 @@ public class MediaItemModel implements Serializable {
                 ", bookmark=" + bookmark +
                 ", inetref='" + inetref + '\'' +
                 ", validationErrors=" + validationErrors +
+                ", isValid=" + isValid() +
                 '}';
     }
 
