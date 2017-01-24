@@ -35,9 +35,8 @@ public class MediaItemDataMapper {
 
     public static MediaItem transform( ProgramEntity programEntity ) throws UnsupportedEncodingException {
 
-        boolean dateValidationError = false;
+        boolean dateValidationError = false, recordedIdValidationError = false;
         MediaItem mediaItem = new MediaItem();
-        mediaItem.setId( programEntity.getRecording().getRecordedId() );
 
         if( null == programEntity.getRecording().getStartTs() ) {
             mediaItem.getValidationErrors().add( new Error( "StartTs", "StartTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
@@ -49,12 +48,13 @@ public class MediaItemDataMapper {
             dateValidationError = true;
         }
 
-        if( programEntity.getRecording().getRecordedId() == -1  ) {
+        if( null == programEntity.getRecording().translateRecordedId()  ) {
             mediaItem.getValidationErrors().add( new Error( "RecordedId", "Recorded Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            recordedIdValidationError = true;
         }
 
-        if( programEntity.getChannel().getChanId() == -1  ) {
-            mediaItem.getValidationErrors().add( new Error( "ChanId", "Channel Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        if( !recordedIdValidationError ) {
+            mediaItem.setId( programEntity.getRecording().translateRecordedId() );
         }
 
         switch( programEntity.getRecording().getStatus() ) {
@@ -76,7 +76,9 @@ public class MediaItemDataMapper {
                 mediaItem.setMedia( Media.PROGRAM );
                 mediaItem.setUrl( url );
                 setContentType( mediaItem, url );
-                mediaItem.setPreviewUrl( "/Content/GetPreviewImage?RecordedId=" + programEntity.getRecording().getRecordedId() );
+                if( !recordedIdValidationError ) {
+                    mediaItem.setPreviewUrl( "/Content/GetPreviewImage?RecordedId=" + programEntity.getRecording().getRecordedId() );
+                }
 
                 mediaItem.setWatched( ( programEntity.getProgramFlags() & 0x00000200 ) > 0 );
                 mediaItem.setMarkWatchedUrl( "/Dvr/UpdateRecordedWatchedStatus" );
@@ -123,7 +125,9 @@ public class MediaItemDataMapper {
             mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
 
         }
-        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        if( !recordedIdValidationError ) {
+            mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        }
 
         List<String> castMembers = new ArrayList<>();
         List<String> characters = new ArrayList<>();
@@ -163,7 +167,9 @@ public class MediaItemDataMapper {
             mediaItem.setCharacters( cast.trim() );
         }
 
-        mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark?RecordedId=%s1", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        if( !recordedIdValidationError ) {
+            mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark?RecordedId=%s1", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        }
         mediaItem.setBookmark( programEntity.getBookmark() );
 
         return mediaItem;
