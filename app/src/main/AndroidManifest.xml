@@ -88,7 +88,7 @@
             android:name=".presentation.view.activity.phone.NsdActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -225,7 +225,7 @@
             android:name=".presentation.view.activity.tv.NsdActivity"
             android:label="@string/app_name"
             android:configChanges="keyboard|keyboardHidden|navigation"
-            android:theme="@style/Theme.Leanback">
+            android:theme="@style/Theme.AppCompat.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -303,7 +303,7 @@
         <activity
             android:name=".presentation.view.activity.tv.PlaybackOverlayActivity"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:theme="@style/Theme.Leanback" />
 
         <provider
             android:name=".presentation.provider.MythtvSearchSuggestionProvider"

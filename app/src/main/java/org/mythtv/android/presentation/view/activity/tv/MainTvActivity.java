@@ -51,7 +51,7 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
     public static Intent getCallingIntent( Context context ) {
 
         Intent callingIntent = new Intent( context, MainTvActivity.class );
-        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        callingIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
 
         return callingIntent;
     }

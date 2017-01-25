@@ -804,7 +804,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
             } else if( what == MediaPlayer.MEDIA_ERROR_SERVER_DIED ) {
 
-                msg = getString(R.string.video_error_server_unaccessible);
+                msg = getString(R.string.video_error_server_inaccessible);
 
             } else {
 

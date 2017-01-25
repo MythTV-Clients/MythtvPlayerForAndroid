@@ -113,7 +113,7 @@ public final class VideoModel implements Parcelable {
         s += ", videoUrl='" + videoUrl + "'";
         s += ", bgImageUrl='" + bgImageUrl + "'";
         s += ", cardImageUrl='" + cardImageUrl + "'";
-        s += ", studio='" + cardImageUrl + "'";
+        s += ", studio='" + studio + "'";
         s += "}";
 
         return s;

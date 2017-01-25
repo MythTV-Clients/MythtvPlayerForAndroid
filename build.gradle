@@ -55,7 +55,7 @@ allprojects {
         compileSdkVersion = 25
 
         //Android Support Libraries
-        supportVersion = '25.0.1'
+        supportVersion = '25.1.0'
         playServicesVersion = '10.0.1'
         firebaseVersion = '10.0.1'
 

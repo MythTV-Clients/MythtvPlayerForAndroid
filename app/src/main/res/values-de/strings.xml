@@ -169,7 +169,7 @@
     <string name="cd_play">play</string>
     <string name="loading">loading</string>
     <string name="video_error_media_load_timeout">Media loading timed out</string>
-    <string name="video_error_server_unaccessible">Media server was not reachable</string>
+    <string name="video_error_server_inaccessible">Media server was not reachable</string>
     <string name="video_error_unknown_error">Failed to load video</string>
 
 </resources>

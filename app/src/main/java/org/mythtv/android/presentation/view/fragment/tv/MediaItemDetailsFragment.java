@@ -45,6 +45,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.VideoModel;
@@ -200,7 +201,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private boolean mediaSupported() {
 
-        return mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mkv" );
+        return mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "m4v" ) || mediaItemModel.getUrl().endsWith( "mkv" );
 
     }
 
@@ -244,21 +245,43 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
                 } else {
 
-                    VideoModel videoModel = new VideoModel
-                            .VideoModelBuilder()
-                            .id( mediaItemModel.getId() )
-                            .category( mediaItemModel.getMedia().name() )
-                            .title( mediaItemModel.getTitle() )
-                            .description( mediaItemModel.getDescription() )
-                            .videoUrl( masterBackendUrl + mediaItemModel.getUrl() )
-                            .bgImageUrl( masterBackendUrl + mediaItemModel.getBannerUrl() )
-                            .cardImageUrl( masterBackendUrl + mediaItemModel.getPreviewUrl() )
-                            .studio( mediaItemModel.getStudio() )
-                            .build();
+                    if( mediaItemModel.getMedia().equals(Media.PROGRAM ) ) {
 
-                    Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
-                    intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
-                    startActivity( intent );
+                        VideoModel videoModel = new VideoModel
+                                .VideoModelBuilder()
+                                .id( mediaItemModel.getId() )
+                                .category( mediaItemModel.getMedia().name() )
+                                .title( mediaItemModel.getTitle() )
+                                .description( mediaItemModel.getDescription() )
+                                .videoUrl( masterBackendUrl + mediaItemModel.getUrl() )
+                                .bgImageUrl( masterBackendUrl + mediaItemModel.getBannerUrl() )
+                                .cardImageUrl( masterBackendUrl + mediaItemModel.getPreviewUrl() )
+                                .studio( mediaItemModel.getStudio() )
+                                .build();
+
+                        Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
+                        intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
+                        startActivity( intent );
+
+                    } else {
+
+                        VideoModel videoModel = new VideoModel
+                                .VideoModelBuilder()
+                                .id( mediaItemModel.getId() )
+                                .category( mediaItemModel.getMedia().name() )
+                                .title( mediaItemModel.getTitle() )
+                                .description( mediaItemModel.getDescription() )
+                                .videoUrl( masterBackendUrl + mediaItemModel.getUrl() )
+                                .bgImageUrl( masterBackendUrl + mediaItemModel.getFanartUrl() )
+                                .cardImageUrl( masterBackendUrl + mediaItemModel.getCoverartUrl() )
+                                .studio( mediaItemModel.getStudio() )
+                                .build();
+
+                        Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
+                        intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
+                        startActivity( intent );
+
+                    }
 
                 }
 

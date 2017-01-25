@@ -23,4 +23,6 @@
     android:orientation="vertical"
     android:padding="@dimen/outer_margin">
 
+    <include layout="@layout/content_nsd" />
+
 </LinearLayout>

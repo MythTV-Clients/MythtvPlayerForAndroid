@@ -52,7 +52,7 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
     public static Intent getCallingIntent( Context context ) {
 
         Intent callingIntent = new Intent( context, MainPhoneActivity.class );
-        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        callingIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
 
         return callingIntent;
     }

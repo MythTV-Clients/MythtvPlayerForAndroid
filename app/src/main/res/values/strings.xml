@@ -187,7 +187,7 @@
     <string name="error">Error</string>
 
     <string name="video_error_media_load_timeout">Media loading timed out</string>
-    <string name="video_error_server_unaccessible">Media server was not reachable</string>
+    <string name="video_error_server_inaccessible">Media server was not reachable</string>
     <string name="video_error_unknown_error">Failed to load video</string>
     <string name="transition_image" translatable="false">transition-image</string>
     <string name="loading">Loading&#8230;</string>

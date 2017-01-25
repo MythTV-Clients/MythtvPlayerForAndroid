@@ -37,7 +37,7 @@ public class NsdActivity extends AbstractBasePhoneActivity implements NsdFragmen
     public void onDiscoveryFailed() {
         Log.d( TAG, "onDiscoveryFailed : enter" );
 
-        navigator.navigateToHome( this );
+        navigator.navigateToSettings( this );
 
         Log.d( TAG, "onDiscoveryFailed : exit" );
     }
