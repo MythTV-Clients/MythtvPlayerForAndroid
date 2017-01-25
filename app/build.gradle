@@ -236,6 +236,8 @@ dependencies {
     compile "com.android.support:preference-leanback-v17:${androidSupportVersion}"
     compile "com.github.bumptech.glide:glide:${glideVersion}"
 
+    compile "com.github.Ennova-IT:ZeRXconf:${zerxConfVersion}"
+
     debugCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
 
