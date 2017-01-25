@@ -20,15 +20,12 @@ package org.mythtv.android.data.net;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
-import org.mythtv.android.domain.SettingsKeys;
 
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -50,25 +47,22 @@ import rx.Subscriber;
  *
  * Created on 11/9/15.
  */
-public class VideoApiImpl implements VideoApi {
+public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
     private static final String TAG = VideoApiImpl.class.getSimpleName();
 
-    private final Context context;
-    private final SharedPreferences sharedPreferences;
     private final OkHttpClient okHttpClient;
     private final VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper;
     private final BooleanJsonMapper booleanJsonMapper;
 
-    public VideoApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
+    public VideoApiImpl( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper, final BooleanJsonMapper booleanJsonMapper ) {
+        super( context, sharedPreferences );
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == videoMetadataInfoEntityJsonMapper || null == booleanJsonMapper ) {
+        if( null == okHttpClient || null == videoMetadataInfoEntityJsonMapper || null == booleanJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
 
-        this.context = context;
-        this.sharedPreferences = sharedPreferences;
         this.okHttpClient = okHttpClient;
         this.videoMetadataInfoEntityJsonMapper = videoMetadataInfoEntityJsonMapper;
         this.booleanJsonMapper = booleanJsonMapper;
@@ -294,33 +288,6 @@ public class VideoApiImpl implements VideoApi {
 
         Log.i( TAG, "postUpdateRecordingWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL ) );
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + UPDATE_VIDEO_WATCHED_STATUS_URL ).requestSyncCall( parameters );
-    }
-
-    private boolean isThereInternetConnection() {
-
-        boolean isConnected;
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.context.getSystemService( Context.CONNECTIVITY_SERVICE );
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        isConnected = ( networkInfo != null && networkInfo.isConnectedOrConnecting() );
-
-        return isConnected;
-    }
-
-    private String getMasterBackendUrl() {
-
-        String host = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-        String masterBackend = "http://" + host + ":" + port;
-        Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
-
-        return masterBackend;
-    }
-
-    private String getFromPreferences( String key ) {
-
-        return sharedPreferences.getString( key, "" );
     }
 
 }

@@ -45,7 +45,7 @@ import butterknife.BindView;
  *
  * Created on 8/31/15.
  */
-public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener {
+public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener, TroubleshootClickListener {
 
     private static final String TAG = MainPhoneActivity.class.getSimpleName();
 
@@ -175,6 +175,7 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
         encodersFragment = EncoderListFragment.newInstance();
 
+
         MediaItemListFragment.Builder upcomingParameters = new MediaItemListFragment.Builder( Media.UPCOMING );
         upcomingFragment = MediaItemListFragment.newInstance( upcomingParameters.toBundle() );
 
@@ -235,6 +236,13 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         }
 
         Log.d( TAG, "onMediaItemClicked : exit" );
+    }
+
+    @Override
+    public void onTroubleshootClicked() {
+
+        navigator.navigateToTroubleshoot( MainPhoneActivity.this );
+
     }
 
 }

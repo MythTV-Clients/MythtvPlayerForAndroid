@@ -53,4 +53,13 @@
 
     </group>
 
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/navigation_item_troubleshoot"
+            android:icon="@drawable/ic_signal_wifi_4_bar_black_24dp"
+            android:title="@string/drawer_item_troubleshoot" />
+
+    </group>
+
 </menu>

@@ -53,27 +53,24 @@ import rx.Subscriber;
  *
  * Created on 10/17/15.
  */
-public class ContentApiImpl implements ContentApi {
+public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
 
     private static final String TAG = ContentApiImpl.class.getSimpleName();
 
     private static final DateTimeFormatter fmt = DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
 
-    private final Context context;
-    private final SharedPreferences sharedPreferences;
     private final OkHttpClient okHttpClient;
     private final LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper;
     private final BooleanJsonMapper booleanJsonMapper;
 
     public ContentApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
+        super( context, sharedPreferences );
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == liveStreamInfoEntityJsonMapper || null == booleanJsonMapper ) {
+        if( null == okHttpClient || null == liveStreamInfoEntityJsonMapper || null == booleanJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
 
-        this.context = context;
-        this.sharedPreferences = sharedPreferences;
         this.okHttpClient = okHttpClient;
         this.liveStreamInfoEntityJsonMapper = liveStreamInfoEntityJsonMapper;
         this.booleanJsonMapper = booleanJsonMapper;
@@ -580,28 +577,6 @@ public class ContentApiImpl implements ContentApi {
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + apiUrl ).requestSyncCall();
     }
 
-    private boolean isThereInternetConnection() {
-
-        boolean isConnected;
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.context.getSystemService( Context.CONNECTIVITY_SERVICE );
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        isConnected = ( networkInfo != null && networkInfo.isConnectedOrConnecting() );
-
-        return isConnected;
-    }
-
-    private String getMasterBackendUrl() {
-
-        String host = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-        String masterBackend = "http://" + host + ":" + port;
-        Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
-
-        return masterBackend;
-    }
-
     private void addParameters( List<String> params ) {
 
         params.add( String.format( WIDTH_QS, getFromPreferences( SettingsKeys.KEY_PREF_HLS_VIDEO_WIDTH ) ) );
@@ -609,11 +584,6 @@ public class ContentApiImpl implements ContentApi {
         params.add( String.format( BITRATE_QS, getFromPreferences( SettingsKeys.KEY_PREF_HLS_VIDEO_BITRATE ) ) );
         params.add( String.format( AUDIO_BITRATE_QS, getFromPreferences( SettingsKeys.KEY_PREF_HLS_AUDIO_BITRATE ) ) );
 
-    }
-
-    private String getFromPreferences( String key ) {
-
-        return sharedPreferences.getString( key, "" );
     }
 
 }
