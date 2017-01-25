@@ -213,10 +213,10 @@
     <string name="player_timer" translatable="false">0:00</string>
     <string name="title_activity_troubleshoot">Troubleshoot Connection</string>
     <string name="troubleshoot">Troubleshoot</string>
-    <string name="airplane_mode_check_label">Airplane Mode is off</string>
-    <string name="network_check_label">Network is connected</string>
-    <string name="master_backend_ping_check_label">Master Backend ping succeeded</string>
-    <string name="mythtv_services_api_check_label">MythTV Services API is connected</string>
+    <string name="airplane_mode_check_label">Airplane Mode must be off</string>
+    <string name="network_check_label">Network must be connected</string>
+    <string name="master_backend_ping_check_label">Test Master Backend ping response</string>
+    <string name="mythtv_services_api_check_label">Test MythTV Services API response</string>
     <string name="drawer_item_troubleshoot">Troubleshoot</string>
     <string name="action_troubleshoot">Troubleshoot</string>
     <string name="troubleshoot_device_in_airplane_mode">Device is in Airplane Mode</string>
@@ -232,6 +232,6 @@
     <string name="backend_lang_is_not_utf8">Backend Language is not UTF-8</string>
     <string name="backend_version_check_failed">MythTV version v%s or greater is required</string>
     <string name="backend_version_check_passed">MythTV version meets minimum version</string>
-    <string name="backend_version_verified_label">MythTV Version v0.28 or greater</string>
+    <string name="backend_version_verified_label">MythTV Version is v0.28 or greater</string>
 
 </resources>

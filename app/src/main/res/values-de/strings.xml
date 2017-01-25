@@ -172,10 +172,10 @@
     <string name="video_error_server_unaccessible">Media server was not reachable</string>
     <string name="video_error_unknown_error">Failed to load video</string>
     <string name="troubleshoot">Troubleshoot</string>
-    <string name="airplane_mode_check_label">Airplane Mode is off</string>
-    <string name="network_check_label">Network is connected</string>
-    <string name="master_backend_ping_check_label">Master Backend ping succeeded</string>
-    <string name="mythtv_services_api_check_label">MythTV Services API is connected</string>
+    <string name="airplane_mode_check_label">Airplane Mode must be off</string>
+    <string name="network_check_label">Network must be connected</string>
+    <string name="master_backend_ping_check_label">Test Master Backend ping response</string>
+    <string name="mythtv_services_api_check_label">Test MythTV Services API response</string>
     <string name="drawer_item_troubleshoot">Troubleshoot</string>
     <string name="action_troubleshoot">Troubleshoot</string>
     <string name="troubleshoot_device_in_airplane_mode">Device is in Airplane Mode</string>
