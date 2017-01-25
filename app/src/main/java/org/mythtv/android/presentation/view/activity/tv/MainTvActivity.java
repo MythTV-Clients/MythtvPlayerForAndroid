@@ -19,6 +19,7 @@
 package org.mythtv.android.presentation.view.activity.tv;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -46,6 +47,14 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
     private static final String TAG = MainTvActivity.class.getSimpleName();
 
     private MediaComponent mediaComponent;
+
+    public static Intent getCallingIntent( Context context ) {
+
+        Intent callingIntent = new Intent( context, MainTvActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
+    }
 
     @Override
     public int getLayoutResource() {

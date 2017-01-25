@@ -57,7 +57,6 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         return callingIntent;
     }
 
-
     private MediaItemListFragment recentFragment;
     private EncoderListFragment encodersFragment;
     private MediaItemListFragment upcomingFragment;

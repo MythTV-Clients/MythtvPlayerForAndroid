@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import org.mythtv.android.domain.Media;
+import org.mythtv.android.presentation.view.activity.tv.MainTvActivity;
 import org.mythtv.android.presentation.view.activity.tv.RecordingsActivity;
 import org.mythtv.android.presentation.view.activity.tv.SearchableActivity;
 import org.mythtv.android.presentation.view.activity.tv.SettingsActivity;
@@ -48,6 +49,19 @@ public class TvNavigator {
     @Inject
     public TvNavigator() {
         //empty
+    }
+
+    public void navigateToMain( Context context ) {
+        Log.d( TAG, "navigateToMain : enter" );
+
+        if( null != context ) {
+
+            Intent intentToLaunch = MainTvActivity.getCallingIntent( context );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToMain : exit" );
     }
 
     public void navigateToRecordings( Context context ) {

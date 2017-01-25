@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MythTV Player An application for Android users to play MythTV Recordings and Videos
   ~ Copyright (c) 2015. Daniel Frey
   ~
@@ -211,5 +210,6 @@
     <string name="cd_image_view_button_4">image view button 4</string>
     <string name="cd_image_view_button_5">image view button 5</string>
     <string name="player_timer" translatable="false">0:00</string>
+    <string name="title_activity_nsd">NsdActivity</string>
 
 </resources>
