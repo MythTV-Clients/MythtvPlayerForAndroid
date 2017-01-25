@@ -170,6 +170,12 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
                 return true;
 
+            case R.id.menu_troubleshoot:
+
+                navigator.navigateToTroubleshoot( this );
+
+                return true;
+
         }
 
         return super.onOptionsItemSelected( item );
@@ -350,7 +356,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
                 FirebaseCrash.logcat( Log.ERROR, TAG, "onButtonFabPlay : mediaItemModel=" + mediaItemModel.toString() );
                 FirebaseCrash.report( e );
 
-                showToastMessage( "HLS for this video is no longer available", null, null );
+                showToastMessage( null, "HLS for this video is no longer available", null, null );
 
             }
 

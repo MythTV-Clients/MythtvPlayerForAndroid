@@ -403,7 +403,6 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
                                 return i1;
                             }
-
                             return Integer.compare( lhs.getEpisode(), rhs.getEpisode() );
 
                         default :

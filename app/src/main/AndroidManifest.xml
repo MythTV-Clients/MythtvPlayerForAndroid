@@ -70,15 +70,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="org.mythtv.android.presentation.provider.CastOptionsProvider" />
-
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
@@ -215,6 +212,16 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
 
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.mythtv.android.presentation.view.activity.phone.MainPhoneActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.view.activity.phone.TroubleshootActivity"
+            android:label="@string/title_activity_troubleshoot"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTop"
+            android:parentActivityName=".presentation.view.activity.phone.MainPhoneActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.mythtv.android.presentation.view.activity.phone.MainPhoneActivity" />

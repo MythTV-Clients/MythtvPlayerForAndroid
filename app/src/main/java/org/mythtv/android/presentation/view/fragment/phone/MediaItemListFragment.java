@@ -34,6 +34,7 @@ import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemListPresenter;
 import org.mythtv.android.presentation.view.MediaItemListView;
+import org.mythtv.android.presentation.view.activity.phone.TroubleshootClickListener;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
 import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
 
@@ -94,6 +95,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     private MediaItemsAdapter mediaItemsAdapter;
 
+    private TroubleshootClickListener troubleshootClickListener;
     private MediaItemListListener mediaItemListListener;
 
     private Map<String, Object> parameters;
@@ -311,6 +313,9 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         if( activity instanceof MediaItemListFragment.MediaItemListListener) {
             this.mediaItemListListener = (MediaItemListFragment.MediaItemListListener) activity;
         }
+        if( activity instanceof TroubleshootClickListener) {
+            this.troubleshootClickListener = (TroubleshootClickListener) activity;
+        }
 
         Log.d( TAG, "onAttach : exit" );
     }
@@ -497,7 +502,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> MediaItemListFragment.this.loadMediaItemList() );
+        this.showToastMessage( message, getResources().getString( R.string.troubleshoot ), v -> troubleshootClickListener.onTroubleshootClicked() );
 
         Log.d( TAG, "showError : exit" );
     }

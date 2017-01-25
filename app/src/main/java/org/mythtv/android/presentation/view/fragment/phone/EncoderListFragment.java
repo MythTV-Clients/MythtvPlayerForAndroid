@@ -18,6 +18,7 @@
 
 package org.mythtv.android.presentation.view.fragment.phone;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,7 @@ import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.EncoderModel;
 import org.mythtv.android.presentation.presenter.phone.EncoderListPresenter;
 import org.mythtv.android.presentation.view.EncoderListView;
+import org.mythtv.android.presentation.view.activity.phone.TroubleshootClickListener;
 import org.mythtv.android.presentation.view.adapter.phone.EncodersAdapter;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
 
@@ -69,6 +71,8 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
 
     private EncodersAdapter encodersAdapter;
 
+    private TroubleshootClickListener troubleshootClickListener;
+
     public EncoderListFragment() {
         super();
     }
@@ -76,6 +80,19 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public static EncoderListFragment newInstance() {
 
         return new EncoderListFragment();
+    }
+
+    @Override
+    public void onAttach( Context context ) {
+        super.onAttach( context );
+        Log.d( TAG, "onAttach : enter" );
+
+        Activity activity = getActivity();
+        if( activity instanceof TroubleshootClickListener) {
+            this.troubleshootClickListener = (TroubleshootClickListener) activity;
+        }
+
+        Log.d( TAG, "onAttach : exit" );
     }
 
     @Override
@@ -221,7 +238,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> EncoderListFragment.this.loadEncoderList());
+        this.showToastMessage( message, getResources().getString( R.string.troubleshoot ), v -> troubleshootClickListener.onTroubleshootClicked() );
 
         Log.d( TAG, "showError : exit" );
     }
