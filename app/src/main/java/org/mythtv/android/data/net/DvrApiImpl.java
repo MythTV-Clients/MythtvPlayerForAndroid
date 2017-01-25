@@ -20,8 +20,6 @@ package org.mythtv.android.data.net;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 
 import org.joda.time.DateTime;
@@ -37,7 +35,6 @@ import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
-import org.mythtv.android.domain.SettingsKeys;
 
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -59,14 +56,12 @@ import rx.Subscriber;
  *
  * Created on 8/27/15.
  */
-public class DvrApiImpl implements DvrApi {
+public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
     private static final String TAG = DvrApiImpl.class.getSimpleName();
 
     private static final DateTimeFormatter fmt = DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
 
-    private final Context context;
-    private final SharedPreferences sharedPreferences;
     private final OkHttpClient okHttpClient;
     private final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper;
     private final ProgramEntityJsonMapper programEntityJsonMapper;
@@ -75,14 +70,13 @@ public class DvrApiImpl implements DvrApi {
     private final LongJsonMapper longJsonMapper;
 
     public DvrApiImpl( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, final ProgramEntityJsonMapper programEntityJsonMapper, final EncoderEntityJsonMapper encoderEntityJsonMapper, final BooleanJsonMapper booleanJsonMapper, final LongJsonMapper longJsonMapper ) {
+        super( context, sharedPreferences );
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper || null == longJsonMapper ) {
+        if( null == okHttpClient || null == titleInfoEntityJsonMapper || null == programEntityJsonMapper || null == encoderEntityJsonMapper || null == booleanJsonMapper || null == longJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
 
-        this.context = context.getApplicationContext();
-        this.sharedPreferences = sharedPreferences;
         this.okHttpClient = okHttpClient;
         this.titleInfoEntityJsonMapper = titleInfoEntityJsonMapper;
         this.programEntityJsonMapper = programEntityJsonMapper;
@@ -603,33 +597,6 @@ public class DvrApiImpl implements DvrApi {
 
         Log.i( TAG, "getBookmarkFromApi : apiUrl=" + sb.toString() );
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
-    }
-
-    private boolean isThereInternetConnection() {
-
-        boolean isConnected;
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.context.getSystemService( Context.CONNECTIVITY_SERVICE );
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        isConnected = ( networkInfo != null && networkInfo.isConnectedOrConnecting() );
-
-        return isConnected;
-    }
-
-    private String getMasterBackendUrl() {
-
-        String host = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-        String masterBackend = "http://" + host + ":" + port;
-        Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
-
-        return masterBackend;
-    }
-
-    private String getFromPreferences( String key ) {
-
-        return sharedPreferences.getString( key, "" );
     }
 
 }

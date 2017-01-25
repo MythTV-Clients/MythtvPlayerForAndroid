@@ -18,9 +18,9 @@
 
 package org.mythtv.android.presentation.view.fragment.phone;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.app.Fragment;
 import android.view.View;
 
 import com.google.gson.Gson;
