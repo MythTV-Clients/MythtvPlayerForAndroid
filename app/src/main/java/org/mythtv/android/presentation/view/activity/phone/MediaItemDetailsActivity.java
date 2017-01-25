@@ -305,7 +305,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         if( null == mediaItemModel || !mediaItemModel.isValid() ) {
             Log.d( TAG, "onButtonFabPlay : exit, mediaItemModel is not valid" );
 
-            showToastMessage( "Entry is not valid and cannot be played.", null, null );
+            showToastMessage( fab, "Entry is not valid and cannot be played.", null, null );
 
             return;
         }
