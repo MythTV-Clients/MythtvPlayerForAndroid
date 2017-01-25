@@ -101,11 +101,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     private OnPlayPauseClickedListener mCallback;
 
-    public static PlaybackOverlayFragment newInstance() {
-
-        return new PlaybackOverlayFragment();
-    }
-
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );

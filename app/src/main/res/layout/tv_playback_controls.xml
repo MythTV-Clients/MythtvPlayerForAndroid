@@ -24,14 +24,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="center" />
 
-    <FrameLayout
-        android:id="@+id/fl_fragment"
+    <fragment
+        android:id="@+id/playback_controls_fragment"
+        android:name="org.mythtv.android.presentation.view.fragment.tv.PlaybackOverlayFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <!--<fragment-->
-        <!--android:id="@+id/playback_controls_fragment"-->
-        <!--android:name="org.mythtv.android.presentation.view.fragment.tv.PlaybackOverlayFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
+        android:layout_height="match_parent" />
 
 </FrameLayout>

@@ -50,8 +50,6 @@ public class PlaybackOverlayActivity extends AbstractBaseTvActivity implements P
     private LeanbackPlaybackState mPlaybackState = LeanbackPlaybackState.IDLE;
     private MediaSession mSession;
 
-    private PlaybackOverlayFragment playbackOverlayFragment;
-
     @Override
     public int getLayoutResource() {
 
@@ -74,8 +72,6 @@ public class PlaybackOverlayActivity extends AbstractBaseTvActivity implements P
 
         mSession.setActive( true );
 
-        this.initializeActivity( savedInstanceState );
-
         Log.d( TAG, "onCreate : exit" );
     }
 
@@ -93,7 +89,7 @@ public class PlaybackOverlayActivity extends AbstractBaseTvActivity implements P
     public boolean onKeyUp( int keyCode, KeyEvent event ) {
         Log.d( TAG, "onKeyUp : enter" );
 
-//        PlaybackOverlayFragment playbackOverlayFragment = (PlaybackOverlayFragment) getFragmentManager().findFragmentById( R.id.playback_controls_fragment );
+        PlaybackOverlayFragment playbackOverlayFragment = (PlaybackOverlayFragment) getFragmentManager().findFragmentById( R.id.playback_controls_fragment );
         switch( keyCode ) {
 
             case KeyEvent.KEYCODE_MEDIA_PLAY :
@@ -166,18 +162,6 @@ public class PlaybackOverlayActivity extends AbstractBaseTvActivity implements P
         updateMetadata( videoModel );
 
         Log.d( TAG, "onFragmentPlayPause : exit" );
-    }
-
-    /**
-     * Initializes this activity.
-     */
-    private void initializeActivity( Bundle savedInstanceState ) {
-        Log.d( TAG, "initializeActivity : enter" );
-
-        playbackOverlayFragment = PlaybackOverlayFragment.newInstance();
-        addFragment( R.id.fl_fragment, playbackOverlayFragment );
-
-        Log.d( TAG, "initializeActivity : exit" );
     }
 
     private void updatePlaybackState( int position ) {
