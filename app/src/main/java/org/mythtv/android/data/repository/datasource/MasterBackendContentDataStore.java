@@ -29,7 +29,12 @@ import java.util.List;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class MasterBackendContentDataStore implements ContentDataStore {
 

@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 
+import java.io.StringReader;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -44,7 +45,7 @@ public class TitleInfoEntityJsonDataMapperTest extends ApplicationTestCase {
     @Test
     public void testTransformTitleInfoEntityHappyCase() {
 
-        TitleInfoEntity titleInfoEntity = titleInfoEntityJsonMapper.transformTitleInfoEntity( JSON_RESPONSE_DVR_GET_TITLE_INFO );
+        TitleInfoEntity titleInfoEntity = titleInfoEntityJsonMapper.transformTitleInfoEntity( new StringReader( JSON_RESPONSE_DVR_GET_TITLE_INFO ) );
 
         assertThat( titleInfoEntity.getTitle(), is( "Descendants" ) );
         assertThat( titleInfoEntity.getInetref(), is( "tmdb3.py_277217" ) );
@@ -55,14 +56,14 @@ public class TitleInfoEntityJsonDataMapperTest extends ApplicationTestCase {
     @Test( expected = JsonSyntaxException.class )
     public void testTransformTitleInfoEntityBadJson() {
 
-        titleInfoEntityJsonMapper.transformTitleInfoEntity( JSON_RESPONSE_DVR_GET_TITLE_INFO_BAD );
+        titleInfoEntityJsonMapper.transformTitleInfoEntity( new StringReader( JSON_RESPONSE_DVR_GET_TITLE_INFO_BAD ) );
 
     }
 
     @Test
     public void testTransformTitleInfoEntityCollectionHappyCase() {
 
-        Collection<TitleInfoEntity> titleInfoEntityCollection = titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( JSON_RESPONSE_DVR_GET_TITLE_INFO_LIST );
+        Collection<TitleInfoEntity> titleInfoEntityCollection = titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_TITLE_INFO_LIST ) );
 
         assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 0 ] ).getTitle(), is( "Descendants" ) );
         assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 0 ] ).getInetref(), is( "tmdb3.py_277217" ) );
@@ -86,7 +87,7 @@ public class TitleInfoEntityJsonDataMapperTest extends ApplicationTestCase {
     @Test( expected = JsonSyntaxException.class )
     public void testTransformTitleInfoEntityCollectionBadJson() {
 
-        titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( JSON_RESPONSE_DVR_GET_TITLE_INFO_LIST_BAD );
+        titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_TITLE_INFO_LIST_BAD ) );
 
     }
 

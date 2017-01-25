@@ -24,10 +24,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import org.joda.time.DateTime;
-import org.mythtv.android.data.cache.ProgramCache;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.net.DvrApi;
@@ -39,71 +38,42 @@ import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 @Singleton
 public class DvrDataStoreFactory {
 
     private static final String TAG = DvrDataStoreFactory.class.getSimpleName();
 
-    private final Context context;
-    private final SharedPreferences sharedPreferences;
-    private final OkHttpClient okHttpClient;
-    private final Gson gson;
-    private final ProgramCache recordedProgramCache;
     private final SearchDataStoreFactory searchDataStoreFactory;
+    private final DvrApi api;
 
     @Inject
-    public DvrDataStoreFactory( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, Gson gson, ProgramCache recordedProgramCache, SearchDataStoreFactory searchDataStoreFactory ) {
+    public DvrDataStoreFactory( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final Gson gson, final SearchDataStoreFactory searchDataStoreFactory ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == gson || null == recordedProgramCache || null == searchDataStoreFactory ) {
+        if( null == context || null == sharedPreferences || null == okHttpClient || null == gson || null == searchDataStoreFactory ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
-        this.context = context.getApplicationContext();
-        this.sharedPreferences = sharedPreferences;
-        this.okHttpClient = okHttpClient;
-        this.gson = gson;
-        this.recordedProgramCache = recordedProgramCache;
         this.searchDataStoreFactory = searchDataStoreFactory;
 
+        api = new DvrApiImpl( context.getApplicationContext(), sharedPreferences, okHttpClient, new TitleInfoEntityJsonMapper( gson ), new ProgramEntityJsonMapper( gson ), new EncoderEntityJsonMapper( gson ), new BooleanJsonMapper(), new LongJsonMapper() );
+
         Log.d( TAG, "initialize : exit" );
-    }
-
-    public DvrDataStore create( int chanId, DateTime startTime ) {
-        Log.d( TAG, "create : enter" );
-
-        DvrDataStore dvrDataStore;
-
-        if( !this.recordedProgramCache.isExpired() && this.recordedProgramCache.isCached( chanId, startTime ) ) {
-            Log.d( TAG, "create : cache is not expired and recordedProgram exists in cache" );
-
-            dvrDataStore = new DiskDvrDataStore( this.recordedProgramCache );
-
-        } else {
-            Log.d( TAG, "create : query backend for data" );
-
-            dvrDataStore = createMasterBackendDataStore();
-
-        }
-
-        Log.d( TAG, "create : exit" );
-        return dvrDataStore;
     }
 
     public DvrDataStore createMasterBackendDataStore() {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
-        TitleInfoEntityJsonMapper titleInfoEntityJsonMapper = new TitleInfoEntityJsonMapper( this.gson );
-        ProgramEntityJsonMapper programEntityJsonMapper = new ProgramEntityJsonMapper( this.gson );
-        EncoderEntityJsonMapper encoderEntityJsonMapper = new EncoderEntityJsonMapper( this.gson );
-        BooleanJsonMapper booleanJsonMapper = new BooleanJsonMapper();
-        DvrApi api = new DvrApiImpl( this.context, this.sharedPreferences, this.okHttpClient, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper );
-
         Log.d( TAG, "createMasterBackendDataStore : exit" );
-        return new MasterBackendDvrDataStore( api, this.recordedProgramCache, this.searchDataStoreFactory );
+        return new MasterBackendDvrDataStore( api, this.searchDataStoreFactory );
     }
 
 }

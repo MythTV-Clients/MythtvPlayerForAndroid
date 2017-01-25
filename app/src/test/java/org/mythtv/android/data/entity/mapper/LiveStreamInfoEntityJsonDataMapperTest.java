@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 
+import java.io.StringReader;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -46,7 +47,7 @@ public class LiveStreamInfoEntityJsonDataMapperTest extends ApplicationTestCase 
     @Test
     public void testTransformLiveStreamInfoEntityHappyCase() {
 
-        LiveStreamInfoEntity liveStreamInfoEntity = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO );
+        LiveStreamInfoEntity liveStreamInfoEntity = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( new StringReader( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO ) );
 
         assertThat( liveStreamInfoEntity.getId(), is( 128 ) );
         assertThat( liveStreamInfoEntity.getWidth(), is( 1280 ) );
@@ -77,14 +78,14 @@ public class LiveStreamInfoEntityJsonDataMapperTest extends ApplicationTestCase 
     @Test( expected = JsonSyntaxException.class )
     public void testTransformLiveStreamInfoEntityBadJson() {
 
-        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_BAD );
+        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( new StringReader( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_BAD ) );
 
     }
 
     @Test
     public void testTransformLiveStreamInfoEntityCollectionHappyCase() {
 
-        Collection<LiveStreamInfoEntity> LiveStreamInfoEntityCollection = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST );
+        Collection<LiveStreamInfoEntity> LiveStreamInfoEntityCollection = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST ) );
 
         assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).getId(), is( 128 ) );
         assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).getWidth(), is( 1280 ) );
@@ -99,7 +100,7 @@ public class LiveStreamInfoEntityJsonDataMapperTest extends ApplicationTestCase 
     @Test( expected = JsonSyntaxException.class )
     public void testTransformLiveStreamInfoEntityCollectionBadJson() {
 
-        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST_BAD );
+        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST_BAD ) );
 
     }
 

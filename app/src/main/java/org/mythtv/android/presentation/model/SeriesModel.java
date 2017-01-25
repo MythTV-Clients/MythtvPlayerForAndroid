@@ -1,0 +1,121 @@
+/*
+ * MythTV Player An application for Android users to play MythTV Recordings and Videos
+ * Copyright (c) 2015. Daniel Frey
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.mythtv.android.presentation.model;
+
+import android.support.annotation.NonNull;
+
+import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.utils.DomainUtils;
+
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 9/23/16.
+ */
+public class SeriesModel implements Comparable<SeriesModel> {
+
+    private String title;
+    private Media media;
+    private String artworkUrl;
+    private int count;
+    private String inetref;
+
+    public SeriesModel() { }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle( String title ) {
+        this.title = title;
+    }
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia( Media media ) {
+
+        this.media = media;
+
+    }
+
+    public String getArtworkUrl() {
+
+        return artworkUrl;
+    }
+
+    public void setArtworkUrl( String artworkUrl ) {
+
+        this.artworkUrl = artworkUrl;
+
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount( int count ) {
+        this.count = count;
+    }
+
+    public String getInetref() {
+        return inetref;
+    }
+
+    public void setInetref( String inetref ) {
+
+        this.inetref = inetref;
+
+    }
+
+    @Override
+    public String toString() {
+        return "SeriesModel{" +
+                "title='" + title + '\'' +
+                ", media=" + media +
+                ", artworkUrl='" + artworkUrl + '\'' +
+                ", count=" + count +
+                ", inetref='" + inetref + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo( @NonNull SeriesModel another ) {
+
+        final int EQUAL = 0;
+
+        if( this == another ) return EQUAL;
+
+        String thisTitle = DomainUtils.removeArticles( this.title.toUpperCase() );
+        String thatTitle = DomainUtils.removeArticles( another.title.toUpperCase() );
+
+        int comparison = thisTitle.compareTo( thatTitle );
+        if( comparison != EQUAL ) return comparison;
+
+        comparison = inetref.compareTo( another.inetref );
+        if( comparison != EQUAL ) return comparison;
+
+        return EQUAL;
+    }
+
+}

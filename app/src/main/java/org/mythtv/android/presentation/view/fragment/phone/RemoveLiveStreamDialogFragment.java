@@ -19,15 +19,20 @@
 package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 
 import org.mythtv.android.R;
 
 /**
- * Created by dmfrey on 4/21/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/21/16.
  */
 public class RemoveLiveStreamDialogFragment extends DialogFragment {
 
@@ -37,8 +42,8 @@ public class RemoveLiveStreamDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
         builder
                 .setTitle( R.string.remove_live_stream_title )
-                .setPositiveButton( R.string.remove_live_stream_positive_label, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_OK, null ))
-                .setNegativeButton( android.R.string.cancel, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_CANCELED, null ));
+                .setPositiveButton( R.string.remove_live_stream_positive_label, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent() ) )
+                .setNegativeButton( android.R.string.cancel, (dialog, which) -> getTargetFragment().onActivityResult( getTargetRequestCode(), Activity.RESULT_CANCELED, getActivity().getIntent() ) );
 
         return builder.create();
     }

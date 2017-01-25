@@ -30,6 +30,8 @@ import java.util.HashMap;
 
 /**
  * A collection of utility methods, all static.
+ *
+ * @author dmfrey
  */
 public class Utils {
 

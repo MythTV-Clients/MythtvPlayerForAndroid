@@ -22,21 +22,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
 
 import org.mythtv.android.R;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.HasComponent;
-import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
-import org.mythtv.android.presentation.model.TitleInfoModel;
-import org.mythtv.android.presentation.view.fragment.phone.TitleInfoListFragment;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.model.SeriesModel;
+import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
 
 /**
  * Activity that shows a list of programs.
  *
- * Created by dmfrey on 9/1/15.
+ * @author dmfrey
+ *
+ * Created on 9/1/15.
  */
-public class TitleInfoListActivity extends AbstractBasePhoneActivity implements HasComponent<DvrComponent>, TitleInfoListFragment.TitleInfoListListener {
+public class TitleInfoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, SeriesListFragment.SeriesListListener {
 
     private static final String TAG = TitleInfoListActivity.class.getSimpleName();
 
@@ -48,7 +50,7 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
         return callingIntent;
     }
 
-    private DvrComponent dvrComponent;
+    private MediaComponent mediaComponent;
 
     @Override
     public int getLayoutResource() {
@@ -60,9 +62,9 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
     protected void onCreate( Bundle savedInstanceState ) {
         Log.d( TAG, "onCreate : enter" );
 
-        requestWindowFeature( Window.FEATURE_INDETERMINATE_PROGRESS );
         super.onCreate( savedInstanceState );
 
+        this.initializeActivity();
         this.initializeInjector();
 
         Log.d( TAG, "onCreate : exit" );
@@ -86,10 +88,24 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
         Log.d( TAG, "onBackPressed : exit" );
     }
 
+    /**
+     * Initializes this activity.
+     */
+    private void initializeActivity() {
+        Log.d( TAG, "initializeActivity : enter" );
+
+        SeriesListFragment.Builder builder = new SeriesListFragment.Builder( Media.PROGRAM );
+        SeriesListFragment seriesListFragment = SeriesListFragment.newInstance( builder.toBundle() );
+
+        addFragment( R.id.fl_fragment, seriesListFragment );
+
+        Log.d( TAG, "initializeActivity : exit" );
+    }
+
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.dvrComponent = DaggerDvrComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .build();
 
@@ -97,21 +113,21 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
     }
 
     @Override
-    public DvrComponent getComponent() {
+    public MediaComponent getComponent() {
         Log.d( TAG, "getComponent : enter" );
 
         Log.d( TAG, "getComponent : exit" );
-        return dvrComponent;
+        return mediaComponent;
     }
 
     @Override
-    public void onTitleInfoClicked( TitleInfoModel titleInfoModel ) {
-        Log.d( TAG, "onTitleInfoClicked : enter" );
+    public void onSeriesClicked( SeriesModel seriesModel ) {
+        Log.d( TAG, "onSeriesClicked : enter" );
 
-        Log.d( TAG, "onTitleInfoClicked : titleInfoModel=" + titleInfoModel );
-        navigator.navigateToPrograms( this, true, -1, -1, titleInfoModel.getTitle(), null, null );
+        Log.d( TAG, "onSeriesClicked : seriesModel=" + seriesModel );
+        navigator.navigateToSeries( this, Media.PROGRAM, true, -1, -1, seriesModel.getTitle(), null, null, seriesModel.getInetref() );
 
-        Log.d( TAG, "onTitleInfoClicked : exit" );
+        Log.d( TAG, "onSeriesClicked : exit" );
     }
 
 }

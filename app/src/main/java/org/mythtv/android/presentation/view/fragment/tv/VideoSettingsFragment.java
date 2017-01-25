@@ -23,8 +23,13 @@ import android.support.v17.preference.LeanbackPreferenceFragment;
 
 import org.mythtv.android.R;
 
-/*
- * Created by dmfrey on 1/28/16.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 public class VideoSettingsFragment extends LeanbackPreferenceFragment {
 

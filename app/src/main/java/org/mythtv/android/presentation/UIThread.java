@@ -26,10 +26,13 @@ import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
+ *
  * MainThread (UI Thread) implementation based on a {@link rx.Scheduler}
  * which will execute actions on the Android UI thread
  *
- * Created by dmfrey on 8/30/15.
+ * @author dmfrey
+ *
+ * Created on 8/30/15.
  */
 public class UIThread implements PostExecutionThread {
 

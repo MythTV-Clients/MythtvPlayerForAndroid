@@ -31,7 +31,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 1/20/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/20/16.
  */
 @PerActivity
 public class EncoderModelDataMapper {

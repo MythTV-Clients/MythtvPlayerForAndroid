@@ -19,9 +19,9 @@
 package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.os.Bundle;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.EditTextPreference;
-import android.support.v7.preference.PreferenceFragmentCompat;
+import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
+import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,25 +31,21 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 
-
-/*
- * Created by dmfrey on 4/7/15.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 4/7/15.
  */
-public class SettingsFragment extends PreferenceFragmentCompat {
-
-    private static final String TAG = SettingsFragment.class.getSimpleName();
+public class SettingsFragment extends PreferenceFragment {
 
     @Override
-    public void onCreatePreferences( Bundle bundle, String s ) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         addPreferencesFromResource( R.xml.preferences );
-
-    }
-
-    @Override
-    public void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
-
 
     }
 

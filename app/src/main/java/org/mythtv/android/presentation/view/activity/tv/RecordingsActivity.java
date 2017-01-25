@@ -23,13 +23,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.R;
-import org.mythtv.android.presentation.internal.di.components.DaggerDvrComponent;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
-import org.mythtv.android.presentation.view.fragment.tv.RecordingsFragment;
+import org.mythtv.android.domain.Media;
+import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.view.fragment.tv.MediaItemListFragment;
 
-public class RecordingsActivity extends AbstractBaseTvActivity implements HasComponent<DvrComponent>, RecordingsFragment.ProgramListListener {
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
+public class RecordingsActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener {
 
     private static final String TAG = RecordingsActivity.class.getSimpleName();
 
@@ -38,7 +45,7 @@ public class RecordingsActivity extends AbstractBaseTvActivity implements HasCom
         return new Intent( context, RecordingsActivity.class );
     }
 
-    private DvrComponent dvrComponent;
+    private MediaComponent mediaComponent;
 
     @Override
     public int getLayoutResource() {
@@ -49,14 +56,29 @@ public class RecordingsActivity extends AbstractBaseTvActivity implements HasCom
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
+        this.initializeActivity();
         this.initializeInjector();
 
+    }
+
+    /**
+     * Initializes this activity.
+     */
+    private void initializeActivity() {
+        Log.d( TAG, "initializeActivity : enter" );
+
+        MediaItemListFragment.Builder recordingsParameters = new MediaItemListFragment.Builder( Media.PROGRAM );
+        MediaItemListFragment mediaItemListFragment = MediaItemListFragment.newInstance( recordingsParameters.toBundle() );
+
+        addFragment( R.id.fl_fragment, mediaItemListFragment);
+
+        Log.d( TAG, "initializeActivity : exit" );
     }
 
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
 
-        this.dvrComponent = DaggerDvrComponent.builder()
+        this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
                 .build();
 
@@ -64,11 +86,11 @@ public class RecordingsActivity extends AbstractBaseTvActivity implements HasCom
     }
 
     @Override
-    public DvrComponent getComponent() {
+    public MediaComponent getComponent() {
         Log.d( TAG, "getComponent : enter" );
 
         Log.d( TAG, "getComponent : exit" );
-        return dvrComponent;
+        return mediaComponent;
     }
 
     @Override

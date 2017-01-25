@@ -27,13 +27,18 @@ import java.util.Map;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 8/26/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
 public class GetRemoveLiveStreamDetails extends DynamicUseCase {
 
     private final ContentRepository contentRepository;
 
-    public GetRemoveLiveStreamDetails(final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetRemoveLiveStreamDetails( final ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
         this.contentRepository = contentRepository;

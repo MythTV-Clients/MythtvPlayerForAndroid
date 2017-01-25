@@ -21,6 +21,9 @@ package org.mythtv.android.presentation.view.activity.tv;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.UiModeManager;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.google.firebase.FirebaseApp;
@@ -37,7 +40,12 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 
 /**
- * Created by dmfrey on 1/28/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 public abstract class AbstractBaseTvActivity extends Activity {
 
@@ -106,6 +114,13 @@ public abstract class AbstractBaseTvActivity extends Activity {
     protected NetComponent getNetComponent() {
 
         return ( (AndroidApplication) getApplication() ).getNetComponent();
+    }
+
+    protected boolean isRealAndroidTvDevice( Context context ) {
+
+        UiModeManager uiModeManager = (UiModeManager) context.getSystemService( UI_MODE_SERVICE );
+
+        return ( uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION );
     }
 
 }

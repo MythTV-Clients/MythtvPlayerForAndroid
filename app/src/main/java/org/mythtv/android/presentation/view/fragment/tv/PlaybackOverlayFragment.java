@@ -72,11 +72,14 @@ import java.util.TimerTask;
 import static android.media.session.MediaSession.FLAG_HANDLES_MEDIA_BUTTONS;
 import static android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS;
 
-/*
+/**
+ *
  * The PlaybackOverlayFragment class handles the Fragment associated with displaying the UI for the
  * media controls such as play / pause / skip forward / skip backward etc.
  *
  * The UI is updated through events that it receives from its MediaController
+ *
+ * @author dmfrey
  */
 @TargetApi( Build.VERSION_CODES.LOLLIPOP )
 public class PlaybackOverlayFragment extends android.support.v17.leanback.app.PlaybackOverlayFragment { //} implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -591,16 +594,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
      * Creates a ListRow for related videos.
      */
     private void addOtherRows() {
-
-//        mVideoCursorAdapter = new CursorObjectAdapter( new CardPresenter() );
-//        mVideoCursorAdapter.setMapper( new VideoCursorMapper() );
-//
-//        Bundle args = new Bundle();
-//        args.putString( VideoContract.VideoEntry.COLUMN_CATEGORY, mSelectedVideo.category );
-//        getLoaderManager().initLoader( RECOMMENDED_VIDEOS_LOADER, args, this );
-//
-//        HeaderItem header = new HeaderItem( getString( R.string.related_movies ) );
-//        mRowsAdapter.add( new ListRow( header, mVideoCursorAdapter ) );
 
     }
 

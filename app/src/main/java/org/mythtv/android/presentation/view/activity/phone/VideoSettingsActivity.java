@@ -22,9 +22,13 @@ import android.os.Bundle;
 
 import org.mythtv.android.R;
 
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ */
 public class VideoSettingsActivity extends AbstractBasePhoneActivity {
-
-    private static final String TAG = VideoSettingsActivity.class.getSimpleName();
 
     @Override
     public int getLayoutResource() {
@@ -36,12 +40,6 @@ public class VideoSettingsActivity extends AbstractBasePhoneActivity {
         super.onCreate( savedInstanceState );
 
         setTitle( getResources().getString( R.string.video_preferences ) );
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
     }
 

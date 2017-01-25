@@ -26,8 +26,11 @@ import android.view.KeyEvent;
 import org.mythtv.android.R;
 
 /**
+ *
  * PlaybackOverlayActivity for video playback that loads PlaybackOverlayFragment and handles
  * the MediaSession object used to maintain the state of the media playback.
+ *
+ * @author dmfrey
  */
 @TargetApi( Build.VERSION_CODES.LOLLIPOP )
 public class PlaybackOverlayActivity extends Activity {

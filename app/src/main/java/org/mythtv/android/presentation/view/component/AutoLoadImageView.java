@@ -23,8 +23,11 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
+ *
  * Simple implementation of {@link ImageView} with extended features like setting an
  * image from an url and an internal file cache using the application cache directory.
+ *
+ * @author dmfrey
  */
 public class AutoLoadImageView extends ImageView {
 

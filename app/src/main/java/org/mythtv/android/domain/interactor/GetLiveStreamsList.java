@@ -27,7 +27,12 @@ import java.util.Map;
 import rx.Observable;
 
 /**
- * Created by dmfrey on 10/25/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 10/25/15.
  */
 public class GetLiveStreamsList extends DynamicUseCase {
 

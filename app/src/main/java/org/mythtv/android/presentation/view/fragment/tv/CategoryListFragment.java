@@ -28,9 +28,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.mythtv.android.R;
-import org.mythtv.android.presentation.internal.di.components.DvrComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.TvCategoryModel;
-import org.mythtv.android.presentation.presenter.phone.TvCategoryListPresenter;
+import org.mythtv.android.presentation.presenter.tv.TvCategoryListPresenter;
 import org.mythtv.android.presentation.view.TvCategoryListView;
 import org.mythtv.android.presentation.view.adapter.tv.CategoriesAdapter;
 import org.mythtv.android.presentation.view.adapter.tv.CategoriesLayoutManager;
@@ -45,7 +45,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by dmfrey on 1/28/16.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 1/28/16.
  */
 public class CategoryListFragment extends AbstractBaseFragment implements TvCategoryListView {
 
@@ -82,12 +87,13 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
     }
 
     @Override
-    public void onAttach( Activity activity ) {
+    public void onAttach( Context context ) {
         Log.d( TAG, "onAttach : enter" );
-        super.onAttach( activity );
+        super.onAttach( context );
 
+        Activity activity = getActivity();
         if( activity instanceof TvCategoryListListener ) {
-            this.tvCategoryListListener = (TvCategoryListListener) activity;
+            this.tvCategoryListListener = (TvCategoryListListener) context;
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -161,7 +167,7 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
     private void initialize() {
         Log.d( TAG, "initialize : enter" );
 
-        this.getComponent( DvrComponent.class ).inject( this );
+        this.getComponent( MediaComponent.class ).inject( this );
         this.tvCategoryListPresenter.setView( this );
 
         Log.d( TAG, "initialize : exit" );

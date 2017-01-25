@@ -20,8 +20,13 @@ package org.mythtv.android.presentation.provider;
 
 import android.content.SearchRecentSuggestionsProvider;
 
-/*
- * Created by dmfrey on 3/15/15.
+/**
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 3/15/15.
  */
 public class MythtvSearchSuggestionProvider extends SearchRecentSuggestionsProvider {
 

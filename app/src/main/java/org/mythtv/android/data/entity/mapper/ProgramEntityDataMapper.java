@@ -32,12 +32,15 @@ import java.util.List;
 import javax.inject.Singleton;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 @Singleton
 public class ProgramEntityDataMapper {
-
-    private static final String TAG = ProgramEntityDataMapper.class.getSimpleName();
 
     private ProgramEntityDataMapper() { }
 
@@ -78,7 +81,6 @@ public class ProgramEntityDataMapper {
             }
 
             if( null != programEntity.getRecording() ) {
-//                Log.i( TAG, "transform : recording=" + programEntity.getRecording() );
 
                 program.setRecording( RecordingInfoEntityDataMapper.transform( programEntity.getRecording() ) );
 

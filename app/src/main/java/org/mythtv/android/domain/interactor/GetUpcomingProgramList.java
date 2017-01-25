@@ -22,18 +22,22 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
 
-import javax.inject.Inject;
+import java.util.Map;
 
 import rx.Observable;
 
 /**
- * Created by dmfrey on 8/26/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/26/15.
  */
-public class GetUpcomingProgramList extends UseCase {
+public class GetUpcomingProgramList extends DynamicUseCase {
 
     private final DvrRepository dvrRepository;
 
-    @Inject
     public GetUpcomingProgramList( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
@@ -42,7 +46,7 @@ public class GetUpcomingProgramList extends UseCase {
     }
 
     @Override
-    public Observable buildUseCaseObservable() {
+    public Observable buildUseCaseObservable( Map parameters ) {
 
         return this.dvrRepository.upcoming( -1, -1, false, -1, -1 );
     }

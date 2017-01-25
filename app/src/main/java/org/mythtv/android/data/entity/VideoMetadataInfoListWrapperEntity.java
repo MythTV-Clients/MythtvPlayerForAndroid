@@ -20,12 +20,14 @@ package org.mythtv.android.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-//import lombok.Data;
-
 /**
- * Created by dmfrey on 11/1/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 11/1/15.
  */
-//@Data
 public class VideoMetadataInfoListWrapperEntity {
 
     @SerializedName( "VideoMetadataInfoList" )
@@ -34,7 +36,7 @@ public class VideoMetadataInfoListWrapperEntity {
     public VideoMetadataInfoListWrapperEntity() {
     }
 
-    public VideoMetadataInfoListWrapperEntity(VideoMetadataInfoListEntity videoMetadataInfoListEntity ) {
+    public VideoMetadataInfoListWrapperEntity( VideoMetadataInfoListEntity videoMetadataInfoListEntity ) {
 
         this.videoMetadataInfoListEntity = videoMetadataInfoListEntity;
 

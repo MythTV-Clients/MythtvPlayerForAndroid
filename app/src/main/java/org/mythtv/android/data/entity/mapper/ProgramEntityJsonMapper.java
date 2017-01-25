@@ -26,6 +26,7 @@ import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.ProgramListEntity;
 import org.mythtv.android.data.entity.ProgramWrapperEntity;
 
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +34,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by dmfrey on 8/27/15.
+ *
+ *
+ *
+ * @author dmfrey
+ *
+ * Created on 8/27/15.
  */
 public class ProgramEntityJsonMapper {
 
@@ -48,7 +54,7 @@ public class ProgramEntityJsonMapper {
 
     }
 
-    public ProgramEntity transformProgramEntity( String programJsonResponse ) throws JsonSyntaxException {
+    public ProgramEntity transformProgramEntity( Reader programJsonResponse ) throws JsonSyntaxException {
 
 //        Log.i( TAG, "transformProgramEntity : programJsonResponse=" + programJsonResponse );
         Type programWrapperEntityType = new TypeToken<ProgramWrapperEntity>() {}.getType();
@@ -57,7 +63,7 @@ public class ProgramEntityJsonMapper {
         return programWrapperEntity.getProgram();
     }
 
-    public List<ProgramEntity> transformProgramEntityCollection( String programListJsonResponse ) throws JsonSyntaxException {
+    public List<ProgramEntity> transformProgramEntityCollection( Reader programListJsonResponse ) throws JsonSyntaxException {
 
 //        Log.i( TAG, "transformProgramEntityCollection : " + programListJsonResponse );
         Type programListEntityType = new TypeToken<ProgramListEntity>() {}.getType();
