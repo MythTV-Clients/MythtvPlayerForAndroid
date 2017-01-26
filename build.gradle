@@ -176,8 +176,8 @@ allprojects {
 
     ext {
         androidApplicationId = 'org.mythtv.android'
-        androidVersionCode = 1714301
-        androidVersionName = "3.0.1"
+        androidVersionCode = 1714302
+        androidVersionName = "3.0.2"
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         testApplicationId = 'org.mythtv.android.test'
     }
