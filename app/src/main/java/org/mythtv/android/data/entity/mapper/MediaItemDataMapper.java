@@ -1,5 +1,7 @@
 package org.mythtv.android.data.entity.mapper;
 
+import android.util.Log;
+
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.mythtv.android.data.entity.ArtworkInfoEntity;
@@ -7,6 +9,7 @@ import org.mythtv.android.data.entity.CastMemberEntity;
 import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
+import org.mythtv.android.domain.Error;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
 
@@ -30,12 +33,37 @@ import javax.inject.Singleton;
 @Singleton
 public class MediaItemDataMapper {
 
+    private static final String TAG = MediaItemDataMapper.class.getSimpleName();
+
     private MediaItemDataMapper() { }
 
     public static MediaItem transform( ProgramEntity programEntity ) throws UnsupportedEncodingException {
+        Log.i( TAG, "transform : programEntity=" + programEntity.toString() );
 
+        boolean dateValidationError = false, recordedIdValidationError = false;
+        List<Error> errors = new ArrayList<>();
         MediaItem mediaItem = new MediaItem();
-        mediaItem.setId( programEntity.getRecording().getRecordedId() );
+
+        Log.i( TAG, "transform : startTs=" + programEntity.getRecording().getStartTs() + ", test=" + ( null == programEntity.getRecording().getStartTs() ) );
+        if( null == programEntity.getRecording().getStartTs() ) {
+            Log.i( TAG, "transform : added StartTs to errors" );
+            errors.add( new Error( "StartTs", "StartTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            dateValidationError = true;
+        }
+
+        if( null == programEntity.getRecording().getEndTs() ) {
+            errors.add( new Error( "EndTs", "EndTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            dateValidationError = true;
+        }
+
+        if( programEntity.getRecording().getStatus() != -1 && ( programEntity.getRecording().getRecordedId().equals( "" ) || programEntity.getRecording().getRecordedId().equals( "0" )  ) ) {
+            errors.add( new Error( "RecordedId", "Recorded Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            recordedIdValidationError = true;
+        }
+
+        if( !recordedIdValidationError ) {
+            mediaItem.setId( programEntity.getRecording().translateRecordedId() );
+        }
 
         switch( programEntity.getRecording().getStatus() ) {
 
@@ -56,7 +84,9 @@ public class MediaItemDataMapper {
                 mediaItem.setMedia( Media.PROGRAM );
                 mediaItem.setUrl( url );
                 setContentType( mediaItem, url );
-                mediaItem.setPreviewUrl( "/Content/GetPreviewImage?RecordedId=" + programEntity.getRecording().getRecordedId() );
+                if( !recordedIdValidationError ) {
+                    mediaItem.setPreviewUrl( "/Content/GetPreviewImage?RecordedId=" + programEntity.getRecording().getRecordedId() );
+                }
 
                 mediaItem.setWatched( ( programEntity.getProgramFlags() & 0x00000200 ) > 0 );
                 mediaItem.setMarkWatchedUrl( "/Dvr/UpdateRecordedWatchedStatus" );
@@ -75,14 +105,17 @@ public class MediaItemDataMapper {
 
         mediaItem.setTitle( programEntity.getTitle() );
         mediaItem.setSubTitle( programEntity.getSubTitle() );
+        mediaItem.setInetref( programEntity.getInetref() );
         mediaItem.setDescription( programEntity.getDescription() );
-        mediaItem.setStartDate( programEntity.getStartTime() );
+        mediaItem.setStartDate(programEntity.getStartTime());
         mediaItem.setProgramFlags( programEntity.getProgramFlags() );
         mediaItem.setSeason( programEntity.getSeason() );
         mediaItem.setEpisode( programEntity.getEpisode() );
         mediaItem.setStudio( programEntity.getChannel().getCallSign() );
 
-        calculateDuration( mediaItem, programEntity.getRecording().getStartTs(), programEntity.getRecording().getEndTs() );
+        if( !dateValidationError ) {
+            calculateDuration( mediaItem, programEntity.getRecording().getStartTs(), programEntity.getRecording().getEndTs() );
+        }
 
         if( null != programEntity.getArtwork() ) {
 
@@ -100,7 +133,9 @@ public class MediaItemDataMapper {
             mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
 
         }
-        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        if( !recordedIdValidationError ) {
+            mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        }
 
         List<String> castMembers = new ArrayList<>();
         List<String> characters = new ArrayList<>();
@@ -140,9 +175,15 @@ public class MediaItemDataMapper {
             mediaItem.setCharacters( cast.trim() );
         }
 
-        mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark?RecordedId=%s1", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        if( !recordedIdValidationError ) {
+            mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark?RecordedId=%s1", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+        }
         mediaItem.setBookmark( programEntity.getBookmark() );
 
+        Log.i( TAG, "transform : errors=" + errors );
+        mediaItem.setValidationErrors( errors );
+
+        Log.i( TAG, "transform : mediaItem=" + mediaItem.toString() );
         return mediaItem;
     }
 

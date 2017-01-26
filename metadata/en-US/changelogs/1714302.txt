@@ -1,0 +1,9 @@
+1714302
+=============
+- bug fixes
+- Fixed issue with marking an episode 'Watched' or 'Unwatched'
+- Fixed issue with series with same name and different inetref showing all episodes
+- Fixed Settings not selecting all text when opening a property
+- Added Troubleshooter to checkout common connection issues between the App and Backend
+- Added visual and snackbar notifications where backend data may be corrupt
+

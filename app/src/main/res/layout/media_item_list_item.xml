@@ -43,6 +43,14 @@
                 android:layout_height="75dp"
                 android:src="@drawable/ic_movie_black_24dp"/>
 
+            <ImageView
+                android:id="@+id/media_item_error_image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_error_outline_red_24dp"/>
+
             <ProgressBar
                 android:id="@+id/media_item_progress"
                 android:layout_width="125dp"

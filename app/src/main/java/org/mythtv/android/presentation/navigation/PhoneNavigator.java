@@ -31,6 +31,7 @@ import org.mythtv.android.presentation.view.activity.phone.MediaItemDetailsActiv
 import org.mythtv.android.presentation.view.activity.phone.SeriesListActivity;
 import org.mythtv.android.presentation.view.activity.phone.SettingsActivity;
 import org.mythtv.android.presentation.view.activity.phone.TitleInfoListActivity;
+import org.mythtv.android.presentation.view.activity.phone.TroubleshootActivity;
 import org.mythtv.android.presentation.view.activity.phone.VideoListActivity;
 
 import javax.inject.Inject;
@@ -80,13 +81,13 @@ public class PhoneNavigator {
         Log.d( TAG, "navigateToTitleInfos : exit" );
     }
 
-    public void navigateToSeries( Context context, Media media, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
+    public void navigateToSeries( Context context, Media media, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup, String inetref ) {
         Log.d( TAG, "navigateToSeries : enter" );
 
         if( null != context ) {
             Log.d( TAG, "navigateToSeries : context != null" );
 
-            context.startActivity( SeriesListActivity.getCallingIntent( context, media, descending, startIndex, count, titleRegEx, recGroup, storageGroup ) );
+            context.startActivity( SeriesListActivity.getCallingIntent( context, media, descending, startIndex, count, titleRegEx, recGroup, storageGroup, inetref ) );
 
         }
 
@@ -161,6 +162,20 @@ public class PhoneNavigator {
         }
 
         Log.d( TAG, "navigateToSettings : exit" );
+    }
+
+    public void navigateToTroubleshoot( Context context ) {
+        Log.d( TAG, "navigateToTroubleshoot : enter" );
+
+        if( null != context ) {
+            Log.d( TAG, "navigateToTroubleshoot : context != null" );
+
+            Intent intentToLaunch = TroubleshootActivity.getCallingIntent( context );
+            context.startActivity( intentToLaunch );
+
+        }
+
+        Log.d( TAG, "navigateToTroubleshoot : exit" );
     }
 
 }

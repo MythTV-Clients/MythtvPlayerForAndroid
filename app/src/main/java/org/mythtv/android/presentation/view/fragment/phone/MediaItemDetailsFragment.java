@@ -39,6 +39,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.JsonSyntaxException;
 
 import org.joda.time.DateTimeZone;
@@ -344,7 +345,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     public void renderMediaItem( MediaItemModel mediaItemModel ) {
         Log.d( TAG, "renderMediaItem : enter" );
 
-        if( null != mediaItemModel ) {
+        if( null != mediaItemModel && mediaItemModel.isValid() ) {
             Log.d( TAG, "renderMediaItem : mediaItem is not null, mediaItemModel=" + mediaItemModel.toString() );
 
             this.mediaItemModel = mediaItemModel;
@@ -549,47 +550,58 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private class MarkWatchedTask extends AsyncTask<Boolean, Void, Boolean> {
 
+        private final String TAG = MarkWatchedTask.class.getSimpleName();
+        private boolean status;
+
         @Override
         protected Boolean doInBackground( Boolean... params ) {
 
-            String idParam;
-            switch( mediaItemModel.getMedia() ) {
+            if( mediaItemModel.isValid() ) {
 
-                case PROGRAM:
+                String idParam;
+                switch( mediaItemModel.getMedia() ) {
 
-                    idParam = "RecordedId";
+                    case PROGRAM:
 
-                    break;
+                        idParam = "RecordedId";
 
-                default:
+                        break;
 
-                    idParam = "Id";
+                    default:
 
-                    break;
-            }
+                        idParam = "Id";
 
-            FormBody.Builder builder = new FormBody.Builder();
-            builder.add(idParam, String.valueOf( mediaItemModel.getId() ) );
-            builder.add( "Watched", String.valueOf( params[ 0 ] ) );
+                        break;
+                }
 
-            final Request request = new Request.Builder()
-                    .url( getMasterBackendUrl() + mediaItemModel.getMarkWatchedUrl() )
-                    .addHeader( "Accept", "application/json" )
-                    .cacheControl( CacheControl.FORCE_NETWORK )
-                    .post( builder.build() )
-                    .build();
+                status = params[ 0 ];
 
-            try {
+                FormBody.Builder builder = new FormBody.Builder();
+                builder.add( idParam, String.valueOf( mediaItemModel.getId() ) );
+                builder.add( "Watched", String.valueOf( status ) );
 
-                BooleanJsonMapper mapper = new BooleanJsonMapper();
-                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+                final Request request = new Request.Builder()
+                        .url( getMasterBackendUrl() + mediaItemModel.getMarkWatchedUrl() )
+                        .addHeader( "Accept", "application/json" )
+                        .cacheControl( CacheControl.FORCE_NETWORK )
+                        .post( builder.build() )
+                        .build();
+
+                try {
+
+                    BooleanJsonMapper mapper = new BooleanJsonMapper();
+                    Reader result = okHttpClient.newCall( request ).execute().body().charStream();
 //                Log.d( TAG, "doInBackground : result=" + result );
 
-                return mapper.transformBoolean( result );
+                    return mapper.transformBoolean( result );
 
-            } catch( IOException e ) {
+                } catch( IOException e ) {
+                    Log.e( TAG, "doInBackground : error", e );
 
-                Log.e( TAG, "doInBackground : error", e );
+                    FirebaseCrash.logcat( Log.ERROR, TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+                    FirebaseCrash.report( e );
+
+                }
 
             }
 
@@ -603,7 +615,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
                 if (result) {
 
-                    mediaItemModel.setWatched( true );
+                    mediaItemModel.setWatched( status );
                     updateMenu();
 
                 }
@@ -616,28 +628,35 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private class AddLiveStreamTask extends AsyncTask<Void, Void, LiveStreamInfoEntity> {
 
+        private final String TAG = AddLiveStreamTask.class.getSimpleName();
+
         @Override
         protected LiveStreamInfoEntity doInBackground( Void... params ) {
             Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
 
-            final Request request = new Request.Builder()
-                    .url( getMasterBackendUrl() + mediaItemModel.getCreateHttpLiveStreamUrl() )
-                    .addHeader( "Accept", "application/json" )
-                    .cacheControl( CacheControl.FORCE_NETWORK )
-                    .get()
-                    .build();
+            if( mediaItemModel.isValid() ) {
+                final Request request = new Request.Builder()
+                        .url( getMasterBackendUrl() + mediaItemModel.getCreateHttpLiveStreamUrl() )
+                        .addHeader( "Accept", "application/json" )
+                        .cacheControl( CacheControl.FORCE_NETWORK )
+                        .get()
+                        .build();
 
-            try {
+                try {
 
-                LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
-                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+                    LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
+                    Reader result = okHttpClient.newCall( request ).execute().body().charStream();
 //                Log.d( TAG, "doInBackground : result=" + result );
 
-                return mapper.transformLiveStreamInfoEntity( result );
+                    return mapper.transformLiveStreamInfoEntity( result );
 
-            } catch( IOException e ) {
+                } catch( IOException e ) {
+                    Log.e( TAG, "doInBackground : error", e );
 
-                Log.e( TAG, "doInBackground : error", e );
+                    FirebaseCrash.logcat( Log.ERROR, TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+                    FirebaseCrash.report( e );
+
+                }
 
             }
 
@@ -683,28 +702,36 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private class RemoveLiveStreamTask extends AsyncTask<Void, Void, Boolean> {
 
+        private final String TAG = RemoveLiveStreamTask.class.getSimpleName();
+
         @Override
         protected Boolean doInBackground( Void... params ) {
             Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
 
-            final Request request = new Request.Builder()
-                    .url( getMasterBackendUrl() + mediaItemModel.getRemoveHttpLiveStreamUrl() )
-                    .addHeader( "Accept", "application/json" )
-                    .cacheControl( CacheControl.FORCE_NETWORK )
-                    .get()
-                    .build();
+            if( mediaItemModel.isValid() ) {
 
-            try {
+                final Request request = new Request.Builder()
+                        .url( getMasterBackendUrl() + mediaItemModel.getRemoveHttpLiveStreamUrl() )
+                        .addHeader( "Accept", "application/json" )
+                        .cacheControl( CacheControl.FORCE_NETWORK )
+                        .get()
+                        .build();
 
-                BooleanJsonMapper mapper = new BooleanJsonMapper();
-                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
-//                Log.d( TAG, "doInBackground : result=" + result );
+                try {
 
-                return mapper.transformBoolean( result );
+                    BooleanJsonMapper mapper = new BooleanJsonMapper();
+                    Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+//                    Log.d( TAG, "doInBackground : result=" + result );
 
-            } catch( IOException e ) {
+                    return mapper.transformBoolean( result );
 
-                Log.e( TAG, "doInBackground : error", e );
+                } catch( IOException e ) {
+                    Log.e( TAG, "doInBackground : error", e );
+
+                    FirebaseCrash.logcat( Log.ERROR, TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+                    FirebaseCrash.report( e );
+
+                }
 
             }
 
@@ -733,28 +760,39 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private class GetLiveStreamTask extends AsyncTask<Void, Void, LiveStreamInfoEntity> {
 
+        private final String TAG = GetLiveStreamTask.class.getSimpleName();
+
         @Override
         protected LiveStreamInfoEntity doInBackground( Void... params ) {
             Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
 
-            final Request request = new Request.Builder()
-                    .url( getMasterBackendUrl() + mediaItemModel.getGetHttpLiveStreamUrl() )
-                    .addHeader( "Accept", "application/json" )
-                    .get()
-                    .build();
+            if( mediaItemModel.isValid() ) {
 
-            try {
+                final Request request = new Request.Builder()
+                        .url( getMasterBackendUrl() + mediaItemModel.getGetHttpLiveStreamUrl() )
+                        .addHeader( "Accept", "application/json" )
+                        .get()
+                        .build();
 
-                LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
-                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+                try {
+
+                    LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
+                    Reader result = okHttpClient.newCall( request ).execute().body().charStream();
 //                Log.d( TAG, "doInBackground : result=" + result );
 
-                return mapper.transformLiveStreamInfoEntity( result );
+                    return mapper.transformLiveStreamInfoEntity( result );
 
-            } catch( JsonSyntaxException | IOException e ) {
+                } catch( JsonSyntaxException | IOException e ) {
+                    Log.e( TAG, "doInBackground : error", e );
 
-                Log.e( TAG, "doInBackground : error", e );
+                    FirebaseCrash.logcat( Log.ERROR, TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+                    FirebaseCrash.report( e );
 
+                }
+
+            } else {
+
+                showToastMessage( getString(R.string.media_item_details_corrupt_data), null, null );
             }
 
             return null;

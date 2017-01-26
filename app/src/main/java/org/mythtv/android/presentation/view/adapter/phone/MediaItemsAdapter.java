@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -181,6 +182,16 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         holder.episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.getSeason(), mediaItemModel.getEpisode() ) );
         holder.duration.setText( context.getResources().getString( R.string.minutes, String.valueOf( mediaItemModel.getDuration() ) ) );
 
+        if( mediaItemModel.isValid() ) {
+
+            holder.error.setVisibility( View.GONE );
+
+        } else {
+
+            holder.error.setVisibility( View.VISIBLE );
+
+        }
+
         holder.itemView.setOnClickListener( v -> {
 
             if( null != MediaItemsAdapter.this.onItemClickListener ) {
@@ -227,6 +238,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
         @BindView( R.id.media_item_image )
         AutoLoadImageView image;
+
+        @BindView( R.id.media_item_error_image )
+        ImageView error;
 
         @BindView( R.id.media_item_title )
         TextView title;

@@ -31,15 +31,18 @@ import android.widget.RelativeLayout;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.model.ErrorModel;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemListPresenter;
 import org.mythtv.android.presentation.view.MediaItemListView;
-import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
+import org.mythtv.android.presentation.view.activity.phone.TroubleshootClickListener;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
+import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -67,6 +70,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public static final String TITLE_REGEX_KEY = "title_regex";
     public static final String REC_GROUP_KEY = "rec_group";
     public static final String STORAGE_GROUP_KEY = "storage_group";
+    public static final String INETREF_KEY = "inetref";
     public static final String FOLDER_KEY = "folder";
     public static final String SORT_KEY = "sort";
 
@@ -92,6 +96,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     private MediaItemsAdapter mediaItemsAdapter;
 
+    private TroubleshootClickListener troubleshootClickListener;
     private MediaItemListListener mediaItemListListener;
 
     private Map<String, Object> parameters;
@@ -115,6 +120,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         private String titleRegEx;
         private String recGroup;
         private String storageGroup;
+        private String inetref;
         private String folder;
         private String sort;
 
@@ -149,6 +155,11 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
         public Builder storageGroup( String storageGroup ) {
             this.storageGroup = storageGroup;
+            return this;
+        }
+
+        public Builder inetref( String inetref ) {
+            this.inetref = inetref;
             return this;
         }
 
@@ -191,6 +202,10 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
                 parameters.put( STORAGE_GROUP_KEY, storageGroup );
             }
 
+            if( null != inetref ) {
+                parameters.put( INETREF_KEY, inetref );
+            }
+
             if( null != folder ) {
                 parameters.put( FOLDER_KEY, folder );
             }
@@ -229,6 +244,10 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
             if( null != storageGroup ) {
                 args.putString( STORAGE_GROUP_KEY, storageGroup );
+            }
+
+            if( null != inetref ) {
+                args.putString( INETREF_KEY, inetref );
             }
 
             if( null != folder ) {
@@ -270,6 +289,10 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
                 builder.storageGroup( args.getString( STORAGE_GROUP_KEY ) );
             }
 
+            if( args.containsKey( INETREF_KEY ) ) {
+                builder.inetref( args.getString( INETREF_KEY ) );
+            }
+
             if( args.containsKey( FOLDER_KEY ) ) {
                 builder.folder( args.getString( FOLDER_KEY ) );
             }
@@ -290,6 +313,9 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Activity activity = getActivity();
         if( activity instanceof MediaItemListFragment.MediaItemListListener) {
             this.mediaItemListListener = (MediaItemListFragment.MediaItemListListener) activity;
+        }
+        if( activity instanceof TroubleshootClickListener) {
+            this.troubleshootClickListener = (TroubleshootClickListener) activity;
         }
 
         Log.d( TAG, "onAttach : exit" );
@@ -430,6 +456,28 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
         if( null != mediaItemModelCollection ) {
 
+            if( parameters.containsKey( INETREF_KEY ) ) {
+
+                String inetref = (String) parameters.get( INETREF_KEY );
+                List<MediaItemModel> filtered = new ArrayList<>();
+                for( MediaItemModel mediaItemModel : mediaItemModelCollection ) {
+
+                    if( mediaItemModel.getInetref().equals( inetref ) ) {
+
+                        filtered.add( mediaItemModel );
+
+                    }
+
+                }
+
+                if( !filtered.isEmpty() ) {
+
+                    mediaItemModelCollection = filtered;
+
+                }
+
+            }
+
             this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
 
         }
@@ -455,7 +503,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
 
-        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> MediaItemListFragment.this.loadMediaItemList() );
+        this.showToastMessage( message, getResources().getString( R.string.troubleshoot ), v -> troubleshootClickListener.onTroubleshootClicked() );
 
         Log.d( TAG, "showError : exit" );
     }
@@ -491,9 +539,39 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     private MediaItemsAdapter.OnItemClickListener onItemClickListener = mediaItemModel -> {
 
         if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
-            Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-            MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel );
+            if( mediaItemModel.isValid() ) {
+                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel );
+
+            } else {
+                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
+
+                if( null == mediaItemModel.getMedia() ) {
+
+                    String message = getString(R.string.validation_no_media_type);
+                    showToastMessage( message, null, null );
+
+                } else {
+
+                    String fields = "";
+                    for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
+
+                        if( !"".equals( fields ) ) {
+                            fields += ", ";
+                        }
+
+                        fields += errorModel.getField();
+
+                    }
+
+                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
+                    showToastMessage( message, null, null );
+
+                }
+
+            }
 
         }
 
