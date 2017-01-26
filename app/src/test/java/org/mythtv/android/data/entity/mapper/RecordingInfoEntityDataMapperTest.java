@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 public class RecordingInfoEntityDataMapperTest {
 
     // Recording Info Fake Values
-    private static final int FAKE_RECORDING_INFO_RECORDED_ID = 1;
+    private static final String FAKE_RECORDING_INFO_RECORDED_ID = "1";
     private static final int FAKE_RECORDING_INFO_STATUS = 1;
     private static final int FAKE_RECORDING_INFO_PRIORITY = 1;
     private static final DateTime FAKE_RECORDING_INFO_START_TS = new DateTime();
@@ -48,7 +48,7 @@ public class RecordingInfoEntityDataMapperTest {
     private void assertRecording( RecordingInfo recordingInfo ) {
 
         assertThat( recordingInfo, is( instanceOf( RecordingInfo.class ) ) );
-        assertThat( recordingInfo.getRecordedId(), is( FAKE_RECORDING_INFO_RECORDED_ID ) );
+        assertThat( recordingInfo.getRecordedId(), is( Integer.parseInt( FAKE_RECORDING_INFO_RECORDED_ID ) ) );
         assertThat( recordingInfo.getStatus(), is( FAKE_RECORDING_INFO_STATUS ) );
         assertThat( recordingInfo.getPriority(), is( FAKE_RECORDING_INFO_PRIORITY ) );
         assertThat( recordingInfo.getStartTs(), is( FAKE_RECORDING_INFO_START_TS ) );

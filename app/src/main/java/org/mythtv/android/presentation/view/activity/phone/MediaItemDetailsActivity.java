@@ -254,6 +254,12 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
+        if( null == mediaItemModel.getMedia() ) {
+            Log.d( TAG, "loadBackdrop : exit, media not set" );
+
+            return;
+        }
+
         String backdropUrl = null;
         switch( mediaItemModel.getMedia() ) {
 
@@ -295,6 +301,14 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
     @OnClick( R.id.fab )
     void onButtonFabPlay() {
         Log.d( TAG, "onButtonFabPlay : enter" );
+
+        if( null == mediaItemModel || !mediaItemModel.isValid() ) {
+            Log.d( TAG, "onButtonFabPlay : exit, mediaItemModel is not valid" );
+
+            showToastMessage( fab, "Entry is not valid and cannot be played.", null, null );
+
+            return;
+        }
 
         if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
             Log.d( TAG, "onButtonFabPlay : sending stream to internal player" );

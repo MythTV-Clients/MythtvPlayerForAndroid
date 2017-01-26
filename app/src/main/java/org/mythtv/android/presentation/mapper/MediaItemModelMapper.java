@@ -1,7 +1,9 @@
 package org.mythtv.android.presentation.mapper;
 
+import org.mythtv.android.domain.Error;
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.presentation.internal.di.PerActivity;
+import org.mythtv.android.presentation.model.ErrorModel;
 import org.mythtv.android.presentation.model.MediaItemModel;
 
 import java.util.ArrayList;
@@ -55,6 +57,12 @@ public class MediaItemModelMapper {
         mediaItemModel.setUpdateSavedBookmarkUrl( mediaItem.getUpdateSavedBookmarkUrl() );
         mediaItemModel.setBookmark( mediaItem.getBookmark() );
         mediaItemModel.setInetref( mediaItem.getInetref() );
+
+        ArrayList<ErrorModel> errors = new ArrayList<>();
+        for( Error error : mediaItem.getValidationErrors() ) {
+            errors.add( ErrorModel.fromError( error ) );
+        }
+        mediaItemModel.setValidationErrors( errors );
 
         return mediaItemModel;
     }

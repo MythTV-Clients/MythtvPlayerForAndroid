@@ -46,7 +46,7 @@ public class RecordingInfoEntityDataMapper {
         if( null != recordingInfoEntity ) {
 
             recordingInfo = new RecordingInfo();
-            recordingInfo.setRecordedId( recordingInfoEntity.getRecordedId() );
+            recordingInfo.setRecordedId( recordingInfoEntity.translateRecordedId() );
             recordingInfo.setStatus( recordingInfoEntity.getStatus() );
             recordingInfo.setPriority( recordingInfoEntity.getPriority() );
             recordingInfo.setStartTs( recordingInfoEntity.getStartTs() );

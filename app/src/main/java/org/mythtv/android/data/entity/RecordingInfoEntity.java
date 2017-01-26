@@ -32,8 +32,8 @@ import org.joda.time.DateTime;
  */
 public class RecordingInfoEntity {
 
-//    @SerializedName( "RecordedId" )
-    private int recordedId;
+    @SerializedName( "RecordedId" )
+    private String recordedId;
 
     @SerializedName( "Status" )
     private int status;
@@ -80,7 +80,7 @@ public class RecordingInfoEntity {
     public RecordingInfoEntity() {
     }
 
-    public RecordingInfoEntity(int recordedId, int status, int priority, DateTime startTs, DateTime endTs, int recordId, String recGroup, String playGroup, String storageGroup, int recType, int dupInType, int dupMethod, int encoderId, String encoderName, String profile ) {
+    public RecordingInfoEntity(String recordedId, int status, int priority, DateTime startTs, DateTime endTs, int recordId, String recGroup, String playGroup, String storageGroup, int recType, int dupInType, int dupMethod, int encoderId, String encoderName, String profile ) {
 
         this.recordedId = recordedId;
         this.status = status;
@@ -100,11 +100,20 @@ public class RecordingInfoEntity {
 
     }
 
-    public int getRecordedId() {
+    public String getRecordedId() {
         return recordedId;
     }
 
-    public void setRecordedId(int recordedId) {
+    public Integer translateRecordedId() {
+
+        try {
+            return Integer.parseInt( recordedId );
+        } catch( NumberFormatException e ) {
+            return null;
+        }
+    }
+
+    public void setRecordedId(String recordedId) {
         this.recordedId = recordedId;
     }
 
