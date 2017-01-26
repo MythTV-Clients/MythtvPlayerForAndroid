@@ -550,7 +550,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
                 if( null == mediaItemModel.getMedia() ) {
 
-                    String message = "Media Type could not be determined";
+                    String message = getString(R.string.validation_no_media_type);
                     showToastMessage( message, null, null );
 
                 } else {
@@ -566,7 +566,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
                     }
 
-                    String message = "Thus episode has corrupt data: " + fields;
+                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
                     showToastMessage( message, null, null );
 
                 }
