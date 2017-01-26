@@ -594,7 +594,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 return mapper.transformString( result );
 
-            } catch( IOException e ) {
+            } catch( IOException | JsonSyntaxException e ) {
 
                 Log.e( TAG, "doInBackground : error", e );
 
