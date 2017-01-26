@@ -52,8 +52,8 @@ android {
         multiDexEnabled true
 
         applicationId 'org.mythtv.android'
-        versionCode 1714301
-        versionName "3.0.1"
+        versionCode 1714302
+        versionName "3.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         resValue "string", "branchName", applicationBranch
