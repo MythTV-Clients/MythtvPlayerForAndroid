@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_troubleshoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.mythtv.android.presentation.view.activity.phone.TroubleshootActivity"
+    tools:showIn="@layout/activity_troubleshoot">
+
+    <LinearLayout
+        android:id="@+id/airplane_mode_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/airplane_mode_check_label"
+            android:layout_weight="0.9" />
+
+        <ImageView
+            android:id="@+id/airplane_mode_connected_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_weight="0.03"
+            android:tint="@color/primary_dark"
+            android:src="@drawable/ic_airplanemode_active_black_24dp"  />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/network_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/airplane_mode_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/network_check_label"
+            android:layout_weight="0.9" />
+
+        <ImageView
+            android:id="@+id/network_connected_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_weight="0.03"
+            android:tint="@color/primary_dark"
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ping_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/network_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/master_backend_ping_check_label"
+            android:layout_weight="0.9" />
+
+        <ImageView
+            android:id="@+id/ping_connected_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_weight="0.1"
+            android:tint="@color/primary_dark"
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/services_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ping_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/mythtv_services_api_check_label"
+            android:layout_weight="0.9" />
+
+        <ImageView
+            android:id="@+id/services_connected_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_weight="0.1"
+            android:tint="@color/primary_dark"
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/backend_version_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/services_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/backend_version_verified_label"
+            android:layout_weight="0.9" />
+
+        <ImageView
+            android:id="@+id/backend_version_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_weight="0.1"
+            android:tint="@color/primary_dark"
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/backend_lang_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/backend_version_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/backend_language_verified_label"
+            android:layout_weight="0.9" />
+
+        <ImageView
+            android:id="@+id/backend_lang_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_weight="0.1"
+            android:tint="@color/primary_dark"
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+
+    </LinearLayout>
+
+</RelativeLayout>
