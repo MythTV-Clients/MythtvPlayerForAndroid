@@ -415,6 +415,12 @@ public class MediaItem {
         return validationErrors;
     }
 
+    public void setValidationErrors( List<Error> validationErrors ) {
+
+        this.validationErrors = validationErrors;
+
+    }
+
     public boolean isValid() {
 
         return null != media && validationErrors.isEmpty();

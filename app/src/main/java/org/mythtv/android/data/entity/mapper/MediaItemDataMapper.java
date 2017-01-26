@@ -1,5 +1,7 @@
 package org.mythtv.android.data.entity.mapper;
 
+import android.util.Log;
+
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.mythtv.android.data.entity.ArtworkInfoEntity;
@@ -31,25 +33,31 @@ import javax.inject.Singleton;
 @Singleton
 public class MediaItemDataMapper {
 
+    private static final String TAG = MediaItemDataMapper.class.getSimpleName();
+
     private MediaItemDataMapper() { }
 
     public static MediaItem transform( ProgramEntity programEntity ) throws UnsupportedEncodingException {
+        Log.i( TAG, "transform : programEntity=" + programEntity.toString() );
 
         boolean dateValidationError = false, recordedIdValidationError = false;
+        List<Error> errors = new ArrayList<>();
         MediaItem mediaItem = new MediaItem();
 
+        Log.i( TAG, "transform : startTs=" + programEntity.getRecording().getStartTs() + ", test=" + ( null == programEntity.getRecording().getStartTs() ) );
         if( null == programEntity.getRecording().getStartTs() ) {
-            mediaItem.getValidationErrors().add( new Error( "StartTs", "StartTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            Log.i( TAG, "transform : added StartTs to errors" );
+            errors.add( new Error( "StartTs", "StartTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
             dateValidationError = true;
         }
 
         if( null == programEntity.getRecording().getEndTs() ) {
-            mediaItem.getValidationErrors().add( new Error( "EndTs", "EndTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            errors.add( new Error( "EndTs", "EndTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
             dateValidationError = true;
         }
 
         if( programEntity.getRecording().getRecordedId().equals( "" ) || programEntity.getRecording().getRecordedId().equals( "0" )  ) {
-            mediaItem.getValidationErrors().add( new Error( "RecordedId", "Recorded Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            errors.add( new Error( "RecordedId", "Recorded Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
             recordedIdValidationError = true;
         }
 
@@ -172,6 +180,10 @@ public class MediaItemDataMapper {
         }
         mediaItem.setBookmark( programEntity.getBookmark() );
 
+        Log.i( TAG, "transform : errors=" + errors );
+        mediaItem.setValidationErrors( errors );
+
+        Log.i( TAG, "transform : mediaItem=" + mediaItem.toString() );
         return mediaItem;
     }
 
