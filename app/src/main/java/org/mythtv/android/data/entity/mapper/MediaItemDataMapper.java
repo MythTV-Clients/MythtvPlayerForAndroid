@@ -48,7 +48,7 @@ public class MediaItemDataMapper {
             dateValidationError = true;
         }
 
-        if( null == programEntity.getRecording().translateRecordedId()  ) {
+        if( programEntity.getRecording().getRecordedId().equals( "0" )  ) {
             mediaItem.getValidationErrors().add( new Error( "RecordedId", "Recorded Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
             recordedIdValidationError = true;
         }
