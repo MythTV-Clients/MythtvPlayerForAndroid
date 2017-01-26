@@ -211,6 +211,7 @@
     <string name="cd_image_view_button_4">image view button 4</string>
     <string name="cd_image_view_button_5">image view button 5</string>
     <string name="player_timer" translatable="false">0:00</string>
+    <string name="media_item_details_corrupt_data">Data is corrupt, check backend</string>
     <string name="title_activity_troubleshoot">Troubleshoot Connection</string>
     <string name="troubleshoot">Troubleshoot</string>
     <string name="airplane_mode_check_label">Airplane Mode must be off</string>
@@ -233,5 +234,7 @@
     <string name="backend_version_check_failed">MythTV version v%s or greater is required</string>
     <string name="backend_version_check_passed">MythTV version meets minimum version</string>
     <string name="backend_version_verified_label">MythTV Version is v0.28 or greater</string>
+    <string name="validation_corrupt_data">This episode has corrupt backend data: %s</string>
+    <string name="validation_no_media_type">Media Type could not be determined</string>
 
 </resources>
