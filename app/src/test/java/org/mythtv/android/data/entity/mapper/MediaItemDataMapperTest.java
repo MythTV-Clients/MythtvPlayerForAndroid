@@ -10,7 +10,10 @@ import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -134,6 +137,29 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
         assertThat( mediaItem.getDuration(), is( equalTo( 30L ) ) );
         assertThat( mediaItem.isValid(), is( false ) );
         assertThat( mediaItem.getValidationErrors(), hasSize( 1 ) );
+
+    }
+
+    @Test
+    public void testTransformUpcoming() throws Exception {
+
+        try( BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( getClass().getClassLoader().getResourceAsStream( "org/mythtv/android/data/entity/mapper/Dvr_GetUpcomingList.json" ) ) ) ) {
+
+            List<ProgramEntity> programEntities = programEntityJsonMapper.transformProgramEntityCollection( bufferedReader );
+            assertThat( programEntities, not(nullValue() ) );
+
+            List<MediaItem> mediaItems = MediaItemDataMapper.transformPrograms( programEntities );
+            assertThat( mediaItems, not( nullValue()) );
+            assertThat( mediaItems, hasSize(equalTo( 40 ) ) );
+
+            for( MediaItem mediaItem : mediaItems ) {
+
+                assertThat( mediaItem.isValid(), is( true ) );
+                assertThat( mediaItem.getValidationErrors(), hasSize( 0 ) );
+
+            }
+
+        }
 
     }
 
