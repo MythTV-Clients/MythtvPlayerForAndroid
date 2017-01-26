@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.gson.JsonSyntaxException;
 
 import org.mythtv.android.R;
 import org.mythtv.android.data.entity.mapper.BackendLangJsonMapper;
@@ -502,7 +503,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 return mapper.transformString( result );
 
-            } catch( IOException e ) {
+            } catch( IOException | JsonSyntaxException e ) {
 
                 Log.e( TAG, "doInBackground : error", e );
 
@@ -593,7 +594,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 return mapper.transformString( result );
 
-            } catch( IOException e ) {
+            } catch( IOException | JsonSyntaxException e ) {
 
                 Log.e( TAG, "doInBackground : error", e );
 
