@@ -237,5 +237,6 @@
     <string name="backend_version_verified_label">MythTV Version is v0.28 or greater</string>
     <string name="validation_corrupt_data">This episode has corrupt backend data: %s</string>
     <string name="validation_no_media_type">Media Type could not be determined</string>
+    <string name="master_backend_address_set">Test Master Backend address set</string>
 
 </resources>

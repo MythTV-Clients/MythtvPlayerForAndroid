@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.JsonSyntaxException;
@@ -49,38 +48,23 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     private static final String TAG = TroubleshootActivity.class.getSimpleName();
 
-    @BindView( R.id.airplane_mode_container )
-    LinearLayout airplaneModeContainer;
-
     @BindView( R.id.airplane_mode_connected_image )
     ImageView airplaneModeConnectedImage;
-
-    @BindView( R.id.network_container )
-    LinearLayout networkConnectedContainer;
 
     @BindView( R.id.network_connected_image )
     ImageView networkConnectedImage;
 
-    @BindView( R.id.ping_container )
-    LinearLayout pingContainer;
+    @BindView( R.id.backend_set_image )
+    ImageView backendSetImage;
 
     @BindView( R.id.ping_connected_image )
     ImageView pingConnectedImage;
 
-    @BindView( R.id.services_container )
-    LinearLayout servicesContainer;
-
     @BindView( R.id.services_connected_image )
     ImageView servicesConnectedImage;
 
-    @BindView( R.id.backend_version_container )
-    LinearLayout backendVersionContainer;
-
     @BindView( R.id.backend_version_image )
     ImageView backendVersionImage;
-
-    @BindView( R.id.backend_lang_container )
-    LinearLayout backendLangContainer;
 
     @BindView( R.id.backend_lang_image )
     ImageView backendLangImage;
@@ -170,6 +154,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
         airplaneModeConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_airplanemode_active_black_24dp, null ) );
         networkConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+        backendSetImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_help_outline_black_24dp, null ) );
         pingConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
         servicesConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
         backendVersionImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
@@ -299,8 +284,11 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     private void startNetworkConnectionCheck() {
 
         setImage( networkConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( backendSetImage, R.drawable.ic_help_outline_black_24dp );
         setImage( pingConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
         setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( backendVersionImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( backendLangImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
         if( null != networkConnectedAsyncTask && networkConnectedAsyncTask.getStatus().equals( AsyncTask.Status.RUNNING ) ) {
 
@@ -332,7 +320,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 showToastMessage( fab, getString( R.string.troubleshoot_network_connected ), null, null );
 
-                startPingConnectionCheck();
+                startBackendSetCheck();
 
             } else {
 
@@ -346,10 +334,43 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     }
 
+    private void startBackendSetCheck() {
+
+        setImage( backendSetImage, R.drawable.ic_help_outline_black_24dp );
+        setImage( pingConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( backendVersionImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( backendLangImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+
+        backendSetImage.startAnimation( pulse );
+
+        new Handler().postDelayed(() -> {
+
+            String masterBackendUrl = getMasterBackendUrl();
+            if( null != masterBackendUrl && !"".equals( masterBackendUrl ) ) {
+
+                setImage( backendSetImage, R.drawable.navigation_drawer_settings );
+
+                startPingConnectionCheck();
+
+            } else {
+
+                setImage( backendSetImage, R.drawable.ic_help_outline_black_24dp );
+
+            }
+
+
+        }, 2000 );
+
+    }
+
     private void startPingConnectionCheck() {
 
         setImage( pingConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
         setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( backendVersionImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+        setImage( backendLangImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
         if( null != pingConnectedAsyncTask && pingConnectedAsyncTask.getStatus().equals( AsyncTask.Status.RUNNING ) ) {
 
