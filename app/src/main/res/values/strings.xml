@@ -53,22 +53,10 @@
     <string name="pref_backend_port_description">The port of the master backend</string>
     <string name="pref_backend_port" translatable="false">6544</string>
 
-    <string name="pref_hls_video_width_title">Width</string>
-    <string name="pref_hls_video_width_default" translatable="false">0</string>
-    <string name="pref_hls_video_height_title">Height</string>
-    <string name="pref_hls_video_height_default" translatable="false">0</string>
-    <string name="pref_hls_video_bitrate_title">Bitrate</string>
-    <string name="pref_hls_video_bitrate_default" translatable="false">800000</string>
-    <string name="pref_hls_audio_bitrate_title">Audio Bitrate</string>
-    <string name="pref_hls_audio_bitrate_default" translatable="false">64000</string>
     <string name="pref_default_player">Default Player</string>
     <string name="pref_internal_player">Internal Player</string>
     <string name="pref_internal_player_summary_on">Playback will be handled by the Internal Player</string>
     <string name="pref_internal_player_summary_off">Playback will be handled by an External Player</string>
-    <string name="pref_hls_video_width_title_summary">HLS transcode video width</string>
-    <string name="pref_hls_video_height_title_summary">HLS transcode video height</string>
-    <string name="pref_hls_video_bitrate_title_summary">HLS transcode video bitrate</string>
-    <string name="pref_hls_audio_bitrate_title_summary">HLS transcode audio bitrate</string>
     <string name="pref_show_adult_tab">Show Adult tab in Watch Videos</string>
     <string name="pref_show_adult_tab_summary_on">Adult tab will be shown</string>
     <string name="pref_show_adult_tab_summary_off">Adult tab will not be shown</string>

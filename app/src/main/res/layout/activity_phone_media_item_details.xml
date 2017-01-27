@@ -83,9 +83,13 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            style="@style/FabStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
             app:layout_anchor="@id/appbar"
-            app:layout_anchorGravity="bottom|right|end" />
+            app:layout_anchorGravity="bottom|end"
+            android:src="@drawable/ic_play"
+            android:elevation="6dp" />
 
     </android.support.design.widget.CoordinatorLayout>
 

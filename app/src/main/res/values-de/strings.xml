@@ -24,25 +24,13 @@
 
     <string name="video">Video</string>
 
-    <!-- not checked, unknown occurence -->
-    <!-- not checked, unknown occurence -->
-
     <string name="drawer_item_watch_recordings">Aufnahmen ansehen</string>
     <string name="drawer_item_watch_videos">Videos ansehen</string>
     <string name="drawer_item_preferences">Einstellungen</string>
 
     <string name="action_settings">Einstellungen</string>
 
-    <!-- not checked, unknown occurence -->
-    <!-- HLS not translated, unknown occurence -->
-
-    <!-- HLS not translated, unknown occurence -->
-    <string name="pref_hls_video_bitrate_title">Bitrate</string>
-    <string name="pref_hls_audio_bitrate_title">Audio Bitrate</string>
     <string name="pref_default_player">Standardplayer</string>
-    <string name="pref_hls_video_height_title_summary">Video Höhe</string>
-    <string name="pref_hls_video_bitrate_title_summary">Video Bitrate</string>
-    <string name="pref_hls_audio_bitrate_title_summary">Audio Bitrate</string>
     <string name="pref_rating_nr">NR – Nicht Bewertet</string>
     <string name="pref_rating_pg">PG – Begleitung eines Erwachsenen erwünscht</string>
     <string name="pref_rating_pg13">PG-13 – Begleitung eines Erwachsenen unbedingt empfohlen</string>
@@ -55,9 +43,6 @@
     <string name="pref_backend_port_description">Port des Master Backends</string>
     <string name="pref_backend_url_description">Hostname oder IP-Adresse des Master Backends</string>
     <string name="pref_backend_url_title">Master Backend Einstellung</string>
-    <string name="pref_hls_video_height_title">Video  Höhe</string>
-    <string name="pref_hls_video_width_title">Video Breite</string>
-    <string name="pref_hls_video_width_title_summary">HLS transcode Video Breite</string> <!-- not checked, unknown occurence -->
     <string name="pref_internal_player">Interner Player</string>
     <string name="pref_internal_player_summary_off">Wiedergabe durch externen Player</string>
     <string name="pref_internal_player_summary_on">Wiedergabe durch internen Player</string>
@@ -78,7 +63,6 @@
     <string name="pref_show_adult_tab_summary_off">Pornos werden verborgen</string>
     <string name="pref_show_adult_tab_summary_on">Pornos werden angezeigt</string>
     <string name="pref_video_display_preferences">Wiedergabeeinstellungen</string>
-    <!-- not checked, unknown occurence -->
     <string name="recording">Aufnahme</string>
     <string name="search_hint">Suche Show, Film, Schauspieler, Persönlichkeit, Kanal</string> <!-- not checked, unknown occurence -->
     <string name="search_results">Suchergebnisse</string>
@@ -172,6 +156,7 @@
     <string name="video_error_server_unaccessible">Media server was not reachable</string>
     <string name="video_error_unknown_error">Failed to load video</string>
     <string name="media_item_details_corrupt_data">Data is corrupt, check backend</string>
+    <string name="title_activity_troubleshoot">Troubleshoot Connection</string>
     <string name="troubleshoot">Troubleshoot</string>
     <string name="airplane_mode_check_label">Airplane Mode must be off</string>
     <string name="network_check_label">Network must be connected</string>

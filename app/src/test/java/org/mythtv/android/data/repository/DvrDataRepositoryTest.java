@@ -48,7 +48,6 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
         dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockContentDataStoreFactory );
 
         given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockDvrDataStore );
-        given( mockContentDataStoreFactory.create() ).willReturn( mockContentDataStore );
         given( mockContentDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockContentDataStore );
 
     }

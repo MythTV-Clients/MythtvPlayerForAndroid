@@ -55,42 +55,6 @@
             android:summaryOn="@string/pref_internal_player_summary_on"
             android:summaryOff="@string/pref_internal_player_summary_off" />
 
-        <ListPreference
-            android:key="hls_video_width"
-            android:title="@string/pref_hls_video_width_title"
-            android:summary="@string/pref_hls_video_width_title_summary"
-            android:dialogTitle="@string/pref_hls_video_width_title"
-            android:entries="@array/pref_hls_video_width_entries"
-            android:entryValues="@array/pref_hls_video_width_values"
-            android:defaultValue="@string/pref_hls_video_width_default" />
-
-        <ListPreference
-            android:key="hls_video_height"
-            android:title="@string/pref_hls_video_height_title"
-            android:summary="@string/pref_hls_video_height_title_summary"
-            android:dialogTitle="@string/pref_hls_video_height_title"
-            android:entries="@array/pref_hls_video_height_entries"
-            android:entryValues="@array/pref_hls_video_height_values"
-            android:defaultValue="@string/pref_hls_video_height_default" />
-
-        <ListPreference
-            android:key="hls_video_bitrate"
-            android:title="@string/pref_hls_video_bitrate_title"
-            android:summary="@string/pref_hls_video_bitrate_title_summary"
-            android:dialogTitle="@string/pref_hls_video_bitrate_title"
-            android:entries="@array/pref_hls_video_bitrate_entries"
-            android:entryValues="@array/pref_hls_video_bitrate_values"
-            android:defaultValue="@string/pref_hls_video_bitrate_default" />
-
-        <ListPreference
-            android:key="hls_audio_bitrate"
-            android:title="@string/pref_hls_audio_bitrate_title"
-            android:summary="@string/pref_hls_audio_bitrate_title_summary"
-            android:dialogTitle="@string/pref_hls_audio_bitrate_title"
-            android:entries="@array/pref_hls_audio_bitrate_entries"
-            android:entryValues="@array/pref_hls_audio_bitrate_values"
-            android:defaultValue="@string/pref_hls_audio_bitrate_default" />
-
     </PreferenceCategory>
 
     <PreferenceCategory

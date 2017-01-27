@@ -28,16 +28,10 @@ package org.mythtv.android.domain;
  */
 public class SettingsKeys {
 
-    public static final String KEY_PREF_LAST_ACTIVITY = "last_activity";
     public static final String KEY_PREF_BACKEND_URL = "backend_url";
     public static final String KEY_PREF_BACKEND_PORT = "backend_port";
 
     public static final String KEY_PREF_INTERNAL_PLAYER = "internal_player";
-    public static final String KEY_PREF_HLS_SETTINGS = "pref_hls_settings";
-    public static final String KEY_PREF_HLS_VIDEO_WIDTH = "hls_video_width";
-    public static final String KEY_PREF_HLS_VIDEO_HEIGHT = "hls_video_height";
-    public static final String KEY_PREF_HLS_VIDEO_BITRATE = "hls_video_bitrate";
-    public static final String KEY_PREF_HLS_AUDIO_BITRATE = "hls_audio_bitrate";
     public static final String KEY_PREF_SHOW_ADULT_TAB = "show_adult_tab";
 
     public static final String KEY_PREF_ENABLE_DEFAULT_RECORDING_GROUP = "enable_default_recording_group";
