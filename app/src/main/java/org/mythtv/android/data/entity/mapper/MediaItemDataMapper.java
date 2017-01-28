@@ -301,8 +301,12 @@ public class MediaItemDataMapper {
         mediaItem.setLiveStreamId( mediaItemEntity.getLiveStreamId() );
         mediaItem.setCreateHttpLiveStreamUrl( mediaItemEntity.getCreateHttpLiveStreamUrl() );
         mediaItem.setRemoveHttpLiveStreamUrl( mediaItemEntity.getRemoveHttpLiveStreamUrl() );
+        mediaItem.setGetHttpLiveStreamUrl( mediaItemEntity.getGetHttpLiveStreamUrl() );
         mediaItem.setWatched( mediaItemEntity.isWatched() );
         mediaItem.setMarkWatchedUrl( mediaItemEntity.getMarkWatchedUrl() );
+        mediaItem.setUpdateSavedBookmarkUrl( mediaItemEntity.getUpdateSavedBookmarkUrl() );
+        mediaItem.setBookmark( mediaItemEntity.getBookmark() );
+        mediaItem.setInetref( mediaItemEntity.getInetref() );
         mediaItem.setCertification( mediaItemEntity.getCertification() );
         mediaItem.setParentalLevel( mediaItemEntity.getParentalLevel() );
 
@@ -355,8 +359,12 @@ public class MediaItemDataMapper {
         mediaItemEntity.setLiveStreamId( mediaItem.getLiveStreamId() );
         mediaItemEntity.setCreateHttpLiveStreamUrl( mediaItem.getCreateHttpLiveStreamUrl() );
         mediaItemEntity.setRemoveHttpLiveStreamUrl( mediaItem.getRemoveHttpLiveStreamUrl() );
+        mediaItemEntity.setGetHttpLiveStreamUrl( mediaItem.getGetHttpLiveStreamUrl() );
         mediaItemEntity.setWatched( mediaItem.isWatched() );
         mediaItemEntity.setMarkWatchedUrl( mediaItem.getMarkWatchedUrl() );
+        mediaItemEntity.setUpdateSavedBookmarkUrl( mediaItem.getUpdateSavedBookmarkUrl() );
+        mediaItemEntity.setBookmark( mediaItem.getBookmark() );
+        mediaItemEntity.setInetref( mediaItem.getInetref() );
         mediaItemEntity.setCertification( mediaItem.getCertification() );
         mediaItemEntity.setParentalLevel( mediaItem.getParentalLevel() );
 
