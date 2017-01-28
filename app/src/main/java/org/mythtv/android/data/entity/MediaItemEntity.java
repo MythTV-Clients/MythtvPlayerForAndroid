@@ -19,7 +19,7 @@ public class MediaItemEntity {
     public static final String DROP_TABLE;
     public static final String SQL_SELECT_MATCH = TABLE_NAME + " MATCH ?";
     public static final String SQL_DELETE_ALL = "delete from " + TABLE_NAME + " where type = ?";
-    public static final String SQL_INSERT = "insert into " + TABLE_NAME + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public static final String SQL_INSERT = "insert into " + TABLE_NAME + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     public static final String FIELD_ID = "id";
     public static final String FIELD_MEDIA = "media";
@@ -48,6 +48,9 @@ public class MediaItemEntity {
     public static final String FIELD_GET_LIVE_STREAM_URL = "get_live_stream_url";
     public static final String FIELD_WATCHED_STATUS = "watched_status";
     public static final String FIELD_MARK_WATCHED_URL = "mark_watched_url";
+    public static final String FIELD_UPDATE_SAVED_BOOKMARK_URL = "update_saved_bookmark_url";
+    public static final String FIELD_BOOKMARK = "bookmark";
+    public static final String FIELD_INETREF = "inetref";
     public static final String FIELD_CERTIFICATION = "certification";
     public static final String FIELD_PARENTAL_LEVEL = "parental_level";
 
@@ -81,6 +84,9 @@ public class MediaItemEntity {
                 FIELD_GET_LIVE_STREAM_URL + " " + "TEXT" + ", " +
                 FIELD_WATCHED_STATUS + " " + "INTEGER" + ", " +
                 FIELD_MARK_WATCHED_URL + " " + "TEXT" + ", " +
+                FIELD_UPDATE_SAVED_BOOKMARK_URL + " " + "TEXT" + ", " +
+                FIELD_BOOKMARK + " " + "TEXT" + ", " +
+                FIELD_INETREF + " " + "TEXT" + ", " +
                 FIELD_CERTIFICATION + " " + "TEXT" + ", " +
                 FIELD_PARENTAL_LEVEL + " " + "TEXT" +
                 ");";
@@ -117,6 +123,9 @@ public class MediaItemEntity {
     private String getHttpLiveStreamUrl;
     private boolean watched;
     private String markWatchedUrl;
+    private String updateSavedBookmarkUrl;
+    private long bookmark;
+    private String inetref;
     private String certification;
     private int parentalLevel;
 
@@ -417,6 +426,39 @@ public class MediaItemEntity {
 
     }
 
+    public String getInetref() {
+
+        return inetref;
+    }
+
+    public void setInetref( String inetref ) {
+
+        this.inetref = inetref;
+
+    }
+
+    public long getBookmark() {
+
+        return bookmark;
+    }
+
+    public void setBookmark( long bookmark ) {
+
+        this.bookmark = bookmark;
+
+    }
+
+    public String getUpdateSavedBookmarkUrl() {
+
+        return updateSavedBookmarkUrl;
+    }
+
+    public void setUpdateSavedBookmarkUrl( String updateSavedBookmarkUrl ) {
+
+        this.updateSavedBookmarkUrl = updateSavedBookmarkUrl;
+
+    }
+
     public String getCertification() {
 
         return certification;
@@ -469,6 +511,9 @@ public class MediaItemEntity {
                 ", getHttpLiveStreamUrl='" + getHttpLiveStreamUrl + '\'' +
                 ", watched=" + watched +
                 ", markWatchedUrl='" + markWatchedUrl + '\'' +
+                ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
+                ", bookmark=" + bookmark +
+                ", inetref='" + inetref + '\'' +
                 ", certification='" + certification + '\'' +
                 ", parentalLevel=" + parentalLevel +
                 '}';
