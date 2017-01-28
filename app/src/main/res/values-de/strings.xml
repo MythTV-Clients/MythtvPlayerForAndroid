@@ -74,7 +74,7 @@
     <string name="watch_video">Videos Ansehen</string>
     <string name="recording_preferences">Aufnahmeeinstellungen</string>
     <string name="recording_preferences_summary">Einstellungen für Aufnahmen</string>
-    <string name="pref_set_default_recording_group">Aufnahme Gruppeneinstellungen   [Einstellung zur Zeit nicht verfügbar]</string><!-- not checked, unknown occurence -->
+    <string name="pref_set_default_recording_group">Aufnahme Gruppeneinstellungen</string>
     <string name="pref_default_recording_group">Standardaufnahmegruppe auswählen</string>
     <string name="pref_default_recording_group_summary_off">Keine Standard ufnahmegruppe festgelegt</string>
     <string name="pref_default_recording_group_summary_on">Nur Aufnahmen der Standardaufnahmegruppe angezeigt</string>
@@ -115,12 +115,6 @@
     <string name="add_live_stream_positive_label">Create</string>
     <string name="add_live_stream_title">Create Live Stream?</string>
 
-    <string name="pref_timeouts">Master Backend Timeouts</string>
-    <string name="pref_timeouts_summary">Timeout settings for connecting to the Master Backend. This is an advanced feature and is not normally needed to change. If you are seeing errors because you have a large library, consider increasing these values. Only set it to \'No Limit\' unless no other options work.</string>
-    <string name="pref_read_timeout_title">Read Timeout</string>
-    <string name="pref_read_timeout_title_summary">Sets the default read timeout for new connections. A value of 0 means no timeout.</string>
-    <string name="pref_connect_timeout_title">Connect Timeout</string>
-    <string name="pref_connect_timeout_title_summary">Sets the default connection timeout for new connections. A value of 0 means no timeout.</string>
     <string name="versionLabel">Version:</string>
     <string name="drawer_item_about">About</string>
     <string name="close">Close</string>

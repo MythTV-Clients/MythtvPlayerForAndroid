@@ -217,21 +217,13 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
         this.initialize();
 
-        Log.d( TAG, "onActivityCreated : exit" );
-    }
-
-    @Override
-    public void onResume() {
-        Log.d( TAG, "onResume : enter" );
-        super.onResume();
-
         this.loadMediaItemList();
 
         setupEventListeners();
 
         this.mediaItemListPresenter.resume();
 
-        Log.d( TAG, "onResume : exit" );
+        Log.d( TAG, "onActivityCreated : exit" );
     }
 
     @Override

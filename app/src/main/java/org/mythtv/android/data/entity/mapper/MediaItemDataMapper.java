@@ -249,6 +249,9 @@ public class MediaItemDataMapper {
         mediaItem.setWatched( videoEntity.isWatched() );
         mediaItem.setMarkWatchedUrl( "/Video/UpdateVideoWatchedStatus?Id=%s&Watched=true" );
 
+        mediaItem.setCertification( videoEntity.getCertification() );
+        mediaItem.setParentalLevel( videoEntity.getParentalLevel() );
+
         return mediaItem;
     }
 
@@ -300,6 +303,8 @@ public class MediaItemDataMapper {
         mediaItem.setRemoveHttpLiveStreamUrl( mediaItemEntity.getRemoveHttpLiveStreamUrl() );
         mediaItem.setWatched( mediaItemEntity.isWatched() );
         mediaItem.setMarkWatchedUrl( mediaItemEntity.getMarkWatchedUrl() );
+        mediaItem.setCertification( mediaItemEntity.getCertification() );
+        mediaItem.setParentalLevel( mediaItemEntity.getParentalLevel() );
 
         return mediaItem;
     }
@@ -352,6 +357,8 @@ public class MediaItemDataMapper {
         mediaItemEntity.setRemoveHttpLiveStreamUrl( mediaItem.getRemoveHttpLiveStreamUrl() );
         mediaItemEntity.setWatched( mediaItem.isWatched() );
         mediaItemEntity.setMarkWatchedUrl( mediaItem.getMarkWatchedUrl() );
+        mediaItemEntity.setCertification( mediaItem.getCertification() );
+        mediaItemEntity.setParentalLevel( mediaItem.getParentalLevel() );
 
         return mediaItemEntity;
     }

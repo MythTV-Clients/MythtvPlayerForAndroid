@@ -52,6 +52,8 @@ public class MediaItemModel implements Serializable {
     public static final String KEY_BOOKMARK = "bookmark";
     public static final String KEY_INETREF = "inetref";
     public static final String KEY_VALIDATION_ERRORS = "validation_errors";
+    public static final String KEY_CERTIFICATION = "certification";
+    public static final String KEY_PARENTAL_LEVEL = "parental_level";
 
     private int id;
     private Media media;
@@ -84,6 +86,8 @@ public class MediaItemModel implements Serializable {
     private long bookmark;
     private String inetref;
     private ArrayList<ErrorModel> validationErrors = new ArrayList<>();
+    private String certification;
+    private int parentalLevel;
 
     public MediaItemModel() { }
 
@@ -475,6 +479,28 @@ public class MediaItemModel implements Serializable {
         return null != media && validationErrors.isEmpty();
     }
 
+    public String getCertification() {
+
+        return certification;
+    }
+
+    public void setCertification( String certification ) {
+
+        this.certification = certification;
+
+    }
+
+    public int getParentalLevel() {
+
+        return parentalLevel;
+    }
+
+    public void setParentalLevel( int parentalLevel ) {
+
+        this.parentalLevel = parentalLevel;
+
+    }
+
     @Override
     public String toString() {
         return "MediaItemModel{" +
@@ -509,7 +535,8 @@ public class MediaItemModel implements Serializable {
                 ", bookmark=" + bookmark +
                 ", inetref='" + inetref + '\'' +
                 ", validationErrors=" + validationErrors +
-                ", isValid=" + isValid() +
+                ", certification='" + certification + '\'' +
+                ", parentalLevel=" + parentalLevel +
                 '}';
     }
 
@@ -599,6 +626,12 @@ public class MediaItemModel implements Serializable {
 
         wrapper.putParcelableArrayList( KEY_VALIDATION_ERRORS, validationErrors );
 
+        if( null != certification && !"".equals( certification ) ) {
+            wrapper.putString( KEY_CERTIFICATION, certification );
+        }
+
+        wrapper.putInt( KEY_PARENTAL_LEVEL, parentalLevel );
+
         return wrapper;
     }
 
@@ -684,6 +717,12 @@ public class MediaItemModel implements Serializable {
         }
 
         media.setValidationErrors( wrapper.getParcelableArrayList( KEY_VALIDATION_ERRORS ) );
+
+        if( wrapper.containsKey( KEY_CERTIFICATION ) ) {
+            media.setCertification( wrapper.getString( KEY_CERTIFICATION ) );
+        }
+
+        media.setParentalLevel( wrapper.getInt( KEY_PARENTAL_LEVEL ) );
 
         return media;
     }

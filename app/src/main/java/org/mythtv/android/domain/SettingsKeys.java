@@ -48,9 +48,6 @@ public class SettingsKeys {
     public static final String KEY_PREF_RATING_R = "rating_r";
     public static final String KEY_PREF_RATING_NC17 = "rating_nc17";
 
-    public static final String KEY_PREF_READ_TIMEOUT = "read_timeout";
-    public static final String KEY_PREF_CONNECT_TIMEOUT = "connect_timeout";
-
     public static final String KEY_PREF_ENABLE_ANALYTICS = "enable_analytics";
 
     private SettingsKeys() { }

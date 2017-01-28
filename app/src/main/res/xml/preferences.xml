@@ -90,31 +90,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_timeouts"
-        android:key="pref_timeouts"
-        android:summary="@string/pref_timeouts_summary">
-
-        <ListPreference
-            android:key="read_timeout"
-            android:title="@string/pref_read_timeout_title"
-            android:summary="@string/pref_read_timeout_title_summary"
-            android:dialogTitle="@string/pref_read_timeout_title"
-            android:entries="@array/pref_timeout_entries"
-            android:entryValues="@array/pref_timeout_values"
-            android:defaultValue="@string/pref_read_timeout_default" />
-
-        <ListPreference
-            android:key="connect_timeout"
-            android:title="@string/pref_connect_timeout_title"
-            android:summary="@string/pref_connect_timeout_title_summary"
-            android:dialogTitle="@string/pref_connect_timeout_title"
-            android:entries="@array/pref_timeout_entries"
-            android:entryValues="@array/pref_timeout_values"
-            android:defaultValue="@string/pref_connect_timeout_default" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="@string/pref_enable_analytics_label"
         android:key="pref_enable_analytics">
 

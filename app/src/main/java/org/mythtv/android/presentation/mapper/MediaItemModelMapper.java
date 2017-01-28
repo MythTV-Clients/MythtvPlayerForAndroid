@@ -64,6 +64,9 @@ public class MediaItemModelMapper {
         }
         mediaItemModel.setValidationErrors( errors );
 
+        mediaItemModel.setCertification( mediaItem.getCertification() );
+        mediaItemModel.setParentalLevel( mediaItem.getParentalLevel() );
+
         return mediaItemModel;
     }
 
