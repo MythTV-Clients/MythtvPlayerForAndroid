@@ -54,6 +54,7 @@ public class MediaItemModel implements Serializable {
     public static final String KEY_VALIDATION_ERRORS = "validation_errors";
     public static final String KEY_CERTIFICATION = "certification";
     public static final String KEY_PARENTAL_LEVEL = "parental_level";
+    public static final String KEY_RECORDING_GROUP = "recording_group";
 
     private int id;
     private Media media;
@@ -88,6 +89,7 @@ public class MediaItemModel implements Serializable {
     private ArrayList<ErrorModel> validationErrors = new ArrayList<>();
     private String certification;
     private int parentalLevel;
+    private String recordingGroup;
 
     public MediaItemModel() { }
 
@@ -501,6 +503,17 @@ public class MediaItemModel implements Serializable {
 
     }
 
+    public String getRecordingGroup() {
+
+        return recordingGroup;
+    }
+
+    public void setRecordingGroup( String recordingGroup ) {
+
+        this.recordingGroup = recordingGroup;
+
+    }
+
     @Override
     public String toString() {
         return "MediaItemModel{" +
@@ -537,6 +550,7 @@ public class MediaItemModel implements Serializable {
                 ", validationErrors=" + validationErrors +
                 ", certification='" + certification + '\'' +
                 ", parentalLevel=" + parentalLevel +
+                ", recordingGroup='" + recordingGroup + '\'' +
                 '}';
     }
 
@@ -632,6 +646,10 @@ public class MediaItemModel implements Serializable {
 
         wrapper.putInt( KEY_PARENTAL_LEVEL, parentalLevel );
 
+        if( null != recordingGroup && !"".equals( recordingGroup ) ) {
+            wrapper.putString( KEY_RECORDING_GROUP, recordingGroup );
+        }
+
         return wrapper;
     }
 
@@ -723,6 +741,10 @@ public class MediaItemModel implements Serializable {
         }
 
         media.setParentalLevel( wrapper.getInt( KEY_PARENTAL_LEVEL ) );
+
+        if( wrapper.containsKey( KEY_RECORDING_GROUP ) ) {
+            media.setRecordingGroup( wrapper.getString( KEY_RECORDING_GROUP ) );
+        }
 
         return media;
     }

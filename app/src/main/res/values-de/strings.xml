@@ -75,10 +75,12 @@
     <string name="recording_preferences">Aufnahmeeinstellungen</string>
     <string name="recording_preferences_summary">Einstellungen für Aufnahmen</string>
     <string name="pref_set_default_recording_group">Aufnahme Gruppeneinstellungen</string>
-    <string name="pref_default_recording_group">Standardaufnahmegruppe auswählen</string>
-    <string name="pref_default_recording_group_summary_off">Keine Standard ufnahmegruppe festgelegt</string>
-    <string name="pref_default_recording_group_summary_on">Nur Aufnahmen der Standardaufnahmegruppe angezeigt</string>
-    <string name="pref_enable_default_recording_group">Standardaufnahmegruppe aktiviert</string>
+    <string name="pref_enable_recording_group_summary_off">Recording Group Filter is off</string>
+    <string name="pref_enable_recording_group_summary_on">Nur Aufnahmen der Standardaufnahmegruppe angezeigt</string>
+    <string name="pref_enable_recording_group_filter">Enable Recording Group Filter</string>
+    <string name="pref_recording_group_filter">Select Recording Group Filter</string>
+    <string name="pref_recording_group_filter_summary_on">Recordings will be filtered by the \'%s\' Recording Group</string>
+    <string name="pref_recording_group_filter_summary_off">No Recording Group selected</string>
     <string name="tv_settings_title">MythTV Settings</string>
     <string name="tv_settings_title_description">MythTV Player backend and content settings</string>
     <string name="tv_settings_master_backend_title">Master Backend</string>

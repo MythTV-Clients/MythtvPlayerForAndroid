@@ -125,6 +125,7 @@ public class DbSearchDataStore implements SearchDataStore {
                         mediaItem.setInetref( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_INETREF ) ) );
                         mediaItem.setCertification( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CERTIFICATION ) ) );
                         mediaItem.setParentalLevel( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_PARENTAL_LEVEL ) ) );
+                        mediaItem.setRecordingGroup( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_RECORDING_GROUP ) ) );
 
 //                        Log.d( TAG, "search.call : searchResultEntity=" + searchResultEntity.toString() );
                         mediaItems.add( mediaItem );
@@ -257,6 +258,7 @@ public class DbSearchDataStore implements SearchDataStore {
             statement.bindString( 29, null != mediaItemEntity.getInetref() ? mediaItemEntity.getInetref() : "" );
             statement.bindString( 30, null != mediaItemEntity.getCertification() ? mediaItemEntity.getCertification() : "" );
             statement.bindLong( 31, mediaItemEntity.getParentalLevel() );
+            statement.bindString( 32, null != mediaItemEntity.getRecordingGroup() ? mediaItemEntity.getRecordingGroup() : "" );
             statement.executeInsert();
 
         }

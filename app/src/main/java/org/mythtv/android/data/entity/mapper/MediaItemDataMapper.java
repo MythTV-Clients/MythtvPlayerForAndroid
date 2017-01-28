@@ -93,6 +93,8 @@ public class MediaItemDataMapper {
 
                 mediaItem.setRecording( programEntity.getRecording().getStatus() == -2 );
 
+                mediaItem.setRecordingGroup( programEntity.getRecording().getRecGroup() );
+
                 break;
 
             case -1 :
@@ -309,6 +311,7 @@ public class MediaItemDataMapper {
         mediaItem.setInetref( mediaItemEntity.getInetref() );
         mediaItem.setCertification( mediaItemEntity.getCertification() );
         mediaItem.setParentalLevel( mediaItemEntity.getParentalLevel() );
+        mediaItem.setRecordingGroup( mediaItemEntity.getRecordingGroup() );
 
         return mediaItem;
     }
@@ -367,6 +370,7 @@ public class MediaItemDataMapper {
         mediaItemEntity.setInetref( mediaItem.getInetref() );
         mediaItemEntity.setCertification( mediaItem.getCertification() );
         mediaItemEntity.setParentalLevel( mediaItem.getParentalLevel() );
+        mediaItemEntity.setRecordingGroup( mediaItem.getRecordingGroup() );
 
         return mediaItemEntity;
     }

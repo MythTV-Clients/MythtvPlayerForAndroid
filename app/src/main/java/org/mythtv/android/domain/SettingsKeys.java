@@ -34,8 +34,8 @@ public class SettingsKeys {
     public static final String KEY_PREF_INTERNAL_PLAYER = "internal_player";
     public static final String KEY_PREF_SHOW_ADULT_TAB = "show_adult_tab";
 
-    public static final String KEY_PREF_ENABLE_DEFAULT_RECORDING_GROUP = "enable_default_recording_group";
-    public static final String KEY_PREF_DEFAULT_RECORDING_GROUP = "default_recording_group";
+    public static final String KEY_PREF_ENABLE_RECORDING_GROUP_FILTER = "enable_recording_group_filter";
+    public static final String KEY_PREF_RECORDING_GROUP_FILTER = "recording_group_filter";
 
     public static final String KEY_PREF_ENABLE_PARENTAL_CONTROLS = "enable_parental_controls";
     public static final String KEY_PREF_PARENTAL_CONTROL_LEVEL = "parental_control_level";

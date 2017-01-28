@@ -54,6 +54,8 @@ public class MediaItem {
     private String certification;
     private int parentalLevel;
 
+    private String recordingGroup;
+
     private List<Error> validationErrors = new ArrayList<>();
 
     public MediaItem() {
@@ -451,6 +453,17 @@ public class MediaItem {
 
     }
 
+    public String getRecordingGroup() {
+
+        return recordingGroup;
+    }
+
+    public void setRecordingGroup( String recordingGroup ) {
+
+        this.recordingGroup = recordingGroup;
+
+    }
+
     @Override
     public boolean equals( Object o ) {
         if (this == o) return true;
@@ -505,6 +518,7 @@ public class MediaItem {
                 ", inetref='" + inetref + '\'' +
                 ", certification='" + certification + '\'' +
                 ", parentalLevel=" + parentalLevel +
+                ", recordingGroup='" + recordingGroup + '\'' +
                 ", validationErrors=" + validationErrors +
                 '}';
     }

@@ -242,8 +242,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
         List<MediaItemModel> mediaItems = new ArrayList<>();
 
-        boolean filterByGroup = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_DEFAULT_RECORDING_GROUP );
-        Log.d( TAG, "filter : filterByGroup=" + filterByGroup );
+        boolean filterByGroup = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_RECORDING_GROUP_FILTER);
+        String filterGroup = getStringFromPreferences( context, SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER);
+        Log.d( TAG, "filter : filterByGroup=" + filterByGroup + ", filterGroup=" + filterGroup );
 
         boolean filterByParentalLevel = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_PARENTAL_CONTROLS );
         int parentalLevel = Integer.parseInt( getStringFromPreferences( context, SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL ) );
@@ -261,6 +262,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         for ( MediaItemModel mediaItemModel: mediaItemsCollection ) {
 
             boolean filtered = false;
+
+            if( mediaItemModel.getMedia().equals( Media.PROGRAM ) && filterByGroup && filterGroup.equals( mediaItemModel.getRecordingGroup() ) ) {
+                Log.d( TAG, "filter : recording group matches" );
+
+                filtered = true;
+
+            }
 
             if( !mediaItemModel.getMedia().equals( Media.PROGRAM ) && filterByParentalLevel && mediaItemModel.getParentalLevel() > parentalLevel ) {
                 Log.d( TAG, "filter : does not meet parental level, skipping..." );

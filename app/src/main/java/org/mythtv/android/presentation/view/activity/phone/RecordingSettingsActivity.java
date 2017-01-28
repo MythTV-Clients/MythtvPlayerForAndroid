@@ -19,8 +19,12 @@
 package org.mythtv.android.presentation.view.activity.phone;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import org.mythtv.android.R;
+import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 
 /**
  *
@@ -28,12 +32,15 @@ import org.mythtv.android.R;
  *
  * @author dmfrey
  */
-public class RecordingSettingsActivity extends AbstractBasePhoneActivity {
+public class RecordingSettingsActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, TroubleshootClickListener {
 
     private static final String TAG = RecordingSettingsActivity.class.getSimpleName();
 
+    private MediaComponent mediaComponent;
+
     @Override
     public int getLayoutResource() {
+
         return R.layout.activity_phone_recording_settings;
     }
 
@@ -42,6 +49,32 @@ public class RecordingSettingsActivity extends AbstractBasePhoneActivity {
         super.onCreate( savedInstanceState );
 
         setTitle( getResources().getString( R.string.recording_preferences ) );
+
+        this.initializeInjector();
+
+
+    }
+
+    private void initializeInjector() {
+        Log.d( TAG, "initializeInjector : enter" );
+
+        this.mediaComponent = DaggerMediaComponent.builder()
+                .applicationComponent( getApplicationComponent() )
+                .build();
+
+        Log.d( TAG, "initializeInjector : exit" );
+    }
+
+    @Override
+    public MediaComponent getComponent() {
+
+        return mediaComponent;
+    }
+
+    @Override
+    public void onTroubleshootClicked() {
+
+        navigator.navigateToTroubleshoot( RecordingSettingsActivity.this );
 
     }
 

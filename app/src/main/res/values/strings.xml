@@ -88,10 +88,12 @@
     <string name="recording_preferences">Recording Settings</string>
     <string name="recording_preferences_summary">Modify Recordings Display and Filters</string>
     <string name="pref_set_default_recording_group">Recording Group Settings</string>
-    <string name="pref_enable_default_recording_group">Enable Default Recording Group</string>
-    <string name="pref_default_recording_group_summary_on">Only recordings in selected recording group will be displayed</string>
-    <string name="pref_default_recording_group_summary_off">No Default Recording Group is set</string>
-    <string name="pref_default_recording_group">Select Default Recording Group</string>
+    <string name="pref_enable_recording_group_filter">Enable Recording Group Filter</string>
+    <string name="pref_enable_recording_group_summary_on">Only recordings in selected recording group will be displayed</string>
+    <string name="pref_enable_recording_group_summary_off">Recording Group Filter is off</string>
+    <string name="pref_recording_group_filter">Select Recording Group Filter</string>
+    <string name="pref_recording_group_filter_summary_on">Recordings will be filtered by the \'%s\' Recording Group</string>
+    <string name="pref_recording_group_filter_summary_off">No Recording Group selected</string>
 
     //Exception messages
     <string name="exception_message_generic" translatable="false">There was an application error</string>

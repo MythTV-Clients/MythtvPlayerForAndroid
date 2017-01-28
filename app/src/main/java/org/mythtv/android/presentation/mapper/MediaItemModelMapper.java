@@ -57,6 +57,7 @@ public class MediaItemModelMapper {
         mediaItemModel.setUpdateSavedBookmarkUrl( mediaItem.getUpdateSavedBookmarkUrl() );
         mediaItemModel.setBookmark( mediaItem.getBookmark() );
         mediaItemModel.setInetref( mediaItem.getInetref() );
+        mediaItemModel.setRecordingGroup( mediaItem.getRecordingGroup() );
 
         ArrayList<ErrorModel> errors = new ArrayList<>();
         for( Error error : mediaItem.getValidationErrors() ) {
