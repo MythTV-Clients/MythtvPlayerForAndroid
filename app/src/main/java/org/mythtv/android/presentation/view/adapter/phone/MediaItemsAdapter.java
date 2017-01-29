@@ -237,6 +237,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
     }
 
+    // TODO: add filter here for only displaying HLS entries issue #203
     private List<MediaItemModel> filter( Collection<MediaItemModel> mediaItemsCollection ) {
         Log.d( TAG, "filter : enter" );
 
@@ -247,7 +248,12 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         Log.d( TAG, "filter : filterByGroup=" + filterByGroup + ", filterGroup=" + filterGroup );
 
         boolean filterByParentalLevel = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_PARENTAL_CONTROLS );
-        int parentalLevel = Integer.parseInt( getStringFromPreferences( context, SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL ) );
+        int parentalLevel;
+        try {
+            parentalLevel = Integer.parseInt( getStringFromPreferences( context, SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL ) );
+        } catch( NumberFormatException e ) {
+            parentalLevel = 4;
+        }
         Log.d( TAG, "filter : filterByParentalLevel=" + filterByParentalLevel + ", parentalLevel=" + parentalLevel );
 
         boolean filterByCertification = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RESTRICT_CONTENT_TYPES );

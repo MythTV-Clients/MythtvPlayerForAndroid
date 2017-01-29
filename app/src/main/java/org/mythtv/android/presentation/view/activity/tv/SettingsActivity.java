@@ -202,6 +202,10 @@ public class SettingsActivity extends Activity {
                     getResources().getString( R.string.tv_settings_content_title ),
                     content,
                     true, true );
+            addAction( getActivity(), actions, ANALYTICS_SETTINGS,
+                    getResources().getString( R.string.tv_settings_analytics_title ),
+                    content,
+                    true, true );
 
             setActions( actions );
 
@@ -599,7 +603,7 @@ public class SettingsActivity extends Activity {
 
             String title = getResources().getString( R.string.pref_enable_analytics_label );
             String breadcrumb = getResources().getString( R.string.pref_enable_analytics_title );
-            String description = getResources().getString( R.string.tv_settings_content_title_description );
+            String description = getResources().getString( R.string.tv_settings_analytics_title_description );
             Drawable icon = null;
 
             return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
@@ -635,18 +639,18 @@ public class SettingsActivity extends Activity {
 
             }
 
-            boolean showAdultContent = getShowAdultContent( getActivity() );
+            boolean enableAnalytics = getEnableAnalytics( getActivity() );
 
             addCheckedAction( getActivity(), actions,
                     -1,
                     getResources().getString( R.string.tv_settings_yes ),
                     null,
-                    showAdultContent );
+                    enableAnalytics );
             addCheckedAction( getActivity(), actions,
                     -1,
                     getResources().getString( R.string.tv_settings_no ),
                     null,
-                    !showAdultContent );
+                    !enableAnalytics );
 
             setActions( actions );
 
@@ -723,6 +727,11 @@ public class SettingsActivity extends Activity {
     private static boolean getShowAdultContent( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_SHOW_ADULT_TAB );
+    }
+
+    private static boolean getEnableAnalytics( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_ANALYTICS );
     }
 
     private static String getStringFromPreferences( Context context, String key ) {
