@@ -408,7 +408,8 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                     } catch( Exception e ) {
                         Log.e( TAG, "getBookmark.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        subscriber.onNext( 0L );
+                        subscriber.onCompleted();
 
                     }
 
