@@ -20,7 +20,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/pref_set_default_recording_group"
+        android:title="@string/recording_preferences"
         android:key="pref_set_default_recording_group">
 
         <SwitchPreference

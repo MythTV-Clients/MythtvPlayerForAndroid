@@ -86,10 +86,10 @@ public class MediaItemEntity {
                 FIELD_WATCHED_STATUS + " " + "INTEGER" + ", " +
                 FIELD_MARK_WATCHED_URL + " " + "TEXT" + ", " +
                 FIELD_UPDATE_SAVED_BOOKMARK_URL + " " + "TEXT" + ", " +
-                FIELD_BOOKMARK + " " + "TEXT" + ", " +
+                FIELD_BOOKMARK + " " + "INTEGER" + ", " +
                 FIELD_INETREF + " " + "TEXT" + ", " +
                 FIELD_CERTIFICATION + " " + "TEXT" + ", " +
-                FIELD_PARENTAL_LEVEL + " " + "TEXT" + ", " +
+                FIELD_PARENTAL_LEVEL + " " + "INTEGER" + ", " +
                 FIELD_RECORDING_GROUP + " " + "TEXT" +
                 ");";
 

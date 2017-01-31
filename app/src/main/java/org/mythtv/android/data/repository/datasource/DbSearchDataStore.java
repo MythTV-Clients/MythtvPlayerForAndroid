@@ -251,13 +251,14 @@ public class DbSearchDataStore implements SearchDataStore {
             statement.bindLong( 22, mediaItemEntity.getLiveStreamId() );
             statement.bindString( 23, null != mediaItemEntity.getCreateHttpLiveStreamUrl() ? mediaItemEntity.getCreateHttpLiveStreamUrl() : "" );
             statement.bindString( 24, null != mediaItemEntity.getRemoveHttpLiveStreamUrl() ? mediaItemEntity.getRemoveHttpLiveStreamUrl() : "" );
-            statement.bindLong( 25, mediaItemEntity.isWatched() ? 1 : 0 );
-            statement.bindString( 26, null != mediaItemEntity.getMarkWatchedUrl() ? mediaItemEntity.getMarkWatchedUrl() : "" );
-            statement.bindString( 27, null != mediaItemEntity.getUpdateSavedBookmarkUrl() ? mediaItemEntity.getUpdateSavedBookmarkUrl() : "" );
-            statement.bindLong( 28, mediaItemEntity.getBookmark() );
-            statement.bindString( 29, null != mediaItemEntity.getInetref() ? mediaItemEntity.getInetref() : "" );
-            statement.bindString( 30, null != mediaItemEntity.getCertification() ? mediaItemEntity.getCertification() : "" );
-            statement.bindLong( 31, mediaItemEntity.getParentalLevel() );
+            statement.bindString( 25, null != mediaItemEntity.getGetHttpLiveStreamUrl() ? mediaItemEntity.getGetHttpLiveStreamUrl() : "" );
+            statement.bindLong( 26, mediaItemEntity.isWatched() ? 1 : 0 );
+            statement.bindString( 27, null != mediaItemEntity.getMarkWatchedUrl() ? mediaItemEntity.getMarkWatchedUrl() : "" );
+            statement.bindString( 28, null != mediaItemEntity.getUpdateSavedBookmarkUrl() ? mediaItemEntity.getUpdateSavedBookmarkUrl() : "" );
+            statement.bindLong( 29, mediaItemEntity.getBookmark() );
+            statement.bindString( 30, null != mediaItemEntity.getInetref() ? mediaItemEntity.getInetref() : "" );
+            statement.bindString( 31, null != mediaItemEntity.getCertification() ? mediaItemEntity.getCertification() : "" );
+            statement.bindLong( 32, mediaItemEntity.getParentalLevel() );
             statement.bindString( 32, null != mediaItemEntity.getRecordingGroup() ? mediaItemEntity.getRecordingGroup() : "" );
             statement.executeInsert();
 

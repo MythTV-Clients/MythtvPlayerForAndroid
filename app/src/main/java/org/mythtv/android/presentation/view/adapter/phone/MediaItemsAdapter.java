@@ -36,13 +36,12 @@ import android.widget.TextView;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
-import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
+import org.mythtv.android.presentation.utils.Utils;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -216,8 +215,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     public void setMediaItemsCollection( Collection<MediaItemModel> mediaItemsCollection ) {
 
         this.validateMediaItemsCollection( mediaItemsCollection );
-        List<MediaItemModel> filterd = filter( mediaItemsCollection );
-        this.mediaItemsCollection = filterd;
+        this.mediaItemsCollection = Utils.filter( PreferenceManager.getDefaultSharedPreferences( context ), mediaItemsCollection );
         this.notifyDataSetChanged();
 
     }
@@ -235,75 +233,6 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
             throw new IllegalArgumentException( "The list cannot be null" );
         }
 
-    }
-
-    // TODO: add filter here for only displaying HLS entries issue #203
-    private List<MediaItemModel> filter( Collection<MediaItemModel> mediaItemsCollection ) {
-        Log.d( TAG, "filter : enter" );
-
-        List<MediaItemModel> mediaItems = new ArrayList<>();
-
-        boolean filterByGroup = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_RECORDING_GROUP_FILTER);
-        String filterGroup = getStringFromPreferences( context, SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER);
-        Log.d( TAG, "filter : filterByGroup=" + filterByGroup + ", filterGroup=" + filterGroup );
-
-        boolean filterByParentalLevel = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_PARENTAL_CONTROLS );
-        int parentalLevel;
-        try {
-            parentalLevel = Integer.parseInt( getStringFromPreferences( context, SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL ) );
-        } catch( NumberFormatException e ) {
-            parentalLevel = 4;
-        }
-        Log.d( TAG, "filter : filterByParentalLevel=" + filterByParentalLevel + ", parentalLevel=" + parentalLevel );
-
-        boolean filterByCertification = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RESTRICT_CONTENT_TYPES );
-        boolean ratingNR = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_NR );
-        boolean ratingG = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_G );
-        boolean ratingPG = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_PG );
-        boolean ratingPG13 = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_PG13 );
-        boolean ratingR = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_R );
-        boolean ratingNC17 = getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_NC17 );
-        Log.d( TAG, "filter : filterByCertification=" + filterByCertification + ", NR=" + ratingNR + ", G=" + ratingG + ", PG=" + ratingPG + ", PG-13=" + ratingPG13 + ", R=" + ratingR + ", NC-17=" + ratingNC17 );
-
-        for ( MediaItemModel mediaItemModel: mediaItemsCollection ) {
-
-            boolean filtered = false;
-
-            if( mediaItemModel.getMedia().equals( Media.PROGRAM ) && filterByGroup && filterGroup.equals( mediaItemModel.getRecordingGroup() ) ) {
-                Log.d( TAG, "filter : recording group matches" );
-
-                filtered = true;
-
-            }
-
-            if( !mediaItemModel.getMedia().equals( Media.PROGRAM ) && filterByParentalLevel && mediaItemModel.getParentalLevel() > parentalLevel ) {
-                Log.d( TAG, "filter : does not meet parental level, skipping..." );
-
-                continue;
-            }
-
-            if( !mediaItemModel.getMedia().equals( Media.PROGRAM ) && filterByCertification ) {
-                Log.d( TAG, "filter : filtering by certification '" + mediaItemModel.getCertification() + "'" );
-
-                if( ratingNR && mediaItemModel.getCertification().equals( "NR" ) ) { filtered = true; }
-                if( ratingG && mediaItemModel.getCertification().equals( "G" ) ) { filtered = true; }
-                if( ratingPG && mediaItemModel.getCertification().equals( "PG" ) ) { filtered = true; }
-                if( ratingPG13 && mediaItemModel.getCertification().equals( "PG-13" ) ) { filtered = true; }
-                if( ratingR && mediaItemModel.getCertification().equals( "R" ) ) { filtered = true; }
-                if( ratingNC17 && mediaItemModel.getCertification().equals( "NC-17" ) ) { filtered = true; }
-
-                if( filtered ) {
-                    Log.d( TAG, "filter : adding to list" );
-
-                    mediaItems.add( mediaItemModel );
-                }
-
-            }
-
-        }
-
-        Log.d( TAG, "filter : exit" );
-        return !mediaItems.isEmpty() ? mediaItems : ( (List<MediaItemModel>) mediaItemsCollection );
     }
 
     static class MediaItemViewHolder extends RecyclerView.ViewHolder {

@@ -18,12 +18,10 @@
 
 package org.mythtv.android.presentation.view.activity.tv;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -36,11 +34,25 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.mythtv.android.R;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.SettingsKeys;
+import org.mythtv.android.presentation.internal.di.HasComponent;
+import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
+import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.model.MediaItemModel;
+import org.mythtv.android.presentation.presenter.phone.MediaItemListPresenter;
+import org.mythtv.android.presentation.view.MediaItemListView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import rx.Observable;
 
 /**
  *
@@ -50,7 +62,7 @@ import java.util.List;
  *
  * Created on 1/28/16.
  */
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent> {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
@@ -59,23 +71,62 @@ public class SettingsActivity extends Activity {
     private static final int MASTER_BACKEND_PORT = 12;
     private static final int PLAYER_SETTINGS = 20;
     private static final int INTERNAL_PLAYER_SETTINGS = 21;
-    private static final int CONTENT_SETTINGS = 30;
-    private static final int ANALYTICS_SETTINGS = 40;
+    private static final int RECORDING_SETTINGS = 30;
+    private static final int ENABLE_RECORDING_GROUP = 31;
+    private static final int RECORDING_GROUPS_FILTER = 32;
+    private static final int VIDEO_SETTINGS = 40;
+    private static final int ADULT_SETTINGS = 41;
+    private static final int PARENTAL_CONTROLS = 42;
+    private static final int PARENTAL_CONTROL_LEVEL = 43;
+    private static final int CONTENT_RATINGS = 44;
+    private static final int CONTENT_RATING_NR = 45;
+    private static final int CONTENT_RATING_G = 46;
+    private static final int CONTENT_RATING_PG = 47;
+    private static final int CONTENT_RATING_PG13 = 48;
+    private static final int CONTENT_RATING_R = 49;
+    private static final int CONTENT_RATING_NC17 = 50;
+    private static final int ANALYTICS_SETTINGS = 60;
 
     private static final int OPTION_CHECK_SET_ID = 10;
 
     private static SettingsFragment mSettingsFragment;
+
     private static MasterBackendFragment mMasterBackendFragment;
     private static MasterBackendUrlFragment mMasterBackendUrlFragment;
     private static MasterBackendPortFragment mMasterBackendPortFragment;
+
     private static PlayerFragment mPlayerFragment;
     private static InternalPlayerFragment mInternalPlayerFragment;
-    private static ContentFragment mContentFragment;
+
+    private static RecordingSettingsFragment mRecordingSettingsFragment;
+    private static EnableRecordingGroupFragment mEnableRecordingGroupFragment;
+    private static RecordingGroupFragment mRecordingGroupFragment;
+
+    private static VideoSettingsFragment mVideoSettingsFragment;
+    private static AdultContentFragment mAdultContentFragment;
+    private static ParentalControlsFragment mParentalControlsFragment;
+    private static ParentalControlLevelFragment mParentalControlLevelFragment;
+    private static ContentRatingFragment mContentRatingFragment;
+    private static ContentRatingNrFragment mContentRatingNrFragment;
+    private static ContentRatingGFragment mContentRatingGFragment;
+    private static ContentRatingPgFragment mContentRatingPgFragment;
+    private static ContentRatingPg13Fragment mContentRatingPg13Fragment;
+    private static ContentRatingRFragment mContentRatingRFragment;
+    private static ContentRatingNc17Fragment mContentRatingNc17Fragment;
+
     private static AnalyticsFragment mAnalyticsFragment;
+
+    private MediaComponent mediaComponent;
 
     public static Intent getCallingIntent( Context context ) {
 
         return new Intent( context, SettingsActivity.class );
+    }
+
+    @Override
+    public int getLayoutResource() {
+
+        return -1;
     }
 
     @Override
@@ -84,37 +135,52 @@ public class SettingsActivity extends Activity {
         super.onCreate( savedInstanceState );
 
         mSettingsFragment = new SettingsFragment();
+
         mMasterBackendFragment = new MasterBackendFragment();
         mMasterBackendUrlFragment = new MasterBackendUrlFragment();
         mMasterBackendPortFragment = new MasterBackendPortFragment();
+
         mPlayerFragment = new PlayerFragment();
         mInternalPlayerFragment = new InternalPlayerFragment();
-        mContentFragment = new ContentFragment();
+
+        mRecordingSettingsFragment = new RecordingSettingsFragment();
+        mEnableRecordingGroupFragment = new EnableRecordingGroupFragment();
+        mRecordingGroupFragment = new RecordingGroupFragment();
+
+        mVideoSettingsFragment = new VideoSettingsFragment();
+        mAdultContentFragment = new AdultContentFragment();
+        mParentalControlsFragment = new ParentalControlsFragment();
+        mParentalControlLevelFragment = new ParentalControlLevelFragment();
+        mContentRatingFragment = new ContentRatingFragment();
+        mContentRatingNrFragment = new ContentRatingNrFragment();
+        mContentRatingGFragment = new ContentRatingGFragment();
+        mContentRatingPgFragment = new ContentRatingPgFragment();
+        mContentRatingPg13Fragment = new ContentRatingPg13Fragment();
+        mContentRatingRFragment = new ContentRatingRFragment();
+        mContentRatingNc17Fragment = new ContentRatingNc17Fragment();
+
         mAnalyticsFragment = new AnalyticsFragment();
 
         GuidedStepFragment.addAsRoot( this, mSettingsFragment, android.R.id.content );
 
-    }
-
-    @Override
-    public void onConfigurationChanged( Configuration newConfig ) {
-        Log.v( TAG, "onConfigurationChanged" );
-        super.onConfigurationChanged( newConfig );
+        this.initializeInjector();
 
     }
 
-    @Override
-    protected void onSaveInstanceState( Bundle outState ) {
-        Log.v( TAG, "onSaveInstanceState" );
-        super.onSaveInstanceState( outState );
+    private void initializeInjector() {
+        Log.d( TAG, "initializeInjector : enter" );
 
+        this.mediaComponent = DaggerMediaComponent.builder()
+                .applicationComponent( getApplicationComponent() )
+                .build();
+
+        Log.d( TAG, "initializeInjector : exit" );
     }
 
     @Override
-    protected void onRestoreInstanceState( Bundle savedInstanceState ) {
-        Log.v( TAG, "onRestoreInstanceState" );
-        super.onRestoreInstanceState( savedInstanceState );
+    public MediaComponent getComponent() {
 
+        return mediaComponent;
     }
 
     public static class SettingsFragment extends GuidedStepFragment {
@@ -123,7 +189,7 @@ public class SettingsActivity extends Activity {
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
-            String title = getResources().getString( R.string.tv_settings_title );
+            String title = getResources().getString( R.string.title_activity_settings );
             String breadcrumb = "";
             String description = getResources().getString( R.string.tv_settings_title_description );
             Drawable icon = null;
@@ -157,9 +223,15 @@ public class SettingsActivity extends Activity {
 
                     break;
 
-                case CONTENT_SETTINGS :
+                case RECORDING_SETTINGS:
 
-                    GuidedStepFragment.add( fm, mContentFragment, android.R.id.content );
+                    GuidedStepFragment.add( fm, mRecordingSettingsFragment, android.R.id.content );
+
+                    break;
+
+                case VIDEO_SETTINGS:
+
+                    GuidedStepFragment.add( fm, mVideoSettingsFragment, android.R.id.content );
 
                     break;
 
@@ -185,26 +257,33 @@ public class SettingsActivity extends Activity {
 
             boolean internalPlayer = getShouldUseInternalPlayer( getActivity() );
 
-            String playback = ( internalPlayer ? getResources().getString( R.string.tv_settings_playback_internal_player ) : getResources().getString( R.string.tv_settings_playback_external_player ) );
+            String playback = ( internalPlayer ? getResources().getString( R.string.pref_internal_player_summary_on ) : getResources().getString( R.string.pref_internal_player_summary_off ) );
 
             boolean showAdultContent = getShowAdultContent( getActivity() );
-            String content = ( showAdultContent ? getResources().getString( R.string.tv_settings_content_adult_shown ) : getResources().getString( R.string.tv_settings_content_adult_hidden ) );
+            String content = ( showAdultContent ? getResources().getString( R.string.pref_show_adult_tab_summary_on ) : getResources().getString( R.string.pref_show_adult_tab_summary_off ) );
+
+            boolean enableAnalytics = getEnableAnalytics( getActivity() );
+            String analytics = ( enableAnalytics ? getResources().getString( R.string.pref_enable_analytics_summary_on ) : getResources().getString( R.string.pref_enable_analytics_summary_off ) );
 
             addAction( getActivity(), actions, MASTER_BACKEND_SETTINGS,
-                    getResources().getString( R.string.tv_settings_master_backend_title ),
+                    getResources().getString( R.string.pref_backend_title ),
                     getMasterBackendUrl( getActivity() ),
                     true, true );
             addAction( getActivity(), actions, PLAYER_SETTINGS,
-                    getResources().getString( R.string.tv_settings_playback_title ),
+                    getResources().getString( R.string.pref_default_player ),
                     playback,
                     true, true );
-            addAction( getActivity(), actions, CONTENT_SETTINGS,
-                    getResources().getString( R.string.tv_settings_content_title ),
-                    content,
+            addAction( getActivity(), actions, RECORDING_SETTINGS,
+                    getResources().getString( R.string.recording_preferences ),
+                    getResources().getString( R.string.recording_preferences_summary ),
+                    true, true );
+            addAction( getActivity(), actions, VIDEO_SETTINGS,
+                    getResources().getString( R.string.video_preferences ),
+                    getResources().getString( R.string.video_preferences_summary ),
                     true, true );
             addAction( getActivity(), actions, ANALYTICS_SETTINGS,
-                    getResources().getString( R.string.tv_settings_analytics_title ),
-                    content,
+                    getResources().getString( R.string.pref_enable_analytics_title ),
+                    analytics,
                     true, true );
 
             setActions( actions );
@@ -219,8 +298,8 @@ public class SettingsActivity extends Activity {
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
-            String title = getResources().getString( R.string.tv_settings_master_backend_title );
-            String breadcrumb = getResources().getString( R.string.tv_settings_title );
+            String title = getResources().getString( R.string.pref_backend_title );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings );
             String description = getResources().getString( R.string.tv_settings_master_backend_description );
             Drawable icon = null;
 
@@ -291,8 +370,8 @@ public class SettingsActivity extends Activity {
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
-            String title = getResources().getString( R.string.tv_settings_master_backend_url );
-            String breadcrumb = getResources().getString( R.string.tv_settings_master_backend_title );
+            String title = getResources().getString( R.string.pref_backend_url_title );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.pref_backend_title );
             String description = getResources().getString( R.string.pref_backend_url_description );
             Drawable icon = null;
 
@@ -355,8 +434,8 @@ public class SettingsActivity extends Activity {
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
-            String title = getResources().getString( R.string.tv_settings_master_backend_port );
-            String breadcrumb = getResources().getString( R.string.tv_settings_master_backend_title );
+            String title = getResources().getString( R.string.pref_backend_port_title );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.pref_backend_title );
             String description = getResources().getString( R.string.pref_backend_port_description );
             Drawable icon = null;
 
@@ -419,9 +498,9 @@ public class SettingsActivity extends Activity {
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
-            String title = getResources().getString( R.string.tv_settings_playback_title );
-            String breadcrumb = getResources().getString( R.string.tv_settings_playback_title );
-            String description = getResources().getString( R.string.tv_settings_playback_title_description );
+            String title = getResources().getString( R.string.pref_default_player );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings );
+            String description = "";
             Drawable icon = null;
 
             return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
@@ -460,10 +539,10 @@ public class SettingsActivity extends Activity {
 
             }
 
-            String internalPlayer = ( getShouldUseInternalPlayer( getActivity() ) ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
+            String internalPlayer = ( getShouldUseInternalPlayer( getActivity() ) ? getResources().getString( R.string.pref_internal_player_summary_on ) : getResources().getString( R.string.pref_internal_player_summary_off ) );
 
             addAction( getActivity(), actions, INTERNAL_PLAYER_SETTINGS,
-                    getResources().getString( R.string.tv_settings_playback_internal_player ),
+                    getResources().getString( R.string.pref_internal_player ),
                     internalPlayer,
                     true, true );
 
@@ -480,7 +559,7 @@ public class SettingsActivity extends Activity {
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.tv_settings_playback_internal_player );
-            String breadcrumb = getResources().getString( R.string.tv_settings_playback_title );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.pref_default_player );
             String description = getResources().getString( R.string.tv_settings_playback_internal_player_description );
             Drawable icon = null;
 
@@ -534,15 +613,537 @@ public class SettingsActivity extends Activity {
 
     }
 
-    public static class ContentFragment extends GuidedStepFragment {
+    public static class RecordingSettingsFragment extends GuidedStepFragment {
 
         @NonNull
         @Override
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
-            String title = getResources().getString( R.string.tv_settings_content_adult_title );
-            String breadcrumb = getResources().getString( R.string.tv_settings_content_title );
-            String description = getResources().getString( R.string.tv_settings_content_title_description );
+            String title = getResources().getString( R.string.recording_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings );
+            String description = getResources().getString( R.string.recording_preferences_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            FragmentManager fm = getFragmentManager();
+
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+            switch( (int) action.getId() ) {
+
+                case ENABLE_RECORDING_GROUP :
+
+                    GuidedStepFragment.add( fm, mEnableRecordingGroupFragment, android.R.id.content );
+
+                    break;
+
+                case RECORDING_GROUPS_FILTER :
+
+                    GuidedStepFragment.add( fm, mRecordingGroupFragment, android.R.id.content );
+
+                    break;
+
+                default :
+
+            }
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean enableRecordingGroupFilter = getEnableRecordingGroupFilter( getActivity() );
+            String enableRecordingGroupFilterMessage = ( enableRecordingGroupFilter ? getResources().getString( R.string.pref_enable_recording_group_summary_on ) : getResources().getString( R.string.pref_enable_recording_group_summary_off ) );
+
+            addAction( getActivity(), actions, ENABLE_RECORDING_GROUP,
+                    getResources().getString( R.string.pref_enable_recording_group_filter ),
+                    enableRecordingGroupFilterMessage,
+                    true, true );
+
+            if( enableRecordingGroupFilter ) {
+
+                String recordingGroupFilter = getRecordingGroupFilter( getActivity() );
+
+                addAction( getActivity(), actions, RECORDING_GROUPS_FILTER,
+                        getResources().getString( R.string.pref_recording_group_filter ),
+                        recordingGroupFilter,
+                        true, true );
+
+            }
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class EnableRecordingGroupFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_enable_recording_group_filter );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.recording_preferences );
+            String description = "";
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_ENABLE_RECORDING_GROUP_FILTER, updated );
+
+            mRecordingSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean enableRecordingGroupFilter = getEnableRecordingGroupFilter( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    enableRecordingGroupFilter );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !enableRecordingGroupFilter );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static abstract class AbstractBaseGuidedStepFragment extends GuidedStepFragment {
+
+        /**
+         * Gets a component for dependency injection by its type.
+         */
+        @SuppressWarnings( "unchecked" )
+        protected <C> C getComponent( Class<C> componentType ) {
+
+            return componentType.cast( ( (HasComponent<C>) getActivity() ).getComponent() );
+        }
+
+
+    }
+
+    public static class RecordingGroupFragment extends AbstractBaseGuidedStepFragment implements MediaItemListView {
+
+        public static final String MEDIA_KEY = "media";
+
+        @Inject
+        MediaItemListPresenter mediaItemListPresenter;
+
+        List<String> availableRecordingGroups;
+
+        @Override
+        public void onCreate( Bundle savedInstanceState ) {
+            super.onCreate( savedInstanceState );
+
+            availableRecordingGroups = Collections.singletonList( "Default" );
+
+        }
+
+        @Override
+        public void onActivityCreated( Bundle savedInstanceState ) {
+            super.onActivityCreated( savedInstanceState );
+
+            this.initialize();
+
+            this.loadMediaItemList();
+
+        }
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_recording_group_filter );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.recording_preferences );
+            String description = "";
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            String updated = action.getLabel1().toString();
+            putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER, updated );
+
+            mRecordingSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        private void initialize() {
+            Log.d( TAG, "initialize : enter" );
+
+            this.getComponent( MediaComponent.class ).inject( this );
+            this.mediaItemListPresenter.setView( this );
+
+            Log.d( TAG, "initialize : exit" );
+        }
+
+        @Override
+        public void showLoading() {
+
+        }
+
+        @Override
+        public void hideLoading() {
+
+        }
+
+        @Override
+        public void showRetry() {
+
+        }
+
+        @Override
+        public void hideRetry() {
+
+        }
+
+        @Override
+        public void showError(String message) {
+
+        }
+
+        @Override
+        public void showMessage(String message) {
+
+        }
+
+        @Override
+        public void renderMediaItemList( Collection<MediaItemModel> mediaItemModelCollection ) {
+
+            Observable.from( mediaItemModelCollection )
+                    .map( MediaItemModel::getRecordingGroup )
+                    .distinct()
+                    .toList()
+                    .subscribe( groups -> {
+                        availableRecordingGroups = groups;
+                    });
+
+        }
+
+        @Override
+        public void viewMediaItem( MediaItemModel mediaItemModel ) {
+
+        }
+
+        @Override
+        public Context getContext() {
+            Log.d( TAG, "getContext : enter" );
+
+            Log.d( TAG, "getContext : exit" );
+            return this.getActivity().getApplicationContext();
+        }
+
+        /**
+         * Loads media items.
+         */
+        private void loadMediaItemList() {
+            Log.d( TAG, "loadMediaItemList : enter" );
+
+            this.mediaItemListPresenter.initialize( Collections.singletonMap( MEDIA_KEY, Media.PROGRAM ) );
+
+            Log.d( TAG, "loadMediaItemList : exit" );
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            if( null == availableRecordingGroups ) {
+
+                availableRecordingGroups = Collections.singletonList( "Default" );
+
+            }
+
+            String recordingGroupFilter = getRecordingGroupFilter( getActivity() );
+
+            for( String recordingGroup : availableRecordingGroups ) {
+
+                addCheckedAction( getActivity(), actions,
+                        -1,
+                        recordingGroup,
+                        null,
+                        recordingGroup.equals( recordingGroupFilter ) );
+
+            }
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class VideoSettingsFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings );
+            String description = getResources().getString( R.string.video_preferences_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+
+            FragmentManager fm = getFragmentManager();
+
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+            switch( (int) action.getId() ) {
+
+                case ADULT_SETTINGS :
+
+                    GuidedStepFragment.add( fm, mAdultContentFragment, android.R.id.content );
+
+                    break;
+
+                case PARENTAL_CONTROLS :
+
+                    GuidedStepFragment.add( fm, mParentalControlsFragment, android.R.id.content );
+
+                    break;
+
+                case PARENTAL_CONTROL_LEVEL :
+
+                    GuidedStepFragment.add( fm, mParentalControlLevelFragment, android.R.id.content );
+
+                    break;
+
+                case CONTENT_RATINGS :
+
+                    GuidedStepFragment.add( fm, mContentRatingFragment, android.R.id.content );
+
+                    break;
+
+                case CONTENT_RATING_NR :
+
+                    GuidedStepFragment.add( fm, mContentRatingNrFragment, android.R.id.content );
+
+                    break;
+
+                case CONTENT_RATING_G :
+
+                    GuidedStepFragment.add( fm, mContentRatingGFragment, android.R.id.content );
+
+                    break;
+
+                case CONTENT_RATING_PG :
+
+                    GuidedStepFragment.add( fm, mContentRatingPgFragment, android.R.id.content );
+
+                    break;
+
+                case CONTENT_RATING_PG13 :
+
+                    GuidedStepFragment.add( fm, mContentRatingPg13Fragment, android.R.id.content );
+
+                    break;
+
+                case CONTENT_RATING_R :
+
+                    GuidedStepFragment.add( fm, mContentRatingRFragment, android.R.id.content );
+
+                    break;
+
+                case CONTENT_RATING_NC17 :
+
+                    GuidedStepFragment.add( fm, mContentRatingNc17Fragment, android.R.id.content );
+
+                    break;
+
+                default :
+
+            }
+
+        }
+
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean showAdultContent = getShowAdultContent( getActivity() );
+            String content = ( showAdultContent ? getResources().getString( R.string.pref_show_adult_tab_summary_on ) : getResources().getString( R.string.pref_show_adult_tab_summary_off ) );
+
+            boolean enableParentalControls = getEnableParentalControls( getActivity() );
+            String parentalControls = ( enableParentalControls ? getResources().getString( R.string.pref_enable_parental_controls_summary_on ) : getResources().getString( R.string.pref_enable_parental_controls_summary_off ) );
+
+            String parentalControlLevel = getParentalControlLevel( getActivity() );
+
+            boolean restrictContentType = getRestrictContentType( getActivity() );
+            String contentType = ( restrictContentType ? getResources().getString( R.string.pref_restrict_content_types_summary_on ) : getResources().getString( R.string.pref_restrict_content_types_summary_off ) );
+
+            addAction( getActivity(), actions, ADULT_SETTINGS,
+                    getResources().getString( R.string.pref_show_adult_tab ),
+                    content,
+                    true, true );
+
+            addAction( getActivity(), actions, PARENTAL_CONTROLS,
+                    getResources().getString( R.string.pref_enable_parental_controls ),
+                    parentalControls,
+                    true, true );
+
+            if( enableParentalControls ) {
+
+                addAction( getActivity(), actions, PARENTAL_CONTROL_LEVEL,
+                        getResources().getString( R.string.pref_parental_control_level ),
+                        parentalControlLevel,
+                        true, true );
+
+            }
+
+            addAction( getActivity(), actions, CONTENT_RATINGS,
+                    getResources().getString( R.string.pref_restrict_content_types ),
+                    contentType,
+                    true, true );
+
+            if( restrictContentType ) {
+
+                boolean contentTypeNr = getContentTypeNR( getActivity() );
+                String nr = ( contentTypeNr ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
+
+                addAction( getActivity(), actions, CONTENT_RATING_NR,
+                        getResources().getString( R.string.pref_rating_nr ),
+                        nr,
+                        true, true );
+
+                boolean contentTypeG = getContentTypeG( getActivity() );
+                String g = ( contentTypeG ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
+
+                addAction( getActivity(), actions, CONTENT_RATING_G,
+                        getResources().getString( R.string.pref_rating_g ),
+                        g,
+                        true, true );
+
+                boolean contentTypePg = getContentTypePG( getActivity() );
+                String pg = ( contentTypePg ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
+
+                addAction( getActivity(), actions, CONTENT_RATING_PG,
+                        getResources().getString( R.string.pref_rating_pg ),
+                        pg,
+                        true, true );
+
+                boolean contentTypePg13 = getContentTypePG13( getActivity() );
+                String pg13 = ( contentTypePg13 ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
+
+                addAction( getActivity(), actions, CONTENT_RATING_PG13,
+                        getResources().getString( R.string.pref_rating_pg13 ),
+                        pg13,
+                        true, true );
+
+                boolean contentTypeR = getContentTypeR( getActivity() );
+                String r = ( contentTypeR ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
+
+                addAction( getActivity(), actions, CONTENT_RATING_R,
+                        getResources().getString( R.string.pref_rating_r ),
+                        r,
+                        true, true );
+
+                boolean contentTypeNc17 = getContentTypeNC17( getActivity() );
+                String nc17 = ( contentTypeNc17 ? getResources().getString( R.string.tv_settings_yes ) : getResources().getString( R.string.tv_settings_no ) );
+
+                addAction( getActivity(), actions, CONTENT_RATING_NC17,
+                        getResources().getString( R.string.pref_rating_nc17 ),
+                        nc17,
+                        true, true );
+
+            }
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class AdultContentFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_show_adult_tab );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = "";
             Drawable icon = null;
 
             return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
@@ -562,6 +1163,7 @@ public class SettingsActivity extends Activity {
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, updated );
 
+            mVideoSettingsFragment.updateActions( null );
             mSettingsFragment.updateActions( null );
 
             getFragmentManager().popBackStack();
@@ -588,6 +1190,574 @@ public class SettingsActivity extends Activity {
                     getResources().getString( R.string.tv_settings_no ),
                     null,
                     !showAdultContent );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class ParentalControlsFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_enable_parental_controls );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = "";
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_ENABLE_PARENTAL_CONTROLS, updated );
+
+            mVideoSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean enableParentalControls = getEnableParentalControls( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    enableParentalControls );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !enableParentalControls );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class ParentalControlLevelFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_parental_controls );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = "";
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            String updated = action.getLabel1().toString();
+            putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL, updated );
+
+            mVideoSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            String parentalControlLevel = getParentalControlLevel( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    "1",
+                    null,
+                    parentalControlLevel.equals( "1" ) );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    "2",
+                    null,
+                    parentalControlLevel.equals( "2" ) );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    "3",
+                    null,
+                    parentalControlLevel.equals( "3" ) );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    "4",
+                    null,
+                    parentalControlLevel.equals( "4" ) );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class ContentRatingFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_restrict_content_types );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = "";
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RESTRICT_CONTENT_TYPES, updated );
+
+            mVideoSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean enableContentRating = getRestrictContentType( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    enableContentRating );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !enableContentRating );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class ContentRatingNrFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_rating_nr );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = getResources().getString( R.string.pref_rating_nr_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_NR, updated );
+
+            mVideoSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean showContentType = getContentTypeNR( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    showContentType );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !showContentType );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class ContentRatingGFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_rating_g );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = getResources().getString( R.string.pref_rating_g_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_G, updated );
+
+            mVideoSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean showContentType = getContentTypeG( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    showContentType );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !showContentType );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class ContentRatingPgFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_rating_pg );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = getResources().getString( R.string.pref_rating_pg_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_PG, updated );
+
+            mVideoSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean showContentType = getContentTypePG( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    showContentType );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !showContentType );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class ContentRatingPg13Fragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_rating_pg13 );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = getResources().getString( R.string.pref_rating_pg13_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_PG13, updated );
+
+            mVideoSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean showContentType = getContentTypePG13( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    showContentType );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !showContentType );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class ContentRatingRFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_rating_r );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = getResources().getString( R.string.pref_rating_r_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_R, updated );
+
+            mVideoSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean showContentType = getContentTypeR( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    showContentType );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !showContentType );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class ContentRatingNc17Fragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_rating_nc17 );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String description = getResources().getString( R.string.pref_rating_nc17_summary );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_NC17, updated );
+
+            mVideoSettingsFragment.updateActions( null );
+            mSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean showContentType = getContentTypeNC17( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    showContentType );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !showContentType );
 
             setActions( actions );
 
@@ -724,9 +1894,64 @@ public class SettingsActivity extends Activity {
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
     }
 
+    private static boolean getEnableRecordingGroupFilter( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_RECORDING_GROUP_FILTER );
+    }
+
+    private static String getRecordingGroupFilter( Context context ) {
+
+        return getStringFromPreferences( context, SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER );
+    }
+
     private static boolean getShowAdultContent( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_SHOW_ADULT_TAB );
+    }
+
+    private static boolean getEnableParentalControls( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_PARENTAL_CONTROLS );
+    }
+
+    private static String getParentalControlLevel( Context context ) {
+
+        return getStringFromPreferences( context, SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL );
+    }
+
+    private static boolean getRestrictContentType( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RESTRICT_CONTENT_TYPES );
+    }
+
+    private static boolean getContentTypeNR( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_NR );
+    }
+
+    private static boolean getContentTypeG( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_G );
+    }
+
+    private static boolean getContentTypePG( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_PG );
+    }
+
+    private static boolean getContentTypePG13(Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_PG13 );
+    }
+
+    private static boolean getContentTypeR( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_R );
+    }
+
+    private static boolean getContentTypeNC17( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_NC17 );
     }
 
     private static boolean getEnableAnalytics( Context context ) {

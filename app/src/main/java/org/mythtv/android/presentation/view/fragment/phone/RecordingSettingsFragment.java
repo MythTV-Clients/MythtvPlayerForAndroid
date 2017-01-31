@@ -235,7 +235,7 @@ public class RecordingSettingsFragment extends AbstractBasePreferenceFragment im
     private void loadMediaItemList() {
         Log.d( TAG, "loadMediaItemList : enter" );
 
-        this.mediaItemListPresenter.initialize(Collections.singletonMap( MEDIA_KEY, Media.PROGRAM ) );
+        this.mediaItemListPresenter.initialize( Collections.singletonMap( MEDIA_KEY, Media.PROGRAM ) );
 
         Log.d( TAG, "loadMediaItemList : exit" );
     }

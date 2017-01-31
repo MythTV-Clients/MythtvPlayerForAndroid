@@ -46,7 +46,7 @@
     <string name="pref_internal_player">Interner Player</string>
     <string name="pref_internal_player_summary_off">Wiedergabe durch externen Player</string>
     <string name="pref_internal_player_summary_on">Wiedergabe durch internen Player</string>
-    <string name="pref_parental_control_level">Altersfreigabestufe</string>
+    <string name="pref_parental_control_level">Select Parental Control level</string>
     <string name="pref_parental_controls">Altersfreigabe</string>
     <string name="pref_rating_g">G – für alle Altersstufen geeignet</string>
     <string name="pref_rating_g_summary">Alle Altersstufen zugelassen.</string>
@@ -59,9 +59,9 @@
     <string name="pref_restrict_content_types">Nur anzeigen Ausgewählte Video Bewertungen</string>
     <string name="pref_restrict_content_types_summary_off">Alle Altersstufen anzeigen</string>
     <string name="pref_restrict_content_types_summary_on">Nur ausgewählte Altersstufen anzeigen</string>
-    <string name="pref_show_adult_tab">Pornos</string>
-    <string name="pref_show_adult_tab_summary_off">Pornos werden verborgen</string>
-    <string name="pref_show_adult_tab_summary_on">Pornos werden angezeigt</string>
+    <string name="pref_show_adult_tab">Show Adult content in Watch Videos</string>
+    <string name="pref_show_adult_tab_summary_on">Adult content will be shown</string>
+    <string name="pref_show_adult_tab_summary_off">Adult content will not be shown</string>
     <string name="pref_video_display_preferences">Wiedergabeeinstellungen</string>
     <string name="recording">Aufnahme</string>
     <string name="search_hint">Suche Show, Film, Schauspieler, Persönlichkeit, Kanal</string> <!-- not checked, unknown occurence -->
@@ -178,5 +178,7 @@
     <string name="validation_no_media_type">Media Type could not be determined</string>
     <string name="tv_settings_analytics_title"><![CDATA[Analytics & Crash Reporting]]></string>
     <string name="tv_settings_analytics_title_description"><![CDATA[Annonymous Analytics & Crash Reports will be sent]]></string>
+    <string name="tv_settings_recording_title">Recording Settings</string>
+    <string name="tv_settings_video_title">Video Settings</string>
 
 </resources>
