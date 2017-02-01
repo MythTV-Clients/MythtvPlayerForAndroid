@@ -524,7 +524,11 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
                     result = result.substring( 1 );
                 }
 
-                result = result.substring( 0, result.indexOf( "-" ) );
+                if( result.contains( "-" ) ) {
+
+                    result = result.substring( 0, result.indexOf( "-" ) );
+
+                }
                 Log.d( TAG, "onPostExcecute : result=" + result );
 
                 float version = Float.parseFloat( result );
