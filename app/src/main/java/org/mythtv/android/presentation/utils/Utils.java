@@ -142,4 +142,21 @@ public class Utils {
         return Long.parseLong( mmr.extractMetadata( MediaMetadataRetriever.METADATA_KEY_DURATION ) );
     }
 
+    public static boolean meetsMinimumVersion( String version, float minimumVersion ) {
+
+        if( version.startsWith( "v" ) ) {
+            version = version.substring( 1 );
+        }
+
+        if( version.contains( "-" ) ) {
+
+            version = version.substring( 0, version.indexOf( "-" ) );
+
+        }
+
+        float extractedVersion = Float.parseFloat( version );
+
+        return ( extractedVersion >= minimumVersion );
+    }
+
 }
