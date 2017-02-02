@@ -18,6 +18,9 @@ public class UtilsTest {
     @Test
     public void testMeetsMinimumVersion() throws Exception {
 
+        assertThat( Utils.meetsMinimumVersion( "b6ae90c071", 0.28f ), equalTo( false ) );
+        assertThat( Utils.meetsMinimumVersion( "Unknown", 0.28f ), equalTo( false ) );
+        assertThat( Utils.meetsMinimumVersion( "v0.27.6", 0.28f ), equalTo( false ) );
         assertThat( Utils.meetsMinimumVersion( "v0.27", 0.28f ), equalTo( false ) );
         assertThat( Utils.meetsMinimumVersion( "0.27", 0.28f ), equalTo( false ) );
         assertThat( Utils.meetsMinimumVersion( "v0.27-xyz", 0.28f ), equalTo( false ) );
@@ -28,10 +31,12 @@ public class UtilsTest {
         assertThat( Utils.meetsMinimumVersion( "v0.28", 0.28f ), equalTo( true ) );
         assertThat( Utils.meetsMinimumVersion( "0.28", 0.28f ), equalTo( true ) );
         assertThat( Utils.meetsMinimumVersion( "v0.28-xyz", 0.28f ), equalTo( true ) );
+        assertThat( Utils.meetsMinimumVersion( "v28.0", 0.28f ), equalTo( true ) );
 
         assertThat( Utils.meetsMinimumVersion( "v0.29", 0.28f ), equalTo( true ) );
         assertThat( Utils.meetsMinimumVersion( "0.29", 0.28f ), equalTo( true ) );
         assertThat( Utils.meetsMinimumVersion( "v0.29-xyz", 0.28f ), equalTo( true ) );
+        assertThat( Utils.meetsMinimumVersion( "v29.0", 0.28f ), equalTo( true ) );
 
     }
 

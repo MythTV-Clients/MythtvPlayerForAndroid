@@ -144,6 +144,11 @@ public class Utils {
 
     public static boolean meetsMinimumVersion( String version, float minimumVersion ) {
 
+        if( version.equals( "Unknown" ) || version.matches( "\b[0-9a-f]{5,40}\b" ) ) {
+
+            return false;
+        }
+
         if( version.startsWith( "v" ) ) {
             version = version.substring( 1 );
         }
@@ -154,7 +159,22 @@ public class Utils {
 
         }
 
+        try {
+
+            Float.parseFloat( version );
+
+        } catch( NumberFormatException e ) {
+
+            return false;
+        }
+
         float extractedVersion = Float.parseFloat( version );
+
+        if( !version.startsWith( "0" ) ) {
+
+            extractedVersion *= 100;
+
+        }
 
         return ( extractedVersion >= minimumVersion );
     }
