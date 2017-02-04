@@ -18,7 +18,6 @@
 
 package org.mythtv.android.data.net;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 
 import java.util.List;
@@ -57,18 +56,6 @@ public interface ContentApi {
     String AUDIO_BITRATE_QS = "AudioBitrate=%s";
     String SAMPLE_RATE_QS = "SampleRate=%s";
 
-    Observable<LiveStreamInfoEntity> addliveStream( final String storageGroup, final String filename, final String hostname );
-
-    Observable<LiveStreamInfoEntity> addRecordingliveStream( final int recordedId, final int chanId, final DateTime startTime );
-
-    Observable<LiveStreamInfoEntity> addVideoliveStream( final int id );
-
     Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename );
-
-    Observable<LiveStreamInfoEntity> liveStreamInfoById( final int id );
-
-    Observable<Boolean> removeLiveStream( final int id );
-
-    Observable<Boolean> stopLiveStream( final int id );
 
 }

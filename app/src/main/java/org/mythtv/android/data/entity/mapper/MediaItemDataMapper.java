@@ -93,6 +93,8 @@ public class MediaItemDataMapper {
 
                 mediaItem.setRecording( programEntity.getRecording().getStatus() == -2 );
 
+                mediaItem.setRecordingGroup( programEntity.getRecording().getRecGroup() );
+
                 break;
 
             case -1 :
@@ -249,6 +251,9 @@ public class MediaItemDataMapper {
         mediaItem.setWatched( videoEntity.isWatched() );
         mediaItem.setMarkWatchedUrl( "/Video/UpdateVideoWatchedStatus?Id=%s&Watched=true" );
 
+        mediaItem.setCertification( videoEntity.getCertification() );
+        mediaItem.setParentalLevel( videoEntity.getParentalLevel() );
+
         return mediaItem;
     }
 
@@ -298,8 +303,15 @@ public class MediaItemDataMapper {
         mediaItem.setLiveStreamId( mediaItemEntity.getLiveStreamId() );
         mediaItem.setCreateHttpLiveStreamUrl( mediaItemEntity.getCreateHttpLiveStreamUrl() );
         mediaItem.setRemoveHttpLiveStreamUrl( mediaItemEntity.getRemoveHttpLiveStreamUrl() );
+        mediaItem.setGetHttpLiveStreamUrl( mediaItemEntity.getGetHttpLiveStreamUrl() );
         mediaItem.setWatched( mediaItemEntity.isWatched() );
         mediaItem.setMarkWatchedUrl( mediaItemEntity.getMarkWatchedUrl() );
+        mediaItem.setUpdateSavedBookmarkUrl( mediaItemEntity.getUpdateSavedBookmarkUrl() );
+        mediaItem.setBookmark( mediaItemEntity.getBookmark() );
+        mediaItem.setInetref( mediaItemEntity.getInetref() );
+        mediaItem.setCertification( mediaItemEntity.getCertification() );
+        mediaItem.setParentalLevel( mediaItemEntity.getParentalLevel() );
+        mediaItem.setRecordingGroup( mediaItemEntity.getRecordingGroup() );
 
         return mediaItem;
     }
@@ -350,8 +362,15 @@ public class MediaItemDataMapper {
         mediaItemEntity.setLiveStreamId( mediaItem.getLiveStreamId() );
         mediaItemEntity.setCreateHttpLiveStreamUrl( mediaItem.getCreateHttpLiveStreamUrl() );
         mediaItemEntity.setRemoveHttpLiveStreamUrl( mediaItem.getRemoveHttpLiveStreamUrl() );
+        mediaItemEntity.setGetHttpLiveStreamUrl( mediaItem.getGetHttpLiveStreamUrl() );
         mediaItemEntity.setWatched( mediaItem.isWatched() );
         mediaItemEntity.setMarkWatchedUrl( mediaItem.getMarkWatchedUrl() );
+        mediaItemEntity.setUpdateSavedBookmarkUrl( mediaItem.getUpdateSavedBookmarkUrl() );
+        mediaItemEntity.setBookmark( mediaItem.getBookmark() );
+        mediaItemEntity.setInetref( mediaItem.getInetref() );
+        mediaItemEntity.setCertification( mediaItem.getCertification() );
+        mediaItemEntity.setParentalLevel( mediaItem.getParentalLevel() );
+        mediaItemEntity.setRecordingGroup( mediaItem.getRecordingGroup() );
 
         return mediaItemEntity;
     }

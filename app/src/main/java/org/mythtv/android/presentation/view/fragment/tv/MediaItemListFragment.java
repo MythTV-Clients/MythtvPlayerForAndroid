@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v17.leanback.app.BackgroundManager;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
@@ -55,6 +56,7 @@ import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemListPresenter;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
+import org.mythtv.android.presentation.utils.Utils;
 import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
 
@@ -217,21 +219,13 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
         this.initialize();
 
-        Log.d( TAG, "onActivityCreated : exit" );
-    }
-
-    @Override
-    public void onResume() {
-        Log.d( TAG, "onResume : enter" );
-        super.onResume();
-
         this.loadMediaItemList();
 
         setupEventListeners();
 
         this.mediaItemListPresenter.resume();
 
-        Log.d( TAG, "onResume : exit" );
+        Log.d( TAG, "onActivityCreated : exit" );
     }
 
     @Override
@@ -348,6 +342,8 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
         if( null != mediaItemModelCollection ) {
             Log.d( TAG, "renderMediaItemList : mediaItemModelCollection is not null" );
 
+            List<MediaItemModel> mediaItems = Utils.filter( PreferenceManager.getDefaultSharedPreferences( getActivity() ), mediaItemModelCollection );
+
             ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
             CardPresenter cardPresenter = new CardPresenter();
 
@@ -361,7 +357,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
             });
 
-            for( MediaItemModel mediaItemModel : mediaItemModelCollection ) {
+            for( MediaItemModel mediaItemModel : mediaItems ) {
                 Log.d( TAG, "renderMediaItemList : mediaItemModel=" + mediaItemModel.toString() );
 
                 Category category = new Category( mediaItemModel.getTitle(), mediaItemModel.getMedia() );

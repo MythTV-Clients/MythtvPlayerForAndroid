@@ -27,9 +27,11 @@ import org.mythtv.android.presentation.internal.di.modules.NetModule;
 import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.presentation.internal.di.modules.TitleInfosModule;
+import org.mythtv.android.presentation.view.activity.tv.SettingsActivity;
 import org.mythtv.android.presentation.view.fragment.phone.EncoderListFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemDetailsFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemSearchResultListFragment;
+import org.mythtv.android.presentation.view.fragment.phone.RecordingSettingsFragment;
 import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
 import org.mythtv.android.presentation.view.fragment.tv.CategoryListFragment;
 import org.mythtv.android.presentation.view.fragment.tv.TvSearchResultListFragment;
@@ -54,10 +56,12 @@ public interface MediaComponent {
     void inject( org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment mediaItemListFragment );
     void inject( MediaItemSearchResultListFragment mediaItemSearchResultListFragment );
     void inject( EncoderListFragment encoderListFragment );
+    void inject( RecordingSettingsFragment recordingSettingsFragment );
 
     // TV fragments
     void inject( CategoryListFragment tvCategoryListFragment );
     void inject( org.mythtv.android.presentation.view.fragment.tv.MediaItemListFragment mediaItemListFragment);
     void inject( TvSearchResultListFragment tvSearchResultListFragment );
+    void inject( SettingsActivity.RecordingGroupFragment recordingGroupFragment );
 
 }

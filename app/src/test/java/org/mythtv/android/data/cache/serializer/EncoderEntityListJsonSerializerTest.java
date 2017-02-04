@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.EncoderListEntity;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

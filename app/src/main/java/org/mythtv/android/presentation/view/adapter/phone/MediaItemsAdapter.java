@@ -39,6 +39,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
+import org.mythtv.android.presentation.utils.Utils;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
@@ -214,7 +215,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     public void setMediaItemsCollection( Collection<MediaItemModel> mediaItemsCollection ) {
 
         this.validateMediaItemsCollection( mediaItemsCollection );
-        this.mediaItemsCollection = (List<MediaItemModel>) mediaItemsCollection;
+        this.mediaItemsCollection = Utils.filter( PreferenceManager.getDefaultSharedPreferences( context ), mediaItemsCollection );
         this.notifyDataSetChanged();
 
     }
@@ -274,17 +275,31 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
     private String getMasterBackendUrl() {
 
-        String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+        String host = getStringFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getStringFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         return "http://" + host + ":" + port;
     }
 
-    public String getFromPreferences( Context context, String key ) {
+    private String getStringFromPreferences( Context context, String key ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getString( key, "" );
+    }
+
+    private boolean getBooleanFromPreferences( Context context, String key ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        return sharedPreferences.getBoolean( key, false );
+    }
+
+    private int getIntFromPreferences( Context context, String key ) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        return sharedPreferences.getInt( key, -1 );
     }
 
 }

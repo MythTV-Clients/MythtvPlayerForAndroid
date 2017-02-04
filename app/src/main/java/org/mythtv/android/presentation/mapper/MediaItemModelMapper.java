@@ -57,12 +57,16 @@ public class MediaItemModelMapper {
         mediaItemModel.setUpdateSavedBookmarkUrl( mediaItem.getUpdateSavedBookmarkUrl() );
         mediaItemModel.setBookmark( mediaItem.getBookmark() );
         mediaItemModel.setInetref( mediaItem.getInetref() );
+        mediaItemModel.setRecordingGroup( mediaItem.getRecordingGroup() );
 
         ArrayList<ErrorModel> errors = new ArrayList<>();
         for( Error error : mediaItem.getValidationErrors() ) {
             errors.add( ErrorModel.fromError( error ) );
         }
         mediaItemModel.setValidationErrors( errors );
+
+        mediaItemModel.setCertification( mediaItem.getCertification() );
+        mediaItemModel.setParentalLevel( mediaItem.getParentalLevel() );
 
         return mediaItemModel;
     }

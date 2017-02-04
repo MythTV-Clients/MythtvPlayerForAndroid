@@ -24,25 +24,13 @@
 
     <string name="video">Video</string>
 
-    <!-- not checked, unknown occurence -->
-    <!-- not checked, unknown occurence -->
-
     <string name="drawer_item_watch_recordings">Aufnahmen ansehen</string>
     <string name="drawer_item_watch_videos">Videos ansehen</string>
     <string name="drawer_item_preferences">Einstellungen</string>
 
     <string name="action_settings">Einstellungen</string>
 
-    <!-- not checked, unknown occurence -->
-    <!-- HLS not translated, unknown occurence -->
-
-    <!-- HLS not translated, unknown occurence -->
-    <string name="pref_hls_video_bitrate_title">Bitrate</string>
-    <string name="pref_hls_audio_bitrate_title">Audio Bitrate</string>
     <string name="pref_default_player">Standardplayer</string>
-    <string name="pref_hls_video_height_title_summary">Video Höhe</string>
-    <string name="pref_hls_video_bitrate_title_summary">Video Bitrate</string>
-    <string name="pref_hls_audio_bitrate_title_summary">Audio Bitrate</string>
     <string name="pref_rating_nr">NR – Nicht Bewertet</string>
     <string name="pref_rating_pg">PG – Begleitung eines Erwachsenen erwünscht</string>
     <string name="pref_rating_pg13">PG-13 – Begleitung eines Erwachsenen unbedingt empfohlen</string>
@@ -55,13 +43,10 @@
     <string name="pref_backend_port_description">Port des Master Backends</string>
     <string name="pref_backend_url_description">Hostname oder IP-Adresse des Master Backends</string>
     <string name="pref_backend_url_title">Master Backend Einstellung</string>
-    <string name="pref_hls_video_height_title">Video  Höhe</string>
-    <string name="pref_hls_video_width_title">Video Breite</string>
-    <string name="pref_hls_video_width_title_summary">HLS transcode Video Breite</string> <!-- not checked, unknown occurence -->
     <string name="pref_internal_player">Interner Player</string>
     <string name="pref_internal_player_summary_off">Wiedergabe durch externen Player</string>
     <string name="pref_internal_player_summary_on">Wiedergabe durch internen Player</string>
-    <string name="pref_parental_control_level">Altersfreigabestufe</string>
+    <string name="pref_parental_control_level">Select Parental Control level</string>
     <string name="pref_parental_controls">Altersfreigabe</string>
     <string name="pref_rating_g">G – für alle Altersstufen geeignet</string>
     <string name="pref_rating_g_summary">Alle Altersstufen zugelassen.</string>
@@ -74,11 +59,10 @@
     <string name="pref_restrict_content_types">Nur anzeigen Ausgewählte Video Bewertungen</string>
     <string name="pref_restrict_content_types_summary_off">Alle Altersstufen anzeigen</string>
     <string name="pref_restrict_content_types_summary_on">Nur ausgewählte Altersstufen anzeigen</string>
-    <string name="pref_show_adult_tab">Pornos</string>
-    <string name="pref_show_adult_tab_summary_off">Pornos werden verborgen</string>
-    <string name="pref_show_adult_tab_summary_on">Pornos werden angezeigt</string>
+    <string name="pref_show_adult_tab">Show Adult content in Watch Videos</string>
+    <string name="pref_show_adult_tab_summary_on">Adult content will be shown</string>
+    <string name="pref_show_adult_tab_summary_off">Adult content will not be shown</string>
     <string name="pref_video_display_preferences">Wiedergabeeinstellungen</string>
-    <!-- not checked, unknown occurence -->
     <string name="recording">Aufnahme</string>
     <string name="search_hint">Suche Show, Film, Schauspieler, Persönlichkeit, Kanal</string> <!-- not checked, unknown occurence -->
     <string name="search_results">Suchergebnisse</string>
@@ -90,11 +74,13 @@
     <string name="watch_video">Videos Ansehen</string>
     <string name="recording_preferences">Aufnahmeeinstellungen</string>
     <string name="recording_preferences_summary">Einstellungen für Aufnahmen</string>
-    <string name="pref_set_default_recording_group">Aufnahme Gruppeneinstellungen   [Einstellung zur Zeit nicht verfügbar]</string><!-- not checked, unknown occurence -->
-    <string name="pref_default_recording_group">Standardaufnahmegruppe auswählen</string>
-    <string name="pref_default_recording_group_summary_off">Keine Standard ufnahmegruppe festgelegt</string>
-    <string name="pref_default_recording_group_summary_on">Nur Aufnahmen der Standardaufnahmegruppe angezeigt</string>
-    <string name="pref_enable_default_recording_group">Standardaufnahmegruppe aktiviert</string>
+    <string name="pref_set_default_recording_group">Aufnahme Gruppeneinstellungen</string>
+    <string name="pref_enable_recording_group_summary_off">Recording Group Filter is off</string>
+    <string name="pref_enable_recording_group_summary_on">Nur Aufnahmen der Standardaufnahmegruppe angezeigt</string>
+    <string name="pref_enable_recording_group_filter">Enable Recording Group Filter</string>
+    <string name="pref_recording_group_filter">Select Recording Group Filter</string>
+    <string name="pref_recording_group_filter_summary_on">Recordings will be filtered by the \'%s\' Recording Group</string>
+    <string name="pref_recording_group_filter_summary_off">No Recording Group selected</string>
     <string name="tv_settings_title">MythTV Settings</string>
     <string name="tv_settings_title_description">MythTV Player backend and content settings</string>
     <string name="tv_settings_master_backend_title">Master Backend</string>
@@ -131,12 +117,6 @@
     <string name="add_live_stream_positive_label">Create</string>
     <string name="add_live_stream_title">Create Live Stream?</string>
 
-    <string name="pref_timeouts">Master Backend Timeouts</string>
-    <string name="pref_timeouts_summary">Timeout settings for connecting to the Master Backend. This is an advanced feature and is not normally needed to change. If you are seeing errors because you have a large library, consider increasing these values. Only set it to \'No Limit\' unless no other options work.</string>
-    <string name="pref_read_timeout_title">Read Timeout</string>
-    <string name="pref_read_timeout_title_summary">Sets the default read timeout for new connections. A value of 0 means no timeout.</string>
-    <string name="pref_connect_timeout_title">Connect Timeout</string>
-    <string name="pref_connect_timeout_title_summary">Sets the default connection timeout for new connections. A value of 0 means no timeout.</string>
     <string name="versionLabel">Version:</string>
     <string name="drawer_item_about">About</string>
     <string name="close">Close</string>
@@ -149,10 +129,10 @@
     <string name="ok">OK</string>
     <string name="error">Error</string>
 
-    <string name="pref_enable_analytics_label">Analytics &amp; Crash Reporting</string>
-    <string name="pref_enable_analytics_title">Enable Analytics &amp; Crash Reporting</string>
-    <string name="pref_enable_analytics_summary_on">Anonymous Analytics &amp; Crash Reports will be sent</string>
-    <string name="pref_enable_analytics_summary_off">Anonymous Analytics &amp; Crash Reports will not be sent</string>
+    <string name="pref_enable_analytics_label">Analytics </string>
+    <string name="pref_enable_analytics_title">Enable Analytics Reporting</string>
+    <string name="pref_enable_analytics_summary_on">Anonymous Analytics will be sent</string>
+    <string name="pref_enable_analytics_summary_off">Anonymous Analytics will not be sent</string>
     <string name="action_create_hls_stream">Create HTTP Live Stream</string>
     <string name="action_remove_hls_stream">Remove HTTP Live Stream</string>
     <string name="action_mark_watched">Mark Watched</string>
@@ -172,6 +152,7 @@
     <string name="video_error_server_unaccessible">Media server was not reachable</string>
     <string name="video_error_unknown_error">Failed to load video</string>
     <string name="media_item_details_corrupt_data">Data is corrupt, check backend</string>
+    <string name="title_activity_troubleshoot">Troubleshoot Connection</string>
     <string name="troubleshoot">Troubleshoot</string>
     <string name="airplane_mode_check_label">Airplane Mode must be off</string>
     <string name="network_check_label">Network must be connected</string>
@@ -195,5 +176,9 @@
     <string name="backend_version_verified_label">MythTV Version v0.28 or greater</string>
     <string name="validation_corrupt_data">This episode has corrupt backend data: %s</string>
     <string name="validation_no_media_type">Media Type could not be determined</string>
+    <string name="tv_settings_analytics_title"><![CDATA[Analytics & Crash Reporting]]></string>
+    <string name="tv_settings_analytics_title_description"><![CDATA[Annonymous Analytics & Crash Reports will be sent]]></string>
+    <string name="tv_settings_recording_title">Recording Settings</string>
+    <string name="tv_settings_video_title">Video Settings</string>
 
 </resources>

@@ -74,7 +74,7 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
         assertThat( mediaItem.getBannerUrl(), is( nullValue() ) );
         assertThat( mediaItem.getPreviewUrl(), is( "/Content/GetPreviewImage?RecordedId=3120" ) );
 
-        assertThat( mediaItem.getDuration(), greaterThan( 0l ) );
+        assertThat( mediaItem.getDuration(), greaterThan(0L) );
         assertThat( mediaItem.getDuration(), is( equalTo( 30L ) ) );
         assertThat( mediaItem.isValid(), is( true ) );
         assertThat( mediaItem.getValidationErrors(), hasSize( 0 ) );
@@ -104,7 +104,7 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
         assertThat( mediaItem.getBannerUrl(), is( nullValue() ) );
         assertThat( mediaItem.getPreviewUrl(), is( "/Content/GetPreviewImage?RecordedId=3120" ) );
 
-        assertThat( mediaItem.getDuration(), lessThanOrEqualTo( 0l ) );
+        assertThat( mediaItem.getDuration(), lessThanOrEqualTo(0L) );
         assertThat( mediaItem.isValid(), is( false ) );
         assertThat( mediaItem.getValidationErrors(), hasSize( 1 ) );
 
@@ -133,7 +133,7 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
         assertThat( mediaItem.getBannerUrl(), is( nullValue() ) );
         assertThat( mediaItem.getPreviewUrl(), is( nullValue() ) );
 
-        assertThat( mediaItem.getDuration(), greaterThan( 0l ) );
+        assertThat( mediaItem.getDuration(), greaterThan(0L) );
         assertThat( mediaItem.getDuration(), is( equalTo( 30L ) ) );
         assertThat( mediaItem.isValid(), is( false ) );
         assertThat( mediaItem.getValidationErrors(), hasSize( 1 ) );
@@ -202,7 +202,7 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
         assertThat( mediaItem.getId(), is( 0 ) );
         assertThat( mediaItem.getMedia(), is( nullValue() ) );
 
-        assertThat( mediaItem.getDuration(), lessThanOrEqualTo( 0l ) );
+        assertThat( mediaItem.getDuration(), lessThanOrEqualTo(0L) );
         assertThat( mediaItem.isValid(), is( false ) );
         assertThat( mediaItem.getValidationErrors(), hasSize( 3 ) );
 

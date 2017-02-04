@@ -1,7 +1,6 @@
 package org.mythtv.android.presentation.internal.di.modules;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.FieldNamingPolicy;
@@ -72,17 +71,12 @@ public class NetModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient( Context context, SharedPreferences sharedPreferences, Cache cache ) {
-
-//        final int readTimeout = Integer.parseInt( sharedPreferences.getString( SettingsKeys.KEY_PREF_READ_TIMEOUT, "10000" ) );
-//        final int connectTimeout = Integer.parseInt( sharedPreferences.getString( SettingsKeys.KEY_PREF_CONNECT_TIMEOUT, "10000" ) );
+    OkHttpClient provideOkHttpClient( Context context, Cache cache ) {
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel( HttpLoggingInterceptor.Level.HEADERS );
 
         return new OkHttpClient.Builder()
-//                .readTimeout( 0, TimeUnit.MILLISECONDS )
-//                .connectTimeout( 0, TimeUnit.MILLISECONDS )
                 .cache( cache )
                 .addNetworkInterceptor( new StethoInterceptor() )
                 .addInterceptor( loggingInterceptor )
