@@ -26,6 +26,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.data.entity.mapper.BackendLangJsonMapper;
 import org.mythtv.android.data.entity.mapper.BackendVersionJsonMapper;
 import org.mythtv.android.data.entity.mapper.StringJsonMapper;
+import org.mythtv.android.presentation.utils.Utils;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -518,18 +519,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
             if( null != result ) {
 
                 float minimumVersion = Float.parseFloat( getResources().getString( R.string.minimum_mythtv_version ) );
-                Log.d( TAG, "onPostExcecute : minimumVersion=" + minimumVersion );
-
-                if( result.startsWith( "v" ) ) {
-                    result = result.substring( 1 );
-                }
-
-                result = result.substring( 0, result.indexOf( "-" ) );
-                Log.d( TAG, "onPostExcecute : result=" + result );
-
-                float version = Float.parseFloat( result );
-
-                if( version >= minimumVersion ) {
+                if( Utils.meetsMinimumVersion( result, minimumVersion ) ) {
 
                     setImage( backendVersionImage, R.drawable.ic_description_black_24dp );
 
