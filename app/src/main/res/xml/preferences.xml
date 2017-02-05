@@ -22,6 +22,16 @@
         android:title="@string/pref_backend_title"
         android:key="pref_backend_settings">
 
+        <PreferenceScreen
+            android:title="@string/backend_scan"
+            android:summary="@string/backend_scan_summary">
+
+            <intent
+                android:targetPackage="org.mythtv.android"
+                android:targetClass="org.mythtv.android.presentation.view.activity.phone.NsdActivity" />
+
+        </PreferenceScreen>
+
         <EditTextPreference
             android:key="backend_url"
             android:title="@string/pref_backend_url_title"

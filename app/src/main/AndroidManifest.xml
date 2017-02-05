@@ -82,17 +82,6 @@
 
         <!-- App Activities -->
         <activity
-            android:name=".presentation.view.activity.phone.NsdActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.AppCompat.Translucent">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity
             android:name=".presentation.view.activity.phone.MainPhoneActivity"
             android:clearTaskOnLaunch="true"
             android:label="@string/app_name"
@@ -165,6 +154,15 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="org.mythtv.android.presentation.view.activity.phone.SearchableActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.view.activity.phone.NsdActivity"
+            android:label="@string/title_activity_settings"
+            android:launchMode="singleTop"
+            android:parentActivityName=".presentation.view.activity.phone.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.mythtv.android.presentation.view.activity.phone.SettingsActivity" />
         </activity>
         <activity
             android:name=".presentation.view.activity.phone.RecordingSettingsActivity"

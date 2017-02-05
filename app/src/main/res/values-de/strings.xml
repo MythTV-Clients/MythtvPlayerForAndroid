@@ -181,5 +181,8 @@
     <string name="tv_settings_analytics_title_description"><![CDATA[Annonymous Analytics & Crash Reports will be sent]]></string>
     <string name="tv_settings_recording_title">Recording Settings</string>
     <string name="tv_settings_video_title">Video Settings</string>
+    <string name="backend_scan">Autodetect Master Backend</string>
+    <string name="backend_scan_summary">Scan for your Master Backend on your network (this setting can be overridden below)</string>
+    <string name="pref_backend_scan_title">Select a Master Backend on your network</string>
 
 </resources>

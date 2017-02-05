@@ -52,7 +52,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import it.ennova.zerxconf.ZeRXconf;
 import rx.Observable;
+import rx.Subscription;
 
 /**
  *
@@ -67,8 +69,9 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
     private static final int MASTER_BACKEND_SETTINGS = 10;
-    private static final int MASTER_BACKEND_URL = 11;
-    private static final int MASTER_BACKEND_PORT = 12;
+    private static final int MASTER_BACKEND_SCAN_URL = 11;
+    private static final int MASTER_BACKEND_URL = 12;
+    private static final int MASTER_BACKEND_PORT = 13;
     private static final int PLAYER_SETTINGS = 20;
     private static final int INTERNAL_PLAYER_SETTINGS = 21;
     private static final int RECORDING_SETTINGS = 30;
@@ -92,6 +95,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
     private static SettingsFragment mSettingsFragment;
 
     private static MasterBackendFragment mMasterBackendFragment;
+    private static MasterBackendScanUrlFragment mMasterBackendScanUrlFragment;
     private static MasterBackendUrlFragment mMasterBackendUrlFragment;
     private static MasterBackendPortFragment mMasterBackendPortFragment;
 
@@ -137,6 +141,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         mSettingsFragment = new SettingsFragment();
 
         mMasterBackendFragment = new MasterBackendFragment();
+        mMasterBackendScanUrlFragment = new MasterBackendScanUrlFragment();
         mMasterBackendUrlFragment = new MasterBackendUrlFragment();
         mMasterBackendPortFragment = new MasterBackendPortFragment();
 
@@ -322,6 +327,12 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             Log.d( TAG, "onGuidedActionClicked : action=" + action );
             switch( (int) action.getId() ) {
 
+                case MASTER_BACKEND_SCAN_URL :
+
+                    GuidedStepFragment.add( fm, mMasterBackendScanUrlFragment, android.R.id.content );
+
+                    break;
+
                 case MASTER_BACKEND_URL :
 
                     GuidedStepFragment.add( fm, mMasterBackendUrlFragment, android.R.id.content );
@@ -349,6 +360,10 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
             String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
 
+            addAction( getActivity(), actions, MASTER_BACKEND_SCAN_URL,
+                    getResources().getString( R.string.backend_scan ),
+                    getResources().getString( R.string.backend_scan_summary ),
+                    true, true );
             addAction( getActivity(), actions, MASTER_BACKEND_URL,
                     url,
                     getResources().getString( R.string.pref_backend_url_description ),
@@ -360,6 +375,147 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
             setActions( actions );
 
+        }
+
+    }
+
+    public static class MasterBackendScanUrlFragment extends GuidedStepFragment {
+
+        List<String> detectedBackends = new ArrayList<>();
+
+        Subscription zeroConfSubscription;
+
+        @Override
+        public void onCreate( Bundle savedInstanceState ) {
+            super.onCreate( savedInstanceState );
+
+
+        }
+
+        @Override
+        public void onActivityCreated( Bundle savedInstanceState ) {
+            Log.d( TAG, "onActivityCreated : enter" );
+            super.onActivityCreated( savedInstanceState );
+
+            this.initialize();
+
+            Log.d( TAG, "onActivityCreated : exit" );
+        }
+
+        @Override
+        public void onPause() {
+            Log.d( TAG, "onPause : enter" );
+
+            if( null != zeroConfSubscription && !zeroConfSubscription.isUnsubscribed() ) {
+
+                zeroConfSubscription.unsubscribe();
+
+            }
+
+            super.onPause();
+
+            Log.d( TAG, "onPause : exit" );
+        }
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_backend_url_title );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.backend_scan );
+            String description = getResources().getString( R.string.pref_backend_url_description );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            String updated = action.getLabel1().toString();
+            String[] updatedComponents = updated.split( ":" );
+            if( updatedComponents.length == 2 ) {
+
+                putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL, updatedComponents[ 0 ] );
+                putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT, updatedComponents[ 1 ] );
+
+                mMasterBackendFragment.updateActions( null );
+                mSettingsFragment.updateActions( null );
+
+            }
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        private void initialize() {
+            Log.d( TAG, "initialize : enter" );
+
+            lookupBackend();
+
+            Log.d( TAG, "initialize : exit" );
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL ) + ":" + getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            if( !detectedBackends.isEmpty() ) {
+
+                for( String backend : detectedBackends ) {
+
+                    addCheckedAction( getActivity(), actions,
+                            -1,
+                            backend,
+                            null,
+                            backend.equals( url ) );
+
+                }
+
+                setActions( actions );
+
+            }
+
+        }
+
+        private void lookupBackend() {
+            Log.d( TAG, "lookupBackend : enter" );
+
+            zeroConfSubscription = ZeRXconf.startDiscovery( getActivity(), "_mythbackend._tcp." )
+                    .subscribe(
+                            nsdInfo -> {
+                                Log.i( TAG, "lookupBackend : " + nsdInfo.getAddress().getHostAddress() + ":" + nsdInfo.getServicePort() );
+
+                                if( !detectedBackends.contains( nsdInfo.getAddress().getHostAddress() + ":" + nsdInfo.getServicePort() ) ) {
+
+                                    detectedBackends.add( nsdInfo.getAddress().getHostAddress() + ":" + nsdInfo.getServicePort() );
+
+                                    updateActions( null );
+
+                                }
+
+
+                            },
+                            e -> {
+                                Log.e( TAG, "lookupBackend : network discovery failed", e );
+                            }
+                    );
+
+            Log.d( TAG, "lookupBackend : exit" );
         }
 
     }
