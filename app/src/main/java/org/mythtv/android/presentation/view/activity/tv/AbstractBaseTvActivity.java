@@ -61,8 +61,13 @@ public abstract class AbstractBaseTvActivity extends Activity {
         super.onCreate( savedInstanceState );
 
         this.getApplicationComponent().inject( this );
-        setContentView( getLayoutResource() );
-        ButterKnife.bind( this );
+
+        if( getLayoutResource() > 0 ) {
+
+            setContentView( getLayoutResource() );
+            ButterKnife.bind( this );
+
+        }
 
         if( !FirebaseApp.getApps( this ).isEmpty() ) {
 

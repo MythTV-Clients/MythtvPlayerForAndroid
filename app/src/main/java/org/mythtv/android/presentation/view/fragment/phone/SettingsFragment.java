@@ -19,9 +19,9 @@
 package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
-import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +42,8 @@ import org.mythtv.android.domain.SettingsKeys;
 public class SettingsFragment extends PreferenceFragment {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
 
         addPreferencesFromResource( R.xml.preferences );
 

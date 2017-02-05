@@ -53,25 +53,13 @@
     <string name="pref_backend_port_description">The port of the master backend</string>
     <string name="pref_backend_port" translatable="false">6544</string>
 
-    <string name="pref_hls_video_width_title">Width</string>
-    <string name="pref_hls_video_width_default" translatable="false">0</string>
-    <string name="pref_hls_video_height_title">Height</string>
-    <string name="pref_hls_video_height_default" translatable="false">0</string>
-    <string name="pref_hls_video_bitrate_title">Bitrate</string>
-    <string name="pref_hls_video_bitrate_default" translatable="false">800000</string>
-    <string name="pref_hls_audio_bitrate_title">Audio Bitrate</string>
-    <string name="pref_hls_audio_bitrate_default" translatable="false">64000</string>
     <string name="pref_default_player">Default Player</string>
     <string name="pref_internal_player">Internal Player</string>
     <string name="pref_internal_player_summary_on">Playback will be handled by the Internal Player</string>
     <string name="pref_internal_player_summary_off">Playback will be handled by an External Player</string>
-    <string name="pref_hls_video_width_title_summary">HLS transcode video width</string>
-    <string name="pref_hls_video_height_title_summary">HLS transcode video height</string>
-    <string name="pref_hls_video_bitrate_title_summary">HLS transcode video bitrate</string>
-    <string name="pref_hls_audio_bitrate_title_summary">HLS transcode audio bitrate</string>
-    <string name="pref_show_adult_tab">Show Adult tab in Watch Videos</string>
-    <string name="pref_show_adult_tab_summary_on">Adult tab will be shown</string>
-    <string name="pref_show_adult_tab_summary_off">Adult tab will not be shown</string>
+    <string name="pref_show_adult_tab">Show Adult content in Watch Videos</string>
+    <string name="pref_show_adult_tab_summary_on">Adult content will be shown</string>
+    <string name="pref_show_adult_tab_summary_off">Adult content will not be shown</string>
     <string name="pref_restrict_content_types">Only Display Selected Video Ratings</string>
     <string name="pref_restrict_content_types_summary_on">Videos for all types selected below will be shown</string>
     <string name="pref_restrict_content_types_summary_off">Show All Videos</string>
@@ -95,15 +83,17 @@
     <string name="pref_enable_parental_controls">Enable Parental Controls</string>
     <string name="pref_enable_parental_controls_summary_on">Parental Controls are enabled</string>
     <string name="pref_enable_parental_controls_summary_off">Parental Controls are disabled</string>
-    <string name="pref_parental_control_level">Select highest Parental Control level displayed</string>
+    <string name="pref_parental_control_level">Select Parental Control level</string>
     <string name="title_activity_settings">Settings</string>
     <string name="recording_preferences">Recording Settings</string>
     <string name="recording_preferences_summary">Modify Recordings Display and Filters</string>
-    <string name="pref_set_default_recording_group">Recording Group Settings [setting unavailable at this time]</string>
-    <string name="pref_enable_default_recording_group">Enable Default Recording Group</string>
-    <string name="pref_default_recording_group_summary_on">Only recordings in selected recording group will be displayed</string>
-    <string name="pref_default_recording_group_summary_off">No Default Recording Group is set</string>
-    <string name="pref_default_recording_group">Select Default Recording Group</string>
+    <string name="pref_set_default_recording_group">Recording Group Settings</string>
+    <string name="pref_enable_recording_group_filter">Enable Recording Group Filter</string>
+    <string name="pref_enable_recording_group_summary_on">Only recordings in selected recording group will be displayed</string>
+    <string name="pref_enable_recording_group_summary_off">Recording Group Filter is off</string>
+    <string name="pref_recording_group_filter">Select Recording Group Filter</string>
+    <string name="pref_recording_group_filter_summary_on">Recordings will be filtered by the \'%s\' Recording Group</string>
+    <string name="pref_recording_group_filter_summary_off">No Recording Group selected</string>
 
     //Exception messages
     <string name="exception_message_generic" translatable="false">There was an application error</string>
@@ -161,14 +151,6 @@
     <string name="add_live_stream_positive_label">Create</string>
     <string name="add_live_stream_title">Create Live Stream?</string>
 
-    <string name="pref_timeouts">Master Backend Timeouts</string>
-    <string name="pref_timeouts_summary">Timeout settings for connecting to the Master Backend. This is an advanced feature and is not normally needed to change. If you are seeing errors because you have a large library, consider increasing these values. Only set it to \'No Timeout\' if no other values work.</string>
-    <string name="pref_read_timeout_title">Read Timeout</string>
-    <string name="pref_read_timeout_title_summary">Sets the default read timeout for new connections.</string>
-    <string name="pref_read_timeout_default" translatable="false">10000</string>
-    <string name="pref_connect_timeout_title">Connect Timeout</string>
-    <string name="pref_connect_timeout_title_summary">Sets the default connection timeout for new connections.</string>
-    <string name="pref_connect_timeout_default" translatable="false">20000</string>
     <string name="versionLabel">Version:</string>
     <string name="drawer_item_about">About</string>
     <string name="close">Close</string>
@@ -193,10 +175,10 @@
     <string name="transition_image" translatable="false">transition-image</string>
     <string name="loading">Loading&#8230;</string>
 
-    <string name="pref_enable_analytics_label">Analytics &amp; Crash Reporting</string>
-    <string name="pref_enable_analytics_title">Enable Analytics &amp; Crash Reporting</string>
-    <string name="pref_enable_analytics_summary_on">Anonymous Analytics &amp; Crash Reports will be sent</string>
-    <string name="pref_enable_analytics_summary_off">Anonymous Analytics &amp; Crash Reports will not be sent</string>
+    <string name="pref_enable_analytics_label">Analytics</string>
+    <string name="pref_enable_analytics_title">Enable Analytics Reporting</string>
+    <string name="pref_enable_analytics_summary_on">Anonymous Analytics will be sent</string>
+    <string name="pref_enable_analytics_summary_off">Anonymous Analytics will not be sent</string>
     <string name="action_create_hls_stream">Create HTTP Live Stream</string>
     <string name="action_remove_hls_stream">Remove HTTP Live Stream</string>
     <string name="action_mark_watched">Mark Watched</string>
@@ -238,5 +220,9 @@
     <string name="validation_corrupt_data">This episode has corrupt backend data: %s</string>
     <string name="validation_no_media_type">Media Type could not be determined</string>
     <string name="master_backend_address_set">Test Master Backend address set</string>
+    <string name="tv_settings_analytics_title"><![CDATA[Analytics & Crash Reporting]]></string>
+    <string name="tv_settings_analytics_title_description"><![CDATA[Annonymous Analytics & Crash Reports will be sent]]></string>
+    <string name="tv_settings_recording_title">Recording Settings</string>
+    <string name="tv_settings_video_title">Video Settings</string>
 
 </resources>

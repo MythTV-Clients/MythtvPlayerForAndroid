@@ -116,9 +116,16 @@ public class DbSearchDataStore implements SearchDataStore {
                         mediaItem.setRecording( ( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_RECORDING ) ) != 0 ) );
                         mediaItem.setLiveStreamId( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_LIVE_STREAM_ID ) ) );
                         mediaItem.setCreateHttpLiveStreamUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CREATE_LIVE_STREAM_URL ) ) );
-                        mediaItem.setRemoveHttpLiveStreamUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CREATE_LIVE_STREAM_URL ) ) );
-                        mediaItem.setWatched( ( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_CREATE_LIVE_STREAM_URL ) ) != 0 ) );
-                        mediaItem.setMarkWatchedUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CREATE_LIVE_STREAM_URL ) ) );
+                        mediaItem.setRemoveHttpLiveStreamUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_REMOVE_LIVE_STREAM_URL ) ) );
+                        mediaItem.setGetHttpLiveStreamUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_GET_LIVE_STREAM_URL ) ) );
+                        mediaItem.setWatched( ( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_WATCHED_STATUS ) ) != 0 ) );
+                        mediaItem.setMarkWatchedUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_MARK_WATCHED_URL ) ) );
+                        mediaItem.setUpdateSavedBookmarkUrl( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_UPDATE_SAVED_BOOKMARK_URL ) ) );
+                        mediaItem.setBookmark( cursor.getLong( cursor.getColumnIndex( MediaItemEntity.FIELD_BOOKMARK ) ) );
+                        mediaItem.setInetref( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_INETREF ) ) );
+                        mediaItem.setCertification( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_CERTIFICATION ) ) );
+                        mediaItem.setParentalLevel( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_PARENTAL_LEVEL ) ) );
+                        mediaItem.setRecordingGroup( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_RECORDING_GROUP ) ) );
 
 //                        Log.d( TAG, "search.call : searchResultEntity=" + searchResultEntity.toString() );
                         mediaItems.add( mediaItem );
@@ -244,8 +251,15 @@ public class DbSearchDataStore implements SearchDataStore {
             statement.bindLong( 22, mediaItemEntity.getLiveStreamId() );
             statement.bindString( 23, null != mediaItemEntity.getCreateHttpLiveStreamUrl() ? mediaItemEntity.getCreateHttpLiveStreamUrl() : "" );
             statement.bindString( 24, null != mediaItemEntity.getRemoveHttpLiveStreamUrl() ? mediaItemEntity.getRemoveHttpLiveStreamUrl() : "" );
-            statement.bindLong( 25, mediaItemEntity.isWatched() ? 1 : 0 );
-            statement.bindString( 26, null != mediaItemEntity.getMarkWatchedUrl() ? mediaItemEntity.getMarkWatchedUrl() : "" );
+            statement.bindString( 25, null != mediaItemEntity.getGetHttpLiveStreamUrl() ? mediaItemEntity.getGetHttpLiveStreamUrl() : "" );
+            statement.bindLong( 26, mediaItemEntity.isWatched() ? 1 : 0 );
+            statement.bindString( 27, null != mediaItemEntity.getMarkWatchedUrl() ? mediaItemEntity.getMarkWatchedUrl() : "" );
+            statement.bindString( 28, null != mediaItemEntity.getUpdateSavedBookmarkUrl() ? mediaItemEntity.getUpdateSavedBookmarkUrl() : "" );
+            statement.bindLong( 29, mediaItemEntity.getBookmark() );
+            statement.bindString( 30, null != mediaItemEntity.getInetref() ? mediaItemEntity.getInetref() : "" );
+            statement.bindString( 31, null != mediaItemEntity.getCertification() ? mediaItemEntity.getCertification() : "" );
+            statement.bindLong( 32, mediaItemEntity.getParentalLevel() );
+            statement.bindString( 32, null != mediaItemEntity.getRecordingGroup() ? mediaItemEntity.getRecordingGroup() : "" );
             statement.executeInsert();
 
         }

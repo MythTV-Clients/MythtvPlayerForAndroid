@@ -20,22 +20,24 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/pref_set_default_recording_group"
+        android:title="@string/recording_preferences"
         android:key="pref_set_default_recording_group">
 
         <SwitchPreference
-            android:title="@string/pref_enable_default_recording_group"
-            android:key="enable_default_recording_group"
+            android:title="@string/pref_enable_recording_group_filter"
+            android:key="enable_recording_group_filter"
             android:defaultValue="false"
-            android:summaryOn="@string/pref_default_recording_group_summary_on"
-            android:summaryOff="@string/pref_default_recording_group_summary_off"
-            android:enabled="false" />
+            android:summaryOn="@string/pref_enable_recording_group_summary_on"
+            android:summaryOff="@string/pref_enable_recording_group_summary_off" />
 
         <ListPreference
-            android:title="@string/pref_default_recording_group"
-            android:key="default_recording_group"
+            android:title="@string/pref_recording_group_filter"
+            android:key="recording_group_filter"
             android:defaultValue="Default"
-            android:dependency="enable_default_recording_group" />
+            android:dependency="enable_recording_group_filter"
+            android:summaryOn="@string/pref_recording_group_filter_summary_on"
+            android:summaryOff="@string/pref_recording_group_filter_summary_off" />
+
 
     </PreferenceCategory>
 

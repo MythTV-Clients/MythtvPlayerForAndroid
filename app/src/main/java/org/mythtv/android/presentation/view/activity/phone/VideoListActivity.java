@@ -185,6 +185,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
         mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 3 ] ) );
 
         boolean showAdultTab = getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, false );
+        Log.v( TAG, "setupTabs : showAdultTab=" + showAdultTab );
         if( showAdultTab ) {
 
             MediaItemListFragment.Builder adultParameters = new MediaItemListFragment.Builder( Media.ADULT );

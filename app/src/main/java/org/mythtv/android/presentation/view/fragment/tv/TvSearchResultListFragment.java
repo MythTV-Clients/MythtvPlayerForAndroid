@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v17.leanback.app.SearchFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
@@ -43,10 +44,12 @@ import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.SearchResultListPresenter;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
+import org.mythtv.android.presentation.utils.Utils;
 import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -231,10 +234,12 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
 
             mRowsAdapter.clear();
 
+            List<MediaItemModel> mediaItems = Utils.filter( PreferenceManager.getDefaultSharedPreferences( getActivity() ), mediaItemModelCollection );
+
             ArrayObjectAdapter programRowAdapter = new ArrayObjectAdapter( new CardPresenter() );
             ArrayObjectAdapter videoRowAdapter = new ArrayObjectAdapter( new CardPresenter() );
 
-            for( MediaItemModel mediaItemModel : mediaItemModelCollection ) {
+            for( MediaItemModel mediaItemModel : mediaItems ) {
                 Log.d( TAG, "renderMediaItemList : mediaItemModel=" + mediaItemModel );
 
                 if( Media.PROGRAM.equals( mediaItemModel.getMedia() ) ) {

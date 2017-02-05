@@ -69,13 +69,6 @@ public class ContentDataStoreFactory {
         Log.d( TAG, "initialize : exit" );
     }
 
-    public ContentDataStore create() {
-        Log.d( TAG, "create : enter" );
-
-        Log.d( TAG, "create : exit" );
-        return createMasterBackendDataStore();
-    }
-
     public ContentDataStore createMasterBackendDataStore() {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 

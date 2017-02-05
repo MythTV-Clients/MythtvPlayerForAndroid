@@ -241,8 +241,7 @@
         </activity>
         <activity
             android:name=".presentation.view.activity.tv.MainTvActivity"
-            android:configChanges="keyboard|keyboardHidden|navigation"
-            android:theme="@style/Theme.Leanback">
+            android:configChanges="keyboard|keyboardHidden|navigation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -251,8 +250,7 @@
         </activity>
         <activity
             android:name=".presentation.view.activity.tv.RecordingsActivity"
-            android:parentActivityName=".presentation.view.activity.tv.MainTvActivity"
-            android:theme="@style/Theme.Leanback">
+            android:parentActivityName=".presentation.view.activity.tv.MainTvActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.view.activity.tv.MainTvActivity" />
@@ -262,30 +260,25 @@
         </activity>
         <activity
             android:name=".presentation.view.activity.tv.MediaItemDetailsActivity"
-            android:parentActivityName=".presentation.view.activity.tv.MainTvActivity"
-            android:theme="@style/Theme.Leanback">
+            android:parentActivityName=".presentation.view.activity.tv.MainTvActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.view.activity.tv.MainTvActivity" />
         </activity>
         <activity
-            android:name=".presentation.view.activity.tv.SettingsActivity"
-            android:theme="@style/Theme.Leanback" />
+            android:name=".presentation.view.activity.tv.SettingsActivity" />
         <activity
-            android:name=".presentation.view.activity.tv.RecordingSettingsActivity"
-            android:theme="@style/Theme.Leanback" />
+            android:name=".presentation.view.activity.tv.RecordingSettingsActivity" />
         <activity
             android:name=".presentation.view.activity.tv.VideosActivity"
-            android:parentActivityName=".presentation.view.activity.tv.MainTvActivity"
-            android:theme="@style/Theme.Leanback">
+            android:parentActivityName=".presentation.view.activity.tv.MainTvActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.view.activity.tv.MainTvActivity" />
         </activity>
         <activity
             android:name=".presentation.view.activity.tv.VideoCategoryActivity"
-            android:parentActivityName=".presentation.view.activity.tv.VideosActivity"
-            android:theme="@style/Theme.Leanback">
+            android:parentActivityName=".presentation.view.activity.tv.VideosActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.view.activity.tv.VideosActivity" />
@@ -294,11 +287,9 @@
                 android:value=".view.activity.SearchableActivity" />
         </activity>
         <activity
-            android:name=".presentation.view.activity.tv.TvVideoSettingsActivity"
-            android:theme="@style/Theme.Leanback" />
+            android:name=".presentation.view.activity.tv.TvVideoSettingsActivity" />
         <activity
-            android:name=".presentation.view.activity.tv.SearchableActivity"
-            android:theme="@style/Theme.Leanback">
+            android:name=".presentation.view.activity.tv.SearchableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
