@@ -142,4 +142,41 @@ public class Utils {
         return Long.parseLong( mmr.extractMetadata( MediaMetadataRetriever.METADATA_KEY_DURATION ) );
     }
 
+    public static boolean meetsMinimumVersion( String version, float minimumVersion ) {
+
+        if( version.equals( "Unknown" ) || version.matches( "\b[0-9a-f]{5,40}\b" ) ) {
+
+            return false;
+        }
+
+        if( version.startsWith( "v" ) ) {
+            version = version.substring( 1 );
+        }
+
+        if( version.contains( "-" ) ) {
+
+            version = version.substring( 0, version.indexOf( "-" ) );
+
+        }
+
+        try {
+
+            Float.parseFloat( version );
+
+        } catch( NumberFormatException e ) {
+
+            return false;
+        }
+
+        float extractedVersion = Float.parseFloat( version );
+
+        if( !version.startsWith( "0" ) ) {
+
+            extractedVersion *= 100;
+
+        }
+
+        return ( extractedVersion >= minimumVersion );
+    }
+
 }
