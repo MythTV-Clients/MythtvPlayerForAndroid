@@ -185,7 +185,9 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        this.rl_progress.setVisibility( View.VISIBLE );
+        if( null != this.rl_progress ) {
+            this.rl_progress.setVisibility( View.VISIBLE );
+        }
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -194,7 +196,9 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
 
-        this.rl_progress.setVisibility( View.GONE );
+        if( null != this.rl_progress ) {
+            this.rl_progress.setVisibility( View.GONE );
+        }
 
         Log.d( TAG, "hideLoading : exit" );
     }
