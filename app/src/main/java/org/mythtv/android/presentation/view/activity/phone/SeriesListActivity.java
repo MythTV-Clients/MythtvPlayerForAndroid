@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -38,7 +39,7 @@ import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment
  *
  * Created on 9/1/15.
  */
-public class SeriesListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemListFragment.MediaItemListListener {
+public class SeriesListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, MediaItemListFragment.MediaItemListListener /*, NotifyListener*/ {
 
     private static final String TAG = SeriesListActivity.class.getSimpleName();
 
@@ -122,7 +123,16 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
     private boolean descending = true;
     private int startIndex = -1, count = -1;
     private String titleRegEx = null, recGroup = null, storageGroup = null, inetref = null;
+
+    private MediaItemListFragment fragment;
+
     private MediaComponent mediaComponent;
+
+//    @BindView( R.id.fabProgressCircle )
+//    FABProgressCircle fabProgressCircle;
+//
+//    @BindView( R.id.fab )
+//    FloatingActionButton mFab;
 
     @Override
     public int getLayoutResource() {
@@ -138,6 +148,8 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
         this.initializeActivity( savedInstanceState );
         this.initializeInjector();
+
+//        mFab.setOnClickListener( this );
 
         Log.d( TAG, "onCreate : exit" );
     }
@@ -268,6 +280,13 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
         Log.d( TAG, "onRestoreInstanceState : exit" );
     }
 
+    @Override
+    public void onClick( View v ) {
+
+        fragment.reload();
+
+    }
+
     /**
      * Initializes this activity.
      */
@@ -337,7 +356,7 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
                                                                     .recGroup( recGroup )
                                                                     .storageGroup( storageGroup )
                                                                     .inetref( inetref );
-            MediaItemListFragment fragment = MediaItemListFragment.newInstance( parameters.toBundle() );
+            fragment = MediaItemListFragment.newInstance( parameters.toBundle() );
 
             addFragment( R.id.fl_fragment, fragment );
 
@@ -420,6 +439,49 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
         Log.d( TAG, "getComponent : exit" );
         return mediaComponent;
     }
+
+//    @Override
+//    public void showLoading() {
+//        Log.d( TAG, "showLoading : enter" );
+//
+//        if( null != fabProgressCircle  ) {
+//            Log.d( TAG, "showLoading : turn on animation" );
+//
+//            fabProgressCircle.measure(15, 15);
+//            fabProgressCircle.show();
+//
+//        }
+//
+//        Log.d( TAG, "showLoading : exit" );
+//    }
+//
+//    @Override
+//    public void finishLoading() {
+//        Log.d( TAG, "finishLoading : enter" );
+//
+//        if( null != fabProgressCircle ) {
+//            Log.d( TAG, "finishLoading : turn off animation" );
+//
+//            fabProgressCircle.beginFinalAnimation();
+//
+//        }
+//
+//        Log.d( TAG, "finishLoading : exit" );
+//    }
+//
+//    @Override
+//    public void hideLoading() {
+//        Log.d( TAG, "hideLoading : enter" );
+//
+//        if( null != fabProgressCircle ) {
+//            Log.d( TAG, "hideLoading : turn off animation" );
+//
+//            fabProgressCircle.hide();
+//
+//        }
+//
+//        Log.d( TAG, "hideLoading : exit" );
+//    }
 
     @Override
     public void onMediaItemClicked( final MediaItemModel mediaItemModel ) {

@@ -26,6 +26,8 @@ import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.View;
 
+import com.github.jorgecastilloprz.FABProgressCircle;
+
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.HasComponent;
@@ -34,6 +36,7 @@ import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.fragment.phone.EncoderListFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment;
+import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import butterknife.BindView;
 
@@ -45,7 +48,7 @@ import butterknife.BindView;
  *
  * Created on 8/31/15.
  */
-public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener, TroubleshootClickListener {
+public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener, TroubleshootClickListener, NotifyListener {
 
     private static final String TAG = MainPhoneActivity.class.getSimpleName();
 
@@ -66,6 +69,9 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     @BindView( R.id.tabs )
     TabLayout mTabLayout;
+
+    @BindView( R.id.fabProgressCircle )
+    FABProgressCircle fabProgressCircle;
 
     @BindView( R.id.fab )
     FloatingActionButton mFab;
@@ -236,6 +242,34 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
         }
 
         Log.d( TAG, "onMediaItemClicked : exit" );
+    }
+
+    @Override
+    public void showLoading() {
+
+        if( null != fabProgressCircle ){
+            fabProgressCircle.measure(15, 15);
+            fabProgressCircle.show();
+        }
+
+    }
+
+    @Override
+    public void finishLoading() {
+
+        if( null != fabProgressCircle ) {
+            fabProgressCircle.beginFinalAnimation();
+        }
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+        if( null != fabProgressCircle ) {
+            fabProgressCircle.hide();
+        }
+
     }
 
     @Override

@@ -52,6 +52,8 @@
             android:layout_marginStart="64dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+        <!--<include layout="@layout/phone_fab_view" />-->
+
     </android.support.design.widget.CoordinatorLayout>
 
     <include layout="@layout/mini_controller" />

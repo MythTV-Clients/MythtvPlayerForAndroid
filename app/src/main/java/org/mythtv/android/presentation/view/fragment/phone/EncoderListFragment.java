@@ -26,7 +26,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
@@ -36,6 +35,7 @@ import org.mythtv.android.presentation.view.EncoderListView;
 import org.mythtv.android.presentation.view.activity.phone.TroubleshootClickListener;
 import org.mythtv.android.presentation.view.adapter.phone.EncodersAdapter;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
+import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,13 +64,11 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     @BindView( R.id.rv_encoders )
     RecyclerView rv_encoders;
 
-    @BindView( R.id.rl_progress )
-    RelativeLayout rl_progress;
-
     private Unbinder unbinder;
 
     private EncodersAdapter encodersAdapter;
 
+    private NotifyListener notifyListener;
     private TroubleshootClickListener troubleshootClickListener;
 
     public EncoderListFragment() {
@@ -88,6 +86,9 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "onAttach : enter" );
 
         Activity activity = getActivity();
+        if( activity instanceof NotifyListener) {
+            this.notifyListener = (NotifyListener) activity;
+        }
         if( activity instanceof TroubleshootClickListener) {
             this.troubleshootClickListener = (TroubleshootClickListener) activity;
         }
@@ -103,8 +104,6 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         ButterKnife.bind( this, fragmentView );
         unbinder = ButterKnife.bind( this, fragmentView );
 
-        setupUI();
-
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
     }
@@ -113,6 +112,8 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void onActivityCreated( Bundle savedInstanceState ) {
         Log.d( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
+
+        setupUI();
 
         this.initialize();
         this.loadEncoderList();
@@ -185,9 +186,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.VISIBLE );
-        }
+        this.notifyListener.showLoading();
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -196,9 +195,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.GONE );
-        }
+        this.notifyListener.finishLoading();
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -241,6 +238,8 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     @Override
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
+
+        this.notifyListener.hideLoading();
 
         this.showToastMessage( message, getResources().getString( R.string.troubleshoot ), v -> troubleshootClickListener.onTroubleshootClicked() );
 
