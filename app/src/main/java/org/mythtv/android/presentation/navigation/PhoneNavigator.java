@@ -18,6 +18,7 @@
 
 package org.mythtv.android.presentation.navigation;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -94,13 +95,21 @@ public class PhoneNavigator {
         Log.d( TAG, "navigateToSeries : exit" );
     }
 
-    public void navigateToMediaItem( final Context context, final int id, final Media media ) {
+    public void navigateToMediaItem( final Context context, final int id, final Media media, final ActivityOptions options ) {
         Log.d( TAG, "navigateToMediaItem : enter" );
 
         if( null != context ) {
             Log.d( TAG, "navigateToMediaItem : context != null" );
 
-            context.startActivity( MediaItemDetailsActivity.getCallingIntent( context, id, media ) );
+            if( null != options ) {
+
+                context.startActivity( MediaItemDetailsActivity.getCallingIntent(context, id, media), options.toBundle() );
+
+            } else {
+
+                context.startActivity( MediaItemDetailsActivity.getCallingIntent( context, id, media ) );
+
+            }
 
         }
 

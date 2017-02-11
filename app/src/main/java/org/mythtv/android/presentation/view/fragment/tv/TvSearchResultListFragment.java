@@ -37,6 +37,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -276,7 +277,7 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     }
 
     @Override
-    public void viewMediaItem( MediaItemModel mediaItemModel ) {
+    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "viewMediaItem : enter" );
 
         if( null != this.mediaItemListListener ) {

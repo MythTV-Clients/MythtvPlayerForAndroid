@@ -18,6 +18,7 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import org.mythtv.android.presentation.internal.di.components.DaggerMediaCompone
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment;
+import org.mythtv.android.presentation.view.listeners.MediaItemListListener;
 
 /**
  * Activity that shows a list of programs.
@@ -39,7 +41,7 @@ import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment
  *
  * Created on 9/1/15.
  */
-public class SeriesListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, MediaItemListFragment.MediaItemListListener /*, NotifyListener*/ {
+public class SeriesListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, MediaItemListListener /*, NotifyListener*/ {
 
     private static final String TAG = SeriesListActivity.class.getSimpleName();
 
@@ -484,11 +486,13 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 //    }
 
     @Override
-    public void onMediaItemClicked( final MediaItemModel mediaItemModel ) {
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
         Log.d( TAG, "onMediaItemClicked : mediaItemModel=" + mediaItemModel.toString() );
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia() );
+
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

@@ -18,6 +18,7 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,8 +38,9 @@ import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.SeriesModel;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment;
-import org.mythtv.android.presentation.view.listeners.NotifyListener;
 import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
+import org.mythtv.android.presentation.view.listeners.MediaItemListListener;
+import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import butterknife.BindView;
 
@@ -50,7 +52,7 @@ import butterknife.BindView;
  *
  * Created on 11/13/15.
  */
-public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener, SeriesListFragment.SeriesListListener, NotifyListener {
+public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListListener, SeriesListFragment.SeriesListListener, NotifyListener {
 
     private static final String TAG = VideoListActivity.class.getSimpleName();
 
@@ -267,10 +269,11 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     }
 
     @Override
-    public void onMediaItemClicked( final MediaItemModel mediaItemModel ) {
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia() );
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }
