@@ -21,7 +21,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin">
+    android:layout_margin="@dimen/margin"
+    android:animateLayoutChanges="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,6 +42,7 @@
                 android:id="@+id/media_item_image"
                 android:layout_width="125dp"
                 android:layout_height="75dp"
+                android:transitionName="set_backdrop"
                 android:src="@drawable/ic_movie_black_24dp"/>
 
             <ImageView

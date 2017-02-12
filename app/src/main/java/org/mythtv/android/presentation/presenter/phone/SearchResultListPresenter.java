@@ -20,6 +20,7 @@ package org.mythtv.android.presentation.presenter.phone;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
@@ -108,10 +109,10 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
 
     }
 
-    public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.i( TAG, "onMediaItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-        this.viewListView.viewMediaItem( mediaItemModel );
+        this.viewListView.viewMediaItem( mediaItemModel, sharedElement, sharedElementName );
 
     }
 

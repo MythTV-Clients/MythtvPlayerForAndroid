@@ -63,7 +63,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
     public interface OnItemClickListener {
 
-        void onMediaItemClicked( MediaItemModel mediaItemModel );
+        void onMediaItemClicked( MediaItemModel mediaItemModel, View sharedElement, String sharedElementName );
 
     }
 
@@ -198,7 +198,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
             if( null != MediaItemsAdapter.this.onItemClickListener ) {
                 Log.v( TAG, "onClick : mediaItem=" + mediaItemModel.toString() );
 
-                MediaItemsAdapter.this.onItemClickListener.onMediaItemClicked( mediaItemModel );
+                MediaItemsAdapter.this.onItemClickListener.onMediaItemClicked( mediaItemModel, holder.image, "set_backdrop" );
 
             }
 

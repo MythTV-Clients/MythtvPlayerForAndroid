@@ -18,12 +18,14 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
+import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
@@ -33,6 +35,7 @@ import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemSearchResultListFragment;
+import org.mythtv.android.presentation.view.listeners.MediaItemListListener;
 
 /**
  *
@@ -42,7 +45,7 @@ import org.mythtv.android.presentation.view.fragment.phone.MediaItemSearchResult
  *
  * Created on 10/14/15.
  */
-public class SearchableActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemSearchResultListFragment.MediaItemListListener {
+public class SearchableActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, MediaItemListListener {
 
     private static final String TAG = SearchableActivity.class.getSimpleName();
 
@@ -168,10 +171,11 @@ public class SearchableActivity extends AbstractBasePhoneActivity implements Has
     }
 
     @Override
-    public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia() );
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

@@ -72,7 +72,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
     private MediaItemModel mediaItemModel;
 
-    @BindView( R.id.backdrop )
+    @BindView( R.id.media_item_image)
     ImageView backdrop;
 
     @BindView( R.id.fab )
@@ -160,6 +160,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
             case android.R.id.home:
 
+//                supportFinishAfterTransition();
                 NavUtils.navigateUpFromSameTask( this );
 
                 return true;
@@ -287,9 +288,9 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         if( null != backdropUrl && !"".equals( backdropUrl ) ) {
 
             Log.i( TAG, "loadBackdrop : backdropUrl=" + backdropUrl );
-            final ImageView imageView = (ImageView) findViewById( R.id.backdrop );
+            final ImageView imageView = (ImageView) findViewById( R.id.media_item_image);
             getNetComponent().picasso()
-                    .load(backdropUrl)
+                    .load( backdropUrl )
                     .fit().centerCrop()
                     .into( imageView );
 
