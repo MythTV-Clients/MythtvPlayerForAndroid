@@ -55,7 +55,7 @@ allprojects {
         compileSdkVersion = 25
 
         //Android Support Libraries
-        supportVersion = '25.1.1'
+        supportVersion = '25.0.1'
         playServicesVersion = '10.0.1'
         firebaseVersion = '10.0.1'
 
@@ -78,6 +78,7 @@ allprojects {
         androidQueryVersion = '0.25.9'
         cclVersion = '2.8.4'
         zerxConfVersion = '1.0.3'
+        fabCircleProgressVersion = '1.01@aar'
 
         //Testing
         robolectricVersion = '3.0'

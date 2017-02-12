@@ -443,9 +443,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     }
 
     @Override
-    public void viewMediaItem( MediaItemModel mediaItemModel ) {
-
-    }
+    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) { }
 
     @Override
     public void showError( String message ) {

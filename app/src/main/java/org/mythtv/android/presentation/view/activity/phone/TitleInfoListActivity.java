@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -38,7 +39,7 @@ import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
  *
  * Created on 9/1/15.
  */
-public class TitleInfoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, SeriesListFragment.SeriesListListener {
+public class TitleInfoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, SeriesListFragment.SeriesListListener /*, NotifyListener*/ {
 
     private static final String TAG = TitleInfoListActivity.class.getSimpleName();
 
@@ -50,7 +51,15 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
         return callingIntent;
     }
 
+    private SeriesListFragment seriesListFragment;
+
     private MediaComponent mediaComponent;
+
+//    @BindView( R.id.fabProgressCircle )
+//    FABProgressCircle fabProgressCircle;
+//
+//    @BindView( R.id.fab )
+//    FloatingActionButton mFab;
 
     @Override
     public int getLayoutResource() {
@@ -64,8 +73,10 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
 
         super.onCreate( savedInstanceState );
 
-        this.initializeActivity();
+        this.initializeActivity( savedInstanceState );
         this.initializeInjector();
+
+//        mFab.setOnClickListener( this );
 
         Log.d( TAG, "onCreate : exit" );
     }
@@ -88,16 +99,36 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
         Log.d( TAG, "onBackPressed : exit" );
     }
 
+    @Override
+    public void onClick( View v ) {
+
+        seriesListFragment.reload();
+
+    }
+
     /**
      * Initializes this activity.
      */
-    private void initializeActivity() {
+    private void initializeActivity( Bundle savedInstanceState ) {
         Log.d( TAG, "initializeActivity : enter" );
 
-        SeriesListFragment.Builder builder = new SeriesListFragment.Builder( Media.PROGRAM );
-        SeriesListFragment seriesListFragment = SeriesListFragment.newInstance( builder.toBundle() );
+        if( null == savedInstanceState ) {
+            Log.d( TAG, "initializeActivity : savedInstanceState == null" );
 
-        addFragment( R.id.fl_fragment, seriesListFragment );
+            Bundle extras = getIntent().getExtras();
+            if( null != extras ) {
+
+            }
+
+            SeriesListFragment.Builder builder = new SeriesListFragment.Builder( Media.PROGRAM );
+            seriesListFragment = SeriesListFragment.newInstance( builder.toBundle() );
+
+            addFragment( R.id.fl_fragment, seriesListFragment );
+
+
+        } else {
+
+        }
 
         Log.d( TAG, "initializeActivity : exit" );
     }
@@ -119,6 +150,49 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
         Log.d( TAG, "getComponent : exit" );
         return mediaComponent;
     }
+
+//    @Override
+//    public void showLoading() {
+//        Log.d( TAG, "showLoading : enter" );
+//
+//        if( null != fabProgressCircle  ) {
+//            Log.d( TAG, "showLoading : turn on animation" );
+//
+//            fabProgressCircle.measure( 15, 15 );
+//            fabProgressCircle.show();
+//
+//        }
+//
+//        Log.d( TAG, "showLoading : exit" );
+//    }
+//
+//    @Override
+//    public void finishLoading() {
+//        Log.d( TAG, "finishLoading : enter" );
+//
+//        if( null != fabProgressCircle ) {
+//            Log.d( TAG, "finishLoading : turn off animation" );
+//
+//            fabProgressCircle.beginFinalAnimation();
+//
+//        }
+//
+//        Log.d( TAG, "finishLoading : exit" );
+//    }
+//
+//    @Override
+//    public void hideLoading() {
+//        Log.d( TAG, "hideLoading : enter" );
+//
+//        if( null != fabProgressCircle ) {
+//            Log.d( TAG, "hideLoading : turn off animation" );
+//
+//            fabProgressCircle.hide();
+//
+//        }
+//
+//        Log.d( TAG, "hideLoading : exit" );
+//    }
 
     @Override
     public void onSeriesClicked( SeriesModel seriesModel ) {

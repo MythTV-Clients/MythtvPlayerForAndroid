@@ -26,7 +26,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -78,13 +77,11 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     @BindView( R.id.rv_seriesList )
     RecyclerView rv_seriesList;
 
-    @BindView( R.id.rl_progress )
-    RelativeLayout rl_progress;
-
     private Unbinder unbinder;
 
     private SeriesAdapter seriesAdapter;
 
+//    private NotifyListener notifyListener;
     private SeriesListListener seriesListListener;
 
     private Map<String, Object> parameters;
@@ -155,6 +152,9 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "onAttach : enter" );
 
         Activity activity = getActivity();
+//        if( activity instanceof NotifyListener) {
+//            this.notifyListener = (NotifyListener) activity;
+//        }
         if( activity instanceof SeriesListListener) {
             this.seriesListListener = (SeriesListListener) activity;
         }
@@ -170,8 +170,6 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         ButterKnife.bind( this, fragmentView );
         unbinder = ButterKnife.bind( this, fragmentView );
 
-        setupUI();
-
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
     }
@@ -180,6 +178,8 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     public void onActivityCreated( Bundle savedInstanceState ) {
         Log.d( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
+
+        setupUI();
 
         this.initialize();
         this.loadSeriesList();
@@ -255,9 +255,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.VISIBLE );
-        }
+//        this.notifyListener.showLoading();
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -266,9 +264,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.GONE );
-        }
+//        this.notifyListener.finishLoading();
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -320,6 +316,8 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     @Override
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
+
+//        this.notifyListener.hideLoading();
 
         Log.e( TAG, "showError : error=" + message );
         this.showToastMessage( message, getResources().getString( R.string.retry ), v -> SeriesListFragment.this.loadSeriesList() );

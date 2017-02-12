@@ -197,6 +197,7 @@ dependencies {
     compile "com.googlecode.android-query:android-query:${project.ext.androidQueryVersion}"
     compile "com.google.firebase:firebase-core:${project.ext.firebaseVersion}"
     compile "com.google.firebase:firebase-crash:${project.ext.firebaseVersion}"
+    compile "com.github.jorgecastilloprz:fabprogresscircle:${project.ext.fabCircleProgressVersion}"
 
     compile "com.android.support:leanback-v17:${project.ext.supportVersion}"
     compile "com.android.support:preference-leanback-v17:${project.ext.supportVersion}"

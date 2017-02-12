@@ -26,7 +26,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -38,6 +37,8 @@ import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.phone.TroubleshootClickListener;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
 import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
+import org.mythtv.android.presentation.view.listeners.MediaItemListListener;
+import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,29 +75,18 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public static final String FOLDER_KEY = "folder";
     public static final String SORT_KEY = "sort";
 
-    /**
-     * Interface for listening media item list events.
-     */
-    public interface MediaItemListListener {
-
-        void onMediaItemClicked( final MediaItemModel mediaItemModel );
-
-    }
-
     @Inject
     MediaItemListPresenter mediaItemListPresenter;
 
     @BindView( R.id.rv_mediaItems )
     RecyclerView rv_mediaItems;
 
-    @BindView( R.id.rl_progress )
-    RelativeLayout rl_progress;
-
     private Unbinder unbinder;
 
     private MediaItemsAdapter mediaItemsAdapter;
 
     private TroubleshootClickListener troubleshootClickListener;
+    private NotifyListener notifyListener;
     private MediaItemListListener mediaItemListListener;
 
     private Map<String, Object> parameters;
@@ -311,8 +301,11 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "onAttach : enter" );
 
         Activity activity = getActivity();
-        if( activity instanceof MediaItemListFragment.MediaItemListListener) {
-            this.mediaItemListListener = (MediaItemListFragment.MediaItemListListener) activity;
+        if( activity instanceof MediaItemListListener) {
+            this.mediaItemListListener = (MediaItemListListener) activity;
+        }
+        if( activity instanceof NotifyListener) {
+            this.notifyListener = (NotifyListener) activity;
         }
         if( activity instanceof TroubleshootClickListener) {
             this.troubleshootClickListener = (TroubleshootClickListener) activity;
@@ -329,8 +322,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         ButterKnife.bind( this, fragmentView );
         unbinder = ButterKnife.bind( this, fragmentView );
 
-        setupUI();
-
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
     }
@@ -340,7 +331,10 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
 
+        setupUI();
+
         this.initialize();
+        this.loadMediaItemList();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -349,8 +343,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void onResume() {
         Log.d( TAG, "onResume : enter" );
         super.onResume();
-
-        this.loadMediaItemList();
 
         this.mediaItemListPresenter.resume();
 
@@ -415,8 +407,8 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.VISIBLE );
+        if( null != notifyListener ) {
+            this.notifyListener.showLoading();
         }
 
         Log.d( TAG, "showLoading : exit" );
@@ -426,8 +418,8 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.GONE );
+        if( null != notifyListener ) {
+            this.notifyListener.finishLoading();
         }
 
         Log.d( TAG, "hideLoading : exit" );
@@ -486,13 +478,13 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     }
 
     @Override
-    public void viewMediaItem( MediaItemModel mediaItemModel ) {
+    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "viewMediaItem : enter" );
 
         if( null != this.mediaItemListListener ) {
             Log.d( TAG, "viewMediaItem : mediaItemModel=" + mediaItemModel.toString() );
 
-            this.mediaItemListListener.onMediaItemClicked( mediaItemModel );
+            this.mediaItemListListener.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
 
         }
 
@@ -502,6 +494,10 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     @Override
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
+
+        if( null != notifyListener ) {
+            this.notifyListener.hideLoading();
+        }
 
         this.showToastMessage( message, getResources().getString( R.string.troubleshoot ), v -> troubleshootClickListener.onTroubleshootClicked() );
 
@@ -536,14 +532,14 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "loadMediaItemList : exit" );
     }
 
-    private MediaItemsAdapter.OnItemClickListener onItemClickListener = mediaItemModel -> {
+    private MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
 
         if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
 
             if( mediaItemModel.isValid() ) {
                 Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel );
+                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
 
             } else {
                 Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );

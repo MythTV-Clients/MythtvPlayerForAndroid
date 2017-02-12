@@ -18,6 +18,7 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.View;
+
+import com.github.jorgecastilloprz.FABProgressCircle;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -36,6 +39,8 @@ import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.SeriesModel;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment;
 import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
+import org.mythtv.android.presentation.view.listeners.MediaItemListListener;
+import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import butterknife.BindView;
 
@@ -47,11 +52,11 @@ import butterknife.BindView;
  *
  * Created on 11/13/15.
  */
-public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener, SeriesListFragment.SeriesListListener {
+public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListListener, SeriesListFragment.SeriesListListener, NotifyListener {
 
     private static final String TAG = VideoListActivity.class.getSimpleName();
 
-    public static Intent getCallingIntent( Context context ) {
+    public static Intent getCallingIntent(Context context ) {
 
         Intent callingIntent = new Intent( context, VideoListActivity.class );
         callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
@@ -69,6 +74,9 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
     @BindView( R.id.tabs )
     TabLayout mTabLayout;
+
+    @BindView( R.id.fabProgressCircle )
+    FABProgressCircle fabProgressCircle;
 
     @BindView( R.id.fab )
     FloatingActionButton mFab;
@@ -261,12 +269,41 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     }
 
     @Override
-    public void onMediaItemClicked( final MediaItemModel mediaItemModel ) {
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia() );
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
+    }
+
+    @Override
+    public void showLoading() {
+
+        if( null != fabProgressCircle ){
+            fabProgressCircle.measure(15, 15);
+            fabProgressCircle.show();
+        }
+
+    }
+
+    @Override
+    public void finishLoading() {
+
+        if( null != fabProgressCircle ) {
+            fabProgressCircle.beginFinalAnimation();
+        }
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+        if( null != fabProgressCircle ) {
+            fabProgressCircle.hide();
+        }
+
     }
 
     @Override
