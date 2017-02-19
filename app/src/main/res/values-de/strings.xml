@@ -180,5 +180,7 @@
     <string name="tv_settings_analytics_title_description"><![CDATA[Annonymous Analytics & Crash Reports will be sent]]></string>
     <string name="tv_settings_recording_title">Recording Settings</string>
     <string name="tv_settings_video_title">Video Settings</string>
+    <string name="hls_only">Show HLS Only</string>
+    <string name="media_item_empty_list">There are no items to display</string>
 
 </resources>

@@ -31,6 +31,8 @@ public class SettingsKeys {
     public static final String KEY_PREF_BACKEND_URL = "backend_url";
     public static final String KEY_PREF_BACKEND_PORT = "backend_port";
 
+    public static final String KEY_PREF_FILTER_HLS_ONLY = "filter_hls_only";
+
     public static final String KEY_PREF_INTERNAL_PLAYER = "internal_player";
     public static final String KEY_PREF_SHOW_ADULT_TAB = "show_adult_tab";
 

@@ -158,6 +158,7 @@ public class Utils {
 
         List<MediaItemModel> mediaItems = new ArrayList<>();
 
+        boolean filterHlsOnlyPreference = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_FILTER_HLS_ONLY, false );
         boolean filterByGroup = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_ENABLE_RECORDING_GROUP_FILTER, false);
         String filterGroup = sharedPreferences.getString(SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER, "");
         Log.d(TAG, "filter : filterByGroup=" + filterByGroup + ", filterGroup=" + filterGroup);
@@ -196,6 +197,18 @@ public class Utils {
 
                     continue;
 
+                } else if( filterHlsOnlyPreference ) {
+
+                    if( mediaItemModel.getLiveStreamId() > 0) {
+
+                        filtered = true;
+
+                    } else {
+
+                        continue;
+
+                    }
+
                 } else {
 
                     filtered = true;
@@ -203,6 +216,16 @@ public class Utils {
                 }
 
             } else {
+
+                if( filterHlsOnlyPreference ) {
+
+                    if( mediaItemModel.getLiveStreamId() <= 0) {
+
+                        continue;
+
+                    }
+
+                }
 
                 if (filterByParentalLevel && mediaItemModel.getParentalLevel() > parentalLevel) {
                     Log.d(TAG, "filter : does not meet parental level, skipping...");
