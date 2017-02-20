@@ -21,7 +21,6 @@ package org.mythtv.android.presentation.view.fragment.phone;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +36,7 @@ import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.phone.TroubleshootClickListener;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
 import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
+import org.mythtv.android.presentation.view.component.EmptyRecyclerView;
 import org.mythtv.android.presentation.view.listeners.MediaItemListListener;
 import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
@@ -79,7 +79,10 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     MediaItemListPresenter mediaItemListPresenter;
 
     @BindView( R.id.rv_mediaItems )
-    RecyclerView rv_mediaItems;
+    EmptyRecyclerView rv_mediaItems;
+
+    @BindView( R.id.media_item_empty_list_view )
+    View emptyView;
 
     private Unbinder unbinder;
 
@@ -334,7 +337,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         setupUI();
 
         this.initialize();
-        this.loadMediaItemList();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -345,6 +347,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         super.onResume();
 
         this.mediaItemListPresenter.resume();
+        this.loadMediaItemList();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -399,6 +402,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         this.mediaItemsAdapter = new MediaItemsAdapter( getActivity(), new ArrayList<>() );
         this.mediaItemsAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_mediaItems.setAdapter( mediaItemsAdapter );
+        this.rv_mediaItems.setEmptyView( emptyView );
 
         Log.d( TAG, "setupUI : exit" );
     }

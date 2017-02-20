@@ -58,6 +58,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/pref_filter_hls_only_title">
+
+        <CheckBoxPreference
+            android:title="@string/pref_filter_hls_only"
+            android:key="filter_hls_only"
+            android:defaultValue="false"
+            android:summaryOn="@string/pref_filter_hls_only_summary_on"
+            android:summaryOff="@string/pref_filter_hls_only_summary_off" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/recording_preferences"
         android:key="pref_recording_preferences">
 

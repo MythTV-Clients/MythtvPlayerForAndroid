@@ -222,5 +222,10 @@
     <string name="tv_settings_analytics_title_description"><![CDATA[Annonymous Analytics & Crash Reports will be sent]]></string>
     <string name="tv_settings_recording_title">Recording Settings</string>
     <string name="tv_settings_video_title">Video Settings</string>
+    <string name="pref_filter_hls_only_title">Filter recordings and videos</string>
+    <string name="pref_filter_hls_only">Show HLS Only</string>
+    <string name="pref_filter_hls_only_summary_on">Only recordings and videos that are HLS transcoded will be shown</string>
+    <string name="pref_filter_hls_only_summary_off">All recordings and videos will be shown</string>
+    <string name="media_item_empty_list">There are no items to display</string>
 
 </resources>
