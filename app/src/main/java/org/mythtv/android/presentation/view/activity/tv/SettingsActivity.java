@@ -74,21 +74,23 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
     private static final int MASTER_BACKEND_PORT = 13;
     private static final int PLAYER_SETTINGS = 20;
     private static final int INTERNAL_PLAYER_SETTINGS = 21;
-    private static final int RECORDING_SETTINGS = 30;
-    private static final int ENABLE_RECORDING_GROUP = 31;
-    private static final int RECORDING_GROUPS_FILTER = 32;
-    private static final int VIDEO_SETTINGS = 40;
-    private static final int ADULT_SETTINGS = 41;
-    private static final int PARENTAL_CONTROLS = 42;
-    private static final int PARENTAL_CONTROL_LEVEL = 43;
-    private static final int CONTENT_RATINGS = 44;
-    private static final int CONTENT_RATING_NR = 45;
-    private static final int CONTENT_RATING_G = 46;
-    private static final int CONTENT_RATING_PG = 47;
-    private static final int CONTENT_RATING_PG13 = 48;
-    private static final int CONTENT_RATING_R = 49;
-    private static final int CONTENT_RATING_NC17 = 50;
-    private static final int ANALYTICS_SETTINGS = 60;
+    private static final int FILTER_SETTINGS = 30;
+    private static final int FILTER_HLS_ONLY = 31;
+    private static final int RECORDING_SETTINGS = 40;
+    private static final int ENABLE_RECORDING_GROUP = 41;
+    private static final int RECORDING_GROUPS_FILTER = 42;
+    private static final int VIDEO_SETTINGS = 50;
+    private static final int ADULT_SETTINGS = 51;
+    private static final int PARENTAL_CONTROLS = 52;
+    private static final int PARENTAL_CONTROL_LEVEL = 53;
+    private static final int CONTENT_RATINGS = 54;
+    private static final int CONTENT_RATING_NR = 55;
+    private static final int CONTENT_RATING_G = 56;
+    private static final int CONTENT_RATING_PG = 57;
+    private static final int CONTENT_RATING_PG13 = 58;
+    private static final int CONTENT_RATING_R = 59;
+    private static final int CONTENT_RATING_NC17 = 60;
+    private static final int ANALYTICS_SETTINGS = 70;
 
     private static final int OPTION_CHECK_SET_ID = 10;
 
@@ -101,6 +103,9 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     private static PlayerFragment mPlayerFragment;
     private static InternalPlayerFragment mInternalPlayerFragment;
+
+    private static FilterSettingsFragment mFilterSettingsFragment;
+    private static EnableHlsOnlyFilterFragment mEnableHlsOnlyFilterFragment;
 
     private static RecordingSettingsFragment mRecordingSettingsFragment;
     private static EnableRecordingGroupFragment mEnableRecordingGroupFragment;
@@ -147,6 +152,9 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         mPlayerFragment = new PlayerFragment();
         mInternalPlayerFragment = new InternalPlayerFragment();
+
+        mFilterSettingsFragment = new FilterSettingsFragment();
+        mEnableHlsOnlyFilterFragment = new EnableHlsOnlyFilterFragment();
 
         mRecordingSettingsFragment = new RecordingSettingsFragment();
         mEnableRecordingGroupFragment = new EnableRecordingGroupFragment();
@@ -228,6 +236,12 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
                     break;
 
+                case FILTER_SETTINGS :
+
+                    GuidedStepFragment.add( fm, mFilterSettingsFragment, android.R.id.content );
+
+                    break;
+
                 case RECORDING_SETTINGS:
 
                     GuidedStepFragment.add( fm, mRecordingSettingsFragment, android.R.id.content );
@@ -264,8 +278,8 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
             String playback = ( internalPlayer ? getResources().getString( R.string.pref_internal_player_summary_on ) : getResources().getString( R.string.pref_internal_player_summary_off ) );
 
-            boolean showAdultContent = getShowAdultContent( getActivity() );
-            String content = ( showAdultContent ? getResources().getString( R.string.pref_show_adult_tab_summary_on ) : getResources().getString( R.string.pref_show_adult_tab_summary_off ) );
+            boolean enableHlsOnly = getFilterHlsOnly( getActivity() );
+            String hlsOnly = ( enableHlsOnly ? getResources().getString( R.string.pref_filter_hls_only_summary_on ) : getResources().getString( R.string.pref_filter_hls_only_summary_off ) );
 
             boolean enableAnalytics = getEnableAnalytics( getActivity() );
             String analytics = ( enableAnalytics ? getResources().getString( R.string.pref_enable_analytics_summary_on ) : getResources().getString( R.string.pref_enable_analytics_summary_off ) );
@@ -277,6 +291,10 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             addAction( getActivity(), actions, PLAYER_SETTINGS,
                     getResources().getString( R.string.pref_default_player ),
                     playback,
+                    true, true );
+            addAction( getActivity(), actions, FILTER_SETTINGS,
+                    getResources().getString( R.string.pref_filter_hls_only_title ),
+                    hlsOnly,
                     true, true );
             addAction( getActivity(), actions, RECORDING_SETTINGS,
                     getResources().getString( R.string.recording_preferences ),
@@ -762,6 +780,127 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
                     getResources().getString( R.string.tv_settings_no ),
                     null,
                     !internalPlayer );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class FilterSettingsFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_filter_hls_only_title );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings );
+            String description = "";
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+
+            FragmentManager fm = getFragmentManager();
+
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+            switch( (int) action.getId() ) {
+
+                case FILTER_HLS_ONLY :
+
+                    GuidedStepFragment.add( fm, mEnableHlsOnlyFilterFragment, android.R.id.content );
+
+                    break;
+
+            }
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            String hlsOnly = ( getFilterHlsOnly( getActivity() ) ? getResources().getString( R.string.pref_filter_hls_only_summary_on ) : getResources().getString( R.string.pref_filter_hls_only_summary_off ) );
+
+            addAction( getActivity(), actions, FILTER_HLS_ONLY,
+                    getResources().getString( R.string.pref_filter_hls_only ),
+                    hlsOnly,
+                    true, true );
+
+            setActions( actions );
+
+        }
+
+    }
+
+    public static class EnableHlsOnlyFilterFragment extends GuidedStepFragment {
+
+        @NonNull
+        @Override
+        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+
+            String title = getResources().getString( R.string.pref_filter_hls_only );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.pref_filter_hls_only_title );
+            String description = ""; //getResources().getString( R.string.tv_settings_playback_internal_player_description );
+            Drawable icon = null;
+
+            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+        }
+
+        @Override
+        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+
+            updateActions( actions );
+        }
+
+        @Override
+        public void onGuidedActionClicked( GuidedAction action ) {
+            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+
+            boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
+            putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_FILTER_HLS_ONLY, updated );
+
+            mSettingsFragment.updateActions( null );
+            mFilterSettingsFragment.updateActions( null );
+
+            getFragmentManager().popBackStack();
+
+        }
+
+        public void updateActions( List<GuidedAction> actions ) {
+
+            if( null == actions ) {
+
+                actions = new ArrayList<>();
+
+            }
+
+            boolean hlsOnly = getFilterHlsOnly( getActivity() );
+
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_yes ),
+                    null,
+                    hlsOnly );
+            addCheckedAction( getActivity(), actions,
+                    -1,
+                    getResources().getString( R.string.tv_settings_no ),
+                    null,
+                    !hlsOnly );
 
             setActions( actions );
 
@@ -2046,6 +2185,11 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
     private static boolean getShouldUseInternalPlayer( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
+    }
+
+    private static boolean getFilterHlsOnly( Context context ) {
+
+        return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_FILTER_HLS_ONLY );
     }
 
     private static boolean getEnableRecordingGroupFilter( Context context ) {

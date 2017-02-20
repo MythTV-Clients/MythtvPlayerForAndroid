@@ -227,5 +227,10 @@
     <string name="backend_scan">Autodetect Master Backend</string>
     <string name="backend_scan_summary">Scan for your Master Backend on your network (this setting can be overridden below)</string>
     <string name="pref_backend_scan_title">Select a Master Backend on your network</string>
+    <string name="pref_filter_hls_only_title">Filter recordings and videos</string>
+    <string name="pref_filter_hls_only">Show HLS Only</string>
+    <string name="pref_filter_hls_only_summary_on">Only recordings and videos that are HLS transcoded will be shown</string>
+    <string name="pref_filter_hls_only_summary_off">All recordings and videos will be shown</string>
+    <string name="media_item_empty_list">There are no items to display</string>
 
 </resources>

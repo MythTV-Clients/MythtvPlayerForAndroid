@@ -198,6 +198,8 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
                     return true;
                 }
 
+                break;
+
         }
 
         return super.onOptionsItemSelected( item );
