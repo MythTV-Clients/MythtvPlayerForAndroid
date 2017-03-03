@@ -59,7 +59,7 @@ dependencies:
     - rm armeabi-v7a-24_r08.zip
 
   cache_directories:
-    - ~/.gradle
+#    - ~/.gradle
     - /usr/local/android-sdk-linux/tools
     - /usr/local/android-sdk-linux/platforms/android-24
     - /usr/local/android-sdk-linux/build-tools/25.0.2
@@ -87,10 +87,10 @@ test:
     - adb shell settings put global window_animation_scale 0
     - adb shell settings put global transition_animation_scale 0
     - adb shell settings put global animator_duration_scale 0
-
-  post:
     # run tests against the emulator and generate report and limit gradle's memory usage
     - ./gradlew jacocoTestReport coveralls -PdisablePreDex --console=plain --info
+
+  post:
     # copy the build outputs to artifacts
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory
