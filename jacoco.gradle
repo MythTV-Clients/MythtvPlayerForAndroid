@@ -4,7 +4,7 @@ apply plugin: 'jacoco'
  * The correct path of the report is $rootProjectDir/app/build/reports/jacoco/index.html
  * to run this task use: ./gradlew clean jacocoTestReport
  */
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) { //we use "debug" build type for test coverage (can be other)
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDevDebugUnitTest']) { //, 'createDevDebugCoverageReport']) { //we use "debug" build type for test coverage (can be other)
     group = "reporting"
     description = "Generate unified Jacoco code coverage report"
 
