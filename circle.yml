@@ -47,12 +47,12 @@ dependencies:
 test:
   pre:
     - android list targets
-    - echo no | android create avd -n custom-android25-googleapis -t "android-25" --abi google_apis/armeabi-v7a
-    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android25-googleapis.ini
-    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android25-googleapis.ini
-    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android25-googleapis.ini
-    - cat ~/.android/avd/custom-android25-googleapis.ini
-    - emulator -avd custom-android25-googleapis -no-window :
+    - echo no | android create avd -n custom-android24-googleapis -t "android-24" --abi google_apis/armeabi-v7a
+    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android24-googleapis.ini
+    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android24-googleapis.ini
+    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android24-googleapis.ini
+    - cat ~/.android/avd/custom-android24-googleapis.ini
+    - emulator -avd custom-android24-googleapis -no-window :
         background: true
         parallel: true
     - circle-android wait-for-boot
