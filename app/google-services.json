@@ -19,7 +19,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "org.mythtv.android",
-            "certificate_hash": "5D335EF6D8A8CCD7716B3C55519C252509460E58"
+            "certificate_hash": "5d335ef6d8a8ccd7716b3c55519c252509460e58"
           }
         },
         {
@@ -27,7 +27,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "org.mythtv.android",
-            "certificate_hash": "02157AF49D3FA4A2DC9756A6A4044CA150DF8FC0"
+            "certificate_hash": "02157af49d3fa4a2dc9756a6a4044ca150df8fc0"
           }
         },
         {
