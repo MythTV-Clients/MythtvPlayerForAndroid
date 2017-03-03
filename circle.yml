@@ -31,15 +31,15 @@ dependencies:
     - if [ ! -e "/usr/local/android-sdk-linux/licenses/android-sdk-license" ]; then echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "/usr/local/android-sdk-linux/licenses/android-sdk-license"; fi
     - if [ ! -e "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license" ]; then echo "79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license"; fi
     - if [ ! -e "/usr/local/android-sdk-linux/licenses/intel-android-extra-license" ]; then echo "d975f751698a77b662f1254ddbeed3901e976f5a" > "/usr/local/android-sdk-linux/licenses/intel-android-extra-license"; fi
-    # Android SDK Platform 24
-    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-24" ]; then echo y | android update sdk --no-ui --all --filter "android-24"; fi
+    # Android SDK Platform 23
+    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-23" ]; then echo y | android update sdk --no-ui --all --filter "android-23"; fi
     # Android SDK Build-tools, revision 25.0.2
     - if [ ! -d "/usr/local/android-sdk-linux/build-tools/25.0.2" ]; then echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"; fi
     # Android Support Repository, revision 44.0.0 / Local Maven repository for Support Libraries
     - if [ ! -d "/usr/local/android-sdk-linux/extras/android/m2repository/com/android/support/design/25.2.0" ]; then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"; fi
 
   cache_directories:
-    - /usr/local/android-sdk-linux/platforms/android-24
+    - /usr/local/android-sdk-linux/platforms/android-23
     - /usr/local/android-sdk-linux/build-tools/25.0.2
     - /usr/local/android-sdk-linux/extras/android/m2repository
     - /usr/local/android-sdk-linux/licenses
@@ -47,11 +47,11 @@ dependencies:
 test:
   pre:
     - android list targets
-    - echo no | android create avd -n custom-android24-googleapis -t "android-24" --abi google_apis/armeabi-v7a
-    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android24-googleapis.ini
-    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android24-googleapis.ini
-    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android24-googleapis.ini
-    - cat ~/.android/avd/custom-android24-googleapis.ini
+    - echo no | android create avd -n custom-android23-googleapis -t "android-23" --abi google_apis/armeabi-v7a
+    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android23-googleapis.ini
+    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android23-googleapis.ini
+    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android23-googleapis.ini
+    - cat ~/.android/avd/custom-android23-googleapis.ini
     - emulator -avd custom-android24-googleapis -no-window :
         background: true
         parallel: true
