@@ -38,8 +38,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.MediaItemModel;
+import org.mythtv.android.presentation.utils.MediaItemFilter;
 import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
-import org.mythtv.android.presentation.utils.Utils;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
@@ -48,6 +48,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 
 /**
  *
@@ -215,7 +216,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     public void setMediaItemsCollection( Collection<MediaItemModel> mediaItemsCollection ) {
 
         this.validateMediaItemsCollection( mediaItemsCollection );
-        this.mediaItemsCollection = Utils.filter( PreferenceManager.getDefaultSharedPreferences( context ), mediaItemsCollection );
+
+        Observable.from( mediaItemsCollection )
+                .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, context ) )
+                .toList()
+                .subscribe( items -> this.mediaItemsCollection = items );
+
+//        this.mediaItemsCollection = Utils.filter( PreferenceManager.getDefaultSharedPreferences( context ), mediaItemsCollection );
         this.notifyDataSetChanged();
 
     }

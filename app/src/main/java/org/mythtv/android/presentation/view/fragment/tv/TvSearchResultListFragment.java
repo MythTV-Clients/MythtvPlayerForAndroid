@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v17.leanback.app.SearchFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
@@ -45,7 +44,7 @@ import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.SearchResultListPresenter;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
-import org.mythtv.android.presentation.utils.Utils;
+import org.mythtv.android.presentation.utils.MediaItemFilter;
 import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
 
@@ -53,6 +52,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import rx.Observable;
 
 /**
  *
@@ -85,6 +86,8 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     private ArrayObjectAdapter mRowsAdapter;
 
     private MediaItemListListener mediaItemListListener;
+
+    private List<MediaItemModel> mediaItems;
 
     public TvSearchResultListFragment() {
         super();
@@ -235,7 +238,10 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
 
             mRowsAdapter.clear();
 
-            List<MediaItemModel> mediaItems = Utils.filter( PreferenceManager.getDefaultSharedPreferences( getActivity() ), mediaItemModelCollection );
+            Observable.from( mediaItemModelCollection )
+                    .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, getContext() ) )
+                    .toList()
+                    .subscribe( items -> this.mediaItems = items );
 
             ArrayObjectAdapter programRowAdapter = new ArrayObjectAdapter( new CardPresenter() );
             ArrayObjectAdapter videoRowAdapter = new ArrayObjectAdapter( new CardPresenter() );

@@ -24,10 +24,8 @@ import android.os.Build;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.MediaItemModel;
 
@@ -35,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
+import rx.Observable;
 
 /**
  * A collection of utility methods, all static.
@@ -85,24 +85,6 @@ public class Utils {
     }
 
 
-    /**
-     * Shows a (long) toast
-     */
-    public static void showToast( Context context, String msg ) {
-
-        Toast.makeText( context, msg, Toast.LENGTH_LONG ).show();
-
-    }
-
-    /**
-     * Shows a (long) toast.
-     */
-    public static void showToast( Context context, int resourceId ) {
-
-        Toast.makeText( context, context.getString( resourceId ), Toast.LENGTH_LONG ).show();
-
-    }
-
     public static int convertDpToPixel( Context ctx, int dp ) {
 
         float density = ctx.getResources().getDisplayMetrics().density;
@@ -152,126 +134,108 @@ public class Utils {
         return Long.parseLong( mmr.extractMetadata( MediaMetadataRetriever.METADATA_KEY_DURATION ) );
     }
 
-    // TODO: add filter here for only displaying HLS entries issue #203
     public static List<MediaItemModel> filter( SharedPreferences sharedPreferences, Collection<MediaItemModel> mediaItemsCollection ) {
-        Log.d(TAG, "filter : enter");
+        Log.d( TAG, "filter : enter" );
 
         List<MediaItemModel> mediaItems = new ArrayList<>();
 
         boolean filterHlsOnlyPreference = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_FILTER_HLS_ONLY, false );
-        boolean filterByGroup = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_ENABLE_RECORDING_GROUP_FILTER, false);
-        String filterGroup = sharedPreferences.getString(SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER, "");
+        boolean filterByGroup = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_ENABLE_RECORDING_GROUP_FILTER, false );
+        String filterGroup = sharedPreferences.getString( SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER, "" );
         Log.d(TAG, "filter : filterByGroup=" + filterByGroup + ", filterGroup=" + filterGroup);
 
-        boolean filterByParentalLevel = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_ENABLE_PARENTAL_CONTROLS, false);
-        int parentalLevel;
+        boolean filterByParentalLevel = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_ENABLE_PARENTAL_CONTROLS, false );
+        int parentalLevel = 4;
         try {
-            parentalLevel = Integer.parseInt(sharedPreferences.getString(SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL, "4"));
-        } catch (NumberFormatException e) {
+            parentalLevel = Integer.parseInt( sharedPreferences.getString( SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL, "4" ) );
+        } catch( NumberFormatException e ) {
             parentalLevel = 4;
         }
-        Log.d(TAG, "filter : filterByParentalLevel=" + filterByParentalLevel + ", parentalLevel=" + parentalLevel);
+        final int finalParentalLevel = parentalLevel;
+        Log.d( TAG, "filter : filterByParentalLevel=" + filterByParentalLevel + ", finalParentalLevel=" + finalParentalLevel );
 
-        boolean filterByCertification = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_RESTRICT_CONTENT_TYPES, false);
-        boolean ratingNR = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_RATING_NR, false);
-        boolean ratingG = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_RATING_G, false);
-        boolean ratingPG = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_RATING_PG, false);
-        boolean ratingPG13 = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_RATING_PG13, false);
-        boolean ratingR = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_RATING_R, false);
-        boolean ratingNC17 = sharedPreferences.getBoolean(SettingsKeys.KEY_PREF_RATING_NC17, false);
-        Log.d(TAG, "filter : filterByCertification=" + filterByCertification + ", NR=" + ratingNR + ", G=" + ratingG + ", PG=" + ratingPG + ", PG-13=" + ratingPG13 + ", R=" + ratingR + ", NC-17=" + ratingNC17);
+        boolean filterByCertification = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_RESTRICT_CONTENT_TYPES, false );
+        boolean ratingNR = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_RATING_NR, false );
+        boolean ratingG = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_RATING_G, false );
+        boolean ratingPG = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_RATING_PG, false );
+        boolean ratingPG13 = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_RATING_PG13, false );
+        boolean ratingR = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_RATING_R, false );
+        boolean ratingNC17 = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_RATING_NC17, false );
+        Log.d( TAG, "filter : filterByCertification=" + filterByCertification + ", NR=" + ratingNR + ", G=" + ratingG + ", PG=" + ratingPG + ", PG-13=" + ratingPG13 + ", R=" + ratingR + ", NC-17=" + ratingNC17 );
 
-        for (MediaItemModel mediaItemModel : mediaItemsCollection) {
+        Observable.from( mediaItemsCollection )
+                .filter( mediaItemModel -> {
 
-            boolean filtered = false;
+                    switch( mediaItemModel.getMedia() ) {
 
-            if (mediaItemModel.getMedia().equals(Media.UPCOMING)) {
-                Log.d(TAG, "filter : always filter upcoming");
+                        case UPCOMING :
+                            Log.d( TAG, "filter : media type 'UPCOMING'" );
 
-                filtered = true;
+                            return true;
 
-            } else if (mediaItemModel.getMedia().equals(Media.PROGRAM)) {
+                        case PROGRAM :
+                            Log.d( TAG, "filter : media type 'PROGRAM'" );
 
-                if (filterByGroup && !filterGroup.equals(mediaItemModel.getRecordingGroup())) {
-                    Log.d(TAG, "filter : recording group does not matches");
+                            if( filterByGroup && !filterGroup.equals( mediaItemModel.getRecordingGroup() ) ) {
+                                Log.d( TAG, "filter : recording group does not matches" );
 
-                    continue;
+                                return false;
 
-                } else if( filterHlsOnlyPreference ) {
+                            }
 
-                    if( mediaItemModel.getLiveStreamId() > 0) {
+                            Log.d( TAG, "filter : recording group filter not set" );
 
-                        filtered = true;
+                            return !filterHlsOnlyPreference || mediaItemModel.getLiveStreamId() > 0;
 
-                    } else {
+                        default :
+                            Log.d( TAG, "filter : media type 'VIDEO'" );
 
-                        continue;
+                            if( filterHlsOnlyPreference ) {
+
+                                if( mediaItemModel.getLiveStreamId() <= 0 ) {
+
+                                    return false;
+                                }
+
+                            }
+
+                            if( filterByParentalLevel && mediaItemModel.getParentalLevel() > finalParentalLevel ) {
+                                Log.d( TAG, "filter : does not meet parental level, skipping..." );
+
+                                return false;
+                            }
+
+                            if( filterByCertification ) {
+                                Log.d( TAG, "filter : filtering by certification '" + mediaItemModel.getCertification() + "'" );
+
+                                if( ratingNR && mediaItemModel.getCertification().equals( "NR" ) ) {
+                                    return true;
+                                }
+                                if( ratingG && ( mediaItemModel.getCertification().equals( "G" ) || mediaItemModel.getCertification().equals( "TV-Y" ) ) ) {
+                                    return true;
+                                }
+                                if( ratingPG && ( mediaItemModel.getCertification().endsWith( "PG" ) || mediaItemModel.getCertification().endsWith( "TV-PG" ) || mediaItemModel.getCertification().endsWith( "TV-Y7" ) ) ) {
+                                    return true;
+                                }
+                                if( ratingPG13 && ( mediaItemModel.getCertification().equals( "PG-13" ) || mediaItemModel.getCertification().equals( "TV-14" ) ) ) {
+                                    return true;
+                                }
+                                if( ratingR && ( mediaItemModel.getCertification().equals( "R" ) || mediaItemModel.getCertification().equals( "TV-MA" ) ) ) {
+                                    return true;
+                                }
+                                if( ratingNC17 && mediaItemModel.getCertification().equals( "NC-17" ) ) {
+                                    return true;
+                                }
+
+                            }
+
+                            return true;
 
                     }
+                })
+                .toList();
+                //.subscribe( items -> mediaItems = items );
 
-                } else {
-
-                    filtered = true;
-
-                }
-
-            } else {
-
-                if( filterHlsOnlyPreference ) {
-
-                    if( mediaItemModel.getLiveStreamId() <= 0) {
-
-                        continue;
-
-                    }
-
-                }
-
-                if (filterByParentalLevel && mediaItemModel.getParentalLevel() > parentalLevel) {
-                    Log.d(TAG, "filter : does not meet parental level, skipping...");
-
-                    continue;
-                }
-
-                if (filterByCertification) {
-                    Log.d(TAG, "filter : filtering by certification '" + mediaItemModel.getCertification() + "'");
-
-                    if (ratingNR && mediaItemModel.getCertification().equals("NR")) {
-                        filtered = true;
-                    }
-                    if (ratingG && (mediaItemModel.getCertification().equals("G") || mediaItemModel.getCertification().equals("TV-Y"))) {
-                        filtered = true;
-                    }
-                    if (ratingPG && (mediaItemModel.getCertification().endsWith("PG") || mediaItemModel.getCertification().endsWith("TV-PG") || mediaItemModel.getCertification().endsWith("TV-Y7"))) {
-                        filtered = true;
-                    }
-                    if (ratingPG13 && (mediaItemModel.getCertification().equals("PG-13") || mediaItemModel.getCertification().equals("TV-14"))) {
-                        filtered = true;
-                    }
-                    if (ratingR && (mediaItemModel.getCertification().equals("R") || mediaItemModel.getCertification().equals("TV-MA"))) {
-                        filtered = true;
-                    }
-                    if (ratingNC17 && mediaItemModel.getCertification().equals("NC-17")) {
-                        filtered = true;
-                    }
-
-                } else {
-
-                    filtered = true;
-
-                }
-
-            }
-
-            if (filtered) {
-                Log.d(TAG, "filter : adding to list");
-
-                mediaItems.add(mediaItemModel);
-            }
-
-        }
-
-        Log.d(TAG, "filter : exit");
         return mediaItems;
     }
 

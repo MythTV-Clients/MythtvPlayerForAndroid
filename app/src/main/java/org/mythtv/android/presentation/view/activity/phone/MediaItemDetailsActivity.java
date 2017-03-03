@@ -31,7 +31,6 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.google.android.gms.cast.framework.CastSession;
-import com.google.firebase.crash.FirebaseCrash;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -41,7 +40,6 @@ import org.mythtv.android.presentation.internal.di.components.DaggerMediaCompone
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.internal.di.modules.MediaItemModule;
 import org.mythtv.android.presentation.model.MediaItemModel;
-import org.mythtv.android.presentation.view.fragment.phone.CastErrorDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.CastNotReadyDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemDetailsFragment;
 
@@ -311,69 +309,31 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
             return;
         }
 
-        if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
+        if( mediaItemModel.getUrl().endsWith( "m3u8" ) ) {
+            Log.d( TAG, "onButtonFabPlay : trying to play HLS stream" );
+
+            if( mediaItemModel.getPercentComplete() <= 2 ) {
+
+                FragmentManager fm = getFragmentManager();
+                CastNotReadyDialogFragment fragment = new CastNotReadyDialogFragment();
+                fragment.show(fm, "Cast Not Ready Dialog Fragment");
+
+                Log.d( TAG, "onButtonFabPlay : HLS stream is not ready" );
+                return;
+            }
+
+        }
+
+        CastSession castSession = mCastContext.getSessionManager().getCurrentCastSession();
+        if( null != castSession && castSession.isConnected() ) {
+            Log.d( TAG, "onButtonFabPlay : always favor cast device, sending stream to cast device via local player" );
+
+            navigator.navigateToLocalPlayer( this, mediaItemModel );
+
+        } else if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
             Log.d( TAG, "onButtonFabPlay : sending stream to internal player" );
 
-            try {
-
-                switch( mediaItemModel.getMedia() ) {
-
-                    case PROGRAM:
-
-                        if( mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "m4v" ) ) {
-
-                            navigator.navigateToLocalPlayer( this, mediaItemModel );
-
-                        } else if( mediaItemModel.getUrl().endsWith( "m3u8" ) ) {
-
-                            if( mediaItemModel.getPercentComplete() > 2 ) {
-
-                                navigator.navigateToLocalPlayer( this, mediaItemModel );
-
-                            } else {
-
-                                FragmentManager fm = getFragmentManager();
-                                CastNotReadyDialogFragment fragment = new CastNotReadyDialogFragment();
-                                fragment.show( fm, "Cast Not Ready Dialog Fragment" );
-
-                            }
-
-                        } else {
-
-                            CastSession castSession = mCastContext.getSessionManager().getCurrentCastSession();
-                            if( null != castSession && castSession.isConnected() ) {
-
-                                FragmentManager fm = getFragmentManager();
-                                CastErrorDialogFragment fragment = new CastErrorDialogFragment();
-                                fragment.show( fm, "Cast Error Dialog Fragment" );
-
-                            } else {
-
-                                navigator.navigateToExternalPlayer( this, ( getMasterBackendUrl() + mediaItemModel.getUrl()), mediaItemModel.getContentType() );
-
-                            }
-
-                        }
-
-                        break;
-
-                    default:
-
-                        navigator.navigateToLocalPlayer( this, mediaItemModel );
-
-                        break;
-
-                }
-
-            } catch( Exception e ) {
-                Log.e( TAG, "onButtonFabPlay : error", e );
-
-                FirebaseCrash.logcat( Log.ERROR, TAG, "onButtonFabPlay : mediaItemModel=" + mediaItemModel.toString() );
-                FirebaseCrash.report( e );
-
-                showToastMessage( null, "HLS for this video is no longer available", null, null );
-
-            }
+            navigator.navigateToLocalPlayer( this, mediaItemModel );
 
         } else {
             Log.d( TAG, "onButtonFabPlay : sending stream to external player" );

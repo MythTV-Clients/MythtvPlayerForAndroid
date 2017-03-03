@@ -88,7 +88,6 @@ public class AndroidApplication extends Application {
 
         this.netComponent = DaggerNetComponent.builder()
                 .applicationModule( applicationModule )
-                .sharedPreferencesModule( sharedPreferencesModule )
                 .netModule( netModule )
                 .build();
 
