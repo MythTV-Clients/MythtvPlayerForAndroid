@@ -32,30 +32,55 @@ dependencies:
     - if [ ! -e "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license" ]; then echo "79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license"; fi
     - if [ ! -e "/usr/local/android-sdk-linux/licenses/intel-android-extra-license" ]; then echo "d975f751698a77b662f1254ddbeed3901e976f5a" > "/usr/local/android-sdk-linux/licenses/intel-android-extra-license"; fi
     # Android SDK Platform 23
-    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-23" ]; then echo y | android update sdk --no-ui --all --filter "android-23"; fi
+#    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-23" ]; then echo y | android update sdk --no-ui --all --filter "android-23"; fi
     # Android SDK Build-tools, revision 25.0.2
-    - if [ ! -d "/usr/local/android-sdk-linux/build-tools/25.0.2" ]; then echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"; fi
+#    - if [ ! -d "/usr/local/android-sdk-linux/build-tools/25.0.2" ]; then echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"; fi
     # Android Support Repository, revision 44.0.0 / Local Maven repository for Support Libraries
-    - if [ ! -d "/usr/local/android-sdk-linux/extras/android/m2repository/com/android/support/design/25.2.0" ]; then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"; fi
+#    - if [ ! -d "/usr/local/android-sdk-linux/extras/android/m2repository/com/android/support/design/25.2.0" ]; then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"; fi
+
+      - echo y | android update sdk --no-ui --all --filter "android-24"
+      # Android SDK Platform 25 Build Tools
+      - echo y | android update sdk --no-ui --all --filter "tools"
+      # Android SDK Platform Tools 25.0.3
+      - echo y | android update sdk --no-ui --all --filter "platform-tools"
+      # Android SDK Build-tools, revision 25.0.2
+      - echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"
+      # Android Support Repository, revision 35 / Local Maven repository for Support Libraries
+      - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
+      # Android 24 ARM Google APIs system Image
+      - echo y | android update sdk --no-ui --all --filter "sys-img-armeabi-v7a-google_apis-24"
+      # Create the android 24 AVD
+      - echo no | android create avd -n circleci-android24-googleapis -t 'android-24' --abi google_apis/armeabi-v7a
+      # software rendering is broken in revision 10, we'll use revision 08
+      - wget "https://dl-ssl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-24_r08.zip"
+      - unzip armeabi-v7a-24_r08.zip
+      # overwrite some of the new files with older files
+      - mv armeabi-v7a/* /usr/local/android-sdk-linux/system-images/android-24/google_apis/armeabi-v7a
+      - rm armeabi-v7a-24_r08.zip
 
   cache_directories:
-    - /usr/local/android-sdk-linux/platforms/android-23
+    - ~/.gradle
+    - /usr/local/android-sdk-linux/tools
+    - /usr/local/android-sdk-linux/platforms/android-24
     - /usr/local/android-sdk-linux/build-tools/25.0.2
     - /usr/local/android-sdk-linux/extras/android/m2repository
     - /usr/local/android-sdk-linux/licenses
 
 test:
-  pre:
-    - android list targets
-    - echo no | android create avd -n custom-android23-googleapis -t "android-23" --abi google_apis/armeabi-v7a
-    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android23-googleapis.ini
-    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android23-googleapis.ini
-    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android23-googleapis.ini
-    - cat ~/.android/avd/custom-android23-googleapis.ini
-    - emulator -avd custom-android23-googleapis -no-window :
+  override:
+#    - android list targets
+#    - echo no | android create avd -n custom-android23-googleapis -t "android-23" --abi google_apis/armeabi-v7a
+#    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android23-googleapis.ini
+#    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android23-googleapis.ini
+#    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android23-googleapis.ini
+#    - cat ~/.android/avd/custom-android23-googleapis.ini
+    # set up emulator
+    - emulator -avd circleci-android24-googleapis -no-window -gpu off :
         background: true
         parallel: true
+    # wait for emulator to boot
     - circle-android wait-for-boot
+    # unlock the emulator
     - sleep 30
     - adb shell input keyevent 82
     - adb shell svc power stayon true
@@ -63,12 +88,12 @@ test:
     - adb shell settings put global transition_animation_scale 0
     - adb shell settings put global animator_duration_scale 0
 
-#  override:
-#    - git checkout app/google-services.json
-#    - ./gradlew testDevDebugUnitTest jacocoTestReport coveralls -PdisablePreDex --console=plain --info
-
   post:
-    - ./gradlew testDevDebugUnitTest jacocoTestReport coveralls -PdisablePreDex --console=plain --info
+    # run tests against the emulator and generate report and limit gradle's memory usage
+    - ./gradlew jacocoTestReport coveralls -PdisablePreDex --console=plain --info
+    # copy the build outputs to artifacts
+    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+    # copy the test results to the test results directory
     - cp -r app/build/outputs/androidTest-results/ $CIRCLE_TEST_REPORTS
     - cp -r app/build/outputs/code-coverage/ $CIRCLE_TEST_REPORTS
     - test ! -d app/build/reports || cp -r app/build/reports $CIRCLE_TEST_REPORTS
