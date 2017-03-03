@@ -83,7 +83,7 @@ test:
 #        parallel: true
 #    - circle-android wait-for-boot
     - git checkout app/google-services.json
-    - ./gradlew testDevDebugUnitTest -PdisablePreDex --console=plain --info
+    - ./gradlew testDevDebugUnitTest jacocoTestReport coveralls -PdisablePreDex --console=plain --info
 
   post:
 #    - test ! -d app/build/outputs || cp -r app/build/outputs $CIRCLE_TEST_ARTIFACTS
