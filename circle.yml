@@ -90,4 +90,4 @@ test:
 #    - cp -r app/build/outputs/androidTest-results/ $CIRCLE_TEST_REPORTS
 #    - cp -r app/build/outputs/code-coverage/ $CIRCLE_TEST_REPORTS
     - test ! -d app/build/reports || cp -r app/build/reports $CIRCLE_TEST_REPORTS
-    - test ! -d app/build/test-results/testDevDebugUnitTest/devDebug || cp -r app/build/test-results/testDevDebugUnitTest/devDebug $CIRCLE_TEST_REPORTS
+    - test ! -d app/build/test-results/testDevDebugUnitTest || cp -r app/build/test-results/testDevDebugUnitTest $CIRCLE_TEST_REPORTS
