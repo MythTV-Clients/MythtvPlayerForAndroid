@@ -63,11 +63,12 @@ test:
     - adb shell settings put global transition_animation_scale 0
     - adb shell settings put global animator_duration_scale 0
 
-  override:
-    - git checkout app/google-services.json
-    - ./gradlew testDevDebugUnitTest jacocoTestReport coveralls -PdisablePreDex --console=plain --info
+#  override:
+#    - git checkout app/google-services.json
+#    - ./gradlew testDevDebugUnitTest jacocoTestReport coveralls -PdisablePreDex --console=plain --info
 
   post:
+    - ./gradlew testDevDebugUnitTest jacocoTestReport coveralls -PdisablePreDex --console=plain --info
     - cp -r app/build/outputs/androidTest-results/ $CIRCLE_TEST_REPORTS
     - cp -r app/build/outputs/code-coverage/ $CIRCLE_TEST_REPORTS
     - test ! -d app/build/reports || cp -r app/build/reports $CIRCLE_TEST_REPORTS
