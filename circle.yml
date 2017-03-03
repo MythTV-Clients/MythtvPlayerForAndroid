@@ -38,25 +38,25 @@ dependencies:
     # Android Support Repository, revision 44.0.0 / Local Maven repository for Support Libraries
 #    - if [ ! -d "/usr/local/android-sdk-linux/extras/android/m2repository/com/android/support/design/25.2.0" ]; then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"; fi
 
-      - echo y | android update sdk --no-ui --all --filter "android-24"
-      # Android SDK Platform 25 Build Tools
-      - echo y | android update sdk --no-ui --all --filter "tools"
-      # Android SDK Platform Tools 25.0.3
-      - echo y | android update sdk --no-ui --all --filter "platform-tools"
-      # Android SDK Build-tools, revision 25.0.2
-      - echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"
-      # Android Support Repository, revision 35 / Local Maven repository for Support Libraries
-      - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
-      # Android 24 ARM Google APIs system Image
-      - echo y | android update sdk --no-ui --all --filter "sys-img-armeabi-v7a-google_apis-24"
-      # Create the android 24 AVD
-      - echo no | android create avd -n circleci-android24-googleapis -t 'android-24' --abi google_apis/armeabi-v7a
-      # software rendering is broken in revision 10, we'll use revision 08
-      - wget "https://dl-ssl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-24_r08.zip"
-      - unzip armeabi-v7a-24_r08.zip
-      # overwrite some of the new files with older files
-      - mv armeabi-v7a/* /usr/local/android-sdk-linux/system-images/android-24/google_apis/armeabi-v7a
-      - rm armeabi-v7a-24_r08.zip
+    - echo y | android update sdk --no-ui --all --filter "android-24"
+    # Android SDK Platform 25 Build Tools
+    - echo y | android update sdk --no-ui --all --filter "tools"
+    # Android SDK Platform Tools 25.0.3
+    - echo y | android update sdk --no-ui --all --filter "platform-tools"
+    # Android SDK Build-tools, revision 25.0.2
+    - echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"
+    # Android Support Repository, revision 35 / Local Maven repository for Support Libraries
+    - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
+    # Android 24 ARM Google APIs system Image
+    - echo y | android update sdk --no-ui --all --filter "sys-img-armeabi-v7a-google_apis-24"
+    # Create the android 24 AVD
+    - echo no | android create avd -n circleci-android24-googleapis -t 'android-24' --abi google_apis/armeabi-v7a
+    # software rendering is broken in revision 10, we'll use revision 08
+    - wget "https://dl-ssl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-24_r08.zip"
+    - unzip armeabi-v7a-24_r08.zip
+    # overwrite some of the new files with older files
+    - mv armeabi-v7a/* /usr/local/android-sdk-linux/system-images/android-24/google_apis/armeabi-v7a
+    - rm armeabi-v7a-24_r08.zip
 
   cache_directories:
     - ~/.gradle
