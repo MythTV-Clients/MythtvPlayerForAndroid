@@ -52,11 +52,11 @@ dependencies:
     # Create the android 24 AVD
     - echo no | android create avd -n circleci-android24-googleapis -t 'android-24' --abi google_apis/armeabi-v7a
     # software rendering is broken in revision 10, we'll use revision 08
-#    - wget "https://dl-ssl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-24_r08.zip"
-#    - unzip armeabi-v7a-24_r08.zip
+    - wget "https://dl-ssl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-24_r11.zip"
+    - unzip armeabi-v7a-24_r11.zip
     # overwrite some of the new files with older files
-#    - mv armeabi-v7a/* /usr/local/android-sdk-linux/system-images/android-24/google_apis/armeabi-v7a
-#    - rm armeabi-v7a-24_r08.zip
+    - mv armeabi-v7a/* /usr/local/android-sdk-linux/system-images/android-24/google_apis/armeabi-v7a
+    - rm armeabi-v7a-24_r11.zip
 
   cache_directories:
     - ~/.gradle
