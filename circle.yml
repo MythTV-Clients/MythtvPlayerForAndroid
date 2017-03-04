@@ -77,7 +77,7 @@ test:
 #    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android23-googleapis.ini
 #    - cat ~/.android/avd/custom-android23-googleapis.ini
     # set up emulator
-    - emulator -avd circleci-android24-googleapis -no-window -gpu off :
+    - emulator -avd circleci-android24-googleapis -no-window :
         background: true
         parallel: true
     # wait for emulator to boot
