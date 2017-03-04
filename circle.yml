@@ -55,6 +55,8 @@ dependencies:
     - wget "https://dl-ssl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-24_r11.zip"
     - unzip armeabi-v7a-24_r11.zip
     # overwrite some of the new files with older files
+    - rm -rf /usr/local/android-sdk-linux/system-images/android-24/google_apis/armeabi-v7a
+    - mkdir -p /usr/local/android-sdk-linux/system-images/android-24/google_apis/armeabi-v7a
     - mv armeabi-v7a/* /usr/local/android-sdk-linux/system-images/android-24/google_apis/armeabi-v7a
     - rm armeabi-v7a-24_r11.zip
 
