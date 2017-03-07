@@ -81,7 +81,7 @@ dependencies:
 
 test:
   override:
-    - ./gradlew testDevDebugUnitTest coveralls -PdisablePreDex
+    - ./gradlew testDevDebugUnitTest -PdisablePreDex
     - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud beta test android run --app app/build/outputs/apk/app-dev-debug.apk --test app/build/outputs/apk/app-dev-debug-androidTest.apk --device-ids Nexus6 --os-version-ids 25 --locales en --orientations portrait
 
 #    - android list targets
