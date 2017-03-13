@@ -18,6 +18,8 @@
 
 package org.mythtv.android.domain.utils;
 
+import java.util.Locale;
+
 /**
  *
  *
@@ -34,15 +36,15 @@ public class DomainUtils {
 
         String ret = value;
 
-        if( value.toLowerCase().startsWith( "the " ) ) {
+        if( value.toLowerCase( Locale.getDefault() ).startsWith( "the " ) ) {
             ret = ret.substring( "the ".length() );
         }
 
-        if( value.toLowerCase().startsWith( "an ") ) {
+        if( value.toLowerCase( Locale.getDefault() ).startsWith( "an ") ) {
             ret = ret.substring( "an ".length() );
         }
 
-        if( value.toLowerCase().startsWith( "a " ) ) {
+        if( value.toLowerCase( Locale.getDefault() ).startsWith( "a " ) ) {
             ret = ret.substring( "a ".length() );
         }
 

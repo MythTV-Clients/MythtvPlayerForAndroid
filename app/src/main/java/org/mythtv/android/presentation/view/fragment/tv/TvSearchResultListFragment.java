@@ -239,7 +239,7 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
             mRowsAdapter.clear();
 
             Observable.from( mediaItemModelCollection )
-                    .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, getContext() ) )
+                    .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, getActivity() ) )
                     .toList()
                     .subscribe( items -> this.mediaItems = items );
 

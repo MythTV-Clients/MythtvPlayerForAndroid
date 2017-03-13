@@ -66,6 +66,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -346,7 +347,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
             Log.d( TAG, "renderMediaItemList : mediaItemModelCollection is not null" );
 
             Observable.from( mediaItemModelCollection )
-                    .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, getContext() ) )
+                    .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, getActivity() ) )
                     .toList()
                     .subscribe( items -> this.mediaItems = items );
 
@@ -624,14 +625,14 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
                 case PROGRAM :
                 case TELEVISION :
 
-                    this.key = ArticleCleaner.clean( getActivity(), title ).toUpperCase();
+                    this.key = ArticleCleaner.clean( getActivity(), title ).toUpperCase( Locale.getDefault() );
                     this.title = title;
 
                     break;
 
                 default :
 
-                    this.key = ArticleCleaner.clean( getActivity(), title ).substring( 0, 1 ).toUpperCase();
+                    this.key = ArticleCleaner.clean( getActivity(), title ).substring( 0, 1 ).toUpperCase( Locale.getDefault() );
                     this.title = key;
 
                     break;

@@ -20,12 +20,14 @@ package org.mythtv.android.presentation;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 
+import org.mythtv.android.BuildConfig;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerApplicationComponent;
@@ -61,8 +63,22 @@ public class AndroidApplication extends Application {
 
     @Override
     public void onCreate() {
-
         super.onCreate();
+
+        if( BuildConfig.DEBUG ) {
+
+            StrictMode.setThreadPolicy( new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build() );
+
+            StrictMode.setVmPolicy( new StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build() );
+
+        }
+
         this.initializeInjector();
 
         Stetho.initializeWithDefaults( this );

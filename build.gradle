@@ -28,7 +28,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1'
         classpath 'com.google.gms:google-services:3.0.0'
-        classpath "com.google.guava:guava:19.0"
+        classpath "com.google.guava:guava:20.0"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
         classpath 'com.google.firebase:firebase-plugins:1.0.4'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
@@ -46,12 +46,6 @@ allprojects {
     }
 
     project.ext {
-
-        //Android
-        buildToolsVersion = '25.0.2'
-        minSdkVersion = 17
-        targetSdkVersion = 25
-        compileSdkVersion = 25
 
         //Android Support Libraries
         supportVersion = '25.2.0'
@@ -94,45 +88,6 @@ allprojects {
     }
 
 }
-
-/*
-    Version Code Algorithm
-    ----------------------
-    Version Code = Min API Level + Min Screen Size + Max Screen Size + App Version
-
-    example: 1414210
-
-
-    Android Version Table
-    ---------------------
-    API Level | Version Number | Code Name
-    ------------------------------------------------------------------------------------------------
-    14 - 15   | 4.0 - 4.0.4    | Ice Cream Sandwich
-    16 - 18   | 4.1 - 4.3.1    | Jellybean
-    19 - 20   | 4.4 - 4.4.4    | KitKat
-    21 - 22   | 5.0 - 5.1.1    | Lollipop
-    23        | 6.0 - 6.0.1    | Marshmellow
-    24        | 7.0 - 7.0.1    | Nougat
-    25        | 7.1?           | Nougat
-
-    Android Screen Size Table
-    --------------------------
-    Code | Size
-    ------------------------------------------------------------------------------------------------
-    1    | low
-    2    | normal
-    3    | large
-    4    | xlarge
-
- */
-
-    ext {
-        androidApplicationId = 'org.mythtv.android'
-        androidVersionCode = 1714306
-        androidVersionName = "3.0.6"
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-        testApplicationId = 'org.mythtv.android.test'
-    }
 
 if( project.hasProperty( "mythtvplayer.google-cast" )
         && new File( project.property( "mythtvplayer.google-cast" ) + ".gradle" ).exists() ) {

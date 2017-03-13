@@ -76,7 +76,6 @@
     <string name="pref_rating_r_summary">Under 17 requires accompanying parent or adult guardian. Contains some adult material. Parents are urged to learn more about the film before taking their young children with them.</string>
     <string name="pref_rating_nc17_summary">No One 17 and Under Admitted. Clearly adult. Children are not admitted.</string>
     <string name="pref_content_ratings">Video Content Ratings</string>
-    <string name="pref_video_display_preferences">Video Display Preferences</string>
     <string name="video_preferences">Video Settings</string>
     <string name="video_preferences_summary">Modify Videos Display and Filters</string>
     <string name="pref_parental_controls">Parental Controls</string>
@@ -87,7 +86,6 @@
     <string name="title_activity_settings">Settings</string>
     <string name="recording_preferences">Recording Settings</string>
     <string name="recording_preferences_summary">Modify Recordings Display and Filters</string>
-    <string name="pref_set_default_recording_group">Recording Group Settings</string>
     <string name="pref_enable_recording_group_filter">Enable Recording Group Filter</string>
     <string name="pref_enable_recording_group_summary_on">Only recordings in selected recording group will be displayed</string>
     <string name="pref_enable_recording_group_summary_off">Recording Group Filter is off</string>
@@ -120,26 +118,10 @@
     <string name="error_fragment" translatable="false">Error Fragment</string>
     <string name="watch" translatable="false">Watch</string>
     <string name="movie" translatable="false">Movie</string>
-    <string name="tv_settings_title">MythTV Settings</string>
     <string name="tv_settings_title_description">MythTV Player backend and content settings</string>
-    <string name="tv_settings_master_backend_title">Master Backend Settings</string>
     <string name="tv_settings_master_backend_description">Master Backend Connection Settings</string>
-    <string name="tv_settings_master_backend_url">Master Backend URL</string>
-    <string name="tv_settings_master_backend_port">Master Backend Port</string>
-    <string name="tv_settings_read_timeout">Master Backend Read Timeout</string>
-    <string name="tv_settings_read_timeout_title">Master Backend Read Timeout</string>
-    <string name="tv_settings_connect_timeout">Master Backend Read Timeout</string>
-    <string name="tv_settings_connect_timeout_title">Master Backend Read Timeout</string>
-    <string name="tv_settings_playback_title">Playback Settings</string>
-    <string name="tv_settings_playback_title_description">Recording and Video Player Settings</string>
     <string name="tv_settings_playback_internal_player">Internal Player</string>
     <string name="tv_settings_playback_internal_player_description">Use the Internal Player for Recording and Video Playback</string>
-    <string name="tv_settings_playback_external_player">External Player</string>
-    <string name="tv_settings_content_title">Content Settings</string>
-    <string name="tv_settings_content_title_description">Show Adult Content</string>
-    <string name="tv_settings_content_adult_title">Adult Content</string>
-    <string name="tv_settings_content_adult_shown">Adult Content will be shown</string>
-    <string name="tv_settings_content_adult_hidden">Adult Content will be hidden</string>
     <string name="tv_settings_yes">Yes</string>
     <string name="tv_settings_no">No</string>
     <string name="backdrop_content_description">backdrop</string>
@@ -218,10 +200,7 @@
     <string name="backend_version_verified_label">MythTV Version is v0.28 or greater</string>
     <string name="validation_corrupt_data">This episode has corrupt backend data: %s</string>
     <string name="validation_no_media_type">Media Type could not be determined</string>
-    <string name="tv_settings_analytics_title"><![CDATA[Analytics & Crash Reporting]]></string>
     <string name="tv_settings_analytics_title_description"><![CDATA[Annonymous Analytics & Crash Reports will be sent]]></string>
-    <string name="tv_settings_recording_title">Recording Settings</string>
-    <string name="tv_settings_video_title">Video Settings</string>
     <string name="pref_filter_hls_only_title">Filter recordings and videos</string>
     <string name="pref_filter_hls_only">Show HLS Only</string>
     <string name="pref_filter_hls_only_summary_on">Only recordings and videos that are HLS transcoded will be shown</string>

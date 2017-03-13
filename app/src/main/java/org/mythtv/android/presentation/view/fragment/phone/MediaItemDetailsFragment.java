@@ -379,7 +379,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             this.tv_studio.setText( this.mediaItemModel.getStudio() );
             this.tv_date.setText( null != mediaItemModel.getStartDate() ? this.mediaItemModel.getStartDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) : "" );
             this.tv_episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.getSeason(), mediaItemModel.getEpisode() ) );
-            this.tv_duration.setText( getContext().getResources().getString( R.string.minutes, String.valueOf( this.mediaItemModel.getDuration() ) ) );
+            this.tv_duration.setText( getActivity().getResources().getString( R.string.minutes, String.valueOf( this.mediaItemModel.getDuration() ) ) );
             this.tv_description.setText( this.mediaItemModel.getDescription() );
 
             updateProgress();

@@ -17,16 +17,17 @@
  */
 
 apply plugin: 'com.android.application'
-apply from: '../jacoco.gradle'
+apply from: '../tools/script-java-code-coverage.gradle'
+apply from: '../tools/script-git-version.gradle'
+apply from: '../tools/script-findbugs.gradle'
+apply from: '../tools/script-lint.gradle'
+apply from: '../tools/script-pmd.gradle'
+//apply from: '../jacoco.gradle'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-
-    def applicationBranch = "git rev-parse --abbrev-ref HEAD".execute().text.trim()
-    def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
-    def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
 
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -54,12 +55,13 @@ android {
         applicationId 'org.mythtv.android'
         versionCode 1714306
         versionName "3.0.6"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        testApplicationId 'org.mythtv.android.test'
 
-        resValue "string", "branchName", applicationBranch
-        resValue "string", "shaName", applicationSHA1
-        resValue "string", "tagName", applicationTag
-        resValue "string", "versionName", versionName
+        resValue "string", "branchName", gitVersionBranch
+        resValue "string", "shaName", gitVersionCommit
+        resValue "string", "tagName", "$gitVersionCode"
+        resValue "string", "versionName", gitVersionName
 
         if (project.hasProperty("mythtvplayer.google-cast")
                 && new File(project.property("mythtvplayer.google-cast") + ".gradle").exists()) {
@@ -74,32 +76,14 @@ android {
 
     }
 
-    buildTypes {
-
-        debug {
-
-            shrinkResources false
-            minifyEnabled false
-            testCoverageEnabled = true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-        }
-
-        release {
-
-            shrinkResources false
-            minifyEnabled true // Enables code shrinking for the release build type.
-            zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-        }
-
-    }
-
     productFlavors {
 
         // Define separate dev and prod product flavors.
         dev {
+
+            versionCode gitVersionCodeTime
+            versionName gitVersionName
+            applicationId 'org.mythtv.android.dev'
 
             // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
             // to pre-dex each module and produce an APK that can be tested on
@@ -109,6 +93,32 @@ android {
         }
 
         prod {
+
+            versionCode gitVersionCode
+            versionName gitVersionName
+            applicationId 'org.mythtv.android'
+
+        }
+
+    }
+
+    buildTypes {
+
+        debug {
+
+            shrinkResources false
+            minifyEnabled false
+//            testCoverageEnabled = true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../tools/rules-proguard-debug.pro'
+
+        }
+
+        release {
+
+            shrinkResources false
+            minifyEnabled true // Enables code shrinking for the release build type.
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../tools/rules-proguard.pro'
 
         }
 
@@ -141,11 +151,11 @@ android {
 
     }
 
-    lintOptions {
-
-        abortOnError false
-
-    }
+//    lintOptions {
+//
+//        abortOnError false
+//
+//    }
 
     testOptions {
 

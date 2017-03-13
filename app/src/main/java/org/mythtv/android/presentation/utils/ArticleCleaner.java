@@ -23,6 +23,8 @@ import android.util.Log;
 
 import org.mythtv.android.R;
 
+import java.util.Locale;
+
 /**
  *
  *
@@ -45,7 +47,7 @@ public class ArticleCleaner {
         }
 
         String[] articles = context.getResources().getStringArray( R.array.articles );
-        String upper = value.toUpperCase();
+        String upper = value.toUpperCase( Locale.getDefault() );
 
         for( String article : articles ) {
             article = article + " ";

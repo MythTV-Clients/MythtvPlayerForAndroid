@@ -23,6 +23,8 @@ import android.support.annotation.NonNull;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.utils.DomainUtils;
 
+import java.util.Locale;
+
 /**
  *
  *
@@ -106,8 +108,8 @@ public class SeriesModel implements Comparable<SeriesModel> {
 
         if( this == another ) return EQUAL;
 
-        String thisTitle = DomainUtils.removeArticles( this.title.toUpperCase() );
-        String thatTitle = DomainUtils.removeArticles( another.title.toUpperCase() );
+        String thisTitle = DomainUtils.removeArticles( this.title.toUpperCase( Locale.getDefault() ) );
+        String thatTitle = DomainUtils.removeArticles( another.title.toUpperCase( Locale.getDefault() ) );
 
         int comparison = thisTitle.compareTo( thatTitle );
         if( comparison != EQUAL ) return comparison;

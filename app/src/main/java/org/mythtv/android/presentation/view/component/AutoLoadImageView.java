@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +30,7 @@ import java.net.URLConnection;
  *
  * @author dmfrey
  */
-public class AutoLoadImageView extends ImageView {
+public class AutoLoadImageView extends AppCompatImageView {
 
   private static final String TAG = AutoLoadImageView.class.getSimpleName();
 
