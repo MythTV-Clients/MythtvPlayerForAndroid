@@ -435,22 +435,17 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
     private Reader getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append( RECORDED_LIST_BASE_URL );
-        sb.append( '?' );
-        sb.append( String.format( DESCENDING_QS, descending ) );
+        sb.append( getMasterBackendUrl() ).append( RECORDED_LIST_BASE_URL ).append( '?' ).append( String.format( DESCENDING_QS, descending ) );
 
         if( startIndex != -1 ) {
 
-            sb.append( '&' );
-            sb.append( String.format( START_INDEX_QS, startIndex ) );
+            sb.append( '&' ).append( String.format( START_INDEX_QS, startIndex ) );
 
         }
 
         if( count != -1 ) {
 
-            sb.append( '&' );
-            sb.append( String.format( COUNT_QS, count ) );
+            sb.append( '&' ).append( String.format( COUNT_QS, count ) );
 
         }
 
@@ -460,8 +455,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
             try {
 
-                sb.append( '&' );
-                sb.append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( dottedTitleRegex, "UTF-8" ) ) );
+                sb.append( '&' ).append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( dottedTitleRegex, "UTF-8" ) ) );
 
             } catch( UnsupportedEncodingException e ) {
                 Log.e( TAG, "getRecordedProgramEntitiesFromApi : error", e );
@@ -470,15 +464,13 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
         if( null != recGroup && !"".equals( recGroup ) ) {
 
-            sb.append( '&' );
-            sb.append( String.format( REC_GROUP_QS, recGroup ) );
+            sb.append( '&' ).append( String.format( REC_GROUP_QS, recGroup ) );
 
         }
 
         if( null != storageGroup && !"".equals( storageGroup ) ) {
 
-            sb.append( '&' );
-            sb.append( String.format( STORAGE_GROUP_QS, storageGroup ) );
+            sb.append( '&' ).append( String.format( STORAGE_GROUP_QS, storageGroup ) );
 
         }
 
@@ -489,9 +481,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
     private Reader getRecordedProgramDetailsFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append( RECORDED_BASE_URL );
-        sb.append( '?' );
+        sb.append( getMasterBackendUrl() ).append( RECORDED_BASE_URL ).append( '?' );
 
         if( recordedId != -1 ) {
 
@@ -501,8 +491,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
         if( chanId != -1 && null != startTime ) {
 
-            sb.append( String.format( CHAN_ID_QS, chanId ) );
-            sb.append( '&' );
+            sb.append( String.format( CHAN_ID_QS, chanId ) ).append( '&' );
             fmt.print( startTime.withZone( DateTimeZone.UTC ) );
 
         }
@@ -514,36 +503,29 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
     private Reader getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append( UPCOMING_LIST_BASE_URL );
-        sb.append( '?' );
-        sb.append( String.format( SHOW_ALL_QS, showAll ) );
+        sb.append( getMasterBackendUrl() ).append( UPCOMING_LIST_BASE_URL ).append( '?' ).append( String.format( SHOW_ALL_QS, showAll ) );
 
         if( startIndex != -1 ) {
 
-            sb.append( '&' );
-            sb.append( String.format( START_INDEX_QS, startIndex ) );
+            sb.append( '&' ).append( String.format( START_INDEX_QS, startIndex ) );
 
         }
 
         if( count != -1 ) {
 
-            sb.append( '&' );
-            sb.append( String.format( COUNT_QS, count ) );
+            sb.append( '&' ).append( String.format( COUNT_QS, count ) );
 
         }
 
         if( recordId != -1 ) {
 
-            sb.append( '&' );
-            sb.append( String.format( RECORD_ID_QS, recordId ) );
+            sb.append( '&' ).append( String.format( RECORD_ID_QS, recordId ) );
 
         }
 
         if( recStatus != -1 ) {
 
-            sb.append( '&' );
-            sb.append( String.format( REC_STATUS_QS, recStatus ) );
+            sb.append( '&' ).append( String.format( REC_STATUS_QS, recStatus ) );
 
         }
 
@@ -571,9 +553,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
     private Reader getBookmarkFromApi( final int recordedId, final int chanId, final DateTime startTime, final String offsetType ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append( BOOKMARK_BASE_URL );
-        sb.append( '?' );
+        sb.append( getMasterBackendUrl() ).append( BOOKMARK_BASE_URL ).append( '?' );
 
         if( recordedId != -1 ) {
 
@@ -583,16 +563,14 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
         if( chanId != -1 && null != startTime ) {
 
-            sb.append( String.format( CHAN_ID_QS, chanId ) );
-            sb.append( '&' );
+            sb.append( String.format( CHAN_ID_QS, chanId ) ).append( '&' );
             fmt.print( startTime.withZone( DateTimeZone.UTC ) );
 
         }
 
         if( null != offsetType && !"".equals( offsetType ) ) {
 
-            sb.append( '&' );
-            sb.append( String.format( OFFSET_TYPE_QS, offsetType ) );
+            sb.append( '&' ).append( String.format( OFFSET_TYPE_QS, offsetType ) );
 
         }
 

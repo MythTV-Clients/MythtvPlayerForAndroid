@@ -123,8 +123,7 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
     private Reader getLiveStreamInfoEntitiesFromApi( String filename ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append( LIVE_STREAM_INFO_LIST_BASE_URL );
+        sb.append( getMasterBackendUrl() ).append( LIVE_STREAM_INFO_LIST_BASE_URL );
 
         if( null != filename && !"".equals( filename ) ) {
 
@@ -134,8 +133,7 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
                 encodedFilename = encodedFilename.replaceAll( "%2F", "/" );
                 encodedFilename = encodedFilename.replaceAll( "\\+", "%20" );
 
-                sb.append( '?' );
-                sb.append( String.format( FILENAME_QS, encodedFilename ) );
+                sb.append( '?' ).append( String.format( FILENAME_QS, encodedFilename ) );
 
             } catch( UnsupportedEncodingException e ) {
 

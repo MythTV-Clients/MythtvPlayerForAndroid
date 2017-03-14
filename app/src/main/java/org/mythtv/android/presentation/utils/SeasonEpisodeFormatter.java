@@ -42,9 +42,7 @@ public class SeasonEpisodeFormatter {
         if( season < 10 ) {
             sb.append( '0' );
         }
-        sb.append( season );
-
-        sb.append( 'E' );
+        sb.append( season ).append( 'E' );
         if( episode < 10 ) {
             sb.append( '0' );
         }

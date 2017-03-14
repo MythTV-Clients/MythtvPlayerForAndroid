@@ -145,9 +145,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
                     if( entity1.getSeason() < 10 ) {
                         e1.append( '0' );
                     }
-                    e1.append( entity1.getSeason() );
-
-                    e1.append( 'E' );
+                    e1.append( entity1.getSeason() ).append( 'E' );
                     if( entity1.getEpisode() < 10 ) {
                         e1.append( '0' );
                     }
@@ -158,9 +156,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
                     if( entity2.getSeason() < 10 ) {
                         e2.append( '0' );
                     }
-                    e2.append( entity2.getSeason() );
-
-                    e2.append( 'E' );
+                    e2.append( entity2.getSeason() ).append( 'E' );
                     if( entity2.getEpisode() < 10 ) {
                         e2.append( '0' );
                     }

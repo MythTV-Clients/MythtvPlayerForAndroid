@@ -220,17 +220,13 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
     private Reader getVideoEntitiesFromApi( final String folder, final String sort, final boolean descending, final int startIndex, final int count ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append(VIDEO_LIST_BASE_URL);
-        sb.append( '?' );
-        sb.append( String.format( DESCENDING_QS, descending ) );
+        sb.append( getMasterBackendUrl() ).append( VIDEO_LIST_BASE_URL ).append( '?' ).append( String.format( DESCENDING_QS, descending ) );
 
         if( null != folder && !"".equals( folder ) ) {
 
             try {
 
-                sb.append( '&' );
-                sb.append( String.format( FOLDER_QS, URLEncoder.encode( folder, "UTF-8" ) ) );
+                sb.append( '&' ).append( String.format( FOLDER_QS, URLEncoder.encode( folder, "UTF-8" ) ) );
 
             } catch( UnsupportedEncodingException e ) {
 
@@ -243,8 +239,7 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
             try {
 
-                sb.append( '&' );
-                sb.append( String.format( SORT_QS, URLEncoder.encode( sort, "UTF-8" ) ) );
+                sb.append( '&' ).append( String.format( SORT_QS, URLEncoder.encode( sort, "UTF-8" ) ) );
 
             } catch( UnsupportedEncodingException e ) {
 
@@ -254,15 +249,13 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
         if( startIndex != -1 ) {
 
-            sb.append( '&' );
-            sb.append( String.format( START_INDEX_QS, startIndex ) );
+            sb.append( '&' ).append( String.format( START_INDEX_QS, startIndex ) );
 
         }
 
         if( count != -1 ) {
 
-            sb.append( '&' );
-            sb.append( String.format( COUNT_QS, startIndex ) );
+            sb.append( '&' ).append( String.format( COUNT_QS, startIndex ) );
 
         }
 
@@ -272,9 +265,7 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
     private Reader getVideoDetailsFromApi( int id ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append(VIDEO_BASE_URL);
-        sb.append( String.format( ID_QS, id ) );
+        sb.append( getMasterBackendUrl() ).append( VIDEO_BASE_URL ).append( String.format( ID_QS, id ) );
         Log.d( TAG, "getVideoDetailsFromApi : url=" + sb.toString() );
 
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
