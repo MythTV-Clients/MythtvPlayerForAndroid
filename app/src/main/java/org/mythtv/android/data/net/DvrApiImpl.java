@@ -437,19 +437,19 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
         sb.append( RECORDED_LIST_BASE_URL );
-        sb.append( "?" );
+        sb.append( '?' );
         sb.append( String.format( DESCENDING_QS, descending ) );
 
         if( startIndex != -1 ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( START_INDEX_QS, startIndex ) );
 
         }
 
         if( count != -1 ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( COUNT_QS, count ) );
 
         }
@@ -460,7 +460,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
             try {
 
-                sb.append( "&" );
+                sb.append( '&' );
                 sb.append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( dottedTitleRegex, "UTF-8" ) ) );
 
             } catch( UnsupportedEncodingException e ) {
@@ -470,14 +470,14 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
         if( null != recGroup && !"".equals( recGroup ) ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( REC_GROUP_QS, recGroup ) );
 
         }
 
         if( null != storageGroup && !"".equals( storageGroup ) ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( STORAGE_GROUP_QS, storageGroup ) );
 
         }
@@ -491,7 +491,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
         sb.append( RECORDED_BASE_URL );
-        sb.append( "?" );
+        sb.append( '?' );
 
         if( recordedId != -1 ) {
 
@@ -502,7 +502,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         if( chanId != -1 && null != startTime ) {
 
             sb.append( String.format( CHAN_ID_QS, chanId ) );
-            sb.append( "&" );
+            sb.append( '&' );
             fmt.print( startTime.withZone( DateTimeZone.UTC ) );
 
         }
@@ -516,33 +516,33 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
         sb.append( UPCOMING_LIST_BASE_URL );
-        sb.append( "?" );
+        sb.append( '?' );
         sb.append( String.format( SHOW_ALL_QS, showAll ) );
 
         if( startIndex != -1 ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( START_INDEX_QS, startIndex ) );
 
         }
 
         if( count != -1 ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( COUNT_QS, count ) );
 
         }
 
         if( recordId != -1 ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( RECORD_ID_QS, recordId ) );
 
         }
 
         if( recStatus != -1 ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( REC_STATUS_QS, recStatus ) );
 
         }
@@ -573,7 +573,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
         sb.append( BOOKMARK_BASE_URL );
-        sb.append( "?" );
+        sb.append( '?' );
 
         if( recordedId != -1 ) {
 
@@ -584,14 +584,14 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         if( chanId != -1 && null != startTime ) {
 
             sb.append( String.format( CHAN_ID_QS, chanId ) );
-            sb.append( "&" );
+            sb.append( '&' );
             fmt.print( startTime.withZone( DateTimeZone.UTC ) );
 
         }
 
         if( null != offsetType && !"".equals( offsetType ) ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( OFFSET_TYPE_QS, offsetType ) );
 
         }

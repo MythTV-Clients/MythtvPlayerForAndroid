@@ -222,14 +222,14 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() );
         sb.append(VIDEO_LIST_BASE_URL);
-        sb.append( "?" );
+        sb.append( '?' );
         sb.append( String.format( DESCENDING_QS, descending ) );
 
         if( null != folder && !"".equals( folder ) ) {
 
             try {
 
-                sb.append( "&" );
+                sb.append( '&' );
                 sb.append( String.format( FOLDER_QS, URLEncoder.encode( folder, "UTF-8" ) ) );
 
             } catch( UnsupportedEncodingException e ) {
@@ -243,7 +243,7 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
             try {
 
-                sb.append( "&" );
+                sb.append( '&' );
                 sb.append( String.format( SORT_QS, URLEncoder.encode( sort, "UTF-8" ) ) );
 
             } catch( UnsupportedEncodingException e ) {
@@ -254,14 +254,14 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
         if( startIndex != -1 ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( START_INDEX_QS, startIndex ) );
 
         }
 
         if( count != -1 ) {
 
-            sb.append( "&" );
+            sb.append( '&' );
             sb.append( String.format( COUNT_QS, startIndex ) );
 
         }

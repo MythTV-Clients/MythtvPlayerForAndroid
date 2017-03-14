@@ -38,15 +38,15 @@ public class SeasonEpisodeFormatter {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "S" );
+        sb.append( 'S' );
         if( season < 10 ) {
-            sb.append( "0" );
+            sb.append( '0' );
         }
         sb.append( season );
 
-        sb.append( "E" );
+        sb.append( 'E' );
         if( episode < 10 ) {
-            sb.append( "0" );
+            sb.append( '0' );
         }
         sb.append( episode );
 

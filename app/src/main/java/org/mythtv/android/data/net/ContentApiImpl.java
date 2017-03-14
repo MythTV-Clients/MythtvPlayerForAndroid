@@ -134,7 +134,7 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
                 encodedFilename = encodedFilename.replaceAll( "%2F", "/" );
                 encodedFilename = encodedFilename.replaceAll( "\\+", "%20" );
 
-                sb.append( "?" );
+                sb.append( '?' );
                 sb.append( String.format( FILENAME_QS, encodedFilename ) );
 
             } catch( UnsupportedEncodingException e ) {
