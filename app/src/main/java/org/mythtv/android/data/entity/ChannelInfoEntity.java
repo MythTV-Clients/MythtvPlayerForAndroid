@@ -96,6 +96,7 @@ public class ChannelInfoEntity {
     private ProgramEntity[] programs;
 
     public ChannelInfoEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public ChannelInfoEntity(int chanId, String chanNum, String callSign, String iconURL, String channelName, int mplexId, int serviceId, int aTSCMajorChan, int aTSCMinorChan, String format, String frequencyId, int fineTune, String chanFilters, int sourceId, int inputId, boolean commFree, boolean useEIT, boolean visible, String xMLTVID, String defaultAuth, ProgramEntity[] programs) {

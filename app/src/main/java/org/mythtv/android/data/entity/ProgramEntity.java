@@ -122,6 +122,7 @@ public class ProgramEntity {
     private long bookmark;
 
     public ProgramEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public ProgramEntity(DateTime startTime, DateTime endTime, String title, String subTitle, String category, String catType, boolean repeat, int videoProps, int audioProps, int subProps, String seriesId, String programId, double stars, long fileSize, DateTime lastModified, int programFlags, String fileName, String hostName, LocalDate airdate, String description, String inetref, int season, int episode, int totalEpisodes, ChannelInfoEntity channel, RecordingInfoEntity recording, ArtworkEntity artwork, CastEntity cast, LiveStreamInfoEntity liveStreamInfoEntity ) {

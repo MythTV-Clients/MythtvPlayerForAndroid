@@ -34,6 +34,7 @@ public class CastMember {
     private String translatedRole;
 
     public CastMember() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public CastMember(String name, String characterName, String role, String translatedRole) {

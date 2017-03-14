@@ -34,6 +34,7 @@ public class LiveStreamInfoWrapperEntity {
     private LiveStreamInfoEntity liveStreamInfo;
 
     public LiveStreamInfoWrapperEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public LiveStreamInfoWrapperEntity(LiveStreamInfoEntity liveStreamInfo ) {

@@ -34,6 +34,7 @@ public class ProgramListEntity {
     private ProgramsEntity programs;
 
     public ProgramListEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public ProgramListEntity(ProgramsEntity programs ) {

@@ -34,6 +34,7 @@ public class VideoMetadataInfoListWrapperEntity {
     private VideoMetadataInfoListEntity videoMetadataInfoListEntity;
 
     public VideoMetadataInfoListWrapperEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public VideoMetadataInfoListWrapperEntity( VideoMetadataInfoListEntity videoMetadataInfoListEntity ) {

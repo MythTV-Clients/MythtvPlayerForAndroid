@@ -56,6 +56,7 @@ public class ProgramsEntity {
     private ProgramEntity[] programs;
 
     public ProgramsEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public ProgramsEntity(int startIndex, int count, int totalAvailable, DateTime asOf, String version, int protoVer, ProgramEntity[] programs ) {

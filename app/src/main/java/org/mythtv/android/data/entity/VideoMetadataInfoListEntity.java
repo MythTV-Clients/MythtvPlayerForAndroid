@@ -62,6 +62,7 @@ public class VideoMetadataInfoListEntity {
     private VideoMetadataInfoEntity[] videoMetadataInfosEntity;
 
     public VideoMetadataInfoListEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public VideoMetadataInfoListEntity(int startIndex, int count, int currentPage, int totalPages, int totalAvailable, DateTime asOf, String version, int protoVer, VideoMetadataInfoEntity[] videoMetadataInfosEntity ) {

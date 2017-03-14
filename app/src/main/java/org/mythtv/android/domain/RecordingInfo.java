@@ -47,6 +47,7 @@ public class RecordingInfo {
     private String profile;
 
     public RecordingInfo() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public RecordingInfo(int recordedId, int status, int priority, DateTime startTs, DateTime endTs, int recordId, String recGroup, String playGroup, String storageGroup, int recType, int dupInType, int dupMethod, int encoderId, String encoderName, String profile) {

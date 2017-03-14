@@ -36,6 +36,7 @@ public class VideoMetadataInfosEntity {
     private VideoMetadataInfoEntity[] videoMetadataInfoEntities;
 
     public VideoMetadataInfosEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public VideoMetadataInfosEntity( VideoMetadataInfoEntity[] videoMetadataInfoEntities ) {

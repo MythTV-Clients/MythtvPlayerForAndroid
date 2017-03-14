@@ -43,6 +43,7 @@ public class CastMemberEntity {
     private String translatedRole;
 
     public CastMemberEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public CastMemberEntity(String name, String characterName, String role, String translatedRole ) {

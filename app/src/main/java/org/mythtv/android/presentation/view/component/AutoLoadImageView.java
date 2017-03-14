@@ -315,7 +315,9 @@ public class AutoLoadImageView extends AppCompatImageView {
 
     }
 
-    ImageDownloader() {}
+    ImageDownloader() {
+      // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     /**
      * Download an image from an url.

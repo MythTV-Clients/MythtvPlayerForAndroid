@@ -132,7 +132,9 @@ public class MediaItemEntity {
     private int parentalLevel;
     private String recordingGroup;
 
-    public MediaItemEntity() { }
+    public MediaItemEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     public int getId() {
 

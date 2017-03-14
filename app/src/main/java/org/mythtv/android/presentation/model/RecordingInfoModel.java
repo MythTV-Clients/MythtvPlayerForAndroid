@@ -49,6 +49,7 @@ public class RecordingInfoModel implements Serializable {
     private String profile;
 
     public RecordingInfoModel() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public RecordingInfoModel(Integer recordedId, Integer status, Integer priority, DateTime startTs, DateTime endTs, Integer recordId, String recGroup, String playGroup, String storageGroup, Integer recType, Integer dupInType, Integer dupMethod, Integer encoderId, String encoderName, String profile) {

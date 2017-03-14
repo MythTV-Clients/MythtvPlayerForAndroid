@@ -34,6 +34,7 @@ public class TitleInfoListEntity {
     private TitleInfosEntity titleInfos;
 
     public TitleInfoListEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public TitleInfoListEntity(TitleInfosEntity titleInfos ) {

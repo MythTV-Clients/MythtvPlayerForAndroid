@@ -40,7 +40,9 @@ public class Series implements Comparable<Series> {
     private int count;
     private String inetref;
 
-    public Series() { }
+    public Series() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     public String getTitle() {
         return title;

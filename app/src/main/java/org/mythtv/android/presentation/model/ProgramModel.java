@@ -67,7 +67,9 @@ public class ProgramModel implements Serializable {
 
     private LiveStreamInfoModel liveStreamInfo;
 
-    public ProgramModel() { }
+    public ProgramModel() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     public ProgramModel(long id, DateTime startTime, DateTime endTime, String title, String subTitle, String category, String catType, Boolean repeat, Integer videoProps, Integer audioProps, Integer subProps, String seriesId, String programId, Double stars, Long fileSize, DateTime lastModified, Integer programFlags, String fileName, String hostName, LocalDate airdate, String description, String inetref, Integer season, Integer episode, Integer totalEpisodes, ChannelInfoModel channel, RecordingInfoModel recording, List<ArtworkInfoModel> artworkInfos, List<CastMemberModel> castMembers, LiveStreamInfoModel liveStreamInfo) {
         this.id = id;

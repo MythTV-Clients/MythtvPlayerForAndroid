@@ -36,6 +36,7 @@ public class ArtworkEntity {
     private ArtworkInfoEntity[] artworkInfos;
 
     public ArtworkEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public ArtworkEntity(ArtworkInfoEntity[] artworkInfos ) {

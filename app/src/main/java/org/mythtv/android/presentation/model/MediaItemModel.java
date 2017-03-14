@@ -91,7 +91,9 @@ public class MediaItemModel implements Serializable {
     private int parentalLevel;
     private String recordingGroup;
 
-    public MediaItemModel() { }
+    public MediaItemModel() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     public int getId() {
 

@@ -38,6 +38,7 @@ public class ArtworkInfoEntity {
     private String type;
 
     public ArtworkInfoEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public ArtworkInfoEntity(String url, String fileName, String storageGroup, String type ) {

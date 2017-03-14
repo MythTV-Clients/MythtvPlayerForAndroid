@@ -34,6 +34,7 @@ public class EncoderListEntity {
     private EncodersEntity encoders;
 
     public EncoderListEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public EncoderListEntity(EncodersEntity encoders ) {

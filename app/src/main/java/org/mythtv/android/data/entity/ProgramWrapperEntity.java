@@ -34,9 +34,10 @@ public class ProgramWrapperEntity {
     private ProgramEntity program;
 
     public ProgramWrapperEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
-    public ProgramWrapperEntity(ProgramEntity program ) {
+    public ProgramWrapperEntity( ProgramEntity program ) {
 
         this.program = program;
 

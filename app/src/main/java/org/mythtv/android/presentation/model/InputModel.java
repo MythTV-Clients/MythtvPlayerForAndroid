@@ -39,6 +39,7 @@ public class InputModel {
     private int liveTvOrder;
 
     public InputModel() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public InputModel(int id, int cardId, int sourceId, String inputName, String displayName, boolean quickTune, int recordPriority, int scheduleOrder, int liveTvOrder) {

@@ -33,6 +33,7 @@ public class Cast {
     private CastMember[] castMembers;
 
     public Cast() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public Cast(CastMember[] castMembers) {

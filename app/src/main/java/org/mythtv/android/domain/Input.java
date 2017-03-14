@@ -39,6 +39,7 @@ public class Input {
     private int liveTvOrder;
 
     public Input() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public Input(int id, int cardId, int sourceId, String inputName, String displayName, boolean quickTune, int recordPriority, int scheduleOrder, int liveTvOrder) {

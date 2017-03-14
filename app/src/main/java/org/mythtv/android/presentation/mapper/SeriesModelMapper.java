@@ -23,7 +23,9 @@ import javax.inject.Inject;
 public class SeriesModelMapper {
 
     @Inject
-    public SeriesModelMapper() { }
+    public SeriesModelMapper() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     public SeriesModel transform( Series series ) {
 

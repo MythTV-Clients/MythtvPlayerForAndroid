@@ -34,6 +34,7 @@ public class ArtworkInfo {
     private String type;
 
     public ArtworkInfo() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public ArtworkInfo(String url, String fileName, String storageGroup, String type) {

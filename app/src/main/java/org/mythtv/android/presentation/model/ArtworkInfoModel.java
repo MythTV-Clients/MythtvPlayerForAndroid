@@ -36,6 +36,7 @@ public class ArtworkInfoModel implements Serializable {
     private String type;
 
     public ArtworkInfoModel() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public ArtworkInfoModel(String url, String fileName, String storageGroup, String type) {

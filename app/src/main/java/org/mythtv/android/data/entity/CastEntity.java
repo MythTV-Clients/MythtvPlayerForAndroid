@@ -36,6 +36,7 @@ public class CastEntity {
     private CastMemberEntity[] castMembers;
 
     public CastEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public CastEntity(CastMemberEntity[] castMembers ) {

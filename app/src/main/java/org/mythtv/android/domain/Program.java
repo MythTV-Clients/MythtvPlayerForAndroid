@@ -66,6 +66,7 @@ public class Program {
     private LiveStreamInfo liveStreamInfo;
 
     public Program() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public Program(long id, DateTime startTime, DateTime endTime, String title, String subTitle, String category, String catType, boolean repeat, int videoProps, int audioProps, int subProps, String seriesId, String programId, double stars, long fileSize, DateTime lastModified, int programFlags, String fileName, String hostName, LocalDate airdate, String description, String inetref, int season, int episode, int totalEpisodes, ChannelInfo channel, RecordingInfo recording, List<ArtworkInfo> artworkInfos, List<CastMember> castMembers, LiveStreamInfo liveStreamInfo) {

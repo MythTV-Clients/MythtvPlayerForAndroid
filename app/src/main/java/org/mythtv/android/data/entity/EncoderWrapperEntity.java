@@ -34,6 +34,7 @@ public class EncoderWrapperEntity {
     private EncoderEntity encoder;
 
     public EncoderWrapperEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public EncoderWrapperEntity(EncoderEntity encoder ) {

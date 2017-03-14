@@ -59,6 +59,7 @@ public class MediaItem {
     private List<Error> validationErrors = new ArrayList<>();
 
     public MediaItem() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public int getId() {

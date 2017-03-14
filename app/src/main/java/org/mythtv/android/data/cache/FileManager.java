@@ -51,6 +51,7 @@ public class FileManager {
 
     @Inject
     public FileManager() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     /**
@@ -103,7 +104,7 @@ public class FileManager {
                 FileReader fileReader = new FileReader( file );
                 BufferedReader bufferedReader = new BufferedReader( fileReader );
                 while( ( stringLine = bufferedReader.readLine() ) != null ) {
-                    fileContentBuilder.append(stringLine).append("\n");
+                    fileContentBuilder.append(stringLine).append('\n');
                 }
                 bufferedReader.close();
                 fileReader.close();

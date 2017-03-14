@@ -102,6 +102,7 @@ public class LiveStreamInfoEntity {
     private int audioOnlyBitrate;
 
     public LiveStreamInfoEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public LiveStreamInfoEntity(int id, int width, int height, int bitrate, int audioBitrate, int segmentSize, int maxSegments, int startSegment, int currentSegment, int segmentCount, int percentComplete, DateTime created, DateTime lastModified, String relativeUrl, String fullUrl, String statusString, int statusInt, String statusMessage, String sourceFile, String sourceHost, int sourceWidth, int sourceHeight, int audioOnlyBitrate ) {

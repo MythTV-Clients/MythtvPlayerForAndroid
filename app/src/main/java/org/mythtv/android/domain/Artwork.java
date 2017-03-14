@@ -33,6 +33,7 @@ public class Artwork {
     private ArtworkInfo[] artworkInfos;
 
     public Artwork() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public Artwork(ArtworkInfo[] artworkInfos) {

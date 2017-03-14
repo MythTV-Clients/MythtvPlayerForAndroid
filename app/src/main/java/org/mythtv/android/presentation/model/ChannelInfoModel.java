@@ -54,6 +54,7 @@ public class ChannelInfoModel implements Serializable {
     private List<ProgramModel> programs;
 
     public ChannelInfoModel() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public ChannelInfoModel(Integer chanId, String chanNum, String callSign, String iconURL, String channelName, Integer mplexId, Integer serviceId, Integer aTSCMajorChan, Integer aTSCMinorChan, String format, String frequencyId, Integer fineTune, String chanFilters, Integer sourceId, Integer inputId, Boolean commFree, Boolean useEIT, Boolean visible, String xMLTVID, String defaultAuth, List<ProgramModel> programs) {

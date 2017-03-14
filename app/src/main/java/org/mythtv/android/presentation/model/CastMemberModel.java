@@ -36,6 +36,7 @@ public class CastMemberModel implements Serializable {
     private String translatedRole;
 
     public CastMemberModel() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public CastMemberModel(String name, String characterName, String role, String translatedRole) {

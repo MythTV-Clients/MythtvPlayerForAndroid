@@ -25,7 +25,9 @@ import javax.inject.Inject;
 public class MediaItemModelMapper {
 
     @Inject
-    public MediaItemModelMapper() { }
+    public MediaItemModelMapper() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     public MediaItemModel transform( MediaItem mediaItem ) {
 

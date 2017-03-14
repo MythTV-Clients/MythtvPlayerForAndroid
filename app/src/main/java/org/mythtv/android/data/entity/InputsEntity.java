@@ -36,6 +36,7 @@ public class InputsEntity {
     private InputEntity[] inputs;
 
     public InputsEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public InputsEntity(InputEntity[] inputs ) {

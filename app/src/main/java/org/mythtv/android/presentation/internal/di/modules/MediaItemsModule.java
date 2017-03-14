@@ -42,7 +42,9 @@ import dagger.Provides;
 @Module
 public class MediaItemsModule {
 
-    public MediaItemsModule() {}
+    public MediaItemsModule() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     @Provides
     @PerActivity

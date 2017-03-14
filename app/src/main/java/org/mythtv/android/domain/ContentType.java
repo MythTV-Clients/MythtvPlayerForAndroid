@@ -34,6 +34,8 @@ public class ContentType {
     public static final String MUSICVIDEO = "MUSICVIDEO";
     public static final String TELEVISION = "TELEVISION";
 
-    private ContentType() { }
+    private ContentType() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
 }

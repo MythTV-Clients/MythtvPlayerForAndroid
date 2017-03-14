@@ -34,6 +34,7 @@ public class LiveStreamInfoListEntity {
     private LiveStreamInfosEntity liveStreamInfos;
 
     public LiveStreamInfoListEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public LiveStreamInfoListEntity(LiveStreamInfosEntity liveStreamInfos ) {

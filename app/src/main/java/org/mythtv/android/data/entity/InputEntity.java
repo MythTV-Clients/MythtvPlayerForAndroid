@@ -58,6 +58,7 @@ public class InputEntity {
     private int liveTvOrder;
 
     public InputEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public InputEntity(int id, int cardId, int sourceId, String inputName, String displayName, boolean quickTune, int recordPriority, int scheduleOrder, int liveTvOrder ) {

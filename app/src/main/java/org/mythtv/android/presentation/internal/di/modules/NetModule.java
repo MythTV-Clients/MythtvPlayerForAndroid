@@ -40,7 +40,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class NetModule {
 
     public NetModule() {
-
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     @Provides

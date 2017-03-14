@@ -40,6 +40,7 @@ public class TitleInfoEntity {
     private int count;
 
     public TitleInfoEntity() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public TitleInfoEntity(String title, String inetref, int count ) {

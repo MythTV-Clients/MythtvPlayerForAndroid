@@ -200,8 +200,7 @@ public class VideoCacheImpl implements VideoCache {
             dir.mkdirs();
         }
 
-        fileNameBuilder.append( File.separator );
-        fileNameBuilder.append( DEFAULT_FILE_NAME );
+        fileNameBuilder.append( File.separator ).append( DEFAULT_FILE_NAME );
         Log.v( TAG, "buildFile : fileNameBuild=" + fileNameBuilder.toString() );
 
         Log.v( TAG, "buildFile : exit" );

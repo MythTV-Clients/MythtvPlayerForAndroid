@@ -41,6 +41,7 @@ public class EncoderModel {
     private ProgramModel recording;
 
     public EncoderModel() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public EncoderModel(int id, String hostname, boolean local, boolean connected, int state, int sleepStatus, boolean lowOnFreeSpace, List<InputModel> inputs, ProgramModel recording) {

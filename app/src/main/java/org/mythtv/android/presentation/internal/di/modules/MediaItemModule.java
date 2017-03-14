@@ -46,7 +46,9 @@ public class MediaItemModule {
     private int id = -1;
     private Media media = null;
 
-    public MediaItemModule() {}
+    public MediaItemModule() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     public MediaItemModule( final int id, final Media media ) {
 

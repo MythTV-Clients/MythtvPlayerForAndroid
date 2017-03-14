@@ -55,6 +55,7 @@ public class LiveStreamInfo {
     private int audioOnlyBitrate;
 
     public LiveStreamInfo() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public LiveStreamInfo(int id, int width, int height, int bitrate, int audioBitrate, int segmentSize, int maxSegments, int startSegment, int currentSegment, int segmentCount, int percentComplete, DateTime created, DateTime lastModified, String relativeUrl, String fullUrl, String statusString, int statusInt, String statusMessage, String sourceFile, String sourceHost, int sourceWidth, int sourceHeight, int audioOnlyBitrate) {
