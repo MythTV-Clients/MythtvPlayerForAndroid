@@ -20,6 +20,7 @@ package org.mythtv.android.presentation.presenter.tv;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
@@ -43,6 +44,8 @@ import javax.inject.Inject;
  */
 public class TvCategoryListPresenter extends DefaultSubscriber<List<TvCategoryModel>> implements Presenter {
 
+    private static final String TAG = TvCategoryListPresenter.class.getSimpleName();
+
     private TvCategoryListView viewListView;
 
     private final Context context;
@@ -59,13 +62,25 @@ public class TvCategoryListPresenter extends DefaultSubscriber<List<TvCategoryMo
     }
 
     @Override
-    public void resume() { }
+    public void resume() {
+        Log.v( TAG, "resume : enter" );
+
+        Log.v( TAG, "resume : exit" );
+    }
 
     @Override
-    public void pause() { }
+    public void pause() {
+        Log.v( TAG, "pause : enter" );
+
+        Log.v( TAG, "pause : exit" );
+    }
 
     @Override
-    public void destroy() { }
+    public void destroy() {
+        Log.v( TAG, "destroy : enter" );
+
+        Log.v( TAG, "destroy : exit" );
+    }
 
     /**
      * Initializes the presenter by start retrieving the tvCategory list.

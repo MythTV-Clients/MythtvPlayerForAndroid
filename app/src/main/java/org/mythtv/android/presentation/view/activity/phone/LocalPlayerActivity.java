@@ -82,7 +82,8 @@ import okhttp3.Request;
 \ */
 public class LocalPlayerActivity extends AppCompatActivity {
 
-    private static final String TAG = "LocalPlayerActivity";
+    private static final String TAG = LocalPlayerActivity.class.getSimpleName();
+
     private VideoView mVideoView;
     private TextView mTitleView;
     private TextView mDescriptionView;
@@ -261,18 +262,30 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
             @Override
             public void onSessionStarting( CastSession session ) {
+                Log.v( TAG, "onSessionStarting : enter" );
+
+                Log.v( TAG, "onSessionStarting : exit" );
             }
 
             @Override
             public void onSessionEnding( CastSession session ) {
+                Log.v( TAG, "onSessionEnding : enter" );
+
+                Log.v( TAG, "onSessionEnding : exit" );
             }
 
             @Override
             public void onSessionResuming( CastSession session, String sessionId ) {
+                Log.v( TAG, "onSessionSesuming : enter" );
+
+                Log.v( TAG, "onSessionResuming : exit" );
             }
 
             @Override
             public void onSessionSuspended( CastSession session, int reason ) {
+                Log.v( TAG, "onSessionSuspended : enter" );
+
+                Log.v( TAG, "onSessionSuspended : exit" );
             }
 
             private void onApplicationConnected( CastSession castSession ) {

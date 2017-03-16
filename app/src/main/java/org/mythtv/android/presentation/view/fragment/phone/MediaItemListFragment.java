@@ -431,12 +431,16 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     @Override
     public void showRetry() {
+        Log.v( TAG, "showRetry : enter" );
 
+        Log.v( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
+        Log.v( TAG, "hideRetry : enter" );
 
+        Log.v( TAG, "hideRetry : exit" );
     }
 
     public void reload() {

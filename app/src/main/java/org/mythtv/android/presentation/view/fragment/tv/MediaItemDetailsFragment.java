@@ -274,7 +274,9 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
     }
 
     private void setupMovieListRow() {
+        Log.v( TAG, "setupMovieListRow : enter" );
 
+        Log.v( TAG, "setupMovieListRow : exit" );
     }
 
     private void setupMovieListRowPresenter() {

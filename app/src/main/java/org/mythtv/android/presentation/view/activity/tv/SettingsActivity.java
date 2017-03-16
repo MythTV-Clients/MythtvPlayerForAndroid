@@ -187,7 +187,9 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     @Override
     public MediaComponent getComponent() {
+        Log.v( TAG, "getComponent : enter" );
 
+        Log.v( TAG, "getComponent : exit" );
         return mediaComponent;
     }
 
@@ -980,32 +982,44 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void showLoading() {
+            Log.v( TAG, "showLoading : enter" );
 
+            Log.v( TAG, "showLoading : exit" );
         }
 
         @Override
         public void hideLoading() {
+            Log.v( TAG, "hideLoading : enter" );
 
+            Log.v( TAG, "shideLoading : exit" );
         }
 
         @Override
         public void showRetry() {
+            Log.v( TAG, "showRetry : enter" );
 
+            Log.v( TAG, "showRetry : exit" );
         }
 
         @Override
         public void hideRetry() {
+            Log.v( TAG, "hideLoading : enter" );
 
+            Log.v( TAG, "hideLoading : exit" );
         }
 
         @Override
         public void showError(String message) {
+            Log.v( TAG, "showError : enter" );
 
+            Log.v( TAG, "showError : exit" );
         }
 
         @Override
         public void showMessage(String message) {
+            Log.v( TAG, "showMessage : enter" );
 
+            Log.v( TAG, "showMessage : exit" );
         }
 
         @Override
@@ -1022,7 +1036,11 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         }
 
         @Override
-        public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) { }
+        public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
+            Log.v( TAG, "viewMediaItem : enter" );
+
+            Log.v( TAG, "viewMediaItem : exit" );
+        }
 
         @Override
         public Context getContext() {

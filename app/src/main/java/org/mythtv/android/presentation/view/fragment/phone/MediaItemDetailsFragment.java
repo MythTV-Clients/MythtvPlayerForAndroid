@@ -81,6 +81,7 @@ import static android.app.Activity.RESULT_OK;
 public class MediaItemDetailsFragment extends AbstractBaseFragment implements MediaItemDetailsView {
 
     private static final String TAG = MediaItemDetailsFragment.class.getSimpleName();
+
     private static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
     private static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
 
@@ -840,7 +841,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         @Override
         public void onFinish() {
+            Log.v( TAG, "onFinish : enter" );
 
+            Log.v( TAG, "onFinish : enter" );
         }
 
     };

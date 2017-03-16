@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ import org.mythtv.android.R;
  * @author dmfrey
  */
 public class ExpandedControlsFragment extends Fragment {
+
+    private static final String TAG = ExpandedControlsFragment.class.getSimpleName();
 
     private TextView mSubtitleTextView;
     private UIMediaController mUIMediaController;
@@ -210,10 +213,16 @@ public class ExpandedControlsFragment extends Fragment {
 
         @Override
         public void onQueueStatusUpdated() {
+            Log.v( TAG, "onQueueStatusUpdated : enter" );
+
+            Log.v( TAG, "onQueueStatusUpdated : exit" );
         }
 
         @Override
         public void onPreloadStatusUpdated() {
+            Log.v( TAG, "onPreloadStatusUpdated : enter" );
+
+            Log.v( TAG, "onPreloadStatusUpdated : exit" );
         }
 
         @Override
@@ -223,7 +232,9 @@ public class ExpandedControlsFragment extends Fragment {
 
         @Override
         public void onAdBreakStatusUpdated() {
+            Log.v( TAG, "onAdBreakStatusUpdated : enter" );
 
+            Log.v( TAG, "onAdBreakStatusUpdated : exit" );
         }
 
     }

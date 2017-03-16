@@ -271,12 +271,16 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
     @Override
     public void showRetry() {
+        Log.v( TAG, "showRetry : enter" );
 
+        Log.v( TAG, "showRetry : enter" );
     }
 
     @Override
     public void hideRetry() {
+        Log.v( TAG, "hideRetry : enter" );
 
+        Log.v( TAG, "hideRetry : enter" );
     }
 
     public void reload() {

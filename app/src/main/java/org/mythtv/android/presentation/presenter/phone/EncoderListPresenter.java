@@ -19,6 +19,7 @@
 package org.mythtv.android.presentation.presenter.phone;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.mythtv.android.domain.Encoder;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
@@ -46,6 +47,8 @@ import javax.inject.Named;
  */
 public class EncoderListPresenter extends DefaultSubscriber<List<Encoder>> implements Presenter {
 
+    private static final String TAG = EncoderListPresenter.class.getSimpleName();
+
     private EncoderListView viewListView;
 
     private final UseCase getEncoderListUseCase;
@@ -65,12 +68,16 @@ public class EncoderListPresenter extends DefaultSubscriber<List<Encoder>> imple
 
     @Override
     public void resume() {
+        Log.v( TAG, "resume : enter" );
 
+        Log.v( TAG, "resume : exit" );
     }
 
     @Override
     public void pause() {
+        Log.v( TAG, "pause : enter" );
 
+        Log.v( TAG, "pause : exit" );
     }
 
     @Override

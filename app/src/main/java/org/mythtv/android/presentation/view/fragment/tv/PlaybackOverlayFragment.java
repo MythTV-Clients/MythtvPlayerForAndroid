@@ -594,7 +594,9 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
      * Creates a ListRow for related videos.
      */
     private void addOtherRows() {
+        Log.v( TAG, "addOtherRows : enter" );
 
+        Log.v( TAG, "addOtherRows : exit" );
     }
 
     private int getUpdatePeriod() {

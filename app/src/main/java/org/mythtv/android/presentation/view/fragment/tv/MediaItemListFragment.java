@@ -321,22 +321,30 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     @Override
     public void showLoading() {
+        Log.v( TAG, "showLoading : enter" );
 
+        Log.v( TAG, "showLoading : exit" );
     }
 
     @Override
     public void hideLoading() {
+        Log.v( TAG, "hideLoading : enter" );
 
+        Log.v( TAG, "hideLoading : exit" );
     }
 
     @Override
     public void showRetry() {
+        Log.v( TAG, "showRetry : enter" );
 
+        Log.v( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
+        Log.v( TAG, "hideRetry : enter" );
 
+        Log.v( TAG, "hideRetry : exit" );
     }
 
     @Override
@@ -443,11 +451,17 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     }
 
     @Override
-    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) { }
+    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
+        Log.v( TAG, "viewMediaItem : enter" );
+
+        Log.v( TAG, "viewMediaItem : exit" );
+    }
 
     @Override
     public void showError( String message ) {
+        Log.v( TAG, "showError : enter" );
 
+        Log.v( TAG, "showError : exit" );
     }
 
     @Override

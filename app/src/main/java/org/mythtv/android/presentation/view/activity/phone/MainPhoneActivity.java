@@ -157,13 +157,17 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     @Override
     public void onTabReselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabReselected : enter" );
 
+        Log.v( TAG, "onTabReselected : exit" );
     }
 
     @Override
     public void onTabUnselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabUnselected : enter" );
 
-    }
+        Log.v( TAG, "onTabUnselected : exit" );
+}
 
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );

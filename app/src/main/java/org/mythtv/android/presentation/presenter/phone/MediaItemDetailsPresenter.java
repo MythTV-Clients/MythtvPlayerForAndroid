@@ -67,10 +67,18 @@ public class MediaItemDetailsPresenter implements Presenter {
     }
 
     @Override
-    public void resume() {}
+    public void resume() {
+        Log.v( TAG, "resume : enter" );
+
+        Log.v( TAG, "resume : exit" );
+    }
 
     @Override
-    public void pause() {}
+    public void pause() {
+        Log.v( TAG, "pause : enter" );
+
+        Log.v( TAG, "pause : exit" );
+    }
 
     @Override
     public void destroy() {

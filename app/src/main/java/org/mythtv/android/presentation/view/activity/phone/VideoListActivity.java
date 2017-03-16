@@ -164,12 +164,16 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
     @Override
     public void onTabReselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabSelected : enter" );
 
+        Log.v( TAG, "onTabSelected : exit" );
     }
 
     @Override
     public void onTabUnselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabUnselected : enter" );
 
+        Log.v( TAG, "onTabUnselected : exit" );
     }
 
     private void setupTabs() {
