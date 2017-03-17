@@ -236,39 +236,33 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         Log.d( TAG, "onActivityResult : enter" );
         super.onActivityResult( requestCode, resultCode, data );
 
-        switch( requestCode ) {
+        if( requestCode == ADD_LIVE_STREAM_DIALOG_RESULT ) {
+            Log.d( TAG, "onActivityResult : add live stream result returned " + resultCode );
 
-            case ADD_LIVE_STREAM_DIALOG_RESULT :
-                Log.d( TAG, "onActivityResult : add live stream result returned " + resultCode );
+            if( resultCode == RESULT_OK ) {
+                Log.d( TAG, "onActivityResult : positive button pressed" );
 
-                if( resultCode == RESULT_OK ) {
-                    Log.d( TAG, "onActivityResult : positive button pressed" );
+                new AddLiveStreamTask().execute();
 
-                    new AddLiveStreamTask().execute();
+            } else {
+                Log.d( TAG, "onActivityResult : negative button pressed" );
 
-                } else {
-                    Log.d( TAG, "onActivityResult : negative button pressed" );
-
-
-                }
-
-                break;
-
-            case REMOVE_LIVE_STREAM_DIALOG_RESULT :
-                Log.d( TAG, "onActivityResult : remove live stream result returned " + resultCode );
-
-                if( resultCode == RESULT_OK ) {
-                    Log.d( TAG, "onActivityResult : positive button pressed" );
-
-                    new RemoveLiveStreamTask().execute();
-
-                } else {
-                    Log.d( TAG, "onActivityResult : negative button pressed" );
+            }
 
 
-                }
+        } else if( requestCode == REMOVE_LIVE_STREAM_DIALOG_RESULT ) {
+            Log.d( TAG, "onActivityResult : remove live stream result returned " + resultCode );
 
-                break;
+            if( resultCode == RESULT_OK ) {
+                Log.d( TAG, "onActivityResult : positive button pressed" );
+
+                new RemoveLiveStreamTask().execute();
+
+            } else {
+                Log.d( TAG, "onActivityResult : negative button pressed" );
+
+            }
+
 
         }
 
@@ -325,6 +319,10 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
                 new MarkWatchedTask().execute( false );
 
                 return true;
+
+            default :
+
+                break;
 
         }
 
@@ -565,19 +563,14 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             if( mediaItemModel.isValid() ) {
 
                 String idParam;
-                switch( mediaItemModel.getMedia() ) {
+                if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.PROGRAM ) {
 
-                    case PROGRAM:
+                    idParam = "RecordedId";
 
-                        idParam = "RecordedId";
+                } else {
 
-                        break;
+                    idParam = "Id";
 
-                    default:
-
-                        idParam = "Id";
-
-                        break;
                 }
 
                 status = params[ 0 ];
@@ -680,19 +673,13 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
                 mediaItemModel.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( liveStreamInfoEntity.getId() ) ) );
                 mediaItemModel.setGetHttpLiveStreamUrl( String.format( "/Content/GetLiveStream?Id=%s", String.valueOf( liveStreamInfoEntity.getId() ) ) );
 
-                switch( mediaItemModel.getMedia() ) {
+                if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.PROGRAM ) {
 
-                    case PROGRAM:
+                    mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( mediaItemModel.getId() ) ) );
 
-                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( mediaItemModel.getId() ) ) );
+                } else if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.VIDEO ) {
 
-                        break;
-
-                    case VIDEO:
-
-                        mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=960", String.valueOf( mediaItemModel.getId() ) ) );
-
-                        break;
+                    mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=960", String.valueOf( mediaItemModel.getId() ) ) );
 
                 }
 

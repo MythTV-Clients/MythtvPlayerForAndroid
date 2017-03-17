@@ -146,46 +146,42 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
         int width = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_WIDTH );
         int height = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_HEIGHT );
 
-        switch( mediaItemModel.getMedia() ) {
+        if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.PROGRAM ) {
 
-            case PROGRAM :
+            Glide.with( getActivity() )
+                    .load( getMasterBackendUrl() + mediaItemModel.getPreviewUrl( String.valueOf( width ) ) )
+                    .error( R.drawable.default_background )
+                    .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
-                Glide.with( getActivity() )
-                        .load( getMasterBackendUrl() + mediaItemModel.getPreviewUrl( String.valueOf( width ) ) )
-                        .error( R.drawable.default_background )
-                        .into( new SimpleTarget<GlideDrawable>( width, height ) {
+                        @Override
+                        public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
+                            Log.d( TAG, "details overview card image url ready: " + resource );
 
-                            @Override
-                            public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
-                                Log.d( TAG, "details overview card image url ready: " + resource );
+                            row.setImageDrawable( resource );
+                            mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
 
-                                row.setImageDrawable( resource );
-                                mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
+                        }
 
-                            }
+                    });
 
-                        });
-                break;
+        } else {
 
-            default :
+            Glide.with( getActivity() )
+                    .load( getMasterBackendUrl() + mediaItemModel.getCoverartUrl() )
+                    .error( R.drawable.default_background )
+                    .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
-                Glide.with( getActivity() )
-                        .load( getMasterBackendUrl() + mediaItemModel.getCoverartUrl() )
-                        .error( R.drawable.default_background )
-                        .into( new SimpleTarget<GlideDrawable>( width, height ) {
+                        @Override
+                        public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
+                            Log.d( TAG, "details overview card image url ready: " + resource );
 
-                            @Override
-                            public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
-                                Log.d( TAG, "details overview card image url ready: " + resource );
+                            row.setImageDrawable( resource );
+                            mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
 
-                                row.setImageDrawable( resource );
-                                mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
+                        }
 
-                            }
+                    });
 
-                        });
-
-                break;
         }
 
         if( mediaSupported() || liveStreamSupported() ) {

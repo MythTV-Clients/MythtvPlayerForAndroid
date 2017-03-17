@@ -175,6 +175,10 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
                 return true;
 
+            default :
+
+                break;
+
         }
 
         return super.onOptionsItemSelected( item );
@@ -260,27 +264,24 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         }
 
         String backdropUrl = null;
-        switch( mediaItemModel.getMedia() ) {
+        if( mediaItemModel.getMedia() == Media.PROGRAM ) {
 
-            case PROGRAM:
+            if( null != mediaItemModel.getPreviewUrl() && !"".equals( mediaItemModel.getPreviewUrl() ) ) {
 
-                if( null != mediaItemModel.getPreviewUrl() && !"".equals( mediaItemModel.getPreviewUrl() ) ) {
+                backdropUrl = getMasterBackendUrl() + mediaItemModel.getPreviewUrl();
 
-                    backdropUrl = getMasterBackendUrl() + mediaItemModel.getPreviewUrl();
+            }
 
-                }
 
-                break;
+        } else {
 
-            default:
+            if( null != mediaItemModel.getFanartUrl() && !"".equals( mediaItemModel.getFanartUrl() ) ) {
 
-                if( null != mediaItemModel.getFanartUrl() && !"".equals( mediaItemModel.getFanartUrl() ) ) {
+                backdropUrl = getMasterBackendUrl() + mediaItemModel.getFanartUrl();
 
-                    backdropUrl = getMasterBackendUrl() + mediaItemModel.getFanartUrl();
+            }
 
-                }
 
-                break;
         }
 
         if( null != backdropUrl && !"".equals( backdropUrl ) ) {

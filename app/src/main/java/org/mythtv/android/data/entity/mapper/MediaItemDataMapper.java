@@ -103,6 +103,10 @@ public class MediaItemDataMapper {
 
                 break;
 
+            default :
+
+                break;
+
         }
 
         mediaItem.setTitle( programEntity.getTitle() );
@@ -454,6 +458,10 @@ public class MediaItemDataMapper {
                 case "fanart" :
 
                     mediaItem.setFanartUrl( artworkInfoEntity.getUrl() );
+                    break;
+
+                default :
+
                     break;
 
             }

@@ -259,6 +259,8 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
                 default :
 
+                    break;
+
             }
 
         }
@@ -340,19 +342,13 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             FragmentManager fm = getFragmentManager();
 
             Log.d( TAG, "onGuidedActionClicked : action=" + action );
-            switch( (int) action.getId() ) {
+            if( (int) action.getId() == MASTER_BACKEND_URL ) {
 
-                case MASTER_BACKEND_URL :
+                GuidedStepFragment.add( fm, mMasterBackendUrlFragment, android.R.id.content );
 
-                    GuidedStepFragment.add( fm, mMasterBackendUrlFragment, android.R.id.content );
+            } else if( (int) action.getId() == MASTER_BACKEND_PORT ) {
 
-                    break;
-
-                case MASTER_BACKEND_PORT :
-
-                    GuidedStepFragment.add( fm, mMasterBackendPortFragment, android.R.id.content );
-
-                    break;
+                GuidedStepFragment.add( fm, mMasterBackendPortFragment, android.R.id.content );
 
             }
 
@@ -539,13 +535,9 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             FragmentManager fm = getFragmentManager();
 
             Log.d( TAG, "onGuidedActionClicked : action=" + action );
-            switch( (int) action.getId() ) {
+            if( (int) action.getId() == INTERNAL_PLAYER_SETTINGS) {
 
-                case INTERNAL_PLAYER_SETTINGS :
-
-                    GuidedStepFragment.add( fm, mInternalPlayerFragment, android.R.id.content );
-
-                    break;
+                GuidedStepFragment.add( fm, mInternalPlayerFragment, android.R.id.content );
 
             }
 
@@ -660,13 +652,9 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             FragmentManager fm = getFragmentManager();
 
             Log.d( TAG, "onGuidedActionClicked : action=" + action );
-            switch( (int) action.getId() ) {
+            if( (int) action.getId() == FILTER_HLS_ONLY ) {
 
-                case FILTER_HLS_ONLY :
-
-                    GuidedStepFragment.add( fm, mEnableHlsOnlyFilterFragment, android.R.id.content );
-
-                    break;
+                GuidedStepFragment.add( fm, mEnableHlsOnlyFilterFragment, android.R.id.content );
 
             }
 
@@ -782,21 +770,13 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             FragmentManager fm = getFragmentManager();
 
             Log.d( TAG, "onGuidedActionClicked : action=" + action );
-            switch( (int) action.getId() ) {
+            if( (int) action.getId() == ENABLE_RECORDING_GROUP ) {
 
-                case ENABLE_RECORDING_GROUP :
+                GuidedStepFragment.add(fm, mEnableRecordingGroupFragment, android.R.id.content );
 
-                    GuidedStepFragment.add( fm, mEnableRecordingGroupFragment, android.R.id.content );
+            } else if( (int) action.getId() == RECORDING_GROUPS_FILTER ) {
 
-                    break;
-
-                case RECORDING_GROUPS_FILTER :
-
-                    GuidedStepFragment.add( fm, mRecordingGroupFragment, android.R.id.content );
-
-                    break;
-
-                default :
+                GuidedStepFragment.add( fm, mRecordingGroupFragment, android.R.id.content );
 
             }
 
@@ -1183,6 +1163,8 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
                     break;
 
                 default :
+
+                    break;
 
             }
 

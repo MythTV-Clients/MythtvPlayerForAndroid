@@ -141,6 +141,10 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
                 break;
 
+            default :
+
+                break;
+
         }
 
         Log.v( TAG, "onClick : exit" );
@@ -221,6 +225,10 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
                 Log.v( TAG, "onTabSelected : showing 'upcomingFragment'" );
 
                 replaceFragment( R.id.frame_container, upcomingFragment );
+
+                break;
+
+            default :
 
                 break;
 

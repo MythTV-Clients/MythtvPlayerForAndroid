@@ -134,20 +134,18 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-        switch( item.getItemId() ) {
+        int i = item.getItemId();
+        if( i == android.R.id.home ) {
 
-            case android.R.id.home:
+            NavUtils.navigateUpFromSameTask( this );
 
-                NavUtils.navigateUpFromSameTask( this );
+            return true;
 
-                return true;
+        } else if( i == R.id.menu_settings ) {
 
-            case R.id.menu_settings:
+            navigator.navigateToSettings( this );
 
-                navigator.navigateToSettings( this );
-
-                return true;
-
+            return true;
         }
 
         return super.onOptionsItemSelected( item );

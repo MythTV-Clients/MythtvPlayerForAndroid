@@ -91,6 +91,10 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
 
                     break;
 
+                default :
+
+                    break;
+
             }
 
         });

@@ -148,6 +148,9 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
                 break;
 
+            default:
+
+                break;
         }
 
         Log.v( TAG, "onClick : exit" );
@@ -247,6 +250,11 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
                 Log.v( TAG, "onTabSelected : showing 'adultFragment'" );
 
                 replaceFragment( R.id.frame_container, adultFragment );
+
+                break;
+
+            default :
+                Log.w( TAG, "onTabSelected : incorrect tab selected" );
 
                 break;
 

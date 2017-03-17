@@ -187,18 +187,16 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-        switch( item.getItemId() ) {
+        int i = item.getItemId();
+        if( i == android.R.id.home ) {
 
-            case android.R.id.home:
+            if( null != navigationView ) {
 
-                if( null != navigationView ) {
+                drawerLayout.openDrawer( GravityCompat.START );
 
-                    drawerLayout.openDrawer( GravityCompat.START );
+                return true;
+            }
 
-                    return true;
-                }
-
-                break;
 
         }
 
@@ -271,6 +269,10 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
                 navigator.navigateToTroubleshoot( this );
 
                 return true;
+
+            default :
+
+                break;
         }
 
         return false;

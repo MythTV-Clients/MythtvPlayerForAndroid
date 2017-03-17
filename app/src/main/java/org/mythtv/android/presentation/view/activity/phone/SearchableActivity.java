@@ -113,14 +113,12 @@ public class SearchableActivity extends AbstractBasePhoneActivity implements Has
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-        switch( item.getItemId() ) {
+        int i = item.getItemId();
+        if( i == android.R.id.home ) {
 
-            case android.R.id.home:
+            finish();
 
-                finish();
-
-                return true;
-
+            return true;
         }
 
         return super.onOptionsItemSelected( item );

@@ -94,23 +94,20 @@ public class CardPresenter extends Presenter {
             cardView.setContentText( mediaItemModel.getDescription() );
             cardView.setMainImageDimensions( CARD_WIDTH, CARD_HEIGHT );
 
-            switch( mediaItemModel.getMedia() ) {
+            if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.PROGRAM ) {
 
-                case PROGRAM :
+                Glide.with( viewHolder.view.getContext() )
+                        .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.getPreviewUrl() )
+                        .error( mDefaultCardImage )
+                        .into( cardView.getMainImageView() );
 
-                    Glide.with( viewHolder.view.getContext() )
-                            .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.getPreviewUrl() )
-                            .error( mDefaultCardImage )
-                            .into( cardView.getMainImageView() );
-                    break;
+            } else {
 
-                default :
+                Glide.with( viewHolder.view.getContext() )
+                        .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.getFanartUrl() )
+                        .error( mDefaultCardImage )
+                        .into( cardView.getMainImageView() );
 
-                    Glide.with( viewHolder.view.getContext() )
-                            .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.getFanartUrl() )
-                            .error( mDefaultCardImage )
-                            .into( cardView.getMainImageView() );
-                    break;
             }
 
         }

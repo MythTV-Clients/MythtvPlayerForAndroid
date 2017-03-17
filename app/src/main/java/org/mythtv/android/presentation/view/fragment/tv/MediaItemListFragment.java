@@ -307,6 +307,10 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
                 break;
 
+            default :
+
+                break;
+
         }
 
         // over title
@@ -399,31 +403,21 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
                 Collections.sort( categories.get( category ), ( lhs, rhs ) -> {
 
-                    switch( category.media ) {
+                    if( category.media == Media.PROGRAM ) {
 
-                        case PROGRAM :
+                        int i1 = Integer.compare( lhs.getSeason(), rhs.getSeason() );
+                        if( i1 != 0 ) {
 
-//                    int i1 = lhs.getEndTime().compareTo( rhs.getEndTime() );
-//                    if( i1 != 0 ) {
-//
-//                        return i1;
-//                    }
+                            return i1;
+                        }
 
-                            int i1 = Integer.compare( lhs.getSeason(), rhs.getSeason() );
-                            if( i1 != 0 ) {
+                        return Integer.compare( lhs.getEpisode(), rhs.getEpisode() );
 
-                                return i1;
-                            }
+                    } else {
+                        String lhsTitle = ArticleCleaner.clean(getActivity(), lhs.getTitle());
+                        String rhsTitle = ArticleCleaner.clean(getActivity(), rhs.getTitle());
 
-                            return Integer.compare( lhs.getEpisode(), rhs.getEpisode() );
-
-                        default :
-
-                            String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.getTitle() );
-                            String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.getTitle() );
-
-                            return lhsTitle.compareTo( rhsTitle );
-
+                        return lhsTitle.compareTo(rhsTitle);
                     }
 
                 });
@@ -634,22 +628,16 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
         public Category( final String title, final Media media ) {
 
-            switch( media ) {
+            if( media == Media.PROGRAM || media == Media.TELEVISION ) {
 
-                case PROGRAM :
-                case TELEVISION :
+                this.key = ArticleCleaner.clean( getActivity(), title ).toUpperCase( Locale.getDefault() );
+                this.title = title;
 
-                    this.key = ArticleCleaner.clean( getActivity(), title ).toUpperCase( Locale.getDefault() );
-                    this.title = title;
+            } else {
 
-                    break;
+                this.key = ArticleCleaner.clean( getActivity(), title ).substring( 0, 1 ).toUpperCase( Locale.getDefault() );
+                this.title = key;
 
-                default :
-
-                    this.key = ArticleCleaner.clean( getActivity(), title ).substring( 0, 1 ).toUpperCase( Locale.getDefault() );
-                    this.title = key;
-
-                    break;
             }
 
             this.media = media;
