@@ -380,17 +380,17 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
                 Log.d( TAG, "renderMediaItemList : mediaItemModel=" + mediaItemModel.toString() );
 
                 Category category = new Category( mediaItemModel.getTitle(), mediaItemModel.getMedia() );
-                if( !categories.containsKey( category ) ) {
+                if( categories.containsKey( category ) ) {
+                    Log.d( TAG, "renderMediaItemList : adding to existing category" );
+
+                    categories.get( category ).add( mediaItemModel );
+
+                } else {
                     Log.d( TAG, "renderMediaItemList : new category=" + category );
 
                     List<MediaItemModel> mediaItemModels = new ArrayList<>();
                     mediaItemModels.add( mediaItemModel );
                     categories.put( category, mediaItemModels );
-
-                } else {
-                    Log.d( TAG, "renderMediaItemList : adding to existing category" );
-
-                    categories.get( category ).add( mediaItemModel );
 
                 }
 

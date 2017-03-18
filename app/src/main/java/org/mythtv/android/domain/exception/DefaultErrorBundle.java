@@ -43,7 +43,7 @@ public class DefaultErrorBundle implements ErrorBundle {
 
     @Override
     public String getErrorMessage() {
-        return ( exception != null ) ? this.exception.getMessage() : DEFAULT_ERROR_MSG;
+        return ( exception == null ) ? DEFAULT_ERROR_MSG : this.exception.getMessage();
     }
 
 }

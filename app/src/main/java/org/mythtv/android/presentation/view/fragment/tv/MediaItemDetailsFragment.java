@@ -229,16 +229,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
             if( action.getId() == ACTION_WATCH ) {
 
                 String masterBackendUrl = getMasterBackendUrl();
-                if( !getSharedPreferencesModule().getInternalPlayer() ) {
-
-                    String externalPlayerUrl = masterBackendUrl + mediaItemModel.getUrl();
-                    Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
-
-                    final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
-                    externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
-                    startActivity( externalPlayer );
-
-                } else {
+                if( getSharedPreferencesModule().getInternalPlayer() ) {
 
                     VideoModel videoModel = new VideoModel
                             .VideoModelBuilder()
@@ -255,6 +246,15 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
                     Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
                     intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
                     startActivity( intent );
+
+                } else {
+
+                    String externalPlayerUrl = masterBackendUrl + mediaItemModel.getUrl();
+                    Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
+
+                    final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
+                    externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
+                    startActivity( externalPlayer );
 
                 }
 

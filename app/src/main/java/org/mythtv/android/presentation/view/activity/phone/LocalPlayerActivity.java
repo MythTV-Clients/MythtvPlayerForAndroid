@@ -289,10 +289,14 @@ public class LocalPlayerActivity extends AppCompatActivity {
             }
 
             private void onApplicationConnected( CastSession castSession ) {
+                Log.v( TAG, "onApplicationConnected : enter" );
 
                 mCastSession = castSession;
 
-                if( null != mSelectedMedia ) {
+                if( null == mSelectedMedia ) {
+                    Log.w( TAG, "onApplicationConnected : no selected media" );
+
+                } else {
 
                     if( mPlaybackState == PlaybackState.PLAYING ) {
 
@@ -457,7 +461,10 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
                     case REMOTE :
 
-                        if( null != mCastSession && mCastSession.isConnected() ) {
+                        if( null == mCastSession || !mCastSession.isConnected() ) {
+                            Log.v( TAG, "togglePlayback : no cast session" );
+
+                        } else {
 
                             loadRemoteMedia( mSeekbar.getProgress(), true );
 
@@ -512,39 +519,45 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     private void setCoverArtStatus( String url ) {
 
-        if( null != url ) {
+        if( null == url ) {
+
+            mCoverArt.setVisibility( View.GONE );
+            mVideoView.setVisibility( View.VISIBLE );
+
+        } else {
 
             mAquery.id( mCoverArt ).image( url );
             mCoverArt.setVisibility( View.VISIBLE );
             mVideoView.setVisibility( View.INVISIBLE );
-
-        } else {
-
-            mCoverArt.setVisibility( View.GONE );
-            mVideoView.setVisibility( View.VISIBLE );
 
         }
 
     }
 
     private void stopTrickplayTimer() {
-        Log.d( TAG, "Stopped TrickPlay Timer" );
 
-        if( null != mSeekbarTimer ) {
+        if( null == mSeekbarTimer ) {
+            Log.w( TAG, "no TrickPlay Timer to stop" );
+
+        } else {
 
             mSeekbarTimer.cancel();
 
+            Log.d( TAG, "Stopped TrickPlay Timer" );
         }
 
     }
 
     private void stopBookmarkTimer() {
-        Log.d( TAG, "Stopped Bookmark Timer" );
 
-        if( null != mBookmarkTimer ) {
+        if( null == mBookmarkTimer ) {
+            Log.w( TAG, "no Bookmark Timer to stop" );
+
+        } else {
 
             mBookmarkTimer.cancel();
 
+            Log.d( TAG, "Stopped Bookmark Timer" );
         }
 
     }
@@ -571,7 +584,10 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     private void stopControllersTimer() {
 
-        if( null != mControllersTimer ) {
+        if( null == mControllersTimer ) {
+            Log.d( TAG, "no Controller Timer to stop" );
+
+        } else {
 
             mControllersTimer.cancel();
 
@@ -581,7 +597,10 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     private void startControllersTimer() {
 
-        if( null != mControllersTimer ) {
+        if( null == mControllersTimer ) {
+            Log.d( TAG, "no controller Timer to start" );
+
+        } else {
 
             mControllersTimer.cancel();
 
@@ -621,19 +640,25 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        Log.d( TAG, "onPause() was called" );
+        Log.d( TAG, "onPause : enter" );
         super.onPause();
 
         if( mLocation == PlaybackLocation.LOCAL ) {
 
-            if( null != mSeekbarTimer ) {
+            if( null == mSeekbarTimer ) {
+                Log.w( TAG, "onPause : no seekbarTimer" );
+
+            } else {
 
                 mSeekbarTimer.cancel();
                 mSeekbarTimer = null;
 
             }
 
-            if( null != mControllersTimer ) {
+            if( null == mControllersTimer ) {
+                Log.w( TAG, "onPause : no controllersTimer" );
+
+            } else {
 
                 mControllersTimer.cancel();
 
@@ -647,7 +672,10 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         }
 
-        if( null != mBookmarkTimer ) {
+        if( null == mBookmarkTimer ) {
+            Log.w( TAG, "onPause : no bookmarkTimer" );
+
+        } else {
 
             mBookmarkTimer.cancel();
             mBookmarkTimer = null;
@@ -689,13 +717,13 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         mCastContext.getSessionManager().addSessionManagerListener( mSessionManagerListener, CastSession.class );
 
-        if( null != mCastSession && mCastSession.isConnected() ) {
+        if( null == mCastSession || !mCastSession.isConnected() ) {
 
-            updatePlaybackLocation( PlaybackLocation.REMOTE );
+            updatePlaybackLocation( PlaybackLocation.LOCAL );
 
         } else {
 
-            updatePlaybackLocation( PlaybackLocation.LOCAL );
+            updatePlaybackLocation( PlaybackLocation.REMOTE );
 
         }
 
@@ -1023,19 +1051,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
     private void updateMetadata( boolean visible ) {
 
         Point displaySize;
-        if( !visible ) {
-
-            mDescriptionView.setVisibility( View.GONE );
-            mTitleView.setVisibility( View.GONE );
-            mAuthorView.setVisibility( View.GONE );
-
-            displaySize = Utils.getDisplaySize( this );
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( displaySize.x, displaySize.y + getSupportActionBar().getHeight() );
-            lp.addRule( RelativeLayout.CENTER_IN_PARENT );
-            mVideoView.setLayoutParams( lp );
-            mVideoView.invalidate();
-
-        } else {
+        if( visible ) {
 
             mDescriptionView.setText( mSelectedMedia.getSubTitle() );
             mTitleView.setText( mSelectedMedia.getTitle() );
@@ -1047,6 +1063,18 @@ public class LocalPlayerActivity extends AppCompatActivity {
             float mAspectRatio = 72f / 128;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( displaySize.x, (int) ( displaySize.x * mAspectRatio) );
             lp.addRule( RelativeLayout.BELOW, R.id.toolbar );
+            mVideoView.setLayoutParams( lp );
+            mVideoView.invalidate();
+
+        } else {
+
+            mDescriptionView.setVisibility( View.GONE );
+            mTitleView.setVisibility( View.GONE );
+            mAuthorView.setVisibility( View.GONE );
+
+            displaySize = Utils.getDisplaySize( this );
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( displaySize.x, displaySize.y + getSupportActionBar().getHeight() );
+            lp.addRule( RelativeLayout.CENTER_IN_PARENT );
             mVideoView.setLayoutParams( lp );
             mVideoView.invalidate();
 

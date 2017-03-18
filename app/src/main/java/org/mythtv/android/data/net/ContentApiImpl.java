@@ -86,16 +86,16 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
                     try {
 
                         Reader responseLiveStreamInfoEntities = getLiveStreamInfoEntitiesFromApi( filename );
-                        if( null != responseLiveStreamInfoEntities ) {
-                            Log.d(TAG, "LiveStreamInfoEntityList.call : retrieved LiveStream info entities");
+                        if( null == responseLiveStreamInfoEntities ) {
+                            Log.d( TAG, "LiveStreamInfoEntityList.call : failed to retrieve LiveStream info entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
+                            Log.d( TAG, "LiveStreamInfoEntityList.call : retrieved LiveStream info entities" );
 
                             subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection(responseLiveStreamInfoEntities) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d(TAG, "LiveStreamInfoEntityList.call : failed to retrieve LiveStream info entities");
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 

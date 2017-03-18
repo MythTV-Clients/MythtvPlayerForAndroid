@@ -154,7 +154,11 @@ public class DbSearchDataStore implements SearchDataStore {
     public void refreshTitleInfoData( Collection<TitleInfoEntity> titleInfoEntityCollection ) {
         Log.d( TAG, "refreshTitleInfoData : enter" );
 
-        if( null != titleInfoEntityCollection && !titleInfoEntityCollection.isEmpty() ) {
+        if( null == titleInfoEntityCollection || titleInfoEntityCollection.isEmpty() ) {
+            Log.d( TAG, "refreshTitleInfoData : titleInfoEntityCollection is empty" );
+
+            return;
+        } else {
             Log.d( TAG, "refreshTitleInfoData : titleInfoEntityCollection is not empty" );
 
             db.beginTransaction();
@@ -184,7 +188,12 @@ public class DbSearchDataStore implements SearchDataStore {
     public void refreshRecordedProgramData( Collection<MediaItem> mediaItemEntityCollection ) {
         Log.d( TAG, "refreshRecordedProgramData : enter" );
 
-        if( null != mediaItemEntityCollection && !mediaItemEntityCollection.isEmpty() ) {
+        if( null == mediaItemEntityCollection || mediaItemEntityCollection.isEmpty() ) {
+            Log.d( TAG, "refreshRecordedProgramData : mediaItemEntityCollection is empty" );
+
+            return;
+
+        } else {
             Log.d( TAG, "refreshRecordedProgramData : mediaItemEntityCollection is not empty" );
 
             db.beginTransaction();
@@ -206,7 +215,12 @@ public class DbSearchDataStore implements SearchDataStore {
     public void refreshVideoData( Collection<MediaItem> mediaItemEntityCollection ) {
         Log.d( TAG, "refreshVideoData : enter" );
 
-        if( null != mediaItemEntityCollection && !mediaItemEntityCollection.isEmpty() ) {
+        if( null == mediaItemEntityCollection || mediaItemEntityCollection.isEmpty() ) {
+            Log.d( TAG, "refreshVideoData : mediaItemEntityCollection is empty" );
+
+            return;
+
+        } else {
             Log.d( TAG, "refreshVideoData : mediaItemEntityCollection is not empty" );
 
             db.beginTransaction();
@@ -229,37 +243,37 @@ public class DbSearchDataStore implements SearchDataStore {
             statement.clearBindings();
             statement.bindLong( 1, mediaItemEntity.getId() );
             statement.bindString( 2, mediaItemEntity.getMedia().name() );
-            statement.bindString( 3, null != mediaItemEntity.getTitle() ? mediaItemEntity.getTitle() : "" );
-            statement.bindString( 4, null != mediaItemEntity.getSubTitle() ? mediaItemEntity.getSubTitle() : "" );
-            statement.bindString( 5, null != mediaItemEntity.getDescription() ? mediaItemEntity.getDescription() : "" );
-            statement.bindLong( 6, null != mediaItemEntity.getStartDate() ? mediaItemEntity.getStartDate().getMillis() : -1 );
+            statement.bindString( 3, null == mediaItemEntity.getTitle() ? "" : mediaItemEntity.getTitle() );
+            statement.bindString( 4, null == mediaItemEntity.getSubTitle() ? "" : mediaItemEntity.getSubTitle() );
+            statement.bindString( 5, null == mediaItemEntity.getDescription() ? "" : mediaItemEntity.getDescription() );
+            statement.bindLong( 6, null == mediaItemEntity.getStartDate() ? -1 : mediaItemEntity.getStartDate().getMillis() );
             statement.bindLong( 7, mediaItemEntity.getProgramFlags() );
             statement.bindLong( 8, mediaItemEntity.getSeason() );
             statement.bindLong( 9, mediaItemEntity.getEpisode() );
-            statement.bindString( 10, null != mediaItemEntity.getStudio() ? mediaItemEntity.getStudio() : "" );
-            statement.bindString( 11, null != mediaItemEntity.getCastMembers() ? mediaItemEntity.getCastMembers() : "" );
-            statement.bindString( 12, null != mediaItemEntity.getCharacters() ? mediaItemEntity.getCharacters() : "" );
-            statement.bindString( 13, null != mediaItemEntity.getUrl() ? mediaItemEntity.getUrl() : "" );
-            statement.bindString( 14, null != mediaItemEntity.getFanartUrl() ? mediaItemEntity.getFanartUrl() : "" );
-            statement.bindString( 15, null != mediaItemEntity.getCoverartUrl() ? mediaItemEntity.getCoverartUrl() : "" );
-            statement.bindString( 16, null != mediaItemEntity.getBannerUrl() ? mediaItemEntity.getBannerUrl() : "" );
-            statement.bindString( 17, null != mediaItemEntity.getPreviewUrl() ? mediaItemEntity.getPreviewUrl() : "" );
-            statement.bindString( 18, null != mediaItemEntity.getContentType() ? mediaItemEntity.getContentType() : "" );
+            statement.bindString( 10, null == mediaItemEntity.getStudio() ? "" : mediaItemEntity.getStudio() );
+            statement.bindString( 11, null == mediaItemEntity.getCastMembers() ? "" : mediaItemEntity.getCastMembers() );
+            statement.bindString( 12, null == mediaItemEntity.getCharacters() ? "" : mediaItemEntity.getCharacters() );
+            statement.bindString( 13, null == mediaItemEntity.getUrl() ? "" : mediaItemEntity.getUrl() );
+            statement.bindString( 14, null == mediaItemEntity.getFanartUrl() ? "" : mediaItemEntity.getFanartUrl() );
+            statement.bindString( 15, null == mediaItemEntity.getCoverartUrl() ? "" : mediaItemEntity.getCoverartUrl() );
+            statement.bindString( 16, null == mediaItemEntity.getBannerUrl() ? "" : mediaItemEntity.getBannerUrl() );
+            statement.bindString( 17, null == mediaItemEntity.getPreviewUrl() ? "" : mediaItemEntity.getPreviewUrl() );
+            statement.bindString( 18, null == mediaItemEntity.getContentType() ? "" : mediaItemEntity.getContentType() );
             statement.bindLong( 19, mediaItemEntity.getDuration() );
             statement.bindLong( 20, mediaItemEntity.getPercentComplete() );
             statement.bindLong( 21, mediaItemEntity.isRecording() ? 1 : 0 );
             statement.bindLong( 22, mediaItemEntity.getLiveStreamId() );
-            statement.bindString( 23, null != mediaItemEntity.getCreateHttpLiveStreamUrl() ? mediaItemEntity.getCreateHttpLiveStreamUrl() : "" );
-            statement.bindString( 24, null != mediaItemEntity.getRemoveHttpLiveStreamUrl() ? mediaItemEntity.getRemoveHttpLiveStreamUrl() : "" );
-            statement.bindString( 25, null != mediaItemEntity.getGetHttpLiveStreamUrl() ? mediaItemEntity.getGetHttpLiveStreamUrl() : "" );
+            statement.bindString( 23, null == mediaItemEntity.getCreateHttpLiveStreamUrl() ? "" : mediaItemEntity.getCreateHttpLiveStreamUrl() );
+            statement.bindString( 24, null == mediaItemEntity.getRemoveHttpLiveStreamUrl() ? "" : mediaItemEntity.getRemoveHttpLiveStreamUrl() );
+            statement.bindString( 25, null == mediaItemEntity.getGetHttpLiveStreamUrl() ? "" : mediaItemEntity.getGetHttpLiveStreamUrl() );
             statement.bindLong( 26, mediaItemEntity.isWatched() ? 1 : 0 );
-            statement.bindString( 27, null != mediaItemEntity.getMarkWatchedUrl() ? mediaItemEntity.getMarkWatchedUrl() : "" );
-            statement.bindString( 28, null != mediaItemEntity.getUpdateSavedBookmarkUrl() ? mediaItemEntity.getUpdateSavedBookmarkUrl() : "" );
+            statement.bindString( 27, null == mediaItemEntity.getMarkWatchedUrl() ? "" : mediaItemEntity.getMarkWatchedUrl() );
+            statement.bindString( 28, null == mediaItemEntity.getUpdateSavedBookmarkUrl() ? "" : mediaItemEntity.getUpdateSavedBookmarkUrl() );
             statement.bindLong( 29, mediaItemEntity.getBookmark() );
-            statement.bindString( 30, null != mediaItemEntity.getInetref() ? mediaItemEntity.getInetref() : "" );
-            statement.bindString( 31, null != mediaItemEntity.getCertification() ? mediaItemEntity.getCertification() : "" );
+            statement.bindString( 30, null == mediaItemEntity.getInetref() ? "" : mediaItemEntity.getInetref() );
+            statement.bindString( 31, null == mediaItemEntity.getCertification() ? "" : mediaItemEntity.getCertification() );
             statement.bindLong( 32, mediaItemEntity.getParentalLevel() );
-            statement.bindString( 32, null != mediaItemEntity.getRecordingGroup() ? mediaItemEntity.getRecordingGroup() : "" );
+            statement.bindString( 32, null == mediaItemEntity.getRecordingGroup() ? "" : mediaItemEntity.getRecordingGroup() );
             statement.executeInsert();
 
         }

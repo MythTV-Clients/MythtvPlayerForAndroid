@@ -60,15 +60,13 @@ public class AutoLoadImageView extends AppCompatImageView {
 //    Log.d( TAG, "setImageUrl : enter" );
 
     AutoLoadImageView.this.loadImagePlaceHolder();
-    if( imageUrl != null ) {
-//      Log.d( TAG, "setImageUrl : imageUrl != null" );
-
-      this.loadImageFromUrl( imageUrl );
-
-    } else {
-//      Log.d( TAG, "setImageUrl : imageUrl == null" );
+    if( null == imageUrl ) {
 
       this.loadImagePlaceHolder();
+
+    } else {
+
+      this.loadImageFromUrl( imageUrl );
 
     }
 
@@ -95,8 +93,9 @@ public class AutoLoadImageView extends AppCompatImageView {
   public void invalidateImageCache() {
 //    Log.d(TAG, "invalidateImageCache : enter");
 
-    if( this.cache != null ) {
-//      Log.d( TAG, "invalidateImageCache : cache != null" );
+    if( null == this.cache ) {
+
+    } else {
 
       this.cache.evictAll();
 
@@ -120,47 +119,45 @@ public class AutoLoadImageView extends AppCompatImageView {
 //        Log.d( TAG, "loadImageFromUrl.run : enter" );
 
         final Bitmap bitmap = AutoLoadImageView.this.getFromCache( getFileNameFromUrl( imageUrl ) );
-        if( bitmap != null ) {
-//          Log.d( TAG, "loadImageFromUrl.run : bitmap != null" );
+        if( null == bitmap ) {
 
-          AutoLoadImageView.this.loadBitmap( bitmap );
-
-        } else {
-//          Log.d( TAG, "loadImageFromUrl.run : bitmap == null" );
-
-          if( isThereInternetConnection() ) {
+            if( isThereInternetConnection() ) {
 //            Log.d( TAG, "loadImageFromUrl.run : internet connected" );
 
-            final ImageDownloader imageDownloader = new ImageDownloader();
-            imageDownloader.download( imageUrl, new ImageDownloader.Callback() {
+                final ImageDownloader imageDownloader = new ImageDownloader();
+                imageDownloader.download( imageUrl, new ImageDownloader.Callback() {
 
-              @Override
-              public void onImageDownloaded( Bitmap bitmap ) {
+                    @Override
+                    public void onImageDownloaded( Bitmap bitmap ) {
 //                Log.d( TAG, "loadImageFromUrl.run.onImageDownloaded : enter" );
 
-                AutoLoadImageView.this.cacheBitmap( bitmap, getFileNameFromUrl( imageUrl ) );
-                AutoLoadImageView.this.loadBitmap( bitmap );
+                        AutoLoadImageView.this.cacheBitmap( bitmap, getFileNameFromUrl( imageUrl ) );
+                        AutoLoadImageView.this.loadBitmap( bitmap );
 
 //                Log.d( TAG, "loadImageFromUrl.run.onImageDownloaded : exit" );
-              }
+                    }
 
-              @Override
-              public void onError() {
+                    @Override
+                    public void onError() {
 //                Log.d( TAG, "loadImageFromUrl.run.onError : enter" );
+
+                        AutoLoadImageView.this.loadImagePlaceHolder();
+
+//                Log.d( TAG, "loadImageFromUrl.run.onError : exit" );
+                    }
+
+                });
+
+            } else {
+//            Log.d( TAG, "loadImageFromUrl.run.onError : internet not connected" );
 
                 AutoLoadImageView.this.loadImagePlaceHolder();
 
-//                Log.d( TAG, "loadImageFromUrl.run.onError : exit" );
-              }
+            }
 
-            });
+        } else {
 
-          } else {
-//            Log.d( TAG, "loadImageFromUrl.run.onError : internet not connected" );
-
-            AutoLoadImageView.this.loadImagePlaceHolder();
-
-          }
+            AutoLoadImageView.this.loadBitmap( bitmap );
 
         }
 
@@ -197,7 +194,7 @@ public class AutoLoadImageView extends AppCompatImageView {
   private void loadImagePlaceHolder() {
 //    Log.d( TAG, "loadImagePlaceHolder : enter" );
 
-    if( this.imagePlaceHolderResourceId != -1 ) {
+    if( this.imagePlaceHolderResourceId > -1 ) {
 //      Log.d( TAG, "loadImagePlaceHolder : imagePlaceHolderResourceId != -1" );
 
       ( (Activity) getContext() ).runOnUiThread( () -> {

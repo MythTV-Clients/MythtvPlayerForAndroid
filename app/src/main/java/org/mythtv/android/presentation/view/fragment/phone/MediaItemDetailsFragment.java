@@ -376,7 +376,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             this.tv_title.setText( this.mediaItemModel.getTitle() );
             this.tv_sub_title.setText( this.mediaItemModel.getSubTitle() );
             this.tv_studio.setText( this.mediaItemModel.getStudio() );
-            this.tv_date.setText( null != mediaItemModel.getStartDate() ? this.mediaItemModel.getStartDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) : "" );
+            this.tv_date.setText( null == mediaItemModel.getStartDate() ? "" : this.mediaItemModel.getStartDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
             this.tv_episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.getSeason(), mediaItemModel.getEpisode() ) );
             this.tv_duration.setText( getActivity().getResources().getString( R.string.minutes, String.valueOf( this.mediaItemModel.getDuration() ) ) );
             this.tv_description.setText( this.mediaItemModel.getDescription() );
@@ -487,15 +487,15 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         if( !mediaItemModel.isRecording() ) {
 
-            if( mediaItemModel.getLiveStreamId() != 0 ) {
-
-                menuHlsEnable.setVisible( false );
-                menuHlsDisable.setVisible( true );
-
-            } else {
+            if( mediaItemModel.getLiveStreamId() == 0 ) {
 
                 menuHlsEnable.setVisible( true );
                 menuHlsDisable.setVisible( false );
+
+            } else {
+
+                menuHlsEnable.setVisible( false );
+                menuHlsDisable.setVisible( true );
 
             }
 
@@ -517,7 +517,18 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private void updateProgress() {
 
-        if( mediaItemModel.getLiveStreamId() != 0 ) {
+        if( mediaItemModel.getLiveStreamId() == 0 ) {
+
+            if( null != this.pb_progress ) {
+
+                this.pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
+                this.pb_progress.setVisibility( View.GONE );
+                this.pb_progress.setIndeterminate( true );
+                this.pb_progress.setProgress( 0 );
+
+            }
+
+        } else {
 
             if( mediaItemModel.getPercentComplete() > 0 ) {
 
@@ -534,17 +545,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
                     this.pb_progress.getProgressDrawable().setColorFilter( getResources().getColor( R.color.accent ), android.graphics.PorterDuff.Mode.SRC_IN );
 
                 }
-
-            }
-
-        } else {
-
-            if( null != this.pb_progress ) {
-
-                this.pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
-                this.pb_progress.setVisibility( View.GONE );
-                this.pb_progress.setIndeterminate( true );
-                this.pb_progress.setProgress( 0 );
 
             }
 

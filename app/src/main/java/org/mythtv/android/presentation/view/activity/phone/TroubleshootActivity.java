@@ -444,19 +444,19 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         @Override
         protected void onPostExecute( String result ) {
 
-            if( null != result && !"".equals( result ) ) {
+            if( null == result || "".equals( result ) ) {
+
+                setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+
+                showToastMessage( fab, getString( R.string.troubleshoot_services_not_connected ), getResources().getString( R.string.retry ), v -> startServicesConnectionCheck() );
+
+            } else {
 
                 setImage( servicesConnectedImage, R.drawable.ic_computer_black_24dp );
 
                 showToastMessage( fab, getString( R.string.troubleshoot_services_connected ), null, null );
 
                 startBackendVersionVerificationCheck();
-
-            } else {
-
-                setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
-
-                showToastMessage( fab, getString( R.string.troubleshoot_services_not_connected ), getResources().getString( R.string.retry ), v -> startServicesConnectionCheck() );
 
             }
 
@@ -514,7 +514,13 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         @Override
         protected void onPostExecute( String result ) {
 
-            if( null != result ) {
+            if( null == result ) {
+
+                setImage( backendVersionImage, R.drawable.ic_warning_black_24dp );
+
+                showToastMessage( fab, getString( R.string.backend_version_check_failed, getResources().getString( R.string.minimum_mythtv_version ) ), getResources().getString( R.string.retry ), v -> startBackendVersionVerificationCheck() );
+
+            } else {
 
                 float minimumVersion = Float.parseFloat( getResources().getString( R.string.minimum_mythtv_version ) );
                 if( Utils.meetsMinimumVersion( result, minimumVersion ) ) {
@@ -532,12 +538,6 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
                     showToastMessage( fab, getString( R.string.backend_version_check_failed, getResources().getString( R.string.minimum_mythtv_version ) ), getResources().getString( R.string.retry ), v -> startBackendVersionVerificationCheck() );
 
                 }
-
-            } else {
-
-                setImage( backendVersionImage, R.drawable.ic_warning_black_24dp );
-
-                showToastMessage( fab, getString( R.string.backend_version_check_failed, getResources().getString( R.string.minimum_mythtv_version ) ), getResources().getString( R.string.retry ), v -> startBackendVersionVerificationCheck() );
 
             }
 

@@ -68,7 +68,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 //        Log.d( TAG, "getItemCount : enter" );
 
 //        Log.d( TAG, "getItemCount : exit" );
-        return ( null != this.encodersCollection ) ? this.encodersCollection.size() : 0;
+        return ( null == this.encodersCollection ) ? 0: this.encodersCollection.size();
     }
 
     @Override
@@ -96,7 +96,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
         }
 
-        holder.textViewName.setText( context.getResources().getString( R.string.encoder, String.valueOf( encoderModel.getId() ), ( null != encoderModel.getInputs() ? encoderModel.getInputs().get( 0 ).getDisplayName() : String.valueOf( encoderModel.getId() ) ), context.getResources().getString( state ) ) );
+        holder.textViewName.setText( context.getResources().getString( R.string.encoder, String.valueOf( encoderModel.getId() ), ( null == encoderModel.getInputs() ?  String.valueOf( encoderModel.getId() ) : encoderModel.getInputs().get( 0 ).getDisplayName() ), context.getResources().getString( state ) ) );
 
         if( null != encoderModel.getRecording() ) {
 

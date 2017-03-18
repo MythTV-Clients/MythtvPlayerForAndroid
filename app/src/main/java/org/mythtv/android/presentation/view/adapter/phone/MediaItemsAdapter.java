@@ -89,7 +89,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     @Override
     public int getItemCount() {
 
-        return ( null != this.mediaItemsCollection ) ? this.mediaItemsCollection.size() : 0;
+        return ( null == this.mediaItemsCollection ) ? 0 : this.mediaItemsCollection.size();
     }
 
     @Override
@@ -115,13 +115,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
             case PROGRAM :
 
-                if( null != mediaItemModel.getPreviewUrl() && !"".equals( mediaItemModel.getPreviewUrl() ) ) {
+                if( null == mediaItemModel.getPreviewUrl() || "".equals( mediaItemModel.getPreviewUrl() ) ) {
 
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getPreviewUrl( "250" ) );
+                    holder.image.setImageDrawable( brokenMovie );
 
                 } else {
 
-                    holder.image.setImageDrawable( brokenMovie );
+                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getPreviewUrl( "250" ) );
 
                 }
 
@@ -132,13 +132,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
             case MOVIE :
             case ADULT :
 
-                if( null != mediaItemModel.getFanartUrl() && !"".equals( mediaItemModel.getFanartUrl() ) ) {
+                if( null == mediaItemModel.getFanartUrl() || "".equals( mediaItemModel.getFanartUrl() ) ) {
 
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getFanartUrl( "250" ) );
+                    holder.image.setImageDrawable( brokenMovie );
 
                 } else {
 
-                    holder.image.setImageDrawable( brokenMovie );
+                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getFanartUrl( "250" ) );
 
                 }
 
@@ -180,7 +180,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         holder.title.setText( mediaItemModel.getTitle() );
         holder.subTitle.setText( mediaItemModel.getSubTitle() );
         holder.studio.setText( mediaItemModel.getStudio() );
-        holder.date.setText( null != mediaItemModel.getStartDate() ? mediaItemModel.getStartDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) : "" );
+        holder.date.setText( null == mediaItemModel.getStartDate() ? "" : mediaItemModel.getStartDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
         holder.episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.getSeason(), mediaItemModel.getEpisode() ) );
         holder.duration.setText( context.getResources().getString( R.string.minutes, String.valueOf( mediaItemModel.getDuration() ) ) );
 

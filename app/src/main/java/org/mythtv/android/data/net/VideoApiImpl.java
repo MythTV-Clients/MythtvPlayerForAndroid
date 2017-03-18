@@ -86,16 +86,16 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
                     try {
 
                         Reader responseVideoEntities = getVideoEntitiesFromApi( folder, sort, descending, startIndex, count );
-                        if( null != responseVideoEntities ) {
+                        if( null == responseVideoEntities ) {
+                            Log.d( TAG, "getVideoList.call : failed to retrieve video entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "getVideoList.call : retrieved video entities" );
 
                             subscriber.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntityCollection( responseVideoEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "getVideoList.call : failed to retrieve video entities" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -133,14 +133,14 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
                     try {
 
                         Reader responseVideoDetails = getVideoDetailsFromApi( id );
-                        if( null != responseVideoDetails ) {
+                        if( null == responseVideoDetails ) {
 
-                            subscriber.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( responseVideoDetails ) );
-                            subscriber.onCompleted();
+                            subscriber.onError( new NetworkConnectionException() );
 
                         } else {
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            subscriber.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( responseVideoDetails ) );
+                            subscriber.onCompleted();
 
                         }
 
@@ -183,16 +183,16 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
                     try {
 
                         Reader response = postUpdateWatchedStatus( videoId, watched );
-                        if( null != response ) {
+                        if( null == response ) {
+                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
 
                             subscriber.onNext( booleanJsonMapper.transformBoolean( response ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 

@@ -101,16 +101,16 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                     try {
 
                         Reader responseRecordedProgramEntities = getTitleInfoEntitiesFromApi();
-                        if( null != responseRecordedProgramEntities ) {
+                        if( null == responseRecordedProgramEntities ) {
+                            Log.d( TAG, "titleInfoEntityList.call : failed to retrieve title info entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "titleInfoEntityList.call : retrieved title info entities" );
 
                             subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( responseRecordedProgramEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "titleInfoEntityList.call : failed to retrieve title info entities" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -122,13 +122,13 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                     }
 
                 } else {
-                    Log.d(TAG, "titleInfoEntityList.call : network is not connected");
+                    Log.d( TAG, "titleInfoEntityList.call : network is not connected" );
 
                     subscriber.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d(TAG, "titleInfoEntityList.call : exit");
+                Log.d( TAG, "titleInfoEntityList.call : exit" );
             }
 
         });
@@ -152,16 +152,16 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                     try {
 
                         Reader responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
-                        if( null != responseRecordedProgramEntities ) {
+                        if( null == responseRecordedProgramEntities ) {
+                            Log.d( TAG, "recordedProgramEntityList.call : failed to retrieve program entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "recordedProgramEntityList.call : retrieved program entities" );
 
                             subscriber.onNext( programEntityJsonMapper.transformProgramEntityCollection( responseRecordedProgramEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "recordedProgramEntityList.call : failed to retrieve program entities" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -199,14 +199,14 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                     try {
 
                         Reader responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId, chanId, startTime );
-                        if( null != responseProgramDetails ) {
+                        if( null == responseProgramDetails ) {
 
-                            subscriber.onNext( programEntityJsonMapper.transformProgramEntity( responseProgramDetails ) );
-                            subscriber.onCompleted();
+                            subscriber.onError( new NetworkConnectionException() );
 
                         } else {
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            subscriber.onNext( programEntityJsonMapper.transformProgramEntity( responseProgramDetails ) );
+                            subscriber.onCompleted();
 
                         }
 
@@ -245,16 +245,16 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                     try {
 
                         Reader responseUpcomingProgramEntities = getUpcomingProgramEntitiesFromApi( startIndex, count, showAll, recordId, recStatus );
-                        if( null != responseUpcomingProgramEntities ) {
+                        if( null == responseUpcomingProgramEntities ) {
+                            Log.d( TAG, "upcomingProgramEntityList.call : failed to retrieve program entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "upcomingEntityList.call : retrieved program entities" );
 
                             subscriber.onNext( programEntityJsonMapper.transformProgramEntityCollection( responseUpcomingProgramEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "upcomingProgramEntityList.call : failed to retrieve program entities" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -294,16 +294,16 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                     try {
 
                         Reader responseEncoderEntities = getEncoderEntitiesFromApi();
-                        if( null != responseEncoderEntities ) {
+                        if( null == responseEncoderEntities ) {
+                            Log.d(TAG, "encoderEntityList.call : failed to retrieve encoder entities");
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d(TAG, "encoderEntityList.call : retrieved encoder entities");
 
                             subscriber.onNext( encoderEntityJsonMapper.transformEncoderEntityCollection( responseEncoderEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d(TAG, "encoderEntityList.call : failed to retrieve encoder entities");
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -343,16 +343,16 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                     try {
 
                         Reader response = postUpdateWatchedStatus( chanId, startTime, watched );
-                        if( null != response ) {
+                        if( null == response ) {
+                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
 
                             subscriber.onNext( booleanJsonMapper.transformBoolean( response ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -387,21 +387,21 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                 Log.d( TAG, "getBookmark.call : enter" );
 
                 if( isThereInternetConnection() ) {
-                    Log.d(TAG, "getBookmark.call : network is connected");
+                    Log.d( TAG, "getBookmark.call : network is connected" );
 
                     try {
 
                         Reader response = getBookmarkFromApi( recordedId, chanId, startTime, offsetType );
-                        if( null != response ) {
+                        if( null == response ) {
+                            Log.d( TAG, "getBookmark.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "getBookmark.call : retrieved status update" );
 
                             subscriber.onNext( longJsonMapper.transformLong( response ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "getBookmark.call : failed to retrieve status update" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 

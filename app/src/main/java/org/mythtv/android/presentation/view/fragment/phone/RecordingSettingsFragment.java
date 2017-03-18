@@ -292,13 +292,13 @@ public class RecordingSettingsFragment extends AbstractBasePreferenceFragment im
 
     private void updateDefaultRecordingGroupSummary( final int resourceId, final String filterGroup ) {
 
-        if( null != filterGroup ) {
+        if( null == filterGroup ) {
 
-            defaultRecordingGroup.setSummary(getResources().getString( resourceId, filterGroup ) );
+            defaultRecordingGroup.setSummary(getResources().getString( resourceId ) );
 
         } else {
 
-            defaultRecordingGroup.setSummary(getResources().getString( resourceId ) );
+            defaultRecordingGroup.setSummary(getResources().getString( resourceId, filterGroup ) );
 
         }
 

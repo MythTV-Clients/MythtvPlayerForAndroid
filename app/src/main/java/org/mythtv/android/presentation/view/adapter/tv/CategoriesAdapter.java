@@ -72,11 +72,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
     @Override
     public int getItemCount() {
 
-        return ( null != this.tvCategoriesCollection ) ? this.tvCategoriesCollection.size() : 0;
+        return ( null == this.tvCategoriesCollection ) ? 0 : this.tvCategoriesCollection.size();
     }
 
     @Override
-    public TvCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
+    public TvCategoryViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
         View view = this.layoutInflater.inflate( R.layout.tv_item, parent, false );
 

@@ -704,15 +704,15 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     private void startClickTrackingTimer() {
 
-        if( null != mClickTrackingTimer ) {
-
-            mClickCount++;
-            mClickTrackingTimer.cancel();
-
-        } else {
+        if( null == mClickTrackingTimer ) {
 
             mClickCount = 0;
             mFfwRwdSpeed = INITIAL_SPEED;
+
+        } else {
+
+            mClickCount++;
+            mClickTrackingTimer.cancel();
 
         }
 
@@ -898,13 +898,15 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         if( activity != null ) {
 
             PlaybackState state = activity.getMediaController().getPlaybackState();
-            if( state != null ) {
-
-                return state.getState();
-            } else {
+            if( null == state ) {
 
                 return PlaybackState.STATE_NONE;
+
+            } else {
+
+                return state.getState();
             }
+
         }
 
         return PlaybackState.STATE_NONE;

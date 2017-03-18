@@ -78,7 +78,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
     @Override
     public int getItemCount() {
 
-        return ( null != this.seriesCollection ) ? this.seriesCollection.size() : 0;
+        return ( null == this.seriesCollection ) ? 0 : this.seriesCollection.size();
     }
 
     @Override
@@ -97,13 +97,13 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
         Log.d( TAG, "onBindViewHolder : enter" );
 
         final SeriesModel seriesModel = this.seriesCollection.get( position );
-        if( null != seriesModel.getArtworkUrl() && !"".equals( seriesModel.getArtworkUrl() ) ) {
+        if( null == seriesModel.getArtworkUrl() || "".equals( seriesModel.getArtworkUrl() ) ) {
 
-            holder.imageViewArtwork.setImageUrl( getMasterBackendUrl() + seriesModel.getArtworkUrl() );
+            holder.imageViewArtwork.setImageDrawable( ContextCompat.getDrawable( context, R.drawable.ffffff ) );
 
         } else {
 
-            holder.imageViewArtwork.setImageDrawable( ContextCompat.getDrawable( context, R.drawable.ffffff ) );
+            holder.imageViewArtwork.setImageUrl( getMasterBackendUrl() + seriesModel.getArtworkUrl() );
 
         }
         holder.textViewTitle.setText( seriesModel.getTitle() );
