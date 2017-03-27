@@ -292,9 +292,17 @@ public class ChannelInfoEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals( Object o ) {
+
+        if( this == o ) {
+
+            return true;
+        }
+
+        if( o == null || getClass() != o.getClass() ) {
+
+            return false;
+        }
 
         ChannelInfoEntity that = (ChannelInfoEntity) o;
 

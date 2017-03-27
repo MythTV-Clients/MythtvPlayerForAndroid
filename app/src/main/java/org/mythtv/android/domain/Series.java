@@ -105,16 +105,25 @@ public class Series implements Comparable<Series> {
 
         final int EQUAL = 0;
 
-        if( this == another ) return EQUAL;
+        if( this == another ) {
+
+            return EQUAL;
+        }
 
         String thisTitle = DomainUtils.removeArticles( this.title.toUpperCase( Locale.getDefault() ) );
         String thatTitle = DomainUtils.removeArticles( another.title.toUpperCase( Locale.getDefault() ) );
 
         int comparison = thisTitle.compareTo( thatTitle );
-        if( comparison != EQUAL ) return comparison;
+        if( comparison != EQUAL ) {
+
+            return comparison;
+        }
 
         comparison = inetref.compareTo( another.inetref );
-        if( comparison != EQUAL ) return comparison;
+        if( comparison != EQUAL ) {
+
+            return comparison;
+        }
 
         return EQUAL;
     }
