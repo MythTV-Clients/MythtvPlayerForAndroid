@@ -71,15 +71,6 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
 
     private String searchText;
 
-    /**
-     * Interface for listening media item list events.
-     */
-    public interface MediaItemListListener {
-
-        void onMediaItemClicked( final MediaItemModel mediaItemModel );
-
-    }
-
     @Inject
     SearchResultListPresenter searchResultListPresenter;
 
@@ -88,6 +79,15 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
     private MediaItemListListener mediaItemListListener;
 
     private List<MediaItemModel> mediaItems;
+
+    /**
+     * Interface for listening media item list events.
+     */
+    public interface MediaItemListListener {
+
+        void onMediaItemClicked( final MediaItemModel mediaItemModel );
+
+    }
 
     public TvSearchResultListFragment() {
         super();

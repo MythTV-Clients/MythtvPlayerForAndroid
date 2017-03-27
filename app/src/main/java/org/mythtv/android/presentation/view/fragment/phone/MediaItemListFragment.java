@@ -94,6 +94,47 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     private Map<String, Object> parameters;
 
+    private MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
+
+        if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
+
+            if( mediaItemModel.isValid() ) {
+                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
+
+            } else {
+                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
+
+                if( null == mediaItemModel.getMedia() ) {
+
+                    String message = getString(R.string.validation_no_media_type);
+                    showToastMessage( message, null, null );
+
+                } else {
+
+                    String fields = "";
+                    for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
+
+                        if( !"".equals( fields ) ) {
+                            fields += ", ";
+                        }
+
+                        fields += errorModel.getField();
+
+                    }
+
+                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
+                    showToastMessage( message, null, null );
+
+                }
+
+            }
+
+        }
+
+    };
+
     public MediaItemListFragment() { super(); }
 
     public static MediaItemListFragment newInstance( Bundle args ) {
@@ -539,46 +580,5 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
         Log.d( TAG, "loadMediaItemList : exit" );
     }
-
-    private MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
-
-        if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
-
-            if( mediaItemModel.isValid() ) {
-                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
-
-                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
-
-            } else {
-                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
-
-                if( null == mediaItemModel.getMedia() ) {
-
-                    String message = getString(R.string.validation_no_media_type);
-                    showToastMessage( message, null, null );
-
-                } else {
-
-                    String fields = "";
-                    for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
-
-                        if( !"".equals( fields ) ) {
-                            fields += ", ";
-                        }
-
-                        fields += errorModel.getField();
-
-                    }
-
-                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
-                    showToastMessage( message, null, null );
-
-                }
-
-            }
-
-        }
-
-    };
 
 }

@@ -43,6 +43,10 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
 
     private static final String TAG = TitleInfoListActivity.class.getSimpleName();
 
+    private SeriesListFragment seriesListFragment;
+
+    private MediaComponent mediaComponent;
+
     public static Intent getCallingIntent( Context context ) {
 
         Intent callingIntent = new Intent( context, TitleInfoListActivity.class );
@@ -50,16 +54,6 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
 
         return callingIntent;
     }
-
-    private SeriesListFragment seriesListFragment;
-
-    private MediaComponent mediaComponent;
-
-//    @BindView( R.id.fabProgressCircle )
-//    FABProgressCircle fabProgressCircle;
-//
-//    @BindView( R.id.fab )
-//    FloatingActionButton mFab;
 
     @Override
     public int getLayoutResource() {

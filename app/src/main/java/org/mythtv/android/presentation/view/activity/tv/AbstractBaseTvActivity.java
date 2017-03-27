@@ -49,12 +49,12 @@ import butterknife.ButterKnife;
  */
 public abstract class AbstractBaseTvActivity extends Activity {
 
-    public abstract int getLayoutResource();
-
     @Inject
     TvNavigator navigator;
 
     protected FirebaseAnalytics mFirebaseAnalytics;
+
+    public abstract int getLayoutResource();
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {

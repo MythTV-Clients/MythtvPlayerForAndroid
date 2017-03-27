@@ -51,16 +51,16 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
 
     private static final String INSTANCE_STATE_PARAM_SEARCH_TEXT = "org.mythtv.android.STATE_PARAM_SEARCH_TEXT";
 
-    public static Intent getCallingIntent( Context context ) {
-
-        return new Intent( context, SearchableActivity.class );
-    }
-
     private String searchText;
     private MediaComponent mediaComponent;
 
     private static final int REQUEST_SPEECH = 1;
     TvSearchResultListFragment mSearchableFragment;
+
+    public static Intent getCallingIntent( Context context ) {
+
+        return new Intent( context, SearchableActivity.class );
+    }
 
     @Override
     public int getLayoutResource() {

@@ -62,18 +62,18 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
     private static final String TAG = MediaItemsAdapter.class.getSimpleName();
 
-    public interface OnItemClickListener {
-
-        void onMediaItemClicked( MediaItemModel mediaItemModel, View sharedElement, String sharedElementName );
-
-    }
-
     private Context context;
     private List<MediaItemModel> mediaItemsCollection;
     private final LayoutInflater layoutInflater;
     private final Drawable brokenMovie;
 
     private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+
+        void onMediaItemClicked( MediaItemModel mediaItemModel, View sharedElement, String sharedElementName );
+
+    }
 
     public MediaItemsAdapter( Context context, Collection<MediaItemModel> programsCollection ) {
 

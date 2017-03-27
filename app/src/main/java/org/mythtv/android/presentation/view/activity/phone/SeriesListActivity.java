@@ -69,6 +69,15 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
     private static final String INTENT_EXTRA_PARAM_INETREF = "org.mythtv.android.INTENT_PARAM_INETREF";
     private static final String INSTANCE_STATE_PARAM_INETREF = "org.mythtv.android.STATE_PARAM_INETREF";
 
+    private Media media;
+    private boolean descending = true;
+    private int startIndex = -1, count = -1;
+    private String titleRegEx = null, recGroup = null, storageGroup = null, inetref = null;
+
+    private MediaItemListFragment fragment;
+
+    private MediaComponent mediaComponent;
+
     public static Intent getCallingIntent( Context context, Media media, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup, String inetref  ) {
 
         Intent callingIntent = new Intent( context, SeriesListActivity.class );
@@ -120,21 +129,6 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
         return callingIntent;
     }
-
-    private Media media;
-    private boolean descending = true;
-    private int startIndex = -1, count = -1;
-    private String titleRegEx = null, recGroup = null, storageGroup = null, inetref = null;
-
-    private MediaItemListFragment fragment;
-
-    private MediaComponent mediaComponent;
-
-//    @BindView( R.id.fabProgressCircle )
-//    FABProgressCircle fabProgressCircle;
-//
-//    @BindView( R.id.fab )
-//    FloatingActionButton mFab;
 
     @Override
     public int getLayoutResource() {

@@ -48,16 +48,16 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 
     private static final String TAG = CategoriesAdapter.class.getSimpleName();
 
+    private List<TvCategoryModel> tvCategoriesCollection;
+    private final LayoutInflater layoutInflater;
+
+    private OnItemClickListener onItemClickListener;
+
     public interface OnItemClickListener {
 
         void onTvCategoryClicked( TvCategoryModel tvCategoryModel );
 
     }
-
-    private List<TvCategoryModel> tvCategoriesCollection;
-    private final LayoutInflater layoutInflater;
-
-    private OnItemClickListener onItemClickListener;
 
     public CategoriesAdapter(Context context, Collection<TvCategoryModel> tvCategoriesCollection ) {
         Log.d( TAG, "initialize : enter" );

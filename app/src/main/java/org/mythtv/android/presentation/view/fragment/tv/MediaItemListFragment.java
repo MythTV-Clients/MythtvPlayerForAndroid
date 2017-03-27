@@ -102,15 +102,6 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     private URI mBackgroundURI;
     private BackgroundManager mBackgroundManager;
 
-    /**
-     * Interface for listening program list events.
-     */
-    public interface MediaItemListListener {
-
-        void onSearchClicked();
-
-    }
-
     @Inject
     MediaItemListPresenter mediaItemListPresenter;
 
@@ -120,6 +111,15 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     public MediaItemListFragment() {
         super();
+    }
+
+    /**
+     * Interface for listening program list events.
+     */
+    public interface MediaItemListListener {
+
+        void onSearchClicked();
+
     }
 
     public static MediaItemListFragment newInstance(Bundle args ) {

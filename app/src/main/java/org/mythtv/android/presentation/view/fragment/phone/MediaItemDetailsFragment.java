@@ -85,12 +85,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     private static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
     private static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
 
-    public interface MediaItemDetailsListener {
-
-        void onMediaItemLoaded( final MediaItemModel mediaItemModel );
-
-    }
-
     private MediaItemModel mediaItemModel;
     private MediaItemDetailsListener listener;
 
@@ -136,6 +130,15 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     RelativeLayout rl_progress;
 
     private Unbinder unbinder;
+
+    private GetLiveStreamTask getLiveStreamTask = null;
+    private int fifteenMin = 60 * 30000;
+
+    public interface MediaItemDetailsListener {
+
+        void onMediaItemLoaded( final MediaItemModel mediaItemModel );
+
+    }
 
     public MediaItemDetailsFragment() { super(); }
 
@@ -808,8 +811,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     }
 
-    private GetLiveStreamTask getLiveStreamTask = null;
-    private int fifteenMin = 60 * 30000;
     private CountDownTimer timer = new CountDownTimer( fifteenMin, 5000 ) {
 
         @Override

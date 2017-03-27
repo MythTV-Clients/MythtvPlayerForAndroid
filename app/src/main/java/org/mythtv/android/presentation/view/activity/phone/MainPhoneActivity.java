@@ -54,15 +54,6 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     private static final String TAG = MainPhoneActivity.class.getSimpleName();
 
-    public static Intent getCallingIntent( Context context ) {
-
-        Intent callingIntent = new Intent( context, MainPhoneActivity.class );
-        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
-
-        return callingIntent;
-    }
-
-
     private MediaItemListFragment recentFragment;
     private EncoderListFragment encodersFragment;
     private MediaItemListFragment upcomingFragment;
@@ -77,6 +68,14 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     @BindView( R.id.fab )
     FloatingActionButton mFab;
+
+    public static Intent getCallingIntent( Context context ) {
+
+        Intent callingIntent = new Intent( context, MainPhoneActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
+    }
 
     @Override
     public int getLayoutResource() {

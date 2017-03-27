@@ -40,12 +40,12 @@ public class VideosActivity extends AbstractBaseTvActivity implements HasCompone
 
     private static final String TAG = VideosActivity.class.getSimpleName();
 
+    private MediaComponent mediaComponent;
+
     public static Intent getCallingIntent( Context context ) {
 
         return new Intent( context, VideosActivity.class );
     }
-
-    private MediaComponent mediaComponent;
 
     @Override
     public int getLayoutResource() {

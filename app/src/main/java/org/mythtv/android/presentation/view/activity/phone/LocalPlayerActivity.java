@@ -113,6 +113,9 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     private OkHttpClient okHttpClient;
 
+    private RemoteMediaClient.ProgressListener progressListener = ( position, duration ) -> new UpdateBookmarkAsyncTask().execute( position  );
+
+
     /**
      * indicates whether we are doing a local or a remote playback
      */
@@ -783,8 +786,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
         }
 
     }
-
-    private RemoteMediaClient.ProgressListener progressListener = ( position, duration ) -> new UpdateBookmarkAsyncTask().execute( position  );
 
     private class UpdateBookmarkAsyncTask extends AsyncTask<Long, Void, Void> {
 

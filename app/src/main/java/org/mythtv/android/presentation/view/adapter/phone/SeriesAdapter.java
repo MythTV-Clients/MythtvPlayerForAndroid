@@ -52,17 +52,17 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
 
     private static final String TAG = SeriesAdapter.class.getSimpleName();
 
-    public interface OnItemClickListener {
-
-        void onSeriesItemClicked( SeriesModel seriesModel );
-
-    }
-
     private Context context;
     private List<SeriesModel> seriesCollection;
     private final LayoutInflater layoutInflater;
 
     private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+
+        void onSeriesItemClicked( SeriesModel seriesModel );
+
+    }
 
     public SeriesAdapter( Context context, Collection<SeriesModel> seriesCollection ) {
         Log.d( TAG, "initialize : enter" );
