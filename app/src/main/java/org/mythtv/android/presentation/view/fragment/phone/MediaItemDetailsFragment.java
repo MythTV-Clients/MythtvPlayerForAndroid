@@ -610,14 +610,10 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         @Override
         protected void onPostExecute( Boolean result ) {
 
-            if( null != result ) {
+            if( null != result && result ) {
 
-                if (result) {
-
-                    mediaItemModel.setWatched( status );
-                    updateMenu();
-
-                }
+                mediaItemModel.setWatched( status );
+                updateMenu();
 
             }
 

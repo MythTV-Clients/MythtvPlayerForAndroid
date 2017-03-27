@@ -29,17 +29,13 @@ public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPrese
     @Override
     protected void onBindDescription( ViewHolder viewHolder, Object item ) {
 
-        if( null != item ) {
+        if( null != item && item instanceof MediaItemModel ) {
 
-            if( item instanceof MediaItemModel ) {
+            MediaItemModel mediaItemModel = (MediaItemModel) item;
 
-                MediaItemModel mediaItemModel = (MediaItemModel) item;
-
-                viewHolder.getTitle().setText( mediaItemModel.getTitle() );
-                viewHolder.getSubtitle().setText( mediaItemModel.getSubTitle() );
-                viewHolder.getBody().setText( mediaItemModel.getDescription() );
-
-            }
+            viewHolder.getTitle().setText( mediaItemModel.getTitle() );
+            viewHolder.getSubtitle().setText( mediaItemModel.getSubTitle() );
+            viewHolder.getBody().setText( mediaItemModel.getDescription() );
 
         }
 

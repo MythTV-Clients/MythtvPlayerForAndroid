@@ -109,14 +109,10 @@ public class MediaItemFilter {
         final int finalParentalLevel = parentalLevel;
         Log.d( TAG, "filterVideo : filterByParentalLevel=" + filterByParentalLevel + ", finalParentalLevel=" + finalParentalLevel );
 
-        if( filterByParentalLevel ) {
+        if( filterByParentalLevel && mediaItemModel.getParentalLevel() > finalParentalLevel ) {
+            Log.d( TAG, "filterVideo : does not meet parental level, skipping..." );
 
-            if( mediaItemModel.getParentalLevel() > finalParentalLevel ) {
-                Log.d( TAG, "filterVideo : does not meet parental level, skipping..." );
-
-                return false;
-            }
-
+            return false;
         }
 
         boolean filterByCertification = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_RESTRICT_CONTENT_TYPES, false );

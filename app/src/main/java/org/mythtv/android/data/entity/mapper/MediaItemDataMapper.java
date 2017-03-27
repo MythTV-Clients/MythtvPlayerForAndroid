@@ -123,13 +123,9 @@ public class MediaItemDataMapper {
             calculateDuration( mediaItem, programEntity.getRecording().getStartTs(), programEntity.getRecording().getEndTs() );
         }
 
-        if( null != programEntity.getArtwork() ) {
+        if( null != programEntity.getArtwork() && null != programEntity.getArtwork().getArtworkInfos() && programEntity.getArtwork().getArtworkInfos().length > 0 ) {
 
-            if( null != programEntity.getArtwork().getArtworkInfos() && programEntity.getArtwork().getArtworkInfos().length > 0 ) {
-
-                addArtwork( mediaItem, programEntity.getArtwork().getArtworkInfos() );
-
-            }
+            addArtwork(mediaItem, programEntity.getArtwork().getArtworkInfos());
 
         }
 
@@ -139,6 +135,7 @@ public class MediaItemDataMapper {
             mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
 
         }
+
         if( !recordedIdValidationError ) {
             mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
         }
@@ -146,20 +143,16 @@ public class MediaItemDataMapper {
         List<String> castMembers = new ArrayList<>();
         List<String> characters = new ArrayList<>();
 
-        if( null != programEntity.getCast() ) {
+        if( null != programEntity.getCast() && null != programEntity.getCast().getCastMembers() && programEntity.getCast().getCastMembers().length != 0 ) {
 
-            if( null != programEntity.getCast().getCastMembers() && programEntity.getCast().getCastMembers().length != 0 ) {
+            for( CastMemberEntity castMember : programEntity.getCast().getCastMembers() ) {
 
-                for( CastMemberEntity castMember : programEntity.getCast().getCastMembers() ) {
+                if( !castMembers.contains( castMember.getName() ) ) {
+                    castMembers.add( castMember.getName() );
+                }
 
-                    if( !castMembers.contains( castMember.getName() ) ) {
-                        castMembers.add( castMember.getName() );
-                    }
-
-                    if( !characters.contains( castMember.getCharacterName() ) ) {
-                        characters.add( castMember.getCharacterName() );
-                    }
-
+                if( !characters.contains( castMember.getCharacterName() ) ) {
+                    characters.add( castMember.getCharacterName() );
                 }
 
             }
@@ -173,6 +166,7 @@ public class MediaItemDataMapper {
             }
             mediaItem.setCastMembers( cast.trim() );
         }
+
         if( !characters.isEmpty() ) {
             String cast = "";
             for( String name : characters ) {
@@ -240,13 +234,9 @@ public class MediaItemDataMapper {
 
         mediaItem.setDuration( videoEntity.getLength() );
 
-        if( null != videoEntity.getArtwork() ) {
+        if( null != videoEntity.getArtwork() && null != videoEntity.getArtwork().getArtworkInfos() && videoEntity.getArtwork().getArtworkInfos().length > 0 ) {
 
-            if( null != videoEntity.getArtwork().getArtworkInfos() && videoEntity.getArtwork().getArtworkInfos().length > 0 ) {
-
-                addArtwork( mediaItem, videoEntity.getArtwork().getArtworkInfos() );
-
-            }
+            addArtwork( mediaItem, videoEntity.getArtwork().getArtworkInfos() );
 
         }
 
