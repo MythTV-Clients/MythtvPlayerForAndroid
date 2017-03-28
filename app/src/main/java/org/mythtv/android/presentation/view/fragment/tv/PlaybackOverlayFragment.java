@@ -128,7 +128,7 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     private int mClickCount;
     private int mQueueIndex = -1;
     private List<MediaSession.QueueItem> mQueue;
-    private CursorObjectAdapter mVideoCursorAdapter;
+//    private CursorObjectAdapter mVideoCursorAdapter;
     private int mPosition = 0;
     private long mStartTimeMillis;
     private MediaSession mSession; // MediaSession is used to hold the state of our media playback.
@@ -283,20 +283,20 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     }
 
-    @TargetApi( Build.VERSION_CODES.M )
-    private MediaSession.QueueItem getQueueItem(VideoModel v ) {
-
-        MediaDescription desc = new MediaDescription.Builder()
-                .setDescription( v.description )
-                .setMediaId( v.id + "" )
-                .setMediaUri( Uri.parse( v.videoUrl ) )
-                .setIconUri( Uri.parse( v.cardImageUrl ) )
-                .setSubtitle( v.studio )
-                .setTitle( v.title )
-                .build();
-
-        return new MediaSession.QueueItem( desc, v.id );
-    }
+//    @TargetApi( Build.VERSION_CODES.M )
+//    private MediaSession.QueueItem getQueueItem(VideoModel v ) {
+//
+//        MediaDescription desc = new MediaDescription.Builder()
+//                .setDescription( v.description )
+//                .setMediaId( v.id + "" )
+//                .setMediaUri( Uri.parse( v.videoUrl ) )
+//                .setIconUri( Uri.parse( v.cardImageUrl ) )
+//                .setSubtitle( v.studio )
+//                .setTitle( v.title )
+//                .build();
+//
+//        return new MediaSession.QueueItem( desc, v.id );
+//    }
 
     private void setPlaybackState( int state ) {
 
@@ -652,11 +652,11 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     }
 
-    private void prev() {
-
-        mMediaController.getTransportControls().skipToPrevious();
-
-    }
+//    private void prev() {
+//
+//        mMediaController.getTransportControls().skipToPrevious();
+//
+//    }
 
     private void fastForward() {
 
@@ -943,16 +943,16 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
                 });
     }
 
-    private void playVideo( VideoModel v, Bundle extras ) {
-        Log.d( TAG, "Playing video " + v.title + " with url = " + v.videoUrl );
-        Log.d( TAG, "Video: " + v.toString() );
-
-        setVideoPath( v.videoUrl );
-        setPlaybackState( PlaybackState.STATE_PAUSED );
-        updateMetadata( v );
-        playPause( extras.getBoolean( AUTO_PLAY ) );
-
-    }
+//    private void playVideo( VideoModel v, Bundle extras ) {
+//        Log.d( TAG, "Playing video " + v.title + " with url = " + v.videoUrl );
+//        Log.d( TAG, "Video: " + v.toString() );
+//
+//        setVideoPath( v.videoUrl );
+//        setPlaybackState( PlaybackState.STATE_PAUSED );
+//        updateMetadata( v );
+//        playPause( extras.getBoolean( AUTO_PLAY ) );
+//
+//    }
 
     // An event was triggered by MediaController.TransportControls and must be handled here.
     // Here we update the media itself to act on the event that was triggered.

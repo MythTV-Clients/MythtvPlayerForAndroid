@@ -47,7 +47,7 @@ import javax.inject.Inject;
 @PerActivity
 public class ProgramModelDataMapper {
 
-    private static final String TAG = ProgramModelDataMapper.class.getSimpleName();
+//    private static final String TAG = ProgramModelDataMapper.class.getSimpleName();
 
     private final LiveStreamInfoModelDataMapper liveStreamInfoModelDataMapper;
 

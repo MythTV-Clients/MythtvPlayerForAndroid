@@ -43,7 +43,7 @@ import javax.inject.Inject;
  */
 public class ProgramEntityJsonMapper {
 
-    private static final String TAG = ProgramEntityJsonMapper.class.getSimpleName();
+//    private static final String TAG = ProgramEntityJsonMapper.class.getSimpleName();
 
     private final Gson gson;
 

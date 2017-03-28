@@ -22,10 +22,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
-import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 
@@ -51,23 +48,19 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
 
     private static final String TAG = ContentApiImpl.class.getSimpleName();
 
-    private static final DateTimeFormatter fmt = DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
-
     private final OkHttpClient okHttpClient;
     private final LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper;
-    private final BooleanJsonMapper booleanJsonMapper;
 
-    public ContentApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper, BooleanJsonMapper booleanJsonMapper ) {
+    public ContentApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper ) {
         super( context, sharedPreferences );
 
-        if( null == okHttpClient || null == liveStreamInfoEntityJsonMapper || null == booleanJsonMapper ) {
+        if( null == okHttpClient || null == liveStreamInfoEntityJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
 
         this.okHttpClient = okHttpClient;
         this.liveStreamInfoEntityJsonMapper = liveStreamInfoEntityJsonMapper;
-        this.booleanJsonMapper = booleanJsonMapper;
 
     }
 

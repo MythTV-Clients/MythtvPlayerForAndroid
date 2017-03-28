@@ -117,7 +117,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
         ButterKnife.bind( this );
 
-        this.initializeActivity( savedInstanceState );
+        this.initializeActivity();
 
         Log.d( TAG, "onCreate : exit" );
     }
@@ -154,7 +154,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     /**
      * Initializes this activity.
      */
-    private void initializeActivity( Bundle savedInstanceState ) {
+    private void initializeActivity() {
         Log.d( TAG, "initializeActivity : enter" );
 
         pulse = AnimationUtils.loadAnimation( this, R.anim.pulse );

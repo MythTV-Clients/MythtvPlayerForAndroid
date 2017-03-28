@@ -295,18 +295,4 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         return sharedPreferences.getString( key, "" );
     }
 
-    private boolean getBooleanFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getBoolean( key, false );
-    }
-
-    private int getIntFromPreferences( Context context, String key ) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
-
-        return sharedPreferences.getInt( key, -1 );
-    }
-
 }

@@ -1991,18 +1991,18 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     }
 
-    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, String desc ) {
-
-        actions.add( new GuidedAction.Builder( context )
-                .id( id )
-                .title( title )
-                .editTitle( editTitle )
-                .description( desc )
-                .editable( true )
-                .hasNext( false )
-                .build() );
-
-    }
+//    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, String desc ) {
+//
+//        actions.add( new GuidedAction.Builder( context )
+//                .id( id )
+//                .title( title )
+//                .editTitle( editTitle )
+//                .description( desc )
+//                .editable( true )
+//                .hasNext( false )
+//                .build() );
+//
+//    }
 
     private static void addCheckedAction( Context context, List<GuidedAction> actions, int iconResId, String title, String desc, boolean checked ) {
 
@@ -2010,7 +2010,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
                 .title( title )
                 .description( desc )
                 .checkSetId( OPTION_CHECK_SET_ID )
-//                .iconResourceId( iconResId, context )
+                .iconResourceId( iconResId, context )
                 .build();
 
         guidedAction.setChecked( checked );

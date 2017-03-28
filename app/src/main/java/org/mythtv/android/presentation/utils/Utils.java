@@ -34,7 +34,7 @@ import java.util.HashMap;
  */
 public class Utils {
 
-    private static final String TAG = Utils.class.getSimpleName();
+//    private static final String TAG = Utils.class.getSimpleName();
 
     /*
      * Making sure public utility methods remain static
