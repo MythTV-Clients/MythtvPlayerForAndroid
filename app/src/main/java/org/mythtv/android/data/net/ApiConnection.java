@@ -42,7 +42,7 @@ import okhttp3.Response;
  *
  * Created on 8/27/15.
  */
-public class ApiConnection implements Callable<Reader> {
+public final class ApiConnection implements Callable<Reader> {
 
     private static final String TAG = ApiConnection.class.getSimpleName();
 

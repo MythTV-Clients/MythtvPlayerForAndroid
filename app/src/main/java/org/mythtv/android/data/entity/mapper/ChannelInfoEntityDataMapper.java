@@ -37,7 +37,7 @@ import javax.inject.Singleton;
  * Created on 1/18/16.
  */
 @Singleton
-public class ChannelInfoEntityDataMapper {
+public final class ChannelInfoEntityDataMapper {
 
     private ChannelInfoEntityDataMapper() { }
 

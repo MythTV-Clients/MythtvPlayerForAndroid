@@ -20,7 +20,7 @@ import javax.inject.Singleton;
  * Created on 9/24/16.
  */
 @Singleton
-public class SeriesDataMapper {
+public final class SeriesDataMapper {
 
     private SeriesDataMapper() { }
 

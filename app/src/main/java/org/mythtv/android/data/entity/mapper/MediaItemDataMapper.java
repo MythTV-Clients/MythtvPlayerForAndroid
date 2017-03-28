@@ -31,7 +31,7 @@ import javax.inject.Singleton;
  */
 
 @Singleton
-public class MediaItemDataMapper {
+public final class MediaItemDataMapper {
 
     private static final String TAG = MediaItemDataMapper.class.getSimpleName();
 

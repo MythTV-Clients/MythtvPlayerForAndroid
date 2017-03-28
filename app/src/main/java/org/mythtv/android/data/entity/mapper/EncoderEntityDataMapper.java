@@ -38,7 +38,7 @@ import javax.inject.Singleton;
  * Created on 1/18/16.
  */
 @Singleton
-public class EncoderEntityDataMapper {
+public final class EncoderEntityDataMapper {
 
     private EncoderEntityDataMapper() { }
 

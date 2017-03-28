@@ -40,7 +40,7 @@ import javax.inject.Singleton;
  * Created on 8/27/15.
  */
 @Singleton
-public class ProgramEntityDataMapper {
+public final class ProgramEntityDataMapper {
 
     private ProgramEntityDataMapper() { }
 

@@ -26,7 +26,7 @@ package org.mythtv.android.domain;
  *
  * Created on 11/10/15.
  */
-public class ContentType {
+public final class ContentType {
 
     public static final String ADULT = "ADULT";
     public static final String HOMEVIDEO = "HOMEVIDEO";

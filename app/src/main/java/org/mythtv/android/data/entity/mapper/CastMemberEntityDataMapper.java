@@ -36,7 +36,7 @@ import javax.inject.Singleton;
  * Created on 1/18/16.
  */
 @Singleton
-public class CastMemberEntityDataMapper {
+public final class CastMemberEntityDataMapper {
 
     private CastMemberEntityDataMapper() { }
 

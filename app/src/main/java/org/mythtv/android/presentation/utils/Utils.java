@@ -32,7 +32,7 @@ import java.util.HashMap;
  *
  * @author dmfrey
  */
-public class Utils {
+public final class Utils {
 
 //    private static final String TAG = Utils.class.getSimpleName();
 

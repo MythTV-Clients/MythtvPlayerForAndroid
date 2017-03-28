@@ -33,7 +33,7 @@ import java.util.Locale;
  *
  * Created on 2/1/16.
  */
-public class ArticleCleaner {
+public final class ArticleCleaner {
 
     private static final String TAG = ArticleCleaner.class.getSimpleName();
 

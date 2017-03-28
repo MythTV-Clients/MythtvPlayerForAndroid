@@ -36,7 +36,7 @@ import javax.inject.Singleton;
  * Created on 10/17/15.
  */
 @Singleton
-public class LiveStreamInfoEntityDataMapper {
+public final class LiveStreamInfoEntityDataMapper {
 
     private LiveStreamInfoEntityDataMapper() { }
 

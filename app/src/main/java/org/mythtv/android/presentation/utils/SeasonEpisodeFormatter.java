@@ -26,7 +26,7 @@ package org.mythtv.android.presentation.utils;
  *
  * Created on 1/13/16.
  */
-public class SeasonEpisodeFormatter {
+public final class SeasonEpisodeFormatter {
 
     private SeasonEpisodeFormatter() {}
 

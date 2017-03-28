@@ -28,7 +28,7 @@ import java.util.Locale;
  *
  * Created on 8/26/15.
  */
-public class DomainUtils {
+public final class DomainUtils {
 
     private DomainUtils() { }
 

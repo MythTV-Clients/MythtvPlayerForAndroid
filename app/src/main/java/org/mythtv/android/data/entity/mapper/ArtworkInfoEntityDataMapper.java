@@ -36,7 +36,7 @@ import javax.inject.Singleton;
  * Created on 1/18/16.
  */
 @Singleton
-public class ArtworkInfoEntityDataMapper {
+public final class ArtworkInfoEntityDataMapper {
 
     private ArtworkInfoEntityDataMapper() { }
 
