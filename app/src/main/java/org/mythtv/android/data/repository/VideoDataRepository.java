@@ -55,6 +55,7 @@ import rx.schedulers.Schedulers;
 public class VideoDataRepository implements VideoRepository {
 
     private static final String TAG = VideoDataRepository.class.getSimpleName();
+    private static final String CONVERT2METHODREF = "Convert2MethodRef";
 
     private final VideoDataStoreFactory videoDataStoreFactory;
     private final ContentDataStoreFactory contentDataStoreFactory;
@@ -67,7 +68,7 @@ public class VideoDataRepository implements VideoRepository {
 
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> getVideoList( String folder, String sort, boolean descending, int startIndex, int count ) {
         Log.d( TAG, "getVideoList : enter" );
@@ -124,7 +125,7 @@ public class VideoDataRepository implements VideoRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> getVideoListByContentType( final String contentType ) {
         Log.d( TAG, "getVideoListByContentType : enter" );
@@ -201,7 +202,7 @@ public class VideoDataRepository implements VideoRepository {
 
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> getVideoListByContentTypeAndSeries( String contentType, String series ) {
         Log.d( TAG, "getVideoListByContentTypeAndSeries : enter" );
@@ -258,7 +259,7 @@ public class VideoDataRepository implements VideoRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<MediaItem> getVideo( int id ) {
 
@@ -296,7 +297,7 @@ public class VideoDataRepository implements VideoRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
         Log.d( TAG, "updateWatchedStatus : enter" );

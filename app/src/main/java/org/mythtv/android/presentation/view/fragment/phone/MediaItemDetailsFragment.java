@@ -84,6 +84,10 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
     private static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
+    private static final String ACCEPT = "Accept";
+    private static final String ACCEPT_MEDIA_TYPE = "application/json";
+    public static final String DO_IN_BACKGROUND_ERROR = "doInBackground : error";
+    public static final String DO_IN_BACKGROUND_MEDIA_ITEM_MODEL = "doInBackground : mediaItemModel=";
 
     private MediaItemModel mediaItemModel;
     private MediaItemDetailsListener listener;
@@ -584,7 +588,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
                 final Request request = new Request.Builder()
                         .url( getMasterBackendUrl() + mediaItemModel.getMarkWatchedUrl() )
-                        .addHeader( "Accept", "application/json" )
+                        .addHeader( ACCEPT, ACCEPT_MEDIA_TYPE )
                         .cacheControl( CacheControl.FORCE_NETWORK )
                         .post( builder.build() )
                         .build();
@@ -598,9 +602,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
                     return mapper.transformBoolean( result );
 
                 } catch( IOException e ) {
-                    Log.e( TAG, "doInBackground : error", e );
+                    Log.e( TAG, DO_IN_BACKGROUND_ERROR, e );
 
-                    FirebaseCrash.logcat( Log.ERROR, TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+                    FirebaseCrash.logcat( Log.ERROR, TAG, DO_IN_BACKGROUND_MEDIA_ITEM_MODEL + mediaItemModel.toString() );
                     FirebaseCrash.report( e );
 
                 }
@@ -630,12 +634,12 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         @Override
         protected LiveStreamInfoEntity doInBackground( Void... params ) {
-            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+//            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
 
             if( mediaItemModel.isValid() ) {
                 final Request request = new Request.Builder()
                         .url( getMasterBackendUrl() + mediaItemModel.getCreateHttpLiveStreamUrl() )
-                        .addHeader( "Accept", "application/json" )
+                        .addHeader( ACCEPT, ACCEPT_MEDIA_TYPE )
                         .cacheControl( CacheControl.FORCE_NETWORK )
                         .get()
                         .build();
@@ -649,9 +653,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
                     return mapper.transformLiveStreamInfoEntity( result );
 
                 } catch( IOException e ) {
-                    Log.e( TAG, "doInBackground : error", e );
+                    Log.e( TAG, DO_IN_BACKGROUND_ERROR, e );
 
-                    FirebaseCrash.logcat( Log.ERROR, TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+                    FirebaseCrash.logcat( Log.ERROR, TAG, DO_IN_BACKGROUND_MEDIA_ITEM_MODEL + mediaItemModel.toString() );
                     FirebaseCrash.report( e );
 
                 }
@@ -698,13 +702,13 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         @Override
         protected Boolean doInBackground( Void... params ) {
-            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+//            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
 
             if( mediaItemModel.isValid() ) {
 
                 final Request request = new Request.Builder()
                         .url( getMasterBackendUrl() + mediaItemModel.getRemoveHttpLiveStreamUrl() )
-                        .addHeader( "Accept", "application/json" )
+                        .addHeader( ACCEPT, ACCEPT_MEDIA_TYPE )
                         .cacheControl( CacheControl.FORCE_NETWORK )
                         .get()
                         .build();
@@ -718,9 +722,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
                     return mapper.transformBoolean( result );
 
                 } catch( IOException e ) {
-                    Log.e( TAG, "doInBackground : error", e );
+                    Log.e( TAG, DO_IN_BACKGROUND_ERROR, e );
 
-                    FirebaseCrash.logcat( Log.ERROR, TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+                    FirebaseCrash.logcat( Log.ERROR, TAG, DO_IN_BACKGROUND_MEDIA_ITEM_MODEL + mediaItemModel.toString() );
                     FirebaseCrash.report( e );
 
                 }
@@ -756,13 +760,13 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         @Override
         protected LiveStreamInfoEntity doInBackground( Void... params ) {
-            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+//            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
 
             if( mediaItemModel.isValid() ) {
 
                 final Request request = new Request.Builder()
                         .url( getMasterBackendUrl() + mediaItemModel.getGetHttpLiveStreamUrl() )
-                        .addHeader( "Accept", "application/json" )
+                        .addHeader( ACCEPT, ACCEPT_MEDIA_TYPE )
                         .get()
                         .build();
 
@@ -775,9 +779,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
                     return mapper.transformLiveStreamInfoEntity( result );
 
                 } catch( JsonSyntaxException | IOException e ) {
-                    Log.e( TAG, "doInBackground : error", e );
+                    Log.e( TAG, DO_IN_BACKGROUND_ERROR, e );
 
-                    FirebaseCrash.logcat( Log.ERROR, TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
+                    FirebaseCrash.logcat( Log.ERROR, TAG, DO_IN_BACKGROUND_MEDIA_ITEM_MODEL + mediaItemModel.toString() );
                     FirebaseCrash.report( e );
 
                 }

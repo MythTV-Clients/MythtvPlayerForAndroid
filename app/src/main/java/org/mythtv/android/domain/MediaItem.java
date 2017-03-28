@@ -16,6 +16,8 @@ import java.util.List;
 
 public class MediaItem {
 
+    public static final String SPACE = "%20";
+
     private int id;
     private Media media;
     private String title;
@@ -203,7 +205,7 @@ public class MediaItem {
 
         if( null != url && !"".equals( url ) ) {
 
-            url = url.replaceAll( " ", "%20" );
+            url = url.replaceAll( " ", SPACE );
             this.url = url;
 
         }
@@ -219,7 +221,7 @@ public class MediaItem {
 
         if( null != fanartUrl && !"".equals( fanartUrl ) ) {
 
-            fanartUrl = fanartUrl.replaceAll( " ", "%20" );
+            fanartUrl = fanartUrl.replaceAll( " ", SPACE );
             this.fanartUrl = fanartUrl;
 
         }
@@ -235,7 +237,7 @@ public class MediaItem {
 
         if( null != coverartUrl && !"".equals( coverartUrl ) ) {
 
-            coverartUrl = coverartUrl.replaceAll( " ", "%20" );
+            coverartUrl = coverartUrl.replaceAll( " ", SPACE );
             this.coverartUrl = coverartUrl;
 
         }
@@ -251,7 +253,7 @@ public class MediaItem {
 
         if( null != bannerUrl && !"".equals( bannerUrl ) ) {
 
-            bannerUrl = bannerUrl.replaceAll( " ", "%20" );
+            bannerUrl = bannerUrl.replaceAll( " ", SPACE );
             this.bannerUrl = bannerUrl;
 
         }
@@ -267,7 +269,7 @@ public class MediaItem {
 
         if( null != previewUrl && !"".equals( previewUrl ) ) {
 
-            previewUrl = previewUrl.replaceAll( " ", "%20" );
+            previewUrl = previewUrl.replaceAll( " ", SPACE );
             this.previewUrl = previewUrl;
 
         }

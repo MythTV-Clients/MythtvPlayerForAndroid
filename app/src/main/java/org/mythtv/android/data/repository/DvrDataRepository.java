@@ -56,6 +56,7 @@ import rx.Observable;
 public class DvrDataRepository implements DvrRepository {
 
     private static final String TAG = DvrDataRepository.class.getSimpleName();
+    private static final String CONVERT2METHODREF = "Convert2MethodRef";
 
     private final DvrDataStoreFactory dvrDataStoreFactory;
     private final ContentDataStoreFactory contentDataStoreFactory;
@@ -68,7 +69,7 @@ public class DvrDataRepository implements DvrRepository {
 
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<Series>> titleInfos() {
         Log.d( TAG, "titleInfos : enter" );
@@ -80,7 +81,7 @@ public class DvrDataRepository implements DvrRepository {
                 .map( titleInfoEntities -> SeriesDataMapper.transformPrograms( titleInfoEntities ) );
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> recordedPrograms( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
         Log.d( TAG, "recordedPrograms : enter" );
@@ -129,7 +130,7 @@ public class DvrDataRepository implements DvrRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<MediaItem> recordedProgram( final int recordedId ) {
         Log.d( TAG, "recordedProgram : enter" );
@@ -194,7 +195,7 @@ public class DvrDataRepository implements DvrRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> recent() {
         Log.d( TAG, "recent : enter" );
@@ -246,7 +247,7 @@ public class DvrDataRepository implements DvrRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<Encoder>> encoders() {
         Log.d( TAG, "encoders : enter" );
@@ -258,7 +259,7 @@ public class DvrDataRepository implements DvrRepository {
                 .map( encoderEntities -> EncoderEntityDataMapper.transformCollection( encoderEntities ) );
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched ) {
         Log.d( TAG, "updateWatchedStatus : enter" );

@@ -14,6 +14,9 @@ import org.mythtv.android.domain.Media;
 
 public class MediaItemEntity {
 
+    private static final String INTEGER_KEY = "INTEGER";
+    private static final String TEXT_KEY = "TEXT";
+    
     public static final String TABLE_NAME = "media_item";
     public static final String CREATE_TABLE;
     public static final String DROP_TABLE;
@@ -58,39 +61,39 @@ public class MediaItemEntity {
     static {
 
         String createTable = ("CREATE VIRTUAL TABLE " + TABLE_NAME + " using fts3 (") +
-                FIELD_ID + " " + "INTEGER" + ", " +
-                FIELD_MEDIA + " " + "TEXT" + ", " +
-                FIELD_TITLE + " " + "TEXT" + ", " +
-                FIELD_SUBTITLE + " " + "TEXT" + ", " +
-                FIELD_DESCRIPTION + " " + "TEXT" + ", " +
-                FIELD_START_DATE + " " + "INTEGER" + ", " +
-                FIELD_PROGRAM_FLAGS + " " + "INTEGER" + ", " +
-                FIELD_SEASON + " " + "INTEGER" + ", " +
-                FIELD_EPISODE + " " + "INTEGER" + ", " +
-                FIELD_STUDIO + " " + "TEXT" + ", " +
-                FIELD_CAST_MEMBERS + " " + "TEXT" + ", " +
-                FIELD_CHARACTERS + " " + "TEXT" + ", " +
-                FIELD_URL + " " + "TEXT" + ", " +
-                FIELD_FANART_URL + " " + "TEXT" + ", " +
-                FIELD_COVERART_URL + " " + "TEXT" + ", " +
-                FIELD_BANNER_URL + " " + "TEXT" + ", " +
-                FIELD_PREVIEW_URL + " " + "TEXT" + ", " +
-                FIELD_CONTENT_TYPE + " " + "TEXT" + ", " +
-                FIELD_DURATION + " " + "INTEGER" + ", " +
-                FIELD_RECORDING + " " + "INTEGER" + ", " +
-                FIELD_LIVE_STREAM_PERCENT_COMPLETE + " " + "INTEGER" + ", " +
-                FIELD_LIVE_STREAM_ID + " " + "INTEGER" + ", " +
-                FIELD_CREATE_LIVE_STREAM_URL + " " + "TEXT" + ", " +
-                FIELD_REMOVE_LIVE_STREAM_URL + " " + "TEXT" + ", " +
-                FIELD_GET_LIVE_STREAM_URL + " " + "TEXT" + ", " +
-                FIELD_WATCHED_STATUS + " " + "INTEGER" + ", " +
-                FIELD_MARK_WATCHED_URL + " " + "TEXT" + ", " +
-                FIELD_UPDATE_SAVED_BOOKMARK_URL + " " + "TEXT" + ", " +
-                FIELD_BOOKMARK + " " + "INTEGER" + ", " +
-                FIELD_INETREF + " " + "TEXT" + ", " +
-                FIELD_CERTIFICATION + " " + "TEXT" + ", " +
-                FIELD_PARENTAL_LEVEL + " " + "INTEGER" + ", " +
-                FIELD_RECORDING_GROUP + " " + "TEXT" +
+                FIELD_ID + " " + INTEGER_KEY + ", " +
+                FIELD_MEDIA + " " + TEXT_KEY + ", " +
+                FIELD_TITLE + " " + TEXT_KEY + ", " +
+                FIELD_SUBTITLE + " " + TEXT_KEY + ", " +
+                FIELD_DESCRIPTION + " " + TEXT_KEY + ", " +
+                FIELD_START_DATE + " " + INTEGER_KEY + ", " +
+                FIELD_PROGRAM_FLAGS + " " + INTEGER_KEY + ", " +
+                FIELD_SEASON + " " + INTEGER_KEY + ", " +
+                FIELD_EPISODE + " " + INTEGER_KEY + ", " +
+                FIELD_STUDIO + " " + TEXT_KEY + ", " +
+                FIELD_CAST_MEMBERS + " " + TEXT_KEY + ", " +
+                FIELD_CHARACTERS + " " + TEXT_KEY + ", " +
+                FIELD_URL + " " + TEXT_KEY + ", " +
+                FIELD_FANART_URL + " " + TEXT_KEY + ", " +
+                FIELD_COVERART_URL + " " + TEXT_KEY + ", " +
+                FIELD_BANNER_URL + " " + TEXT_KEY + ", " +
+                FIELD_PREVIEW_URL + " " + TEXT_KEY + ", " +
+                FIELD_CONTENT_TYPE + " " + TEXT_KEY + ", " +
+                FIELD_DURATION + " " + INTEGER_KEY + ", " +
+                FIELD_RECORDING + " " + INTEGER_KEY + ", " +
+                FIELD_LIVE_STREAM_PERCENT_COMPLETE + " " + INTEGER_KEY + ", " +
+                FIELD_LIVE_STREAM_ID + " " + INTEGER_KEY + ", " +
+                FIELD_CREATE_LIVE_STREAM_URL + " " + TEXT_KEY + ", " +
+                FIELD_REMOVE_LIVE_STREAM_URL + " " + TEXT_KEY + ", " +
+                FIELD_GET_LIVE_STREAM_URL + " " + TEXT_KEY + ", " +
+                FIELD_WATCHED_STATUS + " " + INTEGER_KEY + ", " +
+                FIELD_MARK_WATCHED_URL + " " + TEXT_KEY + ", " +
+                FIELD_UPDATE_SAVED_BOOKMARK_URL + " " + TEXT_KEY + ", " +
+                FIELD_BOOKMARK + " " + INTEGER_KEY + ", " +
+                FIELD_INETREF + " " + TEXT_KEY + ", " +
+                FIELD_CERTIFICATION + " " + TEXT_KEY + ", " +
+                FIELD_PARENTAL_LEVEL + " " + INTEGER_KEY + ", " +
+                FIELD_RECORDING_GROUP + " " + TEXT_KEY +
                 ");";
 
         CREATE_TABLE = createTable;
