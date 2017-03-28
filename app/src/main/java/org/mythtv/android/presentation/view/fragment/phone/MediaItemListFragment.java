@@ -513,13 +513,15 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
                 if( !filtered.isEmpty() ) {
 
-                    mediaItemModelCollection = filtered;
+                    this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
 
                 }
 
-            }
+            } else {
 
-            this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
+                this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
+
+            }
 
         }
 

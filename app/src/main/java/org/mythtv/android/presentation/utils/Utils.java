@@ -90,10 +90,10 @@ public class Utils {
 
         String result = "";
         int hr = millis / 3600000;
-        millis %= 3600000;
-        int min = millis / 60000;
-        millis %= 60000;
-        int sec = millis / 1000;
+        int millisHr = millis % 3600000;
+        int min = millisHr / 60000;
+        int millisMin = millisHr % 60000;
+        int sec = millisMin / 1000;
         if( hr > 0 ) {
             result += hr + ":";
         }
@@ -132,28 +132,29 @@ public class Utils {
             return false;
         }
 
-        if( version.startsWith( "v" ) ) {
-            version = version.substring( 1 );
+        String cleanVersion = version;
+        if( cleanVersion.startsWith( "v" ) ) {
+            cleanVersion = cleanVersion.substring( 1 );
         }
 
-        if( version.contains( "-" ) ) {
+        if( cleanVersion.contains( "-" ) ) {
 
-            version = version.substring( 0, version.indexOf( "-" ) );
+            cleanVersion = cleanVersion.substring( 0, cleanVersion.indexOf( "-" ) );
 
         }
 
         try {
 
-            Float.parseFloat( version );
+            Float.parseFloat( cleanVersion );
 
         } catch( NumberFormatException e ) {
 
             return false;
         }
 
-        float extractedVersion = Float.parseFloat( version );
+        float extractedVersion = Float.parseFloat( cleanVersion );
 
-        if( !version.startsWith( "0" ) ) {
+        if( !cleanVersion.startsWith( "0" ) ) {
 
             extractedVersion *= 100;
 

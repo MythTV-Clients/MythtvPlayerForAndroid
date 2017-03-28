@@ -62,6 +62,7 @@ import rx.Observable;
  *
  * Created on 1/28/16.
  */
+@SuppressWarnings( "PMD.AvoidDuplicateLiterals" )
 public class SettingsActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent> {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
@@ -266,6 +267,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -355,6 +357,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -425,6 +428,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -489,6 +493,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -544,6 +549,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -599,6 +605,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -661,6 +668,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -716,6 +724,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -782,6 +791,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -850,6 +860,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1041,6 +1052,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             Log.d( TAG, "loadMediaItemList : exit" );
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1170,7 +1182,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
-
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1307,6 +1319,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1369,6 +1382,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1431,6 +1445,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1503,6 +1518,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1565,6 +1581,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1627,6 +1644,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1689,6 +1707,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1751,6 +1770,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1813,6 +1833,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1875,6 +1896,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1938,6 +1960,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {

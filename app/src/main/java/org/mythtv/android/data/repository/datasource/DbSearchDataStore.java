@@ -60,13 +60,13 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
-    public Observable<List<MediaItem>> search(String searchString ) {
+    public Observable<List<MediaItem>> search( String searchString ) {
         Log.d( TAG, "search : enter" );
 
-        searchString = "*" + searchString + "*";
-        searchString = searchString.replaceAll( " ", "*" );
+        String search = "*" + searchString + "*";
+        search = search.replaceAll( " ", "*" );
 
-        final String query = searchString;
+        final String query = search;
         Log.d( TAG, "search : query=" + query );
 
         return Observable.create( new Observable.OnSubscribe<List<MediaItem>>() {

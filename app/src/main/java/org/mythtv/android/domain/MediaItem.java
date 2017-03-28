@@ -205,8 +205,7 @@ public class MediaItem {
 
         if( null != url && !"".equals( url ) ) {
 
-            url = url.replaceAll( " ", SPACE );
-            this.url = url;
+            this.url = url.replaceAll( " ", SPACE );
 
         }
 
@@ -221,8 +220,7 @@ public class MediaItem {
 
         if( null != fanartUrl && !"".equals( fanartUrl ) ) {
 
-            fanartUrl = fanartUrl.replaceAll( " ", SPACE );
-            this.fanartUrl = fanartUrl;
+            this.fanartUrl = fanartUrl.replaceAll( " ", SPACE );
 
         }
 
@@ -237,8 +235,7 @@ public class MediaItem {
 
         if( null != coverartUrl && !"".equals( coverartUrl ) ) {
 
-            coverartUrl = coverartUrl.replaceAll( " ", SPACE );
-            this.coverartUrl = coverartUrl;
+            this.coverartUrl = coverartUrl.replaceAll( " ", SPACE );
 
         }
 
@@ -253,8 +250,7 @@ public class MediaItem {
 
         if( null != bannerUrl && !"".equals( bannerUrl ) ) {
 
-            bannerUrl = bannerUrl.replaceAll( " ", SPACE );
-            this.bannerUrl = bannerUrl;
+            this.bannerUrl = bannerUrl.replaceAll( " ", SPACE );
 
         }
 
@@ -269,8 +265,7 @@ public class MediaItem {
 
         if( null != previewUrl && !"".equals( previewUrl ) ) {
 
-            previewUrl = previewUrl.replaceAll( " ", SPACE );
-            this.previewUrl = previewUrl;
+            this.previewUrl = previewUrl.replaceAll( " ", SPACE );
 
         }
 

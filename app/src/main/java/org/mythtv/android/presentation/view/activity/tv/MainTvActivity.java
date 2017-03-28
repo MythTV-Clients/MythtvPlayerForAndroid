@@ -185,6 +185,7 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
         }
 
         @Override
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public View getView( int position, View convertView, ViewGroup parent ) {
 
             Category category = getItem( position );
