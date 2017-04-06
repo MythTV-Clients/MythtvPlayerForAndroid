@@ -249,7 +249,7 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
             for( MediaItemModel mediaItemModel : mediaItems ) {
                 Log.d( TAG, "renderMediaItemList : mediaItemModel=" + mediaItemModel );
 
-                if( Media.PROGRAM.equals( mediaItemModel.getMedia() ) ) {
+                if( Media.PROGRAM.equals( mediaItemModel.media() ) ) {
 
                     programRowAdapter.add( mediaItemModel );
 

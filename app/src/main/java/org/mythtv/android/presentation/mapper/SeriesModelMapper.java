@@ -29,14 +29,7 @@ public class SeriesModelMapper {
 
     public SeriesModel transform( Series series ) {
 
-        SeriesModel seriesModel = new SeriesModel();
-        seriesModel.setTitle( series.getTitle() );
-        seriesModel.setMedia( series.getMedia() );
-        seriesModel.setArtworkUrl( series.getArtworkUrl() );
-        seriesModel.setCount( series.getCount() );
-        seriesModel.setInetref( series.getInetref() );
-
-        return seriesModel;
+        return SeriesModel.create( series.title(), series.media(), series.artworkUrl(), series.count(), series.inetref() );
     }
 
     public List<SeriesModel> transform( Collection<Series> seriesCollection ) {

@@ -17,7 +17,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -35,6 +38,10 @@ public final class MediaItemDataMapper {
 
     private static final String TAG = MediaItemDataMapper.class.getSimpleName();
 
+    private static final String BANNER_KEY = "banner";
+    private static final String COVERART_KEY = "coverart";
+    private static final String FANART_KEY = "fanart";
+
     private MediaItemDataMapper() { }
 
     public static MediaItem transform( ProgramEntity programEntity ) throws UnsupportedEncodingException {
@@ -42,64 +49,67 @@ public final class MediaItemDataMapper {
 
         boolean dateValidationError = false, recordedIdValidationError = false;
         List<Error> errors = new ArrayList<>();
-        MediaItem mediaItem = new MediaItem();
 
-        Log.i( TAG, "transform : startTs=" + programEntity.getRecording().getStartTs() + ", test=" + ( null == programEntity.getRecording().getStartTs() ) );
-        if( null == programEntity.getRecording().getStartTs() ) {
+        Log.i( TAG, "transform : startTs=" + programEntity.recording().startTs() + ", test=" + ( null == programEntity.recording().startTs() ) );
+        if( null == programEntity.recording().startTs() ) {
             Log.i( TAG, "transform : added StartTs to errors" );
-            errors.add( new Error( "StartTs", "StartTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+            errors.add( Error.create( "StartTs", "StartTs is not valid for " + programEntity.title() + " - " + programEntity.subTitle(), -1 ) );
             dateValidationError = true;
         }
 
-        if( null == programEntity.getRecording().getEndTs() ) {
-            errors.add( new Error( "EndTs", "EndTs is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        if( null == programEntity.recording().endTs() ) {
+            errors.add( Error.create( "EndTs", "EndTs is not valid for " + programEntity.title() + " - " + programEntity.subTitle(), -1 ) );
             dateValidationError = true;
         }
 
-        if( programEntity.getRecording().getStatus() != -1 && ( programEntity.getRecording().getRecordedId().equals( "" ) || programEntity.getRecording().getRecordedId().equals( "0" )  ) ) {
-            errors.add( new Error( "RecordedId", "Recorded Id is not valid for " + programEntity.getTitle() + " - " + programEntity.getSubTitle(), -1 ) );
+        if( programEntity.recording().status() != -1 && ( programEntity.recording().recordedId().equals( "" ) || programEntity.recording().recordedId().equals( "0" )  ) ) {
+            errors.add( Error.create( "RecordedId", "Recorded Id is not valid for " + programEntity.title() + " - " + programEntity.subTitle(), -1 ) );
             recordedIdValidationError = true;
         }
 
-        if( !recordedIdValidationError ) {
-            mediaItem.setId( programEntity.getRecording().translateRecordedId() );
-        }
+//        if( !recordedIdValidationError ) {
+//            mediaItem.setId( programEntity.recording().translateRecordedId() );
+//        }
 
-        switch( programEntity.getRecording().getStatus() ) {
+        Media media = null;
+        String url = null, contentType = null, createHttpLiveStreamUrl = null, removeHttpLiveStreamUrl = null, getHttpLiveStreamUrl = null, previewUrl = null, markWatchedUrl = null, recordingGroup = null, updateSavedBookmarkUrl = null;
+        int percentComplete = 0, liveStreamId = 0;
+        boolean watched = false, recording = false;
+        long bookmark = 0, duration = 0;
+        switch( programEntity.recording().status() ) {
 
             case -3 :
             case -2 :
 
-                String url = "/Content/GetFile?FileName=" + URLEncoder.encode( programEntity.getFileName(), "UTF-8" );
+                url = "/Content/GetFile?FileName=" + URLEncoder.encode( programEntity.fileName(), "UTF-8" );
                 if( null != programEntity.getLiveStreamInfoEntity() ) {
 
-                    url = programEntity.getLiveStreamInfoEntity().getRelativeUrl();
-                    mediaItem.setPercentComplete( programEntity.getLiveStreamInfoEntity().getPercentComplete() );
-                    mediaItem.setLiveStreamId( programEntity.getLiveStreamInfoEntity().getId() );
-                    mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
-                    mediaItem.setGetHttpLiveStreamUrl( String.format( "/Content/GetLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
+                    url = programEntity.getLiveStreamInfoEntity().relativeUrl();
+                    percentComplete = programEntity.getLiveStreamInfoEntity().percentComplete();
+                    liveStreamId = programEntity.getLiveStreamInfoEntity().id();
+                    removeHttpLiveStreamUrl = String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().id() ) );
+                    getHttpLiveStreamUrl = String.format( "/Content/GetLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().id() ) );
 
                 }
 
-                mediaItem.setMedia( Media.PROGRAM );
-                mediaItem.setUrl( url );
-                setContentType( mediaItem, url );
+                media = Media.PROGRAM;
+                contentType = setContentType( url );
                 if( !recordedIdValidationError ) {
-                    mediaItem.setPreviewUrl( "/Content/GetPreviewImage?RecordedId=" + programEntity.getRecording().getRecordedId() );
+                    previewUrl = "/Content/GetPreviewImage?RecordedId=" + programEntity.recording().recordedId();
                 }
 
-                mediaItem.setWatched( ( programEntity.getProgramFlags() & 0x00000200 ) > 0 );
-                mediaItem.setMarkWatchedUrl( "/Dvr/UpdateRecordedWatchedStatus" );
+                watched = ( programEntity.programFlags() & 0x00000200 ) > 0;
+                markWatchedUrl = "/Dvr/UpdateRecordedWatchedStatus";
 
-                mediaItem.setRecording( programEntity.getRecording().getStatus() == -2 );
+                recording = programEntity.recording().status() == -2;
 
-                mediaItem.setRecordingGroup( programEntity.getRecording().getRecGroup() );
+                recordingGroup = programEntity.recording().recGroup();
 
                 break;
 
             case -1 :
 
-                mediaItem.setMedia( Media.UPCOMING );
+                media = Media.UPCOMING;
 
                 break;
 
@@ -109,82 +119,79 @@ public final class MediaItemDataMapper {
 
         }
 
-        mediaItem.setTitle( programEntity.getTitle() );
-        mediaItem.setSubTitle( programEntity.getSubTitle() );
-        mediaItem.setInetref( programEntity.getInetref() );
-        mediaItem.setDescription( programEntity.getDescription() );
-        mediaItem.setStartDate(programEntity.getStartTime());
-        mediaItem.setProgramFlags( programEntity.getProgramFlags() );
-        mediaItem.setSeason( programEntity.getSeason() );
-        mediaItem.setEpisode( programEntity.getEpisode() );
-        mediaItem.setStudio( programEntity.getChannel().getCallSign() );
-
         if( !dateValidationError ) {
-            calculateDuration( mediaItem, programEntity.getRecording().getStartTs(), programEntity.getRecording().getEndTs() );
+            duration = calculateDuration( programEntity.recording().startTs(), programEntity.recording().endTs() );
         }
 
-        if( null != programEntity.getArtwork() && null != programEntity.getArtwork().getArtworkInfos() && programEntity.getArtwork().getArtworkInfos().length > 0 ) {
+        Map<String, String> artworks = defaultArtworks();
+        if( null != programEntity.artwork() && null != programEntity.artwork().artworkInfos() && !programEntity.artwork().artworkInfos().isEmpty() ) {
 
-            addArtwork(mediaItem, programEntity.getArtwork().getArtworkInfos());
+            artworks = addArtwork( programEntity.artwork().artworkInfos() );
 
         }
 
         if( null != programEntity.getLiveStreamInfoEntity() ) {
 
-            mediaItem.setLiveStreamId( programEntity.getLiveStreamInfoEntity().getId() );
-            mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().getId() ) ) );
+            liveStreamId = programEntity.getLiveStreamInfoEntity().id();
+            removeHttpLiveStreamUrl = String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().id() ) );
 
         }
 
         if( !recordedIdValidationError ) {
-            mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+            createHttpLiveStreamUrl = String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.recording().recordedId() ) );
         }
 
         List<String> castMembers = new ArrayList<>();
         List<String> characters = new ArrayList<>();
 
-        if( null != programEntity.getCast() && null != programEntity.getCast().getCastMembers() && programEntity.getCast().getCastMembers().length != 0 ) {
+        if( null != programEntity.cast() && null != programEntity.cast().castMembers() && !programEntity.cast().castMembers().isEmpty() ) {
 
-            for( CastMemberEntity castMember : programEntity.getCast().getCastMembers() ) {
+            for( CastMemberEntity castMember : programEntity.cast().castMembers() ) {
 
-                if( !castMembers.contains( castMember.getName() ) ) {
-                    castMembers.add( castMember.getName() );
+                if( !castMembers.contains( castMember.name() ) ) {
+                    castMembers.add( castMember.name() );
                 }
 
-                if( !characters.contains( castMember.getCharacterName() ) ) {
-                    characters.add( castMember.getCharacterName() );
+                if( !characters.contains( castMember.characterName() ) ) {
+                    characters.add( castMember.characterName() );
                 }
 
             }
 
         }
 
+        String cast = "";
         if( !castMembers.isEmpty() ) {
-            String cast = "";
+
             for( String name : castMembers ) {
                 cast += name + " ";
             }
-            mediaItem.setCastMembers( cast.trim() );
+
         }
 
+        String characterNames = "";
         if( !characters.isEmpty() ) {
-            String cast = "";
+
             for( String name : characters ) {
-                cast += name + " ";
+                characterNames += name + " ";
             }
-            mediaItem.setCharacters( cast.trim() );
         }
 
         if( !recordedIdValidationError ) {
-            mediaItem.setUpdateSavedBookmarkUrl( String.format( "/Dvr/SetSavedBookmark?RecordedId=%s1", String.valueOf( programEntity.getRecording().getRecordedId() ) ) );
+            updateSavedBookmarkUrl = String.format( "/Dvr/SetSavedBookmark?RecordedId=%s1", String.valueOf( programEntity.recording().recordedId() ) );
         }
-        mediaItem.setBookmark( programEntity.getBookmark() );
+        bookmark = programEntity.getBookmark();
 
-        Log.i( TAG, "transform : errors=" + errors );
-        mediaItem.setValidationErrors( errors );
-
-        Log.i( TAG, "transform : mediaItem=" + mediaItem.toString() );
-        return mediaItem;
+        Log.i( TAG, "transform : exit" );
+        return MediaItem.create(
+                programEntity.recording().translateRecordedId(), media, programEntity.title(),
+                programEntity.subTitle(), programEntity.description(), programEntity.startTime(),
+                programEntity.programFlags(), programEntity.season(), programEntity.episode(),
+                programEntity.channel().callSign(), cast.trim(), characterNames, url, artworks.get( FANART_KEY ),
+                artworks.get( COVERART_KEY ), artworks.get( BANNER_KEY ), previewUrl, contentType, duration,
+                percentComplete, recording, liveStreamId,
+                watched, markWatchedUrl, updateSavedBookmarkUrl, bookmark,
+                programEntity.inetref(), null, -1, recordingGroup, errors );
     }
 
     public static List<MediaItem> transformPrograms( Collection<ProgramEntity> programEntityCollection ) throws UnsupportedEncodingException {
@@ -208,47 +215,43 @@ public final class MediaItemDataMapper {
 
     public static MediaItem transform( VideoMetadataInfoEntity videoEntity ) throws UnsupportedEncodingException {
 
-        MediaItem mediaItem = new MediaItem();
-        mediaItem.setId( videoEntity.getId() );
-        mediaItem.setMedia( Media.VIDEO );
-        mediaItem.setTitle( videoEntity.getTitle() );
-        mediaItem.setSubTitle( videoEntity.getSubTitle() );
-        mediaItem.setDescription( videoEntity.getDescription() );
-        mediaItem.setSeason( videoEntity.getSeason() );
-        mediaItem.setEpisode( videoEntity.getEpisode() );
-        mediaItem.setStudio( videoEntity.getStudio() );
+        String url = null, contentType = null, previewUrl = null, markWatchedUrl = null, recordingGroup = null, updateSavedBookmarkUrl = null;
+        int percentComplete = 0, liveStreamId = 0;
+        boolean watched = false, recording = false;
+        long bookmark = 0, duration = 0;
 
-        String url = "/Content/GetFile?FileName=" + URLEncoder.encode( videoEntity.getFileName(), "UTF-8" );
+        url = "/Content/GetFile?FileName=" + URLEncoder.encode( videoEntity.fileName(), "UTF-8" );
         if( null != videoEntity.getLiveStreamInfoEntity() ) {
 
-            url = videoEntity.getLiveStreamInfoEntity().getRelativeUrl();
-            mediaItem.setPercentComplete( videoEntity.getLiveStreamInfoEntity().getPercentComplete() );
-            mediaItem.setLiveStreamId( videoEntity.getLiveStreamInfoEntity().getId() );
-            mediaItem.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( videoEntity.getLiveStreamInfoEntity().getId() ) ) );
-            mediaItem.setGetHttpLiveStreamUrl( String.format( "/Content/GetLiveStream?Id=%s", String.valueOf( videoEntity.getLiveStreamInfoEntity().getId() ) ) );
+            url = videoEntity.getLiveStreamInfoEntity().relativeUrl();
+            percentComplete = videoEntity.getLiveStreamInfoEntity().percentComplete();
+            liveStreamId = videoEntity.getLiveStreamInfoEntity().id();
 
         }
 
-        mediaItem.setUrl( url );
-        setContentType( mediaItem, url );
+        contentType = setContentType( url );
 
-        mediaItem.setDuration( videoEntity.getLength() );
+        duration = videoEntity.length();
 
-        if( null != videoEntity.getArtwork() && null != videoEntity.getArtwork().getArtworkInfos() && videoEntity.getArtwork().getArtworkInfos().length > 0 ) {
+        Map<String, String> artworks = defaultArtworks();
+        if( null != videoEntity.artwork() && null != videoEntity.artwork().artworkInfos() && !videoEntity.artwork().artworkInfos().isEmpty() ) {
 
-            addArtwork( mediaItem, videoEntity.getArtwork().getArtworkInfos() );
+            artworks = addArtwork( videoEntity.artwork().artworkInfos() );
 
         }
 
-        mediaItem.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=960", String.valueOf( videoEntity.getId() ) ) );
+        watched = videoEntity.watched();
+        markWatchedUrl = "/Video/UpdateVideoWatchedStatus?Id=%s&Watched=true";
 
-        mediaItem.setWatched( videoEntity.isWatched() );
-        mediaItem.setMarkWatchedUrl( "/Video/UpdateVideoWatchedStatus?Id=%s&Watched=true" );
-
-        mediaItem.setCertification( videoEntity.getCertification() );
-        mediaItem.setParentalLevel( videoEntity.getParentalLevel() );
-
-        return mediaItem;
+        return MediaItem.create(
+                videoEntity.id(), Media.VIDEO, videoEntity.title(),
+                videoEntity.subTitle(), videoEntity.description(), null,
+                -1, videoEntity.season(), videoEntity.episode(),
+                videoEntity.studio(), null, null, url, artworks.get( FANART_KEY ),
+                artworks.get( COVERART_KEY ), artworks.get( BANNER_KEY ), previewUrl, contentType, duration,
+                percentComplete, recording, liveStreamId,
+                watched, markWatchedUrl, updateSavedBookmarkUrl, bookmark,
+                videoEntity.inetref(), videoEntity.certification(), videoEntity.parentalLevel(), recordingGroup, Collections.emptyList() );
     }
 
     public static List<MediaItem> transformVideos( Collection<VideoMetadataInfoEntity> videoEntityCollection ) throws UnsupportedEncodingException {
@@ -272,42 +275,38 @@ public final class MediaItemDataMapper {
 
     public static MediaItem transform( MediaItemEntity mediaItemEntity ) {
 
-        MediaItem mediaItem = new MediaItem();
-        mediaItem.setId( mediaItemEntity.getId() );
-        mediaItem.setMedia( mediaItemEntity.getMedia() );
-        mediaItem.setTitle( mediaItemEntity.getTitle() );
-        mediaItem.setSubTitle( mediaItemEntity.getSubTitle() );
-        mediaItem.setDescription( mediaItemEntity.getDescription() );
-        mediaItem.setStartDate( mediaItemEntity.getStartDate() );
-        mediaItem.setProgramFlags( mediaItemEntity.getProgramFlags() );
-        mediaItem.setSeason( mediaItemEntity.getSeason() );
-        mediaItem.setEpisode( mediaItemEntity.getEpisode() );
-        mediaItem.setStudio( mediaItemEntity.getStudio() );
-        mediaItem.setCastMembers( mediaItemEntity.getCastMembers() );
-        mediaItem.setCharacters( mediaItemEntity.getCharacters() );
-        mediaItem.setUrl( mediaItemEntity.getUrl() );
-        mediaItem.setFanartUrl( mediaItemEntity.getFanartUrl() );
-        mediaItem.setCoverartUrl( mediaItemEntity.getCoverartUrl() );
-        mediaItem.setBannerUrl( mediaItemEntity.getBannerUrl() );
-        mediaItem.setPreviewUrl( mediaItemEntity.getPreviewUrl() );
-        mediaItem.setContentType( mediaItemEntity.getContentType() );
-        mediaItem.setDuration( mediaItemEntity.getDuration() );
-        mediaItem.setPercentComplete( mediaItemEntity.getPercentComplete() );
-        mediaItem.setRecording( mediaItemEntity.isRecording() );
-        mediaItem.setLiveStreamId( mediaItemEntity.getLiveStreamId() );
-        mediaItem.setCreateHttpLiveStreamUrl( mediaItemEntity.getCreateHttpLiveStreamUrl() );
-        mediaItem.setRemoveHttpLiveStreamUrl( mediaItemEntity.getRemoveHttpLiveStreamUrl() );
-        mediaItem.setGetHttpLiveStreamUrl( mediaItemEntity.getGetHttpLiveStreamUrl() );
-        mediaItem.setWatched( mediaItemEntity.isWatched() );
-        mediaItem.setMarkWatchedUrl( mediaItemEntity.getMarkWatchedUrl() );
-        mediaItem.setUpdateSavedBookmarkUrl( mediaItemEntity.getUpdateSavedBookmarkUrl() );
-        mediaItem.setBookmark( mediaItemEntity.getBookmark() );
-        mediaItem.setInetref( mediaItemEntity.getInetref() );
-        mediaItem.setCertification( mediaItemEntity.getCertification() );
-        mediaItem.setParentalLevel( mediaItemEntity.getParentalLevel() );
-        mediaItem.setRecordingGroup( mediaItemEntity.getRecordingGroup() );
-
-        return mediaItem;
+        return MediaItem.create(
+                mediaItemEntity.id(),
+                mediaItemEntity.media(),
+                mediaItemEntity.title(),
+                mediaItemEntity.subTitle(),
+                mediaItemEntity.description(),
+                mediaItemEntity.startDate(),
+                mediaItemEntity.programFlags(),
+                mediaItemEntity.season(),
+                mediaItemEntity.episode(),
+                mediaItemEntity.studio(),
+                mediaItemEntity.castMembers(),
+                mediaItemEntity.characters(),
+                mediaItemEntity.url(),
+                mediaItemEntity.fanartUrl(),
+                mediaItemEntity.coverartUrl(),
+                mediaItemEntity.bannerUrl(),
+                mediaItemEntity.previewUrl(),
+                mediaItemEntity.contentType(),
+                mediaItemEntity.duration(),
+                mediaItemEntity.percentComplete(),
+                mediaItemEntity.recording(),
+                mediaItemEntity.liveStreamId(),
+                mediaItemEntity.watched(),
+                mediaItemEntity.markWatchedUrl(),
+                mediaItemEntity.updateSavedBookmarkUrl(),
+                mediaItemEntity.bookmark(),
+                mediaItemEntity.inetref(),
+                mediaItemEntity.certification(),
+                mediaItemEntity.parentalLevel(),
+                mediaItemEntity.recordingGroup(),
+                Collections.emptyList() );
     }
 
     public static List<MediaItem> transformMediaItemEntities( Collection<MediaItemEntity> mediaItemEntityCollection ) {
@@ -331,42 +330,37 @@ public final class MediaItemDataMapper {
 
     public static MediaItemEntity transform( MediaItem mediaItem ) {
 
-        MediaItemEntity mediaItemEntity = new MediaItemEntity();
-        mediaItemEntity.setId( mediaItem.getId() );
-        mediaItemEntity.setMedia( mediaItem.getMedia() );
-        mediaItemEntity.setTitle( mediaItem.getTitle() );
-        mediaItemEntity.setSubTitle( mediaItem.getSubTitle() );
-        mediaItemEntity.setDescription( mediaItem.getDescription() );
-        mediaItemEntity.setStartDate( mediaItem.getStartDate() );
-        mediaItemEntity.setProgramFlags( mediaItem.getProgramFlags() );
-        mediaItemEntity.setSeason( mediaItem.getSeason() );
-        mediaItemEntity.setEpisode( mediaItem.getEpisode() );
-        mediaItemEntity.setStudio( mediaItem.getStudio() );
-        mediaItemEntity.setCastMembers( mediaItem.getCastMembers() );
-        mediaItemEntity.setCharacters( mediaItem.getCharacters() );
-        mediaItemEntity.setUrl( mediaItem.getUrl() );
-        mediaItemEntity.setFanartUrl( mediaItem.getFanartUrl() );
-        mediaItemEntity.setCoverartUrl( mediaItem.getCoverartUrl() );
-        mediaItemEntity.setBannerUrl( mediaItem.getBannerUrl() );
-        mediaItemEntity.setPreviewUrl( mediaItem.getPreviewUrl() );
-        mediaItemEntity.setContentType( mediaItem.getContentType() );
-        mediaItemEntity.setDuration( mediaItem.getDuration() );
-        mediaItemEntity.setPercentComplete( mediaItem.getPercentComplete() );
-        mediaItemEntity.setRecording( mediaItem.isRecording() );
-        mediaItemEntity.setLiveStreamId( mediaItem.getLiveStreamId() );
-        mediaItemEntity.setCreateHttpLiveStreamUrl( mediaItem.getCreateHttpLiveStreamUrl() );
-        mediaItemEntity.setRemoveHttpLiveStreamUrl( mediaItem.getRemoveHttpLiveStreamUrl() );
-        mediaItemEntity.setGetHttpLiveStreamUrl( mediaItem.getGetHttpLiveStreamUrl() );
-        mediaItemEntity.setWatched( mediaItem.isWatched() );
-        mediaItemEntity.setMarkWatchedUrl( mediaItem.getMarkWatchedUrl() );
-        mediaItemEntity.setUpdateSavedBookmarkUrl( mediaItem.getUpdateSavedBookmarkUrl() );
-        mediaItemEntity.setBookmark( mediaItem.getBookmark() );
-        mediaItemEntity.setInetref( mediaItem.getInetref() );
-        mediaItemEntity.setCertification( mediaItem.getCertification() );
-        mediaItemEntity.setParentalLevel( mediaItem.getParentalLevel() );
-        mediaItemEntity.setRecordingGroup( mediaItem.getRecordingGroup() );
-
-        return mediaItemEntity;
+        return MediaItemEntity.create(
+            mediaItem.id(),
+            mediaItem.media(),
+            mediaItem.title(),
+            mediaItem.subTitle(),
+            mediaItem.description(),
+            mediaItem.startDate(),
+            mediaItem.programFlags(),
+            mediaItem.season(),
+            mediaItem.episode(),
+            mediaItem.studio(),
+            mediaItem.castMembers(),
+            mediaItem.characters(),
+            mediaItem.url(),
+            mediaItem.fanartUrl(),
+            mediaItem.coverartUrl(),
+            mediaItem.bannerUrl(),
+            mediaItem.previewUrl(),
+            mediaItem.contentType(),
+            mediaItem.duration(),
+            mediaItem.percentComplete(),
+            mediaItem.recording(),
+            mediaItem.liveStreamId(),
+            mediaItem.watched(),
+            mediaItem.markWatchedUrl(),
+            mediaItem.updateSavedBookmarkUrl(),
+            mediaItem.bookmark(),
+            mediaItem.inetref(),
+            mediaItem.certification(),
+            mediaItem.parentalLevel(),
+            mediaItem.recordingGroup() );
     }
 
     public static List<MediaItemEntity> transformMediaItems( Collection<MediaItem> mediaItemCollection ) {
@@ -388,66 +382,67 @@ public final class MediaItemDataMapper {
         return mediaItemList;
     }
 
-    private static void calculateDuration( MediaItem mediaItem, DateTime startTime, DateTime endTime ) {
+    private static long calculateDuration( DateTime startTime, DateTime endTime ) {
 
-        long duration = new Duration( startTime, endTime ).getStandardMinutes();
-        mediaItem.setDuration( duration );
-
+        return new Duration( startTime, endTime ).getStandardMinutes();
     }
 
-    private static void setContentType( MediaItem mediaItem, String fileName ) {
+    private static String setContentType( String fileName ) {
 
         if( fileName.endsWith( "mp4" ) ) {
 
-            mediaItem.setContentType( "video/mp4" );
+            return "video/mp4";
 
         } else if( fileName.endsWith( "ogg" ) || fileName.endsWith( "ogv" ) ) {
 
-            mediaItem.setContentType( "video/ogg" );
+            return "video/ogg";
 
         } else if( fileName.endsWith( "mkv" ) ) {
 
-            mediaItem.setContentType( "video/divx" );
+            return "video/divx";
 
         } else if( fileName.endsWith( "avi" ) ) {
 
-            mediaItem.setContentType( "video/avi" );
+            return "video/avi";
 
         } else if( fileName.endsWith( "3gp" ) ) {
 
-            mediaItem.setContentType( "video/3gpp" );
+            return "video/3gpp";
 
         } else if( fileName.endsWith( "m3u8" ) ) {
 
-            mediaItem.setContentType( "application/x-mpegURL" );
+            return "application/x-mpegURL";
 
         } else if( fileName.endsWith( "ts" ) ) {
 
-            mediaItem.setContentType( "video/mp2t" );
+            return "video/mp2t";
 
         }
 
+        return null;
     }
 
-    private static void addArtwork( MediaItem mediaItem, ArtworkInfoEntity[] artworkInfoEntities ) {
+    private static Map<String, String> addArtwork( List<ArtworkInfoEntity> artworkInfoEntities ) {
+
+        Map<String, String> artworks = defaultArtworks();
 
         for( ArtworkInfoEntity artworkInfoEntity : artworkInfoEntities ) {
 
-            switch( artworkInfoEntity.getType() ) {
+            switch( artworkInfoEntity.type() ) {
 
-                case "banner" :
+                case BANNER_KEY :
 
-                    mediaItem.setBannerUrl( artworkInfoEntity.getUrl() );
+                    artworks.put( BANNER_KEY, artworkInfoEntity.url() );
                     break;
 
-                case "coverart" :
+                case COVERART_KEY :
 
-                    mediaItem.setCoverartUrl( artworkInfoEntity.getUrl() );
+                    artworks.put( COVERART_KEY, artworkInfoEntity.url() );
                     break;
 
-                case "fanart" :
+                case FANART_KEY :
 
-                    mediaItem.setFanartUrl( artworkInfoEntity.getUrl() );
+                    artworks.put( FANART_KEY, artworkInfoEntity.url() );
                     break;
 
                 default :
@@ -458,6 +453,18 @@ public final class MediaItemDataMapper {
 
         }
 
+        return artworks;
+    }
+
+    private static Map<String, String> defaultArtworks() {
+
+        Map<String, String> artworks = new HashMap<>();
+        artworks.put( BANNER_KEY, null );
+        artworks.put( COVERART_KEY, null );
+        artworks.put( FANART_KEY, null );
+
+
+        return artworks;
     }
 
 }

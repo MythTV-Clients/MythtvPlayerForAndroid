@@ -18,7 +18,6 @@
 
 package org.mythtv.android.domain.repository;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.domain.Encoder;
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.Series;
@@ -49,6 +48,6 @@ public interface DvrRepository {
 
     Observable<List<Encoder>> encoders();
 
-    Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched );
+    Observable<MediaItem> updateWatchedStatus( final int id, final boolean watched );
 
 }

@@ -18,9 +18,12 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -30,37 +33,20 @@ import java.util.Arrays;
  *
  * Created on 8/27/15.
  */
-public class ArtworkEntity {
+@AutoValue
+public abstract class ArtworkEntity {
 
     @SerializedName( "ArtworkInfos" )
-    private ArtworkInfoEntity[] artworkInfos;
+    public abstract List<ArtworkInfoEntity> artworkInfos();
 
-    public ArtworkEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    public static ArtworkEntity create( List<ArtworkInfoEntity> artworkInfos ) {
+
+        return new AutoValue_ArtworkEntity( artworkInfos );
     }
 
-    public ArtworkEntity(ArtworkInfoEntity[] artworkInfos ) {
+    public static TypeAdapter<ArtworkEntity> typeAdapter( Gson gson ) {
 
-        this.artworkInfos = artworkInfos;
-
-    }
-
-    public ArtworkInfoEntity[] getArtworkInfos() {
-
-        return artworkInfos;
-    }
-
-    public void setArtworkInfos( ArtworkInfoEntity[] artworkInfos ) {
-
-        this.artworkInfos = artworkInfos;
-
-    }
-
-    @Override
-    public String toString() {
-        return "ArtworkEntity{" +
-                "artworkInfos=" + Arrays.toString( artworkInfos ) +
-                '}';
+        return new AutoValue_ArtworkEntity.GsonTypeAdapter( gson );
     }
 
 }

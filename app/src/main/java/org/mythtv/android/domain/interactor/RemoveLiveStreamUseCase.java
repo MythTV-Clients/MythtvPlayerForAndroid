@@ -18,9 +18,10 @@
 
 package org.mythtv.android.domain.interactor;
 
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.ContentRepository;
 
 import javax.inject.Inject;
 
@@ -32,36 +33,27 @@ import rx.Observable;
  *
  * @author dmfrey
  *
- * Created on 8/26/15.
+ * Created on 4/2/17.
  */
-public class GetRecordedProgramList extends UseCase {
+public class RemoveLiveStreamUseCase extends UseCase {
 
-    private final boolean descending;
-    private final int startIndex;
-    private final int count;
-    private final String titleRegEx;
-    private final String recGroup;
-    private final String storageGroup;
-    private final DvrRepository dvrRepository;
+    private final ContentRepository contentRepository;
+    private final int id;
+    private final Media media;
 
     @Inject
-    public GetRecordedProgramList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup, DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public RemoveLiveStreamUseCase( final int id, final Media media, ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.descending = descending;
-        this.startIndex = startIndex;
-        this.count = count;
-        this.titleRegEx = titleRegEx;
-        this.recGroup = recGroup;
-        this.storageGroup = storageGroup;
-        this.dvrRepository = dvrRepository;
+        this.contentRepository = contentRepository;
+        this.id = id;
+        this.media = media;
 
     }
 
     @Override
     public Observable buildUseCaseObservable() {
-
-        return this.dvrRepository.recordedPrograms( this.descending, this.startIndex, this.count, this.titleRegEx, this.recGroup, this.storageGroup );
+        return this.contentRepository.removeLiveStream( id, media );
     }
 
 }

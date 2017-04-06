@@ -76,25 +76,25 @@ public class DiskVideoDataStore implements VideoDataStore {
 
                     StringBuilder e1 = new StringBuilder();
                     e1.append( 'S' );
-                    if( entity1.getSeason() < 10 ) {
+                    if( entity1.season() < 10 ) {
                         e1.append( '0' );
                     }
-                    e1.append( entity1.getSeason() ).append( 'E' );
-                    if( entity1.getEpisode() < 10 ) {
+                    e1.append( entity1.season() ).append( 'E' );
+                    if( entity1.episode() < 10 ) {
                         e1.append( '0' );
                     }
-                    e1.append( entity1.getEpisode() );
+                    e1.append( entity1.episode() );
 
                     StringBuilder e2 = new StringBuilder();
                     e2.append( 'S' );
-                    if( entity2.getSeason() < 10 ) {
+                    if( entity2.season() < 10 ) {
                         e2.append( '0' );
                     }
-                    e2.append( entity2.getSeason() ).append( 'E' );
-                    if( entity2.getEpisode() < 10 ) {
+                    e2.append( entity2.season() ).append( 'E' );
+                    if( entity2.episode() < 10 ) {
                         e2.append( '0' );
                     }
-                    e2.append( entity2.getEpisode() );
+                    e2.append( entity2.episode() );
 
                     return e1.toString().compareTo( e2.toString() );
                 })

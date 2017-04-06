@@ -204,7 +204,7 @@ public class RecordingSettingsFragment extends AbstractBasePreferenceFragment im
         Log.d( TAG, "renderMediaItemList : enter" );
 
         Observable.from( mediaItemModelCollection )
-                .map( MediaItemModel::getRecordingGroup )
+                .map( MediaItemModel::recordingGroup )
                 .distinct()
                 .toList()
                 .subscribe( groups -> {

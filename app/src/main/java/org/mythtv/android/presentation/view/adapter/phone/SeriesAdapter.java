@@ -97,18 +97,18 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
         Log.d( TAG, "onBindViewHolder : enter" );
 
         final SeriesModel seriesModel = this.seriesCollection.get( position );
-        if( null == seriesModel.getArtworkUrl() || "".equals( seriesModel.getArtworkUrl() ) ) {
+        if( null == seriesModel.artworkUrl() || "".equals( seriesModel.artworkUrl() ) ) {
 
             holder.imageViewArtwork.setImageDrawable( ContextCompat.getDrawable( context, R.drawable.ffffff ) );
 
         } else {
 
-            holder.imageViewArtwork.setImageUrl( getMasterBackendUrl() + seriesModel.getArtworkUrl() );
+            holder.imageViewArtwork.setImageUrl( getMasterBackendUrl() + seriesModel.artworkUrl() );
 
         }
-        holder.textViewTitle.setText( seriesModel.getTitle() );
+        holder.textViewTitle.setText( seriesModel.title() );
 
-        int titleCount = seriesModel.getCount();
+        int titleCount = seriesModel.count();
         if( titleCount > 0 ) {
 
             holder.textViewCount.setText( String.valueOf( titleCount ) );

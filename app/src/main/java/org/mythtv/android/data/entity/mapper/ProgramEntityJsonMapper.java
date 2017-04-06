@@ -26,9 +26,7 @@ import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.ProgramListEntity;
 import org.mythtv.android.data.entity.ProgramWrapperEntity;
 
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,23 +52,23 @@ public class ProgramEntityJsonMapper {
 
     }
 
-    public ProgramEntity transformProgramEntity( Reader programJsonResponse ) throws JsonSyntaxException {
+    public ProgramEntity transformProgramEntity( String programJsonResponse ) throws JsonSyntaxException {
 
 //        Log.i( TAG, "transformProgramEntity : programJsonResponse=" + programJsonResponse );
         Type programWrapperEntityType = new TypeToken<ProgramWrapperEntity>() {}.getType();
         ProgramWrapperEntity programWrapperEntity = this.gson.fromJson( programJsonResponse, programWrapperEntityType );
 
-        return programWrapperEntity.getProgram();
+        return programWrapperEntity.program();
     }
 
-    public List<ProgramEntity> transformProgramEntityCollection( Reader programListJsonResponse ) throws JsonSyntaxException {
+    public List<ProgramEntity> transformProgramEntityCollection( String programListJsonResponse ) throws JsonSyntaxException {
 
 //        Log.i( TAG, "transformProgramEntityCollection : " + programListJsonResponse );
         Type programListEntityType = new TypeToken<ProgramListEntity>() {}.getType();
         ProgramListEntity programListEntity = this.gson.fromJson( programListJsonResponse, programListEntityType );
 //        Log.i( TAG, "transformProgramEntityCollection : programListEntity=" + programListEntity.toString() );
 
-        return Arrays.asList( programListEntity.getPrograms().getPrograms() );
+        return programListEntity.programs().programs();
     }
 
 }

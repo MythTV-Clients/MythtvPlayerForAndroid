@@ -18,9 +18,12 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -30,37 +33,20 @@ import java.util.Arrays;
  *
  * Created on 9/7/15.
  */
-public class VideoMetadataInfosEntity {
+@AutoValue
+public abstract class VideoMetadataInfosEntity {
 
     @SerializedName( "VideoMetadataInfos" )
-    private VideoMetadataInfoEntity[] videoMetadataInfoEntities;
+    public abstract List<VideoMetadataInfoEntity> videoMetadataInfoEntities();
 
-    public VideoMetadataInfosEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    public static VideoMetadataInfosEntity create( List<VideoMetadataInfoEntity> videoMetadataInfoEntities ) {
+
+        return new AutoValue_VideoMetadataInfosEntity( videoMetadataInfoEntities );
     }
 
-    public VideoMetadataInfosEntity( VideoMetadataInfoEntity[] videoMetadataInfoEntities ) {
+    public static TypeAdapter<VideoMetadataInfosEntity> typeAdapter( Gson gson ) {
 
-        this.videoMetadataInfoEntities = videoMetadataInfoEntities;
-
-    }
-
-    public VideoMetadataInfoEntity[] getVideoMetadataInfoEntities() {
-
-        return videoMetadataInfoEntities;
-    }
-
-    public void setVideoMetadataInfoEntities( VideoMetadataInfoEntity[] videoMetadataInfoEntities ) {
-
-        this.videoMetadataInfoEntities = videoMetadataInfoEntities;
-
-    }
-
-    @Override
-    public String toString() {
-        return "VideoMetadataInfosEntity{" +
-                "videoMetadataInfoEntities=" + Arrays.toString(videoMetadataInfoEntities) +
-                '}';
+        return new AutoValue_VideoMetadataInfosEntity.GsonTypeAdapter( gson );
     }
 
 }

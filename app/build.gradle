@@ -74,6 +74,16 @@ android {
 
         }
 
+        javaCompileOptions {
+
+            annotationProcessorOptions {
+
+                arguments = [ 'autovaluegson.defaultCollectionsToEmpty': 'true' ]
+
+            }
+
+        }
+
     }
 
     productFlavors {
@@ -177,6 +187,12 @@ android {
 }
 
 dependencies {
+
+    provided "com.google.auto.value:auto-value:${project.ext.autoValueVersion}"
+    annotationProcessor "com.google.auto.value:auto-value:${project.ext.autoValueVersion}"
+
+    provided "com.ryanharter.auto.value:auto-value-gson:${project.ext.autoValueGsonVersion}"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:${project.ext.autoValueGsonVersion}"
 
     compile "com.google.dagger:dagger:${project.ext.daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-compiler:${project.ext.daggerVersion}"

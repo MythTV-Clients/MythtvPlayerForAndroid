@@ -36,7 +36,6 @@ import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -100,7 +99,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseRecordedProgramEntities = getTitleInfoEntitiesFromApi();
+                        String responseRecordedProgramEntities = getTitleInfoEntitiesFromApi();
                         if( null == responseRecordedProgramEntities ) {
                             Log.d( TAG, "titleInfoEntityList.call : failed to retrieve title info entities" );
 
@@ -151,7 +150,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
+                        String responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
                         if( null == responseRecordedProgramEntities ) {
                             Log.d( TAG, "recordedProgramEntityList.call : failed to retrieve program entities" );
 
@@ -198,7 +197,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId, chanId, startTime );
+                        String responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId, chanId, startTime );
                         if( null == responseProgramDetails ) {
 
                             subscriber.onError( new NetworkConnectionException() );
@@ -244,7 +243,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseUpcomingProgramEntities = getUpcomingProgramEntitiesFromApi( startIndex, count, showAll, recordId, recStatus );
+                        String responseUpcomingProgramEntities = getUpcomingProgramEntitiesFromApi( startIndex, count, showAll, recordId, recStatus );
                         if( null == responseUpcomingProgramEntities ) {
                             Log.d( TAG, "upcomingProgramEntityList.call : failed to retrieve program entities" );
 
@@ -293,7 +292,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseEncoderEntities = getEncoderEntitiesFromApi();
+                        String responseEncoderEntities = getEncoderEntitiesFromApi();
                         if( null == responseEncoderEntities ) {
                             Log.d(TAG, "encoderEntityList.call : failed to retrieve encoder entities");
 
@@ -329,7 +328,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
     }
 
     @Override
-    public Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) {
+    public Observable<Boolean> updateWatchedStatus( final int id, final boolean watched ) {
 
         return Observable.create( new Observable.OnSubscribe<Boolean>() {
 
@@ -342,7 +341,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader response = postUpdateWatchedStatus( chanId, startTime, watched );
+                        String response = postUpdateWatchedStatus( id, watched );
                         if( null == response ) {
                             Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
 
@@ -391,7 +390,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader response = getBookmarkFromApi( recordedId, chanId, startTime, offsetType );
+                        String response = getBookmarkFromApi( recordedId, chanId, startTime, offsetType );
                         if( null == response ) {
                             Log.d( TAG, "getBookmark.call : failed to retrieve status update" );
 
@@ -427,12 +426,12 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
     }
 
-    private Reader getTitleInfoEntitiesFromApi() throws MalformedURLException {
+    private String getTitleInfoEntitiesFromApi() throws MalformedURLException {
 
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + TITLE_INFO_LIST_URL ).requestSyncCall();
     }
 
-    private Reader getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
+    private String getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() ).append( RECORDED_LIST_BASE_URL ).append( '?' ).append( String.format( DESCENDING_QS, descending ) );
@@ -478,7 +477,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private Reader getRecordedProgramDetailsFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
+    private String getRecordedProgramDetailsFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() ).append( RECORDED_BASE_URL ).append( '?' );
@@ -500,7 +499,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private Reader getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
+    private String getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() ).append( UPCOMING_LIST_BASE_URL ).append( '?' ).append( String.format( SHOW_ALL_QS, showAll ) );
@@ -533,24 +532,23 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private Reader getEncoderEntitiesFromApi() throws MalformedURLException {
+    private String getEncoderEntitiesFromApi() throws MalformedURLException {
 
         Log.i( TAG, "getEncoderEntitiesFromApi : url=" + ( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ) );
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + ENCODER_LIST_BASE_URL ).requestSyncCall();
     }
 
-    private Reader postUpdateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
+    private String postUpdateWatchedStatus( final int id, final boolean watched ) throws MalformedURLException {
 
         Map<String, String> parameters = new HashMap<>();
-        parameters.put( "ChanId", String.valueOf( chanId ) );
-        parameters.put( "StartTime", fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
+        parameters.put( "RecordedId", String.valueOf( id ) );
         parameters.put( "Watched", String.valueOf( watched ) );
 
         Log.i( TAG, "postUpdateWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ) );
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ).requestSyncCall( parameters );
     }
 
-    private Reader getBookmarkFromApi( final int recordedId, final int chanId, final DateTime startTime, final String offsetType ) throws MalformedURLException {
+    private String getBookmarkFromApi( final int recordedId, final int chanId, final DateTime startTime, final String offsetType ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() ).append( BOOKMARK_BASE_URL ).append( '?' );

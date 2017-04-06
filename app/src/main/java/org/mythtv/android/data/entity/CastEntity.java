@@ -18,9 +18,12 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -30,37 +33,20 @@ import java.util.Arrays;
  *
  * Created on 8/27/15.
  */
-public class CastEntity {
+@AutoValue
+public abstract class CastEntity {
 
     @SerializedName( "CastMembers" )
-    private CastMemberEntity[] castMembers;
+    public abstract List<CastMemberEntity> castMembers();
 
-    public CastEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    public static CastEntity create( List<CastMemberEntity> castMembers ) {
+
+        return new AutoValue_CastEntity( castMembers );
     }
 
-    public CastEntity(CastMemberEntity[] castMembers ) {
+    public static TypeAdapter<CastEntity> typeAdapter( Gson gson ) {
 
-        this.castMembers = castMembers;
-
-    }
-
-    public CastMemberEntity[] getCastMembers() {
-
-        return castMembers;
-    }
-
-    public void setCastMembers( CastMemberEntity[] castMembers ) {
-
-        this.castMembers = castMembers;
-
-    }
-
-    @Override
-    public String toString() {
-        return "CastEntity{" +
-                "castMembers=" + Arrays.toString( castMembers ) +
-                '}';
+        return new AutoValue_CastEntity.GsonTypeAdapter( gson );
     }
 
 }

@@ -18,10 +18,8 @@
 
 package org.mythtv.android.domain.repository;
 
-import org.joda.time.DateTime;
-import org.mythtv.android.domain.LiveStreamInfo;
-
-import java.util.List;
+import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.MediaItem;
 
 import rx.Observable;
 
@@ -31,22 +29,12 @@ import rx.Observable;
  *
  * @author dmfrey
  *
- * Created on 8/26/15.
+ * Created on 10/17/15.
  */
 public interface ContentRepository {
 
-    Observable<LiveStreamInfo> addliveStream( final String storageGroup, final String filename, final String hostname );
+    Observable<MediaItem> addLiveStream( final int id, final Media media );
 
-    Observable<LiveStreamInfo> addRecordingliveStream( final int recordedId, final int chanId, final DateTime startTime );
-
-    Observable<LiveStreamInfo> addVideoliveStream( final int id );
-
-    Observable<List<LiveStreamInfo>> liveStreamInfos( String filename );
-
-    Observable<LiveStreamInfo> liveStreamInfo( int id );
-
-    Observable<Boolean> removeLiveStream( final int id );
-
-    Observable<Boolean> stopLiveStream( final int id );
+    Observable<MediaItem> removeLiveStream( final int id, final Media media );
 
 }

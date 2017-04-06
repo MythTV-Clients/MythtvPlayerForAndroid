@@ -3,6 +3,8 @@ package org.mythtv.android.presentation.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.auto.value.AutoValue;
+
 import org.mythtv.android.domain.Error;
 
 /**
@@ -11,60 +13,27 @@ import org.mythtv.android.domain.Error;
  *
  * Created on 1/20/17.
  */
-
-public class ErrorModel implements Parcelable {
+@AutoValue
+public abstract class ErrorModel implements Parcelable {
 
     public static final String KEY_FIELD = "field";
     public static final String KEY_DEFAULT_MESSAGE = "default_message";
     public static final String KEY_MESSAGE_RESOURCE = "message_resource";
 
-    private String field;
-    private String defaultMessage;
-    private int messageResource;
+    public abstract String field();
+    public abstract String defaultMessage();
+    public abstract int messageResource();
 
-    public ErrorModel( final String field, final String defaultMessage, final int messageResource ) {
+    public static ErrorModel create( String field, String defaultMessage, int messageResource ) {
 
-        this.field = field;
-        this.defaultMessage = defaultMessage;
-        this.messageResource = messageResource;
-
-    }
-
-    public ErrorModel( Parcel in ) {
-
-        readFromParcel( in );
-
-    }
-
-    public String getField() {
-
-        return field;
-    }
-
-    public String getDefaultMessage() {
-
-        return defaultMessage;
-    }
-
-    public int getMessageResource() {
-
-        return messageResource;
-    }
-
-    @Override
-    public String toString() {
-        return "Error{" +
-                "field='" + field + '\'' +
-                ", defaultMessage='" + defaultMessage + '\'' +
-                ", messageResource=" + messageResource +
-                '}';
+        return new AutoValue_ErrorModel( field, defaultMessage, messageResource );
     }
 
     public static final Parcelable.Creator<ErrorModel> CREATOR = new Parcelable.Creator<ErrorModel>() {
 
         public ErrorModel createFromParcel( Parcel in ) {
 
-            return new ErrorModel( in );
+            return ErrorModel.create( in.readString(), in.readString(), in.readInt() );
         }
 
         public ErrorModel[] newArray( int size ) {
@@ -76,15 +45,7 @@ public class ErrorModel implements Parcelable {
 
     public static ErrorModel fromError( final Error error ) {
 
-        return new ErrorModel( error.getField(), error.getDefaultMessage(), error.getMessageResource() );
-    }
-
-    public void readFromParcel( Parcel in ) {
-
-        field = in.readString();
-        defaultMessage = in.readString();
-        messageResource = in.readInt();
-
+        return ErrorModel.create( error.field(), error.defaultMessage(), error.messageResource() );
     }
 
     @Override
@@ -96,9 +57,9 @@ public class ErrorModel implements Parcelable {
     @Override
     public void writeToParcel( Parcel dest, int flags ) {
 
-        dest.writeString( field );
-        dest.writeString( defaultMessage );
-        dest.writeInt( messageResource );
+        dest.writeString( field() );
+        dest.writeString( defaultMessage() );
+        dest.writeInt( messageResource() );
 
     }
 

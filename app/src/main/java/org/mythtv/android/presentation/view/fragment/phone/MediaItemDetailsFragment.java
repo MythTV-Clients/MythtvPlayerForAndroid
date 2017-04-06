@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
@@ -39,15 +38,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.firebase.crash.FirebaseCrash;
-import com.google.gson.JsonSyntaxException;
-
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
-import org.mythtv.android.data.entity.LiveStreamInfoEntity;
-import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
-import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemDetailsPresenter;
@@ -55,8 +48,6 @@ import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
 import org.mythtv.android.presentation.view.MediaItemDetailsView;
 import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -64,9 +55,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import okhttp3.CacheControl;
-import okhttp3.FormBody;
-import okhttp3.Request;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -84,10 +72,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
     private static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
-    private static final String ACCEPT = "Accept";
-    private static final String ACCEPT_MEDIA_TYPE = "application/json";
-    public static final String DO_IN_BACKGROUND_ERROR = "doInBackground : error";
-    public static final String DO_IN_BACKGROUND_MEDIA_ITEM_MODEL = "doInBackground : mediaItemModel=";
 
     private MediaItemModel mediaItemModel;
     private MediaItemDetailsListener listener;
@@ -133,9 +117,10 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     @BindView( R.id.rl_progress )
     RelativeLayout rl_progress;
 
+    private boolean isTimerRunning = false;
+
     private Unbinder unbinder;
 
-    private GetLiveStreamTask getLiveStreamTask = null;
     private int fifteenMin = 60 * 30000;
 
     public interface MediaItemDetailsListener {
@@ -229,12 +214,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         this.timer.cancel();
 
-        if( null != this.getLiveStreamTask && this.getLiveStreamTask.getStatus() == AsyncTask.Status.RUNNING ) {
-
-            getLiveStreamTask.cancel( true );
-
-        }
-
         Log.d( TAG, "onDestroy : exit" );
     }
 
@@ -249,7 +228,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             if( resultCode == RESULT_OK ) {
                 Log.d( TAG, "onActivityResult : positive button pressed" );
 
-                new AddLiveStreamTask().execute();
+                presenter.addLiveStream();
 
             } else {
                 Log.d( TAG, "onActivityResult : negative button pressed" );
@@ -263,7 +242,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             if( resultCode == RESULT_OK ) {
                 Log.d( TAG, "onActivityResult : positive button pressed" );
 
-                new RemoveLiveStreamTask().execute();
+                presenter.removeLiveStream();
 
             } else {
                 Log.d( TAG, "onActivityResult : negative button pressed" );
@@ -317,13 +296,13 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
             case R.id.menu_mark_watched:
 
-                new MarkWatchedTask().execute( true );
+                presenter.markWatched( mediaItemModel.media(), mediaItemModel.id(), true );
 
                 return true;
 
             case R.id.menu_mark_unwatched:
 
-                new MarkWatchedTask().execute( false );
+                presenter.markWatched( mediaItemModel.media(), mediaItemModel.id(), false );
 
                 return true;
 
@@ -359,18 +338,18 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             updateMenu();
 
             ActionBar actionBar = ( (AppCompatActivity) getActivity() ).getSupportActionBar();
-            actionBar.setTitle( this.mediaItemModel.getSubTitle() );
-            actionBar.setSubtitle( this.mediaItemModel.getTitle() );
+            actionBar.setTitle( this.mediaItemModel.subTitle() );
+            actionBar.setSubtitle( this.mediaItemModel.title() );
 
-            if( null == mediaItemModel.getSubTitle() || "".equals( mediaItemModel.getSubTitle() ) ) {
+            if( null == mediaItemModel.subTitle() || "".equals( mediaItemModel.subTitle() ) ) {
 
-                actionBar.setTitle( this.mediaItemModel.getTitle() );
+                actionBar.setTitle( this.mediaItemModel.title() );
                 actionBar.setSubtitle( "" );
 
             }
 
-            this.iv_image.setImageUrl( getMasterBackendUrl() + this.mediaItemModel.getCoverartUrl() );
-            if( mediaItemModel.getBookmark() > 0 ) {
+            this.iv_image.setImageUrl( getMasterBackendUrl() + this.mediaItemModel.coverartUrl() );
+            if( mediaItemModel.bookmark() > 0 ) {
 
                 this.iv_bookmark.setVisibility( View.VISIBLE );
 
@@ -380,17 +359,17 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
             }
 
-            this.tv_title.setText( this.mediaItemModel.getTitle() );
-            this.tv_sub_title.setText( this.mediaItemModel.getSubTitle() );
-            this.tv_studio.setText( this.mediaItemModel.getStudio() );
-            this.tv_date.setText( null == mediaItemModel.getStartDate() ? "" : this.mediaItemModel.getStartDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
-            this.tv_episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.getSeason(), mediaItemModel.getEpisode() ) );
-            this.tv_duration.setText( getActivity().getResources().getString( R.string.minutes, String.valueOf( this.mediaItemModel.getDuration() ) ) );
-            this.tv_description.setText( this.mediaItemModel.getDescription() );
+            this.tv_title.setText( this.mediaItemModel.title() );
+            this.tv_sub_title.setText( this.mediaItemModel.subTitle() );
+            this.tv_studio.setText( this.mediaItemModel.studio() );
+            this.tv_date.setText( null == mediaItemModel.startDate() ? "" : this.mediaItemModel.startDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
+            this.tv_episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.season(), mediaItemModel.episode() ) );
+            this.tv_duration.setText( getActivity().getResources().getString( R.string.minutes, String.valueOf( this.mediaItemModel.duration() ) ) );
+            this.tv_description.setText( this.mediaItemModel.description() );
 
             updateProgress();
 
-            if( mediaItemModel.getLiveStreamId() > 0 && mediaItemModel.getPercentComplete() < 100 ) {
+            if( !isTimerRunning && ( mediaItemModel.liveStreamId() > 0 && mediaItemModel.percentComplete() < 100 ) ) {
 
                 timer.start();
 
@@ -399,6 +378,28 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         }
 
         Log.d( TAG, "renderMediaItem : exit" );
+    }
+
+    @Override
+    public void refreshMediaItem( MediaItemModel mediaItemModel ) {
+        Log.d( TAG, "refreshMediaItem : enter" );
+
+        if( null != mediaItemModel && mediaItemModel.isValid() ) {
+            Log.d( TAG, "refreshMediaItem : mediaItem is not null, mediaItemModel=" + mediaItemModel.toString() );
+
+            this.mediaItemModel = mediaItemModel;
+            updateMenu();
+            updateProgress();
+
+            if( !isTimerRunning && ( mediaItemModel.liveStreamId() > 0 && mediaItemModel.percentComplete() < 100 ) ) {
+
+                timer.start();
+
+            }
+
+        }
+
+        Log.d( TAG, "refreshMediaItem : exit" );
     }
 
     @Override
@@ -492,9 +493,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             return;
         }
 
-        if( !mediaItemModel.isRecording() ) {
+        if( !mediaItemModel.recording() ) {
 
-            if( mediaItemModel.getLiveStreamId() == 0 ) {
+            if( mediaItemModel.liveStreamId() == 0 ) {
 
                 menuHlsEnable.setVisible( true );
                 menuHlsDisable.setVisible( false );
@@ -508,7 +509,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         }
 
-        if( mediaItemModel.isWatched() ) {
+        if( mediaItemModel.watched() ) {
 
             menuMarkUnwatched.setVisible( true );
             menuMarkWatched.setVisible( false );
@@ -524,7 +525,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private void updateProgress() {
 
-        if( mediaItemModel.getLiveStreamId() == 0 ) {
+        if( mediaItemModel.liveStreamId() == 0 ) {
 
             if( null != this.pb_progress ) {
 
@@ -537,13 +538,13 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         } else {
 
-            if( mediaItemModel.getPercentComplete() > 0 ) {
+            if( mediaItemModel.percentComplete() > 0 ) {
 
                 this.pb_progress.setVisibility( View.VISIBLE );
                 this.pb_progress.setIndeterminate( false );
-                this.pb_progress.setProgress( mediaItemModel.getPercentComplete() );
+                this.pb_progress.setProgress( mediaItemModel.percentComplete() );
 
-                if( mediaItemModel.getPercentComplete() < 2 ) {
+                if( mediaItemModel.percentComplete() < 2 ) {
 
                     this.pb_progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
 
@@ -559,270 +560,15 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     }
 
-    private class MarkWatchedTask extends AsyncTask<Boolean, Void, Boolean> {
-
-        private final String TAG = MarkWatchedTask.class.getSimpleName();
-        private boolean status;
-
-        @Override
-        protected Boolean doInBackground( Boolean... params ) {
-
-            if( mediaItemModel.isValid() ) {
-
-                String idParam;
-                if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.PROGRAM ) {
-
-                    idParam = "RecordedId";
-
-                } else {
-
-                    idParam = "Id";
-
-                }
-
-                status = params[ 0 ];
-
-                FormBody.Builder builder = new FormBody.Builder();
-                builder.add( idParam, String.valueOf( mediaItemModel.getId() ) );
-                builder.add( "Watched", String.valueOf( status ) );
-
-                final Request request = new Request.Builder()
-                        .url( getMasterBackendUrl() + mediaItemModel.getMarkWatchedUrl() )
-                        .addHeader( ACCEPT, ACCEPT_MEDIA_TYPE )
-                        .cacheControl( CacheControl.FORCE_NETWORK )
-                        .post( builder.build() )
-                        .build();
-
-                try {
-
-                    BooleanJsonMapper mapper = new BooleanJsonMapper();
-                    Reader result = okHttpClient.newCall( request ).execute().body().charStream();
-//                Log.d( TAG, "doInBackground : result=" + result );
-
-                    return mapper.transformBoolean( result );
-
-                } catch( IOException e ) {
-                    Log.e( TAG, DO_IN_BACKGROUND_ERROR, e );
-
-                    FirebaseCrash.logcat( Log.ERROR, TAG, DO_IN_BACKGROUND_MEDIA_ITEM_MODEL + mediaItemModel.toString() );
-                    FirebaseCrash.report( e );
-
-                }
-
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute( Boolean result ) {
-
-            if( null != result && result ) {
-
-                mediaItemModel.setWatched( status );
-                updateMenu();
-
-            }
-
-        }
-
-    }
-
-    private class AddLiveStreamTask extends AsyncTask<Void, Void, LiveStreamInfoEntity> {
-
-        private final String TAG = AddLiveStreamTask.class.getSimpleName();
-
-        @Override
-        protected LiveStreamInfoEntity doInBackground( Void... params ) {
-//            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
-
-            if( mediaItemModel.isValid() ) {
-                final Request request = new Request.Builder()
-                        .url( getMasterBackendUrl() + mediaItemModel.getCreateHttpLiveStreamUrl() )
-                        .addHeader( ACCEPT, ACCEPT_MEDIA_TYPE )
-                        .cacheControl( CacheControl.FORCE_NETWORK )
-                        .get()
-                        .build();
-
-                try {
-
-                    LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
-                    Reader result = okHttpClient.newCall( request ).execute().body().charStream();
-//                Log.d( TAG, "doInBackground : result=" + result );
-
-                    return mapper.transformLiveStreamInfoEntity( result );
-
-                } catch( IOException e ) {
-                    Log.e( TAG, DO_IN_BACKGROUND_ERROR, e );
-
-                    FirebaseCrash.logcat( Log.ERROR, TAG, DO_IN_BACKGROUND_MEDIA_ITEM_MODEL + mediaItemModel.toString() );
-                    FirebaseCrash.report( e );
-
-                }
-
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute( LiveStreamInfoEntity liveStreamInfoEntity ) {
-
-            if( null != liveStreamInfoEntity ) {
-                Log.d( TAG, "onPostExecute : liveStreamInfoEntity=" + liveStreamInfoEntity.toString() );
-
-                mediaItemModel.setLiveStreamId( liveStreamInfoEntity.getId() );
-                mediaItemModel.setPercentComplete( liveStreamInfoEntity.getPercentComplete() );
-                mediaItemModel.setRemoveHttpLiveStreamUrl( String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( liveStreamInfoEntity.getId() ) ) );
-                mediaItemModel.setGetHttpLiveStreamUrl( String.format( "/Content/GetLiveStream?Id=%s", String.valueOf( liveStreamInfoEntity.getId() ) ) );
-
-                if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.PROGRAM ) {
-
-                    mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( mediaItemModel.getId() ) ) );
-
-                } else if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.VIDEO ) {
-
-                    mediaItemModel.setCreateHttpLiveStreamUrl( String.format( "/Content/AddVideoLiveStream?Id=%s&Width=960", String.valueOf( mediaItemModel.getId() ) ) );
-
-                }
-
-                updateMenu();
-                updateProgress();
-                timer.start();
-
-            }
-
-        }
-
-    }
-
-    private class RemoveLiveStreamTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String TAG = RemoveLiveStreamTask.class.getSimpleName();
-
-        @Override
-        protected Boolean doInBackground( Void... params ) {
-//            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
-
-            if( mediaItemModel.isValid() ) {
-
-                final Request request = new Request.Builder()
-                        .url( getMasterBackendUrl() + mediaItemModel.getRemoveHttpLiveStreamUrl() )
-                        .addHeader( ACCEPT, ACCEPT_MEDIA_TYPE )
-                        .cacheControl( CacheControl.FORCE_NETWORK )
-                        .get()
-                        .build();
-
-                try {
-
-                    BooleanJsonMapper mapper = new BooleanJsonMapper();
-                    Reader result = okHttpClient.newCall( request ).execute().body().charStream();
-//                    Log.d( TAG, "doInBackground : result=" + result );
-
-                    return mapper.transformBoolean( result );
-
-                } catch( IOException e ) {
-                    Log.e( TAG, DO_IN_BACKGROUND_ERROR, e );
-
-                    FirebaseCrash.logcat( Log.ERROR, TAG, DO_IN_BACKGROUND_MEDIA_ITEM_MODEL + mediaItemModel.toString() );
-                    FirebaseCrash.report( e );
-
-                }
-
-            }
-
-            return null;
-
-        }
-
-        @Override
-        protected void onPostExecute( Boolean result ) {
-
-            if( null != result ) {
-
-                mediaItemModel.setLiveStreamId( 0 );
-                mediaItemModel.setPercentComplete( 0 );
-                mediaItemModel.setRemoveHttpLiveStreamUrl( "" );
-                mediaItemModel.setGetHttpLiveStreamUrl( "" );
-
-                updateMenu();
-                updateProgress();
-
-            }
-
-        }
-
-    }
-
-    private class GetLiveStreamTask extends AsyncTask<Void, Void, LiveStreamInfoEntity> {
-
-        private final String TAG = GetLiveStreamTask.class.getSimpleName();
-
-        @Override
-        protected LiveStreamInfoEntity doInBackground( Void... params ) {
-//            Log.d( TAG, "doInBackground : mediaItemModel=" + mediaItemModel.toString() );
-
-            if( mediaItemModel.isValid() ) {
-
-                final Request request = new Request.Builder()
-                        .url( getMasterBackendUrl() + mediaItemModel.getGetHttpLiveStreamUrl() )
-                        .addHeader( ACCEPT, ACCEPT_MEDIA_TYPE )
-                        .get()
-                        .build();
-
-                try {
-
-                    LiveStreamInfoEntityJsonMapper mapper = new LiveStreamInfoEntityJsonMapper( gson );
-                    Reader result = okHttpClient.newCall( request ).execute().body().charStream();
-//                Log.d( TAG, "doInBackground : result=" + result );
-
-                    return mapper.transformLiveStreamInfoEntity( result );
-
-                } catch( JsonSyntaxException | IOException e ) {
-                    Log.e( TAG, DO_IN_BACKGROUND_ERROR, e );
-
-                    FirebaseCrash.logcat( Log.ERROR, TAG, DO_IN_BACKGROUND_MEDIA_ITEM_MODEL + mediaItemModel.toString() );
-                    FirebaseCrash.report( e );
-
-                }
-
-            } else {
-
-                showToastMessage( getString(R.string.media_item_details_corrupt_data), null, null );
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute( LiveStreamInfoEntity liveStreamInfoEntity ) {
-
-            if( null != liveStreamInfoEntity ) {
-
-                mediaItemModel.setPercentComplete( liveStreamInfoEntity.getPercentComplete() );
-
-                if( liveStreamInfoEntity.getPercentComplete() == 100 ) {
-
-                    timer.cancel();
-
-                }
-
-                updateProgress();
-
-            }
-
-        }
-
-    }
-
     private CountDownTimer timer = new CountDownTimer( fifteenMin, 5000 ) {
 
         @Override
         public void onTick( long millisUntilFinished ) {
             Log.v( TAG, "onTick : enter" );
 
-            getLiveStreamTask = new GetLiveStreamTask();
-            getLiveStreamTask.execute();
+            isTimerRunning = true;
+
+            presenter.reload();
 
             Log.v( TAG, "onTick : enter" );
         }
@@ -830,6 +576,8 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         @Override
         public void onFinish() {
             Log.v( TAG, "onFinish : enter" );
+
+            isTimerRunning = false;
 
             Log.v( TAG, "onFinish : enter" );
         }

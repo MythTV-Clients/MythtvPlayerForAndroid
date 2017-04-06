@@ -18,6 +18,9 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -28,37 +31,20 @@ import com.google.gson.annotations.SerializedName;
  *
  * Created on 8/27/15.
  */
-public class ProgramListEntity {
+@AutoValue
+public abstract class ProgramListEntity {
 
     @SerializedName( "ProgramList" )
-    private ProgramsEntity programs;
+    public abstract ProgramsEntity programs();
 
-    public ProgramListEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    public static ProgramListEntity create( ProgramsEntity programs ) {
+
+        return new AutoValue_ProgramListEntity( programs );
     }
 
-    public ProgramListEntity(ProgramsEntity programs ) {
+    public static TypeAdapter<ProgramListEntity> typeAdapter( Gson gson ) {
 
-        this.programs = programs;
-
-    }
-
-    public ProgramsEntity getPrograms() {
-
-        return programs;
-    }
-
-    public void setPrograms( ProgramsEntity programs ) {
-
-        this.programs = programs;
-
-    }
-
-    @Override
-    public String toString() {
-        return "ProgramListEntity{" +
-                "programs=" + programs +
-                '}';
+        return new AutoValue_ProgramListEntity.GsonTypeAdapter( gson );
     }
 
 }

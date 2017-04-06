@@ -91,7 +91,7 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
             } else {
                 Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
 
-                if( null == mediaItemModel.getMedia() ) {
+                if( null == mediaItemModel.media() ) {
 
                     String message = getString(R.string.validation_no_media_type);
                     showToastMessage( message, null, null );
@@ -99,13 +99,13 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
                 } else {
 
                     String fields = "";
-                    for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
+                    for( ErrorModel errorModel : mediaItemModel.validationErrors() ) {
 
                         if( !"".equals( fields ) ) {
                             fields += ", ";
                         }
 
-                        fields += errorModel.getField();
+                        fields += errorModel.field();
 
                     }
 

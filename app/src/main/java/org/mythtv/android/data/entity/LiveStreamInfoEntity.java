@@ -18,9 +18,14 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -30,344 +35,94 @@ import org.joda.time.DateTime;
  *
  * Created on 10/17/15.
  */
-public class LiveStreamInfoEntity {
+@AutoValue
+public abstract class LiveStreamInfoEntity {
 
     @SerializedName( "Id" )
-    private int id;
+    public abstract int id();
 
     @SerializedName( "Width" )
-    private int width;
+    public abstract int width();
 
     @SerializedName( "Height" )
-    private int height;
+    public abstract int height();
 
     @SerializedName( "Bitrate" )
-    private int bitrate;
+    public abstract int bitrate();
 
     @SerializedName( "AudioBitrate" )
-    private int audioBitrate;
+    public abstract int audioBitrate();
 
     @SerializedName( "SegmentSize" )
-    private int segmentSize;
+    public abstract int segmentSize();
 
     @SerializedName( "MaxSegments" )
-    private int maxSegments;
+    public abstract int maxSegments();
 
     @SerializedName( "StartSegment" )
-    private int startSegment;
+    public abstract int startSegment();
 
     @SerializedName( "CurrentSegment" )
-    private int currentSegment;
+    public abstract int currentSegment();
 
     @SerializedName( "SegmentCount" )
-    private int segmentCount;
+    public abstract int segmentCount();
 
     @SerializedName( "PercentComplete" )
-    private int percentComplete;
+    public abstract int percentComplete();
 
+    @Nullable
     @SerializedName( "Created" )
-    private DateTime created;
+    public abstract DateTime created();
 
+    @Nullable
     @SerializedName( "LastModified" )
-    private DateTime lastModified;
+    public abstract DateTime lastModified();
 
+    @Nullable
     @SerializedName( "RelativeURL" )
-    private String relativeUrl;
+    public abstract String relativeUrl();
 
+    @Nullable
     @SerializedName( "FullURL" )
-    private String fullUrl;
+    public abstract String fullUrl();
 
+    @Nullable
     @SerializedName( "StatusStr" )
-    private String statusString;
+    public abstract String statusString();
 
     @SerializedName( "StatusInt" )
-    private int statusInt;
+    public abstract int statusInt();
 
+    @Nullable
     @SerializedName( "StatusMessage" )
-    private String statusMessage;
+    public abstract String statusMessage();
 
+    @Nullable
     @SerializedName( "SourceFile" )
-    private String sourceFile;
+    public abstract String sourceFile();
 
+    @Nullable
     @SerializedName( "SourceHost" )
-    private String sourceHost;
+    public abstract String sourceHost();
 
     @SerializedName( "SourceWidth" )
-    private int sourceWidth;
+    public abstract int sourceWidth();
 
     @SerializedName( "SourceHeight" )
-    private int sourceHeight;
+    public abstract int sourceHeight();
 
     @SerializedName( "AudioOnlyBitrate" )
-    private int audioOnlyBitrate;
+    public abstract int audioOnlyBitrate();
 
-    public LiveStreamInfoEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    public static LiveStreamInfoEntity create( int id, int width, int height, int bitrate, int audioBitrate, int segmentSize, int maxSegments, int startSegment, int currentSegment, int segmentCount, int percentComplete, DateTime created, DateTime lastModified, String relativeUrl, String fullUrl, String statusString, int statusInt, String statusMessage, String sourceFile, String sourceHost, int sourceWidth, int sourceHeight, int audioOnlyBitrate ) {
+
+        return new AutoValue_LiveStreamInfoEntity( id, width, height, bitrate, audioBitrate, segmentSize, maxSegments, startSegment, currentSegment, segmentCount, percentComplete, created, lastModified, relativeUrl, fullUrl, statusString, statusInt, statusMessage, sourceFile, sourceHost, sourceWidth, sourceHeight, audioOnlyBitrate );
     }
 
-    public LiveStreamInfoEntity(int id, int width, int height, int bitrate, int audioBitrate, int segmentSize, int maxSegments, int startSegment, int currentSegment, int segmentCount, int percentComplete, DateTime created, DateTime lastModified, String relativeUrl, String fullUrl, String statusString, int statusInt, String statusMessage, String sourceFile, String sourceHost, int sourceWidth, int sourceHeight, int audioOnlyBitrate ) {
+    public static TypeAdapter<LiveStreamInfoEntity> typeAdapter( Gson gson ) {
 
-        this.id = id;
-        this.width = width;
-        this.height = height;
-        this.bitrate = bitrate;
-        this.audioBitrate = audioBitrate;
-        this.segmentSize = segmentSize;
-        this.maxSegments = maxSegments;
-        this.startSegment = startSegment;
-        this.currentSegment = currentSegment;
-        this.segmentCount = segmentCount;
-        this.percentComplete = percentComplete;
-        this.created = created;
-        this.lastModified = lastModified;
-        this.relativeUrl = relativeUrl;
-        this.fullUrl = fullUrl;
-        this.statusString = statusString;
-        this.statusInt = statusInt;
-        this.statusMessage = statusMessage;
-        this.sourceFile = sourceFile;
-        this.sourceHost = sourceHost;
-        this.sourceWidth = sourceWidth;
-        this.sourceHeight = sourceHeight;
-        this.audioOnlyBitrate = audioOnlyBitrate;
-
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getBitrate() {
-        return bitrate;
-    }
-
-    public void setBitrate(int bitrate) {
-        this.bitrate = bitrate;
-    }
-
-    public int getAudioBitrate() {
-        return audioBitrate;
-    }
-
-    public void setAudioBitrate(int audioBitrate) {
-        this.audioBitrate = audioBitrate;
-    }
-
-    public int getSegmentSize() {
-        return segmentSize;
-    }
-
-    public void setSegmentSize(int segmentSize) {
-        this.segmentSize = segmentSize;
-    }
-
-    public int getMaxSegments() {
-        return maxSegments;
-    }
-
-    public void setMaxSegments(int maxSegments) {
-        this.maxSegments = maxSegments;
-    }
-
-    public int getStartSegment() {
-        return startSegment;
-    }
-
-    public void setStartSegment(int startSegment) {
-        this.startSegment = startSegment;
-    }
-
-    public int getCurrentSegment() {
-        return currentSegment;
-    }
-
-    public void setCurrentSegment(int currentSegment) {
-        this.currentSegment = currentSegment;
-    }
-
-    public int getSegmentCount() {
-        return segmentCount;
-    }
-
-    public void setSegmentCount(int segmentCount) {
-        this.segmentCount = segmentCount;
-    }
-
-    public int getPercentComplete() {
-        return percentComplete;
-    }
-
-    public void setPercentComplete(int percentComplete) {
-        this.percentComplete = percentComplete;
-    }
-
-    public DateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(DateTime created) {
-        this.created = created;
-    }
-
-    public DateTime getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(DateTime lastModified) {
-        this.lastModified = lastModified;
-    }
-
-    public String getRelativeUrl() {
-        return relativeUrl;
-    }
-
-    public void setRelativeUrl(String relativeUrl) {
-        this.relativeUrl = relativeUrl;
-    }
-
-    public String getFullUrl() {
-        return fullUrl;
-    }
-
-    public void setFullUrl(String fullUrl) {
-        this.fullUrl = fullUrl;
-    }
-
-    public String getStatusString() {
-        return statusString;
-    }
-
-    public void setStatusString(String statusString) {
-        this.statusString = statusString;
-    }
-
-    public int getStatusInt() {
-        return statusInt;
-    }
-
-    public void setStatusInt(int statusInt) {
-        this.statusInt = statusInt;
-    }
-
-    public String getStatusMessage() {
-        return statusMessage;
-    }
-
-    public void setStatusMessage(String statusMessage) {
-        this.statusMessage = statusMessage;
-    }
-
-    public String getSourceFile() {
-        return sourceFile;
-    }
-
-    public void setSourceFile(String sourceFile) {
-        this.sourceFile = sourceFile;
-    }
-
-    public String getSourceHost() {
-        return sourceHost;
-    }
-
-    public void setSourceHost(String sourceHost) {
-        this.sourceHost = sourceHost;
-    }
-
-    public int getSourceWidth() {
-        return sourceWidth;
-    }
-
-    public void setSourceWidth(int sourceWidth) {
-        this.sourceWidth = sourceWidth;
-    }
-
-    public int getSourceHeight() {
-        return sourceHeight;
-    }
-
-    public void setSourceHeight(int sourceHeight) {
-        this.sourceHeight = sourceHeight;
-    }
-
-    public int getAudioOnlyBitrate() {
-        return audioOnlyBitrate;
-    }
-
-    public void setAudioOnlyBitrate(int audioOnlyBitrate) {
-        this.audioOnlyBitrate = audioOnlyBitrate;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-
-        if( this == o ) {
-
-            return true;
-        }
-
-        if( o == null || getClass() != o.getClass() ) {
-
-            return false;
-        }
-
-        LiveStreamInfoEntity that = (LiveStreamInfoEntity) o;
-
-        return id == that.id;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public String toString() {
-        return "LiveStreamInfoEntity{" +
-                "id=" + id +
-                ", width=" + width +
-                ", height=" + height +
-                ", bitrate=" + bitrate +
-                ", audioBitrate=" + audioBitrate +
-                ", segmentSize=" + segmentSize +
-                ", maxSegments=" + maxSegments +
-                ", startSegment=" + startSegment +
-                ", currentSegment=" + currentSegment +
-                ", segmentCount=" + segmentCount +
-                ", percentComplete=" + percentComplete +
-                ", created=" + created +
-                ", lastModified=" + lastModified +
-                ", relativeUrl='" + relativeUrl + '\'' +
-                ", fullUrl='" + fullUrl + '\'' +
-                ", statusString='" + statusString + '\'' +
-                ", statusInt=" + statusInt +
-                ", statusMessage='" + statusMessage + '\'' +
-                ", sourceFile='" + sourceFile + '\'' +
-                ", sourceHost='" + sourceHost + '\'' +
-                ", sourceWidth=" + sourceWidth +
-                ", sourceHeight=" + sourceHeight +
-                ", audioOnlyBitrate=" + audioOnlyBitrate +
-                '}';
+        return new AutoValue_LiveStreamInfoEntity.GsonTypeAdapter( gson );
     }
 
 }

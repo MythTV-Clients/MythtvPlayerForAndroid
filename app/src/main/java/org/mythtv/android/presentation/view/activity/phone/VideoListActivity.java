@@ -285,7 +285,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
         Log.d( TAG, "onMediaItemClicked : enter" );
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
+        navigator.navigateToMediaItem( this, mediaItemModel.id(), mediaItemModel.media(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }
@@ -322,7 +322,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     public void onSeriesClicked( final SeriesModel seriesModel ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.getTitle(), null, null, seriesModel.getInetref() );
+        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.title(), null, null, seriesModel.inetref() );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

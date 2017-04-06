@@ -25,7 +25,7 @@ public class MediaItemFilter {
         boolean filterHlsOnlyPreference = sharedPreferences.getBoolean( SettingsKeys.KEY_PREF_FILTER_HLS_ONLY, false );
         Log.d( TAG, "filter : filterHlsOnlyPreference=" + filterHlsOnlyPreference );
 
-        switch( mediaItemModel.getMedia() ) {
+        switch( mediaItemModel.media() ) {
 
             case UPCOMING :
                 Log.d( TAG, "filter : media type 'UPCOMING'" );
@@ -57,7 +57,7 @@ public class MediaItemFilter {
         if( filterHlsOnlyPreference ) {
             Log.d( TAG, "filterProgram : filtering HLS only" );
 
-            if( mediaItemModel.getLiveStreamId() <= 0 ) {
+            if( mediaItemModel.liveStreamId() <= 0 ) {
                 Log.d( TAG, "filterProgram : mediaItem has not been HLS transcoded" );
 
                 return false;
@@ -69,7 +69,7 @@ public class MediaItemFilter {
         String filterGroup = sharedPreferences.getString( SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER, "" );
         Log.d( TAG, "filterProgram : filterByGroup=" + filterByGroup + ", filterGroup=" + filterGroup );
 
-        if( filterByGroup && !filterGroup.equals( mediaItemModel.getRecordingGroup() ) ) {
+        if( filterByGroup && !filterGroup.equals( mediaItemModel.recordingGroup() ) ) {
             Log.d( TAG, "filterProgram : recording group does not match" );
 
             return false;
@@ -91,7 +91,7 @@ public class MediaItemFilter {
         if( filterHlsOnlyPreference ) {
             Log.d( TAG, "filterVideo : filtering HLS only" );
 
-            if( mediaItemModel.getLiveStreamId() <= 0 ) {
+            if( mediaItemModel.liveStreamId() <= 0 ) {
                 Log.d( TAG, "filterVideo : mediaItem has not been HLS transcoded" );
 
                 return false;
@@ -109,7 +109,7 @@ public class MediaItemFilter {
         final int finalParentalLevel = parentalLevel;
         Log.d( TAG, "filterVideo : filterByParentalLevel=" + filterByParentalLevel + ", finalParentalLevel=" + finalParentalLevel );
 
-        if( filterByParentalLevel && mediaItemModel.getParentalLevel() > finalParentalLevel ) {
+        if( filterByParentalLevel && mediaItemModel.parentalLevel() > finalParentalLevel ) {
             Log.d( TAG, "filterVideo : does not meet parental level, skipping..." );
 
             return false;
@@ -125,19 +125,19 @@ public class MediaItemFilter {
         Log.d( TAG, "filterVideo : filterByCertification=" + filterByCertification + ", NR=" + ratingNR + ", G=" + ratingG + ", PG=" + ratingPG + ", PG-13=" + ratingPG13 + ", R=" + ratingR + ", NC-17=" + ratingNC17 );
 
         if( filterByCertification ) {
-            Log.d( TAG, "filterVideo : filtering by certification '" + mediaItemModel.getCertification() + "'" );
+            Log.d( TAG, "filterVideo : filtering by certification '" + mediaItemModel.certification() + "'" );
 
-            if( ratingNR && mediaItemModel.getCertification().equals( "NR" ) ) {
+            if( ratingNR && mediaItemModel.certification().equals( "NR" ) ) {
                 return true;
-            } else if( ratingG && ( mediaItemModel.getCertification().equals( "G" ) || mediaItemModel.getCertification().equals( "TV-Y" ) ) ) {
+            } else if( ratingG && ( mediaItemModel.certification().equals( "G" ) || mediaItemModel.certification().equals( "TV-Y" ) ) ) {
                 return true;
-            } else if( ratingPG && ( mediaItemModel.getCertification().endsWith( "PG" ) || mediaItemModel.getCertification().endsWith( "TV-PG" ) || mediaItemModel.getCertification().endsWith( "TV-Y7" ) ) ) {
+            } else if( ratingPG && ( mediaItemModel.certification().endsWith( "PG" ) || mediaItemModel.certification().endsWith( "TV-PG" ) || mediaItemModel.certification().endsWith( "TV-Y7" ) ) ) {
                 return true;
-            } else if( ratingPG13 && ( mediaItemModel.getCertification().equals( "PG-13" ) || mediaItemModel.getCertification().equals( "TV-14" ) ) ) {
+            } else if( ratingPG13 && ( mediaItemModel.certification().equals( "PG-13" ) || mediaItemModel.certification().equals( "TV-14" ) ) ) {
                 return true;
-            } else if( ratingR && ( mediaItemModel.getCertification().equals( "R" ) || mediaItemModel.getCertification().equals( "TV-MA" ) ) ) {
+            } else if( ratingR && ( mediaItemModel.certification().equals( "R" ) || mediaItemModel.certification().equals( "TV-MA" ) ) ) {
                 return true;
-            } else if( ratingNC17 && mediaItemModel.getCertification().equals( "NC-17" ) ) {
+            } else if( ratingNC17 && mediaItemModel.certification().equals( "NC-17" ) ) {
                 return true;
             } else {
                 return false;

@@ -257,27 +257,27 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        if( null == mediaItemModel.getMedia() ) {
+        if( null == mediaItemModel.media() ) {
             Log.d( TAG, "loadBackdrop : exit, media not set" );
 
             return;
         }
 
         String backdropUrl = null;
-        if( mediaItemModel.getMedia() == Media.PROGRAM ) {
+        if( mediaItemModel.media() == Media.PROGRAM ) {
 
-            if( null != mediaItemModel.getPreviewUrl() && !"".equals( mediaItemModel.getPreviewUrl() ) ) {
+            if( null != mediaItemModel.previewUrl() && !"".equals( mediaItemModel.previewUrl() ) ) {
 
-                backdropUrl = getMasterBackendUrl() + mediaItemModel.getPreviewUrl();
+                backdropUrl = getMasterBackendUrl() + mediaItemModel.previewUrl();
 
             }
 
 
         } else {
 
-            if( null != mediaItemModel.getFanartUrl() && !"".equals( mediaItemModel.getFanartUrl() ) ) {
+            if( null != mediaItemModel.fanartUrl() && !"".equals( mediaItemModel.fanartUrl() ) ) {
 
-                backdropUrl = getMasterBackendUrl() + mediaItemModel.getFanartUrl();
+                backdropUrl = getMasterBackendUrl() + mediaItemModel.fanartUrl();
 
             }
 
@@ -310,10 +310,10 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
             return;
         }
 
-        if( mediaItemModel.getUrl().endsWith( "m3u8" ) ) {
+        if( mediaItemModel.url().endsWith( "m3u8" ) ) {
             Log.d( TAG, "onButtonFabPlay : trying to play HLS stream" );
 
-            if( mediaItemModel.getPercentComplete() <= 2 ) {
+            if( mediaItemModel.percentComplete() <= 2 ) {
 
                 FragmentManager fm = getFragmentManager();
                 CastNotReadyDialogFragment fragment = new CastNotReadyDialogFragment();
@@ -339,7 +339,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         } else {
             Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
 
-            navigator.navigateToExternalPlayer( this, (getMasterBackendUrl() + mediaItemModel.getUrl() ), mediaItemModel.getContentType() );
+            navigator.navigateToExternalPlayer( this, (getMasterBackendUrl() + mediaItemModel.url() ), mediaItemModel.contentType() );
 
         }
 

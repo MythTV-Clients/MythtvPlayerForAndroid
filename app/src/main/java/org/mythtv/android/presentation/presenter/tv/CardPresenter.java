@@ -90,21 +90,21 @@ public class CardPresenter extends Presenter {
 
             MediaItemModel mediaItemModel = (MediaItemModel) item;
             ImageCardView cardView = (ImageCardView) viewHolder.view;
-            cardView.setTitleText( ( null == mediaItemModel.getSubTitle() || "".equals( mediaItemModel.getSubTitle() ) ) ? mediaItemModel.getTitle() : mediaItemModel.getSubTitle() );
-            cardView.setContentText( mediaItemModel.getDescription() );
+            cardView.setTitleText( ( null == mediaItemModel.subTitle() || "".equals( mediaItemModel.subTitle() ) ) ? mediaItemModel.title() : mediaItemModel.subTitle() );
+            cardView.setContentText( mediaItemModel.description() );
             cardView.setMainImageDimensions( CARD_WIDTH, CARD_HEIGHT );
 
-            if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.PROGRAM ) {
+            if( mediaItemModel.media() == org.mythtv.android.domain.Media.PROGRAM ) {
 
                 Glide.with( viewHolder.view.getContext() )
-                        .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.getPreviewUrl() )
+                        .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.previewUrl() )
                         .error( mDefaultCardImage )
                         .into( cardView.getMainImageView() );
 
             } else {
 
                 Glide.with( viewHolder.view.getContext() )
-                        .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.getFanartUrl() )
+                        .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.fanartUrl() )
                         .error( mDefaultCardImage )
                         .into( cardView.getMainImageView() );
 

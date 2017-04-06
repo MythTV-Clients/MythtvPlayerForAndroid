@@ -22,6 +22,7 @@ import android.util.Log;
 
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.net.ContentApi;
+import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
@@ -48,11 +49,24 @@ public class MasterBackendContentDataStore implements ContentDataStore {
     }
 
     @Override
-    public Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( String filename ) {
+    public Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename ) {
         Log.d( TAG, "liveStreamInfoEntityList : enter" );
 
-        Log.d( TAG, "liveStreamInfoEntityList : exit" );
         return this.api.liveStreamInfoEntityList( filename );
+    }
+
+    @Override
+    public Observable<LiveStreamInfoEntity> addLiveStream( final int id, final Media media ) {
+        Log.d( TAG, "addLiveStream : enter" );
+
+        return this.api.addLiveStream( id, media );
+    }
+
+    @Override
+    public Observable<Boolean> removeLiveStream( final int id ) {
+        Log.d( TAG, "removeLiveStream : enter" );
+
+        return this.api.removeLiveStream( id );
     }
 
 }

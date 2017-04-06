@@ -33,9 +33,9 @@ public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPrese
 
             MediaItemModel mediaItemModel = (MediaItemModel) item;
 
-            viewHolder.getTitle().setText( mediaItemModel.getTitle() );
-            viewHolder.getSubtitle().setText( mediaItemModel.getSubTitle() );
-            viewHolder.getBody().setText( mediaItemModel.getDescription() );
+            viewHolder.getTitle().setText( mediaItemModel.title() );
+            viewHolder.getSubtitle().setText( mediaItemModel.subTitle() );
+            viewHolder.getBody().setText( mediaItemModel.description() );
 
         }
 

@@ -173,7 +173,7 @@ public class SearchableActivity extends AbstractBasePhoneActivity implements Has
         Log.d( TAG, "onMediaItemClicked : enter" );
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
+        navigator.navigateToMediaItem( this, mediaItemModel.id(), mediaItemModel.media(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

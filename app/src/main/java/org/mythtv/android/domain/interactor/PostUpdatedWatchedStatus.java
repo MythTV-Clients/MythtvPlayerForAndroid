@@ -18,8 +18,10 @@
 
 package org.mythtv.android.domain.interactor;
 
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
+import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.domain.repository.VideoRepository;
 
 import java.util.Map;
@@ -34,13 +36,16 @@ import rx.Observable;
  *
  * Created on 4/9/16.
  */
-public class PostUpdatedVideoWatchedStatus extends DynamicUseCase {
+public class PostUpdatedWatchedStatus extends DynamicUseCase {
 
+    private final DvrRepository dvrRepository;
     private final VideoRepository videoRepository;
 
-    public PostUpdatedVideoWatchedStatus( final VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+
+    public PostUpdatedWatchedStatus( final DvrRepository dvrRepository, final VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
+        this.dvrRepository = dvrRepository;
         this.videoRepository = videoRepository;
 
     }
@@ -48,10 +53,20 @@ public class PostUpdatedVideoWatchedStatus extends DynamicUseCase {
     @Override
     protected Observable buildUseCaseObservable( Map parameters ) {
 
-        final int videoId = (Integer) parameters.get( "VIDEO_ID" );
+        final int id = (Integer) parameters.get( "ID" );
         final boolean watched = (Boolean) parameters.get( "WATCHED" );
+        final Media media = Media.valueOf( (String) parameters.get( "MEDIA" ) );
 
-        return this.videoRepository.updateWatchedStatus( videoId, watched );
+        if( Media.PROGRAM.equals( media ) ) {
+
+            return this.dvrRepository.updateWatchedStatus( id, watched );
+
+        } else {
+
+            return this.videoRepository.updateWatchedStatus( id, watched );
+
+        }
+
     }
 
 }

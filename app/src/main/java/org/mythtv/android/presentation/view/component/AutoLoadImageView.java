@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -325,30 +326,46 @@ public class AutoLoadImageView extends AppCompatImageView {
     void download( String imageUrl, Callback callback ) {
 //      Log.d( TAG, "download : enter" );
 
-      try {
+        InputStream is = null;
+        try {
 
-        URLConnection conn = new URL( imageUrl ).openConnection();
-        conn.connect();
+            String cleanedImageUrl = imageUrl.replaceAll( " ", "%20" );
+            //cleanedImageUrl = cleanedImageUrl.replaceAll( "&", "%26" );
 
-        Bitmap bitmap = BitmapFactory.decodeStream( conn.getInputStream() );
-        if( callback != null ) {
-//          Log.d( TAG, "download : callback != null" );
+            URLConnection conn = new URL( cleanedImageUrl ).openConnection();
+            conn.connect();
 
-          callback.onImageDownloaded( bitmap );
+            is = conn.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream( is );
+            if( null != callback ) {
+//              Log.d( TAG, "download : callback != null" );
 
+              callback.onImageDownloaded( bitmap );
+
+            }
+
+        } catch( MalformedURLException e ) {
+            Log.e( TAG, "download : malformedexception", e );
+
+            reportError( callback );
+
+        } catch( IOException e ) {
+            Log.e( TAG, "download : ioexception", e );
+
+            reportError( callback );
+
+        } finally {
+
+            if( null != is ) {
+
+                try {
+                    is.close();
+                } catch( IOException e ) {
+                    Log.e( TAG, "download : ioexception, can't close input stream", e );
+                }
+
+            }
         }
-
-      } catch( MalformedURLException e ) {
-        Log.e( TAG, "download : malformedexception", e );
-
-        reportError( callback );
-
-      } catch( IOException e ) {
-        Log.e( TAG, "download : ioexception", e );
-
-        reportError( callback );
-
-      }
 
 //      Log.d( TAG, "download : exit" );
     }

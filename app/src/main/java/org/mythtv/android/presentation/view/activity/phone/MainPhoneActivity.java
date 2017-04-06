@@ -248,10 +248,10 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
     public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        if( null != mediaItemModel && !mediaItemModel.getMedia().equals( Media.UPCOMING ) ) {
+        if( null != mediaItemModel && !mediaItemModel.media().equals( Media.UPCOMING ) ) {
 
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
-            navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
+            navigator.navigateToMediaItem( this, mediaItemModel.id(), mediaItemModel.media(), options );
 
         }
 

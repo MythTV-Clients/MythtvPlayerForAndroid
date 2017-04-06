@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.data.net.ContentApi;
 import org.mythtv.android.data.net.ContentApiImpl;
@@ -72,7 +73,7 @@ public class ContentDataStoreFactory {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
         LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper = new LiveStreamInfoEntityJsonMapper( gson );
-        ContentApi api = new ContentApiImpl( this.context, this.sharedPreferences, this.okHttpClient, liveStreamInfoEntityJsonMapper );
+        ContentApi api = new ContentApiImpl( this.context, this.sharedPreferences, this.okHttpClient, liveStreamInfoEntityJsonMapper, new BooleanJsonMapper() );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
         return new MasterBackendContentDataStore( api );

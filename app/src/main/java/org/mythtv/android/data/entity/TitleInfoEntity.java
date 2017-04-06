@@ -18,6 +18,9 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -28,60 +31,26 @@ import com.google.gson.annotations.SerializedName;
  *
  * Created on 12/7/14.
  */
-public class TitleInfoEntity {
+@AutoValue
+public abstract class TitleInfoEntity {
 
     @SerializedName( "Title" )
-    private String title;
+    public abstract String title();
 
     @SerializedName( "Inetref" )
-    private String inetref;
+    public abstract String inetref();
 
     @SerializedName( "Count" )
-    private int count;
+    public abstract int count();
 
-    public TitleInfoEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    public static TitleInfoEntity create( String title, String inetref, int count ) {
+
+        return new AutoValue_TitleInfoEntity( title, inetref, count );
     }
 
-    public TitleInfoEntity(String title, String inetref, int count ) {
+    public static TypeAdapter<TitleInfoEntity> typeAdapter( Gson gson ) {
 
-        this.title = title;
-        this.inetref = inetref;
-        this.count = count;
-
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getInetref() {
-        return inetref;
-    }
-
-    public void setInetref(String inetref) {
-        this.inetref = inetref;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    @Override
-    public String toString() {
-        return "TitleInfoEntity{" +
-                "title='" + title + '\'' +
-                ", inetref='" + inetref + '\'' +
-                ", count=" + count +
-                '}';
+        return new AutoValue_TitleInfoEntity.GsonTypeAdapter( gson );
     }
 
 }

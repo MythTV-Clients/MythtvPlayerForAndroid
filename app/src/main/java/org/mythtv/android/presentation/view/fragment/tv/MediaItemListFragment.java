@@ -379,7 +379,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
             for( MediaItemModel mediaItemModel : mediaItems ) {
                 Log.d( TAG, "renderMediaItemList : mediaItemModel=" + mediaItemModel.toString() );
 
-                Category category = new Category( mediaItemModel.getTitle(), mediaItemModel.getMedia() );
+                Category category = new Category( mediaItemModel.title(), mediaItemModel.media() );
                 if( categories.containsKey( category ) ) {
                     Log.d( TAG, "renderMediaItemList : adding to existing category" );
 
@@ -405,17 +405,17 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
                     if( category.media == Media.PROGRAM ) {
 
-                        int i1 = Integer.compare( lhs.getSeason(), rhs.getSeason() );
+                        int i1 = Integer.compare( lhs.season(), rhs.season() );
                         if( i1 != 0 ) {
 
                             return i1;
                         }
 
-                        return Integer.compare( lhs.getEpisode(), rhs.getEpisode() );
+                        return Integer.compare( lhs.episode(), rhs.episode() );
 
                     } else {
-                        String lhsTitle = ArticleCleaner.clean(getActivity(), lhs.getTitle());
-                        String rhsTitle = ArticleCleaner.clean(getActivity(), rhs.getTitle());
+                        String lhsTitle = ArticleCleaner.clean(getActivity(), lhs.title());
+                        String rhsTitle = ArticleCleaner.clean(getActivity(), rhs.title());
 
                         return lhsTitle.compareTo(rhsTitle);
                     }
@@ -424,7 +424,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
                 ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( cardPresenter );
                 for( MediaItemModel mediaItemModel : categories.get( category ) ) {
-                    Log.d( TAG, "renderMediaItemList : adding mediaItem '" + mediaItemModel.getTitle() + "' to category '" + category.getKey() + "' list row adapter" );
+                    Log.d( TAG, "renderMediaItemList : adding mediaItem '" + mediaItemModel.title() + "' to category '" + category.getKey() + "' list row adapter" );
 
                     listRowAdapter.add( mediaItemModel );
 
@@ -595,7 +595,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
             if( item instanceof MediaItemModel ) {
 
                 MediaItemModel mediaItemModel = (MediaItemModel) item;
-                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + mediaItemModel.getFanartUrl() );
+                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + mediaItemModel.fanartUrl() );
                 startBackgroundTimer();
 
             }

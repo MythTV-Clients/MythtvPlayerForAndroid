@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.model.EncoderModel;
-import org.mythtv.android.presentation.model.ProgramModel;
 
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Adapter that manages a collection of {@link ProgramModel}.
+ * Adapter that manages a collection of {@link EncoderModel}.
  *
  * @author dmfrey
  *
@@ -85,7 +84,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
         final EncoderModel encoderModel = this.encodersCollection.get( position );
 
-        int state = translateState( encoderModel.getState() );
+        int state = translateState( encoderModel.state() );
         if( state == R.string.encoder_state_recording ) {
 
             holder.imageViewRecording.setVisibility( View.VISIBLE );
@@ -96,12 +95,12 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
         }
 
-        holder.textViewName.setText( context.getResources().getString( R.string.encoder, String.valueOf( encoderModel.getId() ), ( null == encoderModel.getInputs() ?  String.valueOf( encoderModel.getId() ) : encoderModel.getInputs().get( 0 ).getDisplayName() ), context.getResources().getString( state ) ) );
+        holder.textViewName.setText( context.getResources().getString( R.string.encoder, String.valueOf( encoderModel.id() ), encoderModel.inputName(), context.getResources().getString( state ) ) );
 
-        if( null != encoderModel.getRecording() ) {
+        if( null != encoderModel.recordingName() ) {
 
-            holder.textViewRecording.setText( encoderModel.getRecording().getTitle() );
-            holder.textViewRecordingDescription.setText( encoderModel.getRecording().getDescription() );
+            holder.textViewRecording.setText( encoderModel.recordingName() );
+            holder.textViewRecordingDescription.setText( encoderModel.recordingDescription() );
 
         }
 

@@ -18,9 +18,14 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -30,488 +35,153 @@ import org.joda.time.DateTime;
  *
  * Created on 10/30/15.
  */
-public class VideoMetadataInfoEntity {
+@AutoValue
+public abstract class VideoMetadataInfoEntity {
 
     @SerializedName( "Id" )
-    private int id;
+    public abstract int id();
 
+    @Nullable
     @SerializedName( "Title" )
-    private String title;
+    public abstract String title();
 
+    @Nullable
     @SerializedName( "SubTitle" )
-    private String subTitle;
+    public abstract String subTitle();
 
+    @Nullable
     @SerializedName( "Tagline" )
-    private String tagline;
+    public abstract String tagline();
 
+    @Nullable
     @SerializedName( "Director" )
-    private String director;
+    public abstract String director();
 
+    @Nullable
     @SerializedName( "Studio" )
-    private String studio;
+    public abstract String studio();
 
+    @Nullable
     @SerializedName( "Description" )
-    private String description;
+    public abstract String description();
 
+    @Nullable
     @SerializedName( "Certification" )
-    private String certification;
+    public abstract String certification();
 
+    @Nullable
     @SerializedName( "Inetref" )
-    private String inetref;
+    public abstract String inetref();
 
     @SerializedName( "Collectionref" )
-    private int collectionref;
+    public abstract int collectionref();
 
+    @Nullable
     @SerializedName( "HomePage" )
-    private String homePage;
+    public abstract String homePage();
 
+    @Nullable
     @SerializedName( "ReleaseDate" )
-    private DateTime releaseDate;
+    public abstract DateTime releaseDate();
 
+    @Nullable
     @SerializedName( "AddDate" )
-    private DateTime addDate;
+    public abstract DateTime addDate();
 
     @SerializedName( "UserRating" )
-    private float userRating;
+    public abstract float userRating();
 
     @SerializedName( "Length" )
-    private int length;
+    public abstract int length();
 
     @SerializedName( "PlayCount" )
-    private int playCount;
+    public abstract int playCount();
 
     @SerializedName( "Season" )
-    private int season;
+    public abstract int season();
 
     @SerializedName( "Episode" )
-    private int episode;
+    public abstract int episode();
 
     @SerializedName( "ParentalLevel" )
-    private int parentalLevel;
+    public abstract int parentalLevel();
 
     @SerializedName( "Visible" )
-    private boolean visible;
+    public abstract boolean visible();
 
     @SerializedName( "Watched" )
-    private boolean watched;
+    public abstract boolean watched();
 
     @SerializedName( "Processed" )
-    private boolean processed;
+    public abstract boolean processed();
 
+    @Nullable
     @SerializedName( "ContentType" )
-    private String contentType;
+    public abstract String contentType();
 
+    @Nullable
     @SerializedName( "FileName" )
-    private String fileName;
+    public abstract String fileName();
 
+    @Nullable
     @SerializedName( "Hash" )
-    private String hash;
+    public abstract String hash();
 
+    @Nullable
     @SerializedName( "HostName" )
-    private String hostName;
+    public abstract String hostName();
 
+    @Nullable
     @SerializedName( "Coverart" )
-    private String coverart;
+    public abstract String coverart();
 
+    @Nullable
     @SerializedName( "Fanart" )
-    private String fanart;
+    public abstract String fanart();
 
+    @Nullable
     @SerializedName( "Banner" )
-    private String banner;
+    public abstract String banner();
 
+    @Nullable
     @SerializedName( "Screenshot" )
-    private String screenshot;
+    public abstract String screenshot();
 
+    @Nullable
     @SerializedName( "Trailer" )
-    private String trailer;
+    public abstract String trailer();
 
+    @Nullable
     @SerializedName( "Artwork" )
-    private ArtworkEntity artwork;
+    public abstract ArtworkEntity artwork();
 
+    @Nullable
     @SerializedName( "Cast" )
-    private CastEntity cast;
+    public abstract CastEntity cast();
 
+    @Nullable
     private LiveStreamInfoEntity liveStreamInfoEntity;
 
-    public VideoMetadataInfoEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
-    }
-
-    public VideoMetadataInfoEntity(int id, String title, String subTitle, String tagline, String director, String studio, String description, String certification, String inetref, int collectionref, String homePage, DateTime releaseDate, DateTime addDate, float userRating, int length, int playCount, int season, int episode, int parentalLevel, boolean visible, boolean watched, boolean processed, String contentType, String fileName, String hash, String hostName, String coverart, String fanart, String banner, String screenshot, String trailer, ArtworkEntity artwork, CastEntity cast ) {
-
-        this.id = id;
-        this.title = title;
-        this.subTitle = subTitle;
-        this.tagline = tagline;
-        this.director = director;
-        this.studio = studio;
-        this.description = description;
-        this.certification = certification;
-        this.inetref = inetref;
-        this.collectionref = collectionref;
-        this.homePage = homePage;
-        this.releaseDate = releaseDate;
-        this.addDate = addDate;
-        this.userRating = userRating;
-        this.length = length;
-        this.playCount = playCount;
-        this.season = season;
-        this.episode = episode;
-        this.parentalLevel = parentalLevel;
-        this.visible = visible;
-        this.watched = watched;
-        this.processed = processed;
-        this.contentType = contentType;
-        this.fileName = fileName;
-        this.hash = hash;
-        this.hostName = hostName;
-        this.coverart = coverart;
-        this.fanart = fanart;
-        this.banner = banner;
-        this.screenshot = screenshot;
-        this.trailer = trailer;
-        this.artwork = artwork;
-        this.cast = cast;
-
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
-    }
-
-    public String getTagline() {
-        return tagline;
-    }
-
-    public void setTagline(String tagline) {
-        this.tagline = tagline;
-    }
-
-    public String getDirector() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
-    }
-
-    public String getStudio() {
-        return studio;
-    }
-
-    public void setStudio(String studio) {
-        this.studio = studio;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCertification() {
-        return certification;
-    }
-
-    public void setCertification(String certification) {
-        this.certification = certification;
-    }
-
-    public String getInetref() {
-        return inetref;
-    }
-
-    public void setInetref(String inetref) {
-        this.inetref = inetref;
-    }
-
-    public int getCollectionref() {
-        return collectionref;
-    }
-
-    public void setCollectionref(int collectionref) {
-        this.collectionref = collectionref;
-    }
-
-    public String getHomePage() {
-        return homePage;
-    }
-
-    public void setHomePage(String homePage) {
-        this.homePage = homePage;
-    }
-
-    public DateTime getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(DateTime releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public DateTime getAddDate() {
-        return addDate;
-    }
-
-    public void setAddDate(DateTime addDate) {
-        this.addDate = addDate;
-    }
-
-    public float getUserRating() {
-        return userRating;
-    }
-
-    public void setUserRating(float userRating) {
-        this.userRating = userRating;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public int getPlayCount() {
-        return playCount;
-    }
-
-    public void setPlayCount(int playCount) {
-        this.playCount = playCount;
-    }
-
-    public int getSeason() {
-        return season;
-    }
-
-    public void setSeason(int season) {
-        this.season = season;
-    }
-
-    public int getEpisode() {
-        return episode;
-    }
-
-    public void setEpisode(int episode) {
-        this.episode = episode;
-    }
-
-    public int getParentalLevel() {
-        return parentalLevel;
-    }
-
-    public void setParentalLevel(int parentalLevel) {
-        this.parentalLevel = parentalLevel;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public boolean isWatched() {
-        return watched;
-    }
-
-    public void setWatched(boolean watched) {
-        this.watched = watched;
-    }
-
-    public boolean isProcessed() {
-        return processed;
-    }
-
-    public void setProcessed(boolean processed) {
-        this.processed = processed;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
+    public static VideoMetadataInfoEntity create( int id, String title, String subTitle, String tagline, String director, String studio, String description, String certification, String inetref, int collectionref, String homePage, DateTime releaseDate, DateTime addDate, float userRating, int length, int playCount, int season, int episode, int parentalLevel, boolean visible, boolean watched, boolean processed, String contentType, String fileName, String hash, String hostName, String coverart, String fanart, String banner, String screenshot, String trailer, ArtworkEntity artwork, CastEntity cast ) {
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+        return new AutoValue_VideoMetadataInfoEntity( id, title, subTitle, tagline, director, studio, description, certification, inetref, collectionref, homePage, releaseDate, addDate, userRating, length, playCount, season, episode, parentalLevel, visible, watched, processed, contentType, fileName, hash, hostName, coverart, fanart, banner, screenshot, trailer, artwork, cast );
     }
 
-    public String getHash() {
-        return hash;
-    }
-
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-
-    public String getHostName() {
-        return hostName;
-    }
-
-    public void setHostName(String hostName) {
-        this.hostName = hostName;
-    }
-
-    public String getCoverart() {
-        return coverart;
-    }
-
-    public void setCoverart(String coverart) {
-        this.coverart = coverart;
-    }
-
-    public String getFanart() {
-        return fanart;
-    }
-
-    public void setFanart(String fanart) {
-        this.fanart = fanart;
-    }
-
-    public String getBanner() {
-        return banner;
-    }
-
-    public void setBanner(String banner) {
-        this.banner = banner;
-    }
-
-    public String getScreenshot() {
-        return screenshot;
-    }
-
-    public void setScreenshot(String screenshot) {
-        this.screenshot = screenshot;
-    }
-
-    public String getTrailer() {
-        return trailer;
-    }
-
-    public void setTrailer(String trailer) {
-        this.trailer = trailer;
-    }
-
-    public ArtworkEntity getArtwork() {
-        return artwork;
-    }
-
-    public void setArtwork(ArtworkEntity artwork) {
-        this.artwork = artwork;
-    }
-
-    public CastEntity getCast() {
-        return cast;
-    }
+    public static TypeAdapter<VideoMetadataInfoEntity> typeAdapter(Gson gson ) {
 
-    public void setCast(CastEntity cast) {
-        this.cast = cast;
+        return new AutoValue_VideoMetadataInfoEntity.GsonTypeAdapter( gson );
     }
 
+    @Nullable
     public LiveStreamInfoEntity getLiveStreamInfoEntity() {
 
         return liveStreamInfoEntity;
     }
 
-    public void setLiveStreamInfoEntity( LiveStreamInfoEntity liveStreamInfoEntity ) {
+    public void setLiveStreamInfoEntity( @Nullable LiveStreamInfoEntity liveStreamInfoEntity ) {
 
         this.liveStreamInfoEntity = liveStreamInfoEntity;
 
-    }
-
-    @Override
-    public boolean equals(Object o) {
-
-        if( this == o ) {
-
-            return true;
-        }
-
-        if( o == null || getClass() != o.getClass() ) {
-
-            return false;
-        }
-
-        VideoMetadataInfoEntity that = (VideoMetadataInfoEntity) o;
-
-        return id == that.id;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public String toString() {
-        return "VideoMetadataInfoEntity{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", subTitle='" + subTitle + '\'' +
-                ", tagline='" + tagline + '\'' +
-                ", director='" + director + '\'' +
-                ", studio='" + studio + '\'' +
-                ", description='" + description + '\'' +
-                ", certification='" + certification + '\'' +
-                ", inetref='" + inetref + '\'' +
-                ", collectionref=" + collectionref +
-                ", homePage='" + homePage + '\'' +
-                ", releaseDate=" + releaseDate +
-                ", addDate=" + addDate +
-                ", userRating=" + userRating +
-                ", length=" + length +
-                ", playCount=" + playCount +
-                ", season=" + season +
-                ", episode=" + episode +
-                ", parentalLevel=" + parentalLevel +
-                ", visible=" + visible +
-                ", watched=" + watched +
-                ", processed=" + processed +
-                ", contentType='" + contentType + '\'' +
-                ", fileName='" + fileName + '\'' +
-                ", hash='" + hash + '\'' +
-                ", hostName='" + hostName + '\'' +
-                ", coverart='" + coverart + '\'' +
-                ", fanart='" + fanart + '\'' +
-                ", banner='" + banner + '\'' +
-                ", screenshot='" + screenshot + '\'' +
-                ", trailer='" + trailer + '\'' +
-                ", artwork=" + artwork +
-                ", cast=" + cast +
-                ", liveStreamInfoEntity=" + liveStreamInfoEntity +
-                '}';
     }
 
 }

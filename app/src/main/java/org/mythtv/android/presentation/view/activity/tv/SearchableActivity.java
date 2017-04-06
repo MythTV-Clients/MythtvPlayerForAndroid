@@ -184,11 +184,11 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
     public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.PROGRAM ) {
+        if( mediaItemModel.media() == org.mythtv.android.domain.Media.PROGRAM ) {
             Log.d( TAG, "onMediaItemClicked : recording clicked" );
 
 
-        } else if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.VIDEO ) {
+        } else if( mediaItemModel.media() == org.mythtv.android.domain.Media.VIDEO ) {
             Log.d( TAG, "onMediaItemClicked : video clicked" );
 
 

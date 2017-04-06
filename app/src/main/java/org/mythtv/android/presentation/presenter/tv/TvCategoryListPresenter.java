@@ -138,9 +138,9 @@ public class TvCategoryListPresenter extends DefaultSubscriber<List<TvCategoryMo
                 R.drawable.tv_setting
         };
 
-        tvCategoryModelsCollection.add( new TvCategoryModel( 0, titles[ 0 ], categories[ 0 ] ) );
-        tvCategoryModelsCollection.add( new TvCategoryModel( 1, titles[ 1 ], categories[ 1 ] ) );
-        tvCategoryModelsCollection.add( new TvCategoryModel( 2, titles[ 2 ], categories[ 2 ] ) );
+        tvCategoryModelsCollection.add( TvCategoryModel.create( 0, titles[ 0 ], categories[ 0 ] ) );
+        tvCategoryModelsCollection.add( TvCategoryModel.create( 1, titles[ 1 ], categories[ 1 ] ) );
+        tvCategoryModelsCollection.add( TvCategoryModel.create( 2, titles[ 2 ], categories[ 2 ] ) );
 
         showTvCategoriesCollectionInView( tvCategoryModelsCollection );
 

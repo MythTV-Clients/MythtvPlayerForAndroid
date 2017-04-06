@@ -45,6 +45,6 @@ public interface VideoRepository {
 
     Observable<MediaItem> getVideo( int id );
 
-    Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched );
+    Observable<MediaItem> updateWatchedStatus( final int videoId, final boolean watched );
 
 }

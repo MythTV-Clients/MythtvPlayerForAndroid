@@ -3,16 +3,13 @@ package org.mythtv.android.data;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import org.joda.time.DateTime;
 import org.junit.runner.RunWith;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
 import org.mythtv.android.BuildConfig;
+import org.mythtv.android.data.entity.MythTvTypeAdapterFactory;
+import org.mythtv.android.data.entity.mapper.serializers.DateTimeTypeConverter;
 import org.robolectric.annotation.Config;
-
-import java.lang.reflect.Type;
 
 /**
  * Base class for Robolectric data layer tests.
@@ -26,15 +23,13 @@ public abstract class ApplicationTestCase {
 
     public ApplicationTestCase() {
 
-        Type dateTimeType = new TypeToken<DateTime>(){}.getType();
-
         this.gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .setFieldNamingPolicy( FieldNamingPolicy.UPPER_CAMEL_CASE )
                 .setPrettyPrinting()
                 .serializeNulls()
-                .registerTypeAdapter( dateTimeType, new DateTimeSerializer() )
-                .registerTypeAdapter( dateTimeType, new DateTimeDeserializer() )
+                .registerTypeAdapterFactory( MythTvTypeAdapterFactory.create() )
+                .registerTypeAdapter( DateTime.class, new DateTimeTypeConverter() )
                 .create();
 
     }

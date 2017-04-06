@@ -87,8 +87,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
     public void onBindViewHolder( TvCategoryViewHolder holder, final int position ) {
 
         final TvCategoryModel tvCategoryModel = this.tvCategoriesCollection.get( position );
-        holder.imageViewCategory.setImageResource( tvCategoryModel.getDrawable() );
-        holder.textViewTitle.setText( tvCategoryModel.getTitle() );
+        holder.imageViewCategory.setImageResource( tvCategoryModel.drawable() );
+        holder.textViewTitle.setText( tvCategoryModel.title() );
         holder.itemView.setOnClickListener(v -> {
             if( null != CategoriesAdapter.this.onItemClickListener ) {
 

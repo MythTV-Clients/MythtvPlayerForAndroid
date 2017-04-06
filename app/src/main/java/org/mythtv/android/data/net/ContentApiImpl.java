@@ -23,10 +23,11 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
+import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
+import org.mythtv.android.domain.Media;
 
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -50,17 +51,19 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
 
     private final OkHttpClient okHttpClient;
     private final LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper;
+    private final BooleanJsonMapper booleanJsonMapper;
 
-    public ContentApiImpl( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper ) {
+    public ContentApiImpl( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper, final BooleanJsonMapper booleanJsonMapper ) {
         super( context, sharedPreferences );
 
-        if( null == okHttpClient || null == liveStreamInfoEntityJsonMapper ) {
+        if( null == okHttpClient || null == liveStreamInfoEntityJsonMapper || null == booleanJsonMapper ) {
 
             throw new IllegalArgumentException( "The constructor parameters cannot be null!!!" );
         }
 
         this.okHttpClient = okHttpClient;
         this.liveStreamInfoEntityJsonMapper = liveStreamInfoEntityJsonMapper;
+        this.booleanJsonMapper = booleanJsonMapper;
 
     }
 
@@ -78,7 +81,7 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
 
                     try {
 
-                        Reader responseLiveStreamInfoEntities = getLiveStreamInfoEntitiesFromApi( filename );
+                        String responseLiveStreamInfoEntities = getLiveStreamInfoEntitiesFromApi( filename );
                         if( null == responseLiveStreamInfoEntities ) {
                             Log.d( TAG, "LiveStreamInfoEntityList.call : failed to retrieve LiveStream info entities" );
 
@@ -87,7 +90,7 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
                         } else {
                             Log.d( TAG, "LiveStreamInfoEntityList.call : retrieved LiveStream info entities" );
 
-                            subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection(responseLiveStreamInfoEntities) );
+                            subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( responseLiveStreamInfoEntities) );
                             subscriber.onCompleted();
 
                         }
@@ -113,7 +116,186 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
 
     }
 
-    private Reader getLiveStreamInfoEntitiesFromApi( String filename ) throws MalformedURLException {
+    @Override
+    public Observable<LiveStreamInfoEntity> addLiveStream( final int id, final Media media ) {
+
+        return Observable.create( new Observable.OnSubscribe<LiveStreamInfoEntity>() {
+
+            @Override
+            public void call( Subscriber<? super LiveStreamInfoEntity> subscriber ) {
+                Log.d(TAG, "LiveStreamInfoEntity.call : enter");
+
+                if( isThereInternetConnection() ) {
+                    Log.d(TAG, "LiveStreamInfoEntity.call : network is connected");
+
+                    try {
+
+                        switch( media ) {
+
+                            case PROGRAM :
+
+                                String responseAddRecordingLiveStreamInfo = addRecordingLiveStreamInfoEntityFromApi( id );
+                                if( null == responseAddRecordingLiveStreamInfo ) {
+                                    Log.d( TAG, "LiveStreamInfoEntity.call : failed to add recording LiveStream" );
+
+                                    subscriber.onError( new NetworkConnectionException() );
+
+                                } else {
+                                    Log.d( TAG, "LiveStreamInfoEntity.call : added recording LiveStream info" );
+
+                                    subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseAddRecordingLiveStreamInfo) );
+                                    subscriber.onCompleted();
+
+                                }
+
+                                break;
+
+                            case VIDEO :
+
+                                String responseAddVideoLiveStreamInfo = addVideoLiveStreamInfoEntityFromApi( id );
+                                if( null == responseAddVideoLiveStreamInfo ) {
+                                    Log.d( TAG, "LiveStreamInfoEntity.call : failed to add video LiveStream" );
+
+                                    subscriber.onError( new NetworkConnectionException() );
+
+                                } else {
+                                    Log.d( TAG, "LiveStreamInfoEntity.call : added video LiveStream info" );
+
+                                    subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseAddVideoLiveStreamInfo) );
+                                    subscriber.onCompleted();
+
+                                }
+
+                                break;
+
+                            default :
+                                Log.d( TAG, "LiveStreamInfoEntity.call : media type not supported" );
+
+                                subscriber.onError( new NetworkConnectionException() );
+
+                                break;
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "LiveStreamInfoEntity.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d( TAG, "LiveStreamInfoEntity.call : network is not connected" );
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d( TAG, "LiveStreamInfoEntity.call : exit" );
+            }
+
+        });
+
+    }
+
+    @Override
+    public Observable<LiveStreamInfoEntity> getLiveStream( final int id ) {
+
+        return Observable.create( new Observable.OnSubscribe<LiveStreamInfoEntity>() {
+
+            @Override
+            public void call( Subscriber<? super LiveStreamInfoEntity> subscriber ) {
+                Log.d(TAG, "LiveStreamInfoEntity.call : enter");
+
+                if( isThereInternetConnection() ) {
+                    Log.d(TAG, "LiveStreamInfoEntity.call : network is connected");
+
+                    try {
+
+                        String responseLiveStreamInfoEntity = getLiveStreamInfoEntityFromApi( id );
+                        if( null == responseLiveStreamInfoEntity ) {
+                            Log.d( TAG, "LiveStreamInfoEntity.call : failed to retrieve LiveStream info entity" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
+                            Log.d( TAG, "LiveStreamInfoEntity.call : retrieved LiveStream info entity" );
+
+                            subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseLiveStreamInfoEntity ) );
+                            subscriber.onCompleted();
+
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "LiveStreamInfoEntity.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d( TAG, "LiveStreamInfoEntity.call : network is not connected" );
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d( TAG, "LiveStreamInfoEntity.call : exit" );
+            }
+
+        });
+
+    }
+
+    @Override
+    public Observable<Boolean> removeLiveStream( final int id ) {
+
+        return Observable.create( new Observable.OnSubscribe<Boolean>() {
+
+            @Override
+            public void call( Subscriber<? super Boolean> subscriber ) {
+                Log.d(TAG, "LiveStreamInfoEntity.call : enter");
+
+                if( isThereInternetConnection() ) {
+                    Log.d(TAG, "LiveStreamInfoEntity.call : network is connected");
+
+                    try {
+
+                        String responseRemoveLiveStreamInfoEntity = removeLiveStreamInfoEntityFromApi( id );
+                        if( null == responseRemoveLiveStreamInfoEntity ) {
+                            Log.d( TAG, "LiveStreamInfoEntity.call : failed to remove LiveStream info entity" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
+                            Log.d( TAG, "LiveStreamInfoEntity.call : removed LiveStream info entity" );
+
+                            subscriber.onNext( booleanJsonMapper.transformBoolean( responseRemoveLiveStreamInfoEntity ) );
+                            subscriber.onCompleted();
+
+                        }
+
+                    } catch( Exception e ) {
+                        Log.e( TAG, "LiveStreamInfoEntity.call : error", e );
+
+                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+
+                    }
+
+                } else {
+                    Log.d( TAG, "LiveStreamInfoEntityL.call : network is not connected" );
+
+                    subscriber.onError( new NetworkConnectionException() );
+
+                }
+
+                Log.d( TAG, "LiveStreamInfoEntity.call : exit" );
+            }
+
+        });
+
+    }
+
+    private String getLiveStreamInfoEntitiesFromApi( String filename ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() ).append( LIVE_STREAM_INFO_LIST_BASE_URL );
@@ -137,6 +319,52 @@ public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
         }
 
         Log.d( TAG, "getLiveStreamInfoEntitiesFromApi : url=" + sb.toString() );
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
+    }
+
+    private String addRecordingLiveStreamInfoEntityFromApi( final int id ) throws MalformedURLException {
+        Log.d( TAG, "addRecordingLiveStreamInfoEntityFromApi : enter" );
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() ).append( ADD_RECORDING_LIVE_STREAM_BASE_URL )
+                .append( '?' ).append( String.format( RECORDEDID_QS, id ) )
+                .append( '&' ).append( WIDTH_QS );
+
+        Log.d( TAG, "addRecordingLiveStreamInfoEntityFromApi : url=" + sb.toString() );
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
+    }
+
+    private String addVideoLiveStreamInfoEntityFromApi( final int id ) throws MalformedURLException {
+        Log.d( TAG, "addVideoLiveStreamInfoEntityFromApi : enter" );
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() ).append( ADD_VIDEO_LIVE_STREAM_BASE_URL )
+                .append( '?' ).append( String.format( ID_QS, id ) )
+                .append( '&' ).append( WIDTH_QS );
+
+        Log.d( TAG, "addVideoLiveStreamInfoEntityFromApi : url=" + sb.toString() );
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
+    }
+
+    private String getLiveStreamInfoEntityFromApi( final int id ) throws MalformedURLException {
+        Log.d( TAG, "getLiveStreamInfoEntityFromApi : enter" );
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() ).append( GET_LIVE_STREAM_BASE_URL )
+                .append( '?' ).append( String.format( ID_QS, id ) );
+
+        Log.d( TAG, "getLiveStreamInfoEntityFromApi : url=" + sb.toString() );
+        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
+    }
+
+    private String removeLiveStreamInfoEntityFromApi( final int id ) throws MalformedURLException {
+        Log.d( TAG, "removeLiveStreamInfoEntityFromApi : enter" );
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( getMasterBackendUrl() ).append( REMOVE_LIVE_STREAM_BASE_URL )
+                .append( '?' ).append( String.format( ID_QS, id ) );
+
+        Log.d( TAG, "removeLiveStreamInfoEntityFromApi : url=" + sb.toString() );
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 

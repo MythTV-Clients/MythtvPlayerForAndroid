@@ -18,12 +18,12 @@
 
 package org.mythtv.android.domain.interactor;
 
-import org.joda.time.DateTime;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.ContentRepository;
 
-import java.util.Map;
+import javax.inject.Inject;
 
 import rx.Observable;
 
@@ -33,27 +33,27 @@ import rx.Observable;
  *
  * @author dmfrey
  *
- * Created on 4/9/16.
+ * Created on 4/2/17.
  */
-public class PostUpdatedRecordedWatchedStatus extends DynamicUseCase {
+public class AddLiveStreamUseCase extends UseCase {
 
-    private final DvrRepository dvrRepository;
+    private final ContentRepository contentRepository;
+    private final int id;
+    private final Media media;
 
-    public PostUpdatedRecordedWatchedStatus( final DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    @Inject
+    public AddLiveStreamUseCase( final int id, final Media media, ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.dvrRepository = dvrRepository;
+        this.contentRepository = contentRepository;
+        this.id = id;
+        this.media = media;
 
     }
 
     @Override
-    protected Observable buildUseCaseObservable( Map parameters ) {
-
-        final int chanId = (Integer) parameters.get( "CHAN_ID" );
-        final DateTime startTime = (DateTime) parameters.get( "START_TIME" );
-        final boolean watched = (Boolean) parameters.get( "WATCHED" );
-
-        return this.dvrRepository.updateWatchedStatus( chanId, startTime, watched );
+    public Observable buildUseCaseObservable() {
+        return this.contentRepository.addLiveStream( id, media );
     }
 
 }

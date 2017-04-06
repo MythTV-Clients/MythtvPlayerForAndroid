@@ -22,8 +22,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
-import java.io.Reader;
-
 import javax.inject.Inject;
 
 /**
@@ -45,7 +43,7 @@ public class BackendLangJsonMapper {
 
     }
 
-    public String transformString( Reader booleanJsonResponse ) throws JsonSyntaxException {
+    public String transformString( String booleanJsonResponse ) throws JsonSyntaxException {
 
         JsonObject rootObject = parser.parse( booleanJsonResponse ).getAsJsonObject();
 

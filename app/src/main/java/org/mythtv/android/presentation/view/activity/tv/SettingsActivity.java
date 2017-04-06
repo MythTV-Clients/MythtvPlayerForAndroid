@@ -1017,7 +1017,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public void renderMediaItemList( Collection<MediaItemModel> mediaItemModelCollection ) {
 
             Observable.from( mediaItemModelCollection )
-                    .map( MediaItemModel::getRecordingGroup )
+                    .map( MediaItemModel::recordingGroup )
                     .distinct()
                     .toList()
                     .subscribe( groups -> {

@@ -18,9 +18,14 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -30,225 +35,83 @@ import org.joda.time.DateTime;
  *
  * Created on 11/12/14.
  */
-public class RecordingInfoEntity {
+@AutoValue
+public abstract class RecordingInfoEntity {
 
+    @Nullable
     @SerializedName( "RecordedId" )
-    private String recordedId;
+    public abstract String recordedId();
 
     @SerializedName( "Status" )
-    private int status;
+    public abstract int status();
 
     @SerializedName( "Priority" )
-    private int priority;
+    public abstract int priority();
 
+    @Nullable
     @SerializedName( "StartTs" )
-    private DateTime startTs;
+    public abstract DateTime startTs();
 
+    @Nullable
     @SerializedName( "EndTs" )
-    private DateTime endTs;
+    public abstract DateTime endTs();
 
     @SerializedName( "RecordId" )
-    private int recordId;
+    public abstract int recordId();
 
+    @Nullable
     @SerializedName( "RecGroup" )
-    private String recGroup;
+    public abstract String recGroup();
 
+    @Nullable
     @SerializedName( "PlayGroup" )
-    private String playGroup;
+    public abstract String playGroup();
 
+    @Nullable
     @SerializedName( "StorageGroup" )
-    private String storageGroup;
+    public abstract String storageGroup();
 
     @SerializedName( "RecType" )
-    private int recType;
+    public abstract int recType();
 
     @SerializedName( "DupInType" )
-    private int dupInType;
+    public abstract int dupInType();
 
     @SerializedName( "DupMethod" )
-    private int dupMethod;
+    public abstract int dupMethod();
 
     @SerializedName( "EncoderId" )
-    private int encoderId;
+    public abstract int encoderId();
 
+    @Nullable
     @SerializedName( "EncoderName" )
-    private String encoderName;
+    public abstract String encoderName();
 
+    @Nullable
     @SerializedName( "Profile" )
-    private String profile;
+    public abstract String profile();
 
-    public RecordingInfoEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    public static RecordingInfoEntity create( String recordedId, int status, int priority, DateTime startTs, DateTime endTs, int recordId, String recGroup, String playGroup, String storageGroup, int recType, int dupInType, int dupMethod, int encoderId, String encoderName, String profile ) {
+
+        return new AutoValue_RecordingInfoEntity( recordedId, status, priority, startTs, endTs, recordId, recGroup, playGroup, storageGroup, recType, dupInType, dupMethod, encoderId, encoderName, profile );
     }
 
-    public RecordingInfoEntity(String recordedId, int status, int priority, DateTime startTs, DateTime endTs, int recordId, String recGroup, String playGroup, String storageGroup, int recType, int dupInType, int dupMethod, int encoderId, String encoderName, String profile ) {
+    public static TypeAdapter<RecordingInfoEntity> typeAdapter( Gson gson ) {
 
-        this.recordedId = recordedId;
-        this.status = status;
-        this.priority = priority;
-        this.startTs = startTs;
-        this.endTs = endTs;
-        this.recordId = recordId;
-        this.recGroup = recGroup;
-        this.playGroup = playGroup;
-        this.storageGroup = storageGroup;
-        this.recType = recType;
-        this.dupInType = dupInType;
-        this.dupMethod = dupMethod;
-        this.encoderId = encoderId;
-        this.encoderName = encoderName;
-        this.profile = profile;
-
-    }
-
-    public String getRecordedId() {
-        return recordedId;
+        return new AutoValue_RecordingInfoEntity.GsonTypeAdapter( gson );
     }
 
     public Integer translateRecordedId() {
 
         try {
-            return Integer.parseInt( recordedId );
+
+            return Integer.parseInt( recordedId() );
+
         } catch( NumberFormatException e ) {
-            return null;
+
+            return 0;
         }
-    }
 
-    public void setRecordedId(String recordedId) {
-        this.recordedId = recordedId;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public DateTime getStartTs() {
-        return startTs;
-    }
-
-    public void setStartTs(DateTime startTs) {
-        this.startTs = startTs;
-    }
-
-    public DateTime getEndTs() {
-        return endTs;
-    }
-
-    public void setEndTs(DateTime endTs) {
-        this.endTs = endTs;
-    }
-
-    public int getRecordId() {
-        return recordId;
-    }
-
-    public void setRecordId(int recordId) {
-        this.recordId = recordId;
-    }
-
-    public String getRecGroup() {
-        return recGroup;
-    }
-
-    public void setRecGroup(String recGroup) {
-        this.recGroup = recGroup;
-    }
-
-    public String getPlayGroup() {
-        return playGroup;
-    }
-
-    public void setPlayGroup(String playGroup) {
-        this.playGroup = playGroup;
-    }
-
-    public String getStorageGroup() {
-        return storageGroup;
-    }
-
-    public void setStorageGroup(String storageGroup) {
-        this.storageGroup = storageGroup;
-    }
-
-    public int getRecType() {
-        return recType;
-    }
-
-    public void setRecType(int recType) {
-        this.recType = recType;
-    }
-
-    public int getDupInType() {
-        return dupInType;
-    }
-
-    public void setDupInType(int dupInType) {
-        this.dupInType = dupInType;
-    }
-
-    public int getDupMethod() {
-        return dupMethod;
-    }
-
-    public void setDupMethod(int dupMethod) {
-        this.dupMethod = dupMethod;
-    }
-
-    public int getEncoderId() {
-        return encoderId;
-    }
-
-    public void setEncoderId(int encoderId) {
-        this.encoderId = encoderId;
-    }
-
-    public String getEncoderName() {
-        return encoderName;
-    }
-
-    public void setEncoderName(String encoderName) {
-        this.encoderName = encoderName;
-    }
-
-    public String getProfile() {
-        return profile;
-    }
-
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
-
-    @Override
-    public String toString() {
-        return "RecordingInfoEntity{" +
-                "recordedId=" + recordedId +
-                ", status=" + status +
-                ", priority=" + priority +
-                ", startTs=" + startTs +
-                ", endTs=" + endTs +
-                ", recordId=" + recordId +
-                ", recGroup='" + recGroup + '\'' +
-                ", playGroup='" + playGroup + '\'' +
-                ", storageGroup='" + storageGroup + '\'' +
-                ", recType=" + recType +
-                ", dupInType=" + dupInType +
-                ", dupMethod=" + dupMethod +
-                ", encoderId=" + encoderId +
-                ", encoderName='" + encoderName + '\'' +
-                ", profile='" + profile + '\'' +
-                '}';
     }
 
 }

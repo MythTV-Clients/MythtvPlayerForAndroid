@@ -12,7 +12,6 @@ import org.mythtv.android.domain.MediaItem;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -54,89 +53,89 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
     @Test
     public void testTransformProgram() throws Exception {
 
-        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( new StringReader( JSON_RESPONSE_DVR_GET_RECORDED ) );
+        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( JSON_RESPONSE_DVR_GET_RECORDED );
         assertThat( programEntity, not( nullValue() ) );
 
         MediaItem mediaItem = MediaItemDataMapper.transform( programEntity );
         assertThat( mediaItem, not( nullValue() ) );
-        assertThat( mediaItem.getId(), is( equalTo( 3120 ) ) );
-        assertThat( mediaItem.getMedia(), is( equalTo( Media.PROGRAM ) ) );
-        assertThat( mediaItem.getTitle(), is( equalTo( "Star Wars: Droid Tales" ) ) );
-        assertThat( mediaItem.getSubTitle(), is( equalTo( "Mission to Mos Eisley" ) ) );
-        assertThat( mediaItem.getDescription(), is( equalTo( "C-3PO recounts his adventure with the ``Star Wars Rebels'' crew in an effort to find R2-D2, who has been kidnapped." ) ) );
-        assertThat( mediaItem.getStartDate(), not( nullValue() ) );
-        assertThat( mediaItem.getSeason(), is( equalTo( 0 ) ) );
-        assertThat( mediaItem.getEpisode(), is( equalTo( 0 ) ) );
-        assertThat( mediaItem.getStudio(), is( equalTo( "DXDHD" ) ) );
-        assertThat( mediaItem.getUrl(), is( equalTo( "/Content/GetFile?FileName=2289_20150908113000.ts" ) ) );
-        assertThat( mediaItem.getFanartUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getCoverartUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getBannerUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getPreviewUrl(), is( "/Content/GetPreviewImage?RecordedId=3120" ) );
+        assertThat( mediaItem.id(), is( equalTo( 3120 ) ) );
+        assertThat( mediaItem.media(), is( equalTo( Media.PROGRAM ) ) );
+        assertThat( mediaItem.title(), is( equalTo( "Star Wars: Droid Tales" ) ) );
+        assertThat( mediaItem.subTitle(), is( equalTo( "Mission to Mos Eisley" ) ) );
+        assertThat( mediaItem.description(), is( equalTo( "C-3PO recounts his adventure with the ``Star Wars Rebels'' crew in an effort to find R2-D2, who has been kidnapped." ) ) );
+        assertThat( mediaItem.startDate(), not( nullValue() ) );
+        assertThat( mediaItem.season(), is( equalTo( 0 ) ) );
+        assertThat( mediaItem.episode(), is( equalTo( 0 ) ) );
+        assertThat( mediaItem.studio(), is( equalTo( "DXDHD" ) ) );
+        assertThat( mediaItem.url(), is( equalTo( "/Content/GetFile?FileName=2289_20150908113000.ts" ) ) );
+        assertThat( mediaItem.fanartUrl(), is( nullValue() ) );
+        assertThat( mediaItem.coverartUrl(), is( nullValue() ) );
+        assertThat( mediaItem.bannerUrl(), is( nullValue() ) );
+        assertThat( mediaItem.previewUrl(), is( "/Content/GetPreviewImage?RecordedId=3120" ) );
 
-        assertThat( mediaItem.getDuration(), greaterThan(0L) );
-        assertThat( mediaItem.getDuration(), is( equalTo( 30L ) ) );
+        assertThat( mediaItem.duration(), greaterThan(0L) );
+        assertThat( mediaItem.duration(), is( equalTo( 30L ) ) );
         assertThat( mediaItem.isValid(), is( true ) );
-        assertThat( mediaItem.getValidationErrors(), hasSize( 0 ) );
+        assertThat( mediaItem.validationErrors(), hasSize( 0 ) );
 
     }
 
     @Test
     public void testTransformProgramNullStartTs() throws Exception {
 
-        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( new StringReader( JSON_RESPONSE_DVR_GET_RECORDED_NULL_STARTTS ) );
+        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( JSON_RESPONSE_DVR_GET_RECORDED_NULL_STARTTS );
         assertThat( programEntity, not( nullValue() ) );
 
         MediaItem mediaItem = MediaItemDataMapper.transform( programEntity );
         assertThat( mediaItem, not( nullValue() ) );
-        assertThat( mediaItem.getId(), is( equalTo( 3120 ) ) );
-        assertThat( mediaItem.getMedia(), is( equalTo( Media.PROGRAM ) ) );
-        assertThat( mediaItem.getTitle(), is( equalTo( "Star Wars: Droid Tales" ) ) );
-        assertThat( mediaItem.getSubTitle(), is( equalTo( "Mission to Mos Eisley" ) ) );
-        assertThat( mediaItem.getDescription(), is( equalTo( "C-3PO recounts his adventure with the ``Star Wars Rebels'' crew in an effort to find R2-D2, who has been kidnapped." ) ) );
-        assertThat( mediaItem.getStartDate(), not( nullValue() ) );
-        assertThat( mediaItem.getSeason(), is( equalTo( 0 ) ) );
-        assertThat( mediaItem.getEpisode(), is( equalTo( 0 ) ) );
-        assertThat( mediaItem.getStudio(), is( equalTo( "DXDHD" ) ) );
-        assertThat( mediaItem.getUrl(), is( equalTo( "/Content/GetFile?FileName=2289_20150908113000.ts" ) ) );
-        assertThat( mediaItem.getFanartUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getCoverartUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getBannerUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getPreviewUrl(), is( "/Content/GetPreviewImage?RecordedId=3120" ) );
+        assertThat( mediaItem.id(), is( equalTo( 3120 ) ) );
+        assertThat( mediaItem.media(), is( equalTo( Media.PROGRAM ) ) );
+        assertThat( mediaItem.title(), is( equalTo( "Star Wars: Droid Tales" ) ) );
+        assertThat( mediaItem.subTitle(), is( equalTo( "Mission to Mos Eisley" ) ) );
+        assertThat( mediaItem.description(), is( equalTo( "C-3PO recounts his adventure with the ``Star Wars Rebels'' crew in an effort to find R2-D2, who has been kidnapped." ) ) );
+        assertThat( mediaItem.startDate(), not( nullValue() ) );
+        assertThat( mediaItem.season(), is( equalTo( 0 ) ) );
+        assertThat( mediaItem.episode(), is( equalTo( 0 ) ) );
+        assertThat( mediaItem.studio(), is( equalTo( "DXDHD" ) ) );
+        assertThat( mediaItem.url(), is( equalTo( "/Content/GetFile?FileName=2289_20150908113000.ts" ) ) );
+        assertThat( mediaItem.fanartUrl(), is( nullValue() ) );
+        assertThat( mediaItem.coverartUrl(), is( nullValue() ) );
+        assertThat( mediaItem.bannerUrl(), is( nullValue() ) );
+        assertThat( mediaItem.previewUrl(), is( "/Content/GetPreviewImage?RecordedId=3120" ) );
 
-        assertThat( mediaItem.getDuration(), lessThanOrEqualTo(0L) );
+        assertThat( mediaItem.duration(), lessThanOrEqualTo(0L) );
         assertThat( mediaItem.isValid(), is( false ) );
-        assertThat( mediaItem.getValidationErrors(), hasSize( 1 ) );
+        assertThat( mediaItem.validationErrors(), hasSize( 1 ) );
 
     }
 
     @Test
     public void testTransformProgramNullRecordedId() throws Exception {
 
-        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( new StringReader( JSON_RESPONSE_DVR_GET_RECORDED_NULL_RECORDEDID ) );
+        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( JSON_RESPONSE_DVR_GET_RECORDED_NULL_RECORDEDID );
         assertThat( programEntity, not( nullValue() ) );
 
         MediaItem mediaItem = MediaItemDataMapper.transform( programEntity );
         assertThat( mediaItem, not( nullValue() ) );
-        assertThat( mediaItem.getId(), is( 0 ) );
-        assertThat( mediaItem.getMedia(), is( equalTo( Media.PROGRAM ) ) );
-        assertThat( mediaItem.getTitle(), is( equalTo( "Star Wars: Droid Tales" ) ) );
-        assertThat( mediaItem.getSubTitle(), is( equalTo( "Mission to Mos Eisley" ) ) );
-        assertThat( mediaItem.getDescription(), is( equalTo( "C-3PO recounts his adventure with the ``Star Wars Rebels'' crew in an effort to find R2-D2, who has been kidnapped." ) ) );
-        assertThat( mediaItem.getStartDate(), not( nullValue() ) );
-        assertThat( mediaItem.getSeason(), is( equalTo( 0 ) ) );
-        assertThat( mediaItem.getEpisode(), is( equalTo( 0 ) ) );
-        assertThat( mediaItem.getStudio(), is( equalTo( "DXDHD" ) ) );
-        assertThat( mediaItem.getUrl(), is( equalTo( "/Content/GetFile?FileName=2289_20150908113000.ts" ) ) );
-        assertThat( mediaItem.getFanartUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getCoverartUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getBannerUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getPreviewUrl(), is( nullValue() ) );
+        assertThat( mediaItem.id(), is( 0 ) );
+        assertThat( mediaItem.media(), is( equalTo( Media.PROGRAM ) ) );
+        assertThat( mediaItem.title(), is( equalTo( "Star Wars: Droid Tales" ) ) );
+        assertThat( mediaItem.subTitle(), is( equalTo( "Mission to Mos Eisley" ) ) );
+        assertThat( mediaItem.description(), is( equalTo( "C-3PO recounts his adventure with the ``Star Wars Rebels'' crew in an effort to find R2-D2, who has been kidnapped." ) ) );
+        assertThat( mediaItem.startDate(), not( nullValue() ) );
+        assertThat( mediaItem.season(), is( equalTo( 0 ) ) );
+        assertThat( mediaItem.episode(), is( equalTo( 0 ) ) );
+        assertThat( mediaItem.studio(), is( equalTo( "DXDHD" ) ) );
+        assertThat( mediaItem.url(), is( equalTo( "/Content/GetFile?FileName=2289_20150908113000.ts" ) ) );
+        assertThat( mediaItem.fanartUrl(), is( nullValue() ) );
+        assertThat( mediaItem.coverartUrl(), is( nullValue() ) );
+        assertThat( mediaItem.bannerUrl(), is( nullValue() ) );
+        assertThat( mediaItem.previewUrl(), is( nullValue() ) );
 
-        assertThat( mediaItem.getDuration(), greaterThan(0L) );
-        assertThat( mediaItem.getDuration(), is( equalTo( 30L ) ) );
+        assertThat( mediaItem.duration(), greaterThan( 0L) );
+        assertThat( mediaItem.duration(), is( equalTo( 30L ) ) );
         assertThat( mediaItem.isValid(), is( false ) );
-        assertThat( mediaItem.getValidationErrors(), hasSize( 1 ) );
+        assertThat( mediaItem.validationErrors(), hasSize( 1 ) );
 
     }
 
@@ -145,7 +144,15 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
 
         try( BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( getClass().getClassLoader().getResourceAsStream( "org/mythtv/android/data/entity/mapper/Dvr_GetUpcomingList.json" ) ) ) ) {
 
-            List<ProgramEntity> programEntities = programEntityJsonMapper.transformProgramEntityCollection( bufferedReader );
+            String line = null;
+            String message = new String();
+            final StringBuffer buffer = new StringBuffer( 2048 );
+            while( ( line = bufferedReader.readLine()) != null ) {
+                // buffer.append(line);
+                message += line;
+            }
+
+            List<ProgramEntity> programEntities = programEntityJsonMapper.transformProgramEntityCollection( message );
             assertThat( programEntities, not(nullValue() ) );
 
             List<MediaItem> mediaItems = MediaItemDataMapper.transformPrograms( programEntities );
@@ -155,7 +162,7 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
             for( MediaItem mediaItem : mediaItems ) {
 
                 assertThat( mediaItem.isValid(), is( true ) );
-                assertThat( mediaItem.getValidationErrors(), hasSize( 0 ) );
+                assertThat( mediaItem.validationErrors(), hasSize( 0 ) );
 
             }
 
@@ -166,45 +173,45 @@ public class MediaItemDataMapperTest extends ApplicationTestCase {
     @Test
     public void testTransformVideo() throws Exception {
 
-        VideoMetadataInfoEntity videoMetadataInfoEntity = videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( new StringReader( JSON_RESPONSE_VIDEO_GET_VIDEO ) );
+        VideoMetadataInfoEntity videoMetadataInfoEntity = videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( JSON_RESPONSE_VIDEO_GET_VIDEO );
         assertThat( videoMetadataInfoEntity, not( nullValue() ) );
 
         MediaItem mediaItem = MediaItemDataMapper.transform( videoMetadataInfoEntity );
         assertThat( mediaItem, not( nullValue() ) );
-        assertThat( mediaItem.getId(), is( equalTo( 1 ) ) );
-        assertThat( mediaItem.getMedia(), is( equalTo( Media.VIDEO ) ) );
-        assertThat( mediaItem.getTitle(), is( equalTo( "big buck bunny 1080p stereo" ) ) );
-        assertThat( mediaItem.getSubTitle(), is( equalTo( "" ) ) );
-        assertThat( mediaItem.getDescription(), is( equalTo( "None" ) ) );
-        assertThat( mediaItem.getStartDate(), is( nullValue() ) );
-        assertThat( mediaItem.getSeason(), is( equalTo( 0 ) ) );
-        assertThat( mediaItem.getEpisode(), is( equalTo( 0 ) ) );
-        assertThat( mediaItem.getStudio(), is( equalTo( "" ) ) );
-        assertThat( mediaItem.getUrl(), is( equalTo( "/Content/GetFile?FileName=library%2FBlender%2Fbig_buck_bunny_1080p_stereo.ogg" ) ) );
-        assertThat( mediaItem.getFanartUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getCoverartUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getBannerUrl(), is( nullValue() ) );
-        assertThat( mediaItem.getPreviewUrl(), is( nullValue() ) );
+        assertThat( mediaItem.id(), is( equalTo( 1 ) ) );
+        assertThat( mediaItem.media(), is( equalTo( Media.VIDEO ) ) );
+        assertThat( mediaItem.title(), is( equalTo( "big buck bunny 1080p stereo" ) ) );
+        assertThat( mediaItem.subTitle(), is( equalTo( "" ) ) );
+        assertThat( mediaItem.description(), is( equalTo( "None" ) ) );
+        assertThat( mediaItem.startDate(), is( nullValue() ) );
+        assertThat( mediaItem.season(), is( equalTo( 0 ) ) );
+        assertThat( mediaItem.episode(), is( equalTo( 0 ) ) );
+        assertThat( mediaItem.studio(), is( equalTo( "" ) ) );
+        assertThat( mediaItem.url(), is( equalTo( "/Content/GetFile?FileName=library%2FBlender%2Fbig_buck_bunny_1080p_stereo.ogg" ) ) );
+        assertThat( mediaItem.fanartUrl(), is( nullValue() ) );
+        assertThat( mediaItem.coverartUrl(), is( nullValue() ) );
+        assertThat( mediaItem.bannerUrl(), is( nullValue() ) );
+        assertThat( mediaItem.previewUrl(), is( nullValue() ) );
 
-        assertThat( mediaItem.getDuration(), is( equalTo( 0L ) ) );
-        assertThat( mediaItem.getValidationErrors(), hasSize( 0 ) );
+        assertThat( mediaItem.duration(), is( equalTo( 0L ) ) );
+        assertThat( mediaItem.validationErrors(), hasSize( 0 ) );
 
     }
 
     @Test
     public void testTransformProgramBillBad() throws Exception {
 
-        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( new StringReader( JSON_RESPONSE_DVR_GET_RECORDED_BILL_BAD ) );
+        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( JSON_RESPONSE_DVR_GET_RECORDED_BILL_BAD );
         assertThat( programEntity, not( nullValue() ) );
 
         MediaItem mediaItem = MediaItemDataMapper.transform( programEntity );
         assertThat( mediaItem, not( nullValue() ) );
-        assertThat( mediaItem.getId(), is( 0 ) );
-        assertThat( mediaItem.getMedia(), is( nullValue() ) );
+        assertThat( mediaItem.id(), is( 0 ) );
+        assertThat( mediaItem.media(), is( nullValue() ) );
 
-        assertThat( mediaItem.getDuration(), lessThanOrEqualTo(0L) );
+        assertThat( mediaItem.duration(), lessThanOrEqualTo(0L) );
         assertThat( mediaItem.isValid(), is( false ) );
-        assertThat( mediaItem.getValidationErrors(), hasSize( 3 ) );
+        assertThat( mediaItem.validationErrors(), hasSize( 3 ) );
 
     }
 

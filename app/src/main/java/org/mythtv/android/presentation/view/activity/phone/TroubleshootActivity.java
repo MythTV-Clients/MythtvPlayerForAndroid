@@ -577,7 +577,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
             try {
 
                 BackendLangJsonMapper mapper = new BackendLangJsonMapper();
-                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+                String result = okHttpClient.newCall( request ).execute().body().string();
                 Log.d( TAG, "doInBackground : result=" + result );
 
                 return mapper.transformString( result );

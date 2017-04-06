@@ -18,10 +18,15 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -31,356 +36,123 @@ import org.joda.time.LocalDate;
  *
  * Created on 11/12/14.
  */
-public class ProgramEntity {
+@AutoValue
+public abstract class ProgramEntity {
 
+    @Nullable
     @SerializedName( "StartTime" )
-    private DateTime startTime;
+    public abstract DateTime startTime();
 
+    @Nullable
     @SerializedName( "EndTime" )
-    private DateTime endTime;
+    public abstract DateTime endTime();
 
+    @Nullable
     @SerializedName( "Title" )
-    private String title;
+    public abstract String title();
 
+    @Nullable
     @SerializedName( "SubTitle" )
-    private String subTitle;
+    public abstract String subTitle();
 
+    @Nullable
     @SerializedName( "Category" )
-    private String category;
+    public abstract String category();
 
+    @Nullable
     @SerializedName( "CatType" )
-    private String catType;
+    public abstract String catType();
 
     @SerializedName( "Repeat" )
-    private boolean repeat;
+    public abstract boolean repeat();
 
     @SerializedName( "VideoProps" )
-    private int videoProps;
+    public abstract int videoProps();
 
     @SerializedName( "AudioProps" )
-    private int audioProps;
+    public abstract int audioProps();
 
     @SerializedName( "SubProps" )
-    private int subProps;
+    public abstract int subProps();
 
+    @Nullable
     @SerializedName( "SeriesId" )
-    private String seriesId;
+    public abstract String seriesId();
 
+    @Nullable
     @SerializedName( "ProgramId" )
-    private String programId;
+    public abstract String programId();
 
     @SerializedName( "Stars" )
-    private double stars;
+    public abstract double stars();
 
     @SerializedName( "FileSize" )
-    private long fileSize;
+    public abstract long fileSize();
 
+    @Nullable
     @SerializedName( "LastModified" )
-    private DateTime lastModified;
+    public abstract DateTime lastModified();
 
     @SerializedName( "ProgramFlags" )
-    private int programFlags;
+    public abstract int programFlags();
 
+    @Nullable
     @SerializedName( "FileName" )
-    private String fileName;
+    public abstract String fileName();
 
+    @Nullable
     @SerializedName( "HostName" )
-    private String hostName;
+    public abstract String hostName();
 
+    @Nullable
     @SerializedName( "AirDate" )
-    private LocalDate airdate;
+    public abstract LocalDate airdate();
 
+    @Nullable
     @SerializedName( "Description" )
-    private String description;
+    public abstract String description();
 
+    @Nullable
     @SerializedName( "Inetref" )
-    private String inetref;
+    public abstract String inetref();
 
     @SerializedName( "Season" )
-    private int season;
+    public abstract int season();
 
     @SerializedName( "Episode" )
-    private int episode;
+    public abstract int episode();
 
     @SerializedName( "TotalEpisodes" )
-    private int totalEpisodes;
+    public abstract int totalEpisodes();
 
+    @Nullable
     @SerializedName( "Channel" )
-    private ChannelInfoEntity channel;
+    public abstract ChannelInfoEntity channel();
 
+    @Nullable
     @SerializedName( "Recording" )
-    private RecordingInfoEntity recording;
+    public abstract RecordingInfoEntity recording();
 
+    @Nullable
     @SerializedName( "Artwork" )
-    private ArtworkEntity artwork;
+    public abstract ArtworkEntity artwork();
 
+    @Nullable
     @SerializedName( "Cast" )
-    private CastEntity cast;
+    public abstract CastEntity cast();
 
     private LiveStreamInfoEntity liveStreamInfoEntity;
 
     private long bookmark;
 
-    public ProgramEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    public static ProgramEntity create( DateTime startTime, DateTime endTime, String title, String subTitle, String category, String catType, boolean repeat, int videoProps, int audioProps, int subProps, String seriesId, String programId, double stars, long fileSize, DateTime lastModified, int programFlags, String fileName, String hostName, LocalDate airdate, String description, String inetref, int season, int episode, int totalEpisodes, ChannelInfoEntity channel, RecordingInfoEntity recording, ArtworkEntity artwork, CastEntity cast ) {
+
+        return new AutoValue_ProgramEntity( startTime, endTime, title, subTitle, category, catType, repeat, videoProps, audioProps, subProps, seriesId, programId, stars, fileSize, lastModified, programFlags, fileName, hostName, airdate, description, inetref, season, episode, totalEpisodes, channel, recording, artwork, cast );
     }
 
-    public ProgramEntity(DateTime startTime, DateTime endTime, String title, String subTitle, String category, String catType, boolean repeat, int videoProps, int audioProps, int subProps, String seriesId, String programId, double stars, long fileSize, DateTime lastModified, int programFlags, String fileName, String hostName, LocalDate airdate, String description, String inetref, int season, int episode, int totalEpisodes, ChannelInfoEntity channel, RecordingInfoEntity recording, ArtworkEntity artwork, CastEntity cast, LiveStreamInfoEntity liveStreamInfoEntity ) {
+    public static TypeAdapter<ProgramEntity> typeAdapter( Gson gson ) {
 
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.title = title;
-        this.subTitle = subTitle;
-        this.category = category;
-        this.catType = catType;
-        this.repeat = repeat;
-        this.videoProps = videoProps;
-        this.audioProps = audioProps;
-        this.subProps = subProps;
-        this.seriesId = seriesId;
-        this.programId = programId;
-        this.stars = stars;
-        this.fileSize = fileSize;
-        this.lastModified = lastModified;
-        this.programFlags = programFlags;
-        this.fileName = fileName;
-        this.hostName = hostName;
-        this.airdate = airdate;
-        this.description = description;
-        this.inetref = inetref;
-        this.season = season;
-        this.episode = episode;
-        this.totalEpisodes = totalEpisodes;
-        this.channel = channel;
-        this.recording = recording;
-        this.artwork = artwork;
-        this.cast = cast;
-        this.liveStreamInfoEntity = liveStreamInfoEntity;
-
-    }
-
-    public DateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(DateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public DateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(DateTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getCatType() {
-        return catType;
-    }
-
-    public void setCatType(String catType) {
-        this.catType = catType;
-    }
-
-    public boolean isRepeat() {
-        return repeat;
-    }
-
-    public void setRepeat(boolean repeat) {
-        this.repeat = repeat;
-    }
-
-    public int getVideoProps() {
-        return videoProps;
-    }
-
-    public void setVideoProps(int videoProps) {
-        this.videoProps = videoProps;
-    }
-
-    public int getAudioProps() {
-        return audioProps;
-    }
-
-    public void setAudioProps(int audioProps) {
-        this.audioProps = audioProps;
-    }
-
-    public int getSubProps() {
-        return subProps;
-    }
-
-    public void setSubProps(int subProps) {
-        this.subProps = subProps;
-    }
-
-    public String getSeriesId() {
-        return seriesId;
-    }
-
-    public void setSeriesId(String seriesId) {
-        this.seriesId = seriesId;
-    }
-
-    public String getProgramId() {
-        return programId;
-    }
-
-    public void setProgramId(String programId) {
-        this.programId = programId;
-    }
-
-    public double getStars() {
-        return stars;
-    }
-
-    public void setStars(double stars) {
-        this.stars = stars;
-    }
-
-    public long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public DateTime getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(DateTime lastModified) {
-        this.lastModified = lastModified;
-    }
-
-    public int getProgramFlags() {
-        return programFlags;
-    }
-
-    public void setProgramFlags(int programFlags) {
-        this.programFlags = programFlags;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getHostName() {
-        return hostName;
-    }
-
-    public void setHostName(String hostName) {
-        this.hostName = hostName;
-    }
-
-    public LocalDate getAirdate() {
-        return airdate;
-    }
-
-    public void setAirdate(LocalDate airdate) {
-        this.airdate = airdate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getInetref() {
-        return inetref;
-    }
-
-    public void setInetref(String inetref) {
-        this.inetref = inetref;
-    }
-
-    public int getSeason() {
-        return season;
-    }
-
-    public void setSeason(int season) {
-        this.season = season;
-    }
-
-    public int getEpisode() {
-        return episode;
-    }
-
-    public void setEpisode(int episode) {
-        this.episode = episode;
-    }
-
-    public int getTotalEpisodes() {
-        return totalEpisodes;
-    }
-
-    public void setTotalEpisodes(int totalEpisodes) {
-        this.totalEpisodes = totalEpisodes;
-    }
-
-    public ChannelInfoEntity getChannel() {
-        return channel;
-    }
-
-    public void setChannel(ChannelInfoEntity channel) {
-        this.channel = channel;
-    }
-
-    public RecordingInfoEntity getRecording() {
-        return recording;
-    }
-
-    public void setRecording(RecordingInfoEntity recording) {
-        this.recording = recording;
-    }
-
-    public ArtworkEntity getArtwork() {
-        return artwork;
-    }
-
-    public void setArtwork(ArtworkEntity artwork) {
-        this.artwork = artwork;
-    }
-
-    public CastEntity getCast() {
-        return cast;
-    }
-
-    public void setCast(CastEntity cast) {
-        this.cast = cast;
+        return new AutoValue_ProgramEntity.GsonTypeAdapter( gson );
     }
 
     public LiveStreamInfoEntity getLiveStreamInfoEntity() {
@@ -402,42 +174,6 @@ public class ProgramEntity {
 
         this.bookmark = bookmark;
 
-    }
-
-    @Override
-    public String toString() {
-        return "ProgramEntity{" +
-                "startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", title='" + title + '\'' +
-                ", subTitle='" + subTitle + '\'' +
-                ", category='" + category + '\'' +
-                ", catType='" + catType + '\'' +
-                ", repeat=" + repeat +
-                ", videoProps=" + videoProps +
-                ", audioProps=" + audioProps +
-                ", subProps=" + subProps +
-                ", seriesId='" + seriesId + '\'' +
-                ", programId='" + programId + '\'' +
-                ", stars=" + stars +
-                ", fileSize=" + fileSize +
-                ", lastModified=" + lastModified +
-                ", programFlags=" + programFlags +
-                ", fileName='" + fileName + '\'' +
-                ", hostName='" + hostName + '\'' +
-                ", airdate=" + airdate +
-                ", description='" + description + '\'' +
-                ", inetref='" + inetref + '\'' +
-                ", season=" + season +
-                ", episode=" + episode +
-                ", totalEpisodes=" + totalEpisodes +
-                ", channel=" + channel +
-                ", recording=" + recording +
-                ", artwork=" + artwork +
-                ", cast=" + cast +
-                ", liveStreamInfoEntity=" + liveStreamInfoEntity +
-                ", bookmark=" + bookmark +
-                '}';
     }
 
 }

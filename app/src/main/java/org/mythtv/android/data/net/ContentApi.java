@@ -19,6 +19,7 @@
 package org.mythtv.android.data.net;
 
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
+import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
@@ -35,9 +36,22 @@ import rx.Observable;
 public interface ContentApi {
 
     String LIVE_STREAM_INFO_LIST_BASE_URL = "/Content/GetLiveStreamList";
+    String ADD_RECORDING_LIVE_STREAM_BASE_URL = "/Content/AddRecordingLiveStream";
+    String ADD_VIDEO_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
+    String REMOVE_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
+    String GET_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
 
+    String ID_QS = "Id=%s";
+    String RECORDEDID_QS = "RecordedId=%s";
     String FILENAME_QS = "FileName=%s";
+    String WIDTH_QS = "Width=960";
 
     Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename );
+
+    Observable<LiveStreamInfoEntity> addLiveStream( final int id, final Media  media );
+
+    Observable<LiveStreamInfoEntity> getLiveStream( final int id );
+
+    Observable<Boolean> removeLiveStream( final int id );
 
 }

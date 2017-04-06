@@ -20,10 +20,14 @@ package org.mythtv.android.presentation.model;
 
 import android.support.annotation.NonNull;
 
+import com.google.auto.value.AutoValue;
+
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.utils.DomainUtils;
 
 import java.util.Locale;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -33,76 +37,27 @@ import java.util.Locale;
  *
  * Created on 9/23/16.
  */
-public class SeriesModel implements Comparable<SeriesModel> {
+@AutoValue
+public abstract class SeriesModel implements Comparable<SeriesModel> {
 
-    private String title;
-    private Media media;
-    private String artworkUrl;
-    private int count;
-    private String inetref;
+    @Nullable
+    public abstract String title();
 
-    public SeriesModel() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    @Nullable
+    public abstract Media media();
+
+    @Nullable
+    public abstract String artworkUrl();
+
+    public abstract int count();
+
+    @Nullable
+    public abstract String inetref();
+
+    public static SeriesModel create( String title, Media media, String artwork, int count, String inetref ) {
+
+        return new AutoValue_SeriesModel( title, media, artwork, count, inetref );
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle( String title ) {
-        this.title = title;
-    }
-
-    public Media getMedia() {
-        return media;
-    }
-
-    public void setMedia( Media media ) {
-
-        this.media = media;
-
-    }
-
-    public String getArtworkUrl() {
-
-        return artworkUrl;
-    }
-
-    public void setArtworkUrl( String artworkUrl ) {
-
-        this.artworkUrl = artworkUrl;
-
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount( int count ) {
-        this.count = count;
-    }
-
-    public String getInetref() {
-        return inetref;
-    }
-
-    public void setInetref( String inetref ) {
-
-        this.inetref = inetref;
-
-    }
-
-    @Override
-    public String toString() {
-        return "SeriesModel{" +
-                "title='" + title + '\'' +
-                ", media=" + media +
-                ", artworkUrl='" + artworkUrl + '\'' +
-                ", count=" + count +
-                ", inetref='" + inetref + '\'' +
-                '}';
-    }
-
     @Override
     public int compareTo( @NonNull SeriesModel another ) {
 
@@ -113,8 +68,8 @@ public class SeriesModel implements Comparable<SeriesModel> {
             return EQUAL;
         }
 
-        String thisTitle = DomainUtils.removeArticles( this.title.toUpperCase( Locale.getDefault() ) );
-        String thatTitle = DomainUtils.removeArticles( another.title.toUpperCase( Locale.getDefault() ) );
+        String thisTitle = DomainUtils.removeArticles( this.title().toUpperCase( Locale.getDefault() ) );
+        String thatTitle = DomainUtils.removeArticles( another.title().toUpperCase( Locale.getDefault() ) );
 
         int comparison = thisTitle.compareTo( thatTitle );
         if( comparison != EQUAL ) {
@@ -122,7 +77,7 @@ public class SeriesModel implements Comparable<SeriesModel> {
             return comparison;
         }
 
-        comparison = inetref.compareTo( another.inetref );
+        comparison = inetref().compareTo( another.inetref() );
         if( comparison != EQUAL ) {
 
             return comparison;

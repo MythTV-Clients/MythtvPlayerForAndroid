@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.IOException;
 import java.io.Reader;
 
 import javax.inject.Inject;
@@ -48,6 +49,12 @@ public class BackendVersionJsonMapper {
     public String transformString( Reader booleanJsonResponse ) throws JsonSyntaxException {
 
         JsonObject rootObject = parser.parse( booleanJsonResponse ).getAsJsonObject();
+
+        try {
+            booleanJsonResponse.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return rootObject.get( "BackendInfo" )
                 .getAsJsonObject().get( "Build" )

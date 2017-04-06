@@ -18,11 +18,14 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -32,112 +35,38 @@ import java.util.Arrays;
  *
  * Created on 9/7/15.
  */
-public class ProgramsEntity {
+@AutoValue
+public abstract class ProgramsEntity {
 
     @SerializedName( "StartIndex" )
-    private int startIndex;
+    public abstract int startIndex();
 
     @SerializedName( "Count" )
-    private int count;
+    public abstract int count();
 
     @SerializedName( "TotalAvailable" )
-    private int totalAvailable;
+    public abstract int totalAvailable();
 
     @SerializedName( "AsOf" )
-    private DateTime asOf;
+    public abstract DateTime asOf();
 
     @SerializedName( "Version" )
-    private String version;
+    public abstract String version();
 
     @SerializedName( "ProtoVer" )
-    private int protoVer;
+    public abstract int protoVer();
 
     @SerializedName( "Programs" )
-    private ProgramEntity[] programs;
+    public abstract List<ProgramEntity> programs();
 
-    public ProgramsEntity() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    public static ProgramsEntity create( int startIndex, int count, int totalAvailable, DateTime asOf, String version, int protoVer, List<ProgramEntity> programs ) {
+
+        return new AutoValue_ProgramsEntity( startIndex, count, totalAvailable, asOf, version, protoVer, programs );
     }
 
-    public ProgramsEntity(int startIndex, int count, int totalAvailable, DateTime asOf, String version, int protoVer, ProgramEntity[] programs ) {
+    public static TypeAdapter<ProgramsEntity> typeAdapter( Gson gson ) {
 
-        this.startIndex = startIndex;
-        this.count = count;
-        this.totalAvailable = totalAvailable;
-        this.asOf = asOf;
-        this.version = version;
-        this.protoVer = protoVer;
-        this.programs = programs;
-
-    }
-
-    public int getStartIndex() {
-        return startIndex;
-    }
-
-    public void setStartIndex(int startIndex) {
-        this.startIndex = startIndex;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public int getTotalAvailable() {
-        return totalAvailable;
-    }
-
-    public void setTotalAvailable(int totalAvailable) {
-        this.totalAvailable = totalAvailable;
-    }
-
-    public DateTime getAsOf() {
-        return asOf;
-    }
-
-    public void setAsOf(DateTime asOf) {
-        this.asOf = asOf;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public int getProtoVer() {
-        return protoVer;
-    }
-
-    public void setProtoVer(int protoVer) {
-        this.protoVer = protoVer;
-    }
-
-    public ProgramEntity[] getPrograms() {
-        return programs;
-    }
-
-    public void setPrograms(ProgramEntity[] programs) {
-        this.programs = programs;
-    }
-
-    @Override
-    public String toString() {
-        return "ProgramsEntity{" +
-                "startIndex=" + startIndex +
-                ", count=" + count +
-                ", totalAvailable=" + totalAvailable +
-                ", asOf=" + asOf +
-                ", version='" + version + '\'' +
-                ", protoVer=" + protoVer +
-                ", programs=" + Arrays.toString(programs) +
-                '}';
+        return new AutoValue_ProgramsEntity.GsonTypeAdapter( gson );
     }
 
 }

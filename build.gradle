@@ -53,12 +53,14 @@ allprojects {
         firebaseVersion = '10.0.1'
 
         //Libraries
+        autoValueVersion = '1.4'
+        autoValueGsonVersion = '0.4.6'
         daggerVersion = '2.6'
         butterKnifeVersion = '8.4.0'
         rxJavaVersion = '1.2.3'
         rxAndroidVersion = '1.2.1'
         javaxAnnotationVersion = '1.0'
-        gsonVersion = '2.7'
+        gsonVersion = '2.8.0'
         okHttpVersion = '3.5.0'
         picassoVersion = '2.5.2'
         jodaVersion = '2.9.6'

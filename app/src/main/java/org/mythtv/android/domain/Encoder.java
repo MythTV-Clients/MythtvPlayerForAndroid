@@ -18,7 +18,11 @@
 
 package org.mythtv.android.domain;
 
-import java.util.List;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -28,119 +32,30 @@ import java.util.List;
  *
  * Created on 1/18/16.
  */
-public class Encoder {
+@AutoValue
+public abstract class Encoder {
 
-    private int id;
-    private String hostname;
-    private boolean local;
-    private boolean connected;
-    private int state;
-    private int sleepStatus;
-    private boolean lowOnFreeSpace;
-    private List<Input> inputs;
-    private Program recording;
+    public abstract int id();
 
-    public Encoder() {
-        // This constructor is intentionally empty. Nothing special is needed here.
+    @Nullable
+    public abstract String inputName();
+
+    @Nullable
+    public abstract String recordingName();
+
+    @Nullable
+    public abstract String recordingDescription();
+
+    public abstract int state();
+
+    public static Encoder create( int id, String inputName, String recordingName, String recordingDescription, int state ) {
+
+        return new AutoValue_Encoder( id, inputName, recordingName, recordingDescription, state );
     }
 
-    public Encoder(int id, String hostname, boolean local, boolean connected, int state, int sleepStatus, boolean lowOnFreeSpace, List<Input> inputs, Program recording) {
-        this.id = id;
-        this.hostname = hostname;
-        this.local = local;
-        this.connected = connected;
-        this.state = state;
-        this.sleepStatus = sleepStatus;
-        this.lowOnFreeSpace = lowOnFreeSpace;
-        this.inputs = inputs;
-        this.recording = recording;
-    }
+    public static TypeAdapter<Encoder> typeAdapter(Gson gson ) {
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getHostname() {
-        return hostname;
-    }
-
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
-    }
-
-    public boolean isLocal() {
-        return local;
-    }
-
-    public void setLocal(boolean local) {
-        this.local = local;
-    }
-
-    public boolean isConnected() {
-        return connected;
-    }
-
-    public void setConnected(boolean connected) {
-        this.connected = connected;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public int getSleepStatus() {
-        return sleepStatus;
-    }
-
-    public void setSleepStatus(int sleepStatus) {
-        this.sleepStatus = sleepStatus;
-    }
-
-    public boolean isLowOnFreeSpace() {
-        return lowOnFreeSpace;
-    }
-
-    public void setLowOnFreeSpace(boolean lowOnFreeSpace) {
-        this.lowOnFreeSpace = lowOnFreeSpace;
-    }
-
-    public List<Input> getInputs() {
-        return inputs;
-    }
-
-    public void setInputs(List<Input> inputs) {
-        this.inputs = inputs;
-    }
-
-    public Program getRecording() {
-        return recording;
-    }
-
-    public void setRecording(Program recording) {
-        this.recording = recording;
-    }
-
-    @Override
-    public String toString() {
-        return "Encoder{" +
-                "id=" + id +
-                ", hostname='" + hostname + '\'' +
-                ", local=" + local +
-                ", connected=" + connected +
-                ", state=" + state +
-                ", sleepStatus=" + sleepStatus +
-                ", lowOnFreeSpace=" + lowOnFreeSpace +
-                ", inputs=" + inputs +
-                ", recording=" + recording +
-                '}';
+        return new AutoValue_Encoder.GsonTypeAdapter( gson );
     }
 
 }

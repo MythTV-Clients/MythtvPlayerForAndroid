@@ -106,7 +106,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         final MediaItemModel mediaItemModel = this.mediaItemsCollection.get( position );
         Log.i( TAG, "onBindViewHolder : mediaItemModel=" + mediaItemModel.toString() );
 
-        switch( mediaItemModel.getMedia() ) {
+        switch( mediaItemModel.media() ) {
 
             case MUSICVIDEO :
             case HOMEVIDEO :
@@ -115,7 +115,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
             case PROGRAM :
 
-                if( null == mediaItemModel.getPreviewUrl() || "".equals( mediaItemModel.getPreviewUrl() ) ) {
+                if( null == mediaItemModel.previewUrl() || "".equals( mediaItemModel.previewUrl() ) ) {
 
                     holder.image.setImageDrawable( brokenMovie );
 
@@ -132,7 +132,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
             case MOVIE :
             case ADULT :
 
-                if( null == mediaItemModel.getFanartUrl() || "".equals( mediaItemModel.getFanartUrl() ) ) {
+                if( null == mediaItemModel.fanartUrl() || "".equals( mediaItemModel.fanartUrl() ) ) {
 
                     holder.image.setImageDrawable( brokenMovie );
 
@@ -152,13 +152,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
         }
 
-        if( mediaItemModel.getLiveStreamId() > 0 ) {
+        if( mediaItemModel.liveStreamId() > 0 ) {
 
             holder.progress.setVisibility( View.VISIBLE );
             holder.progress.setIndeterminate( false );
-            holder.progress.setProgress( mediaItemModel.getPercentComplete() );
+            holder.progress.setProgress( mediaItemModel.percentComplete() );
 
-            if( mediaItemModel.getPercentComplete() < 2 ) {
+            if( mediaItemModel.percentComplete() < 2 ) {
 
                 holder.progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
 
@@ -177,12 +177,12 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
         }
 
-        holder.title.setText( mediaItemModel.getTitle() );
-        holder.subTitle.setText( mediaItemModel.getSubTitle() );
-        holder.studio.setText( mediaItemModel.getStudio() );
-        holder.date.setText( null == mediaItemModel.getStartDate() ? "" : mediaItemModel.getStartDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
-        holder.episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.getSeason(), mediaItemModel.getEpisode() ) );
-        holder.duration.setText( context.getResources().getString( R.string.minutes, String.valueOf( mediaItemModel.getDuration() ) ) );
+        holder.title.setText( mediaItemModel.title() );
+        holder.subTitle.setText( mediaItemModel.subTitle() );
+        holder.studio.setText( mediaItemModel.studio() );
+        holder.date.setText( null == mediaItemModel.startDate() ? "" : mediaItemModel.startDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
+        holder.episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.season(), mediaItemModel.episode() ) );
+        holder.duration.setText( context.getResources().getString( R.string.minutes, String.valueOf( mediaItemModel.duration() ) ) );
 
         if( mediaItemModel.isValid() ) {
 

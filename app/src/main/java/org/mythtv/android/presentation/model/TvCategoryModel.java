@@ -18,6 +18,10 @@
 
 package org.mythtv.android.presentation.model;
 
+import com.google.auto.value.AutoValue;
+
+import javax.annotation.Nullable;
+
 /**
  *
  *
@@ -26,40 +30,20 @@ package org.mythtv.android.presentation.model;
  *
  * Created on 1/28/16.
  */
-public class TvCategoryModel {
+@AutoValue
+public abstract class TvCategoryModel {
 
-    private final int position;
-    private final String title;
-    private final Integer drawable;
+    public abstract int position();
 
-    public TvCategoryModel( int position, String title, Integer drawable ) {
+    @Nullable
+    public abstract String title();
 
-        this.position = position;
-        this.title = title;
-        this.drawable = drawable;
+    @Nullable
+    public abstract Integer drawable();
 
-    }
+    public static TvCategoryModel create( int position, String title, Integer drawable ) {
 
-    public int getPosition() {
-
-        return position;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Integer getDrawable() {
-        return drawable;
-    }
-
-    @Override
-    public String toString() {
-        return "TvCategoryModel{" +
-                "position=" + position +
-                ", title='" + title + '\'' +
-                ", drawable=" + drawable +
-                '}';
+        return new AutoValue_TvCategoryModel( position, title, drawable );
     }
 
 }

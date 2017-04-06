@@ -21,15 +21,20 @@ package org.mythtv.android.presentation.presenter.phone;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
+import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
 import org.mythtv.android.presentation.mapper.MediaItemModelMapper;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.MediaItemDetailsView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,12 +55,23 @@ public class MediaItemDetailsPresenter implements Presenter {
     private MediaItemDetailsView viewDetailsView;
 
     private final UseCase getMediaItemDetailsUseCase;
+    private final UseCase addLiveStreamUseCase;
+    private final UseCase removeLiveStreamUseCase;
+    private final DynamicUseCase updateWatchedStatusUseCase;
     private final MediaItemModelMapper mediaItemModelMapper;
 
     @Inject
-    public MediaItemDetailsPresenter( @Named( "mediaItemDetails" ) UseCase getMediaItemDetailsUseCase, MediaItemModelMapper mediaItemModelMapper ) {
+    public MediaItemDetailsPresenter(
+            @Named( "mediaItemDetails" ) final UseCase getMediaItemDetailsUseCase,
+            @Named( "addLiveStream" ) final UseCase addLiveStreamUseCase,
+            @Named( "removeLiveStream" ) final UseCase removeLiveStreamUseCase,
+            @Named( "updateWatchedStatus" ) final DynamicUseCase updateWatchedStatusUseCase,
+            MediaItemModelMapper mediaItemModelMapper ) {
 
         this.getMediaItemDetailsUseCase = getMediaItemDetailsUseCase;
+        this.addLiveStreamUseCase = addLiveStreamUseCase;
+        this.removeLiveStreamUseCase = removeLiveStreamUseCase;
+        this.updateWatchedStatusUseCase = updateWatchedStatusUseCase;
         this.mediaItemModelMapper = mediaItemModelMapper;
 
     }
@@ -84,6 +100,8 @@ public class MediaItemDetailsPresenter implements Presenter {
     public void destroy() {
 
         this.getMediaItemDetailsUseCase.unsubscribe();
+        this.addLiveStreamUseCase.unsubscribe();
+        this.removeLiveStreamUseCase.unsubscribe();
 
     }
 
@@ -96,6 +114,34 @@ public class MediaItemDetailsPresenter implements Presenter {
 
     }
 
+    public void addLiveStream() {
+
+        this.addLiveStreamUseCase.execute( new RefreshMediaItemDetailsSubscriber() );
+
+    }
+
+    public void removeLiveStream() {
+
+        this.removeLiveStreamUseCase.execute( new RefreshMediaItemDetailsSubscriber() );
+
+    }
+
+    public void reload() {
+
+        this.getMediaItemDetailsUseCase.execute( new RefreshMediaItemDetailsSubscriber() );
+
+    }
+
+    public void markWatched( Media media, int id, boolean watched ) {
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put( "ID", id );
+        parameters.put( "WATCHED", watched );
+        parameters.put( "MEDIA", media.name() );
+
+        this.updateWatchedStatusUseCase.execute( new RefreshMediaItemDetailsSubscriber(), parameters );
+
+    }
     /**
      * Loads mediaItem details.
      */
@@ -152,9 +198,27 @@ public class MediaItemDetailsPresenter implements Presenter {
     private void showDetailsInView() {
         Log.d( TAG, "showDetailsInView : enter" );
 
-        this.viewDetailsView.renderMediaItem( this.mediaItemModel);
+        this.viewDetailsView.renderMediaItem( this.mediaItemModel );
 
         Log.d( TAG, "showDetailsInView : exit" );
+    }
+
+    private synchronized void refreshDetails( MediaItem mediaItem ) {
+        Log.d( TAG, "refreshDetails : enter" );
+
+        this.mediaItemModel = this.mediaItemModelMapper.transform( mediaItem );
+
+        refreshDetailsInView();
+
+        Log.d( TAG, "refreshDetails : exit" );
+    }
+
+    private void refreshDetailsInView() {
+        Log.d( TAG, "refreshDetailsInView : enter" );
+
+        this.viewDetailsView.refreshMediaItem( this.mediaItemModel );
+
+        Log.d( TAG, "refreshDetailsInView : exit" );
     }
 
     private void getDetails() {
@@ -185,6 +249,31 @@ public class MediaItemDetailsPresenter implements Presenter {
         public void onNext( MediaItem mediaItem ) {
 
             MediaItemDetailsPresenter.this.updateDetails( mediaItem );
+
+        }
+
+    }
+
+    private final class RefreshMediaItemDetailsSubscriber extends DefaultSubscriber<MediaItem> {
+
+        @Override
+        public void onCompleted() {
+            MediaItemDetailsPresenter.this.hideViewLoading();
+        }
+
+        @Override
+        public void onError( Throwable e ) {
+
+            MediaItemDetailsPresenter.this.hideViewLoading();
+            MediaItemDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            MediaItemDetailsPresenter.this.showViewRetry();
+
+        }
+
+        @Override
+        public void onNext( MediaItem mediaItem ) {
+
+            MediaItemDetailsPresenter.this.refreshDetails( mediaItem );
 
         }
 

@@ -23,11 +23,13 @@ import android.content.Context;
 import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.cache.VideoCacheImpl;
 import org.mythtv.android.data.executor.JobExecutor;
+import org.mythtv.android.data.repository.ContentDataRepository;
 import org.mythtv.android.data.repository.DvrDataRepository;
 import org.mythtv.android.data.repository.SearchDataRepository;
 import org.mythtv.android.data.repository.VideoDataRepository;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
+import org.mythtv.android.domain.repository.ContentRepository;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.domain.repository.SearchRepository;
 import org.mythtv.android.domain.repository.VideoRepository;
@@ -82,6 +84,13 @@ public class ApplicationModule {
     DvrRepository provideDvrRepository( DvrDataRepository dvrDataRepository) {
 
         return dvrDataRepository;
+    }
+
+    @Provides
+    @Singleton
+    ContentRepository provideContentRepository( ContentDataRepository contentDataRepository ) {
+
+        return contentDataRepository;
     }
 
     @Provides

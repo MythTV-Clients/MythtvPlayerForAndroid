@@ -26,14 +26,10 @@ public final class SeriesDataMapper {
 
     public static Series transform( final TitleInfoEntity titleInfoEntity ) {
 
-        Series series = new Series();
-        series.setTitle( titleInfoEntity.getTitle() );
-        series.setMedia( Media.PROGRAM );
-        series.setCount( titleInfoEntity.getCount() );
-        series.setArtworkUrl( "/Content/GetRecordingArtwork?Inetref=" + titleInfoEntity.getInetref() + "&Type=banner&Height=100" );
-        series.setInetref( titleInfoEntity.getInetref() );
-
-        return series;
+        return Series.create(
+                titleInfoEntity.title(), Media.PROGRAM,
+                "/Content/GetRecordingArtwork?Inetref=" + titleInfoEntity.inetref() + "&Type=banner&Height=100",
+                titleInfoEntity.count(), titleInfoEntity.inetref() );
     }
 
     public static List<Series> transformPrograms( Collection<TitleInfoEntity> programEntityCollection ) {
@@ -58,12 +54,10 @@ public final class SeriesDataMapper {
 
     public static Series transform( final VideoMetadataInfoEntity videoMetadataInfoEntity ) {
 
-        Series series = new Series();
-        series.setTitle( videoMetadataInfoEntity.getTitle() );
-        series.setMedia( Media.VIDEO );
-        series.setArtworkUrl( "/Content/GetVideoArtwork?Id=" + videoMetadataInfoEntity.getId() + "&Type=banner&Height=100" );
-
-        return series;
+        return Series.create(
+                videoMetadataInfoEntity.title(),Media.VIDEO,
+                "/Content/GetVideoArtwork?Id=" + videoMetadataInfoEntity.id() + "&Type=banner&Height=100",
+                1, videoMetadataInfoEntity.inetref() );
     }
 
     public static List<Series> transformVideos( Collection<VideoMetadataInfoEntity> videoEntityCollection ) {

@@ -93,7 +93,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
             setupDetailsOverviewRowPresenter();
             setupMovieListRow();
             setupMovieListRowPresenter();
-            updateBackground( getMasterBackendUrl() + mediaItemModel.getFanartUrl() );
+            updateBackground( getMasterBackendUrl() + mediaItemModel.fanartUrl() );
             setOnItemViewClickedListener( new ItemViewClickedListener() );
 
         }
@@ -146,10 +146,10 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
         int width = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_WIDTH );
         int height = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_HEIGHT );
 
-        if( mediaItemModel.getMedia() == org.mythtv.android.domain.Media.PROGRAM ) {
+        if( mediaItemModel.media() == org.mythtv.android.domain.Media.PROGRAM ) {
 
             Glide.with( getActivity() )
-                    .load( getMasterBackendUrl() + mediaItemModel.getPreviewUrl( String.valueOf( width ) ) )
+                    .load( getMasterBackendUrl() + mediaItemModel.previewUrl() )
                     .error( R.drawable.default_background )
                     .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
@@ -167,7 +167,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
         } else {
 
             Glide.with( getActivity() )
-                    .load( getMasterBackendUrl() + mediaItemModel.getCoverartUrl() )
+                    .load( getMasterBackendUrl() + mediaItemModel.coverartUrl() )
                     .error( R.drawable.default_background )
                     .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
@@ -196,13 +196,13 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private boolean mediaSupported() {
 
-        return mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mkv" );
+        return mediaItemModel.url().endsWith( "mp4" ) || mediaItemModel.url().endsWith( "mp4" ) || mediaItemModel.url().endsWith( "mkv" );
 
     }
 
     private boolean liveStreamSupported() {
 
-        if( mediaItemModel.getLiveStreamId() != -1 && mediaItemModel.getPercentComplete() > 2 ) {
+        if( mediaItemModel.liveStreamId() != -1 && mediaItemModel.percentComplete() > 2 ) {
 
             return true;
         }
@@ -229,14 +229,14 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
                     VideoModel videoModel = new VideoModel
                             .VideoModelBuilder()
-                            .id( mediaItemModel.getId() )
-                            .category( mediaItemModel.getMedia().name() )
-                            .title( mediaItemModel.getTitle() )
-                            .description( mediaItemModel.getDescription() )
-                            .videoUrl( masterBackendUrl + mediaItemModel.getUrl() )
-                            .bgImageUrl( masterBackendUrl + mediaItemModel.getBannerUrl() )
-                            .cardImageUrl( masterBackendUrl + mediaItemModel.getPreviewUrl() )
-                            .studio( mediaItemModel.getStudio() )
+                            .id( mediaItemModel.id() )
+                            .category( mediaItemModel.media().name() )
+                            .title( mediaItemModel.title() )
+                            .description( mediaItemModel.description() )
+                            .videoUrl( masterBackendUrl + mediaItemModel.url() )
+                            .bgImageUrl( masterBackendUrl + mediaItemModel.bannerUrl() )
+                            .cardImageUrl( masterBackendUrl + mediaItemModel.previewUrl() )
+                            .studio( mediaItemModel.studio() )
                             .build();
 
                     Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
@@ -245,7 +245,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
                 } else {
 
-                    String externalPlayerUrl = masterBackendUrl + mediaItemModel.getUrl();
+                    String externalPlayerUrl = masterBackendUrl + mediaItemModel.url();
                     Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
 
                     final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
