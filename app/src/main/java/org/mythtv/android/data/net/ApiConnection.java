@@ -48,19 +48,19 @@ public final class ApiConnection implements Callable<String> {
     private static final String ACCEPT_LABEL = "Accept";
     private static final String ACCEPT_VALUE_JSON = "application/json";
 
-    private OkHttpClient okHttpClient;
+    private final OkHttpClient okHttpClient;
 
-    private URL url;
+    private final URL url;
     private String response;
 
-    private ApiConnection( OkHttpClient okHttpClient, String url ) throws MalformedURLException {
+    private ApiConnection( final OkHttpClient okHttpClient, final String url ) throws MalformedURLException {
 
         this.okHttpClient = okHttpClient;
         this.url = new URL( url );
 
     }
 
-    public static ApiConnection create( OkHttpClient okHttpClient, String url ) throws MalformedURLException {
+    public static ApiConnection create( final OkHttpClient okHttpClient, final String url ) throws MalformedURLException {
 
         return new ApiConnection( okHttpClient, url );
     }

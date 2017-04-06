@@ -123,7 +123,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private Unbinder unbinder;
 
-    private int fifteenMin = 60 * 30000;
+    private final int fifteenMin = 60 * 30000;
 
     public interface MediaItemDetailsListener {
 
@@ -569,7 +569,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     }
 
-    private CountDownTimer timer = new CountDownTimer( fifteenMin, 5000 ) {
+    private final CountDownTimer timer = new CountDownTimer( fifteenMin, 5000 ) {
 
         @Override
         public void onTick( long millisUntilFinished ) {

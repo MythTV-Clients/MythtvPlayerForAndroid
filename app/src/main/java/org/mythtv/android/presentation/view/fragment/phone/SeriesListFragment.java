@@ -76,7 +76,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
     private Map<String, Object> parameters;
 
-    private SeriesAdapter.OnItemClickListener onItemClickListener = seriesModel -> {
+    private final SeriesAdapter.OnItemClickListener onItemClickListener = seriesModel -> {
 
         if( null != SeriesListFragment.this.seriesListPresenter && null != seriesModel ) {
             Log.i( TAG, "onItemClicked : seriesModel=" + seriesModel.toString() );
@@ -108,7 +108,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
     public static class Builder {
 
-        private Media media;
+        private final Media media;
         private String titleRegEx;
 
         public Builder( Media media ) {

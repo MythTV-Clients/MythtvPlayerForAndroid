@@ -64,7 +64,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
     private static final String TAG = MediaItemsAdapter.class.getSimpleName();
 
-    private Context context;
+    private final Context context;
     private List<MediaItemModel> mediaItemsCollection;
     private final LayoutInflater layoutInflater;
     private final Drawable brokenMovie;
@@ -77,7 +77,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
     }
 
-    public MediaItemsAdapter( Context context, Collection<MediaItemModel> programsCollection ) {
+    public MediaItemsAdapter( final Context context, Collection<MediaItemModel> programsCollection ) {
 
         this.context = context;
         this.validateMediaItemsCollection( programsCollection );

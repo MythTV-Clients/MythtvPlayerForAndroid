@@ -68,7 +68,7 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
 
     private TvCategoryListListener tvCategoryListListener;
 
-    private CategoriesAdapter.OnItemClickListener onItemClickListener = tvCategoryModel -> {
+    private final CategoriesAdapter.OnItemClickListener onItemClickListener = tvCategoryModel -> {
 
         if( null != CategoryListFragment.this.tvCategoryListPresenter && null != tvCategoryModel ) {
 

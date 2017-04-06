@@ -133,7 +133,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     public static class Builder {
 
-        private Media media;
+        private final Media media;
         private boolean tv;
 
         public Builder( Media media ) {

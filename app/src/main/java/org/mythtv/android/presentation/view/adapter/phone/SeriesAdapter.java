@@ -55,7 +55,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
 
     private static final String TAG = SeriesAdapter.class.getSimpleName();
 
-    private Context context;
+    private final Context context;
     private List<SeriesModel> seriesCollection;
     private final LayoutInflater layoutInflater;
 
@@ -67,7 +67,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
 
     }
 
-    public SeriesAdapter( Context context, Collection<SeriesModel> seriesCollection ) {
+    public SeriesAdapter( final Context context, Collection<SeriesModel> seriesCollection ) {
         Log.d( TAG, "initialize : enter" );
 
         this.context = context;

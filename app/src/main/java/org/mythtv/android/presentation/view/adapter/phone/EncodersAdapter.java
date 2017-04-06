@@ -47,11 +47,11 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
     private static final String TAG = EncodersAdapter.class.getSimpleName();
 
-    private Context context;
+    private final Context context;
     private List<EncoderModel> encodersCollection;
     private final LayoutInflater layoutInflater;
 
-    public EncodersAdapter( Context context, Collection<EncoderModel> encodersCollection ) {
+    public EncodersAdapter( final Context context, final Collection<EncoderModel> encodersCollection ) {
         Log.d( TAG, "initialize : enter" );
 
         this.context = context;

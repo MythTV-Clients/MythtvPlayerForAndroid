@@ -94,7 +94,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     private Map<String, Object> parameters;
 
-    private MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
+    private final MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
 
         if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
 
@@ -147,7 +147,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     public static class Builder {
 
-        private Media media;
+        private final Media media;
         private Boolean descending;
         private Integer startIndex;
         private Integer count;
