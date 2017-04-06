@@ -794,7 +794,7 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         @Override
         // This method should play any media tv_item regardless of the Queue.
         public void onPlayFromMediaId( String mediaId, Bundle extras ) {
-
+            // this method is left blank intentionally
         }
 
         @Override
