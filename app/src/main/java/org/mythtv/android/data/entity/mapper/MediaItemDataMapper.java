@@ -73,7 +73,7 @@ public final class MediaItemDataMapper {
 //        }
 
         Media media = null;
-        String url = null, contentType = null, createHttpLiveStreamUrl = null, removeHttpLiveStreamUrl = null, getHttpLiveStreamUrl = null, previewUrl = null, markWatchedUrl = null, recordingGroup = null, updateSavedBookmarkUrl = null;
+        String url = null, contentType = null, previewUrl = null, markWatchedUrl = null, recordingGroup = null, updateSavedBookmarkUrl = null;
         int percentComplete = 0, liveStreamId = 0;
         boolean watched = false, recording = false;
         long bookmark = 0, duration = 0;
@@ -88,8 +88,6 @@ public final class MediaItemDataMapper {
                     url = programEntity.getLiveStreamInfoEntity().relativeUrl();
                     percentComplete = programEntity.getLiveStreamInfoEntity().percentComplete();
                     liveStreamId = programEntity.getLiveStreamInfoEntity().id();
-                    removeHttpLiveStreamUrl = String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().id() ) );
-                    getHttpLiveStreamUrl = String.format( "/Content/GetLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().id() ) );
 
                 }
 
@@ -134,12 +132,7 @@ public final class MediaItemDataMapper {
         if( null != programEntity.getLiveStreamInfoEntity() ) {
 
             liveStreamId = programEntity.getLiveStreamInfoEntity().id();
-            removeHttpLiveStreamUrl = String.format( "/Content/RemoveLiveStream?Id=%s", String.valueOf( programEntity.getLiveStreamInfoEntity().id() ) );
 
-        }
-
-        if( !recordedIdValidationError ) {
-            createHttpLiveStreamUrl = String.format( "/Content/AddRecordingLiveStream?RecordedId=%s&Width=960", String.valueOf( programEntity.recording().recordedId() ) );
         }
 
         List<String> castMembers = new ArrayList<>();
