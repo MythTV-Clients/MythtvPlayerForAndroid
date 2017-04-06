@@ -83,6 +83,7 @@ import static android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS
  * @author dmfrey
  */
 @TargetApi( Build.VERSION_CODES.LOLLIPOP )
+@SuppressWarnings( "PMD.GodClass" )
 public class PlaybackOverlayFragment extends android.support.v17.leanback.app.PlaybackOverlayFragment { //} implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = PlaybackOverlayFragment.class.getSimpleName();
@@ -109,17 +110,8 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     private ArrayObjectAdapter mPrimaryActionsAdapter;
     private ArrayObjectAdapter mSecondaryActionsAdapter;
     private PlayPauseAction mPlayPauseAction;
-//    private ClosedCaptioningAction mClosedCaptioningAction;
     private FastForwardAction mFastForwardAction;
-//    private HighQualityAction mHighQualityAction;
-//    private MoreActions mMoreActions;
-//    private RepeatAction mRepeatAction;
     private RewindAction mRewindAction;
-//    private ShuffleAction mShuffleAction;
-//    private SkipNextAction mSkipNextAction;
-//    private SkipPreviousAction mSkipPreviousAction;
-//    private ThumbsDownAction mThumbsDownAction;
-//    private ThumbsUpAction mThumbsUpAction;
     private PlaybackControlsRow mPlaybackControlsRow;
     private Handler mHandler;
     private Runnable mRunnable;
@@ -129,15 +121,9 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     private int mClickCount;
     private int mQueueIndex = -1;
     private List<MediaSession.QueueItem> mQueue;
-//    private CursorObjectAdapter mVideoCursorAdapter;
     private int mPosition = 0;
     private long mStartTimeMillis;
     private MediaSession mSession; // MediaSession is used to hold the state of our media playback.
-//    private final static int RECOMMENDED_VIDEOS_LOADER = 1;
-//    private final static int QUEUE_VIDEOS_LOADER = 2;
-//    private int mSpecificVideoLoaderId = 3;
-//    private final VideoCursorMapper mVideoCursorMapper = new VideoCursorMapper();
-//    private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
 
     private MediaController mMediaController;
     private final MediaController.Callback mMediaControllerCallback = new MediaControllerCallback();
@@ -148,8 +134,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     public void onAttach( Context context ) {
         Log.d( TAG, "onAttach" );
         super.onAttach( context );
-
-//        mCallbacks = this;
 
         createMediaSession();
 
@@ -188,11 +172,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         setVideoPath( mSelectedVideo.videoUrl );
         updateMetadata( mSelectedVideo );
         playPause( true );
-
-        // Start loading videos for the queue.
-//        Bundle args = new Bundle();
-//        args.putString( VideoContract.VideoEntry.COLUMN_CATEGORY, mSelectedVideo.category );
-//        getLoaderManager().initLoader( QUEUE_VIDEOS_LOADER, args, mCallbacks );
 
         // Set up listeners.
         setOnItemViewSelectedListener((OnItemViewSelectedListener) (itemViewHolder, item, rowViewHolder, row) -> {
@@ -283,21 +262,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         }
 
     }
-
-//    @TargetApi( Build.VERSION_CODES.M )
-//    private MediaSession.QueueItem getQueueItem(VideoModel v ) {
-//
-//        MediaDescription desc = new MediaDescription.Builder()
-//                .setDescription( v.description )
-//                .setMediaId( v.id + "" )
-//                .setMediaUri( Uri.parse( v.videoUrl ) )
-//                .setIconUri( Uri.parse( v.cardImageUrl ) )
-//                .setSubtitle( v.studio )
-//                .setTitle( v.title )
-//                .build();
-//
-//        return new MediaSession.QueueItem( desc, v.id );
-//    }
 
     private void setPlaybackState( int state ) {
 
@@ -428,47 +392,21 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         mSecondaryActionsAdapter = new ArrayObjectAdapter( presenterSelector );
 
         mPlayPauseAction = new PlayPauseAction( getActivity() );
-//        mRepeatAction = new RepeatAction( activity );
-//        mThumbsUpAction = new ThumbsUpAction( activity );
-//        mThumbsDownAction = new ThumbsDownAction( activity );
-//        mShuffleAction = new ShuffleAction( activity );
-//        mSkipNextAction = new SkipNextAction( activity );
-//        mSkipPreviousAction = new SkipPreviousAction( activity );
         mFastForwardAction = new FastForwardAction( activity );
         mRewindAction = new RewindAction( activity );
-//        mHighQualityAction = new HighQualityAction( activity );
-//        mClosedCaptioningAction = new ClosedCaptioningAction( activity );
-//        mMoreActions = new MoreActions( activity );
 
         // Add main controls to primary adapter.
-//        mPrimaryActionsAdapter.add( mSkipPreviousAction );
         mPrimaryActionsAdapter.add( mRewindAction );
         mPrimaryActionsAdapter.add( mPlayPauseAction );
         mPrimaryActionsAdapter.add( mFastForwardAction );
-//        mPrimaryActionsAdapter.add( mSkipNextAction );
 
         // Add rest of controls to secondary adapter.
-//        mSecondaryActionsAdapter.add( mThumbsUpAction );
-//        mSecondaryActionsAdapter.add( mRepeatAction );
-//        mSecondaryActionsAdapter.add( mShuffleAction );
-//        mSecondaryActionsAdapter.add( mThumbsDownAction );
-//        mSecondaryActionsAdapter.add( mHighQualityAction );
-//        mSecondaryActionsAdapter.add( mClosedCaptioningAction );
-//        mSecondaryActionsAdapter.add( mMoreActions );
 
         playbackControlsRowPresenter.setOnActionClickedListener(action -> {
 
             if( action.getId() == mPlayPauseAction.getId() ) {
 
                 togglePlayback( mPlayPauseAction.getIndex() == PlayPauseAction.PLAY );
-
-//                } else if( action.getId() == mSkipNextAction.getId() ) {
-//
-//                    next();
-//
-//                } else if( action.getId() == mSkipPreviousAction.getId() ) {
-//
-//                    prev();
 
             } else if( action.getId() == mFastForwardAction.getId() ) {
 
@@ -653,12 +591,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     }
 
-//    private void prev() {
-//
-//        mMediaController.getTransportControls().skipToPrevious();
-//
-//    }
-
     private void fastForward() {
 
         startClickTrackingTimer();
@@ -689,6 +621,7 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         Glide.with( this )
                 .load( uri )
                 .centerCrop()
+                .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into( new SimpleTarget<GlideDrawable>( CARD_WIDTH, CARD_HEIGHT ) {
 
                     @Override
@@ -721,107 +654,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         mClickTrackingTimer.schedule( new UpdateFfwRwdSpeedTask(), CLICK_TRACKING_DELAY );
 
     }
-
-//    @Override
-//    public Loader<Cursor> onCreateLoader( int id, Bundle args ) {
-//        switch( id ) {
-//
-//            case RECOMMENDED_VIDEOS_LOADER: // Fall through.
-//            case QUEUE_VIDEOS_LOADER : {
-//
-//                String category = args.getString( VideoContract.VideoEntry.COLUMN_CATEGORY );
-//                return new CursorLoader(
-//                        getActivity(),
-//                        VideoContract.VideoEntry.CONTENT_URI,
-//                        null, // Projection to return - null means return all fields.
-//                        VideoContract.VideoEntry.COLUMN_CATEGORY + " = ?", // Selection clause is category.
-//                        new String[]{category}, // Select based on the category.
-//                        null // Default sort order
-//                );
-//
-//            }
-//
-//            default : {
-//
-//                // Loading a specific video.
-//                String videoId = args.getString( VideoContract.VideoEntry._ID );
-//                return new CursorLoader(
-//                        getActivity(),
-//                        VideoContract.VideoEntry.CONTENT_URI,
-//                        null, // Projection to return - null means return all fields.
-//                        VideoContract.VideoEntry._ID + " = ?", // Selection clause is id.
-//                        new String[]{videoId}, // Select based on the id.
-//                        null // Default sort order
-//                );
-//
-//            }
-//
-//        }
-//
-//    }
-
-//    @Override
-//    public void onLoadFinished( Loader<Cursor> loader, Cursor cursor ) {
-//
-//        if( cursor != null && cursor.moveToFirst() ) {
-//
-//            switch( loader.getId() ) {
-//
-//                case QUEUE_VIDEOS_LOADER : {
-//
-//                    mQueue.clear();
-//                    while( !cursor.isAfterLast() ) {
-//                        VideoModel v = (VideoModel) mVideoCursorMapper.convert( cursor );
-//
-//                        // Set the queue index to the selected video.
-//                        if( v.id == mSelectedVideo.id ) {
-//
-//                            mQueueIndex = mQueue.size();
-//                            Log.d( TAG, "mQueueIndex set to " + mQueueIndex );
-//
-//                        }
-//
-//                        // Add the video to the queue.
-//                        MediaSession.QueueItem tv_item = getQueueItem( v );
-//                        mQueue.add( tv_item );
-//
-//                        cursor.moveToNext();
-//                    }
-//
-//                    mSession.setQueue( mQueue );
-//                    mSession.setQueueTitle( getString( R.string.queue_name ) );
-//
-//                    break;
-//                }
-//
-//                case RECOMMENDED_VIDEOS_LOADER : {
-//
-//                    mVideoCursorAdapter.changeCursor( cursor );
-//
-//                    break;
-//                }
-//
-//                default : {
-//
-//                    // Playing a specific video.
-//                    VideoModel video = (VideoModel) mVideoCursorMapper.convert( cursor );
-//                    Bundle extras = new Bundle();
-//                    extras.putBoolean( AUTO_PLAY, true );
-//                    playVideo( video, extras );
-//
-//                    break;
-//                }
-//
-//            }
-//
-//        }
-//
-//    }
-
-//    @Override
-//    public void onLoaderReset( Loader<Cursor> loader ) {
-//        mVideoCursorAdapter.changeCursor( null );
-//    }
 
     private static class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
@@ -945,17 +777,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
                 });
     }
 
-//    private void playVideo( VideoModel v, Bundle extras ) {
-//        Log.d( TAG, "Playing video " + v.title + " with url = " + v.videoUrl );
-//        Log.d( TAG, "Video: " + v.toString() );
-//
-//        setVideoPath( v.videoUrl );
-//        setPlaybackState( PlaybackState.STATE_PAUSED );
-//        updateMetadata( v );
-//        playPause( extras.getBoolean( AUTO_PLAY ) );
-//
-//    }
-
     // An event was triggered by MediaController.TransportControls and must be handled here.
     // Here we update the media itself to act on the event that was triggered.
     private class MediaSessionCallback extends MediaSession.Callback {
@@ -973,10 +794,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         @Override
         // This method should play any media tv_item regardless of the Queue.
         public void onPlayFromMediaId( String mediaId, Bundle extras ) {
-
-//            Bundle args = new Bundle();
-//            args.putString( VideoContract.VideoEntry._ID, mediaId );
-//            getLoaderManager().initLoader( mSpecificVideoLoaderId++, args, mCallbacks );
 
         }
 
@@ -1094,18 +911,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
                 mPlayPauseAction.setIndex( PlayPauseAction.PLAY );
                 mPlayPauseAction.setIcon( mPlayPauseAction.getDrawable( PlayPauseAction.PLAY ) );
                 notifyChanged( mPlayPauseAction );
-
-//            } else if( nextState == PlaybackState.STATE_SKIPPING_TO_NEXT ) {
-//
-//                startProgressAutomation();
-//                setFadingEnabled( true );
-//                notifyChanged( mSkipNextAction );
-//
-//            } else if( nextState == PlaybackState.STATE_SKIPPING_TO_PREVIOUS ) {
-//
-//                startProgressAutomation();
-//                setFadingEnabled( true );
-//                notifyChanged( mSkipPreviousAction );
 
             }
 

@@ -46,6 +46,7 @@ import okhttp3.Request;
  *  4. Verify Services API Connection
  *
  */
+@SuppressWarnings( "PMD.GodClass" )
 public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     private static final String TAG = TroubleshootActivity.class.getSimpleName();

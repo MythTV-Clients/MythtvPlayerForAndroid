@@ -34,6 +34,7 @@ import javax.inject.Singleton;
  */
 
 @Singleton
+@SuppressWarnings( "PMD.GodClass" )
 public final class MediaItemDataMapper {
 
     private static final String TAG = MediaItemDataMapper.class.getSimpleName();

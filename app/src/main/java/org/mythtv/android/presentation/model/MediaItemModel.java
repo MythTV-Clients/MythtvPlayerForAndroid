@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
  * Created on 7/10/16.
  */
 @AutoValue
+@SuppressWarnings( "PMD.GodClass" )
 public abstract class MediaItemModel implements Serializable {
 
     private static final String WIDTH_QS = "&Width=%s";
