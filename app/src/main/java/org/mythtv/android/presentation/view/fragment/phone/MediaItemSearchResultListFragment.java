@@ -78,7 +78,7 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
 
     private MediaItemListListener mediaItemListListener;
 
-    private MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
+    private final MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
 
         if( null != MediaItemSearchResultListFragment.this.mediaItemListListener && null != mediaItemModel ) {
             Log.d( TAG, "onProgramItemClicked : mediaItemModel=" + mediaItemModel.toString() );
