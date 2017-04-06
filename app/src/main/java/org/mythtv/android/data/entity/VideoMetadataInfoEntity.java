@@ -38,6 +38,9 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class VideoMetadataInfoEntity {
 
+    @Nullable
+    private LiveStreamInfoEntity liveStreamInfoEntity;
+
     @SerializedName( "Id" )
     public abstract int id();
 
@@ -158,9 +161,6 @@ public abstract class VideoMetadataInfoEntity {
     @Nullable
     @SerializedName( "Cast" )
     public abstract CastEntity cast();
-
-    @Nullable
-    private LiveStreamInfoEntity liveStreamInfoEntity;
 
     public static VideoMetadataInfoEntity create( int id, String title, String subTitle, String tagline, String director, String studio, String description, String certification, String inetref, int collectionref, String homePage, DateTime releaseDate, DateTime addDate, float userRating, int length, int playCount, int season, int episode, int parentalLevel, boolean visible, boolean watched, boolean processed, String contentType, String fileName, String hash, String hostName, String coverart, String fanart, String banner, String screenshot, String trailer, ArtworkEntity artwork, CastEntity cast ) {
 

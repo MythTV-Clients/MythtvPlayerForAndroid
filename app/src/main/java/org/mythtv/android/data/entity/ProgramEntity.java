@@ -39,6 +39,10 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class ProgramEntity {
 
+    private LiveStreamInfoEntity liveStreamInfoEntity;
+
+    private long bookmark;
+
     @Nullable
     @SerializedName( "StartTime" )
     public abstract DateTime startTime();
@@ -140,10 +144,6 @@ public abstract class ProgramEntity {
     @Nullable
     @SerializedName( "Cast" )
     public abstract CastEntity cast();
-
-    private LiveStreamInfoEntity liveStreamInfoEntity;
-
-    private long bookmark;
 
     public static ProgramEntity create( DateTime startTime, DateTime endTime, String title, String subTitle, String category, String catType, boolean repeat, int videoProps, int audioProps, int subProps, String seriesId, String programId, double stars, long fileSize, DateTime lastModified, int programFlags, String fileName, String hostName, LocalDate airdate, String description, String inetref, int season, int episode, int totalEpisodes, ChannelInfoEntity channel, RecordingInfoEntity recording, ArtworkEntity artwork, CastEntity cast ) {
 
