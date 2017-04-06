@@ -45,7 +45,7 @@ import rx.Subscriber;
  *
  * Created on 10/17/15.
  */
-public class ContentApiImpl extends AbstractBaseApi implements ContentApi {
+public class ContentApiImpl extends BaseApi implements ContentApi {
 
     private static final String TAG = ContentApiImpl.class.getSimpleName();
 

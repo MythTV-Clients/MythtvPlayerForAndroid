@@ -15,14 +15,14 @@ import org.mythtv.android.domain.SettingsKeys;
  * Created on 1/21/17.
  */
 
-public abstract class AbstractBaseApi {
+public class BaseApi {
 
-    private static final String TAG = AbstractBaseApi.class.getSimpleName();
+    private static final String TAG = BaseApi.class.getSimpleName();
 
     protected final Context context;
     protected final SharedPreferences sharedPreferences;
 
-    protected AbstractBaseApi( final Context context, final SharedPreferences sharedPreferences ) {
+    protected BaseApi(final Context context, final SharedPreferences sharedPreferences ) {
 
         if( null == context || null == sharedPreferences ) {
 

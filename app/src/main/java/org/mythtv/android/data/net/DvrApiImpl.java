@@ -55,7 +55,7 @@ import rx.Subscriber;
  *
  * Created on 8/27/15.
  */
-public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
+public class DvrApiImpl extends BaseApi implements DvrApi {
 
     private static final String TAG = DvrApiImpl.class.getSimpleName();
 

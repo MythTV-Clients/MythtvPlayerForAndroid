@@ -46,7 +46,7 @@ import rx.Subscriber;
  *
  * Created on 11/9/15.
  */
-public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
+public class VideoApiImpl extends BaseApi implements VideoApi {
 
     private static final String TAG = VideoApiImpl.class.getSimpleName();
 
