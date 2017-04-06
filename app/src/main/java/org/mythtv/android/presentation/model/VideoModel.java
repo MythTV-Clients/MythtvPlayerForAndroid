@@ -104,6 +104,19 @@ public final class VideoModel implements Parcelable {
     }
 
     @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (category == null ? 0 : category.hashCode());
+        result = 31 * result + title.hashCode();
+        result = 31 * result + (description == null ? 0 : description.hashCode());
+        result = 31 * result + (bgImageUrl == null ? 0 : bgImageUrl.hashCode());
+        result = 31 * result + (cardImageUrl == null ? 0 : cardImageUrl.hashCode());
+        result = 31 * result + videoUrl.hashCode();
+        result = 31 * result + (studio == null ? 0 : studio.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
 
         String s = "VideoModel{";
