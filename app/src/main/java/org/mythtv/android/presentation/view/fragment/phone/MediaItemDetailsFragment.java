@@ -38,6 +38,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
@@ -46,7 +48,6 @@ import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemDetailsPresenter;
 import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
 import org.mythtv.android.presentation.view.MediaItemDetailsView;
-import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Locale;
 
@@ -85,7 +86,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     MediaItemDetailsPresenter presenter;
 
     @BindView( R.id.media_item_image )
-    AutoLoadImageView iv_image;
+    ImageView iv_image;
 
     @BindView( R.id.media_item_bookmark )
     ImageView iv_bookmark;
@@ -348,7 +349,13 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
             }
 
-            this.iv_image.setImageUrl( getMasterBackendUrl() + this.mediaItemModel.coverartUrl() );
+            Glide
+                    .with( getActivity() )
+                    .load( getMasterBackendUrl() + this.mediaItemModel.coverartUrl() )
+                    .centerCrop()
+                    .crossFade()
+                    .into( this.iv_image );
+//            this.iv_image.setImageUrl( getMasterBackendUrl() + this.mediaItemModel.coverartUrl() );
             if( mediaItemModel.bookmark() > 0 ) {
 
                 this.iv_bookmark.setVisibility( View.VISIBLE );

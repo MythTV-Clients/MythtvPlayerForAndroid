@@ -38,7 +38,7 @@
             android:layout_marginEnd="16dp"
             android:gravity="fill_horizontal">
 
-            <org.mythtv.android.presentation.view.component.AutoLoadImageView
+            <ImageView
                 android:id="@+id/media_item_image"
                 android:layout_width="125dp"
                 android:layout_height="75dp"

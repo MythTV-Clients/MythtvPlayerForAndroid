@@ -33,6 +33,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
@@ -40,7 +42,6 @@ import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.utils.MediaItemFilter;
 import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
-import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
 import java.util.List;
@@ -106,6 +107,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         final MediaItemModel mediaItemModel = this.mediaItemsCollection.get( position );
         Log.i( TAG, "onBindViewHolder : mediaItemModel=" + mediaItemModel.toString() );
 
+        String imageUrl = null;
         switch( mediaItemModel.media() ) {
 
             case MUSICVIDEO :
@@ -115,15 +117,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
             case PROGRAM :
 
-                if( null == mediaItemModel.previewUrl() || "".equals( mediaItemModel.previewUrl() ) ) {
-
-                    holder.image.setImageDrawable( brokenMovie );
-
-                } else {
-
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getPreviewUrl( "250" ) );
-
-                }
+                imageUrl = getMasterBackendUrl() + mediaItemModel.getPreviewUrl( "250" );
 
                 break;
 
@@ -132,23 +126,24 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
             case MOVIE :
             case ADULT :
 
-                if( null == mediaItemModel.fanartUrl() || "".equals( mediaItemModel.fanartUrl() ) ) {
-
-                    holder.image.setImageDrawable( brokenMovie );
-
-                } else {
-
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getFanartUrl( "250" ) );
-
-                }
+                imageUrl = getMasterBackendUrl() + mediaItemModel.getFanartUrl( "250" );
 
                 break;
 
             default :
 
-                holder.image.setImageDrawable( brokenMovie );
-
                 break;
+
+        }
+        if( null != imageUrl ) {
+
+            Glide
+                    .with( context )
+                    .load( imageUrl )
+                    .centerCrop()
+                    .placeholder( brokenMovie )
+                    .crossFade()
+                    .into( holder.image );
 
         }
 
@@ -245,7 +240,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     static class MediaItemViewHolder extends RecyclerView.ViewHolder {
 
         @BindView( R.id.media_item_image )
-        AutoLoadImageView image;
+        ImageView image;
 
         @BindView( R.id.media_item_error_image )
         ImageView error;

@@ -27,12 +27,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.SeriesModel;
-import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
 import java.util.Collection;
 import java.util.List;
@@ -97,15 +99,24 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
         Log.d( TAG, "onBindViewHolder : enter" );
 
         final SeriesModel seriesModel = this.seriesCollection.get( position );
-        if( null == seriesModel.artworkUrl() || "".equals( seriesModel.artworkUrl() ) ) {
 
-            holder.imageViewArtwork.setImageDrawable( ContextCompat.getDrawable( context, R.drawable.ffffff ) );
+        Glide
+                .with( context )
+                .load( getMasterBackendUrl() + seriesModel.artworkUrl() )
+                .centerCrop()
+                .placeholder( ContextCompat.getDrawable( context, R.drawable.ffffff ) )
+                .crossFade()
+                .into( holder.imageViewArtwork );
 
-        } else {
-
-            holder.imageViewArtwork.setImageUrl( getMasterBackendUrl() + seriesModel.artworkUrl() );
-
-        }
+//        if( null == seriesModel.artworkUrl() || "".equals( seriesModel.artworkUrl() ) ) {
+//
+//            holder.imageViewArtwork.setImageDrawable( ContextCompat.getDrawable( context, R.drawable.ffffff ) );
+//
+//        } else {
+//
+//            holder.imageViewArtwork.setImageUrl( getMasterBackendUrl() + seriesModel.artworkUrl() );
+//
+//        }
         holder.textViewTitle.setText( seriesModel.title() );
 
         int titleCount = seriesModel.count();
@@ -167,7 +178,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
     static class SeriesViewHolder extends RecyclerView.ViewHolder {
 
         @BindView( R.id.series_item_artwork )
-        AutoLoadImageView imageViewArtwork;
+        ImageView imageViewArtwork;
 
         @BindView( R.id.series_item_title )
         TextView textViewTitle;

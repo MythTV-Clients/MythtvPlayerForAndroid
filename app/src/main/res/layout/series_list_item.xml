@@ -28,7 +28,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical">
 
-        <org.mythtv.android.presentation.view.component.AutoLoadImageView
+        <ImageView
             android:id="@+id/series_item_artwork"
             android:layout_width="match_parent"
             android:layout_height="120dp"
