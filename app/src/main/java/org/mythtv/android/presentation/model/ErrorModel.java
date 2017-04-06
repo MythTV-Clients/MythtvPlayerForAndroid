@@ -14,6 +14,7 @@ import org.mythtv.android.domain.Error;
  * Created on 1/20/17.
  */
 @AutoValue
+@SuppressWarnings( "PMD.EmptyMethodInAbstractClassShouldBeAbstract")
 public abstract class ErrorModel implements Parcelable {
 
     public static final String KEY_FIELD = "field";
