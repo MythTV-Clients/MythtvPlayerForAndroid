@@ -34,6 +34,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -141,8 +142,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
                     .with( context )
                     .load( imageUrl )
                     .centerCrop()
-                    .placeholder( brokenMovie )
+                    .error( brokenMovie )
                     .crossFade()
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
                     .into( holder.image );
 
         }

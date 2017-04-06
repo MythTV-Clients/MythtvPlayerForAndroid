@@ -66,6 +66,7 @@ allprojects {
         jodaVersion = '2.9.6'
         exoplayerVersion = 'r1.5.4'
         glideVersion = '3.7.0'
+        glideOkHttpVersion = '1.4.0'
         multidexVersion = '1.0.1'
         recyclerviewfastscrollerVersion = "0.1.3"
         stethoVersion = '1.4.1'

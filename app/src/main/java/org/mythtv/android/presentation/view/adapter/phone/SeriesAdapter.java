@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
@@ -104,19 +105,11 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
                 .with( context )
                 .load( getMasterBackendUrl() + seriesModel.artworkUrl() )
                 .centerCrop()
-                .placeholder( ContextCompat.getDrawable( context, R.drawable.ffffff ) )
+                .error( ContextCompat.getDrawable( context, R.drawable.ffffff ) )
                 .crossFade()
+                .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into( holder.imageViewArtwork );
 
-//        if( null == seriesModel.artworkUrl() || "".equals( seriesModel.artworkUrl() ) ) {
-//
-//            holder.imageViewArtwork.setImageDrawable( ContextCompat.getDrawable( context, R.drawable.ffffff ) );
-//
-//        } else {
-//
-//            holder.imageViewArtwork.setImageUrl( getMasterBackendUrl() + seriesModel.artworkUrl() );
-//
-//        }
         holder.textViewTitle.setText( seriesModel.title() );
 
         int titleCount = seriesModel.count();

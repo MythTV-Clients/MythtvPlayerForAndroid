@@ -55,6 +55,7 @@ import android.util.Log;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -930,6 +931,7 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         Glide.with( this )
                 .load( Uri.parse( videoModel.cardImageUrl ) )
                 .asBitmap()
+                .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into( new SimpleTarget<Bitmap>( 500, 500 ) {
 
                     @Override

@@ -39,6 +39,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -354,8 +355,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
                     .load( getMasterBackendUrl() + this.mediaItemModel.coverartUrl() )
                     .centerCrop()
                     .crossFade()
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
                     .into( this.iv_image );
-//            this.iv_image.setImageUrl( getMasterBackendUrl() + this.mediaItemModel.coverartUrl() );
+
             if( mediaItemModel.bookmark() > 0 ) {
 
                 this.iv_bookmark.setVisibility( View.VISIBLE );

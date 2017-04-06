@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
@@ -99,6 +100,7 @@ public class CardPresenter extends Presenter {
                 Glide.with( viewHolder.view.getContext() )
                         .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.previewUrl() )
                         .error( mDefaultCardImage )
+                        .diskCacheStrategy( DiskCacheStrategy.RESULT )
                         .into( cardView.getMainImageView() );
 
             } else {
@@ -106,6 +108,7 @@ public class CardPresenter extends Presenter {
                 Glide.with( viewHolder.view.getContext() )
                         .load( getMasterBackendUrl( viewHolder.view.getContext() ) + mediaItemModel.fanartUrl() )
                         .error( mDefaultCardImage )
+                        .diskCacheStrategy( DiskCacheStrategy.RESULT )
                         .into( cardView.getMainImageView() );
 
             }

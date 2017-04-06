@@ -40,6 +40,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -116,6 +117,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
                 .load( uri )
                 .fitCenter()
                 .error( mDefaultBackground )
+                .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into( new SimpleTarget<GlideDrawable>( mMetrics.widthPixels, mMetrics.heightPixels ) {
 
                     @Override
@@ -151,6 +153,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
             Glide.with( getActivity() )
                     .load( getMasterBackendUrl() + mediaItemModel.previewUrl() )
                     .error( R.drawable.default_background )
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
                     .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
                         @Override
@@ -169,6 +172,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
             Glide.with( getActivity() )
                     .load( getMasterBackendUrl() + mediaItemModel.coverartUrl() )
                     .error( R.drawable.default_background )
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
                     .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
                         @Override
