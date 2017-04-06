@@ -137,11 +137,7 @@ public class MediaItemFilter {
                 return true;
             } else if( ratingR && ( mediaItemModel.certification().equals( "R" ) || mediaItemModel.certification().equals( "TV-MA" ) ) ) {
                 return true;
-            } else if( ratingNC17 && mediaItemModel.certification().equals( "NC-17" ) ) {
-                return true;
-            } else {
-                return false;
-            }
+            } else return ratingNC17 && mediaItemModel.certification().equals("NC-17");
 
         }
 

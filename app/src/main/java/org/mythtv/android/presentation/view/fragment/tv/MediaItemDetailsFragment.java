@@ -206,12 +206,8 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private boolean liveStreamSupported() {
 
-        if( mediaItemModel.liveStreamId() != -1 && mediaItemModel.percentComplete() > 2 ) {
+        return mediaItemModel.liveStreamId() != -1 && mediaItemModel.percentComplete() > 2;
 
-            return true;
-        }
-
-        return false;
     }
 
     private void setupDetailsOverviewRowPresenter() {
