@@ -29,6 +29,8 @@ import android.os.Parcelable;
  *
  * Created on 8/26/15.
  */
+// TODO: replace with auto-value parcel extension
+@SuppressWarnings( "PMD.AccessorClassGeneration" )
 public final class VideoModel implements Parcelable {
     public final long id;
     public final String category;
