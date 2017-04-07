@@ -127,7 +127,7 @@ public final class Utils {
 
     public static boolean meetsMinimumVersion( String version, float minimumVersion ) {
 
-        if( version.equals( "Unknown" ) || version.matches( "\\b[0-9a-f]{5,40}\\b" ) ) {
+        if( "Unknown".equals( version ) || version.matches( "\\b[0-9a-f]{5,40}\\b" ) ) {
 
             return false;
         }

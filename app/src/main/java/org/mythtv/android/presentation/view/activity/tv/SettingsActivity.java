@@ -1460,22 +1460,22 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
                     -1,
                     "1",
                     null,
-                    parentalControlLevel.equals( "1" ) );
+                    "1".equals( parentalControlLevel ) );
             addCheckedAction( getActivity(), actions,
                     -1,
                     "2",
                     null,
-                    parentalControlLevel.equals( "2" ) );
+                    "2".equals( parentalControlLevel ) );
             addCheckedAction( getActivity(), actions,
                     -1,
                     "3",
                     null,
-                    parentalControlLevel.equals( "3" ) );
+                    "3".equals( parentalControlLevel ) );
             addCheckedAction( getActivity(), actions,
                     -1,
                     "4",
                     null,
-                    parentalControlLevel.equals( "4" ) );
+                    "4".equals( parentalControlLevel ) );
 
             setActions( actions );
 
