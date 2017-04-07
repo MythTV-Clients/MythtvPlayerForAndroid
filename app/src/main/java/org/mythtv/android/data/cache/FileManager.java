@@ -65,9 +65,8 @@ public class FileManager {
 
         if( !file.exists() ) {
 
-            try {
+            try( FileWriter writer = new FileWriter( file ) ) {
 
-                FileWriter writer = new FileWriter( file );
                 writer.write( fileContent );
                 writer.close();
 
