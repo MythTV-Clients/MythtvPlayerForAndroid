@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.MediaDescription;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
@@ -36,16 +35,13 @@ import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.ControlButtonPresenterSelector;
-import android.support.v17.leanback.widget.CursorObjectAdapter;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
-import android.support.v17.leanback.widget.PlaybackControlsRow.FastForwardAction;
 import android.support.v17.leanback.widget.PlaybackControlsRow.PlayPauseAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.RewindAction;
 import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
@@ -67,8 +63,6 @@ import org.mythtv.android.presentation.view.activity.tv.PlaybackOverlayActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static android.media.session.MediaSession.FLAG_HANDLES_MEDIA_BUTTONS;
 import static android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS;
@@ -99,10 +93,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     private static final int DEFAULT_UPDATE_PERIOD = 1000;
     private static final int UPDATE_PERIOD = 16;
     private static final int SIMULATED_BUFFERED_TIME = 10000;
-    private static final int CLICK_TRACKING_DELAY = 1000;
-    private static final int INITIAL_SPEED = 10000;
-
-    private final Handler mClickTrackingHandler = new Handler();
 
     private VideoView mVideoView; // VideoView is used to play the video (media) in a view.
     private VideoModel mSelectedVideo; // Video is the currently playing Video and its metadata.
@@ -110,15 +100,10 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     private ArrayObjectAdapter mPrimaryActionsAdapter;
     private ArrayObjectAdapter mSecondaryActionsAdapter;
     private PlayPauseAction mPlayPauseAction;
-    private FastForwardAction mFastForwardAction;
-    private RewindAction mRewindAction;
     private PlaybackControlsRow mPlaybackControlsRow;
     private Handler mHandler;
     private Runnable mRunnable;
     private long mDuration = -1;
-    private int mFfwRwdSpeed = INITIAL_SPEED;
-    private Timer mClickTrackingTimer;
-    private int mClickCount;
     private int mQueueIndex = -1;
     private List<MediaSession.QueueItem> mQueue;
     private int mPosition = 0;
@@ -375,7 +360,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
         ClassPresenterSelector ps = new ClassPresenterSelector();
         PlaybackControlsRowPresenter playbackControlsRowPresenter;
-        Activity activity = getActivity();
 
         if( SHOW_DETAIL ) {
 
@@ -392,13 +376,9 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         mSecondaryActionsAdapter = new ArrayObjectAdapter( presenterSelector );
 
         mPlayPauseAction = new PlayPauseAction( getActivity() );
-        mFastForwardAction = new FastForwardAction( activity );
-        mRewindAction = new RewindAction( activity );
 
         // Add main controls to primary adapter.
-        mPrimaryActionsAdapter.add( mRewindAction );
         mPrimaryActionsAdapter.add( mPlayPauseAction );
-        mPrimaryActionsAdapter.add( mFastForwardAction );
 
         // Add rest of controls to secondary adapter.
 
@@ -407,14 +387,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
             if( action.getId() == mPlayPauseAction.getId() ) {
 
                 togglePlayback( mPlayPauseAction.getIndex() == PlayPauseAction.PLAY );
-
-            } else if( action.getId() == mFastForwardAction.getId() ) {
-
-                fastForward();
-
-            } else if( action.getId() == mRewindAction.getId() ) {
-
-                fastRewind();
 
             }
 
@@ -591,20 +563,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     }
 
-    private void fastForward() {
-
-        startClickTrackingTimer();
-        mMediaController.getTransportControls().fastForward();
-
-    }
-
-    private void fastRewind() {
-
-        startClickTrackingTimer();
-        mMediaController.getTransportControls().rewind();
-
-    }
-
     private void stopProgressAutomation() {
 
         if( mHandler != null && mRunnable != null ) {
@@ -636,25 +594,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     }
 
-    private void startClickTrackingTimer() {
-
-        if( null == mClickTrackingTimer ) {
-
-            mClickCount = 0;
-            mFfwRwdSpeed = INITIAL_SPEED;
-
-        } else {
-
-            mClickCount++;
-            mClickTrackingTimer.cancel();
-
-        }
-
-        mClickTrackingTimer = new Timer();
-        mClickTrackingTimer.schedule( new UpdateFfwRwdSpeedTask(), CLICK_TRACKING_DELAY );
-
-    }
-
     private static class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
         @Override
@@ -664,36 +603,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
             viewHolder.getTitle().setText( video.title );
             viewHolder.getSubtitle().setText( video.studio );
-
-        }
-
-    }
-
-    private class UpdateFfwRwdSpeedTask extends TimerTask {
-
-        @Override
-        public void run() {
-
-            mClickTrackingHandler.post( () -> {
-
-                if( mClickCount == 0 ) {
-
-                    mFfwRwdSpeed = INITIAL_SPEED;
-
-                } else if( mClickCount == 1 ) {
-
-                    mFfwRwdSpeed *= 2;
-
-                } else if( mClickCount >= 2 ) {
-
-                    mFfwRwdSpeed *= 4;
-
-                }
-
-                mClickCount = 0;
-                mClickTrackingTimer = null;
-
-            });
 
         }
 
