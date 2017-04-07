@@ -185,7 +185,7 @@ public class MediaItemDetailsPresenter implements Presenter {
 
     }
 
-    private synchronized void updateDetails( MediaItem mediaItem ) {
+    private void updateDetails( MediaItem mediaItem ) {
         Log.d( TAG, "updateDetails : enter" );
 
         this.mediaItemModel = this.mediaItemModelMapper.transform( mediaItem );
@@ -203,7 +203,7 @@ public class MediaItemDetailsPresenter implements Presenter {
         Log.d( TAG, "showDetailsInView : exit" );
     }
 
-    private synchronized void refreshDetails( MediaItem mediaItem ) {
+    private void refreshDetails( MediaItem mediaItem ) {
         Log.d( TAG, "refreshDetails : enter" );
 
         this.mediaItemModel = this.mediaItemModelMapper.transform( mediaItem );
