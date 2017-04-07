@@ -200,7 +200,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private boolean mediaSupported() {
 
-        return mediaItemModel.url().endsWith( "mp4" ) || mediaItemModel.url().endsWith( "mp4" ) || mediaItemModel.url().endsWith( "mkv" );
+        return "mp4".endsWith( mediaItemModel.url() ) || "m4v".endsWith( mediaItemModel.url() ) || "mkv".endsWith( mediaItemModel.url() );
 
     }
 
