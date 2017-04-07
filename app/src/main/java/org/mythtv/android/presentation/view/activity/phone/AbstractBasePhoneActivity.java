@@ -98,6 +98,7 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     public abstract int getLayoutResource();
 
     @Override
+    @SuppressWarnings( "PMD.AvoidDeeplyNestedIfStmts" )
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
