@@ -120,7 +120,7 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
         return mediaComponent;
     }
 
-    private class Category {
+    private static class Category {
 
         final String title;
         final Integer drawable;
