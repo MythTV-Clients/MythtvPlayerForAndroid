@@ -139,7 +139,7 @@ public final class Utils {
 
         if( cleanVersion.contains( "-" ) ) {
 
-            cleanVersion = cleanVersion.substring( 0, cleanVersion.indexOf( "-" ) );
+            cleanVersion = cleanVersion.substring( 0, cleanVersion.indexOf( '-' ) );
 
         }
 
