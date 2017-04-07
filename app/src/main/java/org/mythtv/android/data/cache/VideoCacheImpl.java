@@ -197,7 +197,10 @@ public class VideoCacheImpl implements VideoCache {
 
         File dir = new File( fileNameBuilder.toString() );
         if( !dir.exists() ) {
-            dir.mkdirs();
+            boolean made = dir.mkdirs();
+            if( !made ) {
+                Log.w( TAG, "buildFile : directories not created" );
+            }
         }
 
         fileNameBuilder.append( File.separator ).append( DEFAULT_FILE_NAME );

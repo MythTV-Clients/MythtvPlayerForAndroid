@@ -240,7 +240,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
                             .build();
 
                     Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
-                    intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
+                    intent.putExtra( MythTvPlaybackFragment.VIDEO, videoModel );
                     startActivity( intent );
 
                 } else {

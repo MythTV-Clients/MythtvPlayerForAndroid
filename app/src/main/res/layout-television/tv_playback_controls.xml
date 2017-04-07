@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/playback_overlay"
-        android:name="org.mythtv.android.presentation.view.fragment.tv.PlaybackOverlayFragment"
+        android:name="org.mythtv.android.presentation.view.fragment.tv.MythTvPlaybackFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

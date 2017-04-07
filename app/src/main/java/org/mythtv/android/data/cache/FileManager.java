@@ -146,7 +146,10 @@ public class FileManager {
         if( directory.exists() ) {
 
             for( File file : directory.listFiles() ) {
-                file.delete();
+                boolean deleted = file.delete();
+                if( !deleted ) {
+                    Log.w( TAG, "clearDirectory : directory not deleted" );
+                }
             }
 
         }

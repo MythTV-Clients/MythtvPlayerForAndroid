@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v17.leanback.app.PlaybackOverlayFragment;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -69,7 +70,7 @@ import static android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS
 
 /**
  *
- * The PlaybackOverlayFragment class handles the Fragment associated with displaying the UI for the
+ * The MythTvPlaybackFragment class handles the Fragment associated with displaying the UI for the
  * media controls such as play / pause / skip forward / skip backward etc.
  *
  * The UI is updated through events that it receives from its MediaController
@@ -78,16 +79,16 @@ import static android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS
  */
 @TargetApi( Build.VERSION_CODES.LOLLIPOP )
 @SuppressWarnings( "PMD.GodClass" )
-public class PlaybackOverlayFragment extends android.support.v17.leanback.app.PlaybackOverlayFragment { //} implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MythTvPlaybackFragment extends PlaybackOverlayFragment { //} implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = PlaybackOverlayFragment.class.getSimpleName();
+    private static final String TAG = MythTvPlaybackFragment.class.getSimpleName();
 
     public static final String VIDEO = "org.mythtv.player.Video";
     public static final String SHARED_ELEMENT_NAME = "hero";
 
     private static final boolean SHOW_DETAIL = true;
     private static final boolean HIDE_MORE_ACTIONS = false;
-    private static final int BACKGROUND_TYPE = PlaybackOverlayFragment.BG_LIGHT;
+    private static final int BACKGROUND_TYPE = MythTvPlaybackFragment.BG_LIGHT;
     private static final int CARD_WIDTH = 150;
     private static final int CARD_HEIGHT = 240;
     private static final int DEFAULT_UPDATE_PERIOD = 1000;
