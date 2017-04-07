@@ -14,9 +14,13 @@ import org.mythtv.android.presentation.model.MediaItemModel;
  *
  * Created on 2/22/17.
  */
-public class MediaItemFilter {
+public final class MediaItemFilter {
 
     private static final String TAG = MediaItemFilter.class.getSimpleName();
+
+    private MediaItemFilter() {
+        // this is a private constructor and intentionally left blank
+    }
 
     public static boolean filter( MediaItemModel mediaItemModel, Context context ) {
 
@@ -137,7 +141,9 @@ public class MediaItemFilter {
                 return true;
             } else if( ratingR && ( mediaItemModel.certification().equals( "R" ) || mediaItemModel.certification().equals( "TV-MA" ) ) ) {
                 return true;
-            } else return ratingNC17 && mediaItemModel.certification().equals("NC-17");
+            } else {
+                return ratingNC17 && mediaItemModel.certification().equals("NC-17");
+            }
 
         }
 
