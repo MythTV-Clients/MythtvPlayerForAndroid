@@ -157,18 +157,25 @@ public final class MediaItemDataMapper {
         String cast = "";
         if( !castMembers.isEmpty() ) {
 
+            StringBuilder sb = new StringBuilder();
             for( String name : castMembers ) {
-                cast += name + " ";
+                sb.append( name ).append( " " );
             }
+
+            cast = sb.toString().trim();
 
         }
 
         String characterNames = "";
         if( !characters.isEmpty() ) {
 
+            StringBuilder sb = new StringBuilder();
             for( String name : characters ) {
-                characterNames += name + " ";
+                sb.append( name ).append( " " );
             }
+
+            characterNames = sb.toString().trim();
+
         }
 
         if( !recordedIdValidationError ) {
