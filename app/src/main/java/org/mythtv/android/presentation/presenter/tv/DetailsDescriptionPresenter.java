@@ -29,7 +29,7 @@ public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPrese
     @Override
     protected void onBindDescription( ViewHolder viewHolder, Object item ) {
 
-        if( null != item && item instanceof MediaItemModel ) {
+        if( item instanceof MediaItemModel ) {
 
             MediaItemModel mediaItemModel = (MediaItemModel) item;
 
