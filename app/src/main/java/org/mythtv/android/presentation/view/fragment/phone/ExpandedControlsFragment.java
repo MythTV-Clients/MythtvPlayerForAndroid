@@ -120,17 +120,17 @@ public class ExpandedControlsFragment extends Fragment {
 
     private void setUpTransportControls(View rootView) {
         setUpClosedCaptionButton((ImageButton) rootView.findViewById(R.id.button_image_view_1),
-                false, mUIMediaController);
+                mUIMediaController);
         setUpSkipPrevButton((ImageButton) rootView.findViewById(R.id.button_image_view_2),
                 mUIMediaController);
         setUpPlayPauseToggleButton((ImageButton) rootView.findViewById(R.id.button_image_view_3),
-                true, mUIMediaController);
+                mUIMediaController);
         setUpSkipNextButton((ImageButton) rootView.findViewById(R.id.button_image_view_4),
                 mUIMediaController);
         rootView.findViewById(R.id.button_image_view_5).setVisibility(View.INVISIBLE);
     }
 
-    private void setUpPlayPauseToggleButton(ImageButton button, boolean isAtCenter,
+    private void setUpPlayPauseToggleButton(ImageButton button,
                                             UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
         Drawable pauseDrawable = getResources().getDrawable( R.drawable.ic_pause_circle_white_80dp );
@@ -166,7 +166,7 @@ public class ExpandedControlsFragment extends Fragment {
         uiMediaController.bindViewToSkipNext(button, View.VISIBLE);
     }
 
-    private void setUpClosedCaptionButton(ImageButton button, boolean isAtCenter,
+    private void setUpClosedCaptionButton(ImageButton button,
                                           UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
         Drawable closedCaptionDrawable = getResources().getDrawable(R.drawable.cc);
