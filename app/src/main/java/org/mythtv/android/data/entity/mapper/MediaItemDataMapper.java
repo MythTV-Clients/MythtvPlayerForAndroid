@@ -159,7 +159,7 @@ public final class MediaItemDataMapper {
 
             StringBuilder sb = new StringBuilder();
             for( String name : castMembers ) {
-                sb.append( name ).append( " " );
+                sb.append( name ).append( ' ' );
             }
 
             cast = sb.toString().trim();
@@ -171,7 +171,7 @@ public final class MediaItemDataMapper {
 
             StringBuilder sb = new StringBuilder();
             for( String name : characters ) {
-                sb.append( name ).append( " " );
+                sb.append( name ).append( ' ' );
             }
 
             characterNames = sb.toString().trim();
