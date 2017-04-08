@@ -399,12 +399,12 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
             Log.d( TAG, "renderMediaItemList : build the list row adapters, catgory size=" + categories.size() );
             int i = 0;
-            for( Category category : categories.keySet() ) {
-                Log.d( TAG, "renderMediaItemList : category=" + category );
+            for( Map.Entry<Category, List<MediaItemModel>> entry : categories.entrySet() ) {
+                Log.d( TAG, "renderMediaItemList : category=" + entry.getKey() );
 
-                Collections.sort( categories.get( category ), ( lhs, rhs ) -> {
+                Collections.sort( entry.getValue(), ( lhs, rhs ) -> {
 
-                    if( category.media == Media.PROGRAM ) {
+                    if( entry.getKey().media == Media.PROGRAM ) {
 
                         int i1 = Integer.compare( lhs.season(), rhs.season() );
                         if( i1 != 0 ) {
@@ -424,14 +424,14 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
                 });
 
                 ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( cardPresenter );
-                for( MediaItemModel mediaItemModel : categories.get( category ) ) {
-                    Log.d( TAG, "renderMediaItemList : adding mediaItem '" + mediaItemModel.title() + "' to category '" + category.getKey() + "' list row adapter" );
+                for( MediaItemModel mediaItemModel : entry.getValue() ) {
+                    Log.d( TAG, "renderMediaItemList : adding mediaItem '" + mediaItemModel.title() + "' to category '" + entry.getKey().getKey() + "' list row adapter" );
 
                     listRowAdapter.add( mediaItemModel );
 
                 }
 
-                HeaderItem header = new HeaderItem( i, category.getTitle() );
+                HeaderItem header = new HeaderItem( i, entry.getKey().getTitle() );
                 mRowsAdapter.add( new ListRow( header, listRowAdapter ) );
 
                 i++;

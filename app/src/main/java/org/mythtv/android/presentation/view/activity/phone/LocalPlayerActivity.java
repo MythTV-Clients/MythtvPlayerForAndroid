@@ -806,9 +806,9 @@ public class LocalPlayerActivity extends AppCompatActivity {
                 parameters.put("Offset", String.valueOf(currentPos));
 
                 FormBody.Builder builder = new FormBody.Builder();
-                for (String key : parameters.keySet()) {
-                    Log.d(TAG, "UpdateBookmarkAsyncTask.doInBackground : key=" + key + ", value=" + parameters.get(key));
-                    builder.add(key, parameters.get(key));
+                for( Map.Entry<String, String> entry : parameters.entrySet() ) {
+                    Log.d( TAG, "UpdateBookmarkAsyncTask.doInBackground : key=" + entry.getKey() + ", value=" + entry.getValue() );
+                    builder.add( entry.getKey(), entry.getValue() );
                 }
 
                 final Request request = new Request.Builder()

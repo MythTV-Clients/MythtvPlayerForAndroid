@@ -96,9 +96,9 @@ public final class ApiConnection implements Callable<String> {
 
         if( null != parameters && !parameters.isEmpty() ) {
 
-            for( String key : parameters.keySet() ) {
-                Log.i( TAG, "requestSyncCall : key=" + key + ", value=" + parameters.get( key ) );
-                builder.add( key, parameters.get( key ) );
+            for( Map.Entry<String, String> entry : parameters.entrySet() ) {
+                Log.i( TAG, "requestSyncCall : key=" + entry.getKey() + ", value=" + entry.getValue() );
+                builder.add( entry.getKey(), entry.getValue() );
 
             }
 
