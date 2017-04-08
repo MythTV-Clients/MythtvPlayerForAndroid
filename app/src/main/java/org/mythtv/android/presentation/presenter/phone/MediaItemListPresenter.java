@@ -163,7 +163,7 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
         public void onError( Throwable e ) {
 
             MediaItemListPresenter.this.hideViewLoading();
-            MediaItemListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            MediaItemListPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             MediaItemListPresenter.this.showViewRetry();
 
         }

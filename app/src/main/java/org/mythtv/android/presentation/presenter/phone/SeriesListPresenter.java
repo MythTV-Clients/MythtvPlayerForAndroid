@@ -163,7 +163,7 @@ public class SeriesListPresenter extends DefaultSubscriber<List<Series>> impleme
         public void onError( Throwable e ) {
 
             SeriesListPresenter.this.hideViewLoading();
-            SeriesListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            SeriesListPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             SeriesListPresenter.this.showViewRetry();
 
         }

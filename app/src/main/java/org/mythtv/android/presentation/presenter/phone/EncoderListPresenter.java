@@ -154,7 +154,7 @@ public class EncoderListPresenter extends DefaultSubscriber<List<Encoder>> imple
         public void onError( Throwable e ) {
 
             EncoderListPresenter.this.hideViewLoading();
-            EncoderListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            EncoderListPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             EncoderListPresenter.this.showViewRetry();
 
         }

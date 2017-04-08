@@ -170,7 +170,7 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
         public void onError( Throwable e ) {
 
             SearchResultListPresenter.this.hideViewLoading();
-            SearchResultListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            SearchResultListPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             SearchResultListPresenter.this.showViewRetry();
 
         }

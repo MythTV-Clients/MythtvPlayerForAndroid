@@ -240,7 +240,7 @@ public class MediaItemDetailsPresenter implements Presenter {
         public void onError( Throwable e ) {
 
             MediaItemDetailsPresenter.this.hideViewLoading();
-            MediaItemDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            MediaItemDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             MediaItemDetailsPresenter.this.showViewRetry();
 
         }
@@ -265,7 +265,7 @@ public class MediaItemDetailsPresenter implements Presenter {
         public void onError( Throwable e ) {
 
             MediaItemDetailsPresenter.this.hideViewLoading();
-            MediaItemDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            MediaItemDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             MediaItemDetailsPresenter.this.showViewRetry();
 
         }
