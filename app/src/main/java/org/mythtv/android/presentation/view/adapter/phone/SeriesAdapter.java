@@ -37,6 +37,7 @@ import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.SeriesModel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
         this.context = context;
         this.validateSeriesCollection( seriesCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.seriesCollection = (List<SeriesModel>) seriesCollection;
+        this.seriesCollection = new ArrayList<>( seriesCollection );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -142,7 +143,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
         Log.d( TAG, "setSeriesCollection : enter" );
 
         this.validateSeriesCollection( seriesCollection );
-        this.seriesCollection = (List<SeriesModel>) seriesCollection;
+        this.seriesCollection = new ArrayList<>( seriesCollection );
         this.notifyDataSetChanged();
 
         Log.d( TAG, "setSeriesCollection : exit");

@@ -30,6 +30,7 @@ import android.widget.TextView;
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.model.TvCategoryModel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 
         this.validateTvCategoriesCollection( tvCategoriesCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.tvCategoriesCollection = (List<TvCategoryModel>) tvCategoriesCollection;
+        this.tvCategoriesCollection = new ArrayList<>( tvCategoriesCollection );
 
         Log.d( TAG, "initialize : exit" );
     }

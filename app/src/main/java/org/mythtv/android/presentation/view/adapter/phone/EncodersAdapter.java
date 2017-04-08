@@ -30,6 +30,7 @@ import android.widget.TextView;
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.model.EncoderModel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
         this.context = context;
         this.validateEncodersCollection( encodersCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.encodersCollection = (List<EncoderModel>) encodersCollection;
+        this.encodersCollection = new ArrayList<>( encodersCollection );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -118,7 +119,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
     public void setEncodersCollection( Collection<EncoderModel> encodersCollection ) {
 
         this.validateEncodersCollection( encodersCollection );
-        this.encodersCollection = (List<EncoderModel>) encodersCollection;
+        this.encodersCollection = new ArrayList<>( encodersCollection );
         this.notifyDataSetChanged();
 
     }

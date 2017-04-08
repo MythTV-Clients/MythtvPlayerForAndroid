@@ -44,6 +44,7 @@ import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.utils.MediaItemFilter;
 import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -82,7 +83,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         this.context = context;
         this.validateMediaItemsCollection( programsCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.mediaItemsCollection = (List<MediaItemModel>) programsCollection;
+        this.mediaItemsCollection = new ArrayList<>( programsCollection );
 
         brokenMovie = ContextCompat.getDrawable( context, R.drawable.ic_movie_black_24dp );
 
