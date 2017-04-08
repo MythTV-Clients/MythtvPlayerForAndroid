@@ -112,7 +112,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 //        Log.d( TAG, "setTitleInfosCollection : enter" );
 
         this.validateTvCategoriesCollection( tvCategoriesCollection );
-        this.tvCategoriesCollection = (List<TvCategoryModel>) tvCategoriesCollection;
+        this.tvCategoriesCollection = new ArrayList<>( tvCategoriesCollection );
         this.notifyDataSetChanged();
 
 //        Log.d( TAG, "setTitleInfosCollection : exit");
