@@ -218,6 +218,7 @@ public class ExpandedControlsFragment extends Fragment {
 
     }
 
+    @SuppressWarnings( "PMD.AvoidDeeplyNestedIfStmts" )
     private void updateToolbarTitle() {
         RemoteMediaClient remoteMediaClient = getRemoteMediaClient();
         if (remoteMediaClient != null && remoteMediaClient.hasMediaSession()) {
@@ -240,6 +241,7 @@ public class ExpandedControlsFragment extends Fragment {
                 ? castSession.getRemoteMediaClient() : null;
     }
 
+    @SuppressWarnings( "PMD.AvoidDeeplyNestedIfStmts" )
     private void updateSubtitle() {
         CastSession castSession =
                 CastContext.getSharedInstance(getContext()).getSessionManager()
