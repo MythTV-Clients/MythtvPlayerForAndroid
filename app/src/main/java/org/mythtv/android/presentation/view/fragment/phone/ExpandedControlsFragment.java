@@ -121,11 +121,11 @@ public class ExpandedControlsFragment extends Fragment {
     private void setUpTransportControls(View rootView) {
         setUpClosedCaptionButton((ImageButton) rootView.findViewById(R.id.button_image_view_1),
                 false, mUIMediaController);
-        setUpSkipPrevButton((ImageButton) rootView.findViewById(R.id.button_image_view_2), false,
+        setUpSkipPrevButton((ImageButton) rootView.findViewById(R.id.button_image_view_2),
                 mUIMediaController);
         setUpPlayPauseToggleButton((ImageButton) rootView.findViewById(R.id.button_image_view_3),
                 true, mUIMediaController);
-        setUpSkipNextButton((ImageButton) rootView.findViewById(R.id.button_image_view_4), false,
+        setUpSkipNextButton((ImageButton) rootView.findViewById(R.id.button_image_view_4),
                 mUIMediaController);
         rootView.findViewById(R.id.button_image_view_5).setVisibility(View.INVISIBLE);
     }
@@ -133,20 +133,8 @@ public class ExpandedControlsFragment extends Fragment {
     private void setUpPlayPauseToggleButton(ImageButton button, boolean isAtCenter,
                                             UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
-        Drawable pauseDrawable;
-        Drawable playDrawable;
-        if (isAtCenter) {
-            pauseDrawable = getResources()
-                    .getDrawable(R.drawable.ic_pause_circle_white_80dp);
-            playDrawable = getResources()
-                    .getDrawable(R.drawable.ic_play_circle_white_80dp);
-
-        } else {
-            pauseDrawable = getResources()
-                    .getDrawable(R.drawable.ic_pause_circle_white_80dp);
-
-            playDrawable = getResources().getDrawable(R.drawable.ic_play_circle_white_80dp);
-        }
+        Drawable pauseDrawable = getResources().getDrawable( R.drawable.ic_pause_circle_white_80dp );
+        Drawable playDrawable = getResources().getDrawable( R.drawable.ic_play_circle_white_80dp );
         button.setImageDrawable(playDrawable);
         uiMediaController.bindImageViewToPlayPauseToggle(button, playDrawable,
                 pauseDrawable, null, null, false);
@@ -162,24 +150,18 @@ public class ExpandedControlsFragment extends Fragment {
         button.setBackgroundResource(selectable);
     }
 
-    private void setUpSkipPrevButton(ImageButton button, boolean isAtCenter,
+    private void setUpSkipPrevButton(ImageButton button,
                                      UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
-        Drawable skipPreviousDrawable = isAtCenter
-                ? getResources()
-                .getDrawable(R.drawable.skip_previous_button)
-                : getResources().getDrawable(R.drawable.skip_previous_button);
+        Drawable skipPreviousDrawable = getResources().getDrawable(R.drawable.skip_previous_button);
         button.setImageDrawable(skipPreviousDrawable);
         uiMediaController.bindViewToSkipPrev(button, View.VISIBLE);
     }
 
-    private void setUpSkipNextButton(ImageButton button, boolean isAtCenter,
+    private void setUpSkipNextButton(ImageButton button,
                                      UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
-        Drawable skipNextDrawable = isAtCenter
-                ? getResources()
-                .getDrawable(R.drawable.skip_next_button)
-                : getResources().getDrawable(R.drawable.skip_next_button);
+        Drawable skipNextDrawable = getResources().getDrawable(R.drawable.skip_next_button);
         button.setImageDrawable(skipNextDrawable);
         uiMediaController.bindViewToSkipNext(button, View.VISIBLE);
     }
@@ -187,10 +169,7 @@ public class ExpandedControlsFragment extends Fragment {
     private void setUpClosedCaptionButton(ImageButton button, boolean isAtCenter,
                                           UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
-        Drawable closedCaptionDrawable = isAtCenter
-                ? getResources()
-                .getDrawable(R.drawable.cc)
-                : getResources().getDrawable(R.drawable.cc);
+        Drawable closedCaptionDrawable = getResources().getDrawable(R.drawable.cc);
         button.setImageDrawable(closedCaptionDrawable);
         uiMediaController.bindViewToClosedCaption(button);
     }
