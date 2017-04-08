@@ -42,13 +42,9 @@ public class CardPresenter extends Presenter {
 
     private static final int CARD_WIDTH = 313;
     private static final int CARD_HEIGHT = 176;
-    private static int sSelectedBackgroundColor;
-    private static int sDefaultBackgroundColor;
     private Drawable mDefaultCardImage;
 
-    private static void updateCardBackgroundColor( ImageCardView view, boolean selected ) {
-
-        int color = selected ? sSelectedBackgroundColor : sDefaultBackgroundColor;
+    private static void updateCardBackgroundColor( ImageCardView view, int color ) {
 
         // Both background colors should be set because the view's background is temporarily visible
         // during animations.
@@ -61,15 +57,18 @@ public class CardPresenter extends Presenter {
     public ViewHolder onCreateViewHolder( ViewGroup parent ) {
         Log.d( TAG, "onCreateViewHolder" );
 
-        sDefaultBackgroundColor = parent.getResources().getColor( R.color.default_background );
-        sSelectedBackgroundColor = parent.getResources().getColor( R.color.primary_dark );
+        final int sDefaultBackgroundColor = parent.getResources().getColor( R.color.default_background );
+        final int sSelectedBackgroundColor = parent.getResources().getColor( R.color.primary_dark );
+
         mDefaultCardImage = parent.getResources().getDrawable( R.drawable.movie );
 
         ImageCardView cardView = new ImageCardView( parent.getContext() ) {
             @Override
             public void setSelected( boolean selected ) {
 
-                updateCardBackgroundColor( this, selected );
+                int color = selected ? sSelectedBackgroundColor : sDefaultBackgroundColor;
+
+                updateCardBackgroundColor( this, color );
                 super.setSelected( selected );
 
             }
@@ -78,7 +77,7 @@ public class CardPresenter extends Presenter {
 
         cardView.setFocusable( true);
         cardView.setFocusableInTouchMode( true );
-        updateCardBackgroundColor( cardView, false );
+        updateCardBackgroundColor( cardView, sDefaultBackgroundColor );
 
         return new ViewHolder( cardView );
     }
