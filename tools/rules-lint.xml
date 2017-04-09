@@ -4,4 +4,5 @@
     <issue id="InvalidPackage">
         <ignore regexp="okio-1.11.0.jar"/>
     </issue>
+    <issue id="IconDensities" severity="ignore" />
 </lint>

@@ -133,8 +133,8 @@ public class ExpandedControlsFragment extends Fragment {
     private void setUpPlayPauseToggleButton(ImageButton button,
                                             UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
-        Drawable pauseDrawable = getResources().getDrawable( R.drawable.ic_pause_circle_white_80dp );
-        Drawable playDrawable = getResources().getDrawable( R.drawable.ic_play_circle_white_80dp );
+        Drawable pauseDrawable = getResources().getDrawable( R.drawable.ic_pause_circle_white);
+        Drawable playDrawable = getResources().getDrawable( R.drawable.ic_play_circle_white);
         button.setImageDrawable(playDrawable);
         uiMediaController.bindImageViewToPlayPauseToggle(button, playDrawable,
                 pauseDrawable, null, null, false);
