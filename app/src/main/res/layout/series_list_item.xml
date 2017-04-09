@@ -32,7 +32,8 @@
             android:id="@+id/series_item_artwork"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:contentDescription="@string/series_item_artwork_cd"/>
 
         <TextView
             android:id="@+id/series_item_title"

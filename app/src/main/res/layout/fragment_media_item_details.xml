@@ -44,7 +44,8 @@
                 android:layout_margin="0dp"
                 android:layout_gravity="center"
                 android:scaleType="fitXY"
-                android:elevation="15dp" />
+                android:elevation="15dp"
+                android:contentDescription="@string/media_item_image_cd" />
 
             <ImageView
                 android:id="@+id/media_item_bookmark"

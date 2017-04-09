@@ -43,7 +43,8 @@
                 android:layout_width="125dp"
                 android:layout_height="75dp"
                 android:transitionName="set_backdrop"
-                android:src="@drawable/ic_movie_black_24dp"/>
+                android:src="@drawable/ic_movie_black_24dp"
+                android:contentDescription="@string/media_item_image_cd" />
 
             <ImageView
                 android:id="@+id/media_item_error_image"
@@ -51,7 +52,8 @@
                 android:layout_height="48dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_error_outline_red_24dp"/>
+                android:src="@drawable/ic_error_outline_red_24dp"
+                android:contentDescription="@string/media_item_image_error_cd" />
 
             <ProgressBar
                 android:id="@+id/media_item_progress"

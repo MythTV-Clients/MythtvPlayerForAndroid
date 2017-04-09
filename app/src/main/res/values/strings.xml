@@ -207,5 +207,14 @@
     <string name="pref_filter_hls_only_summary_off">All recordings and videos will be shown</string>
     <string name="media_item_empty_list">There are no items to display</string>
     <string name="hls_only_filter_is_enabled">HLS only filter is enabled</string>
+    <string name="troubleshoot_backend_language_cd">troubleshoot backend language</string>
+    <string name="troubleshoot_backend_version_cd">troubleshoot backend version</string>
+    <string name="troubleshoot_services_cd">troubleshoot services</string>
+    <string name="troubleshoot_ping_cd">troubleshoot ping</string>
+    <string name="troubleshoot_network_cd">troubleshoot network</string>
+    <string name="troubleshoot_airplane_mode_cd">troubleshoot airplane mode</string>
+    <string name="media_item_image_cd">media item image</string>
+    <string name="media_item_image_error_cd">media item image error</string>
+    <string name="series_item_artwork_cd">series item artwork</string>
 
 </resources>
