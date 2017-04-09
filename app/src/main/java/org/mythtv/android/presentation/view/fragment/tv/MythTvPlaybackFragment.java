@@ -16,6 +16,7 @@
 
 package org.mythtv.android.presentation.view.fragment.tv;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -65,9 +66,6 @@ import org.mythtv.android.presentation.view.activity.tv.PlaybackOverlayActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.media.session.MediaSession.FLAG_HANDLES_MEDIA_BUTTONS;
-import static android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS;
-
 /**
  *
  * The MythTvPlaybackFragment class handles the Fragment associated with displaying the UI for the
@@ -78,8 +76,9 @@ import static android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS
  * @author dmfrey
  */
 @TargetApi( Build.VERSION_CODES.LOLLIPOP )
+@SuppressLint( "InlinedApi" )
 @SuppressWarnings( "PMD.GodClass" )
-public class MythTvPlaybackFragment extends PlaybackOverlayFragment { //} implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     private static final String TAG = MythTvPlaybackFragment.class.getSimpleName();
 
@@ -237,7 +236,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment { //} implem
 
             mSession = new MediaSession( getActivity(), getResources().getString( R.string.app_name ) );
             mSession.setCallback( new MediaSessionCallback() );
-            mSession.setFlags( FLAG_HANDLES_MEDIA_BUTTONS | FLAG_HANDLES_TRANSPORT_CONTROLS );
+            mSession.setFlags( MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS );
 
             mSession.setActive( true );
 
