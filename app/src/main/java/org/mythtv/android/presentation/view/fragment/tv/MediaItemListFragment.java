@@ -596,9 +596,20 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
             if( item instanceof MediaItemModel ) {
 
-                MediaItemModel mediaItemModel = (MediaItemModel) item;
-                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + mediaItemModel.fanartUrl() );
-                startBackgroundTimer();
+                try {
+
+                    MediaItemModel mediaItemModel = (MediaItemModel) item;
+
+                    String cleanedUrl = mediaItemModel.fanartUrl();
+                    cleanedUrl = cleanedUrl.replaceAll(" ", "%20");
+                    cleanedUrl = cleanedUrl.replaceAll(":", "&#58;");
+
+                    mBackgroundURI = URI.create(getSharedPreferencesModule().getMasterBackendUrl() + cleanedUrl);
+                    startBackgroundTimer();
+
+                } catch( NullPointerException e ) {
+                    Log.w( TAG, e.getLocalizedMessage(), e );
+                }
 
             }
 
