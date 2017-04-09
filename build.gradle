@@ -25,7 +25,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:2.3.1'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1'
         classpath 'com.google.gms:google-services:3.0.0'
         classpath "com.google.guava:guava:20.0"
@@ -103,9 +103,9 @@ project.ext.preDexLibs = !project.hasProperty( 'disablePreDex' )
 
 subprojects {
     project.plugins.whenPluginAdded { plugin ->
-        if( "com.android.build.gradle.AppPlugin".equals(plugin.class.name ) ) {
+        if("com.android.build.gradle.AppPlugin" == plugin.class.name) {
             project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
-        } else if( "com.android.build.gradle.LibraryPlugin".equals( plugin.class.name ) ) {
+        } else if("com.android.build.gradle.LibraryPlugin" == plugin.class.name) {
             project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
         }
     }
