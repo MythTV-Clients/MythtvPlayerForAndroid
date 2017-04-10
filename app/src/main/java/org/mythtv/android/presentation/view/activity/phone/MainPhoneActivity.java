@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -250,7 +251,7 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
         if( null != mediaItemModel && !mediaItemModel.media().equals( Media.UPCOMING ) ) {
 
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
             navigator.navigateToMediaItem( this, mediaItemModel.id(), mediaItemModel.media(), options );
 
         }

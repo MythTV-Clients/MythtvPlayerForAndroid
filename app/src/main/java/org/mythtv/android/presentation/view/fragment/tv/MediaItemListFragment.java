@@ -406,17 +406,22 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
                     if( entry.getKey().media == Media.PROGRAM ) {
 
-                        int i1 = Integer.compare( lhs.season(), rhs.season() );
+                        // Requires min API 19
+//                        int i1 = Integer.compare( lhs.season(), rhs.season() );
+                        int i1 = Integer.valueOf( lhs.season() ).compareTo( rhs.season() );
                         if( i1 != 0 ) {
 
                             return i1;
                         }
 
-                        return Integer.compare( lhs.episode(), rhs.episode() );
+                        // Requires min API 19
+//                        return Integer.compare( lhs.episode(), rhs.episode() );
+                        return Integer.valueOf( lhs.episode() ).compareTo( rhs.episode() );
 
                     } else {
-                        String lhsTitle = ArticleCleaner.clean(getActivity(), lhs.title());
-                        String rhsTitle = ArticleCleaner.clean(getActivity(), rhs.title());
+
+                        String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.title() );
+                        String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.title() );
 
                         return lhsTitle.compareTo(rhsTitle);
                     }

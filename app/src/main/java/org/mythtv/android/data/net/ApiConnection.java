@@ -120,8 +120,10 @@ public final class ApiConnection implements Callable<String> {
 //                .cacheControl( CacheControl.FORCE_NETWORK )
                 .build();
 
-        try( Response call = okHttpClient.newCall( request ).execute() ) {
+        Response call = null;
+        try {
 
+            call = okHttpClient.newCall( request ).execute();
             this.response = call.body().string();
             Log.d( TAG, "connectToApi : cacheResponse - " + call.cacheResponse() );
             Log.d( TAG, "connectToApi : networkResponse - " + call.networkResponse() );
@@ -129,6 +131,14 @@ public final class ApiConnection implements Callable<String> {
         } catch( IOException e ) {
 
             Log.e( TAG, "connectToApi : error", e );
+
+        } finally {
+
+            if( null != call  ) {
+
+                call.close();
+
+            }
 
         }
 
@@ -145,8 +155,10 @@ public final class ApiConnection implements Callable<String> {
                 .post( formBody )
                 .build();
 
-        try( Response call = okHttpClient.newCall( request ).execute() ) {
+        Response call = null;
+        try {
 
+            call = okHttpClient.newCall( request ).execute();
             this.response = call.body().string();
             Log.d( TAG, "connectToApi : cacheResponse - " + call.cacheResponse() );
             Log.d( TAG, "connectToApi : networkResponse - " + call.networkResponse() );
@@ -155,6 +167,13 @@ public final class ApiConnection implements Callable<String> {
 
             Log.e( TAG, "connectToApi : error", e );
 
+        } finally {
+
+            if( null != call ) {
+
+                call.close();
+
+            }
         }
 
     }

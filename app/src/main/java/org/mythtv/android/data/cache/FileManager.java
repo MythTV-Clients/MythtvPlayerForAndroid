@@ -34,14 +34,12 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -70,20 +68,31 @@ public class FileManager {
 
         if( !file.exists() ) {
 
-            try(
-                    OutputStreamWriter writer = new OutputStreamWriter( new FileOutputStream( file ), StandardCharsets.UTF_8 )
-            ) {
+            OutputStreamWriter writer = null;
+            try {
 
+//                Requires min API 19
+//                writer = new OutputStreamWriter( new FileOutputStream( file ), StandardCharsets.UTF_8 );
+                writer = new OutputStreamWriter( new FileOutputStream( file ) );
                 writer.write( fileContent );
-
-            } catch( FileNotFoundException e ) {
-
-                Log.e( TAG, "writeToFile : error, file not found", e );
 
             } catch( IOException e ) {
 
                 Log.e(TAG, "writeToFile : error, io", e);
 
+            } finally {
+
+                if( null != writer ) {
+
+                    try {
+
+                        writer.close();
+
+                    } catch( IOException e ) {
+                        Log.w( TAG, e.getLocalizedMessage(), e );
+                    }
+
+                }
             }
 
         }
@@ -104,23 +113,64 @@ public class FileManager {
         if( file.exists() ) {
 
             String stringLine;
-            try(
-                    InputStream in = new FileInputStream( file );
-                    Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-                    BufferedReader bufferedReader = new BufferedReader( reader )
-            ) {
+            InputStream in = null;
+            Reader reader = null;
+            BufferedReader bufferedReader = null;
+            try {
+
+                in = new FileInputStream( file );
+
+//                Requires min API 19
+//                reader = new InputStreamReader( in, StandardCharsets.UTF_8 );
+                reader = new InputStreamReader( in );
+
+                bufferedReader = new BufferedReader( reader );
 
                 while( ( stringLine = bufferedReader.readLine() ) != null ) {
                     fileContentBuilder.append(stringLine).append('\n');
                 }
 
-            } catch( FileNotFoundException e ) {
-
-                Log.e(TAG, "readFileContent : error, file not found", e);
-
             } catch( IOException e ) {
 
                 Log.e( TAG, "readFileContent : error, io", e );
+
+            } finally {
+
+                if( null != bufferedReader ) {
+
+                    try {
+
+                        bufferedReader.close();
+
+                    } catch( IOException e ) {
+                        Log.w( TAG, e.getLocalizedMessage(), e );
+                    }
+
+                }
+
+                if( null != reader ) {
+
+                    try {
+
+                        reader.close();
+
+                    } catch( IOException e ) {
+                        Log.w( TAG, e.getLocalizedMessage(), e );
+                    }
+
+                }
+
+                if( null != in ) {
+
+                    try {
+
+                        in.close();
+
+                    } catch( IOException e ) {
+                        Log.w( TAG, e.getLocalizedMessage(), e );
+                    }
+
+                }
 
             }
 

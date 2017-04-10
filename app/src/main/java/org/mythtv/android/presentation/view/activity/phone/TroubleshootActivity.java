@@ -168,12 +168,20 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     private void resetImages() {
         Log.v( TAG, "resetImages : enter" );
 
-        airplaneModeConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_airplanemode_active_black_24dp, null ) );
-        networkConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
-        pingConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
-        servicesConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
-        backendVersionImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
-        backendLangImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        Requires min API 19
+//        airplaneModeConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_airplanemode_active_black_24dp, null ) );
+//        networkConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        pingConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        servicesConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        backendVersionImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        backendLangImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+
+        airplaneModeConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_airplanemode_active_black_24dp ) );
+        networkConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
+        pingConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
+        servicesConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
+        backendVersionImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
+        backendLangImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
 
         Log.v( TAG, "resetImages : enter" );
     }
@@ -184,7 +192,9 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         pulse.cancel();
         pulse.reset();
 
-        imageView.setImageDrawable( getResources().getDrawable( resource, null ) );
+//        Requires min API 19
+//        imageView.setImageDrawable( getResources().getDrawable( resource, null ) );
+        imageView.setImageDrawable( getResources().getDrawable( resource ) );
 
         Log.v( TAG, "setImage : exit" );
     }
