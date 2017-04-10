@@ -134,12 +134,6 @@
 
     </RelativeLayout>
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="@dimen/margin"
-        layout="@layout/phone_separator" />
-
     <TextView
         android:layout_margin="@dimen/margin"
         android:layout_width="wrap_content"
@@ -153,12 +147,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Test Description" />
-
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="@dimen/margin"
-        layout="@layout/phone_separator" />
 
     <include
         layout="@layout/phone_view_progress" />
