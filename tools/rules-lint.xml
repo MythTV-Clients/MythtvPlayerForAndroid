@@ -8,4 +8,5 @@
     <issue id="UnusedResources">
         <ignore regexp="google_crash_reporting_api_key" />
     </issue>
+    <issue id="UnusedAttribute" severity="ignore" />
 </lint>

@@ -106,8 +106,7 @@ public class MainPhoneActivityAndroidTest {
                 .check( matches( isClosed( Gravity.START ) ) ); // Left Drawer should be closed.
 
         // Open Drawer
-        String navigateUpDesc = mActivityTestRule.getActivity()
-                .getString( android.support.v7.appcompat.R.string.abc_action_bar_up_description );
+        String navigateUpDesc = "Navigate Up";
         onView( withContentDescription( navigateUpDesc ) ).perform( click() );
 
         // Check if drawer is open
