@@ -9,4 +9,5 @@
         <ignore regexp="google_crash_reporting_api_key" />
     </issue>
     <issue id="UnusedAttribute" severity="ignore" />
+    <issue id="ObsoleteSdkInt" severity="ignore" />
 </lint>
