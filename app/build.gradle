@@ -61,7 +61,7 @@ android {
         resValue "string", "branchName", gitVersionBranch
         resValue "string", "shaName", gitVersionCommit
         resValue "string", "tagName", "$gitVersionCode"
-        resValue "string", "versionName", gitVersionName
+        resValue "string", "versionName", ( gitVersionName == null ? versionName : gitVersionName )
 
         if (project.hasProperty("mythtvplayer.google-cast")
                 && new File(project.property("mythtvplayer.google-cast") + ".gradle").exists()) {
