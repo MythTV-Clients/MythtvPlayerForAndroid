@@ -5,4 +5,7 @@
         <ignore regexp="okio-1.11.0.jar"/>
     </issue>
     <issue id="IconDensities" severity="ignore" />
+    <issue id="UnusedResources">
+        <ignore regexp="google_crash_reporting_api_key" />
+    </issue>
 </lint>

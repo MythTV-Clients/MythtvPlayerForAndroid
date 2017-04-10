@@ -175,7 +175,6 @@
     <string name="cd_image_view_button_4">image view button 4</string>
     <string name="cd_image_view_button_5">image view button 5</string>
     <string name="player_timer" translatable="false">0:00</string>
-    <string name="media_item_details_corrupt_data">Data is corrupt, check backend</string>
     <string name="title_activity_troubleshoot">Troubleshoot Connection</string>
     <string name="troubleshoot">Troubleshoot</string>
     <string name="airplane_mode_check_label">Airplane Mode must be off</string>
