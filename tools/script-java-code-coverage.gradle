@@ -9,7 +9,7 @@ task javaCodeCoverage(type: JacocoReport, dependsOn: 'testDevDebugUnitTest') {
     }
 
     def classFileTree = fileTree(
-            dir: "${buildDir}/intermediates/classes/debug",
+            dir: "${buildDir}/intermediates/classes/dev/debug",
             excludes: ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', '**/*$*.class'] //,
             //includes: ['**/*Presenter*.class']
     )
