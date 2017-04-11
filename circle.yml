@@ -45,7 +45,7 @@ test:
     - ./gradlew lint
     - ./gradlew findbugs
     - ./gradlew pmd
-    - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud beta test android run --app app/build/outputs/apk/app-dev-debug.apk --test app/build/outputs/apk/app-dev-debug-androidTest.apk --device-ids Nexus6 --os-version-ids 25 --locales en --orientations portrait
+    - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud firebase test android run --app app/build/outputs/apk/app-dev-debug.apk --test app/build/outputs/apk/app-dev-debug-androidTest.apk --device-ids Nexus6 --os-version-ids 25 --locales en --orientations portrait
 
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
