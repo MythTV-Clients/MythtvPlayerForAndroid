@@ -25,7 +25,7 @@ dependencies:
     - sudo pip install -U crcmod
   post:
     - ./gradlew assembleDevDebug assembleDevDebugAndroidTest -PdisablePreDex
-    - echo $FIREBASE_SERVICE_ACCOUNT | base64 --decode > ${HOME}/client-secret.json
+    - echo $CLIENT_SECRET | base64 --decode --ignore-garbage > ${HOME}/client-secret.json
     - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
     - sudo /opt/google-cloud-sdk/bin/gcloud config set project $FIREBASE_PROJECT
     - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components install beta
