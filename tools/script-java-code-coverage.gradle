@@ -3,7 +3,7 @@ apply plugin: 'jacoco'
 task javaCodeCoverage(type: JacocoReport, dependsOn: 'testDevDebugUnitTest') {
 
     reports {
-        xml.enabled = false
+        xml.enabled = true
         html.enabled = true
         html.destination "$project.buildDir/outputs/jacoco/"
     }
