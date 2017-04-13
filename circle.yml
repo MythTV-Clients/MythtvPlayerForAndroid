@@ -54,7 +54,7 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/code-coverage/
     - find . -type f -regex ".*/build/outputs/code-coverage/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/code-coverage/ \;
     - mkdir -p $CIRCLE_TEST_REPORTS/jacoco/
-    - find . -type f -regex ".*/build/outputs/jacoco/*" -exec cp {} $CIRCLE_TEST_REPORTS/jacoco/ \;
+    - cp -r app/build/outputs/jacoco/ $CIRCLE_TEST_REPORTS/jacoco/
     - mkdir -p $CIRCLE_TEST_REPORTS/lint/
     - find . -type f -regex ".*/build/outputs/lint/lint.html" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
     - mkdir -p $CIRCLE_TEST_REPORTS/findbugs/
