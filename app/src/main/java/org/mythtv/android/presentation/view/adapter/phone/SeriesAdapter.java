@@ -20,8 +20,9 @@ package org.mythtv.android.presentation.view.adapter.phone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -105,8 +106,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
         Glide
                 .with( context )
                 .load( getMasterBackendUrl() + seriesModel.artworkUrl() )
-                .centerCrop()
-                .error( ContextCompat.getDrawable( context, R.drawable.ffffff ) )
+                .error( new ColorDrawable(Color.WHITE ) )
                 .crossFade()
                 .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into( holder.imageViewArtwork );

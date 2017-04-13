@@ -22,14 +22,14 @@ machine:
 dependencies:
   pre:
     - echo "y" | android update sdk --no-ui --all --filter tools,build-tools-25.0.2,android-25,extra-google-m2repository,extra-google-google_play_services,extra-android-m2repository
-    - sudo pip install -U crcmod
+#    - sudo pip install -U crcmod
   post:
     - ./gradlew assembleDevDebug assembleDevDebugAndroidTest -PdisablePreDex
-    - echo $CLIENT_SECRET | base64 --decode --ignore-garbage > ${HOME}/client-secret.json
-    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
-    - sudo /opt/google-cloud-sdk/bin/gcloud config set project $FIREBASE_PROJECT
-    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components install beta
-    - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
+#    - echo $CLIENT_SECRET | base64 --decode --ignore-garbage > ${HOME}/client-secret.json
+#    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+#    - sudo /opt/google-cloud-sdk/bin/gcloud config set project $FIREBASE_PROJECT
+#    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components install beta
+#    - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
 
   cache_directories:
 #    - ~/.gradle
@@ -45,7 +45,8 @@ test:
     - ./gradlew lint
     - ./gradlew findbugs
     - ./gradlew pmd
-    - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud firebase test android run --app app/build/outputs/apk/app-dev-debug.apk --test app/build/outputs/apk/app-dev-debug-androidTest.apk --device-ids Nexus6 --os-version-ids 21 --locales en --orientations portrait
+#    - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud firebase test android run --app app/build/outputs/apk/app-dev-debug.apk --test app/build/outputs/apk/app-dev-debug-androidTest.apk --device-ids Nexus6 --os-version-ids 21 --locales en --orientations portrait
+#    - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud firebase test android run --app app/build/outputs/apk/app-dev-debug.apk --test app/build/outputs/apk/app-dev-debug-androidTest.apk --device model=Nexus6,version=21,locale=en,orientation=portrait --device model=Nexus5X,version=25,locale=en,orientation=portrait --device model=Nexus10,version=21,locale=en,orientation=landscape --device model=Nexus7,version=21,locale=en,orientation=landscape
 
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
@@ -60,4 +61,4 @@ test:
     - find . -type f -regex ".*/build/outputs/findbugs/findbugs.html" -exec cp {} $CIRCLE_TEST_REPORTS/findbugs/ \;
     - mkdir -p $CIRCLE_TEST_REPORTS/pmd/
     - find . -type f -regex ".*/build/outputs/pmd/pmd.html" -exec cp {} $CIRCLE_TEST_REPORTS/pmd/ \;
-    - sudo /opt/google-cloud-sdk/bin/gsutil -m cp -r -U `sudo /opt/google-cloud-sdk/bin/gsutil ls gs://$TEST_LAB_BUCKET | tail -1` $CIRCLE_ARTIFACTS/ | true    # copy the build outputs to artifacts
+ #   - sudo /opt/google-cloud-sdk/bin/gsutil -m cp -r -U `sudo /opt/google-cloud-sdk/bin/gsutil ls gs://$TEST_LAB_BUCKET | tail -1` $CIRCLE_ARTIFACTS/ | true    # copy the build outputs to artifacts

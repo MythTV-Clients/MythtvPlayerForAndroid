@@ -35,7 +35,7 @@ public class MainPhoneActivityAndroidTest {
     public void clickOnHomeNavigationItem_ShowsHomeScreen() {
         // Open Drawer to click on navigation.
         onView( withId( R.id.drawer_layout ) )
-                .check(matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
+                .check( matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
                 .perform( open() ); // Open Drawer
 
         // Start home screen.
