@@ -50,7 +50,7 @@ public class RepositoryErrorBundle implements ErrorBundle {
 
         if( null != this.exception ) {
 
-            this.exception.getMessage();
+            message = this.exception.getMessage();
 
         }
 

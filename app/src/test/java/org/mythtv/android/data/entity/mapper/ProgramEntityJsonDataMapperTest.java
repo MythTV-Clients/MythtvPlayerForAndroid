@@ -1,17 +1,14 @@
 package org.mythtv.android.data.entity.mapper;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.ProgramEntity;
 
-import java.io.StringReader;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -33,9 +30,6 @@ public class ProgramEntityJsonDataMapperTest extends ApplicationTestCase {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    @Mock
-    private Gson mockGson;
-
     @Before
     public void setUp() {
 
@@ -46,27 +40,27 @@ public class ProgramEntityJsonDataMapperTest extends ApplicationTestCase {
     @Test
     public void testTransformProgramEntityHappyCase() {
 
-        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( new StringReader( JSON_RESPONSE_DVR_GET_RECORDED ) );
+        ProgramEntity programEntity = programEntityJsonMapper.transformProgramEntity( JSON_RESPONSE_DVR_GET_RECORDED );
 
-        assertThat( programEntity.getTitle(), is( equalTo( "Star Wars: Droid Tales" ) ) );
-        assertThat( programEntity.getSubTitle(), is( equalTo( "Mission to Mos Eisley" ) ) );
+        assertThat( programEntity.title(), is( equalTo( "Star Wars: Droid Tales" ) ) );
+        assertThat( programEntity.subTitle(), is( equalTo( "Mission to Mos Eisley" ) ) );
 
     }
 
     @Test( expected = JsonSyntaxException.class )
     public void testTransformProgramEntityBadJson() {
 
-        programEntityJsonMapper.transformProgramEntity( new StringReader( JSON_RESPONSE_DVR_GET_RECORDED_BAD ) );
+        programEntityJsonMapper.transformProgramEntity( JSON_RESPONSE_DVR_GET_RECORDED_BAD );
 
     }
 
     @Test
     public void testTransformProgramEntityCollectionHappyCase() {
 
-        Collection<ProgramEntity> programEntityCollection = programEntityJsonMapper.transformProgramEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_RECORDED_LIST ) );
+        Collection<ProgramEntity> programEntityCollection = programEntityJsonMapper.transformProgramEntityCollection( JSON_RESPONSE_DVR_GET_RECORDED_LIST );
 
-        assertThat( ( (ProgramEntity) programEntityCollection.toArray() [ 0 ] ).getTitle(), is( "Action News 6PM" ) );
-        assertThat( ( (ProgramEntity) programEntityCollection.toArray() [ 1 ] ).getTitle(), is( "Action News 5PM" ) );
+        assertThat( ( (ProgramEntity) programEntityCollection.toArray() [ 0 ] ).title(), is( "Action News 6PM" ) );
+        assertThat( ( (ProgramEntity) programEntityCollection.toArray() [ 1 ] ).title(), is( "Action News 5PM" ) );
         assertThat( programEntityCollection.size(), is( 2 ) );
 
     }
@@ -74,7 +68,7 @@ public class ProgramEntityJsonDataMapperTest extends ApplicationTestCase {
     @Test( expected = JsonSyntaxException.class )
     public void testTransformProgramEntityCollectionBadJson() {
 
-        programEntityJsonMapper.transformProgramEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_RECORDED_LIST_BAD ) );
+        programEntityJsonMapper.transformProgramEntityCollection( JSON_RESPONSE_DVR_GET_RECORDED_LIST_BAD );
 
     }
 

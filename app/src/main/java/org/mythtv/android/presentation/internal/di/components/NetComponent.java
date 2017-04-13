@@ -5,7 +5,6 @@ import com.squareup.picasso.Picasso;
 
 import org.mythtv.android.presentation.internal.di.modules.ApplicationModule;
 import org.mythtv.android.presentation.internal.di.modules.NetModule;
-import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.presentation.view.activity.phone.AbstractBasePhoneActivity;
 
 import javax.inject.Singleton;
@@ -22,7 +21,7 @@ import okhttp3.OkHttpClient;
  * Created on 5/9/16.
  */
 @Singleton
-@Component( modules = { ApplicationModule.class, SharedPreferencesModule.class, NetModule.class } )
+@Component( modules = { ApplicationModule.class, NetModule.class } )
 public interface NetComponent {
 
     void inject( AbstractBasePhoneActivity baseActivity );

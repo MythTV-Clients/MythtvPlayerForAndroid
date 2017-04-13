@@ -18,10 +18,10 @@
 
 package org.mythtv.android.presentation.navigation;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 
 import org.mythtv.android.domain.Media;
@@ -58,7 +58,11 @@ public class PhoneNavigator {
     public void navigateToHome( Context context ) {
         Log.d( TAG, "navigateToHome : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
             Log.d( TAG, "navigateToHome : context != null" );
 
             Intent intentToLaunch = MainPhoneActivity.getCallingIntent( context );
@@ -72,7 +76,11 @@ public class PhoneNavigator {
     public void navigateToTitleInfos( Context context ) {
         Log.d( TAG, "navigateToTitleInfos : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
             Log.d( TAG, "navigateToTitleInfos : context != null" );
 
             context.startActivity( TitleInfoListActivity.getCallingIntent( context ) );
@@ -85,7 +93,11 @@ public class PhoneNavigator {
     public void navigateToSeries( Context context, Media media, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup, String inetref ) {
         Log.d( TAG, "navigateToSeries : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
             Log.d( TAG, "navigateToSeries : context != null" );
 
             context.startActivity( SeriesListActivity.getCallingIntent( context, media, descending, startIndex, count, titleRegEx, recGroup, storageGroup, inetref ) );
@@ -95,19 +107,23 @@ public class PhoneNavigator {
         Log.d( TAG, "navigateToSeries : exit" );
     }
 
-    public void navigateToMediaItem( final Context context, final int id, final Media media, final ActivityOptions options ) {
+    public void navigateToMediaItem( final Context context, final int id, final Media media, final ActivityOptionsCompat options ) {
         Log.d( TAG, "navigateToMediaItem : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
             Log.d( TAG, "navigateToMediaItem : context != null" );
 
-            if( null != options ) {
+            if( null == options ) {
 
-                context.startActivity( MediaItemDetailsActivity.getCallingIntent(context, id, media), options.toBundle() );
+                context.startActivity( MediaItemDetailsActivity.getCallingIntent( context, id, media ) );
 
             } else {
 
-                context.startActivity( MediaItemDetailsActivity.getCallingIntent( context, id, media ) );
+                context.startActivity( MediaItemDetailsActivity.getCallingIntent( context, id, media), options.toBundle() );
 
             }
 
@@ -119,7 +135,11 @@ public class PhoneNavigator {
     public void navigateToVideos( Context context ) {
         Log.d( TAG, "navigateToVideos : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
             Log.d( TAG, "navigateToVideos : context != null" );
 
             context.startActivity( VideoListActivity.getCallingIntent( context ) );
@@ -132,7 +152,11 @@ public class PhoneNavigator {
     public void navigateToExternalPlayer( Context context, String uri, String contentType ) {
         Log.d( TAG, "navigateToExternalPlayer : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
             Log.d( TAG, "navigateToExternalPlayer : context != null" );
             Log.d( TAG, "navigateToExternalPlayer : uri=" + uri + ", contentType=" + contentType );
 
@@ -148,7 +172,11 @@ public class PhoneNavigator {
     public void navigateToLocalPlayer( Context context, MediaItemModel mediaItemModel ) {
         Log.d( TAG, "navigateToLocalPlayer : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
             Log.d( TAG, "navigateToLocalPlayer : context != null" );
             Log.d( TAG, "navigateToLocalPlayer : mediaItemModel=" + mediaItemModel );
 
@@ -162,7 +190,11 @@ public class PhoneNavigator {
     public void navigateToSettings( Context context ) {
         Log.d( TAG, "navigateToSettings : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
             Log.d( TAG, "navigateToSettings : context != null" );
 
             Intent intentToLaunch = SettingsActivity.getCallingIntent( context );
@@ -176,7 +208,11 @@ public class PhoneNavigator {
     public void navigateToTroubleshoot( Context context ) {
         Log.d( TAG, "navigateToTroubleshoot : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
             Log.d( TAG, "navigateToTroubleshoot : context != null" );
 
             Intent intentToLaunch = TroubleshootActivity.getCallingIntent( context );

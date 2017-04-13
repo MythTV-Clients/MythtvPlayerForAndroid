@@ -27,13 +27,13 @@ public class EncoderEntityJsonSerializerTest extends ApplicationTestCase {
         String jsonString = jsonSerializer.serialize( encoderEntityOne );
         EncoderEntity encoderEntityTwo = jsonSerializer.deserialize( jsonString );
 
-        assertThat( encoderEntityOne.getId(), is( equalTo( encoderEntityTwo.getId() ) ) );
-        assertThat( encoderEntityOne.getHostname(), is( equalTo( encoderEntityTwo.getHostname() ) ) );
-        assertThat( encoderEntityOne.isLocal(), is( equalTo( encoderEntityTwo.isLocal() ) ) );
-        assertThat( encoderEntityOne.isConnected(), is( equalTo( encoderEntityTwo.isConnected() ) ) );
-        assertThat( encoderEntityOne.getState(), is( equalTo( encoderEntityTwo.getState() ) ) );
-        assertThat( encoderEntityOne.getSleepStatus(), is( equalTo( encoderEntityTwo.getSleepStatus() ) ) );
-        assertThat( encoderEntityOne.isLowOnFreeSpace(), is( equalTo( encoderEntityTwo.isLowOnFreeSpace() ) ) );
+        assertThat( encoderEntityOne.id(), is( equalTo( encoderEntityTwo.id() ) ) );
+        assertThat( encoderEntityOne.hostname(), is( equalTo( encoderEntityTwo.hostname() ) ) );
+        assertThat( encoderEntityOne.local(), is( equalTo( encoderEntityTwo.local() ) ) );
+        assertThat( encoderEntityOne.connected(), is( equalTo( encoderEntityTwo.connected() ) ) );
+        assertThat( encoderEntityOne.state(), is( equalTo( encoderEntityTwo.state() ) ) );
+        assertThat( encoderEntityOne.sleepStatus(), is( equalTo( encoderEntityTwo.sleepStatus() ) ) );
+        assertThat( encoderEntityOne.lowOnFreeSpace(), is( equalTo( encoderEntityTwo.lowOnFreeSpace() ) ) );
 
     }
 

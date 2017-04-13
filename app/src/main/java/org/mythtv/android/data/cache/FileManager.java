@@ -33,10 +33,13 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -51,6 +54,7 @@ public class FileManager {
 
     @Inject
     public FileManager() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     /**
@@ -64,20 +68,31 @@ public class FileManager {
 
         if( !file.exists() ) {
 
+            OutputStreamWriter writer = null;
             try {
 
-                FileWriter writer = new FileWriter( file );
+//                Requires min API 19
+//                writer = new OutputStreamWriter( new FileOutputStream( file ), StandardCharsets.UTF_8 );
+                writer = new OutputStreamWriter( new FileOutputStream( file ) );
                 writer.write( fileContent );
-                writer.close();
-
-            } catch( FileNotFoundException e ) {
-
-                Log.e( TAG, "writeToFile : error, file not found", e );
 
             } catch( IOException e ) {
 
                 Log.e(TAG, "writeToFile : error, io", e);
 
+            } finally {
+
+                if( null != writer ) {
+
+                    try {
+
+                        writer.close();
+
+                    } catch( IOException e ) {
+                        Log.w( TAG, e.getLocalizedMessage(), e );
+                    }
+
+                }
             }
 
         }
@@ -98,23 +113,64 @@ public class FileManager {
         if( file.exists() ) {
 
             String stringLine;
+            InputStream in = null;
+            Reader reader = null;
+            BufferedReader bufferedReader = null;
             try {
 
-                FileReader fileReader = new FileReader( file );
-                BufferedReader bufferedReader = new BufferedReader( fileReader );
+                in = new FileInputStream( file );
+
+//                Requires min API 19
+//                reader = new InputStreamReader( in, StandardCharsets.UTF_8 );
+                reader = new InputStreamReader( in );
+
+                bufferedReader = new BufferedReader( reader );
+
                 while( ( stringLine = bufferedReader.readLine() ) != null ) {
-                    fileContentBuilder.append(stringLine).append("\n");
+                    fileContentBuilder.append(stringLine).append('\n');
                 }
-                bufferedReader.close();
-                fileReader.close();
-
-            } catch( FileNotFoundException e ) {
-
-                Log.e(TAG, "readFileContent : error, file not found", e);
 
             } catch( IOException e ) {
 
                 Log.e( TAG, "readFileContent : error, io", e );
+
+            } finally {
+
+                if( null != bufferedReader ) {
+
+                    try {
+
+                        bufferedReader.close();
+
+                    } catch( IOException e ) {
+                        Log.w( TAG, e.getLocalizedMessage(), e );
+                    }
+
+                }
+
+                if( null != reader ) {
+
+                    try {
+
+                        reader.close();
+
+                    } catch( IOException e ) {
+                        Log.w( TAG, e.getLocalizedMessage(), e );
+                    }
+
+                }
+
+                if( null != in ) {
+
+                    try {
+
+                        in.close();
+
+                    } catch( IOException e ) {
+                        Log.w( TAG, e.getLocalizedMessage(), e );
+                    }
+
+                }
 
             }
 
@@ -144,8 +200,17 @@ public class FileManager {
 
         if( directory.exists() ) {
 
-            for( File file : directory.listFiles() ) {
-                file.delete();
+            try {
+
+                for (File file : directory.listFiles()) {
+                    boolean deleted = file.delete();
+                    if (!deleted) {
+                        Log.w(TAG, "clearDirectory : directory not deleted");
+                    }
+                }
+
+            } catch( NullPointerException e ) {
+                Log.e( TAG, "clearDirectory : failed to delete directory" );
             }
 
         }

@@ -91,6 +91,10 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
 
                     break;
 
+                default :
+
+                    break;
+
             }
 
         });
@@ -116,7 +120,7 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
         return mediaComponent;
     }
 
-    private class Category {
+    private static class Category {
 
         final String title;
         final Integer drawable;
@@ -181,6 +185,7 @@ public class MainTvActivity extends AbstractBaseTvActivity implements HasCompone
         }
 
         @Override
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public View getView( int position, View convertView, ViewGroup parent ) {
 
             Category category = getItem( position );

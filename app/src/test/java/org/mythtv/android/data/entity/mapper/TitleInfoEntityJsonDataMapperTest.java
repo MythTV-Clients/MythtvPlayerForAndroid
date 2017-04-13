@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 
-import java.io.StringReader;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -45,41 +44,41 @@ public class TitleInfoEntityJsonDataMapperTest extends ApplicationTestCase {
     @Test
     public void testTransformTitleInfoEntityHappyCase() {
 
-        TitleInfoEntity titleInfoEntity = titleInfoEntityJsonMapper.transformTitleInfoEntity( new StringReader( JSON_RESPONSE_DVR_GET_TITLE_INFO ) );
+        TitleInfoEntity titleInfoEntity = titleInfoEntityJsonMapper.transformTitleInfoEntity( JSON_RESPONSE_DVR_GET_TITLE_INFO );
 
-        assertThat( titleInfoEntity.getTitle(), is( "Descendants" ) );
-        assertThat( titleInfoEntity.getInetref(), is( "tmdb3.py_277217" ) );
-        assertThat( titleInfoEntity.getCount(), is( 1 ) );
+        assertThat( titleInfoEntity.title(), is( "Descendants" ) );
+        assertThat( titleInfoEntity.inetref(), is( "tmdb3.py_277217" ) );
+        assertThat( titleInfoEntity.count(), is( 1 ) );
 
     }
 
     @Test( expected = JsonSyntaxException.class )
     public void testTransformTitleInfoEntityBadJson() {
 
-        titleInfoEntityJsonMapper.transformTitleInfoEntity( new StringReader( JSON_RESPONSE_DVR_GET_TITLE_INFO_BAD ) );
+        titleInfoEntityJsonMapper.transformTitleInfoEntity( JSON_RESPONSE_DVR_GET_TITLE_INFO_BAD );
 
     }
 
     @Test
     public void testTransformTitleInfoEntityCollectionHappyCase() {
 
-        Collection<TitleInfoEntity> titleInfoEntityCollection = titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_TITLE_INFO_LIST ) );
+        Collection<TitleInfoEntity> titleInfoEntityCollection = titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( JSON_RESPONSE_DVR_GET_TITLE_INFO_LIST );
 
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 0 ] ).getTitle(), is( "Descendants" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 0 ] ).getInetref(), is( "tmdb3.py_277217" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 0 ] ).getCount(), is( 1 ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 1 ] ).getTitle(), is( "Halt and Catch Fire" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 1 ] ).getInetref(), is( "ttvdb.py_271910" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 1 ] ).getCount(), is( 3 ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 2 ] ).getTitle(), is( "MasterChef" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 2 ] ).getInetref(), is( "ttvdb.py_167751" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 2 ] ).getCount(), is( 15 ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 3 ] ).getTitle(), is( "Rachael Ray's Kids Cook-Off" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 3 ] ).getInetref(), is( "ttvdb.py_273064" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 3 ] ).getCount(), is( 5 ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 4 ] ).getTitle(), is( "Star Wars: Droid Tales" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 4 ] ).getInetref(), is( "ttvdb.py_298171" ) );
-        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 4 ] ).getCount(), is( 1 ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 0 ] ).title(), is( "Descendants" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 0 ] ).inetref(), is( "tmdb3.py_277217" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 0 ] ).count(), is( 1 ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 1 ] ).title(), is( "Halt and Catch Fire" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 1 ] ).inetref(), is( "ttvdb.py_271910" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 1 ] ).count(), is( 3 ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 2 ] ).title(), is( "MasterChef" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 2 ] ).inetref(), is( "ttvdb.py_167751" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 2 ] ).count(), is( 15 ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 3 ] ).title(), is( "Rachael Ray's Kids Cook-Off" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 3 ] ).inetref(), is( "ttvdb.py_273064" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 3 ] ).count(), is( 5 ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 4 ] ).title(), is( "Star Wars: Droid Tales" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 4 ] ).inetref(), is( "ttvdb.py_298171" ) );
+        assertThat( ( (TitleInfoEntity) titleInfoEntityCollection.toArray() [ 4 ] ).count(), is( 1 ) );
         assertThat( titleInfoEntityCollection.size(), is( 5 ) );
 
     }
@@ -87,7 +86,7 @@ public class TitleInfoEntityJsonDataMapperTest extends ApplicationTestCase {
     @Test( expected = JsonSyntaxException.class )
     public void testTransformTitleInfoEntityCollectionBadJson() {
 
-        titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_TITLE_INFO_LIST_BAD ) );
+        titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( JSON_RESPONSE_DVR_GET_TITLE_INFO_LIST_BAD );
 
     }
 

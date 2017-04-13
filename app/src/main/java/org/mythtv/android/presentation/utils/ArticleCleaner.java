@@ -23,6 +23,8 @@ import android.util.Log;
 
 import org.mythtv.android.R;
 
+import java.util.Locale;
+
 /**
  *
  *
@@ -31,7 +33,7 @@ import org.mythtv.android.R;
  *
  * Created on 2/1/16.
  */
-public class ArticleCleaner {
+public final class ArticleCleaner {
 
     private static final String TAG = ArticleCleaner.class.getSimpleName();
 
@@ -41,26 +43,29 @@ public class ArticleCleaner {
         Log.d( TAG, "clean : enter" );
 
         if( null == value || "".equals( value ) ) {
+
             return value;
         }
 
+        String cleaned = value;
+
         String[] articles = context.getResources().getStringArray( R.array.articles );
-        String upper = value.toUpperCase();
+        String upper = cleaned.toUpperCase( Locale.getDefault() );
 
         for( String article : articles ) {
             article = article + " ";
-            Log.d( TAG, "clean : article=" + article + ", value=" + value );
+            Log.d( TAG, "clean : article=" + article + ", cleaned=" + cleaned );
 
             if( upper.startsWith( article ) ) {
                 Log.d( TAG, "clean : article found" );
 
-                value = value.substring( article.length() ).trim();
+                cleaned = cleaned.substring( article.length() ).trim();
             }
 
         }
 
-        Log.d( TAG, "clean : exit - value=" + value );
-        return value;
+        Log.d( TAG, "clean : exit - cleaned=" + cleaned );
+        return cleaned;
     }
 
 }

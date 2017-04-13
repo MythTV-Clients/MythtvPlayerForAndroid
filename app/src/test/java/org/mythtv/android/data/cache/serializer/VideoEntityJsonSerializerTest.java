@@ -26,10 +26,10 @@ public class VideoEntityJsonSerializerTest extends ApplicationTestCase {
         String jsonString = jsonSerializer.serialize( videoEntityOne );
         VideoMetadataInfoEntity videoEntityTwo = jsonSerializer.deserialize( jsonString );
 
-        assertThat( videoEntityOne.getId(), is( videoEntityTwo.getId() ) );
-        assertThat( videoEntityOne.getTitle(), is( videoEntityTwo.getTitle() ) );
-        assertThat( videoEntityOne.getSubTitle(), is( videoEntityTwo.getSubTitle() ) );
-        assertThat( videoEntityOne.getFileName(), is( videoEntityTwo.getFileName() ) );
+        assertThat( videoEntityOne.id(), is( videoEntityTwo.id() ) );
+        assertThat( videoEntityOne.title(), is( videoEntityTwo.title() ) );
+        assertThat( videoEntityOne.subTitle(), is( videoEntityTwo.subTitle() ) );
+        assertThat( videoEntityOne.fileName(), is( videoEntityTwo.fileName() ) );
 
     }
 

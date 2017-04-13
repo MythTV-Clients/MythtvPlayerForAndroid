@@ -20,6 +20,7 @@ package org.mythtv.android.presentation.presenter.tv;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
@@ -43,6 +44,8 @@ import javax.inject.Inject;
  */
 public class TvCategoryListPresenter extends DefaultSubscriber<List<TvCategoryModel>> implements Presenter {
 
+    private static final String TAG = TvCategoryListPresenter.class.getSimpleName();
+
     private TvCategoryListView viewListView;
 
     private final Context context;
@@ -59,13 +62,25 @@ public class TvCategoryListPresenter extends DefaultSubscriber<List<TvCategoryMo
     }
 
     @Override
-    public void resume() { }
+    public void resume() {
+        Log.v( TAG, "resume : enter" );
+
+        Log.v( TAG, "resume : exit" );
+    }
 
     @Override
-    public void pause() { }
+    public void pause() {
+        Log.v( TAG, "pause : enter" );
+
+        Log.v( TAG, "pause : exit" );
+    }
 
     @Override
-    public void destroy() { }
+    public void destroy() {
+        Log.v( TAG, "destroy : enter" );
+
+        Log.v( TAG, "destroy : exit" );
+    }
 
     /**
      * Initializes the presenter by start retrieving the tvCategory list.
@@ -123,9 +138,9 @@ public class TvCategoryListPresenter extends DefaultSubscriber<List<TvCategoryMo
                 R.drawable.tv_setting
         };
 
-        tvCategoryModelsCollection.add( new TvCategoryModel( 0, titles[ 0 ], categories[ 0 ] ) );
-        tvCategoryModelsCollection.add( new TvCategoryModel( 1, titles[ 1 ], categories[ 1 ] ) );
-        tvCategoryModelsCollection.add( new TvCategoryModel( 2, titles[ 2 ], categories[ 2 ] ) );
+        tvCategoryModelsCollection.add( TvCategoryModel.create( 0, titles[ 0 ], categories[ 0 ] ) );
+        tvCategoryModelsCollection.add( TvCategoryModel.create( 1, titles[ 1 ], categories[ 1 ] ) );
+        tvCategoryModelsCollection.add( TvCategoryModel.create( 2, titles[ 2 ], categories[ 2 ] ) );
 
         showTvCategoriesCollectionInView( tvCategoryModelsCollection );
 

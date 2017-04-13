@@ -21,6 +21,7 @@ package org.mythtv.android.data.cache;
 import android.content.Context;
 import android.util.Log;
 
+import org.joda.time.DateTime;
 import org.mythtv.android.data.cache.serializer.VideoListEntityJsonSerializer;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoListEntity;
@@ -97,8 +98,7 @@ public class VideoCacheImpl implements VideoCache {
             if( !isCached() ) {
                 Log.d( TAG, "put : videos are not cached" );
 
-                VideoMetadataInfoListEntity videoEntities = new VideoMetadataInfoListEntity();
-                videoEntities.setVideoMetadataInfosEntity( videos.toArray( new VideoMetadataInfoEntity[ videos.size() ] ) );
+                VideoMetadataInfoListEntity videoEntities = VideoMetadataInfoListEntity.create( 1, videos.size(), 1, 1, videos.size(), DateTime.now(), "1", 1, videos );
 
                 String jsonString = this.videoListEntityJsonSerializer.serialize( videoEntities );
                 this.executeAsynchronously( new CacheWriter( this.fileManager, videoEntitiesFile, jsonString ) );
@@ -118,7 +118,7 @@ public class VideoCacheImpl implements VideoCache {
 
         return readFromFile()
                 .flatMap( Observable::from )
-                .filter( entity -> entity.getId() == id );
+                .filter( entity -> entity.id() == id );
 
     }
 
@@ -135,7 +135,7 @@ public class VideoCacheImpl implements VideoCache {
 
         return readFromFile()
                 .flatMap( Observable::from )
-                .filter( entity -> entity.getContentType().equals( category ) )
+                .filter( entity -> entity.contentType().equals( category ) )
 //                .distinct( videoMetadataInfoEntity -> videoMetadataInfoEntity.getTitle() )
                 .doOnNext( entity -> Log.d( TAG, "getCategory : entity=" + entity ) )
                 .toList();
@@ -197,11 +197,13 @@ public class VideoCacheImpl implements VideoCache {
 
         File dir = new File( fileNameBuilder.toString() );
         if( !dir.exists() ) {
-            dir.mkdirs();
+            boolean made = dir.mkdirs();
+            if( !made ) {
+                Log.w( TAG, "buildFile : directories not created" );
+            }
         }
 
-        fileNameBuilder.append( File.separator );
-        fileNameBuilder.append( DEFAULT_FILE_NAME );
+        fileNameBuilder.append( File.separator ).append( DEFAULT_FILE_NAME );
         Log.v( TAG, "buildFile : fileNameBuild=" + fileNameBuilder.toString() );
 
         Log.v( TAG, "buildFile : exit" );
@@ -220,7 +222,7 @@ public class VideoCacheImpl implements VideoCache {
 
         Log.v( TAG, "readFromFile : exit" );
         return Observable
-                .from( videoMetadataInfoListEntity.getVideoMetadataInfosEntity() )
+                .from( videoMetadataInfoListEntity.videoMetadataInfos() )
                 .toList()
                 .doOnError( VideoNotFoundException::new );
     }

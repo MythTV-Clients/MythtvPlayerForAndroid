@@ -20,20 +20,25 @@ package org.mythtv.android.presentation.view.adapter.phone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.SeriesModel;
-import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -52,25 +57,25 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
 
     private static final String TAG = SeriesAdapter.class.getSimpleName();
 
+    private final Context context;
+    private List<SeriesModel> seriesCollection;
+    private final LayoutInflater layoutInflater;
+
+    private OnItemClickListener onItemClickListener;
+
     public interface OnItemClickListener {
 
         void onSeriesItemClicked( SeriesModel seriesModel );
 
     }
 
-    private Context context;
-    private List<SeriesModel> seriesCollection;
-    private final LayoutInflater layoutInflater;
-
-    private OnItemClickListener onItemClickListener;
-
-    public SeriesAdapter( Context context, Collection<SeriesModel> seriesCollection ) {
+    public SeriesAdapter( final Context context, Collection<SeriesModel> seriesCollection ) {
         Log.d( TAG, "initialize : enter" );
 
         this.context = context;
         this.validateSeriesCollection( seriesCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.seriesCollection = (List<SeriesModel>) seriesCollection;
+        this.seriesCollection = new ArrayList<>( seriesCollection );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -78,7 +83,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
     @Override
     public int getItemCount() {
 
-        return ( null != this.seriesCollection ) ? this.seriesCollection.size() : 0;
+        return ( null == this.seriesCollection ) ? 0 : this.seriesCollection.size();
     }
 
     @Override
@@ -97,18 +102,18 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
         Log.d( TAG, "onBindViewHolder : enter" );
 
         final SeriesModel seriesModel = this.seriesCollection.get( position );
-        if( null != seriesModel.getArtworkUrl() && !"".equals( seriesModel.getArtworkUrl() ) ) {
 
-            holder.imageViewArtwork.setImageUrl( getMasterBackendUrl() + seriesModel.getArtworkUrl() );
+        Glide
+                .with( context )
+                .load( getMasterBackendUrl() + seriesModel.artworkUrl() )
+                .error( new ColorDrawable(Color.WHITE ) )
+                .crossFade()
+                .diskCacheStrategy( DiskCacheStrategy.RESULT )
+                .into( holder.imageViewArtwork );
 
-        } else {
+        holder.textViewTitle.setText( seriesModel.title() );
 
-            holder.imageViewArtwork.setImageDrawable( ContextCompat.getDrawable( context, R.drawable.ffffff ) );
-
-        }
-        holder.textViewTitle.setText( seriesModel.getTitle() );
-
-        int titleCount = seriesModel.getCount();
+        int titleCount = seriesModel.count();
         if( titleCount > 0 ) {
 
             holder.textViewCount.setText( String.valueOf( titleCount ) );
@@ -138,7 +143,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
         Log.d( TAG, "setSeriesCollection : enter" );
 
         this.validateSeriesCollection( seriesCollection );
-        this.seriesCollection = (List<SeriesModel>) seriesCollection;
+        this.seriesCollection = new ArrayList<>( seriesCollection );
         this.notifyDataSetChanged();
 
         Log.d( TAG, "setSeriesCollection : exit");
@@ -167,7 +172,7 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
     static class SeriesViewHolder extends RecyclerView.ViewHolder {
 
         @BindView( R.id.series_item_artwork )
-        AutoLoadImageView imageViewArtwork;
+        ImageView imageViewArtwork;
 
         @BindView( R.id.series_item_title )
         TextView textViewTitle;

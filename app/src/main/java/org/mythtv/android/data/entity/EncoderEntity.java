@@ -18,9 +18,12 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -30,151 +33,44 @@ import java.util.Arrays;
  *
  * Created on 1/18/16.
  */
-public class EncoderEntity {
+@AutoValue
+public abstract class EncoderEntity {
 
     @SerializedName( "Id" )
-    private int id;
+    public abstract int id();
 
     @SerializedName( "HostName" )
-    private String hostname;
+    public abstract String hostname();
 
     @SerializedName( "Local" )
-    private boolean local;
+    public abstract boolean local();
 
     @SerializedName( "Connected" )
-    private boolean connected;
+    public abstract boolean connected();
 
     @SerializedName( "State" )
-    private int state;
+    public abstract int state();
 
     @SerializedName( "SleepStatus" )
-    private int sleepStatus;
+    public abstract int sleepStatus();
 
     @SerializedName( "LowOnFreeSpace" )
-    private boolean lowOnFreeSpace;
+    public abstract boolean lowOnFreeSpace();
 
     @SerializedName( "Inputs" )
-    private InputEntity[] inputs;
+    public abstract List<InputEntity> inputs();
 
     @SerializedName( "Recording" )
-    private ProgramEntity recording;
+    public abstract ProgramEntity recording();
 
-    public EncoderEntity() {
+    public static EncoderEntity create( int id, String hostname, boolean local, boolean connected, int state, int sleepStatus, boolean lowOnFreeSpace, List<InputEntity> inputs, ProgramEntity recording ) {
+
+        return new AutoValue_EncoderEntity( id, hostname, local, connected, state, sleepStatus, lowOnFreeSpace, inputs, recording );
     }
 
-    public EncoderEntity(int id, String hostname, boolean local, boolean connected, int state, int sleepStatus, boolean lowOnFreeSpace, InputEntity[] inputs, ProgramEntity recording) {
-        this.id = id;
-        this.hostname = hostname;
-        this.local = local;
-        this.connected = connected;
-        this.state = state;
-        this.sleepStatus = sleepStatus;
-        this.lowOnFreeSpace = lowOnFreeSpace;
-        this.inputs = inputs;
-        this.recording = recording;
-    }
+    public static TypeAdapter<EncoderEntity> typeAdapter(Gson gson ) {
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getHostname() {
-        return hostname;
-    }
-
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
-    }
-
-    public boolean isLocal() {
-        return local;
-    }
-
-    public void setLocal(boolean local) {
-        this.local = local;
-    }
-
-    public boolean isConnected() {
-        return connected;
-    }
-
-    public void setConnected(boolean connected) {
-        this.connected = connected;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public int getSleepStatus() {
-        return sleepStatus;
-    }
-
-    public void setSleepStatus(int sleepStatus) {
-        this.sleepStatus = sleepStatus;
-    }
-
-    public boolean isLowOnFreeSpace() {
-        return lowOnFreeSpace;
-    }
-
-    public void setLowOnFreeSpace(boolean lowOnFreeSpace) {
-        this.lowOnFreeSpace = lowOnFreeSpace;
-    }
-
-    public InputEntity[] getInputs() {
-        return inputs;
-    }
-
-    public void setInputs(InputEntity[] inputs) {
-        this.inputs = inputs;
-    }
-
-    public ProgramEntity getRecording() {
-        return recording;
-    }
-
-    public void setRecording(ProgramEntity recording) {
-        this.recording = recording;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        EncoderEntity that = (EncoderEntity) o;
-
-        return id == that.id;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public String toString() {
-        return "EncoderEntity{" +
-                "id=" + id +
-                ", hostname='" + hostname + '\'' +
-                ", local=" + local +
-                ", connected=" + connected +
-                ", state=" + state +
-                ", sleepStatus=" + sleepStatus +
-                ", lowOnFreeSpace=" + lowOnFreeSpace +
-                ", inputs=" + Arrays.toString(inputs) +
-                ", recording=" + recording +
-                '}';
+        return new AutoValue_EncoderEntity.GsonTypeAdapter( gson );
     }
 
 }

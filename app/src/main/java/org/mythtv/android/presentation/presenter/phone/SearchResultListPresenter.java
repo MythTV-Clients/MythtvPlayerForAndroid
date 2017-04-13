@@ -72,12 +72,16 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
 
     @Override
     public void resume() {
+        Log.v( TAG, "resume : enter" );
 
+        Log.v( TAG, "resume : exit" );
     }
 
     @Override
     public void pause() {
+        Log.v( TAG, "pause : enter" );
 
+        Log.v( TAG, "pause : exit" );
     }
 
     @Override
@@ -166,7 +170,7 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
         public void onError( Throwable e ) {
 
             SearchResultListPresenter.this.hideViewLoading();
-            SearchResultListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            SearchResultListPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             SearchResultListPresenter.this.showViewRetry();
 
         }

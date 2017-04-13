@@ -28,13 +28,13 @@ public class ProgramEntityListJsonSerializerTest extends ApplicationTestCase {
 
 //        assertThat( programListEntityOne, is( programListEntityTwo ) );
 //        assertThat( programListEntityOne.getPrograms(), is( programListEntityTwo.getPrograms() ) );
-        assertThat( programListEntityOne.getPrograms().getStartIndex(), is( programListEntityTwo.getPrograms().getStartIndex() ) );
-        assertThat( programListEntityOne.getPrograms().getCount(), is( programListEntityTwo.getPrograms().getCount() ) );
-        assertThat( programListEntityOne.getPrograms().getAsOf(), is( programListEntityTwo.getPrograms().getAsOf() ) );
-        assertThat( programListEntityOne.getPrograms().getVersion(), is( programListEntityTwo.getPrograms().getVersion() ) );
-        assertThat( programListEntityOne.getPrograms().getProtoVer(), is( programListEntityTwo.getPrograms().getProtoVer() ) );
+        assertThat( programListEntityOne.programs().startIndex(), is( programListEntityTwo.programs().startIndex() ) );
+        assertThat( programListEntityOne.programs().count(), is( programListEntityTwo.programs().count() ) );
+        assertThat( programListEntityOne.programs().asOf(), is( programListEntityTwo.programs().asOf() ) );
+        assertThat( programListEntityOne.programs().version(), is( programListEntityTwo.programs().version() ) );
+        assertThat( programListEntityOne.programs().protoVer(), is( programListEntityTwo.programs().protoVer() ) );
 //        assertThat( programListEntityOne.getPrograms().getPrograms(), is( programListEntityTwo.getPrograms().getPrograms() ) );
-        assertThat( programListEntityOne.getPrograms().getPrograms().length, is( programListEntityTwo.getPrograms().getPrograms().length ) );
+        assertThat( programListEntityOne.programs().programs().size(), is( programListEntityTwo.programs().programs().size() ) );
 
     }
 

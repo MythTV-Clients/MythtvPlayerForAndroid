@@ -10,84 +10,55 @@ general:
 
 machine:
   environment:
+    _JAVA_OPTIONS: "-Xms1024m -Xmx2048m"
     ANDROID_HOME: /usr/local/android-sdk-linux
     ADB_INSTALL_TIMEOUT: 60
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
     QEMU_AUDIO_DRV: none
   java:
-    version: openjdk8
+    version: oraclejdk8
 
 
 dependencies:
   pre:
-    - touch app/google-services.json
-    - echo $GOOGLE_SERVICES_JSON > app/google-services.json
-    # Accept Android Developer License
-    - if [ ! -d "$HOME/.android/license" ]; then mkdir -p "$HOME/.android/license"; fi
-    - if [ ! -e "$HOME/.android/license/android-sdk-license" ]; then echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$HOME/.android/license/android-sdk-license"; fi
-    - if [ ! -e "$HOME/.android/license/android-sdk-preview-license" ]; then echo "79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "$HOME/.android/license/android-sdk-preview-license"; fi
-    - if [ ! -e "$HOME/.android/license/intel-android-extra-license" ]; then echo "d975f751698a77b662f1254ddbeed3901e976f5a" > "$HOME/.android/license/intel-android-extra-license"; fi
-    - if [ ! -d "/usr/local/android-sdk-linux/licenses" ]; then mkdir -p "/usr/local/android-sdk-linux/licenses"; fi
-    - if [ ! -e "/usr/local/android-sdk-linux/licenses/android-sdk-license" ]; then echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "/usr/local/android-sdk-linux/licenses/android-sdk-license"; fi
-    - if [ ! -e "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license" ]; then echo "79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > "/usr/local/android-sdk-linux/licenses/android-sdk-preview-license"; fi
-    - if [ ! -e "/usr/local/android-sdk-linux/licenses/intel-android-extra-license" ]; then echo "d975f751698a77b662f1254ddbeed3901e976f5a" > "/usr/local/android-sdk-linux/licenses/intel-android-extra-license"; fi
-    # Android SDK Platform 25
-    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-25" ]; then echo y | android update sdk --no-ui --all --filter "android-25"; fi
-    # Android SDK Build-tools, revision 25.0.1
-    - if [ ! -d "/usr/local/android-sdk-linux/build-tools/25.0.2" ]; then echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"; fi
-    # Android Support Repository, revision 35 / Local Maven repository for Support Libraries
-    - if [ ! -d "/usr/local/android-sdk-linux/extras/android/m2repository/com/android/support/design/25.0.1" ]; then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services,extra-android-support"; fi
+    - echo "y" | android update sdk --no-ui --all --filter tools,build-tools-25.0.2,android-25,extra-google-m2repository,extra-google-google_play_services,extra-android-m2repository
+#    - sudo pip install -U crcmod
+  post:
+    - ./gradlew assembleDevDebug assembleDevDebugAndroidTest -PdisablePreDex
+#    - echo $CLIENT_SECRET | base64 --decode --ignore-garbage > ${HOME}/client-secret.json
+#    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+#    - sudo /opt/google-cloud-sdk/bin/gcloud config set project $FIREBASE_PROJECT
+#    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components install beta
+#    - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
 
   cache_directories:
-    - /usr/local/android-sdk-linux/platforms/android-25
-    - /usr/local/android-sdk-linux/build-tools/25.0.2
-    - /usr/local/android-sdk-linux/extras/android/m2repository
-    - /usr/local/android-sdk-linux/licenses
+#    - ~/.gradle
+#    - /usr/local/android-sdk-linux/tools
+#    - /usr/local/android-sdk-linux/platforms/android-24
+#    - /usr/local/android-sdk-linux/build-tools/25.0.2
+#    - /usr/local/android-sdk-linux/extras/android/m2repository
+#    - /usr/local/android-sdk-linux/licenses
 
 test:
-  pre:
-#    - android list targets
-#    - echo no | android create avd -n custom-android23-googleapis -t "android-23" --abi google_apis/armeabi-v7a
-#    - echo 'vm.heapSize=512' >> ~/.android/avd/custom-android23-googleapis.ini
-#    - echo 'hw.ramSize=2048' >> ~/.android/avd/custom-android23-googleapis.ini
-#    - echo 'hw.gpu.enabled=yes' >> ~/.android/avd/custom-android23-googleapis.ini
-#    - cat ~/.android/avd/custom-android23-googleapis.ini
-    - echo y | android update sdk --no-ui --all --filter tools
-    - echo y | android update sdk --no-ui --all --filter platform-tools
-    - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
-    - echo y | android update sdk --no-ui --all --filter extra-android-support
-    - echo y | android update sdk --no-ui --all --filter extra-google-google_play_services
-    - echo y | android update sdk --no-ui --all --filter extra-google-m2repository
-    - echo y | android update sdk --no-ui --all --filter android-24
-    - echo y | android update sdk --no-ui --all --filter build-tools-25.0.2
-    - echo y | android update sdk -a -u -t sys-img-armeabi-v7a-google_apis-24
-#    - emulator -avd circleci-android24 -no-window :
-#        background: true
-#        parallel: true
-#    - circle-android wait-for-boot
-#    - sleep 30
-#    - adb shell input keyevent 82
-#    - adb shell svc power stayon true
-#    - adb shell settings put global window_animation_scale 0
-#    - adb shell settings put global transition_animation_scale 0
-#    - adb shell settings put global animator_duration_scale 0
-#  post:
-#    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-#    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-
   override:
-#    - echo no | android create avd -n custom-android24-googleapis -t "android-24" --abi google_apis/armeabi-v7a
-#    - android list avd
-#    - emulator -avd custom-android24-googleapis -no-window:
-#        background: true
-#        parallel: true
-#    - circle-android wait-for-boot
-    - git checkout app/google-services.json
-    - ./gradlew testDevDebugUnitTest -PdisablePreDex --console=plain --info
+    - ./gradlew javaCodeCoverage -PdisablePreDex
+    - ./gradlew lint
+    - ./gradlew findbugs
+    - ./gradlew pmd
+#    - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud firebase test android run --app app/build/outputs/apk/app-dev-debug.apk --test app/build/outputs/apk/app-dev-debug-androidTest.apk --device-ids Nexus6 --os-version-ids 21 --locales en --orientations portrait
+#    - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud firebase test android run --app app/build/outputs/apk/app-dev-debug.apk --test app/build/outputs/apk/app-dev-debug-androidTest.apk --device model=Nexus6,version=21,locale=en,orientation=portrait --device model=Nexus5X,version=25,locale=en,orientation=portrait --device model=Nexus10,version=21,locale=en,orientation=landscape --device model=Nexus7,version=21,locale=en,orientation=landscape
 
   post:
-#    - test ! -d app/build/outputs || cp -r app/build/outputs $CIRCLE_TEST_ARTIFACTS
-#    - cp -r app/build/outputs/androidTest-results/ $CIRCLE_TEST_REPORTS
-#    - cp -r app/build/outputs/code-coverage/ $CIRCLE_TEST_REPORTS
-    - test ! -d app/build/reports || cp -r app/build/reports $CIRCLE_TEST_REPORTS
-    - test ! -d app/build/test-results/testDevDebugUnitTest/devDebug || cp -r app/build/test-results/testDevDebugUnitTest/devDebug $CIRCLE_TEST_REPORTS
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - mkdir -p $CIRCLE_TEST_REPORTS/code-coverage/
+    - find . -type f -regex ".*/build/outputs/code-coverage/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/code-coverage/ \;
+    - mkdir -p $CIRCLE_TEST_REPORTS/jacoco/
+    - cp -r app/build/outputs/jacoco/ $CIRCLE_TEST_REPORTS/jacoco/
+    - mkdir -p $CIRCLE_TEST_REPORTS/lint/
+    - find . -type f -regex ".*/build/outputs/lint/lint.html" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
+    - mkdir -p $CIRCLE_TEST_REPORTS/findbugs/
+    - find . -type f -regex ".*/build/outputs/findbugs/findbugs.html" -exec cp {} $CIRCLE_TEST_REPORTS/findbugs/ \;
+    - mkdir -p $CIRCLE_TEST_REPORTS/pmd/
+    - find . -type f -regex ".*/build/outputs/pmd/pmd.html" -exec cp {} $CIRCLE_TEST_REPORTS/pmd/ \;
+ #   - sudo /opt/google-cloud-sdk/bin/gsutil -m cp -r -U `sudo /opt/google-cloud-sdk/bin/gsutil ls gs://$TEST_LAB_BUCKET | tail -1` $CIRCLE_ARTIFACTS/ | true    # copy the build outputs to artifacts

@@ -20,7 +20,6 @@ package org.mythtv.android.data.repository;
 
 import android.util.Log;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.mapper.EncoderEntityDataMapper;
@@ -56,6 +55,7 @@ import rx.Observable;
 public class DvrDataRepository implements DvrRepository {
 
     private static final String TAG = DvrDataRepository.class.getSimpleName();
+    private static final String CONVERT2METHODREF = "Convert2MethodRef";
 
     private final DvrDataStoreFactory dvrDataStoreFactory;
     private final ContentDataStoreFactory contentDataStoreFactory;
@@ -68,7 +68,7 @@ public class DvrDataRepository implements DvrRepository {
 
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<Series>> titleInfos() {
         Log.d( TAG, "titleInfos : enter" );
@@ -80,7 +80,7 @@ public class DvrDataRepository implements DvrRepository {
                 .map( titleInfoEntities -> SeriesDataMapper.transformPrograms( titleInfoEntities ) );
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> recordedPrograms( boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup ) {
         Log.d( TAG, "recordedPrograms : enter" );
@@ -101,7 +101,7 @@ public class DvrDataRepository implements DvrRepository {
 
                     for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
 
-                        if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
+                        if( liveStreamInfoEntity.sourceFile().endsWith( programEntity.fileName() ) ) {
 
                             programEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
@@ -129,7 +129,7 @@ public class DvrDataRepository implements DvrRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<MediaItem> recordedProgram( final int recordedId ) {
         Log.d( TAG, "recordedProgram : enter" );
@@ -141,7 +141,7 @@ public class DvrDataRepository implements DvrRepository {
 
         Observable<ProgramEntity> programEntity = dvrDataStore.recordedProgramEntityDetails( recordedId );
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntity = programEntity
-                .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.getFileName() ) );
+                .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.fileName() ) );
         Observable<Long> bookmark = dvrDataStore.getBookmark( recordedId, "Duration" );
 
         Observable<ProgramEntity> recordedProgramEntity = Observable.zip( programEntity, liveStreamInfoEntity, bookmark, ( programEntity1, liveStreamInfoEntityList, bookmark1 ) -> {
@@ -194,7 +194,7 @@ public class DvrDataRepository implements DvrRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> recent() {
         Log.d( TAG, "recent : enter" );
@@ -213,7 +213,7 @@ public class DvrDataRepository implements DvrRepository {
 
                     for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
 
-                        if( liveStreamInfoEntity.getSourceFile().endsWith( programEntity.getFileName() ) ) {
+                        if( liveStreamInfoEntity.sourceFile().endsWith( programEntity.fileName() ) ) {
 
                             programEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
@@ -230,7 +230,7 @@ public class DvrDataRepository implements DvrRepository {
         // Limit results to 50, then remove anything in the LiveTV storage group and only take 10 for the final results
         return recordedProgramEntityList
                 .flatMap( Observable::from )
-                .filter( programEntity -> !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) )
+                .filter( programEntity -> !programEntity.recording().storageGroup().equalsIgnoreCase( "LiveTV" ) )
                 .take( 10 )
                 .toList()
                 .map( recordedProgramEntities -> {
@@ -246,7 +246,7 @@ public class DvrDataRepository implements DvrRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<Encoder>> encoders() {
         Log.d( TAG, "encoders : enter" );
@@ -258,16 +258,20 @@ public class DvrDataRepository implements DvrRepository {
                 .map( encoderEntities -> EncoderEntityDataMapper.transformCollection( encoderEntities ) );
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
-    public Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched ) {
+    public Observable<MediaItem> updateWatchedStatus( final int id, final boolean watched ) {
         Log.d( TAG, "updateWatchedStatus : enter" );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
-        return dvrDataStore.updateWatchedStatus( chanId, startTime, watched )
+        Observable<Boolean> updateWatchedStatus = dvrDataStore.updateWatchedStatus( id, watched )
                 .doOnError( throwable -> Log.e( TAG, "updateWatchedStatus : error", throwable ) )
                 .doOnCompleted( () -> dvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null ) );
+
+        Observable<MediaItem> recordedProgram = recordedProgram( id );
+
+        return Observable.zip( updateWatchedStatus, recordedProgram, ( updateWatchedStatus1, recordedProgram1 ) -> recordedProgram1 );
     }
 
 }

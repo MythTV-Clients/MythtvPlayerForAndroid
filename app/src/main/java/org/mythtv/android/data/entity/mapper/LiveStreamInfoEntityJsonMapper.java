@@ -26,9 +26,7 @@ import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoListEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoWrapperEntity;
 
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -53,20 +51,20 @@ public class LiveStreamInfoEntityJsonMapper {
 
     }
 
-    public LiveStreamInfoEntity transformLiveStreamInfoEntity( Reader liveStreamInfoJsonResponse ) throws JsonSyntaxException {
+    public LiveStreamInfoEntity transformLiveStreamInfoEntity( String liveStreamInfoJsonResponse ) throws JsonSyntaxException {
 
         Type liveStreamInfoWrapperEntityType = new TypeToken<LiveStreamInfoWrapperEntity>() {}.getType();
         LiveStreamInfoWrapperEntity liveStreamInfoWrapperEntity = this.gson.fromJson( liveStreamInfoJsonResponse, liveStreamInfoWrapperEntityType );
 
-        return liveStreamInfoWrapperEntity.getLiveStreamInfo();
+        return liveStreamInfoWrapperEntity.liveStreamInfo();
     }
 
-    public List<LiveStreamInfoEntity> transformLiveStreamInfoEntityCollection( Reader liveStreamInfoListJsonResponse ) throws JsonSyntaxException {
+    public List<LiveStreamInfoEntity> transformLiveStreamInfoEntityCollection( String liveStreamInfoListJsonResponse ) throws JsonSyntaxException {
 
         Type liveStreamInfoListEntityType = new TypeToken<LiveStreamInfoListEntity>() {}.getType();
         LiveStreamInfoListEntity liveStreamInfoListEntity = gson.fromJson( liveStreamInfoListJsonResponse, liveStreamInfoListEntityType );
 
-        return Arrays.asList( liveStreamInfoListEntity.getLiveStreamInfos().getLiveStreamInfos() );
+        return liveStreamInfoListEntity.liveStreamInfos().liveStreamInfos();
     }
 
 }

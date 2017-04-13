@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <issue id="GoogleAppIndexingWarning" severity="ignore" />
+    <issue id="InvalidPackage">
+        <ignore regexp="okio-1.11.0.jar"/>
+    </issue>
+    <issue id="IconDensities" severity="ignore" />
+    <issue id="UnusedResources">
+        <ignore regexp="google_crash_reporting_api_key" />
+    </issue>
+    <issue id="UnusedAttribute" severity="ignore" />
+    <issue id="ObsoleteSdkInt" severity="ignore" />
+</lint>

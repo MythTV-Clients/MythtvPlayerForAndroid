@@ -30,6 +30,7 @@ import android.widget.TextView;
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.model.TvCategoryModel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -48,23 +49,23 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 
     private static final String TAG = CategoriesAdapter.class.getSimpleName();
 
+    private List<TvCategoryModel> tvCategoriesCollection;
+    private final LayoutInflater layoutInflater;
+
+    private OnItemClickListener onItemClickListener;
+
     public interface OnItemClickListener {
 
         void onTvCategoryClicked( TvCategoryModel tvCategoryModel );
 
     }
 
-    private List<TvCategoryModel> tvCategoriesCollection;
-    private final LayoutInflater layoutInflater;
-
-    private OnItemClickListener onItemClickListener;
-
     public CategoriesAdapter(Context context, Collection<TvCategoryModel> tvCategoriesCollection ) {
         Log.d( TAG, "initialize : enter" );
 
         this.validateTvCategoriesCollection( tvCategoriesCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.tvCategoriesCollection = (List<TvCategoryModel>) tvCategoriesCollection;
+        this.tvCategoriesCollection = new ArrayList<>( tvCategoriesCollection );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -72,11 +73,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
     @Override
     public int getItemCount() {
 
-        return ( null != this.tvCategoriesCollection ) ? this.tvCategoriesCollection.size() : 0;
+        return ( null == this.tvCategoriesCollection ) ? 0 : this.tvCategoriesCollection.size();
     }
 
     @Override
-    public TvCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
+    public TvCategoryViewHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
 
         View view = this.layoutInflater.inflate( R.layout.tv_item, parent, false );
 
@@ -87,8 +88,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
     public void onBindViewHolder( TvCategoryViewHolder holder, final int position ) {
 
         final TvCategoryModel tvCategoryModel = this.tvCategoriesCollection.get( position );
-        holder.imageViewCategory.setImageResource( tvCategoryModel.getDrawable() );
-        holder.textViewTitle.setText( tvCategoryModel.getTitle() );
+        holder.imageViewCategory.setImageResource( tvCategoryModel.drawable() );
+        holder.textViewTitle.setText( tvCategoryModel.title() );
         holder.itemView.setOnClickListener(v -> {
             if( null != CategoriesAdapter.this.onItemClickListener ) {
 
@@ -111,7 +112,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Tv
 //        Log.d( TAG, "setTitleInfosCollection : enter" );
 
         this.validateTvCategoriesCollection( tvCategoriesCollection );
-        this.tvCategoriesCollection = (List<TvCategoryModel>) tvCategoriesCollection;
+        this.tvCategoriesCollection = new ArrayList<>( tvCategoriesCollection );
         this.notifyDataSetChanged();
 
 //        Log.d( TAG, "setTitleInfosCollection : exit");

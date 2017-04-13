@@ -69,12 +69,16 @@ public class SeriesListPresenter extends DefaultSubscriber<List<Series>> impleme
 
     @Override
     public void resume() {
+        Log.v( TAG, "resume : enter" );
 
+        Log.v( TAG, "resume : exit" );
     }
 
     @Override
     public void pause() {
+        Log.v( TAG, "pause : enter" );
 
+        Log.v( TAG, "pause : exit" );
     }
 
     @Override
@@ -159,7 +163,7 @@ public class SeriesListPresenter extends DefaultSubscriber<List<Series>> impleme
         public void onError( Throwable e ) {
 
             SeriesListPresenter.this.hideViewLoading();
-            SeriesListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            SeriesListPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             SeriesListPresenter.this.showViewRetry();
 
         }

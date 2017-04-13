@@ -122,8 +122,8 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
                 .doOnNext( saveVideosToCacheAction )
                 .doOnNext( saveVideosToDbAction )
                 .flatMap( Observable::from )
-                .filter( entity -> entity.getContentType().equals( category ) )
-                .toSortedList( ( entity1, entity2 ) -> entity1.getTitle().compareTo( entity2.getTitle() ) )
+                .filter( entity -> entity.contentType().equals( category ) )
+                .toSortedList( ( entity1, entity2 ) -> entity1.title().compareTo( entity2.title() ) )
                 .doOnNext( entity -> Log.d( TAG, "getCategory : entity=" + entity ) );
 
     }
@@ -136,35 +136,31 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         return this.api.getVideoList( null, null, false, -1, -1 )
                 .flatMap( Observable::from )
-                .filter( entity -> entity.getContentType().equals( category ) )
-                .filter( entity -> entity.getTitle().equals( series ) )
+                .filter( entity -> entity.contentType().equals( category ) )
+                .filter( entity -> entity.title().equals( series ) )
                 .toSortedList( ( entity1, entity2 ) -> {
 
                     StringBuilder e1 = new StringBuilder();
-                    e1.append( "S" );
-                    if( entity1.getSeason() < 10 ) {
-                        e1.append( "0" );
+                    e1.append( 'S' );
+                    if( entity1.season() < 10 ) {
+                        e1.append( '0' );
                     }
-                    e1.append( entity1.getSeason() );
-
-                    e1.append( "E" );
-                    if( entity1.getEpisode() < 10 ) {
-                        e1.append( "0" );
+                    e1.append( entity1.season() ).append( 'E' );
+                    if( entity1.episode() < 10 ) {
+                        e1.append( '0' );
                     }
-                    e1.append( entity1.getEpisode() );
+                    e1.append( entity1.episode() );
 
                     StringBuilder e2 = new StringBuilder();
-                    e2.append( "S" );
-                    if( entity2.getSeason() < 10 ) {
-                        e2.append( "0" );
+                    e2.append( 'S' );
+                    if( entity2.season() < 10 ) {
+                        e2.append( '0' );
                     }
-                    e2.append( entity2.getSeason() );
-
-                    e2.append( "E" );
-                    if( entity2.getEpisode() < 10 ) {
-                        e2.append( "0" );
+                    e2.append( entity2.season() ).append( 'E' );
+                    if( entity2.episode() < 10 ) {
+                        e2.append( '0' );
                     }
-                    e2.append( entity2.getEpisode() );
+                    e2.append( entity2.episode() );
 
                     return e1.toString().compareTo( e2.toString() );
                 })

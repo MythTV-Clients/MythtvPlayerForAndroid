@@ -46,6 +46,7 @@ import okhttp3.Request;
  *  4. Verify Services API Connection
  *
  */
+@SuppressWarnings( "PMD.GodClass" )
 public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     private static final String TAG = TroubleshootActivity.class.getSimpleName();
@@ -117,7 +118,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
         ButterKnife.bind( this );
 
-        this.initializeActivity( savedInstanceState );
+        this.initializeActivity();
 
         Log.d( TAG, "onCreate : exit" );
     }
@@ -134,20 +135,18 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-        switch( item.getItemId() ) {
+        int i = item.getItemId();
+        if( i == android.R.id.home ) {
 
-            case android.R.id.home:
+            NavUtils.navigateUpFromSameTask( this );
 
-                NavUtils.navigateUpFromSameTask( this );
+            return true;
 
-                return true;
+        } else if( i == R.id.menu_settings ) {
 
-            case R.id.menu_settings:
+            navigator.navigateToSettings( this );
 
-                navigator.navigateToSettings( this );
-
-                return true;
-
+            return true;
         }
 
         return super.onOptionsItemSelected( item );
@@ -156,7 +155,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     /**
      * Initializes this activity.
      */
-    private void initializeActivity( Bundle savedInstanceState ) {
+    private void initializeActivity() {
         Log.d( TAG, "initializeActivity : enter" );
 
         pulse = AnimationUtils.loadAnimation( this, R.anim.pulse );
@@ -169,12 +168,20 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     private void resetImages() {
         Log.v( TAG, "resetImages : enter" );
 
-        airplaneModeConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_airplanemode_active_black_24dp, null ) );
-        networkConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
-        pingConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
-        servicesConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
-        backendVersionImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
-        backendLangImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        Requires min API 19
+//        airplaneModeConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_airplanemode_active_black_24dp, null ) );
+//        networkConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        pingConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        servicesConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        backendVersionImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+//        backendLangImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp, null ) );
+
+        airplaneModeConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_airplanemode_active_black_24dp ) );
+        networkConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
+        pingConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
+        servicesConnectedImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
+        backendVersionImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
+        backendLangImage.setImageDrawable( getResources().getDrawable( R.drawable.ic_signal_wifi_0_bar_black_24dp ) );
 
         Log.v( TAG, "resetImages : enter" );
     }
@@ -185,7 +192,9 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         pulse.cancel();
         pulse.reset();
 
-        imageView.setImageDrawable( getResources().getDrawable( resource, null ) );
+//        Requires min API 19
+//        imageView.setImageDrawable( getResources().getDrawable( resource, null ) );
+        imageView.setImageDrawable( getResources().getDrawable( resource ) );
 
         Log.v( TAG, "setImage : exit" );
     }
@@ -446,19 +455,19 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         @Override
         protected void onPostExecute( String result ) {
 
-            if( null != result && !"".equals( result ) ) {
+            if( null == result || "".equals( result ) ) {
+
+                setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
+
+                showToastMessage( fab, getString( R.string.troubleshoot_services_not_connected ), getResources().getString( R.string.retry ), v -> startServicesConnectionCheck() );
+
+            } else {
 
                 setImage( servicesConnectedImage, R.drawable.ic_computer_black_24dp );
 
                 showToastMessage( fab, getString( R.string.troubleshoot_services_connected ), null, null );
 
                 startBackendVersionVerificationCheck();
-
-            } else {
-
-                setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
-
-                showToastMessage( fab, getString( R.string.troubleshoot_services_not_connected ), getResources().getString( R.string.retry ), v -> startServicesConnectionCheck() );
 
             }
 
@@ -516,7 +525,13 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         @Override
         protected void onPostExecute( String result ) {
 
-            if( null != result ) {
+            if( null == result ) {
+
+                setImage( backendVersionImage, R.drawable.ic_warning_black_24dp );
+
+                showToastMessage( fab, getString( R.string.backend_version_check_failed, getResources().getString( R.string.minimum_mythtv_version ) ), getResources().getString( R.string.retry ), v -> startBackendVersionVerificationCheck() );
+
+            } else {
 
                 float minimumVersion = Float.parseFloat( getResources().getString( R.string.minimum_mythtv_version ) );
                 if( Utils.meetsMinimumVersion( result, minimumVersion ) ) {
@@ -534,12 +549,6 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
                     showToastMessage( fab, getString( R.string.backend_version_check_failed, getResources().getString( R.string.minimum_mythtv_version ) ), getResources().getString( R.string.retry ), v -> startBackendVersionVerificationCheck() );
 
                 }
-
-            } else {
-
-                setImage( backendVersionImage, R.drawable.ic_warning_black_24dp );
-
-                showToastMessage( fab, getString( R.string.backend_version_check_failed, getResources().getString( R.string.minimum_mythtv_version ) ), getResources().getString( R.string.retry ), v -> startBackendVersionVerificationCheck() );
 
             }
 
@@ -579,7 +588,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
             try {
 
                 BackendLangJsonMapper mapper = new BackendLangJsonMapper();
-                Reader result = okHttpClient.newCall( request ).execute().body().charStream();
+                String result = okHttpClient.newCall( request ).execute().body().string();
                 Log.d( TAG, "doInBackground : result=" + result );
 
                 return mapper.transformString( result );

@@ -55,6 +55,7 @@ import rx.schedulers.Schedulers;
 public class VideoDataRepository implements VideoRepository {
 
     private static final String TAG = VideoDataRepository.class.getSimpleName();
+    private static final String CONVERT2METHODREF = "Convert2MethodRef";
 
     private final VideoDataStoreFactory videoDataStoreFactory;
     private final ContentDataStoreFactory contentDataStoreFactory;
@@ -67,7 +68,7 @@ public class VideoDataRepository implements VideoRepository {
 
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> getVideoList( String folder, String sort, boolean descending, int startIndex, int count ) {
         Log.d( TAG, "getVideoList : enter" );
@@ -94,7 +95,7 @@ public class VideoDataRepository implements VideoRepository {
 
                     for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
 
-                        if( liveStreamInfoEntity.getSourceFile().endsWith( videoEntity.getFileName() ) ) {
+                        if( liveStreamInfoEntity.sourceFile().endsWith( videoEntity.fileName() ) ) {
 
                             videoEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
@@ -124,7 +125,7 @@ public class VideoDataRepository implements VideoRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> getVideoListByContentType( final String contentType ) {
         Log.d( TAG, "getVideoListByContentType : enter" );
@@ -151,7 +152,7 @@ public class VideoDataRepository implements VideoRepository {
 
                     for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
 
-                        if( liveStreamInfoEntity.getSourceFile().endsWith( videoEntity.getFileName() ) ) {
+                        if( liveStreamInfoEntity.sourceFile().endsWith( videoEntity.fileName() ) ) {
 
                             videoEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
@@ -194,14 +195,14 @@ public class VideoDataRepository implements VideoRepository {
                 .observeOn( AndroidSchedulers.mainThread() )
                 .doOnError( throwable -> Log.e( TAG, "getVideoSeriesListByContentType : error", throwable ) )
                 .flatMap( Observable::from )
-                .filter( entity -> entity.getContentType().equals( contentType ) )
-                .distinct( VideoMetadataInfoEntity::getTitle )
-                .toSortedList( ( entity1, entity2 ) -> entity1.getTitle().compareTo( entity2.getTitle() ) )
+                .filter( entity -> entity.contentType().equals( contentType ) )
+                .distinct( VideoMetadataInfoEntity::title )
+                .toSortedList( ( entity1, entity2 ) -> entity1.title().compareTo( entity2.title() ) )
                 .map( SeriesDataMapper::transformVideos );
 
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> getVideoListByContentTypeAndSeries( String contentType, String series ) {
         Log.d( TAG, "getVideoListByContentTypeAndSeries : enter" );
@@ -228,7 +229,7 @@ public class VideoDataRepository implements VideoRepository {
 
                     for( LiveStreamInfoEntity liveStreamInfoEntity : list ) {
 
-                        if( liveStreamInfoEntity.getSourceFile().endsWith( videoEntity.getFileName() ) ) {
+                        if( liveStreamInfoEntity.sourceFile().endsWith( videoEntity.fileName() ) ) {
 
                             videoEntity.setLiveStreamInfoEntity( liveStreamInfoEntity );
 
@@ -258,7 +259,7 @@ public class VideoDataRepository implements VideoRepository {
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<MediaItem> getVideo( int id ) {
 
@@ -267,7 +268,7 @@ public class VideoDataRepository implements VideoRepository {
 
         Observable<VideoMetadataInfoEntity> videoEntity = videoDataStore.getVideoById( id );
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntity = videoEntity
-                .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.getFileName() ) );
+                .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.fileName() ) );
 
         Observable<VideoMetadataInfoEntity> video = Observable.zip( videoEntity, liveStreamInfoEntity, ( videoEntity1, liveStreamInfoEntityList ) -> {
 
@@ -292,20 +293,24 @@ public class VideoDataRepository implements VideoRepository {
                         Log.e( TAG, "getVideo : error", e );
                     }
 
-                    return new MediaItem();
+                    return null;
                 });
     }
 
-    @SuppressWarnings( "Convert2MethodRef" )
+    @SuppressWarnings( CONVERT2METHODREF )
     @Override
-    public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
+    public Observable<MediaItem> updateWatchedStatus( final int videoId, final boolean watched ) {
         Log.d( TAG, "updateWatchedStatus : enter" );
 
         final VideoDataStore videoDataStore = this.videoDataStoreFactory.createMasterBackendDataStore();
 
-        return videoDataStore.updateWatchedStatus( videoId, watched )
+        Observable<Boolean> updateWatchedStatus = videoDataStore.updateWatchedStatus( videoId, watched )
                 .doOnError( throwable -> Log.e( TAG, "updateWatchedStatus : error", throwable ) )
                 .doOnCompleted( () -> videoDataStore.getVideos( null, null, false, -1, -1 ) );
+
+        Observable<MediaItem> video = getVideo( videoId );
+
+        return Observable.zip( updateWatchedStatus, video, ( updateWatchedStatus1, video1 ) -> video1 );
     }
 
 }

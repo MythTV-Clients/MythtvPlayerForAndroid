@@ -32,7 +32,7 @@ import org.mythtv.android.data.exception.ProgramNotFoundException;
  *
  * Created on 8/30/15.
  */
-public class ErrorMessageFactory {
+public final class ErrorMessageFactory {
 
     private ErrorMessageFactory() {
     }

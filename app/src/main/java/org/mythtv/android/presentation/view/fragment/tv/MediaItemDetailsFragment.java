@@ -40,6 +40,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -93,7 +94,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
             setupDetailsOverviewRowPresenter();
             setupMovieListRow();
             setupMovieListRowPresenter();
-            updateBackground( getMasterBackendUrl() + mediaItemModel.getFanartUrl() );
+            updateBackground( getMasterBackendUrl() + mediaItemModel.fanartUrl() );
             setOnItemViewClickedListener( new ItemViewClickedListener() );
 
         }
@@ -116,6 +117,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
                 .load( uri )
                 .fitCenter()
                 .error( mDefaultBackground )
+                .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into( new SimpleTarget<GlideDrawable>( mMetrics.widthPixels, mMetrics.heightPixels ) {
 
                     @Override
@@ -146,46 +148,44 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
         int width = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_WIDTH );
         int height = Utils.convertDpToPixel( getActivity().getApplicationContext(), DETAIL_THUMB_HEIGHT );
 
-        switch( mediaItemModel.getMedia() ) {
+        if( mediaItemModel.media() == org.mythtv.android.domain.Media.PROGRAM ) {
 
-            case PROGRAM :
+            Glide.with( getActivity() )
+                    .load( getMasterBackendUrl() + mediaItemModel.previewUrl() )
+                    .error( R.drawable.default_background )
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
+                    .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
-                Glide.with( getActivity() )
-                        .load( getMasterBackendUrl() + mediaItemModel.getPreviewUrl( String.valueOf( width ) ) )
-                        .error( R.drawable.default_background )
-                        .into( new SimpleTarget<GlideDrawable>( width, height ) {
+                        @Override
+                        public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
+                            Log.d( TAG, "details overview card image url ready: " + resource );
 
-                            @Override
-                            public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
-                                Log.d( TAG, "details overview card image url ready: " + resource );
+                            row.setImageDrawable( resource );
+                            mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
 
-                                row.setImageDrawable( resource );
-                                mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
+                        }
 
-                            }
+                    });
 
-                        });
-                break;
+        } else {
 
-            default :
+            Glide.with( getActivity() )
+                    .load( getMasterBackendUrl() + mediaItemModel.coverartUrl() )
+                    .error( R.drawable.default_background )
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
+                    .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
-                Glide.with( getActivity() )
-                        .load( getMasterBackendUrl() + mediaItemModel.getCoverartUrl() )
-                        .error( R.drawable.default_background )
-                        .into( new SimpleTarget<GlideDrawable>( width, height ) {
+                        @Override
+                        public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
+                            Log.d( TAG, "details overview card image url ready: " + resource );
 
-                            @Override
-                            public void onResourceReady( GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation ) {
-                                Log.d( TAG, "details overview card image url ready: " + resource );
+                            row.setImageDrawable( resource );
+                            mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
 
-                                row.setImageDrawable( resource );
-                                mAdapter.notifyArrayItemRangeChanged( 0, mAdapter.size() );
+                        }
 
-                            }
+                    });
 
-                        });
-
-                break;
         }
 
         if( mediaSupported() || liveStreamSupported() ) {
@@ -200,22 +200,14 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private boolean mediaSupported() {
 
-        return mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "mkv" );
+        return "mp4".endsWith( mediaItemModel.url() ) || "m4v".endsWith( mediaItemModel.url() ) || "mkv".endsWith( mediaItemModel.url() );
 
     }
 
     private boolean liveStreamSupported() {
 
-        if( mediaItemModel.getLiveStreamId() != -1 ) {
+        return mediaItemModel.liveStreamId() != -1 && mediaItemModel.percentComplete() > 2;
 
-            if( mediaItemModel.getPercentComplete() > 2 ) {
-
-                return true;
-            }
-
-        }
-
-        return false;
     }
 
     private void setupDetailsOverviewRowPresenter() {
@@ -233,32 +225,32 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
             if( action.getId() == ACTION_WATCH ) {
 
                 String masterBackendUrl = getMasterBackendUrl();
-                if( !getSharedPreferencesModule().getInternalPlayer() ) {
+                if( getSharedPreferencesModule().getInternalPlayer() ) {
 
-                    String externalPlayerUrl = masterBackendUrl + mediaItemModel.getUrl();
+                    VideoModel videoModel = new VideoModel
+                            .VideoModelBuilder()
+                            .id( mediaItemModel.id() )
+                            .category( mediaItemModel.media().name() )
+                            .title( mediaItemModel.title() )
+                            .description( mediaItemModel.description() )
+                            .videoUrl( masterBackendUrl + mediaItemModel.url() )
+                            .bgImageUrl( masterBackendUrl + mediaItemModel.bannerUrl() )
+                            .cardImageUrl( masterBackendUrl + mediaItemModel.previewUrl() )
+                            .studio( mediaItemModel.studio() )
+                            .build();
+
+                    Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
+                    intent.putExtra( MythTvPlaybackFragment.VIDEO, videoModel );
+                    startActivity( intent );
+
+                } else {
+
+                    String externalPlayerUrl = masterBackendUrl + mediaItemModel.url();
                     Log.i( TAG, "externalPlayerUrl=" + externalPlayerUrl );
 
                     final Intent externalPlayer = new Intent( Intent.ACTION_VIEW );
                     externalPlayer.setDataAndType( Uri.parse( externalPlayerUrl ), "video/*" );
                     startActivity( externalPlayer );
-
-                } else {
-
-                    VideoModel videoModel = new VideoModel
-                            .VideoModelBuilder()
-                            .id( mediaItemModel.getId() )
-                            .category( mediaItemModel.getMedia().name() )
-                            .title( mediaItemModel.getTitle() )
-                            .description( mediaItemModel.getDescription() )
-                            .videoUrl( masterBackendUrl + mediaItemModel.getUrl() )
-                            .bgImageUrl( masterBackendUrl + mediaItemModel.getBannerUrl() )
-                            .cardImageUrl( masterBackendUrl + mediaItemModel.getPreviewUrl() )
-                            .studio( mediaItemModel.getStudio() )
-                            .build();
-
-                    Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
-                    intent.putExtra( PlaybackOverlayFragment.VIDEO, videoModel );
-                    startActivity( intent );
 
                 }
 
@@ -274,7 +266,9 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
     }
 
     private void setupMovieListRow() {
+        Log.v( TAG, "setupMovieListRow : enter" );
 
+        Log.v( TAG, "setupMovieListRow : exit" );
     }
 
     private void setupMovieListRowPresenter() {

@@ -26,7 +26,7 @@ package org.mythtv.android.presentation.utils;
  *
  * Created on 1/13/16.
  */
-public class SeasonEpisodeFormatter {
+public final class SeasonEpisodeFormatter {
 
     private SeasonEpisodeFormatter() {}
 
@@ -38,15 +38,13 @@ public class SeasonEpisodeFormatter {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "S" );
+        sb.append( 'S' );
         if( season < 10 ) {
-            sb.append( "0" );
+            sb.append( '0' );
         }
-        sb.append( season );
-
-        sb.append( "E" );
+        sb.append( season ).append( 'E' );
         if( episode < 10 ) {
-            sb.append( "0" );
+            sb.append( '0' );
         }
         sb.append( episode );
 

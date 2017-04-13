@@ -29,8 +29,8 @@ import android.widget.TextView;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.model.EncoderModel;
-import org.mythtv.android.presentation.model.ProgramModel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Adapter that manages a collection of {@link ProgramModel}.
+ * Adapter that manages a collection of {@link EncoderModel}.
  *
  * @author dmfrey
  *
@@ -48,17 +48,17 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
     private static final String TAG = EncodersAdapter.class.getSimpleName();
 
-    private Context context;
+    private final Context context;
     private List<EncoderModel> encodersCollection;
     private final LayoutInflater layoutInflater;
 
-    public EncodersAdapter( Context context, Collection<EncoderModel> encodersCollection ) {
+    public EncodersAdapter( final Context context, final Collection<EncoderModel> encodersCollection ) {
         Log.d( TAG, "initialize : enter" );
 
         this.context = context;
         this.validateEncodersCollection( encodersCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.encodersCollection = (List<EncoderModel>) encodersCollection;
+        this.encodersCollection = new ArrayList<>( encodersCollection );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -68,7 +68,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 //        Log.d( TAG, "getItemCount : enter" );
 
 //        Log.d( TAG, "getItemCount : exit" );
-        return ( null != this.encodersCollection ) ? this.encodersCollection.size() : 0;
+        return ( null == this.encodersCollection ) ? 0: this.encodersCollection.size();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
         final EncoderModel encoderModel = this.encodersCollection.get( position );
 
-        int state = translateState( encoderModel.getState() );
+        int state = translateState( encoderModel.state() );
         if( state == R.string.encoder_state_recording ) {
 
             holder.imageViewRecording.setVisibility( View.VISIBLE );
@@ -96,12 +96,12 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
 
         }
 
-        holder.textViewName.setText( context.getResources().getString( R.string.encoder, String.valueOf( encoderModel.getId() ), ( null != encoderModel.getInputs() ? encoderModel.getInputs().get( 0 ).getDisplayName() : String.valueOf( encoderModel.getId() ) ), context.getResources().getString( state ) ) );
+        holder.textViewName.setText( context.getResources().getString( R.string.encoder, String.valueOf( encoderModel.id() ), encoderModel.inputName(), context.getResources().getString( state ) ) );
 
-        if( null != encoderModel.getRecording() ) {
+        if( null != encoderModel.recordingName() ) {
 
-            holder.textViewRecording.setText( encoderModel.getRecording().getTitle() );
-            holder.textViewRecordingDescription.setText( encoderModel.getRecording().getDescription() );
+            holder.textViewRecording.setText( encoderModel.recordingName() );
+            holder.textViewRecordingDescription.setText( encoderModel.recordingDescription() );
 
         }
 
@@ -119,7 +119,7 @@ public class EncodersAdapter extends RecyclerView.Adapter<EncodersAdapter.Encode
     public void setEncodersCollection( Collection<EncoderModel> encodersCollection ) {
 
         this.validateEncodersCollection( encodersCollection );
-        this.encodersCollection = (List<EncoderModel>) encodersCollection;
+        this.encodersCollection = new ArrayList<>( encodersCollection );
         this.notifyDataSetChanged();
 
     }

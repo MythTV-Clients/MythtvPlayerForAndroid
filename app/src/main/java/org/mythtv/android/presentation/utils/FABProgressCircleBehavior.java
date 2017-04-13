@@ -18,7 +18,9 @@ import com.github.jorgecastilloprz.FABProgressCircle;
 
 public class FABProgressCircleBehavior extends CoordinatorLayout.Behavior<FABProgressCircle> {
 
-    public FABProgressCircleBehavior( Context context, AttributeSet attrs ) { }
+    public FABProgressCircleBehavior( Context context, AttributeSet attrs ) {
+        super( context, attrs );
+    }
 
     @Override
     public boolean onDependentViewChanged( CoordinatorLayout parent, FABProgressCircle child, View dependency ) {

@@ -18,11 +18,11 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
-import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -113,14 +113,12 @@ public class SearchableActivity extends AbstractBasePhoneActivity implements Has
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-        switch( item.getItemId() ) {
+        int i = item.getItemId();
+        if( i == android.R.id.home ) {
 
-            case android.R.id.home:
+            finish();
 
-                finish();
-
-                return true;
-
+            return true;
         }
 
         return super.onOptionsItemSelected( item );
@@ -174,8 +172,8 @@ public class SearchableActivity extends AbstractBasePhoneActivity implements Has
     public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+        navigator.navigateToMediaItem( this, mediaItemModel.id(), mediaItemModel.media(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

@@ -27,7 +27,7 @@ import org.mythtv.android.R;
 
 /**
  *
- * PlaybackOverlayActivity for video playback that loads PlaybackOverlayFragment and handles
+ * PlaybackOverlayActivity for video playback that loads MythTvPlaybackFragment and handles
  * the MediaSession object used to maintain the state of the media playback.
  *
  * @author dmfrey

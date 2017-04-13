@@ -26,7 +26,7 @@ package org.mythtv.android.domain;
  *
  * Created on 11/10/15.
  */
-public class ContentType {
+public final class ContentType {
 
     public static final String ADULT = "ADULT";
     public static final String HOMEVIDEO = "HOMEVIDEO";
@@ -34,6 +34,8 @@ public class ContentType {
     public static final String MUSICVIDEO = "MUSICVIDEO";
     public static final String TELEVISION = "TELEVISION";
 
-    private ContentType() { }
+    private ContentType() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
 }

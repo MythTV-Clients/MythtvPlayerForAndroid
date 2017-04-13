@@ -16,6 +16,7 @@ import org.mythtv.android.domain.MediaItem;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -52,10 +53,14 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
     private static final int FAKE_PERCENT_COMPLETE = -1;
     private static final boolean FAKE_RECORDING = false;
     private static final int FAKE_LIVE_STREAM_ID = -1;
-    private static final String FAKE_CREATE_HTTP_LIVE_STREAM_URL = "fake create http live stream url";
-    private static final String FAKE_REMOVE_HTTP_LIVE_STREAM_URL = "fake remove http live stream url";
     private static final boolean FAKE_WATCHED = false;
     private static final String FAKE_MARK_WATCHED_URL = "fake mark watched url";
+    private static final String FAKE_UPDATE_SAVED_BOOKMARK_URL = "fake update saved bookmark url";
+    private static final long FAKE_BOOKMARK = -1;
+    private static final String FAKE_INETREF = "fake inetref";
+    private static final String FAKE_CERTIFICATION = "fake certification";
+    private static final int FAKE_PARENTAL_LEVEL = -1;
+    private static final String FAKE_RECORDING_GROUP = "fake recording group";
 
     private DbSearchDataStore dbSearchDataStore;
 
@@ -98,33 +103,39 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
 
     private MediaItem createFakeSearchResultEntity() {
 
-        MediaItem mediaItem = new MediaItem();
-        mediaItem.setId( FAKE_ID );
-        mediaItem.setMedia( FAKE_MEDIA );
-        mediaItem.setTitle( FAKE_TITLE );
-        mediaItem.setSubTitle( FAKE_SUB_TITLE );
-        mediaItem.setDescription( FAKE_DESCRIPTION );
-        mediaItem.setStartDate( FAKE_START_DATE );
-        mediaItem.setProgramFlags( FAKE_PROGRAM_FLAGS );
-        mediaItem.setSeason( FAKE_SEASON );
-        mediaItem.setEpisode( FAKE_EPISODE );
-        mediaItem.setStudio( FAKE_STUDIO );
-        mediaItem.setCastMembers( FAKE_CAST_MEMBERS );
-        mediaItem.setCharacters( FAKE_CHARACTERS );
-        mediaItem.setUrl( FAKE_URL );
-        mediaItem.setFanartUrl( FAKE_FANART_URL );
-        mediaItem.setCoverartUrl( FAKE_COVERART_URL );
-        mediaItem.setBannerUrl( FAKE_BANNER_URL );
-        mediaItem.setPreviewUrl( FAKE_PREVIEW_URL );
-        mediaItem.setContentType( FAKE_CONTENT_TYPE );
-        mediaItem.setDuration( FAKE_DURATION );
-        mediaItem.setPercentComplete( FAKE_PERCENT_COMPLETE );
-        mediaItem.setRecording( FAKE_RECORDING );
-        mediaItem.setLiveStreamId( FAKE_LIVE_STREAM_ID );
-        mediaItem.setCreateHttpLiveStreamUrl( FAKE_CREATE_HTTP_LIVE_STREAM_URL );
-        mediaItem.setRemoveHttpLiveStreamUrl( FAKE_REMOVE_HTTP_LIVE_STREAM_URL );
-        mediaItem.setWatched( FAKE_WATCHED );
-        mediaItem.setMarkWatchedUrl( FAKE_MARK_WATCHED_URL );
+        MediaItem mediaItem = MediaItem.create(
+            FAKE_ID,
+            FAKE_MEDIA,
+            FAKE_TITLE,
+            FAKE_SUB_TITLE,
+            FAKE_DESCRIPTION,
+            FAKE_START_DATE,
+            FAKE_PROGRAM_FLAGS,
+            FAKE_SEASON,
+            FAKE_EPISODE,
+            FAKE_STUDIO,
+            FAKE_CAST_MEMBERS,
+            FAKE_CHARACTERS,
+            FAKE_URL,
+            FAKE_FANART_URL,
+            FAKE_COVERART_URL,
+            FAKE_BANNER_URL,
+            FAKE_PREVIEW_URL,
+            FAKE_CONTENT_TYPE,
+            FAKE_DURATION,
+            FAKE_PERCENT_COMPLETE,
+            FAKE_RECORDING,
+            FAKE_LIVE_STREAM_ID,
+            FAKE_WATCHED,
+            FAKE_MARK_WATCHED_URL,
+            FAKE_UPDATE_SAVED_BOOKMARK_URL,
+            FAKE_BOOKMARK,
+            FAKE_INETREF,
+            FAKE_CERTIFICATION,
+            FAKE_PARENTAL_LEVEL,
+            FAKE_RECORDING_GROUP,
+            Collections.emptyList()
+        );
 
         return mediaItem;
     }

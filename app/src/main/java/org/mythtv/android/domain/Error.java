@@ -1,48 +1,29 @@
 package org.mythtv.android.domain;
 
+import com.google.auto.value.AutoValue;
+
+import javax.annotation.Nullable;
+
 /**
  *
  * @author dmfrey
  *
  * Created on 1/20/17.
  */
+@AutoValue
+public abstract class Error {
 
-public class Error {
+    @Nullable
+    public abstract String field();
 
-    private final String field;
-    private final String defaultMessage;
-    private final int messageResource;
+    @Nullable
+    public abstract String defaultMessage();
 
-    public Error(final String field, final String defaultMessage, final int messageResource ) {
+    public abstract int messageResource();
 
-        this.field = field;
-        this.defaultMessage = defaultMessage;
-        this.messageResource = messageResource;
+    public static Error create( String field, String defaultMessage, int messageResource ) {
 
-    }
-
-    public String getField() {
-
-        return field;
-    }
-
-    public String getDefaultMessage() {
-
-        return defaultMessage;
-    }
-
-    public int getMessageResource() {
-
-        return messageResource;
-    }
-
-    @Override
-    public String toString() {
-        return "Error{" +
-                "field='" + field + '\'' +
-                ", defaultMessage='" + defaultMessage + '\'' +
-                ", messageResource=" + messageResource +
-                '}';
+        return new AutoValue_Error( field, defaultMessage, messageResource );
     }
 
 }

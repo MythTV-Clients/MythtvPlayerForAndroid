@@ -118,7 +118,7 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
 
         return this.api.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup )
                 .flatMap( Observable::from )
-                .filter( programEntity -> !programEntity.getRecording().getRecGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) || "Deleted".equalsIgnoreCase( programEntity.getRecording().getRecGroup() ) )
+                .filter( programEntity -> ( !programEntity.recording().recGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.recording().storageGroup().equalsIgnoreCase( "LiveTV" ) ) && !"Deleted".equalsIgnoreCase( programEntity.recording().recGroup() ) )
                 .toList()
                 .doOnNext( saveRecordedProgramsToDbAction )
                 .doOnError( e -> Log.e( TAG, "recordedProgramEntityList : error", e ) );
@@ -151,12 +151,12 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
     }
 
     @Override
-    public Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) {
+    public Observable<Boolean> updateWatchedStatus( final int id, final boolean watched ) {
         Log.d( TAG, "updateWatchedStatus : enter" );
 
-        Log.d( TAG, "updateWatchedStatus : chanId=" + chanId + ", startTime=" + startTime + ", watched=" + watched );
+        Log.d( TAG, "updateWatchedStatus : id=" + id + ", watched=" + watched );
 
-        return this.api.updateWatchedStatus( chanId, startTime, watched );
+        return this.api.updateWatchedStatus( id, watched );
     }
 
     @Override

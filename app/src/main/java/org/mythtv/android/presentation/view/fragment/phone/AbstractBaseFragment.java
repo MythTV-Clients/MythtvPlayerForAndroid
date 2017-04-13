@@ -23,15 +23,11 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import com.google.gson.Gson;
-
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.NetComponent;
 import org.mythtv.android.presentation.internal.di.components.SharedPreferencesComponent;
-
-import okhttp3.OkHttpClient;
 
 /**
  *
@@ -43,17 +39,11 @@ import okhttp3.OkHttpClient;
  */
 public abstract class AbstractBaseFragment extends Fragment {
 
-    protected OkHttpClient okHttpClient;
-    protected Gson gson;
-
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
         setRetainInstance( true );
-
-        okHttpClient = getNetComponent().okHttpClient();
-        gson = getNetComponent().gson();
 
     }
 

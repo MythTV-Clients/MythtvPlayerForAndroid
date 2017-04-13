@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -54,15 +55,6 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     private static final String TAG = MainPhoneActivity.class.getSimpleName();
 
-    public static Intent getCallingIntent( Context context ) {
-
-        Intent callingIntent = new Intent( context, MainPhoneActivity.class );
-        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
-
-        return callingIntent;
-    }
-
-
     private MediaItemListFragment recentFragment;
     private EncoderListFragment encodersFragment;
     private MediaItemListFragment upcomingFragment;
@@ -77,6 +69,14 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     @BindView( R.id.fab )
     FloatingActionButton mFab;
+
+    public static Intent getCallingIntent( Context context ) {
+
+        Intent callingIntent = new Intent( context, MainPhoneActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
+    }
 
     @Override
     public int getLayoutResource() {
@@ -141,6 +141,10 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
                 break;
 
+            default :
+
+                break;
+
         }
 
         Log.v( TAG, "onClick : exit" );
@@ -157,13 +161,17 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
     @Override
     public void onTabReselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabReselected : enter" );
 
+        Log.v( TAG, "onTabReselected : exit" );
     }
 
     @Override
     public void onTabUnselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabUnselected : enter" );
 
-    }
+        Log.v( TAG, "onTabUnselected : exit" );
+}
 
     private void initializeInjector() {
         Log.d( TAG, "initializeInjector : enter" );
@@ -220,6 +228,10 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
 
                 break;
 
+            default :
+
+                break;
+
         }
 
         Log.v( TAG, "setSelectedTab : exit" );
@@ -237,10 +249,10 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
     public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        if( null != mediaItemModel && !mediaItemModel.getMedia().equals( Media.UPCOMING ) ) {
+        if( null != mediaItemModel && !mediaItemModel.media().equals( Media.UPCOMING ) ) {
 
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
-            navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+            navigator.navigateToMediaItem( this, mediaItemModel.id(), mediaItemModel.media(), options );
 
         }
 

@@ -1,0 +1,16 @@
+<FindBugsFilter>
+
+    <Match>
+        <Class name="~.*\.R\$.*" />
+    </Match>
+
+    <Match>
+        <Class name="~.*Manifest\$.*"/>
+    </Match>
+
+    <!-- Temporary exclude FileManager from scanning until min API level is 21 -->
+    <Match>
+        <Class name="org.mythtv.android.data.cache.FileManager"/>
+    </Match>
+
+</FindBugsFilter>

@@ -25,9 +25,7 @@ import com.google.gson.reflect.TypeToken;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.entity.TitleInfoListEntity;
 
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,19 +49,19 @@ public class TitleInfoEntityJsonMapper {
 
     }
 
-    public TitleInfoEntity transformTitleInfoEntity( Reader titleInfoJsonResponse ) throws JsonSyntaxException {
+    public TitleInfoEntity transformTitleInfoEntity( String titleInfoJsonResponse ) throws JsonSyntaxException {
 
         Type titleInfoEntityType = new TypeToken<TitleInfoEntity>() {}.getType();
 
         return this.gson.fromJson( titleInfoJsonResponse, titleInfoEntityType );
     }
 
-    public List<TitleInfoEntity> transformTitleInfoEntityCollection( Reader titleInfoListJsonResponse ) throws JsonSyntaxException {
+    public List<TitleInfoEntity> transformTitleInfoEntityCollection( String titleInfoListJsonResponse ) throws JsonSyntaxException {
 
         Type titleInfoListEntityType = new TypeToken<TitleInfoListEntity>() {}.getType();
         TitleInfoListEntity titleInfoListEntity = gson.fromJson( titleInfoListJsonResponse, titleInfoListEntityType );
 
-        return Arrays.asList( titleInfoListEntity.getTitleInfos().getTitleInfos() );
+        return titleInfoListEntity.titleInfos().titleInfos();
     }
 
 }

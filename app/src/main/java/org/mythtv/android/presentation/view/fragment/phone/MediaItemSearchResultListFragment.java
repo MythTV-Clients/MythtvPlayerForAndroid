@@ -78,6 +78,48 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
 
     private MediaItemListListener mediaItemListListener;
 
+    private final MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
+
+        if( null != MediaItemSearchResultListFragment.this.mediaItemListListener && null != mediaItemModel ) {
+            Log.d( TAG, "onProgramItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+            if( mediaItemModel.isValid() ) {
+                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+                MediaItemSearchResultListFragment.this.searchResultListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
+
+            } else {
+                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
+
+                if( null == mediaItemModel.media() ) {
+
+                    String message = getString(R.string.validation_no_media_type);
+                    showToastMessage( message, null, null );
+
+                } else {
+
+                    String fields = "";
+                    for( ErrorModel errorModel : mediaItemModel.validationErrors() ) {
+
+                        if( !"".equals( fields ) ) {
+                            fields += ", ";
+                        }
+
+                        fields += errorModel.field();
+
+                    }
+
+                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
+                    showToastMessage( message, null, null );
+
+                }
+
+            }
+
+        }
+
+    };
+
     public MediaItemSearchResultListFragment() {
         super();
     }
@@ -299,47 +341,5 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
 
         Log.d( TAG, "loadSearchResultList : exit" );
     }
-
-    private MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
-
-        if( null != MediaItemSearchResultListFragment.this.mediaItemListListener && null != mediaItemModel ) {
-            Log.d( TAG, "onProgramItemClicked : mediaItemModel=" + mediaItemModel.toString() );
-
-            if( mediaItemModel.isValid() ) {
-                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
-
-                MediaItemSearchResultListFragment.this.searchResultListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
-
-            } else {
-                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
-
-                if( null == mediaItemModel.getMedia() ) {
-
-                    String message = getString(R.string.validation_no_media_type);
-                    showToastMessage( message, null, null );
-
-                } else {
-
-                    String fields = "";
-                    for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
-
-                        if( !"".equals( fields ) ) {
-                            fields += ", ";
-                        }
-
-                        fields += errorModel.getField();
-
-                    }
-
-                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
-                    showToastMessage( message, null, null );
-
-                }
-
-            }
-
-        }
-
-    };
 
 }
