@@ -30,6 +30,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.cast.framework.CastSession;
 
 import org.mythtv.android.R;
@@ -46,6 +48,7 @@ import org.mythtv.android.presentation.view.fragment.phone.MediaItemDetailsFragm
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  *
@@ -70,13 +73,15 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
     private MediaItemModel mediaItemModel;
 
-    @BindView( R.id.media_item_image)
+    @BindView( R.id.media_item_image )
     ImageView backdrop;
 
     @BindView( R.id.fab )
     FloatingActionButton fab;
 
     MediaItemDetailsFragment fragment;
+
+    private Unbinder unbinder;
 
     public static Intent getCallingIntent( Context context, int id, Media media ) {
 
@@ -101,6 +106,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         super.onCreate( savedInstanceState );
 
         ButterKnife.bind( this );
+        unbinder = ButterKnife.bind( this );
 
         this.initializeActivity( savedInstanceState );
         this.initializeInjector();
@@ -140,6 +146,14 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         }
 
         Log.d( TAG, "onRestoreInstanceState : exit" );
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        unbinder.unbind();
+
+        super.onDestroy();
     }
 
     @Override
@@ -254,6 +268,15 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         Log.d( TAG, "onMediaItemLoaded : exit" );
     }
 
+    @Override
+    public void onMediaItemRefreshed( final MediaItemModel mediaItemModel ) {
+        Log.d( TAG, "onMediaItemRefreshed : enter" );
+
+        this.mediaItemModel = mediaItemModel;
+
+        Log.d( TAG, "onMediaItemRefreshed : exit" );
+    }
+
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
@@ -287,11 +310,13 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         if( null != backdropUrl && !"".equals( backdropUrl ) ) {
 
             Log.i( TAG, "loadBackdrop : backdropUrl=" + backdropUrl );
-            final ImageView imageView = (ImageView) findViewById( R.id.media_item_image);
-            getNetComponent().picasso()
+            Glide
+                    .with( this )
                     .load( backdropUrl )
-                    .fit().centerCrop()
-                    .into( imageView );
+                    .centerCrop()
+                    .crossFade()
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
+                    .into( backdrop );
 
         }
 

@@ -1,7 +1,6 @@
 package org.mythtv.android.presentation.internal.di.components;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.mythtv.android.presentation.internal.di.modules.ApplicationModule;
 import org.mythtv.android.presentation.internal.di.modules.NetModule;
@@ -28,7 +27,6 @@ public interface NetComponent {
 
     //Exposed to sub-graphs.
     OkHttpClient okHttpClient();
-    Picasso picasso();
     Gson gson();
 
 }

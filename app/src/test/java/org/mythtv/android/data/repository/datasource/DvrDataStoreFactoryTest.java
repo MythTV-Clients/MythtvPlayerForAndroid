@@ -1,15 +1,11 @@
 package org.mythtv.android.data.repository.datasource;
 
-import android.content.SharedPreferences;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
-import org.robolectric.RuntimeEnvironment;
-
-import okhttp3.OkHttpClient;
+import org.mythtv.android.data.net.DvrApi;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -24,10 +20,7 @@ public class DvrDataStoreFactoryTest extends ApplicationTestCase {
     private DvrDataStoreFactory dvrDataStoreFactory;
 
     @Mock
-    private SharedPreferences mockSharedPreferences;
-
-    @Mock
-    private OkHttpClient mockOkHttpClient;
+    private DvrApi mockDvrApi;
 
     @Mock
     private SearchDataStoreFactory mockSearchDataStoreFactory;
@@ -36,7 +29,7 @@ public class DvrDataStoreFactoryTest extends ApplicationTestCase {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataStoreFactory = new DvrDataStoreFactory( RuntimeEnvironment.application, mockSharedPreferences, mockOkHttpClient, this.gson, mockSearchDataStoreFactory );
+        dvrDataStoreFactory = new DvrDataStoreFactory( mockDvrApi, mockSearchDataStoreFactory );
 
     }
 

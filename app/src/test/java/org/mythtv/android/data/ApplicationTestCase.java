@@ -9,14 +9,15 @@ import org.junit.runner.RunWith;
 import org.mythtv.android.BuildConfig;
 import org.mythtv.android.data.entity.MythTvTypeAdapterFactory;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeTypeConverter;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 /**
  * Base class for Robolectric data layer tests.
  * Inherit from this class to create a test.
  */
-@RunWith( CustomGradleTestRunner.class )
-@Config( constants = BuildConfig.class, application = ApplicationStub.class )
+@RunWith( RobolectricTestRunner.class )
+@Config( constants = BuildConfig.class )
 public abstract class ApplicationTestCase {
 
     protected final Gson gson;

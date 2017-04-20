@@ -18,22 +18,13 @@
 
 package org.mythtv.android.data.repository.datasource;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import org.mythtv.android.data.cache.VideoCache;
-import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
-import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.net.VideoApi;
-import org.mythtv.android.data.net.VideoApiImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import okhttp3.OkHttpClient;
 
 /**
  *
@@ -48,26 +39,20 @@ public class VideoDataStoreFactory {
 
     private static final String TAG = VideoDataStoreFactory.class.getSimpleName();
 
-    private final Context context;
-    private final SharedPreferences sharedPreferences;
-    private final OkHttpClient okHttpClient;
-    private final Gson gson;
+    private final VideoApi api;
     private final VideoCache videoCache;
     private final SearchDataStoreFactory searchDataStoreFactory;
 
     @Inject
-    public VideoDataStoreFactory( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, Gson gson, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
+    public VideoDataStoreFactory( final VideoApi api, final VideoCache videoCache, final SearchDataStoreFactory searchDataStoreFactory ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == gson  || null == videoCache || null == searchDataStoreFactory ) {
+        if( null == api  || null == videoCache || null == searchDataStoreFactory ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
-        this.context = context.getApplicationContext();
-        this.sharedPreferences = sharedPreferences;
-        this.okHttpClient = okHttpClient;
-        this.gson = gson;
+        this.api = api;
         this.videoCache = videoCache;
         this.searchDataStoreFactory = searchDataStoreFactory;
 
@@ -98,12 +83,8 @@ public class VideoDataStoreFactory {
     public VideoDataStore createMasterBackendDataStore() {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
-        VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper = new VideoMetadataInfoEntityJsonMapper( this.gson );
-        BooleanJsonMapper booleanJsonMapper = new BooleanJsonMapper();
-        VideoApi api = new VideoApiImpl( this.context, this.sharedPreferences, this.okHttpClient, videoMetadataInfoEntityJsonMapper, booleanJsonMapper );
-
         Log.d( TAG, "createMasterBackendDataStore : exit" );
-        return new MasterBackendVideoDataStore( api, this.videoCache, this.searchDataStoreFactory );
+        return new MasterBackendVideoDataStore( this.api, this.videoCache, this.searchDataStoreFactory );
     }
 
     public VideoDataStore createCategoryDataStore() {

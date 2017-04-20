@@ -19,8 +19,9 @@ package org.mythtv.android.presentation.model;
 import android.annotation.TargetApi;
 import android.media.MediaDescription;
 import android.os.Build;
-import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.auto.value.AutoValue;
 
 /**
  * VideoModel is an immutable object that holds the various metadata associated with a single video.
@@ -31,107 +32,37 @@ import android.os.Parcelable;
  */
 // TODO: replace with auto-value parcel extension
 @SuppressWarnings( "PMD.AccessorClassGeneration" )
-public final class VideoModel implements Parcelable {
-    public final long id;
-    public final String category;
-    public final String title;
-    public final String description;
-    public final String bgImageUrl;
-    public final String cardImageUrl;
-    public final String videoUrl;
-    public final String studio;
+@AutoValue
+public abstract class VideoModel implements Parcelable {
 
-    private VideoModel(
-            final long id,
-            final String category,
-            final String title,
-            final String desc,
-            final String videoUrl,
-            final String bgImageUrl,
-            final String cardImageUrl,
-            final String studio) {
-        this.id = id;
-        this.category = category;
-        this.title = title;
-        this.description = desc;
-        this.videoUrl = videoUrl;
-        this.bgImageUrl = bgImageUrl;
-        this.cardImageUrl = cardImageUrl;
-        this.studio = studio;
+    public abstract long id();
+    public abstract String category();
+    public abstract String title();
+    public abstract String description();
+    public abstract String bgImageUrl();
+    public abstract String cardImageUrl();
+    public abstract String videoUrl();
+    public abstract String studio();
+
+    public static VideoModel create( final long id,
+                                     final String category,
+                                     final String title,
+                                     final String desc,
+                                     final String videoUrl,
+                                     final String bgImageUrl,
+                                     final String cardImageUrl,
+                                     final String studio ) {
+
+        return new AutoValue_VideoModel( id, category, title, desc, videoUrl, bgImageUrl, cardImageUrl, studio );
     }
-
-    protected VideoModel(Parcel in) {
-        id = in.readLong();
-        category = in.readString();
-        title = in.readString();
-        description = in.readString();
-        bgImageUrl = in.readString();
-        cardImageUrl = in.readString();
-        videoUrl = in.readString();
-        studio = in.readString();
-    }
-
-    public static final Creator<VideoModel> CREATOR = new Creator<VideoModel>() {
-
-        @Override
-        public VideoModel createFromParcel( Parcel in ) {
-            return new VideoModel( in );
-        }
-
-        @Override
-        public VideoModel[] newArray( int size ) {
-            return new VideoModel[ size ];
-        }
-    };
 
     @Override
     public boolean equals( Object m ) {
-        return m instanceof VideoModel && id == ( (VideoModel) m ).id;
+        return m instanceof VideoModel && id() == ( (VideoModel) m ).id();
     }
 
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel( Parcel dest, int flags ) {
-        dest.writeLong( id );
-        dest.writeString( category );
-        dest.writeString( title );
-        dest.writeString( description );
-        dest.writeString( bgImageUrl );
-        dest.writeString( cardImageUrl );
-        dest.writeString( videoUrl );
-        dest.writeString( studio );
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (category == null ? 0 : category.hashCode());
-        result = 31 * result + title.hashCode();
-        result = 31 * result + (description == null ? 0 : description.hashCode());
-        result = 31 * result + (bgImageUrl == null ? 0 : bgImageUrl.hashCode());
-        result = 31 * result + (cardImageUrl == null ? 0 : cardImageUrl.hashCode());
-        result = 31 * result + videoUrl.hashCode();
-        result = 31 * result + (studio == null ? 0 : studio.hashCode());
-        return result;
-    }
-
-    @Override
-    public String toString() {
-
-        String s = "VideoModel{";
-        s += "id=" + id;
-        s += ", category='" + category + "'";
-        s += ", title='" + title + "'";
-        s += ", videoUrl='" + videoUrl + "'";
-        s += ", bgImageUrl='" + bgImageUrl + "'";
-        s += ", cardImageUrl='" + cardImageUrl + "'";
-        s += ", studio='" + cardImageUrl + "'";
-        s += "}";
-
-        return s;
     }
 
     // Builder for Video object.
@@ -205,7 +136,7 @@ public final class VideoModel implements Parcelable {
         @TargetApi( Build.VERSION_CODES.LOLLIPOP )
         public VideoModel buildFromMediaDesc( MediaDescription desc ) {
 
-            return new VideoModel(
+            return VideoModel.create(
 
                     Long.parseLong( desc.getMediaId() ),
                     "", // Category - not provided by MediaDescription.
@@ -221,7 +152,7 @@ public final class VideoModel implements Parcelable {
 
         public VideoModel build() {
 
-            return new VideoModel(
+            return VideoModel.create(
                     id,
                     category,
                     title,

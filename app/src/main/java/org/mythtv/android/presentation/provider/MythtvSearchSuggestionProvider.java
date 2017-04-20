@@ -20,6 +20,8 @@ package org.mythtv.android.presentation.provider;
 
 import android.content.SearchRecentSuggestionsProvider;
 
+import org.mythtv.android.BuildConfig;
+
 /**
  *
  *
@@ -30,7 +32,7 @@ import android.content.SearchRecentSuggestionsProvider;
  */
 public class MythtvSearchSuggestionProvider extends SearchRecentSuggestionsProvider {
 
-    public final static String AUTHORITY = "org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider";
+    public final static String AUTHORITY = BuildConfig.APPLICATION_ID + ".presentation.provider.MythtvSearchSuggestionProvider";
     public final static int MODE = DATABASE_MODE_QUERIES;
 
     public MythtvSearchSuggestionProvider() {

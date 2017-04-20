@@ -6,8 +6,6 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jakewharton.picasso.OkHttp3Downloader;
-import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.BuildConfig;
@@ -43,7 +41,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    Cache provideOkHttpCache( Context context ) {
+    Cache provideOkHttpCache( final Context context ) {
 
         final File cacheDir = new File( context.getCacheDir(), "HttpResponseCache" );
         final int cacheSize = 100 * 1024 * 1024; // 100 MiB
@@ -67,7 +65,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient( Context context, Cache cache ) {
+    OkHttpClient provideOkHttpClient( final Context context, final Cache cache ) {
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel( HttpLoggingInterceptor.Level.HEADERS );
@@ -78,19 +76,6 @@ public class NetModule {
                 .addInterceptor( loggingInterceptor )
                 .addInterceptor( new UserAgentInterceptor( context.getResources().getString( R.string.app_name )+ "/" + BuildConfig.VERSION_NAME ) )
                 .build();
-    }
-
-    @Provides
-    @Singleton
-    Picasso providePicasso( Context context, OkHttpClient okHttpClient ) {
-
-        final Picasso picasso = new Picasso.Builder( context )
-                .downloader( new OkHttp3Downloader( okHttpClient ) )
-                .build();
-
-        Picasso.setSingletonInstance( picasso );
-
-        return picasso;
     }
 
 }

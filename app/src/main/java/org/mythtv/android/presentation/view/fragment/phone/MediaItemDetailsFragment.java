@@ -128,6 +128,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     public interface MediaItemDetailsListener {
 
         void onMediaItemLoaded( final MediaItemModel mediaItemModel );
+        void onMediaItemRefreshed( final MediaItemModel mediaItemModel );
 
     }
 
@@ -399,6 +400,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             this.mediaItemModel = mediaItemModel;
             updateMenu();
             updateProgress();
+            this.listener.onMediaItemRefreshed( this.mediaItemModel );
 
             if( !isTimerRunning && ( mediaItemModel.liveStreamId() > 0 && mediaItemModel.percentComplete() < 100 ) ) {
 

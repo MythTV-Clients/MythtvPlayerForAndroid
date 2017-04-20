@@ -135,7 +135,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
     public static Intent getCallingIntent( Context context, MediaItemModel mediaItemModel ) {
 
         Intent intent = new Intent( context, LocalPlayerActivity.class );
-        intent.putExtra( "media", mediaItemModel.toBundle() );
+        intent.putExtra( "media", mediaItemModel );
         intent.putExtra( "shouldStart", false );
 
         return intent;
@@ -163,7 +163,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if( null != bundle ) {
 
-            mSelectedMedia = MediaItemModel.fromBundle( getIntent().getBundleExtra( "media" ) );
+            mSelectedMedia = getIntent().getParcelableExtra( "media" );
 
             setupActionBar();
 

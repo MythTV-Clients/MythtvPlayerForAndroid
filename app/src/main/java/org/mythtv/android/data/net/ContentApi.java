@@ -38,8 +38,8 @@ public interface ContentApi {
     String LIVE_STREAM_INFO_LIST_BASE_URL = "/Content/GetLiveStreamList";
     String ADD_RECORDING_LIVE_STREAM_BASE_URL = "/Content/AddRecordingLiveStream";
     String ADD_VIDEO_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
-    String REMOVE_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
-    String GET_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
+    String REMOVE_LIVE_STREAM_BASE_URL = "/Content/RemoveLiveStream";
+    String GET_LIVE_STREAM_BASE_URL = "/Content/GetLiveStream";
 
     String ID_QS = "Id=%s";
     String RECORDEDID_QS = "RecordedId=%s";
