@@ -6,15 +6,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mythtv.android.data.ApplicationTestCase;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
-import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.repository.datasource.ContentDataStore;
-import org.mythtv.android.data.repository.datasource.ContentDataStoreFactory;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
 
@@ -27,9 +26,8 @@ import rx.Observable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-public class DvrDataRepositoryTest extends ApplicationTestCase {
-
-    private static final int FAKE_RECORDED_ID = 999;
+@RunWith( MockitoJUnitRunner.class )
+public class DvrDataRepositoryTest {
 
     private static final DateTime FAKE_START_TIME = new DateTime();
     private static final DateTime FAKE_END_TIME = new DateTime();
@@ -83,7 +81,6 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     private DvrDataRepository dvrDataRepository;
 
     @Mock private DvrDataStoreFactory mockDvrDataStoreFactory;
-    @Mock private ContentDataStoreFactory mockContentDataStoreFactory;
     @Mock private DvrDataStore mockDvrDataStore;
     @Mock private ContentDataStore mockContentDataStore;
     @Mock private ProgramEntity mockProgramEntity;
@@ -95,63 +92,9 @@ public class DvrDataRepositoryTest extends ApplicationTestCase {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory, mockContentDataStoreFactory );
+        dvrDataRepository = new DvrDataRepository( mockDvrDataStoreFactory );
 
         given( mockDvrDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockDvrDataStore );
-        given( mockContentDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockContentDataStore );
-
-    }
-
-    @Test
-    public void testGetTitleInfosHappyCase() {
-
-        List<TitleInfoEntity> titleInfosList = new ArrayList<>();
-        titleInfosList.add( TitleInfoEntity.create( "", "", -1 ) );
-
-        List<ProgramEntity> recordedProgramsList = new ArrayList<>();
-        recordedProgramsList.add( createFakeProgramEntity() );
-
-        given( mockDvrDataStore.titleInfoEntityList() ).willReturn( Observable.just( titleInfosList ) );
-        given( mockDvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null ) ).willReturn( Observable.just( recordedProgramsList ) );
-
-        dvrDataRepository.titleInfos();
-
-        verify( mockDvrDataStoreFactory ).createMasterBackendDataStore();
-        verify( mockDvrDataStore ).titleInfoEntityList();
-
-    }
-
-    @Test
-    public void testGetRecordedProgramsHappyCase() {
-
-        List<ProgramEntity> recordedProgramsList = new ArrayList<>();
-        recordedProgramsList.add( createFakeProgramEntity() );
-        given( mockDvrDataStore.recordedProgramEntityList( true, -1, -1, null, null, null ) ).willReturn( Observable.just( recordedProgramsList ) );
-
-        List<LiveStreamInfoEntity> liveStreamInfoEntityList = new ArrayList<>();
-        liveStreamInfoEntityList.add( createFakeLiveStreamInfoEntity() );
-        given( mockContentDataStore.liveStreamInfoEntityList( null ) ).willReturn( Observable.just( liveStreamInfoEntityList ) );
-
-        dvrDataRepository.recordedPrograms( true, -1, -1, null, null, null );
-
-        verify( mockDvrDataStoreFactory ).createMasterBackendDataStore();
-        verify( mockDvrDataStore ).recordedProgramEntityList( true, -1, -1, null, null, null );
-
-        verify( mockContentDataStoreFactory ).createMasterBackendDataStore();
-        verify( mockContentDataStore ).liveStreamInfoEntityList( null );
-
-    }
-
-    @Test
-    public void testGetRecordedProgramHappyCase() {
-
-        ProgramEntity programEntity = createFakeProgramEntity();
-        given( mockDvrDataStore.recordedProgramEntityDetails( FAKE_RECORDED_ID ) ).willReturn( Observable.just( programEntity ) );
-
-        dvrDataRepository.recordedProgram( FAKE_RECORDED_ID );
-
-        verify( mockDvrDataStoreFactory ).createMasterBackendDataStore();
-        verify( mockDvrDataStore ).recordedProgramEntityDetails( FAKE_RECORDED_ID );
 
     }
 

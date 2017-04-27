@@ -31,8 +31,7 @@ buildscript {
         classpath "com.google.guava:guava:20.0"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
         classpath 'com.google.firebase:firebase-plugins:1.0.4'
-        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
-        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.6.0'
     }
 
 }
@@ -56,6 +55,7 @@ allprojects {
         autoValueVersion = '1.4.1'
         autoValueGsonVersion = '0.4.6'
         autoValueParcelVersion = '0.2.5'
+        autoValueIgnoreHashEqualsVersion = '1.1.3'
         daggerVersion = '2.10'
         butterKnifeVersion = '8.5.1'
         rxJavaVersion = '1.2.9'
@@ -80,7 +80,7 @@ allprojects {
         robolectricVersion = '3.0'
         jUnitVersion = '4.12'
         hamcrestVersion = '1.3'
-        assertJVersion = '3.3.0'
+        assertJVersion = '3.6.2'
         mockitoVersion = '1.10.19'
         dexmakerVersion = '1.2'
         espressoVersion = '2.3-alpha'

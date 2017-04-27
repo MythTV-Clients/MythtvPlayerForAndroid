@@ -21,7 +21,13 @@ public interface MediaItemRepository {
 
     Observable<List<MediaItem>> mediaItems( Media media, String title );
 
-    Observable<MediaItem> mediaItem( int id );
+    Observable<MediaItem> mediaItem( Media media, int id );
+
+    Observable<MediaItem> addLiveStream( Media media, int id );
+
+    Observable<MediaItem> removeLiveStream( Media media, int id );
+
+    Observable<MediaItem> updateWatchedStatus( Media media, int id, boolean watched );
 
     Observable<List<MediaItem>> search( String searchString );
 

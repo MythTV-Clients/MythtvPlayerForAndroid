@@ -18,11 +18,10 @@
 
 package org.mythtv.android.domain.interactor;
 
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.DvrRepository;
-
-import java.util.Map;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 
 import rx.Observable;
 
@@ -32,23 +31,27 @@ import rx.Observable;
  *
  * @author dmfrey
  *
- * Created on 8/26/15.
+ * Created on 4/24/17.
  */
-public class GetRecentProgramList extends DynamicUseCase {
+public class GetMediaItemDetails extends UseCase {
 
-    private final DvrRepository dvrRepository;
+    private final Media media;
+    private final int id;
+    private final MediaItemRepository mediaItemRepository;
 
-    public GetRecentProgramList( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetMediaItemDetails( final Media media, final int id, final MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.dvrRepository = dvrRepository;
+        this.media = media;
+        this.id = id;
+        this.mediaItemRepository = mediaItemRepository;
 
     }
 
     @Override
-    public Observable buildUseCaseObservable( Map parameters ) {
+    protected Observable buildUseCaseObservable() {
 
-        return this.dvrRepository.recent();
+        return this.mediaItemRepository.mediaItem( this.media, this.id );
     }
 
 }

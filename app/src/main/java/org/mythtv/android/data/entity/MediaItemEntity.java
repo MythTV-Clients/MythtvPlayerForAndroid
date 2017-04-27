@@ -6,6 +6,9 @@ import com.google.gson.TypeAdapter;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.annotations.IgnoreHashEquals;
+
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -28,7 +31,7 @@ public abstract class MediaItemEntity {
     public static final String DROP_TABLE;
     public static final String SQL_SELECT_MATCH = TABLE_NAME + " MATCH ?";
     public static final String SQL_DELETE_ALL = "delete from " + TABLE_NAME + " where type = ?";
-    public static final String SQL_INSERT = "insert into " + TABLE_NAME + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public static final String SQL_INSERT = "insert into " + TABLE_NAME + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     public static final String FIELD_ID = "id";
     public static final String FIELD_MEDIA = "media";
@@ -53,7 +56,6 @@ public abstract class MediaItemEntity {
     public static final String FIELD_LIVE_STREAM_PERCENT_COMPLETE = "percent_complete";
     public static final String FIELD_LIVE_STREAM_ID = "live_stream_id";
     public static final String FIELD_WATCHED_STATUS = "watched_status";
-    public static final String FIELD_MARK_WATCHED_URL = "mark_watched_url";
     public static final String FIELD_UPDATE_SAVED_BOOKMARK_URL = "update_saved_bookmark_url";
     public static final String FIELD_BOOKMARK = "bookmark";
     public static final String FIELD_INETREF = "inetref";
@@ -87,7 +89,6 @@ public abstract class MediaItemEntity {
                 FIELD_LIVE_STREAM_PERCENT_COMPLETE + " " + INTEGER_KEY + ", " +
                 FIELD_LIVE_STREAM_ID + " " + INTEGER_KEY + ", " +
                 FIELD_WATCHED_STATUS + " " + INTEGER_KEY + ", " +
-                FIELD_MARK_WATCHED_URL + " " + TEXT_KEY + ", " +
                 FIELD_UPDATE_SAVED_BOOKMARK_URL + " " + TEXT_KEY + ", " +
                 FIELD_BOOKMARK + " " + INTEGER_KEY + ", " +
                 FIELD_INETREF + " " + TEXT_KEY + ", " +
@@ -162,9 +163,6 @@ public abstract class MediaItemEntity {
     public abstract boolean watched();
 
     @Nullable
-    public abstract String markWatchedUrl();
-
-    @Nullable
     public abstract String updateSavedBookmarkUrl();
 
     public abstract long bookmark();
@@ -180,22 +178,31 @@ public abstract class MediaItemEntity {
     @Nullable
     public abstract String recordingGroup();
 
+    @Nullable
+    @IgnoreHashEquals
+    public abstract List<ErrorEntity> validationErrors();
+
     public static MediaItemEntity create( int id, Media media, String title, String subTitle, String description, DateTime startDate, int programFlags, int season, int episode, String studio,
                                           String castMembers, String characters, String url, String fanartUrl, String coverartUrl, String bannerUrl, String previewUrl, String contentType,
                                           long duration, int percentComplete, boolean recording, int liveStreamId,
-                                          boolean watched, String markWatchedUrl, String updateSavedBookmarkUrl, long bookmark, String inetref,
-                                          String certification, int parentalLevel, String recordingGroup ) {
+                                          boolean watched, String updateSavedBookmarkUrl, long bookmark, String inetref,
+                                          String certification, int parentalLevel, String recordingGroup, List<ErrorEntity> validationErrors ) {
 
         return new AutoValue_MediaItemEntity( id, media, title, subTitle, description, startDate, programFlags, season, episode, studio,
                 castMembers, characters, url, fanartUrl, coverartUrl, bannerUrl, previewUrl, contentType,
                 duration, percentComplete, recording, liveStreamId,
-                watched, markWatchedUrl, updateSavedBookmarkUrl, bookmark, inetref,
-                certification, parentalLevel, recordingGroup );
+                watched, updateSavedBookmarkUrl, bookmark, inetref,
+                certification, parentalLevel, recordingGroup, validationErrors );
     }
 
     public static TypeAdapter<MediaItemEntity> typeAdapter( Gson gson ) {
 
         return new AutoValue_MediaItemEntity.GsonTypeAdapter( gson );
+    }
+
+    public boolean isValid() {
+
+        return null != media() && validationErrors().isEmpty();
     }
 
 }

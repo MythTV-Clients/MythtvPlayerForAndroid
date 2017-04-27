@@ -139,7 +139,7 @@ public class MediaItemDetailsPresenter implements Presenter {
         parameters.put( "WATCHED", watched );
         parameters.put( "MEDIA", media.name() );
 
-        this.updateWatchedStatusUseCase.execute( new RefreshMediaItemDetailsSubscriber(), parameters );
+        this.updateWatchedStatusUseCase.execute( new MarkWatchedSubscriber(), parameters );
 
     }
     /**
@@ -255,6 +255,31 @@ public class MediaItemDetailsPresenter implements Presenter {
     }
 
     private final class RefreshMediaItemDetailsSubscriber extends DefaultSubscriber<MediaItem> {
+
+        @Override
+        public void onCompleted() {
+            MediaItemDetailsPresenter.this.hideViewLoading();
+        }
+
+        @Override
+        public void onError( Throwable e ) {
+
+            MediaItemDetailsPresenter.this.hideViewLoading();
+            MediaItemDetailsPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
+            MediaItemDetailsPresenter.this.showViewRetry();
+
+        }
+
+        @Override
+        public void onNext( MediaItem mediaItem ) {
+
+            MediaItemDetailsPresenter.this.refreshDetails( mediaItem );
+
+        }
+
+    }
+
+    private final class MarkWatchedSubscriber extends DefaultSubscriber<MediaItem> {
 
         @Override
         public void onCompleted() {

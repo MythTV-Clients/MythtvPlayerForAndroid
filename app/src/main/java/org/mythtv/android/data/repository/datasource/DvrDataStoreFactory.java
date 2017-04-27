@@ -39,19 +39,17 @@ public class DvrDataStoreFactory {
     private static final String TAG = DvrDataStoreFactory.class.getSimpleName();
 
     private final DvrApi api;
-    private final SearchDataStoreFactory searchDataStoreFactory;
 
     @Inject
-    public DvrDataStoreFactory( final DvrApi api, final SearchDataStoreFactory searchDataStoreFactory ) {
+    public DvrDataStoreFactory( final DvrApi api ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == api || null == searchDataStoreFactory ) {
+        if( null == api ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
         this.api = api;
-        this.searchDataStoreFactory = searchDataStoreFactory;
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -60,7 +58,7 @@ public class DvrDataStoreFactory {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
-        return new MasterBackendDvrDataStore( api, this.searchDataStoreFactory );
+        return new MasterBackendDvrDataStore( api );
     }
 
 }

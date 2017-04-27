@@ -37,7 +37,7 @@ public interface ContentDataStore {
 
     Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename );
 
-    Observable<LiveStreamInfoEntity> addLiveStream( final int id, final Media media );
+    Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id );
 
     Observable<Boolean> removeLiveStream( final int id );
 

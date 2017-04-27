@@ -56,10 +56,10 @@ public class MasterBackendContentDataStore implements ContentDataStore {
     }
 
     @Override
-    public Observable<LiveStreamInfoEntity> addLiveStream( final int id, final Media media ) {
+    public Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id ) {
         Log.d( TAG, "addLiveStream : enter" );
 
-        return this.api.addLiveStream( id, media );
+        return this.api.addLiveStream( media, id );
     }
 
     @Override

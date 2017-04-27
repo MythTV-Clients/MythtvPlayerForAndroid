@@ -26,10 +26,8 @@ import com.vincentbrison.openlibraries.android.dualcache.Builder;
 import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer;
 import com.vincentbrison.openlibraries.android.dualcache.DualCache;
 import com.vincentbrison.openlibraries.android.dualcache.JsonSerializer;
-import com.vincentbrison.openlibraries.android.dualcache.SizeOf;
 
-import org.mythtv.android.data.cache.VideoCache;
-import org.mythtv.android.data.cache.VideoCacheImpl;
+import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.LongJsonMapper;
@@ -41,17 +39,14 @@ import org.mythtv.android.data.net.DvrApi;
 import org.mythtv.android.data.net.DvrApiImpl;
 import org.mythtv.android.data.net.VideoApi;
 import org.mythtv.android.data.net.VideoApiImpl;
-import org.mythtv.android.data.repository.ContentDataRepository;
 import org.mythtv.android.data.repository.DvrDataRepository;
+import org.mythtv.android.data.repository.MediaItemDataRepository;
 import org.mythtv.android.data.repository.SearchDataRepository;
-import org.mythtv.android.data.repository.VideoDataRepository;
-import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.ContentRepository;
 import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 import org.mythtv.android.domain.repository.SearchRepository;
-import org.mythtv.android.domain.repository.VideoRepository;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.UIThread;
 
@@ -108,9 +103,9 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    ContentRepository provideContentRepository( ContentDataRepository contentDataRepository ) {
+    MediaItemRepository provideMediaItemRepository( MediaItemDataRepository mediaItemDataRepository ) {
 
-        return contentDataRepository;
+        return mediaItemDataRepository;
     }
 
     @Provides
@@ -118,20 +113,6 @@ public class ApplicationModule {
     SearchRepository provideSearchRepository( SearchDataRepository searchDataRepository ) {
 
         return searchDataRepository;
-    }
-
-    @Provides
-    @Singleton
-    VideoCache provideVideoCache( VideoCacheImpl videoCacheImpl ) {
-
-        return videoCacheImpl;
-    }
-
-    @Provides
-    @Singleton
-    VideoRepository provideVideoRepository( VideoDataRepository videoDataRepository ) {
-
-        return videoDataRepository;
     }
 
     @Provides
@@ -171,7 +152,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    VideoMetadataInfoEntityJsonMapper provideVideoMetadataInfoEntityJsonMapper(final Gson gson ) {
+    VideoMetadataInfoEntityJsonMapper provideVideoMetadataInfoEntityJsonMapper( final Gson gson ) {
 
         return new VideoMetadataInfoEntityJsonMapper( gson );
     }
@@ -192,23 +173,13 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    DualCache<MediaItem> provideCache( final Context context, final Gson gson ) {
+    DualCache<MediaItemEntity> provideCache( final Context context, final Gson gson ) {
 
-        CacheSerializer<MediaItem> jsonSerializer = new JsonSerializer<>( MediaItem.class );
+        CacheSerializer<MediaItemEntity> jsonSerializer = new JsonSerializer<>( MediaItemEntity.class );
 
-        return new Builder<MediaItem>( "MythtvPlayerCache", 1 )
+        return new Builder<MediaItemEntity>( "MythtvPlayerCache", 1 )
                 .enableLog()
-                .useReferenceInRam( 5242880, new SizeOf<MediaItem>() {
-
-                    @Override
-                    public int sizeOf( MediaItem mediaItem ) {
-
-                        String json = gson.toJson( mediaItem );
-
-                        return json.getBytes().length;
-                    }
-
-                })
+                .useReferenceInRam( 5242880, mediaItemEntity -> gson.toJson( mediaItemEntity ).length() )
                 .useSerializerInDisk( 10485760, true, jsonSerializer, context )
                 .build();
 

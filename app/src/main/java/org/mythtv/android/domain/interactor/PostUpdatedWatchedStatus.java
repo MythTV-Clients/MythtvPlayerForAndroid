@@ -21,8 +21,7 @@ package org.mythtv.android.domain.interactor;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.DvrRepository;
-import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 
 import java.util.Map;
 
@@ -38,35 +37,26 @@ import rx.Observable;
  */
 public class PostUpdatedWatchedStatus extends DynamicUseCase {
 
-    private final DvrRepository dvrRepository;
-    private final VideoRepository videoRepository;
+    private final MediaItemRepository mediaItemRepository;
 
+    private final Media media;
+    private final int id;
 
-    public PostUpdatedWatchedStatus( final DvrRepository dvrRepository, final VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public PostUpdatedWatchedStatus( final Media media, final int id, final MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.dvrRepository = dvrRepository;
-        this.videoRepository = videoRepository;
+        this.media = media;
+        this.id = id;
+        this.mediaItemRepository = mediaItemRepository;
 
     }
 
     @Override
     protected Observable buildUseCaseObservable( Map parameters ) {
 
-        final int id = (Integer) parameters.get( "ID" );
         final boolean watched = (Boolean) parameters.get( "WATCHED" );
-        final Media media = Media.valueOf( (String) parameters.get( "MEDIA" ) );
 
-        if( Media.PROGRAM.equals( media ) ) {
-
-            return this.dvrRepository.updateWatchedStatus( id, watched );
-
-        } else {
-
-            return this.videoRepository.updateWatchedStatus( id, watched );
-
-        }
-
+        return mediaItemRepository.updateWatchedStatus( this.media, this.id, watched );
     }
 
 }

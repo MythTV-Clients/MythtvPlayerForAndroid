@@ -56,14 +56,11 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
     @Mock
     private DvrApi mockDvrApi;
 
-    @Mock
-    private SearchDataStoreFactory mockSearchDataStoreFactory;
-
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        masterBackendDvrDataStore = new MasterBackendDvrDataStore( mockDvrApi, mockSearchDataStoreFactory );
+        masterBackendDvrDataStore = new MasterBackendDvrDataStore( mockDvrApi );
 
     }
 

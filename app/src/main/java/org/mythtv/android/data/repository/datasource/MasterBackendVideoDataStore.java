@@ -20,19 +20,13 @@ package org.mythtv.android.data.repository.datasource;
 
 import android.util.Log;
 
-import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
-import org.mythtv.android.data.entity.mapper.MediaItemDataMapper;
 import org.mythtv.android.data.net.VideoApi;
-import org.mythtv.android.domain.MediaItem;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -48,52 +42,10 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
     private static final String TAG = MasterBackendVideoDataStore.class.getSimpleName();
 
     private final VideoApi api;
-    private final VideoCache videoCache;
-    private final SearchDataStoreFactory searchDataStoreFactory;
 
-    private final Action1<List<VideoMetadataInfoEntity>> saveVideosToCacheAction =
-            entities -> {
-
-                if( null != entities ) {
-
-                    MasterBackendVideoDataStore.this.videoCache.put( entities );
-
-                }
-
-            };
-
-    private final Action1<List<VideoMetadataInfoEntity>> saveVideosToDbAction =
-            videoEntities -> {
-
-                if( null != videoEntities ) {
-
-                    final SearchDataStore searchDataStore = MasterBackendVideoDataStore.this.searchDataStoreFactory.createWriteSearchDataStore();
-
-                    Observable
-                        .from( videoEntities )
-                        .toList()
-                        .map( entities -> {
-
-                            try {
-
-                                return MediaItemDataMapper.transformVideos( entities );
-
-                            } catch( UnsupportedEncodingException e ) {
-                                Log.e( TAG, "saveVideosToDbAction : error", e );
-                            }
-
-                            return new ArrayList<MediaItem>();
-                        })
-                        .subscribe( searchDataStore::refreshVideoData );
-                }
-
-            };
-
-    public MasterBackendVideoDataStore( VideoApi api, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
+    public MasterBackendVideoDataStore( VideoApi api ) {
 
         this.api = api;
-        this.videoCache = videoCache;
-        this.searchDataStoreFactory = searchDataStoreFactory;
 
     }
 
@@ -105,8 +57,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Observable<List<VideoMetadataInfoEntity>> videoList = this.api.getVideoList( folder, sort, descending, startIndex, count )
                 .subscribeOn( Schedulers.io() )
-                .observeOn( AndroidSchedulers.mainThread() )
-                .doOnNext( saveVideosToCacheAction );
+                .observeOn( AndroidSchedulers.mainThread() );
 
         Log.d( TAG, "getVideos : exit" );
         return videoList;
@@ -119,8 +70,6 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getCategory : category=" + category );
 
         return this.api.getVideoList( null, null, false, -1, -1 )
-                .doOnNext( saveVideosToCacheAction )
-                .doOnNext( saveVideosToDbAction )
                 .flatMap( Observable::from )
                 .filter( entity -> entity.contentType().equals( category ) )
                 .toSortedList( ( entity1, entity2 ) -> entity1.title().compareTo( entity2.title() ) )

@@ -1,8 +1,6 @@
 package org.mythtv.android.data.entity.mapper;
 
-import org.mythtv.android.data.entity.TitleInfoEntity;
-import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
-import org.mythtv.android.domain.Media;
+import org.mythtv.android.data.entity.SeriesEntity;
 import org.mythtv.android.domain.Series;
 
 import java.util.ArrayList;
@@ -24,55 +22,23 @@ public final class SeriesDataMapper {
 
     private SeriesDataMapper() { }
 
-    public static Series transform( final TitleInfoEntity titleInfoEntity ) {
+    public static Series transform( final SeriesEntity seriesEntity ) {
 
         return Series.create(
-                titleInfoEntity.title(), Media.PROGRAM,
-                "/Content/GetRecordingArtwork?Inetref=" + titleInfoEntity.inetref() + "&Type=banner&Height=100",
-                titleInfoEntity.count(), titleInfoEntity.inetref() );
+                seriesEntity.title(),
+                seriesEntity.media(),
+                seriesEntity.artworkUrl(),
+                seriesEntity.count(),
+                seriesEntity.inetref() );
     }
 
-    public static List<Series> transformPrograms( Collection<TitleInfoEntity> programEntityCollection ) {
+    public static List<Series> transform( Collection<SeriesEntity> seriesEntityCollection ) {
 
-        List<Series> seriesList = new ArrayList<>( programEntityCollection.size() );
+        List<Series> seriesList = new ArrayList<>( seriesEntityCollection.size() );
 
-        Series series;
-        for( TitleInfoEntity programEntity : programEntityCollection ) {
+        for( SeriesEntity programEntity : seriesEntityCollection ) {
 
-            series = transform( programEntity );
-            if( null != series ) {
-
-                seriesList.add( series );
-
-            }
-
-        }
-
-        return seriesList;
-
-    }
-
-    public static Series transform( final VideoMetadataInfoEntity videoMetadataInfoEntity ) {
-
-        return Series.create(
-                videoMetadataInfoEntity.title(),Media.VIDEO,
-                "/Content/GetVideoArtwork?Id=" + videoMetadataInfoEntity.id() + "&Type=banner&Height=100",
-                1, videoMetadataInfoEntity.inetref() );
-    }
-
-    public static List<Series> transformVideos( Collection<VideoMetadataInfoEntity> videoEntityCollection ) {
-
-        List<Series> seriesList = new ArrayList<>( videoEntityCollection.size() );
-
-        Series series;
-        for( VideoMetadataInfoEntity videoEntity : videoEntityCollection ) {
-
-            series = transform( videoEntity );
-            if( null != series ) {
-
-                seriesList.add( series );
-
-            }
+            seriesList.add( transform( programEntity ) );
 
         }
 

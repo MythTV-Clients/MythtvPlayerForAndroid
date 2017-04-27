@@ -60,7 +60,6 @@ public class MediaItemModelMapper {
                 mediaItem.recording(),
                 mediaItem.liveStreamId(),
                 mediaItem.watched(),
-                mediaItem.markWatchedUrl(),
                 mediaItem.updateSavedBookmarkUrl(),
                 mediaItem.bookmark(),
                 mediaItem.inetref(),

@@ -22,7 +22,6 @@ apply from: '../tools/script-git-version.gradle'
 apply from: '../tools/script-findbugs.gradle'
 apply from: '../tools/script-lint.gradle'
 apply from: '../tools/script-pmd.gradle'
-//apply from: '../jacoco.gradle'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'me.tatarka.retrolambda'
@@ -56,12 +55,11 @@ android {
         versionCode 1714306
         versionName "3.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        testApplicationId 'org.mythtv.android.test'
 
         resValue "string", "branchName", gitVersionBranch
         resValue "string", "shaName", gitVersionCommit
         resValue "string", "tagName", "$gitVersionCode"
-        resValue "string", "versionName", ( gitVersionName == null ? versionName : gitVersionName )
+        resValue "string", "versionName", (gitVersionName == null ? versionName : gitVersionName)
 
         if (project.hasProperty("mythtvplayer.google-cast")
                 && new File(project.property("mythtvplayer.google-cast") + ".gradle").exists()) {
@@ -78,7 +76,7 @@ android {
 
             annotationProcessorOptions {
 
-                arguments = [ 'autovaluegson.defaultCollectionsToEmpty': 'true' ]
+                arguments = ['autovaluegson.defaultCollectionsToEmpty': 'true']
 
             }
 
@@ -184,6 +182,7 @@ android {
 
     }
 
+    sourceSets { debug { res.srcDirs = ['src/debug/res', 'src/debug/res/values'] } }
 }
 
 dependencies {
@@ -196,6 +195,9 @@ dependencies {
 
     provided "com.ryanharter.auto.value:auto-value-parcel:${project.ext.autoValueParcelVersion}"
     annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:${project.ext.autoValueParcelVersion}"
+
+    provided "com.github.reggar:auto-value-ignore-hash-equals:${project.ext.autoValueIgnoreHashEqualsVersion}"
+    annotationProcessor "com.github.reggar:auto-value-ignore-hash-equals:${project.ext.autoValueIgnoreHashEqualsVersion}"
 
     compile "com.google.dagger:dagger:${project.ext.daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-compiler:${project.ext.daggerVersion}"
@@ -240,9 +242,9 @@ dependencies {
 
     // Dependencies for local testing
     testCompile "junit:junit:${project.ext.jUnitVersion}"
-    testCompile "org.hamcrest:hamcrest-all:${project.ext.hamcrestVersion}"
+    testCompile "org.hamcrest:hamcrest-library:${project.ext.hamcrestVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "org.hamcrest:hamcrest-core:${project.ext.hamcrestVersion}"
+    testCompile "org.assertj:assertj-core:${project.ext.assertJVersion}"
     testCompile "org.robolectric:robolectric:${project.ext.robolectricVersion}"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:${project.ext.leakCanaryVersion}"
 

@@ -17,7 +17,7 @@ import org.robolectric.annotation.Config;
  * Inherit from this class to create a test.
  */
 @RunWith( RobolectricTestRunner.class )
-@Config( constants = BuildConfig.class )
+@Config( manifest = Config.NONE, constants = BuildConfig.class )
 public abstract class ApplicationTestCase {
 
     protected final Gson gson;

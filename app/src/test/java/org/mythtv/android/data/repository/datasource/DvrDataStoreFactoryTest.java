@@ -22,14 +22,11 @@ public class DvrDataStoreFactoryTest extends ApplicationTestCase {
     @Mock
     private DvrApi mockDvrApi;
 
-    @Mock
-    private SearchDataStoreFactory mockSearchDataStoreFactory;
-
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        dvrDataStoreFactory = new DvrDataStoreFactory( mockDvrApi, mockSearchDataStoreFactory );
+        dvrDataStoreFactory = new DvrDataStoreFactory( mockDvrApi );
 
     }
 

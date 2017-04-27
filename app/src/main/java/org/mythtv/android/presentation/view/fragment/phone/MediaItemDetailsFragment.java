@@ -35,7 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -115,9 +114,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     @BindView( R.id.media_item_description )
     TextView tv_description;
-
-    @BindView( R.id.rl_progress )
-    RelativeLayout rl_progress;
 
     private boolean isTimerRunning = false;
 
@@ -417,21 +413,12 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.VISIBLE );
-        }
-
-
         Log.d( TAG, "showLoading : exit" );
     }
 
     @Override
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
-
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.GONE );
-        }
 
         Log.d( TAG, "hideLoading : exit" );
     }
