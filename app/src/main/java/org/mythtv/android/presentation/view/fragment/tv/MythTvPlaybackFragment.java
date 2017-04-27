@@ -476,7 +476,17 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     private void updateMovieView( MediaMetadata metadata ) {
 
-        VideoModel v = new VideoModel.VideoModelBuilder().buildFromMediaDesc( metadata.getDescription() );
+        VideoModel v = VideoModel.create(
+                Long.parseLong( metadata.getDescription().getMediaId() ),
+                "", // Category - not provided by MediaDescription.
+                String.valueOf( metadata.getDescription().getTitle() ),
+                String.valueOf( metadata.getDescription().getDescription() ),
+                "", // Media URI - not provided by MediaDescription.
+                "", // Background Image URI - not provided by MediaDescription.
+                String.valueOf( metadata.getDescription().getIconUri() ),
+                String.valueOf( metadata.getDescription().getSubtitle() )
+        );
+
         long dur = metadata.getLong( MediaMetadata.METADATA_KEY_DURATION );
 
         // PlaybackControlsRow doesn't allow you to set the tv_item, so we must create a new one

@@ -126,7 +126,6 @@ android {
             minifyEnabled true // Enables code shrinking for the release build type.
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), '../tools/rules-proguard.pro'
-            applicationIdSuffix '.release'
 
         }
 

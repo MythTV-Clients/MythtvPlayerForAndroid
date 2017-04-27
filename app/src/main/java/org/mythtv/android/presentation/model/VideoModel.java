@@ -16,9 +16,6 @@
 
 package org.mythtv.android.presentation.model;
 
-import android.annotation.TargetApi;
-import android.media.MediaDescription;
-import android.os.Build;
 import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
@@ -54,117 +51,6 @@ public abstract class VideoModel implements Parcelable {
                                      final String studio ) {
 
         return new AutoValue_VideoModel( id, category, title, desc, videoUrl, bgImageUrl, cardImageUrl, studio );
-    }
-
-    @Override
-    public boolean equals( Object m ) {
-        return m instanceof VideoModel && id() == ( (VideoModel) m ).id();
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
-    // Builder for Video object.
-    public static class VideoModelBuilder {
-
-        private long id;
-        private String category;
-        private String title;
-        private String desc;
-        private String bgImageUrl;
-        private String cardImageUrl;
-        private String videoUrl;
-        private String studio;
-
-        public VideoModelBuilder id( long id ) {
-
-            this.id = id;
-
-            return this;
-        }
-
-        public VideoModelBuilder category( String category ) {
-
-            this.category = category;
-
-            return this;
-        }
-
-        public VideoModelBuilder title( String title ) {
-
-            this.title = title;
-
-            return this;
-        }
-
-        public VideoModelBuilder description( String desc ) {
-
-            this.desc = desc;
-
-            return this;
-        }
-
-        public VideoModelBuilder videoUrl( String videoUrl ) {
-
-            this.videoUrl = videoUrl;
-
-            return this;
-        }
-
-        public VideoModelBuilder bgImageUrl( String bgImageUrl ) {
-
-            this.bgImageUrl = bgImageUrl;
-
-            return this;
-        }
-
-        public VideoModelBuilder cardImageUrl( String cardImageUrl ) {
-
-            this.cardImageUrl = cardImageUrl;
-
-            return this;
-        }
-
-        public VideoModelBuilder studio( String studio ) {
-
-            this.studio = studio;
-
-            return this;
-        }
-
-        @TargetApi( Build.VERSION_CODES.LOLLIPOP )
-        public VideoModel buildFromMediaDesc( MediaDescription desc ) {
-
-            return VideoModel.create(
-
-                    Long.parseLong( desc.getMediaId() ),
-                    "", // Category - not provided by MediaDescription.
-                    String.valueOf( desc.getTitle() ),
-                    String.valueOf( desc.getDescription() ),
-                    "", // Media URI - not provided by MediaDescription.
-                    "", // Background Image URI - not provided by MediaDescription.
-                    String.valueOf( desc.getIconUri() ),
-                    String.valueOf( desc.getSubtitle() )
-            );
-
-        }
-
-        public VideoModel build() {
-
-            return VideoModel.create(
-                    id,
-                    category,
-                    title,
-                    desc,
-                    videoUrl,
-                    bgImageUrl,
-                    cardImageUrl,
-                    studio
-            );
-
-        }
-
     }
 
 }

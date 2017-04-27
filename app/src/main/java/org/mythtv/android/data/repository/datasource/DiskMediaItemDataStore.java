@@ -24,6 +24,8 @@ import rx.Observable;
 @Singleton
 public class DiskMediaItemDataStore implements MediaItemDataStore {
 
+    private static final String UNSUPPORTED_OPERATION_EXCEPTION_VALUE = "this call should always go to the backend";
+
     private final DualCache<MediaItemEntity> cache;
 
     @Inject
@@ -36,13 +38,13 @@ public class DiskMediaItemDataStore implements MediaItemDataStore {
     @Override
     public Observable<List<SeriesEntity>> series( final Media media ) {
 
-        throw new UnsupportedOperationException( "this call should always go to the backend" );
+        throw new UnsupportedOperationException( UNSUPPORTED_OPERATION_EXCEPTION_VALUE );
     }
 
     @Override
     public Observable<List<MediaItemEntity>> mediaItems( final Media media, @Nullable final String title ) {
 
-        throw new UnsupportedOperationException( "this call should always go to the backend" );
+        throw new UnsupportedOperationException( UNSUPPORTED_OPERATION_EXCEPTION_VALUE );
     }
 
     @Override
@@ -54,19 +56,19 @@ public class DiskMediaItemDataStore implements MediaItemDataStore {
     @Override
     public Observable<MediaItemEntity> addLiveStream( final Media media, final int id ) {
 
-        throw new UnsupportedOperationException( "this call should always go to the backend" );
+        throw new UnsupportedOperationException( UNSUPPORTED_OPERATION_EXCEPTION_VALUE );
     }
 
     @Override
     public Observable<MediaItemEntity> removeLiveStream( final Media media, final int id ) {
 
-        throw new UnsupportedOperationException( "this call should always go to the backend" );
+        throw new UnsupportedOperationException( UNSUPPORTED_OPERATION_EXCEPTION_VALUE );
     }
 
     @Override
     public Observable<MediaItemEntity> updateWatchedStatus( final Media media, final int id, final boolean watched ) {
 
-        throw new UnsupportedOperationException( "this call should always go to the backend" );
+        throw new UnsupportedOperationException( UNSUPPORTED_OPERATION_EXCEPTION_VALUE );
     }
 
 }

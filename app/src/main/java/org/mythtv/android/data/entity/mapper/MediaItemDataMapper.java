@@ -23,8 +23,6 @@ import javax.inject.Singleton;
 @SuppressWarnings( "PMD.GodClass" )
 public final class MediaItemDataMapper {
 
-    private static final String TAG = MediaItemDataMapper.class.getSimpleName();
-
     private MediaItemDataMapper() { }
 
     public static MediaItem transform( final MediaItemEntity mediaItem ) {
@@ -79,15 +77,9 @@ public final class MediaItemDataMapper {
 
         List<MediaItem> mediaItemList = new ArrayList<>( mediaItemCollection.size() );
 
-        MediaItem mediaItem;
         for( MediaItemEntity mediaItemEntity : mediaItemCollection ) {
 
-            mediaItem = transform( mediaItemEntity );
-            if( null != mediaItemEntity ) {
-
-                mediaItemList.add( mediaItem );
-
-            }
+            mediaItemList.add( transform( mediaItemEntity ) );
 
         }
 

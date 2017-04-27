@@ -42,23 +42,6 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
     private final SearchDataStoreFactory searchDataStoreFactory;
     private final DualCache<MediaItemEntity> cache;
 
-    @Inject
-    public MasterBackendMediaItemDataStore(
-            final DvrDataStoreFactory dvrDataStoreFactory,
-            final VideoDataStoreFactory videoDataStoreFactory,
-            final ContentDataStoreFactory contentDataStoreFactory,
-            final SearchDataStoreFactory searchDataStoreFactory,
-            final DualCache<MediaItemEntity> cache
-    ) {
-
-        this.dvrDataStoreFactory = dvrDataStoreFactory;
-        this.videoDataStoreFactory = videoDataStoreFactory;
-        this.contentDataStoreFactory = contentDataStoreFactory;
-        this.searchDataStoreFactory = searchDataStoreFactory;
-        this.cache = cache;
-
-    }
-
     private final Action1<List<SeriesEntity>> removeStaleTitleInfosDbAction =
             titleInfoEntities -> {
 
@@ -116,6 +99,23 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
                 }
 
             };
+
+    @Inject
+    public MasterBackendMediaItemDataStore(
+            final DvrDataStoreFactory dvrDataStoreFactory,
+            final VideoDataStoreFactory videoDataStoreFactory,
+            final ContentDataStoreFactory contentDataStoreFactory,
+            final SearchDataStoreFactory searchDataStoreFactory,
+            final DualCache<MediaItemEntity> cache
+    ) {
+
+        this.dvrDataStoreFactory = dvrDataStoreFactory;
+        this.videoDataStoreFactory = videoDataStoreFactory;
+        this.contentDataStoreFactory = contentDataStoreFactory;
+        this.searchDataStoreFactory = searchDataStoreFactory;
+        this.cache = cache;
+
+    }
 
     @Override
     public Observable<List<SeriesEntity>> series( final Media media ) {
