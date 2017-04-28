@@ -55,7 +55,8 @@ public class MediaItemDataStoreFactory {
         if( cache.contains( String.valueOf( id ) ) ) {
 
             Log.d( TAG, "create : exit, getting mediaItemEntity from cache" );
-            return new DiskMediaItemDataStore( cache );
+            return new DiskMediaItemDataStore( this.dvrDataStoreFactory, this.contentDataStoreFactory, cache );
+
         } else {
 
             Log.d( TAG, "create : exit, getting mediaItemEntity from master backend" );
