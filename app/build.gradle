@@ -29,7 +29,7 @@ apply plugin: 'me.tatarka.retrolambda'
 android {
 
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     adbOptions {
 
@@ -55,6 +55,8 @@ android {
         versionCode 1714306
         versionName "3.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        resConfigs "en", "de"
 
         resValue "string", "branchName", gitVersionBranch
         resValue "string", "shaName", gitVersionCommit
@@ -95,7 +97,7 @@ android {
             // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
             // to pre-dex each module and produce an APK that can be tested on
             // Android Lollipop without time consuming dex merging processes.
-            minSdkVersion 21
+//            minSdkVersion 21
 
         }
 
@@ -113,8 +115,6 @@ android {
         debug {
 
             shrinkResources false
-            minifyEnabled false
-//            testCoverageEnabled = true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), '../tools/rules-proguard-debug.pro'
             applicationIdSuffix '.debug'
 
@@ -222,7 +222,6 @@ dependencies {
     compile "com.facebook.stetho:stetho-okhttp3:${project.ext.stethoVersion}"
     compile "xyz.danoz:recyclerviewfastscroller:${project.ext.recyclerviewfastscrollerVersion}"
     compile "com.android.support:multidex:${project.ext.multidexVersion}"
-    compile "com.googlecode.android-query:android-query:${project.ext.androidQueryVersion}"
     compile "com.google.firebase:firebase-core:${project.ext.firebaseVersion}"
     compile "com.google.firebase:firebase-crash:${project.ext.firebaseVersion}"
     compile "com.github.jorgecastilloprz:fabprogresscircle:${project.ext.fabCircleProgressVersion}"
