@@ -143,6 +143,12 @@ public final class Utils {
 
         }
 
+        if( cleanVersion.length() > 4 ) {
+
+            cleanVersion = cleanVersion.substring( 0, 4 );
+
+        }
+
         try {
 
             Float.parseFloat( cleanVersion );
