@@ -21,7 +21,7 @@ machine:
 
 dependencies:
   pre:
-    - echo "y" | android update sdk --no-ui --all --filter tools,build-tools-25.0.2,android-25,extra-google-m2repository,extra-google-google_play_services,extra-android-m2repository
+    - echo "y" | android update sdk --no-ui --all --filter tools,build-tools-25.0.3,android-25,extra-google-m2repository,extra-google-google_play_services,extra-android-m2repository
 #    - sudo pip install -U crcmod
   post:
     - ./gradlew assembleDevDebug assembleDevDebugAndroidTest -PdisablePreDex
@@ -35,7 +35,7 @@ dependencies:
 #    - ~/.gradle
 #    - /usr/local/android-sdk-linux/tools
 #    - /usr/local/android-sdk-linux/platforms/android-24
-#    - /usr/local/android-sdk-linux/build-tools/25.0.2
+#    - /usr/local/android-sdk-linux/build-tools/25.0.3
 #    - /usr/local/android-sdk-linux/extras/android/m2repository
 #    - /usr/local/android-sdk-linux/licenses
 
