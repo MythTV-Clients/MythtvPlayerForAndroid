@@ -7,8 +7,7 @@ import org.mockito.MockitoAnnotations;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.DvrRepository;
-import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +21,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
  */
 public class PostUpdatedWatchedStatusTest {
 
+    private static final Media FAKE_MEDIA = Media.PROGRAM;
     private static final int FAKE_ID = -1;
     private static final boolean FAKE_WATCHED = false;
 
@@ -34,16 +34,13 @@ public class PostUpdatedWatchedStatusTest {
     private PostExecutionThread mockPostExecutionThread;
 
     @Mock
-    private DvrRepository mockDvrRepository;
-
-    @Mock
-    private VideoRepository mockVideoRepository;
+    private MediaItemRepository mockMediaItemRepository;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        postUpdatedWatchedStatus = new PostUpdatedWatchedStatus( mockDvrRepository, mockVideoRepository, mockThreadExecutor, mockPostExecutionThread );
+        postUpdatedWatchedStatus = new PostUpdatedWatchedStatus( FAKE_MEDIA, FAKE_ID, mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
@@ -51,31 +48,12 @@ public class PostUpdatedWatchedStatusTest {
     public void testPostUpdatedRecordedWatchedStatusDynamicUseCaseObservableHappyCase() {
 
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put( "ID", FAKE_ID );
         parameters.put( "WATCHED", FAKE_WATCHED );
-        parameters.put( "MEDIA", Media.PROGRAM.name() );
         postUpdatedWatchedStatus.buildUseCaseObservable( parameters );
 
-        verify( mockDvrRepository ).updateWatchedStatus( FAKE_ID, FAKE_WATCHED );
-        verifyNoMoreInteractions( mockDvrRepository );
-        verifyZeroInteractions( mockVideoRepository );
-        verifyZeroInteractions( mockThreadExecutor );
-        verifyZeroInteractions( mockPostExecutionThread );
-
-    }
-
-    @Test
-    public void testPostUpdatedVideoWatchedStatusDynamicUseCaseObservableHappyCase() {
-
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put( "ID", FAKE_ID );
-        parameters.put( "WATCHED", FAKE_WATCHED );
-        parameters.put( "MEDIA", Media.VIDEO.name() );
-        postUpdatedWatchedStatus.buildUseCaseObservable( parameters );
-
-        verify( mockVideoRepository ).updateWatchedStatus( FAKE_ID, FAKE_WATCHED );
-        verifyNoMoreInteractions( mockVideoRepository );
-        verifyZeroInteractions( mockDvrRepository );
+        verify( mockMediaItemRepository ).updateWatchedStatus( FAKE_MEDIA, FAKE_ID, FAKE_WATCHED );
+        verifyNoMoreInteractions( mockMediaItemRepository );
+        verifyZeroInteractions( mockMediaItemRepository );
         verifyZeroInteractions( mockThreadExecutor );
         verifyZeroInteractions( mockPostExecutionThread );
 

@@ -117,7 +117,7 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
     }
 
     @Override
-    public Observable<LiveStreamInfoEntity> addLiveStream( final int id, final Media media ) {
+    public Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id ) {
 
         return Observable.create( new Observable.OnSubscribe<LiveStreamInfoEntity>() {
 
@@ -174,55 +174,6 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
                                 subscriber.onError( new NetworkConnectionException() );
 
                                 break;
-                        }
-
-                    } catch( Exception e ) {
-                        Log.e( TAG, "LiveStreamInfoEntity.call : error", e );
-
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
-
-                    }
-
-                } else {
-                    Log.d( TAG, "LiveStreamInfoEntity.call : network is not connected" );
-
-                    subscriber.onError( new NetworkConnectionException() );
-
-                }
-
-                Log.d( TAG, "LiveStreamInfoEntity.call : exit" );
-            }
-
-        });
-
-    }
-
-    @Override
-    public Observable<LiveStreamInfoEntity> getLiveStream( final int id ) {
-
-        return Observable.create( new Observable.OnSubscribe<LiveStreamInfoEntity>() {
-
-            @Override
-            public void call( Subscriber<? super LiveStreamInfoEntity> subscriber ) {
-                Log.d(TAG, "LiveStreamInfoEntity.call : enter");
-
-                if( isThereInternetConnection() ) {
-                    Log.d(TAG, "LiveStreamInfoEntity.call : network is connected");
-
-                    try {
-
-                        String responseLiveStreamInfoEntity = getLiveStreamInfoEntityFromApi( id );
-                        if( null == responseLiveStreamInfoEntity ) {
-                            Log.d( TAG, "LiveStreamInfoEntity.call : failed to retrieve LiveStream info entity" );
-
-                            subscriber.onError( new NetworkConnectionException() );
-
-                        } else {
-                            Log.d( TAG, "LiveStreamInfoEntity.call : retrieved LiveStream info entity" );
-
-                            subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseLiveStreamInfoEntity ) );
-                            subscriber.onCompleted();
-
                         }
 
                     } catch( Exception e ) {
@@ -343,17 +294,6 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
                 .append( '&' ).append( WIDTH_QS );
 
         Log.d( TAG, "addVideoLiveStreamInfoEntityFromApi : url=" + sb.toString() );
-        return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
-    }
-
-    private String getLiveStreamInfoEntityFromApi( final int id ) throws MalformedURLException {
-        Log.d( TAG, "getLiveStreamInfoEntityFromApi : enter" );
-
-        StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() ).append( GET_LIVE_STREAM_BASE_URL )
-                .append( '?' ).append( String.format( ID_QS, id ) );
-
-        Log.d( TAG, "getLiveStreamInfoEntityFromApi : url=" + sb.toString() );
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 

@@ -18,8 +18,8 @@
 
 package org.mythtv.android.data.repository.datasource;
 
-import org.mythtv.android.data.entity.TitleInfoEntity;
-import org.mythtv.android.domain.MediaItem;
+import org.mythtv.android.data.entity.MediaItemEntity;
+import org.mythtv.android.data.entity.SeriesEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -36,12 +36,12 @@ import rx.Observable;
  */
 public interface SearchDataStore {
 
-    Observable<List<MediaItem>> search( String searchString );
+    Observable<List<MediaItemEntity>> search( String searchString );
 
-    void refreshTitleInfoData( Collection<TitleInfoEntity> titleInfoEntityCollection );
+    void refreshTitleInfoData( Collection<SeriesEntity> seriesEntityCollection );
 
-    void refreshRecordedProgramData( Collection<MediaItem> mediaItemEntityCollection );
+    void refreshRecordedProgramData( Collection<MediaItemEntity> mediaItemEntityCollection );
 
-    void refreshVideoData( Collection<MediaItem> mediaItemEntityCollection );
+    void refreshVideoData( Collection<MediaItemEntity> mediaItemEntityCollection );
 
 }

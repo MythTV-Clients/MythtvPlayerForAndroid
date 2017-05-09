@@ -3,6 +3,7 @@ package org.mythtv.android.domain;
 import com.google.auto.value.AutoValue;
 
 import org.joda.time.DateTime;
+import org.mythtv.android.domain.annotations.IgnoreHashEquals;
 
 import java.util.List;
 
@@ -80,9 +81,6 @@ public abstract class MediaItem {
     public abstract boolean watched();
 
     @Nullable
-    public abstract String markWatchedUrl();
-
-    @Nullable
     public abstract String updateSavedBookmarkUrl();
 
     public abstract long bookmark();
@@ -99,18 +97,19 @@ public abstract class MediaItem {
     public abstract String recordingGroup();
 
     @Nullable
+    @IgnoreHashEquals
     public abstract List<Error> validationErrors();
 
     public static MediaItem create( int id, Media media, String title, String subTitle, String description, DateTime startDate, int programFlags, int season, int episode, String studio,
                                     String castMembers, String characters, String url, String fanartUrl, String coverartUrl, String bannerUrl, String previewUrl, String contentType,
                                     long duration, int percentComplete, boolean recording, int liveStreamId,
-                                    boolean watched, String markWatchedUrl, String updateSavedBookmarkUrl, long bookmark, String inetref,
+                                    boolean watched, String updateSavedBookmarkUrl, long bookmark, String inetref,
                                     String certification, int parentalLevel, String recordingGroup, List<Error> validationErrors ) {
 
         return new AutoValue_MediaItem( id, media, title, subTitle, description, startDate, programFlags, season, episode, studio,
                 castMembers, characters, url, fanartUrl, coverartUrl, bannerUrl, previewUrl, contentType,
                 duration, percentComplete, recording, liveStreamId,
-                watched, markWatchedUrl, updateSavedBookmarkUrl, bookmark, inetref,
+                watched, updateSavedBookmarkUrl, bookmark, inetref,
                 certification, parentalLevel, recordingGroup, validationErrors );
     }
 

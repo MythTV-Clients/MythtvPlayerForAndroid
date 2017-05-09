@@ -84,9 +84,9 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
 
     @Override
     public void destroy() {
+        Log.v( TAG, "destroy : enter" );
 
-//        this.getMediaItemListUseCase.unsubscribe();
-
+        Log.v( TAG, "destroy : exit" );
     }
 
     /**

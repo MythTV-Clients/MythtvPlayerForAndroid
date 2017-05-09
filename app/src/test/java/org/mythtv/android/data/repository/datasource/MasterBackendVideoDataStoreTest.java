@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
-import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.net.VideoApi;
 import org.mythtv.android.domain.ContentType;
@@ -31,17 +30,11 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     @Mock
     private VideoApi mockVideoApi;
 
-    @Mock
-    private VideoCache mockVideoCache;
-
-    @Mock
-    private SearchDataStoreFactory mockSearchDataStoreFactory;
-
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        masterBackendVideoDataStore = new MasterBackendVideoDataStore( mockVideoApi, mockVideoCache, mockSearchDataStoreFactory );
+        masterBackendVideoDataStore = new MasterBackendVideoDataStore( mockVideoApi );
 
     }
 

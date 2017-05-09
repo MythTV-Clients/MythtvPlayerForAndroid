@@ -154,7 +154,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
         setupRows();
 
         // Start playing the selected video.
-        setVideoPath( mSelectedVideo.videoUrl );
+        setVideoPath( mSelectedVideo.videoUrl() );
         updateMetadata( mSelectedVideo );
         playPause( true );
 
@@ -476,7 +476,17 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     private void updateMovieView( MediaMetadata metadata ) {
 
-        VideoModel v = new VideoModel.VideoModelBuilder().buildFromMediaDesc( metadata.getDescription() );
+        VideoModel v = VideoModel.create(
+                Long.parseLong( metadata.getDescription().getMediaId() ),
+                "", // Category - not provided by MediaDescription.
+                String.valueOf( metadata.getDescription().getTitle() ),
+                String.valueOf( metadata.getDescription().getDescription() ),
+                "", // Media URI - not provided by MediaDescription.
+                "", // Background Image URI - not provided by MediaDescription.
+                String.valueOf( metadata.getDescription().getIconUri() ),
+                String.valueOf( metadata.getDescription().getSubtitle() )
+        );
+
         long dur = metadata.getLong( MediaMetadata.METADATA_KEY_DURATION );
 
         // PlaybackControlsRow doesn't allow you to set the tv_item, so we must create a new one
@@ -487,7 +497,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
         // Show the video card image if there is enough room in the UI for it.
         // If you have many primary actions, you may not have enough room.
-        updateVideoImage( v.cardImageUrl );
+        updateVideoImage( v.cardImageUrl() );
 
         mRowsAdapter.clear();
         mRowsAdapter.add( mPlaybackControlsRow );
@@ -601,8 +611,8 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
             VideoModel video = (VideoModel) item;
 
-            viewHolder.getTitle().setText( video.title );
-            viewHolder.getSubtitle().setText( video.studio );
+            viewHolder.getTitle().setText( video.title() );
+            viewHolder.getSubtitle().setText( video.studio() );
 
         }
 
@@ -658,19 +668,19 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
         final MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
 
-        metadataBuilder.putString( MediaMetadata.METADATA_KEY_MEDIA_ID, videoModel.id + "" );
-        metadataBuilder.putString( MediaMetadata.METADATA_KEY_DISPLAY_TITLE, videoModel.title );
-        metadataBuilder.putString( MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE, videoModel.studio );
-        metadataBuilder.putString( MediaMetadata.METADATA_KEY_DISPLAY_DESCRIPTION, videoModel.description );
-        metadataBuilder.putString( MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI, videoModel.cardImageUrl );
+        metadataBuilder.putString( MediaMetadata.METADATA_KEY_MEDIA_ID, videoModel.id() + "" );
+        metadataBuilder.putString( MediaMetadata.METADATA_KEY_DISPLAY_TITLE, videoModel.title() );
+        metadataBuilder.putString( MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE, videoModel.studio() );
+        metadataBuilder.putString( MediaMetadata.METADATA_KEY_DISPLAY_DESCRIPTION, videoModel.description() );
+        metadataBuilder.putString( MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI, videoModel.cardImageUrl() );
         metadataBuilder.putLong( MediaMetadata.METADATA_KEY_DURATION, mDuration );
 
         // And at minimum the title and artist for legacy support
-        metadataBuilder.putString( MediaMetadata.METADATA_KEY_TITLE, videoModel.title );
-        metadataBuilder.putString( MediaMetadata.METADATA_KEY_ARTIST, videoModel.studio );
+        metadataBuilder.putString( MediaMetadata.METADATA_KEY_TITLE, videoModel.title() );
+        metadataBuilder.putString( MediaMetadata.METADATA_KEY_ARTIST, videoModel.studio() );
 
         Glide.with( this )
-                .load( Uri.parse( videoModel.cardImageUrl ) )
+                .load( Uri.parse( videoModel.cardImageUrl() ) )
                 .asBitmap()
                 .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into( new SimpleTarget<Bitmap>( 500, 500 ) {

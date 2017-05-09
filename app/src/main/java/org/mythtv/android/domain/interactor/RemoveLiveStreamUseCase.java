@@ -21,7 +21,7 @@ package org.mythtv.android.domain.interactor;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.ContentRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 
 import javax.inject.Inject;
 
@@ -37,23 +37,24 @@ import rx.Observable;
  */
 public class RemoveLiveStreamUseCase extends UseCase {
 
-    private final ContentRepository contentRepository;
-    private final int id;
     private final Media media;
+    private final int id;
+    private final MediaItemRepository mediaItemRepository;
 
     @Inject
-    public RemoveLiveStreamUseCase( final int id, final Media media, ContentRepository contentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public RemoveLiveStreamUseCase( final Media media, final int id, MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.contentRepository = contentRepository;
-        this.id = id;
         this.media = media;
+        this.id = id;
+        this.mediaItemRepository = mediaItemRepository;
 
     }
 
     @Override
     public Observable buildUseCaseObservable() {
-        return this.contentRepository.removeLiveStream( id, media );
+
+        return this.mediaItemRepository.removeLiveStream( media, id );
     }
 
 }

@@ -46,7 +46,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.androidquery.AQuery;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.framework.CastButtonFactory;
@@ -101,7 +102,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
     private Timer mBookmarkTimer;
     private PlaybackState mPlaybackState;
     private final Handler mHandler = new Handler();
-    private AQuery mAquery;
     private MediaItemModel mSelectedMedia;
     private boolean mControllersVisible;
     private int mDuration;
@@ -135,7 +135,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
     public static Intent getCallingIntent( Context context, MediaItemModel mediaItemModel ) {
 
         Intent intent = new Intent( context, LocalPlayerActivity.class );
-        intent.putExtra( "media", mediaItemModel.toBundle() );
+        intent.putExtra( "media", mediaItemModel );
         intent.putExtra( "shouldStart", false );
 
         return intent;
@@ -149,8 +149,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         okHttpClient = ( (AndroidApplication) getApplication() ).getNetComponent().okHttpClient();
 
-        mAquery = new AQuery( this );
-
         loadViews();
         setupControlsCallbacks();
         setupCastListener();
@@ -163,7 +161,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if( null != bundle ) {
 
-            mSelectedMedia = MediaItemModel.fromBundle( getIntent().getBundleExtra( "media" ) );
+            mSelectedMedia = getIntent().getParcelableExtra( "media" );
 
             setupActionBar();
 
@@ -530,7 +528,11 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
         } else {
 
-            mAquery.id( mCoverArt ).image( url );
+            Glide.with( getApplicationContext() )
+                    .load( url )
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
+                    .into( mCoverArt );
+
             mCoverArt.setVisibility( View.VISIBLE );
             mVideoView.setVisibility( View.INVISIBLE );
 

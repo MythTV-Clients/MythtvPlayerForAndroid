@@ -10,9 +10,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
+import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.repository.DatabaseHelper;
 import org.mythtv.android.domain.Media;
-import org.mythtv.android.domain.MediaItem;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.ArrayList;
@@ -54,7 +54,6 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
     private static final boolean FAKE_RECORDING = false;
     private static final int FAKE_LIVE_STREAM_ID = -1;
     private static final boolean FAKE_WATCHED = false;
-    private static final String FAKE_MARK_WATCHED_URL = "fake mark watched url";
     private static final String FAKE_UPDATE_SAVED_BOOKMARK_URL = "fake update saved bookmark url";
     private static final long FAKE_BOOKMARK = -1;
     private static final String FAKE_INETREF = "fake inetref";
@@ -91,19 +90,19 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
     @Test
     public void testRefreshData() {
 
-        MediaItem fakeMediaItemEntity = createFakeSearchResultEntity();
-        List<MediaItem> fakeMediaItemList = new ArrayList<>();
+        MediaItemEntity fakeMediaItemEntity = createFakeSearchResultEntity();
+        List<MediaItemEntity> fakeMediaItemList = new ArrayList<>();
         fakeMediaItemList.add( fakeMediaItemEntity );
 
         dbSearchDataStore.refreshRecordedProgramData( fakeMediaItemList );
-        Observable<List<MediaItem>> results = dbSearchDataStore.search( FAKE_TITLE );
+        Observable<List<MediaItemEntity>> results = dbSearchDataStore.search( FAKE_TITLE );
         assertThat( results, is( instanceOf( Observable.class ) ) );
 
     }
 
-    private MediaItem createFakeSearchResultEntity() {
+    private MediaItemEntity createFakeSearchResultEntity() {
 
-        MediaItem mediaItem = MediaItem.create(
+        return MediaItemEntity.create(
             FAKE_ID,
             FAKE_MEDIA,
             FAKE_TITLE,
@@ -127,7 +126,6 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
             FAKE_RECORDING,
             FAKE_LIVE_STREAM_ID,
             FAKE_WATCHED,
-            FAKE_MARK_WATCHED_URL,
             FAKE_UPDATE_SAVED_BOOKMARK_URL,
             FAKE_BOOKMARK,
             FAKE_INETREF,
@@ -136,8 +134,6 @@ public class DbSearchDataStoreTest extends ApplicationTestCase {
             FAKE_RECORDING_GROUP,
             Collections.emptyList()
         );
-
-        return mediaItem;
     }
 
 }

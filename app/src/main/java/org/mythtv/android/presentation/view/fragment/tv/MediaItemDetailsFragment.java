@@ -227,17 +227,15 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
                 String masterBackendUrl = getMasterBackendUrl();
                 if( getSharedPreferencesModule().getInternalPlayer() ) {
 
-                    VideoModel videoModel = new VideoModel
-                            .VideoModelBuilder()
-                            .id( mediaItemModel.id() )
-                            .category( mediaItemModel.media().name() )
-                            .title( mediaItemModel.title() )
-                            .description( mediaItemModel.description() )
-                            .videoUrl( masterBackendUrl + mediaItemModel.url() )
-                            .bgImageUrl( masterBackendUrl + mediaItemModel.bannerUrl() )
-                            .cardImageUrl( masterBackendUrl + mediaItemModel.previewUrl() )
-                            .studio( mediaItemModel.studio() )
-                            .build();
+                    VideoModel videoModel = VideoModel.create(
+                            mediaItemModel.id(),
+                            mediaItemModel.media().name(),
+                            mediaItemModel.title(),
+                            mediaItemModel.description(),
+                            masterBackendUrl + mediaItemModel.url(),
+                            masterBackendUrl + mediaItemModel.bannerUrl(),
+                            masterBackendUrl + mediaItemModel.previewUrl(),
+                            mediaItemModel.studio() );
 
                     Intent intent = new Intent( getActivity(), PlaybackOverlayActivity.class );
                     intent.putExtra( MythTvPlaybackFragment.VIDEO, videoModel );

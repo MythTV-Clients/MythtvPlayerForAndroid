@@ -26,7 +26,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
@@ -68,9 +67,6 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
 
     @BindView( R.id.rv_mediaItems )
     RecyclerView rv_mediaItems;
-
-    @BindView( R.id.rl_progress )
-    RelativeLayout rl_progress;
 
     private Unbinder unbinder;
 
@@ -244,20 +240,12 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.VISIBLE );
-        }
-
         Log.d( TAG, "showLoading : exit" );
     }
 
     @Override
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
-
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.GONE );
-        }
 
         Log.d( TAG, "hideLoading : exit" );
     }

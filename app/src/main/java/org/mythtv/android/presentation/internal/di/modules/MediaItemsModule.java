@@ -23,8 +23,7 @@ import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.domain.interactor.GetMediaItemList;
 import org.mythtv.android.domain.interactor.GetSeriesList;
-import org.mythtv.android.domain.repository.DvrRepository;
-import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 
 import javax.inject.Named;
@@ -49,17 +48,17 @@ public class MediaItemsModule {
     @Provides
     @PerActivity
     @Named( "seriesList" )
-    DynamicUseCase provideGetSeriesListUseCase( DvrRepository dvrRepository, VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    DynamicUseCase provideGetSeriesListUseCase( MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
-        return new GetSeriesList( dvrRepository, videoRepository, threadExecutor, postExecutionThread );
+        return new GetSeriesList( mediaItemRepository, threadExecutor, postExecutionThread );
     }
 
     @Provides
     @PerActivity
     @Named( "mediaItemList" )
-    DynamicUseCase provideGetMediaItemListUseCase( DvrRepository dvrRepository, VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    DynamicUseCase provideGetMediaItemListUseCase( MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
-        return new GetMediaItemList( dvrRepository, videoRepository, threadExecutor, postExecutionThread );
+        return new GetMediaItemList( mediaItemRepository, threadExecutor, postExecutionThread );
     }
 
 }

@@ -38,8 +38,7 @@ public interface ContentApi {
     String LIVE_STREAM_INFO_LIST_BASE_URL = "/Content/GetLiveStreamList";
     String ADD_RECORDING_LIVE_STREAM_BASE_URL = "/Content/AddRecordingLiveStream";
     String ADD_VIDEO_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
-    String REMOVE_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
-    String GET_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
+    String REMOVE_LIVE_STREAM_BASE_URL = "/Content/RemoveLiveStream";
 
     String ID_QS = "Id=%s";
     String RECORDEDID_QS = "RecordedId=%s";
@@ -48,9 +47,7 @@ public interface ContentApi {
 
     Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename );
 
-    Observable<LiveStreamInfoEntity> addLiveStream( final int id, final Media  media );
-
-    Observable<LiveStreamInfoEntity> getLiveStream( final int id );
+    Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id );
 
     Observable<Boolean> removeLiveStream( final int id );
 

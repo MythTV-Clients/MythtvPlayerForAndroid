@@ -10,7 +10,30 @@ task javaCodeCoverage(type: JacocoReport, dependsOn: 'testDevDebugUnitTest') {
 
     def classFileTree = fileTree(
             dir: "${buildDir}/intermediates/classes/dev/debug",
-            excludes: ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', '**/*$*.class'] //,
+            excludes: [
+                    '**/*Test*.*',
+                    '**/*AutoValue_*.*',
+                    '**/*JavascriptBridge.class',
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/Manifest*.*',
+                    'android/**/*.*',
+                    '**/BuildConfig.*',
+                    '**/*$ViewBinder*.*',
+                    '**/*$ViewInjector*.*',
+                    '**/Lambda$*.class',
+                    '**/Lambda.class',
+                    '**/*Lambda.class',
+                    '**/*Lambda*.class',
+                    '**/*$InjectAdapter.class',
+                    '**/*$ModuleAdapter.class',
+                    '**/*$ViewInjector*.class',
+                    '**/*_MembersInjector.class', //Dagger2 generated code
+                    '*/*_MembersInjector*.*', //Dagger2 generated code
+                    '**/*_*Factory*.*', //Dagger2 generated code
+                    '*/*Component*.*', //Dagger2 generated code
+                    '**/*Module*.*' //Dagger2 generated code
+            ] //,
             //includes: ['**/*Presenter*.class']
     )
 

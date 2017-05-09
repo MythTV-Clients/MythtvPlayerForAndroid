@@ -35,7 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -116,9 +115,6 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     @BindView( R.id.media_item_description )
     TextView tv_description;
 
-    @BindView( R.id.rl_progress )
-    RelativeLayout rl_progress;
-
     private boolean isTimerRunning = false;
 
     private Unbinder unbinder;
@@ -128,6 +124,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     public interface MediaItemDetailsListener {
 
         void onMediaItemLoaded( final MediaItemModel mediaItemModel );
+        void onMediaItemRefreshed( final MediaItemModel mediaItemModel );
 
     }
 
@@ -399,6 +396,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
             this.mediaItemModel = mediaItemModel;
             updateMenu();
             updateProgress();
+            this.listener.onMediaItemRefreshed( this.mediaItemModel );
 
             if( !isTimerRunning && ( mediaItemModel.liveStreamId() > 0 && mediaItemModel.percentComplete() < 100 ) ) {
 
@@ -415,21 +413,12 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.VISIBLE );
-        }
-
-
         Log.d( TAG, "showLoading : exit" );
     }
 
     @Override
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
-
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.GONE );
-        }
 
         Log.d( TAG, "hideLoading : exit" );
     }

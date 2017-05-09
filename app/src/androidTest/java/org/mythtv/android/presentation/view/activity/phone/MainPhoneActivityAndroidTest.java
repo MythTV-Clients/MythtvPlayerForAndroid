@@ -20,6 +20,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
+ *
+ *
  * Created by dmfrey on 6/29/16.
  */
 
@@ -106,7 +108,7 @@ public class MainPhoneActivityAndroidTest {
                 .check( matches( isClosed( Gravity.START ) ) ); // Left Drawer should be closed.
 
         // Open Drawer
-        String navigateUpDesc = "Navigate Up";
+        String navigateUpDesc = "Navigate up";
         onView( withContentDescription( navigateUpDesc ) ).perform( click() );
 
         // Check if drawer is open

@@ -27,10 +27,9 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.MediaItemEntity;
-import org.mythtv.android.data.entity.TitleInfoEntity;
+import org.mythtv.android.data.entity.SeriesEntity;
 import org.mythtv.android.data.exception.DatabaseException;
 import org.mythtv.android.domain.Media;
-import org.mythtv.android.domain.MediaItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,7 +60,7 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
-    public Observable<List<MediaItem>> search( String searchString ) {
+    public Observable<List<MediaItemEntity>> search( String searchString ) {
         Log.d( TAG, "search : enter" );
 
         String search = "*" + searchString + "*";
@@ -70,10 +69,10 @@ public class DbSearchDataStore implements SearchDataStore {
         final String query = search;
         Log.d( TAG, "search : query=" + query );
 
-        return Observable.create( new Observable.OnSubscribe<List<MediaItem>>() {
+        return Observable.create( new Observable.OnSubscribe<List<MediaItemEntity>>() {
 
             @Override
-            public void call( Subscriber<? super List<MediaItem>> subscriber ) {
+            public void call( Subscriber<? super List<MediaItemEntity>> subscriber ) {
                 Log.d( TAG, "search.call : enter" );
 
                 Cursor cursor;
@@ -82,18 +81,18 @@ public class DbSearchDataStore implements SearchDataStore {
 
                 try {
 
-                    List<MediaItem> mediaItems = new ArrayList<>();
+                    List<MediaItemEntity> mediaItems = new ArrayList<>();
 
                     builder.setTables( MediaItemEntity.TABLE_NAME );
 
                     String selection = MediaItemEntity.SQL_SELECT_MATCH;
                     String[] selectionArgs = new String[] { query };
 
-                    MediaItem mediaItem;
+                    MediaItemEntity mediaItem;
                     cursor = builder.query( db, null, selection, selectionArgs, null, null, MediaItemEntity.FIELD_START_DATE + " DESC, " + MediaItemEntity.FIELD_TITLE );
                     while( cursor.moveToNext() ) {
 
-                        mediaItem = MediaItem.create(
+                        mediaItem = MediaItemEntity.create(
                             cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_ID ) ),
                             Media.valueOf( cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_MEDIA ) ) ),
                             cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_TITLE ) ),
@@ -117,7 +116,6 @@ public class DbSearchDataStore implements SearchDataStore {
                             ( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_RECORDING ) ) != 0 ),
                             cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_LIVE_STREAM_ID ) ),
                             ( cursor.getInt( cursor.getColumnIndex( MediaItemEntity.FIELD_WATCHED_STATUS ) ) != 0 ),
-                            cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_MARK_WATCHED_URL ) ),
                             cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_UPDATE_SAVED_BOOKMARK_URL ) ),
                             cursor.getLong( cursor.getColumnIndex( MediaItemEntity.FIELD_BOOKMARK ) ),
                             cursor.getString( cursor.getColumnIndex( MediaItemEntity.FIELD_INETREF ) ),
@@ -151,15 +149,16 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
-    public void refreshTitleInfoData( Collection<TitleInfoEntity> titleInfoEntityCollection ) {
+    public void refreshTitleInfoData( Collection<SeriesEntity> seriesEntityCollection ) {
         Log.d( TAG, "refreshTitleInfoData : enter" );
 
-        if( null == titleInfoEntityCollection || titleInfoEntityCollection.isEmpty() ) {
-            Log.d( TAG, "refreshTitleInfoData : titleInfoEntityCollection is empty" );
+        if( null == seriesEntityCollection || seriesEntityCollection.isEmpty() ) {
+            Log.d( TAG, "refreshTitleInfoData : seriesEntityCollection is empty" );
 
             return;
+
         } else {
-            Log.d( TAG, "refreshTitleInfoData : titleInfoEntityCollection is not empty" );
+            Log.d( TAG, "refreshTitleInfoData : seriesEntityCollection is not empty" );
 
             db.beginTransaction();
 
@@ -167,7 +166,7 @@ public class DbSearchDataStore implements SearchDataStore {
             values.add( Media.PROGRAM.name() );
 
             List<String> parameters = new ArrayList<>();
-            for( TitleInfoEntity entity : titleInfoEntityCollection ) {
+            for( SeriesEntity entity : seriesEntityCollection ) {
 
                 parameters.add( "?" );
                 values.add( entity.title() );
@@ -185,7 +184,7 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
-    public void refreshRecordedProgramData( Collection<MediaItem> mediaItemEntityCollection ) {
+    public void refreshRecordedProgramData( Collection<MediaItemEntity> mediaItemEntityCollection ) {
         Log.d( TAG, "refreshRecordedProgramData : enter" );
 
         if( null == mediaItemEntityCollection || mediaItemEntityCollection.isEmpty() ) {
@@ -199,7 +198,7 @@ public class DbSearchDataStore implements SearchDataStore {
             db.beginTransaction();
 
             Observable.from( mediaItemEntityCollection )
-                    .distinct( MediaItem::title )
+                    .distinct( MediaItemEntity::title )
                     .flatMap( mediaItemEntity -> Observable.just( mediaItemEntity.title() ) )
                     .doOnNext( title -> db.delete( MediaItemEntity.TABLE_NAME, MediaItemEntity.FIELD_MEDIA + " = ? and " + MediaItemEntity.FIELD_TITLE + " = ?", new String[] { Media.PROGRAM.name(), title } ) )
                     .doOnNext( title -> Log.d( TAG, "refreshRecordedPrograms : deleting old recordings for title=" + title ) )
@@ -212,7 +211,7 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
-    public void refreshVideoData( Collection<MediaItem> mediaItemEntityCollection ) {
+    public void refreshVideoData( Collection<MediaItemEntity> mediaItemEntityCollection ) {
         Log.d( TAG, "refreshVideoData : enter" );
 
         if( null == mediaItemEntityCollection || mediaItemEntityCollection.isEmpty() ) {
@@ -234,10 +233,10 @@ public class DbSearchDataStore implements SearchDataStore {
         Log.d( TAG, "refreshVideoData : exit" );
     }
 
-    private void processCollection( Collection<MediaItem> mediaItemEntityCollection ) {
+    private void processCollection( Collection<MediaItemEntity> mediaItemEntityCollection ) {
 
         SQLiteStatement statement = db.compileStatement( MediaItemEntity.SQL_INSERT );
-        for( MediaItem mediaItemEntity : mediaItemEntityCollection ) {
+        for( MediaItemEntity mediaItemEntity : mediaItemEntityCollection ) {
 //            Log.d(TAG, "processCollection : searchResultEntity=" + searchResultEntity.toString());
 
             statement.clearBindings();
@@ -264,13 +263,12 @@ public class DbSearchDataStore implements SearchDataStore {
             statement.bindLong( 21, mediaItemEntity.recording() ? 1 : 0 );
             statement.bindLong( 22, mediaItemEntity.liveStreamId() );
             statement.bindLong( 23, mediaItemEntity.watched() ? 1 : 0 );
-            statement.bindString( 24, null == mediaItemEntity.markWatchedUrl() ? "" : mediaItemEntity.markWatchedUrl() );
-            statement.bindString( 25, null == mediaItemEntity.updateSavedBookmarkUrl() ? "" : mediaItemEntity.updateSavedBookmarkUrl() );
-            statement.bindLong( 26, mediaItemEntity.bookmark() );
-            statement.bindString( 27, null == mediaItemEntity.inetref() ? "" : mediaItemEntity.inetref() );
-            statement.bindString( 28, null == mediaItemEntity.certification() ? "" : mediaItemEntity.certification() );
-            statement.bindLong( 29, mediaItemEntity.parentalLevel() );
-            statement.bindString( 30, null == mediaItemEntity.recordingGroup() ? "" : mediaItemEntity.recordingGroup() );
+            statement.bindString( 24, null == mediaItemEntity.updateSavedBookmarkUrl() ? "" : mediaItemEntity.updateSavedBookmarkUrl() );
+            statement.bindLong( 25, mediaItemEntity.bookmark() );
+            statement.bindString( 26, null == mediaItemEntity.inetref() ? "" : mediaItemEntity.inetref() );
+            statement.bindString( 27, null == mediaItemEntity.certification() ? "" : mediaItemEntity.certification() );
+            statement.bindLong( 28, mediaItemEntity.parentalLevel() );
+            statement.bindString( 29, null == mediaItemEntity.recordingGroup() ? "" : mediaItemEntity.recordingGroup() );
             statement.executeInsert();
 
         }

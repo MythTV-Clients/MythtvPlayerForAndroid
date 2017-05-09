@@ -148,7 +148,4 @@
         android:layout_height="wrap_content"
         tools:text="Test Description" />
 
-    <include
-        layout="@layout/phone_view_progress" />
-
 </LinearLayout>
