@@ -19,6 +19,7 @@
 package org.mythtv.android.data.repository.datasource;
 
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
+import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
@@ -35,5 +36,9 @@ import rx.Observable;
 public interface ContentDataStore {
 
     Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename );
+
+    Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id );
+
+    Observable<Boolean> removeLiveStream( final int id );
 
 }

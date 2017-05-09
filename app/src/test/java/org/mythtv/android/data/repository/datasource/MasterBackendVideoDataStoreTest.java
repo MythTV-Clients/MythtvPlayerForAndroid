@@ -1,17 +1,16 @@
 package org.mythtv.android.data.repository.datasource;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
-import org.mythtv.android.data.cache.VideoCache;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import org.mythtv.android.data.net.VideoApi;
 import org.mythtv.android.domain.ContentType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 
@@ -31,17 +30,11 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     @Mock
     private VideoApi mockVideoApi;
 
-    @Mock
-    private VideoCache mockVideoCache;
-
-    @Mock
-    private SearchDataStoreFactory mockSearchDataStoreFactory;
-
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        masterBackendVideoDataStore = new MasterBackendVideoDataStore( mockVideoApi, mockVideoCache, mockSearchDataStoreFactory );
+        masterBackendVideoDataStore = new MasterBackendVideoDataStore( mockVideoApi );
 
     }
 
@@ -49,8 +42,7 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     public void testGetVideos() {
 
         List<VideoMetadataInfoEntity> fakeVideoMetadataInfoEntities = new ArrayList<>();
-        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = new VideoMetadataInfoEntity();
-        fakeVideoMetadataInfoEntity.setContentType( ContentType.MOVIE );
+        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = createVideoMetadataInfoEntity();
         fakeVideoMetadataInfoEntities.add( fakeVideoMetadataInfoEntity );
         Observable<List<VideoMetadataInfoEntity>> fakeObservable = Observable.just( fakeVideoMetadataInfoEntities );
         given( mockVideoApi.getVideoList( null, null, false, -1, -1 ) ).willReturn( fakeObservable );
@@ -64,8 +56,7 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     public void testGetCategory() {
 
         List<VideoMetadataInfoEntity> fakeVideoMetadataInfoEntities = new ArrayList<>();
-        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = new VideoMetadataInfoEntity();
-        fakeVideoMetadataInfoEntity.setContentType( ContentType.MOVIE );
+        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = createVideoMetadataInfoEntity();
         fakeVideoMetadataInfoEntities.add( fakeVideoMetadataInfoEntity );
         Observable<List<VideoMetadataInfoEntity>> fakeObservable = Observable.just( fakeVideoMetadataInfoEntities );
         given( mockVideoApi.getVideoList( null, null, false, -1, -1 ) ).willReturn( fakeObservable );
@@ -78,7 +69,7 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     @Test
     public void testGetVideoById() {
 
-        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = new VideoMetadataInfoEntity();
+        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = createVideoMetadataInfoEntity();
         Observable<VideoMetadataInfoEntity> fakeObservable = Observable.just( fakeVideoMetadataInfoEntity );
         given( mockVideoApi.getVideoById( FAKE_VIDEO_ID ) ).willReturn( fakeObservable );
 
@@ -91,7 +82,7 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
     @Test
     public void testGetVideoByFilename() {
 
-        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = new VideoMetadataInfoEntity();
+        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = createVideoMetadataInfoEntity();
         Observable<VideoMetadataInfoEntity> fakeObservable = Observable.just( fakeVideoMetadataInfoEntity );
         given( mockVideoApi.getVideoByFilename( FAKE_VIDEO_FILENAME ) ).willReturn( fakeObservable );
 
@@ -99,6 +90,15 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
 
         verify( mockVideoApi ).getVideoByFilename( FAKE_VIDEO_FILENAME );
 
+    }
+
+    private VideoMetadataInfoEntity createVideoMetadataInfoEntity() {
+
+        return VideoMetadataInfoEntity.create(
+                FAKE_VIDEO_ID, null, null, null, null, null, null, null, null,
+                -1, null, null, null, 0, 0, 0, 0, 0, 1, true, false,
+                true, ContentType.MOVIE, FAKE_VIDEO_FILENAME, null,
+                null, null, null, null, null, null, null, null );
     }
 
 }

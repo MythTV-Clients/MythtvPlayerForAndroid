@@ -30,8 +30,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.cast.framework.CastSession;
-import com.google.firebase.crash.FirebaseCrash;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -41,13 +42,13 @@ import org.mythtv.android.presentation.internal.di.components.DaggerMediaCompone
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.internal.di.modules.MediaItemModule;
 import org.mythtv.android.presentation.model.MediaItemModel;
-import org.mythtv.android.presentation.view.fragment.phone.CastErrorDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.CastNotReadyDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemDetailsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  *
@@ -72,13 +73,15 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
     private MediaItemModel mediaItemModel;
 
-    @BindView( R.id.media_item_image)
+    @BindView( R.id.media_item_image )
     ImageView backdrop;
 
     @BindView( R.id.fab )
     FloatingActionButton fab;
 
     MediaItemDetailsFragment fragment;
+
+    private Unbinder unbinder;
 
     public static Intent getCallingIntent( Context context, int id, Media media ) {
 
@@ -103,6 +106,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         super.onCreate( savedInstanceState );
 
         ButterKnife.bind( this );
+        unbinder = ButterKnife.bind( this );
 
         this.initializeActivity( savedInstanceState );
         this.initializeInjector();
@@ -145,6 +149,14 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
     }
 
     @Override
+    protected void onDestroy() {
+
+        unbinder.unbind();
+
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu( Menu menu ) {
 
         MenuInflater inflater = getMenuInflater();
@@ -176,6 +188,10 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
                 navigator.navigateToTroubleshoot( this );
 
                 return true;
+
+            default :
+
+                break;
 
         }
 
@@ -252,47 +268,55 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
         Log.d( TAG, "onMediaItemLoaded : exit" );
     }
 
+    @Override
+    public void onMediaItemRefreshed( final MediaItemModel mediaItemModel ) {
+        Log.d( TAG, "onMediaItemRefreshed : enter" );
+
+        this.mediaItemModel = mediaItemModel;
+
+        Log.d( TAG, "onMediaItemRefreshed : exit" );
+    }
+
     private void loadBackdrop() {
         Log.d( TAG, "loadBackdrop : enter" );
 
-        if( null == mediaItemModel.getMedia() ) {
+        if( null == mediaItemModel.media() ) {
             Log.d( TAG, "loadBackdrop : exit, media not set" );
 
             return;
         }
 
         String backdropUrl = null;
-        switch( mediaItemModel.getMedia() ) {
+        if( mediaItemModel.media() == Media.PROGRAM ) {
 
-            case PROGRAM:
+            if( null != mediaItemModel.previewUrl() && !"".equals( mediaItemModel.previewUrl() ) ) {
 
-                if( null != mediaItemModel.getPreviewUrl() && !"".equals( mediaItemModel.getPreviewUrl() ) ) {
+                backdropUrl = getMasterBackendUrl() + mediaItemModel.previewUrl();
 
-                    backdropUrl = getMasterBackendUrl() + mediaItemModel.getPreviewUrl();
+            }
 
-                }
 
-                break;
+        } else {
 
-            default:
+            if( null != mediaItemModel.fanartUrl() && !"".equals( mediaItemModel.fanartUrl() ) ) {
 
-                if( null != mediaItemModel.getFanartUrl() && !"".equals( mediaItemModel.getFanartUrl() ) ) {
+                backdropUrl = getMasterBackendUrl() + mediaItemModel.fanartUrl();
 
-                    backdropUrl = getMasterBackendUrl() + mediaItemModel.getFanartUrl();
+            }
 
-                }
 
-                break;
         }
 
         if( null != backdropUrl && !"".equals( backdropUrl ) ) {
 
             Log.i( TAG, "loadBackdrop : backdropUrl=" + backdropUrl );
-            final ImageView imageView = (ImageView) findViewById( R.id.media_item_image);
-            getNetComponent().picasso()
+            Glide
+                    .with( this )
                     .load( backdropUrl )
-                    .fit().centerCrop()
-                    .into( imageView );
+                    .centerCrop()
+                    .crossFade()
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
+                    .into( backdrop );
 
         }
 
@@ -311,74 +335,36 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
             return;
         }
 
-        if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
+        if( mediaItemModel.url().endsWith( "m3u8" ) ) {
+            Log.d( TAG, "onButtonFabPlay : trying to play HLS stream" );
+
+            if( mediaItemModel.percentComplete() <= 2 ) {
+
+                FragmentManager fm = getFragmentManager();
+                CastNotReadyDialogFragment fragment = new CastNotReadyDialogFragment();
+                fragment.show(fm, "Cast Not Ready Dialog Fragment");
+
+                Log.d( TAG, "onButtonFabPlay : HLS stream is not ready" );
+                return;
+            }
+
+        }
+
+        CastSession castSession = mCastContext.getSessionManager().getCurrentCastSession();
+        if( null != castSession && castSession.isConnected() ) {
+            Log.d( TAG, "onButtonFabPlay : always favor cast device, sending stream to cast device via local player" );
+
+            navigator.navigateToLocalPlayer( this, mediaItemModel );
+
+        } else if( getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_INTERNAL_PLAYER, true ) ) {
             Log.d( TAG, "onButtonFabPlay : sending stream to internal player" );
 
-            try {
-
-                switch( mediaItemModel.getMedia() ) {
-
-                    case PROGRAM:
-
-                        if( mediaItemModel.getUrl().endsWith( "mp4" ) || mediaItemModel.getUrl().endsWith( "m4v" ) ) {
-
-                            navigator.navigateToLocalPlayer( this, mediaItemModel );
-
-                        } else if( mediaItemModel.getUrl().endsWith( "m3u8" ) ) {
-
-                            if( mediaItemModel.getPercentComplete() > 2 ) {
-
-                                navigator.navigateToLocalPlayer( this, mediaItemModel );
-
-                            } else {
-
-                                FragmentManager fm = getFragmentManager();
-                                CastNotReadyDialogFragment fragment = new CastNotReadyDialogFragment();
-                                fragment.show( fm, "Cast Not Ready Dialog Fragment" );
-
-                            }
-
-                        } else {
-
-                            CastSession castSession = mCastContext.getSessionManager().getCurrentCastSession();
-                            if( null != castSession && castSession.isConnected() ) {
-
-                                FragmentManager fm = getFragmentManager();
-                                CastErrorDialogFragment fragment = new CastErrorDialogFragment();
-                                fragment.show( fm, "Cast Error Dialog Fragment" );
-
-                            } else {
-
-                                navigator.navigateToExternalPlayer( this, ( getMasterBackendUrl() + mediaItemModel.getUrl()), mediaItemModel.getContentType() );
-
-                            }
-
-                        }
-
-                        break;
-
-                    default:
-
-                        navigator.navigateToLocalPlayer( this, mediaItemModel );
-
-                        break;
-
-                }
-
-            } catch( Exception e ) {
-                Log.e( TAG, "onButtonFabPlay : error", e );
-
-                FirebaseCrash.logcat( Log.ERROR, TAG, "onButtonFabPlay : mediaItemModel=" + mediaItemModel.toString() );
-                FirebaseCrash.report( e );
-
-                showToastMessage( null, "HLS for this video is no longer available", null, null );
-
-            }
+            navigator.navigateToLocalPlayer( this, mediaItemModel );
 
         } else {
             Log.d( TAG, "onButtonFabPlay : sending stream to external player" );
 
-            navigator.navigateToExternalPlayer( this, (getMasterBackendUrl() + mediaItemModel.getUrl() ), mediaItemModel.getContentType() );
+            navigator.navigateToExternalPlayer( this, (getMasterBackendUrl() + mediaItemModel.url() ), mediaItemModel.contentType() );
 
         }
 

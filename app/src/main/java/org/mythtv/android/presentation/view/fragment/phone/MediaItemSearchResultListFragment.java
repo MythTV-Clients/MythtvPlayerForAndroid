@@ -26,7 +26,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
@@ -69,14 +68,53 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     @BindView( R.id.rv_mediaItems )
     RecyclerView rv_mediaItems;
 
-    @BindView( R.id.rl_progress )
-    RelativeLayout rl_progress;
-
     private Unbinder unbinder;
 
     private MediaItemsAdapter mediaItemsAdapter;
 
     private MediaItemListListener mediaItemListListener;
+
+    private final MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
+
+        if( null != MediaItemSearchResultListFragment.this.mediaItemListListener && null != mediaItemModel ) {
+            Log.d( TAG, "onProgramItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+            if( mediaItemModel.isValid() ) {
+                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+                MediaItemSearchResultListFragment.this.searchResultListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
+
+            } else {
+                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
+
+                if( null == mediaItemModel.media() ) {
+
+                    String message = getString(R.string.validation_no_media_type);
+                    showToastMessage( message, null, null );
+
+                } else {
+
+                    String fields = "";
+                    for( ErrorModel errorModel : mediaItemModel.validationErrors() ) {
+
+                        if( !"".equals( fields ) ) {
+                            fields += ", ";
+                        }
+
+                        fields += errorModel.field();
+
+                    }
+
+                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
+                    showToastMessage( message, null, null );
+
+                }
+
+            }
+
+        }
+
+    };
 
     public MediaItemSearchResultListFragment() {
         super();
@@ -202,20 +240,12 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.VISIBLE );
-        }
-
         Log.d( TAG, "showLoading : exit" );
     }
 
     @Override
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
-
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.GONE );
-        }
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -299,47 +329,5 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
 
         Log.d( TAG, "loadSearchResultList : exit" );
     }
-
-    private MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
-
-        if( null != MediaItemSearchResultListFragment.this.mediaItemListListener && null != mediaItemModel ) {
-            Log.d( TAG, "onProgramItemClicked : mediaItemModel=" + mediaItemModel.toString() );
-
-            if( mediaItemModel.isValid() ) {
-                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
-
-                MediaItemSearchResultListFragment.this.searchResultListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
-
-            } else {
-                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
-
-                if( null == mediaItemModel.getMedia() ) {
-
-                    String message = getString(R.string.validation_no_media_type);
-                    showToastMessage( message, null, null );
-
-                } else {
-
-                    String fields = "";
-                    for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
-
-                        if( !"".equals( fields ) ) {
-                            fields += ", ";
-                        }
-
-                        fields += errorModel.getField();
-
-                    }
-
-                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
-                    showToastMessage( message, null, null );
-
-                }
-
-            }
-
-        }
-
-    };
 
 }

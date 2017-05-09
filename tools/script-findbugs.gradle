@@ -1,0 +1,14 @@
+apply plugin: 'findbugs'
+
+task findbugs(type: FindBugs) {
+    excludeFilter = file("../tools/rules-findbugs.xml")
+    classes = fileTree("$project.buildDir/intermediates/classes/dev/debug/org/mythtv/android")
+    source = fileTree('src/main/java/org/mythtv/android/')
+    classpath = files()
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        html.destination = "$project.buildDir/outputs/findbugs/findbugs.html"
+    }
+}

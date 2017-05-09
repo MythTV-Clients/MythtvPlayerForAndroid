@@ -18,6 +18,9 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -28,36 +31,20 @@ import com.google.gson.annotations.SerializedName;
  *
  * Created on 9/18/15.
  */
-public class VideoMetadataInfoWrapperEntity {
+@AutoValue
+public abstract class VideoMetadataInfoWrapperEntity {
 
     @SerializedName( "VideoMetadataInfo" )
-    private VideoMetadataInfoEntity videoMetadataInfo;
+    public abstract VideoMetadataInfoEntity videoMetadataInfo();
 
-    public VideoMetadataInfoWrapperEntity() {
+    public static VideoMetadataInfoWrapperEntity create( VideoMetadataInfoEntity videoMetadataInfo ) {
+
+        return new AutoValue_VideoMetadataInfoWrapperEntity( videoMetadataInfo );
     }
 
-    public VideoMetadataInfoWrapperEntity(VideoMetadataInfoEntity videoMetadataInfo ) {
+    public static TypeAdapter<VideoMetadataInfoWrapperEntity> typeAdapter( Gson gson ) {
 
-        this.videoMetadataInfo = videoMetadataInfo;
-
-    }
-
-    public VideoMetadataInfoEntity getVideoMetadataInfo() {
-
-        return videoMetadataInfo;
-    }
-
-    public void setVideoMetadataInfo( VideoMetadataInfoEntity videoMetadataInfo ) {
-
-        this.videoMetadataInfo = videoMetadataInfo;
-
-    }
-
-    @Override
-    public String toString() {
-        return "VideoMetadataInfoWrapperEntity{" +
-                "videoMetadataInfo=" + videoMetadataInfo +
-                '}';
+        return new AutoValue_VideoMetadataInfoWrapperEntity.GsonTypeAdapter( gson );
     }
 
 }

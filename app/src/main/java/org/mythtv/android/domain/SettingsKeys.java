@@ -26,7 +26,7 @@ package org.mythtv.android.domain;
  *
  * Created on 9/2/15.
  */
-public class SettingsKeys {
+public final class SettingsKeys {
 
     public static final String KEY_PREF_BACKEND_SCAN_URL = "backend_scan_url";
     public static final String KEY_PREF_BACKEND_URL = "backend_url";

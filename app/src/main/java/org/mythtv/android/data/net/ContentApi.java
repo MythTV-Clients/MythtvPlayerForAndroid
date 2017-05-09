@@ -19,6 +19,7 @@
 package org.mythtv.android.data.net;
 
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
+import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
@@ -34,28 +35,20 @@ import rx.Observable;
  */
 public interface ContentApi {
 
-    String ADD_LIVE_STREAM_BASE_URL = "/Content/AddLiveStream";
+    String LIVE_STREAM_INFO_LIST_BASE_URL = "/Content/GetLiveStreamList";
     String ADD_RECORDING_LIVE_STREAM_BASE_URL = "/Content/AddRecordingLiveStream";
     String ADD_VIDEO_LIVE_STREAM_BASE_URL = "/Content/AddVideoLiveStream";
-    String LIVE_STREAM_INFO_LIST_BASE_URL = "/Content/GetLiveStreamList";
-    String LIVE_STREAM_INFO_URL = "/Content/GetLiveStream?Id=%s";
-    String REMOVE_LIVE_STREAM_URL = "/Content/RemoveLiveStream?Id=%s";
-    String STOP_LIVE_STREAM_URL = "/Content/StopLiveStream?Id=%s";
+    String REMOVE_LIVE_STREAM_BASE_URL = "/Content/RemoveLiveStream";
 
-    String STORAGE_GROUP_QS = "StorageGroup=%s";
-    String FILENAME_QS = "FileName=%s";
-    String HOSTNAME_QS = "HostName=%s";
-    String RECORDED_ID_QS = "RecordedId=%s";
-    String CHAN_ID_QS = "ChanId=%s";
-    String START_TIME_QS = "StartTime=%s";
     String ID_QS = "Id=%s";
-    String MAX_SEGMENTS_QS = "MaxSegments=%s";
-    String WIDTH_QS = "Width=%s";
-    String HEIGHT_QS = "Height=%s";
-    String BITRATE_QS = "Bitrate=%s";
-    String AUDIO_BITRATE_QS = "AudioBitrate=%s";
-    String SAMPLE_RATE_QS = "SampleRate=%s";
+    String RECORDEDID_QS = "RecordedId=%s";
+    String FILENAME_QS = "FileName=%s";
+    String WIDTH_QS = "Width=960";
 
     Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename );
+
+    Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id );
+
+    Observable<Boolean> removeLiveStream( final int id );
 
 }

@@ -26,9 +26,7 @@ import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.EncoderListEntity;
 import org.mythtv.android.data.entity.EncoderWrapperEntity;
 
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -52,20 +50,20 @@ public class EncoderEntityJsonMapper {
 
     }
 
-    public EncoderEntity transformEncoderEntity( Reader encoderJsonResponse ) throws JsonSyntaxException {
+    public EncoderEntity transformEncoderEntity( String encoderJsonResponse ) throws JsonSyntaxException {
 
         Type encoderWrapperEntityType = new TypeToken<EncoderWrapperEntity>() {}.getType();
         EncoderWrapperEntity encoderWrapperEntity = this.gson.fromJson( encoderJsonResponse, encoderWrapperEntityType );
 
-        return encoderWrapperEntity.getEncoder();
+        return encoderWrapperEntity.encoder();
     }
 
-    public List<EncoderEntity> transformEncoderEntityCollection( Reader encoderListJsonResponse ) throws JsonSyntaxException {
+    public List<EncoderEntity> transformEncoderEntityCollection( String encoderListJsonResponse ) throws JsonSyntaxException {
 
         Type encoderListEntityType = new TypeToken<EncoderListEntity>() {}.getType();
         EncoderListEntity encoderListEntity = this.gson.fromJson( encoderListJsonResponse, encoderListEntityType );
 
-        return Arrays.asList( encoderListEntity.getEncoders().getEncoders() );
+        return encoderListEntity.encoders().encoders();
     }
 
 }

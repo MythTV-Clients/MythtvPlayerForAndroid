@@ -18,10 +18,10 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -68,6 +68,15 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
     private static final String INTENT_EXTRA_PARAM_INETREF = "org.mythtv.android.INTENT_PARAM_INETREF";
     private static final String INSTANCE_STATE_PARAM_INETREF = "org.mythtv.android.STATE_PARAM_INETREF";
+
+    private Media media;
+    private boolean descending = true;
+    private int startIndex = -1, count = -1;
+    private String titleRegEx = null, recGroup = null, storageGroup = null, inetref = null;
+
+    private MediaItemListFragment fragment;
+
+    private MediaComponent mediaComponent;
 
     public static Intent getCallingIntent( Context context, Media media, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup, String inetref  ) {
 
@@ -120,21 +129,6 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
         return callingIntent;
     }
-
-    private Media media;
-    private boolean descending = true;
-    private int startIndex = -1, count = -1;
-    private String titleRegEx = null, recGroup = null, storageGroup = null, inetref = null;
-
-    private MediaItemListFragment fragment;
-
-    private MediaComponent mediaComponent;
-
-//    @BindView( R.id.fabProgressCircle )
-//    FABProgressCircle fabProgressCircle;
-//
-//    @BindView( R.id.fab )
-//    FloatingActionButton mFab;
 
     @Override
     public int getLayoutResource() {
@@ -304,47 +298,47 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
                 this.media = Media.valueOf( getIntent().getStringExtra( INTENT_EXTRA_PARAM_MEDIA ) );
 
                 this.descending = extras.getBoolean( INTENT_EXTRA_PARAM_DESCENDING, true );
-                Log.d( TAG, "initializeActivity : restored descending=" + this.descending + ", from extras" );
+                Log.d( TAG, "initializeActivity : restored descending=" + this.descending );
 
                 if( extras.containsKey( INTENT_EXTRA_PARAM_START_INDEX ) ) {
 
                     this.startIndex = extras.getInt( INTENT_EXTRA_PARAM_START_INDEX );
-                    Log.d( TAG, "initializeActivity : restored startIndex=" + this.startIndex + ", from extras" );
+                    Log.d( TAG, "initializeActivity : restored startIndex=" + this.startIndex );
 
                 }
 
                 if( extras.containsKey( INTENT_EXTRA_PARAM_COUNT ) ) {
 
                     this.count = extras.getInt( INTENT_EXTRA_PARAM_COUNT );
-                    Log.d( TAG, "initializeActivity : restored count=" + this.count + ", from extras" );
+                    Log.d( TAG, "initializeActivity : restored count=" + this.count );
 
                 }
 
                 if( extras.containsKey( INTENT_EXTRA_PARAM_TITLE_REG_EX ) ) {
 
                     this.titleRegEx = extras.getString( INTENT_EXTRA_PARAM_TITLE_REG_EX );
-                    Log.d( TAG, "initializeActivity : restored titleRegEx=" + this.titleRegEx + ", from extras" );
+                    Log.d( TAG, "initializeActivity : restored titleRegEx=" + this.titleRegEx );
 
                 }
 
                 if( extras.containsKey( INTENT_EXTRA_PARAM_REC_GROUP ) ) {
 
                     this.recGroup = extras.getString( INTENT_EXTRA_PARAM_REC_GROUP );
-                    Log.d( TAG, "initializeActivity : restored recGroup=" + this.recGroup + ", from extras" );
+                    Log.d( TAG, "initializeActivity : restored recGroup=" + this.recGroup );
 
                 }
 
                 if( extras.containsKey( INTENT_EXTRA_PARAM_STORAGE_GROUP ) ) {
 
                     this.storageGroup = extras.getString( INTENT_EXTRA_PARAM_STORAGE_GROUP );
-                    Log.d( TAG, "initializeActivity : restored storageGroup=" + this.storageGroup + ", from extras" );
+                    Log.d( TAG, "initializeActivity : restored storageGroup=" + this.storageGroup );
 
                 }
 
                 if( extras.containsKey( INTENT_EXTRA_PARAM_INETREF ) ) {
 
                     this.inetref = extras.getString( INTENT_EXTRA_PARAM_INETREF );
-                    Log.d( TAG, "initializeActivity : restored inetref=" + this.inetref + ", from extras" );
+                    Log.d( TAG, "initializeActivity : restored inetref=" + this.inetref );
 
                 }
 
@@ -368,47 +362,47 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
             this.media = Media.valueOf( savedInstanceState.getString( INSTANCE_STATE_PARAM_MEDIA ) );
 
             this.descending = savedInstanceState.getBoolean( INSTANCE_STATE_PARAM_DESCENDING );
-            Log.d( TAG, "initializeActivity : restored descending=" + this.descending + ", from savedInstanceState" );
+            Log.d( TAG, "initializeActivity : restored descending=" + this.descending );
 
             if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_START_INDEX ) ) {
 
                 this.startIndex = savedInstanceState.getInt( INSTANCE_STATE_PARAM_START_INDEX );
-                Log.d( TAG, "initializeActivity : restored startIndex=" + this.startIndex + ", from savedInstanceState" );
+                Log.d( TAG, "initializeActivity : restored startIndex=" + this.startIndex );
 
             }
 
             if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_COUNT ) ) {
 
                 this.count = savedInstanceState.getInt( INSTANCE_STATE_PARAM_COUNT );
-                Log.d( TAG, "initializeActivity : restored count=" + this.count + ", from savedInstanceState" );
+                Log.d( TAG, "initializeActivity : restored count=" + this.count );
 
             }
 
             if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_TITLE_REG_EX ) ) {
 
                 this.titleRegEx = savedInstanceState.getString( INSTANCE_STATE_PARAM_TITLE_REG_EX );
-                Log.d( TAG, "initializeActivity : restored titleRegEx=" + this.titleRegEx + ", from savedInstanceState" );
+                Log.d( TAG, "initializeActivity : restored titleRegEx=" + this.titleRegEx );
 
             }
 
             if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_REC_GROUP ) ) {
 
                 this.recGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_REC_GROUP );
-                Log.d( TAG, "initializeActivity : restored recGroup=" + this.recGroup + ", from savedInstanceState" );
+                Log.d( TAG, "initializeActivity : restored recGroup=" + this.recGroup );
 
             }
 
             if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_STORAGE_GROUP ) ) {
 
                 this.storageGroup = savedInstanceState.getString( INSTANCE_STATE_PARAM_STORAGE_GROUP );
-                Log.d( TAG, "initializeActivity : restored storageGroup=" + this.storageGroup + ", from savedInstanceState" );
+                Log.d( TAG, "initializeActivity : restored storageGroup=" + this.storageGroup );
 
             }
 
             if( savedInstanceState.containsKey( INSTANCE_STATE_PARAM_INETREF ) ) {
 
                 this.inetref = savedInstanceState.getString( INSTANCE_STATE_PARAM_INETREF );
-                Log.d( TAG, "initializeActivity : restored inetref=" + this.inetref + ", from savedInstanceState" );
+                Log.d( TAG, "initializeActivity : restored inetref=" + this.inetref );
 
             }
 
@@ -491,8 +485,8 @@ public class SeriesListActivity extends AbstractBasePhoneActivity implements Has
 
         Log.d( TAG, "onMediaItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+        navigator.navigateToMediaItem( this, mediaItemModel.id(), mediaItemModel.media(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

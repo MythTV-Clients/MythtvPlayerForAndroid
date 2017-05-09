@@ -20,6 +20,7 @@ package org.mythtv.android.data.repository;
 
 import android.util.Log;
 
+import org.mythtv.android.data.entity.mapper.MediaItemDataMapper;
 import org.mythtv.android.data.repository.datasource.SearchDataStore;
 import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
 import org.mythtv.android.domain.MediaItem;
@@ -61,7 +62,8 @@ public class SearchDataRepository implements SearchRepository {
 
         final SearchDataStore searchDataStore = this.searchDataStoreFactory.createReadSearchDataStore();
 
-        return searchDataStore.search( searchString );
+        return searchDataStore.search( searchString )
+                .map( MediaItemDataMapper::transformMediaItems );
     }
 
 }

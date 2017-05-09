@@ -51,7 +51,7 @@
             android:textSize="18sp"
             android:gravity="center_horizontal"
             android:layout_alignParentBottom="true"
-            android:text="HLS only filter is enabled" />
+            android:text="@string/hls_only_filter_is_enabled" />
 
     </RelativeLayout>
 

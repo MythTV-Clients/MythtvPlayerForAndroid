@@ -152,6 +152,10 @@ public class VideoCategoryActivity extends AbstractBaseTvActivity implements Has
 
                     break;
 
+                default :
+
+                    break;
+
             }
 
         } else {

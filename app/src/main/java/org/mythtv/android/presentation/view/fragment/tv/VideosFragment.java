@@ -49,6 +49,8 @@ public class VideosFragment extends AbstractBaseGuidedStepFragment {
     private static final int MUSIC_VIDEOS = 4;
     private static final int ADULT = 5;
 
+    private MediaListener mediaListener;
+
     /**
      * Interface for listening category list events.
      */
@@ -57,8 +59,6 @@ public class VideosFragment extends AbstractBaseGuidedStepFragment {
         void onCategoryClicked( final Media media );
 
     }
-
-    private MediaListener mediaListener;
 
     @Override
     public void onAttach( Context context ) {

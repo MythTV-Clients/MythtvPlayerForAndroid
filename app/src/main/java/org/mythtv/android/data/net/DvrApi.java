@@ -82,7 +82,7 @@ public interface DvrApi {
      * @return true  - if status was successfully updated
      *         false - if status was not updated
      */
-    Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched );
+    Observable<Boolean> updateWatchedStatus( final int id, final boolean watched );
 
     Observable<Long> getBookmark( final int recordedId, final int chanId, final DateTime startTime, final String offsetType );
 

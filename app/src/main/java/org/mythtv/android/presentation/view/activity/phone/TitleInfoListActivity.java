@@ -43,6 +43,10 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
 
     private static final String TAG = TitleInfoListActivity.class.getSimpleName();
 
+    private SeriesListFragment seriesListFragment;
+
+    private MediaComponent mediaComponent;
+
     public static Intent getCallingIntent( Context context ) {
 
         Intent callingIntent = new Intent( context, TitleInfoListActivity.class );
@@ -50,16 +54,6 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
 
         return callingIntent;
     }
-
-    private SeriesListFragment seriesListFragment;
-
-    private MediaComponent mediaComponent;
-
-//    @BindView( R.id.fabProgressCircle )
-//    FABProgressCircle fabProgressCircle;
-//
-//    @BindView( R.id.fab )
-//    FloatingActionButton mFab;
 
     @Override
     public int getLayoutResource() {
@@ -199,7 +193,7 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
         Log.d( TAG, "onSeriesClicked : enter" );
 
         Log.d( TAG, "onSeriesClicked : seriesModel=" + seriesModel );
-        navigator.navigateToSeries( this, Media.PROGRAM, true, -1, -1, seriesModel.getTitle(), null, null, seriesModel.getInetref() );
+        navigator.navigateToSeries( this, Media.PROGRAM, true, -1, -1, seriesModel.title(), null, null, seriesModel.inetref() );
 
         Log.d( TAG, "onSeriesClicked : exit" );
     }

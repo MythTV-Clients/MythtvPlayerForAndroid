@@ -27,7 +27,6 @@ import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -47,7 +46,7 @@ import rx.Subscriber;
  *
  * Created on 11/9/15.
  */
-public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
+public class VideoApiImpl extends BaseApi implements VideoApi {
 
     private static final String TAG = VideoApiImpl.class.getSimpleName();
 
@@ -85,17 +84,17 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
                     try {
 
-                        Reader responseVideoEntities = getVideoEntitiesFromApi( folder, sort, descending, startIndex, count );
-                        if( null != responseVideoEntities ) {
+                        String responseVideoEntities = getVideoEntitiesFromApi( folder, sort, descending, startIndex, count );
+                        if( null == responseVideoEntities ) {
+                            Log.d( TAG, "getVideoList.call : failed to retrieve video entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "getVideoList.call : retrieved video entities" );
 
                             subscriber.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntityCollection( responseVideoEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "getVideoList.call : failed to retrieve video entities" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -132,15 +131,15 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
                     try {
 
-                        Reader responseVideoDetails = getVideoDetailsFromApi( id );
-                        if( null != responseVideoDetails ) {
+                        String responseVideoDetails = getVideoDetailsFromApi( id );
+                        if( null == responseVideoDetails ) {
 
-                            subscriber.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( responseVideoDetails ) );
-                            subscriber.onCompleted();
+                            subscriber.onError( new NetworkConnectionException() );
 
                         } else {
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            subscriber.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( responseVideoDetails ) );
+                            subscriber.onCompleted();
 
                         }
 
@@ -182,17 +181,17 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
                     try {
 
-                        Reader response = postUpdateWatchedStatus( videoId, watched );
-                        if( null != response ) {
+                        String response = postUpdateWatchedStatus( videoId, watched );
+                        if( null == response ) {
+                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
 
                             subscriber.onNext( booleanJsonMapper.transformBoolean( response ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -217,20 +216,16 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
     }
 
-    private Reader getVideoEntitiesFromApi( final String folder, final String sort, final boolean descending, final int startIndex, final int count ) throws MalformedURLException {
+    private String getVideoEntitiesFromApi( final String folder, final String sort, final boolean descending, final int startIndex, final int count ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append(VIDEO_LIST_BASE_URL);
-        sb.append( "?" );
-        sb.append( String.format( DESCENDING_QS, descending ) );
+        sb.append( getMasterBackendUrl() ).append( VIDEO_LIST_BASE_URL ).append( '?' ).append( String.format( DESCENDING_QS, descending ) );
 
         if( null != folder && !"".equals( folder ) ) {
 
             try {
 
-                sb.append( "&" );
-                sb.append( String.format( FOLDER_QS, URLEncoder.encode( folder, "UTF-8" ) ) );
+                sb.append( '&' ).append( String.format( FOLDER_QS, URLEncoder.encode( folder, "UTF-8" ) ) );
 
             } catch( UnsupportedEncodingException e ) {
 
@@ -243,8 +238,7 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
             try {
 
-                sb.append( "&" );
-                sb.append( String.format( SORT_QS, URLEncoder.encode( sort, "UTF-8" ) ) );
+                sb.append( '&' ).append( String.format( SORT_QS, URLEncoder.encode( sort, "UTF-8" ) ) );
 
             } catch( UnsupportedEncodingException e ) {
 
@@ -254,33 +248,29 @@ public class VideoApiImpl extends AbstractBaseApi implements VideoApi {
 
         if( startIndex != -1 ) {
 
-            sb.append( "&" );
-            sb.append( String.format( START_INDEX_QS, startIndex ) );
+            sb.append( '&' ).append( String.format( START_INDEX_QS, startIndex ) );
 
         }
 
         if( count != -1 ) {
 
-            sb.append( "&" );
-            sb.append( String.format( COUNT_QS, startIndex ) );
+            sb.append( '&' ).append( String.format( COUNT_QS, startIndex ) );
 
         }
 
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private Reader getVideoDetailsFromApi( int id ) throws MalformedURLException {
+    private String getVideoDetailsFromApi( int id ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append(VIDEO_BASE_URL);
-        sb.append( String.format( ID_QS, id ) );
+        sb.append( getMasterBackendUrl() ).append( VIDEO_BASE_URL ).append( String.format( ID_QS, id ) );
         Log.d( TAG, "getVideoDetailsFromApi : url=" + sb.toString() );
 
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private Reader postUpdateWatchedStatus( final int videoId, final boolean watched ) throws MalformedURLException {
+    private String postUpdateWatchedStatus( final int videoId, final boolean watched ) throws MalformedURLException {
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put( "Id", String.valueOf( videoId ) );

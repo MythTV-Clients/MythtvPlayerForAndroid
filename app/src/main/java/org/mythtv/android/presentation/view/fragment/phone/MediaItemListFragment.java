@@ -94,6 +94,47 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     private Map<String, Object> parameters;
 
+    private final MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
+
+        if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
+
+            if( mediaItemModel.isValid() ) {
+                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
+
+            } else {
+                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
+
+                if( null == mediaItemModel.media() ) {
+
+                    String message = getString(R.string.validation_no_media_type);
+                    showToastMessage( message, null, null );
+
+                } else {
+
+                    String fields = "";
+                    for( ErrorModel errorModel : mediaItemModel.validationErrors() ) {
+
+                        if( !"".equals( fields ) ) {
+                            fields += ", ";
+                        }
+
+                        fields += errorModel.field();
+
+                    }
+
+                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
+                    showToastMessage( message, null, null );
+
+                }
+
+            }
+
+        }
+
+    };
+
     public MediaItemListFragment() { super(); }
 
     public static MediaItemListFragment newInstance( Bundle args ) {
@@ -106,7 +147,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     public static class Builder {
 
-        private Media media;
+        private final Media media;
         private Boolean descending;
         private Integer startIndex;
         private Integer count;
@@ -431,12 +472,16 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     @Override
     public void showRetry() {
+        Log.v( TAG, "showRetry : enter" );
 
+        Log.v( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
+        Log.v( TAG, "hideRetry : enter" );
 
+        Log.v( TAG, "hideRetry : exit" );
     }
 
     public void reload() {
@@ -458,7 +503,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
                 List<MediaItemModel> filtered = new ArrayList<>();
                 for( MediaItemModel mediaItemModel : mediaItemModelCollection ) {
 
-                    if( mediaItemModel.getInetref().equals( inetref ) ) {
+                    if( mediaItemModel.inetref().equals( inetref ) ) {
 
                         filtered.add( mediaItemModel );
 
@@ -468,13 +513,15 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
                 if( !filtered.isEmpty() ) {
 
-                    mediaItemModelCollection = filtered;
+                    this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
 
                 }
 
-            }
+            } else {
 
-            this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
+                this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
+
+            }
 
         }
 
@@ -535,46 +582,5 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
         Log.d( TAG, "loadMediaItemList : exit" );
     }
-
-    private MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
-
-        if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
-
-            if( mediaItemModel.isValid() ) {
-                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
-
-                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
-
-            } else {
-                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
-
-                if( null == mediaItemModel.getMedia() ) {
-
-                    String message = getString(R.string.validation_no_media_type);
-                    showToastMessage( message, null, null );
-
-                } else {
-
-                    String fields = "";
-                    for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
-
-                        if( !"".equals( fields ) ) {
-                            fields += ", ";
-                        }
-
-                        fields += errorModel.getField();
-
-                    }
-
-                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
-                    showToastMessage( message, null, null );
-
-                }
-
-            }
-
-        }
-
-    };
 
 }

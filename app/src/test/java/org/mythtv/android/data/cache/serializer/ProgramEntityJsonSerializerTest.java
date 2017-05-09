@@ -26,9 +26,9 @@ public class ProgramEntityJsonSerializerTest extends ApplicationTestCase {
         String jsonString = jsonSerializer.serialize( programEntityOne );
         ProgramEntity programEntityTwo = jsonSerializer.deserialize( jsonString );
 
-        assertThat( programEntityOne.getTitle(), is( programEntityTwo.getTitle() ) );
-        assertThat( programEntityOne.getStartTime(), is( programEntityTwo.getStartTime() ) );
-        assertThat( programEntityOne.getFileName(), is( programEntityTwo.getFileName() ) );
+        assertThat( programEntityOne.title(), is( programEntityTwo.title() ) );
+        assertThat( programEntityOne.startTime(), is( programEntityTwo.startTime() ) );
+        assertThat( programEntityOne.fileName(), is( programEntityTwo.fileName() ) );
 
     }
 

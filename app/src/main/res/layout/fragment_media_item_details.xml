@@ -37,14 +37,15 @@
             android:layout_marginEnd="16dp"
             android:gravity="fill_horizontal">
 
-            <org.mythtv.android.presentation.view.component.AutoLoadImageView
+            <ImageView
                 android:id="@+id/media_item_image"
                 android:layout_width="75dp"
                 android:layout_height="125dp"
                 android:layout_margin="0dp"
                 android:layout_gravity="center"
                 android:scaleType="fitXY"
-                android:elevation="15dp" />
+                android:elevation="15dp"
+                android:contentDescription="@string/media_item_image_cd" />
 
             <ImageView
                 android:id="@+id/media_item_bookmark"
@@ -133,12 +134,6 @@
 
     </RelativeLayout>
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="@dimen/margin"
-        layout="@layout/phone_separator" />
-
     <TextView
         android:layout_margin="@dimen/margin"
         android:layout_width="wrap_content"
@@ -152,14 +147,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Test Description" />
-
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="@dimen/margin"
-        layout="@layout/phone_separator" />
-
-    <include
-        layout="@layout/phone_view_progress" />
 
 </LinearLayout>

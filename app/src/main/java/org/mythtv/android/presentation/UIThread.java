@@ -37,7 +37,9 @@ import rx.android.schedulers.AndroidSchedulers;
 public class UIThread implements PostExecutionThread {
 
     @Inject
-    public UIThread() {}
+    public UIThread() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     @Override
     public Scheduler getScheduler() {

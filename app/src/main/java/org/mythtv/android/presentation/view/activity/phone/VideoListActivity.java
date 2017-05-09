@@ -18,12 +18,12 @@
 
 package org.mythtv.android.presentation.view.activity.phone;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -56,14 +56,6 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
     private static final String TAG = VideoListActivity.class.getSimpleName();
 
-    public static Intent getCallingIntent(Context context ) {
-
-        Intent callingIntent = new Intent( context, VideoListActivity.class );
-        callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-
-        return callingIntent;
-    }
-
     private MediaItemListFragment movieFragment;
     private SeriesListFragment seriesListFragment;
     private MediaItemListFragment homeVideoFragment;
@@ -80,6 +72,14 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
     @BindView( R.id.fab )
     FloatingActionButton mFab;
+
+    public static Intent getCallingIntent( Context context ) {
+
+        Intent callingIntent = new Intent( context, VideoListActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
+    }
 
     @Override
     public int getLayoutResource() {
@@ -148,6 +148,9 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
                 break;
 
+            default:
+
+                break;
         }
 
         Log.v( TAG, "onClick : exit" );
@@ -164,12 +167,16 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
     @Override
     public void onTabReselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabSelected : enter" );
 
+        Log.v( TAG, "onTabSelected : exit" );
     }
 
     @Override
     public void onTabUnselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabUnselected : enter" );
 
+        Log.v( TAG, "onTabUnselected : exit" );
     }
 
     private void setupTabs() {
@@ -246,6 +253,11 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
                 break;
 
+            default :
+                Log.w( TAG, "onTabSelected : incorrect tab selected" );
+
+                break;
+
         }
 
         Log.v( TAG, "setSelectedTab : exit" );
@@ -272,8 +284,8 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia(), options );
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+        navigator.navigateToMediaItem( this, mediaItemModel.id(), mediaItemModel.media(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }
@@ -310,7 +322,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     public void onSeriesClicked( final SeriesModel seriesModel ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.getTitle(), null, null, seriesModel.getInetref() );
+        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.title(), null, null, seriesModel.inetref() );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

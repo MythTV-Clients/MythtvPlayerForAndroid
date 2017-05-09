@@ -17,19 +17,19 @@
  */
 
 apply plugin: 'com.android.application'
-apply from: '../jacoco.gradle'
+apply from: '../tools/script-java-code-coverage.gradle'
+apply from: '../tools/script-git-version.gradle'
+apply from: '../tools/script-findbugs.gradle'
+apply from: '../tools/script-lint.gradle'
+apply from: '../tools/script-pmd.gradle'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
 
-    def applicationBranch = "git rev-parse --abbrev-ref HEAD".execute().text.trim()
-    def applicationSHA1 = "git rev-parse --short HEAD".execute().text.trim()
-    def applicationTag = "git describe --abbrev=0 --dirty --tags".execute().text.trim()
-
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     adbOptions {
 
@@ -56,10 +56,12 @@ android {
         versionName "3.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        resValue "string", "branchName", applicationBranch
-        resValue "string", "shaName", applicationSHA1
-        resValue "string", "tagName", applicationTag
-        resValue "string", "versionName", versionName
+        resConfigs "en", "de"
+
+        resValue "string", "branchName", gitVersionBranch
+        resValue "string", "shaName", gitVersionCommit
+        resValue "string", "tagName", "$gitVersionCode"
+        resValue "string", "versionName", (gitVersionName == null ? versionName : gitVersionName)
 
         if (project.hasProperty("mythtvplayer.google-cast")
                 && new File(project.property("mythtvplayer.google-cast") + ".gradle").exists()) {
@@ -72,25 +74,13 @@ android {
 
         }
 
-    }
+        javaCompileOptions {
 
-    buildTypes {
+            annotationProcessorOptions {
 
-        debug {
+                arguments = ['autovaluegson.defaultCollectionsToEmpty': 'true']
 
-            shrinkResources false
-            minifyEnabled false
-            testCoverageEnabled = true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-        }
-
-        release {
-
-            shrinkResources false
-            minifyEnabled true // Enables code shrinking for the release build type.
-            zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
 
         }
 
@@ -101,14 +91,41 @@ android {
         // Define separate dev and prod product flavors.
         dev {
 
+            versionCode gitVersionCodeTime
+            versionName gitVersionName
+
             // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
             // to pre-dex each module and produce an APK that can be tested on
             // Android Lollipop without time consuming dex merging processes.
-            minSdkVersion 21
+//            minSdkVersion 21
 
         }
 
         prod {
+
+            versionCode gitVersionCode
+            versionName gitVersionName
+
+        }
+
+    }
+
+    buildTypes {
+
+        debug {
+
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../tools/rules-proguard-debug.pro'
+            applicationIdSuffix '.debug'
+
+        }
+
+        release {
+
+            shrinkResources false
+            minifyEnabled true // Enables code shrinking for the release build type.
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../tools/rules-proguard.pro'
 
         }
 
@@ -141,11 +158,11 @@ android {
 
     }
 
-    lintOptions {
-
-        abortOnError false
-
-    }
+//    lintOptions {
+//
+//        abortOnError false
+//
+//    }
 
     testOptions {
 
@@ -164,9 +181,22 @@ android {
 
     }
 
+    sourceSets { debug { res.srcDirs = ['src/debug/res', 'src/debug/res/values'] } }
 }
 
 dependencies {
+
+    provided "com.google.auto.value:auto-value:${project.ext.autoValueVersion}"
+    annotationProcessor "com.google.auto.value:auto-value:${project.ext.autoValueVersion}"
+
+    provided "com.ryanharter.auto.value:auto-value-gson:${project.ext.autoValueGsonVersion}"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:${project.ext.autoValueGsonVersion}"
+
+    provided "com.ryanharter.auto.value:auto-value-parcel:${project.ext.autoValueParcelVersion}"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:${project.ext.autoValueParcelVersion}"
+
+    provided "com.github.reggar:auto-value-ignore-hash-equals:${project.ext.autoValueIgnoreHashEqualsVersion}"
+    annotationProcessor "com.github.reggar:auto-value-ignore-hash-equals:${project.ext.autoValueIgnoreHashEqualsVersion}"
 
     compile "com.google.dagger:dagger:${project.ext.daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-compiler:${project.ext.daggerVersion}"
@@ -181,8 +211,6 @@ dependencies {
     compile "com.android.support:palette-v7:${project.ext.supportVersion}"
     compile "io.reactivex:rxjava:${project.ext.rxJavaVersion}"
     compile "io.reactivex:rxandroid:${project.ext.rxAndroidVersion}"
-    compile "com.squareup.picasso:picasso:${project.ext.picassoVersion}"
-    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     compile "com.android.support:support-annotations:${project.ext.supportVersion}"
     compile "com.android.support:mediarouter-v7:${project.ext.supportVersion}"
     compile "com.google.android.gms:play-services-cast-framework:${project.ext.playServicesVersion}"
@@ -194,14 +222,16 @@ dependencies {
     compile "com.facebook.stetho:stetho-okhttp3:${project.ext.stethoVersion}"
     compile "xyz.danoz:recyclerviewfastscroller:${project.ext.recyclerviewfastscrollerVersion}"
     compile "com.android.support:multidex:${project.ext.multidexVersion}"
-    compile "com.googlecode.android-query:android-query:${project.ext.androidQueryVersion}"
     compile "com.google.firebase:firebase-core:${project.ext.firebaseVersion}"
     compile "com.google.firebase:firebase-crash:${project.ext.firebaseVersion}"
     compile "com.github.jorgecastilloprz:fabprogresscircle:${project.ext.fabCircleProgressVersion}"
+    compile "com.vincentbrison.openlibraries.android:dualcache:${project.ext.dualcacheVersion}"
+    compile "com.vincentbrison.openlibraries.android:dualcache-jsonserializer:${project.ext.dualcacheVersion}"
 
     compile "com.android.support:leanback-v17:${project.ext.supportVersion}"
     compile "com.android.support:preference-leanback-v17:${project.ext.supportVersion}"
     compile "com.github.bumptech.glide:glide:${project.ext.glideVersion}"
+    compile "com.github.bumptech.glide:okhttp3-integration:${project.ext.glideOkHttpVersion}@aar"
 
     compile "com.github.Ennova-IT:ZeRXconf:${zerxConfVersion}"
 
@@ -212,9 +242,9 @@ dependencies {
 
     // Dependencies for local testing
     testCompile "junit:junit:${project.ext.jUnitVersion}"
-    testCompile "org.hamcrest:hamcrest-all:${project.ext.hamcrestVersion}"
+    testCompile "org.hamcrest:hamcrest-library:${project.ext.hamcrestVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "org.hamcrest:hamcrest-core:${project.ext.hamcrestVersion}"
+    testCompile "org.assertj:assertj-core:${project.ext.assertJVersion}"
     testCompile "org.robolectric:robolectric:${project.ext.robolectricVersion}"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:${project.ext.leakCanaryVersion}"
 

@@ -64,9 +64,11 @@ import rx.Subscription;
  *
  * Created on 1/28/16.
  */
+@SuppressWarnings({ "PMD.AvoidDuplicateLiterals", "PMD.GodClass" })
 public class SettingsActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent> {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
+    private static final String SEPARATOR = " | ";
 
     private static final int MASTER_BACKEND_SETTINGS = 10;
     private static final int MASTER_BACKEND_SCAN_URL = 11;
@@ -192,7 +194,9 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     @Override
     public MediaComponent getComponent() {
+        Log.v( TAG, "getComponent : enter" );
 
+        Log.v( TAG, "getComponent : exit" );
         return mediaComponent;
     }
 
@@ -221,7 +225,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
             FragmentManager fm = getFragmentManager();
 
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
             switch( (int) action.getId() ) {
 
                 case MASTER_BACKEND_SETTINGS :
@@ -262,10 +266,13 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
                 default :
 
+                    break;
+
             }
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -363,10 +370,15 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
                     break;
 
+                default :
+
+                    break;
+
             }
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -486,9 +498,10 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
             String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL ) + ":" + getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-            if( null == actions ) {
+            List<GuidedAction> guidedActions = new ArrayList<>();
+            if( null != actions ) {
 
-                actions = new ArrayList<>();
+                guidedActions = actions;
 
             }
 
@@ -496,7 +509,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
                 for( String backend : detectedBackends ) {
 
-                    addCheckedAction( getActivity(), actions,
+                    addCheckedAction( getActivity(), guidedActions,
                             -1,
                             backend,
                             null,
@@ -504,7 +517,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
                 }
 
-                setActions( actions );
+                setActions( guidedActions );
 
             }
 
@@ -545,7 +558,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_backend_url_title );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.pref_backend_title );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.pref_backend_title );
             String description = getResources().getString( R.string.pref_backend_url_description );
             Drawable icon = null;
 
@@ -582,6 +595,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -609,7 +623,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_backend_port_title );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.pref_backend_title );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.pref_backend_title );
             String description = getResources().getString( R.string.pref_backend_port_description );
             Drawable icon = null;
 
@@ -646,6 +660,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -692,19 +707,16 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
             FragmentManager fm = getFragmentManager();
 
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
-            switch( (int) action.getId() ) {
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+            if( (int) action.getId() == INTERNAL_PLAYER_SETTINGS) {
 
-                case INTERNAL_PLAYER_SETTINGS :
-
-                    GuidedStepFragment.add( fm, mInternalPlayerFragment, android.R.id.content );
-
-                    break;
+                GuidedStepFragment.add( fm, mInternalPlayerFragment, android.R.id.content );
 
             }
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -733,7 +745,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.tv_settings_playback_internal_player );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.pref_default_player );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.pref_default_player );
             String description = getResources().getString( R.string.tv_settings_playback_internal_player_description );
             Drawable icon = null;
 
@@ -748,7 +760,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_INTERNAL_PLAYER, updated );
@@ -760,6 +772,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -813,19 +826,16 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
             FragmentManager fm = getFragmentManager();
 
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
-            switch( (int) action.getId() ) {
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+            if( (int) action.getId() == FILTER_HLS_ONLY ) {
 
-                case FILTER_HLS_ONLY :
-
-                    GuidedStepFragment.add( fm, mEnableHlsOnlyFilterFragment, android.R.id.content );
-
-                    break;
+                GuidedStepFragment.add( fm, mEnableHlsOnlyFilterFragment, android.R.id.content );
 
             }
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -854,7 +864,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_filter_hls_only );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.pref_filter_hls_only_title );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.pref_filter_hls_only_title );
             String description = ""; //getResources().getString( R.string.tv_settings_playback_internal_player_description );
             Drawable icon = null;
 
@@ -869,7 +879,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_FILTER_HLS_ONLY, updated );
@@ -881,6 +891,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -931,31 +942,23 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             FragmentManager fm = getFragmentManager();
 
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
-            switch( (int) action.getId() ) {
+            if( (int) action.getId() == ENABLE_RECORDING_GROUP ) {
 
-                case ENABLE_RECORDING_GROUP :
+                GuidedStepFragment.add(fm, mEnableRecordingGroupFragment, android.R.id.content );
 
-                    GuidedStepFragment.add( fm, mEnableRecordingGroupFragment, android.R.id.content );
+            } else if( (int) action.getId() == RECORDING_GROUPS_FILTER ) {
 
-                    break;
-
-                case RECORDING_GROUPS_FILTER :
-
-                    GuidedStepFragment.add( fm, mRecordingGroupFragment, android.R.id.content );
-
-                    break;
-
-                default :
+                GuidedStepFragment.add( fm, mRecordingGroupFragment, android.R.id.content );
 
             }
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -996,7 +999,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_enable_recording_group_filter );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.recording_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.recording_preferences );
             String description = "";
             Drawable icon = null;
 
@@ -1012,7 +1015,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_ENABLE_RECORDING_GROUP_FILTER, updated );
@@ -1024,6 +1027,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1097,7 +1101,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_recording_group_filter );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.recording_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.recording_preferences );
             String description = "";
             Drawable icon = null;
 
@@ -1113,7 +1117,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             String updated = action.getLabel1().toString();
             putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER, updated );
@@ -1136,39 +1140,51 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void showLoading() {
+            Log.v( TAG, "showLoading : enter" );
 
+            Log.v( TAG, "showLoading : exit" );
         }
 
         @Override
         public void hideLoading() {
+            Log.v( TAG, "hideLoading : enter" );
 
+            Log.v( TAG, "shideLoading : exit" );
         }
 
         @Override
         public void showRetry() {
+            Log.v( TAG, "showRetry : enter" );
 
+            Log.v( TAG, "showRetry : exit" );
         }
 
         @Override
         public void hideRetry() {
+            Log.v( TAG, "hideLoading : enter" );
 
+            Log.v( TAG, "hideLoading : exit" );
         }
 
         @Override
         public void showError(String message) {
+            Log.v( TAG, "showError : enter" );
 
+            Log.v( TAG, "showError : exit" );
         }
 
         @Override
         public void showMessage(String message) {
+            Log.v( TAG, "showMessage : enter" );
 
+            Log.v( TAG, "showMessage : exit" );
         }
 
         @Override
         public void renderMediaItemList( Collection<MediaItemModel> mediaItemModelCollection ) {
 
             Observable.from( mediaItemModelCollection )
-                    .map( MediaItemModel::getRecordingGroup )
+                    .map( MediaItemModel::recordingGroup )
                     .distinct()
                     .toList()
                     .subscribe( groups -> {
@@ -1178,7 +1194,11 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         }
 
         @Override
-        public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) { }
+        public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
+            Log.v( TAG, "viewMediaItem : enter" );
+
+            Log.v( TAG, "viewMediaItem : exit" );
+        }
 
         @Override
         public Context getContext() {
@@ -1199,6 +1219,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             Log.d( TAG, "loadMediaItemList : exit" );
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1257,7 +1278,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
             FragmentManager fm = getFragmentManager();
 
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
             switch( (int) action.getId() ) {
 
                 case ADULT_SETTINGS :
@@ -1322,11 +1343,13 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
                 default :
 
+                    break;
+
             }
 
         }
 
-
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1435,7 +1458,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_show_adult_tab );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = "";
             Drawable icon = null;
 
@@ -1451,7 +1474,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, updated );
@@ -1463,6 +1486,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1497,7 +1521,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_enable_parental_controls );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = "";
             Drawable icon = null;
 
@@ -1513,7 +1537,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_ENABLE_PARENTAL_CONTROLS, updated );
@@ -1525,6 +1549,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1559,7 +1584,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_parental_controls );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = "";
             Drawable icon = null;
 
@@ -1575,7 +1600,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             String updated = action.getLabel1().toString();
             putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL, updated );
@@ -1587,6 +1612,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1601,22 +1627,22 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
                     -1,
                     "1",
                     null,
-                    parentalControlLevel.equals( "1" ) );
+                    "1".equals( parentalControlLevel ) );
             addCheckedAction( getActivity(), actions,
                     -1,
                     "2",
                     null,
-                    parentalControlLevel.equals( "2" ) );
+                    "2".equals( parentalControlLevel ) );
             addCheckedAction( getActivity(), actions,
                     -1,
                     "3",
                     null,
-                    parentalControlLevel.equals( "3" ) );
+                    "3".equals( parentalControlLevel ) );
             addCheckedAction( getActivity(), actions,
                     -1,
                     "4",
                     null,
-                    parentalControlLevel.equals( "4" ) );
+                    "4".equals( parentalControlLevel ) );
 
             setActions( actions );
 
@@ -1631,7 +1657,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_restrict_content_types );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = "";
             Drawable icon = null;
 
@@ -1647,7 +1673,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RESTRICT_CONTENT_TYPES, updated );
@@ -1659,6 +1685,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1693,7 +1720,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_rating_nr );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = getResources().getString( R.string.pref_rating_nr_summary );
             Drawable icon = null;
 
@@ -1709,7 +1736,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_NR, updated );
@@ -1721,6 +1748,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1755,7 +1783,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_rating_g );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = getResources().getString( R.string.pref_rating_g_summary );
             Drawable icon = null;
 
@@ -1771,7 +1799,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_G, updated );
@@ -1783,6 +1811,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1817,7 +1846,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_rating_pg );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = getResources().getString( R.string.pref_rating_pg_summary );
             Drawable icon = null;
 
@@ -1833,7 +1862,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_PG, updated );
@@ -1845,6 +1874,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1879,7 +1909,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_rating_pg13 );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = getResources().getString( R.string.pref_rating_pg13_summary );
             Drawable icon = null;
 
@@ -1895,7 +1925,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_PG13, updated );
@@ -1907,6 +1937,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -1941,7 +1972,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_rating_r );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = getResources().getString( R.string.pref_rating_r_summary );
             Drawable icon = null;
 
@@ -1957,7 +1988,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_R, updated );
@@ -1969,6 +2000,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -2003,7 +2035,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
 
             String title = getResources().getString( R.string.pref_rating_nc17 );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + " | " + getResources().getString( R.string.video_preferences );
+            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.video_preferences );
             String description = getResources().getString( R.string.pref_rating_nc17_summary );
             Drawable icon = null;
 
@@ -2019,7 +2051,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_RATING_NC17, updated );
@@ -2031,6 +2063,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -2081,7 +2114,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         @Override
         public void onGuidedActionClicked( GuidedAction action ) {
-            Log.d( TAG, "onGuidedActionClicked : action=" + action );
+//            Log.d( TAG, "onGuidedActionClicked : action=" + action );
 
             boolean updated = ( action.getLabel1().equals( getResources().getString( R.string.tv_settings_yes ) ) );
             putBooleanToPreferences( getActivity(), SettingsKeys.KEY_PREF_ENABLE_ANALYTICS, updated );
@@ -2094,6 +2127,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         }
 
+        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
         public void updateActions( List<GuidedAction> actions ) {
 
             if( null == actions ) {
@@ -2147,18 +2181,18 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     }
 
-    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, String desc ) {
-
-        actions.add( new GuidedAction.Builder( context )
-                .id( id )
-                .title( title )
-                .editTitle( editTitle )
-                .description( desc )
-                .editable( true )
-                .hasNext( false )
-                .build() );
-
-    }
+//    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, String desc ) {
+//
+//        actions.add( new GuidedAction.Builder( context )
+//                .id( id )
+//                .title( title )
+//                .editTitle( editTitle )
+//                .description( desc )
+//                .editable( true )
+//                .hasNext( false )
+//                .build() );
+//
+//    }
 
     private static void addCheckedAction( Context context, List<GuidedAction> actions, int iconResId, String title, String desc, boolean checked ) {
 
@@ -2166,7 +2200,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
                 .title( title )
                 .description( desc )
                 .checkSetId( OPTION_CHECK_SET_ID )
-//                .iconResourceId( iconResId, context )
+                .iconResourceId( iconResId, context )
                 .build();
 
         guidedAction.setChecked( checked );

@@ -62,15 +62,6 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     public static final String MEDIA_KEY = "media";
     public static final String TITLE_REGEX_KEY = "title_regex";
 
-    /**
-     * Interface for listening series list events.
-     */
-    public interface SeriesListListener {
-
-        void onSeriesClicked( final SeriesModel seriesModel );
-
-    }
-
     @Inject
     SeriesListPresenter seriesListPresenter;
 
@@ -81,10 +72,29 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
     private SeriesAdapter seriesAdapter;
 
-//    private NotifyListener notifyListener;
     private SeriesListListener seriesListListener;
 
     private Map<String, Object> parameters;
+
+    private final SeriesAdapter.OnItemClickListener onItemClickListener = seriesModel -> {
+
+        if( null != SeriesListFragment.this.seriesListPresenter && null != seriesModel ) {
+            Log.i( TAG, "onItemClicked : seriesModel=" + seriesModel.toString() );
+
+            SeriesListFragment.this.seriesListPresenter.onSeriesClicked( seriesModel );
+
+        }
+
+    };
+
+    /**
+     * Interface for listening series list events.
+     */
+    public interface SeriesListListener {
+
+        void onSeriesClicked( final SeriesModel seriesModel );
+
+    }
 
     public SeriesListFragment() { super(); }
 
@@ -98,7 +108,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
     public static class Builder {
 
-        private Media media;
+        private final Media media;
         private String titleRegEx;
 
         public Builder( Media media ) {
@@ -271,12 +281,16 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
     @Override
     public void showRetry() {
+        Log.v( TAG, "showRetry : enter" );
 
+        Log.v( TAG, "showRetry : enter" );
     }
 
     @Override
     public void hideRetry() {
+        Log.v( TAG, "hideRetry : enter" );
 
+        Log.v( TAG, "hideRetry : enter" );
     }
 
     public void reload() {
@@ -352,16 +366,5 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
         Log.d( TAG, "loadSeriesList : exit" );
     }
-
-    private SeriesAdapter.OnItemClickListener onItemClickListener = seriesModel -> {
-
-        if( null != SeriesListFragment.this.seriesListPresenter && null != seriesModel ) {
-            Log.i( TAG, "onItemClicked : seriesModel=" + seriesModel.toString() );
-
-            SeriesListFragment.this.seriesListPresenter.onSeriesClicked( seriesModel );
-
-        }
-
-    };
 
 }

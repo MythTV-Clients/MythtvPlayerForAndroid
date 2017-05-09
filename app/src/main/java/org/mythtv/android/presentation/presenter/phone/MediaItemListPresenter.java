@@ -70,19 +70,23 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
 
     @Override
     public void resume() {
+        Log.v( TAG, "resume : enter" );
 
+        Log.v( TAG, "resume : exit" );
     }
 
     @Override
     public void pause() {
+        Log.v( TAG, "pause : enter" );
 
+        Log.v( TAG, "pause : exit" );
     }
 
     @Override
     public void destroy() {
+        Log.v( TAG, "destroy : enter" );
 
-//        this.getMediaItemListUseCase.unsubscribe();
-
+        Log.v( TAG, "destroy : exit" );
     }
 
     /**
@@ -159,7 +163,7 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
         public void onError( Throwable e ) {
 
             MediaItemListPresenter.this.hideViewLoading();
-            MediaItemListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            MediaItemListPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             MediaItemListPresenter.this.showViewRetry();
 
         }

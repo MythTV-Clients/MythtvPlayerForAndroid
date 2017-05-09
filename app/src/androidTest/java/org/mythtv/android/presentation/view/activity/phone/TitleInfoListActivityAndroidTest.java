@@ -36,7 +36,7 @@ public class TitleInfoListActivityAndroidTest {
     public void clickOnHomeNavigationItem_ShowsHomeScreen() {
         // Open Drawer to click on navigation.
         onView( withId( R.id.drawer_layout ) )
-                .check(matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
+                .check( matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
                 .perform( open() ); // Open Drawer
 
         // Start home screen.
@@ -54,7 +54,7 @@ public class TitleInfoListActivityAndroidTest {
     public void clickOnHomeNavigationItem_ShowsRecordingsScreen() {
         // Open Drawer to click on navigation.
         onView( withId( R.id.drawer_layout ) )
-                .check(matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
+                .check( matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
                 .perform( open() ); // Open Drawer
 
         onView( withId( R.id.drawer_layout ) )
@@ -70,7 +70,7 @@ public class TitleInfoListActivityAndroidTest {
     public void clickOnHomeNavigationItem_ShowsVideosScreen() {
         // Open Drawer to click on navigation.
         onView( withId( R.id.drawer_layout ) )
-                .check(matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
+                .check( matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
                 .perform( open() ); // Open Drawer
 
         // Start watch videos screen.
@@ -87,7 +87,7 @@ public class TitleInfoListActivityAndroidTest {
     public void clickOnHomeNavigationItem_ShowsSettingsScreen() {
         // Open Drawer to click on navigation.
         onView( withId( R.id.drawer_layout ) )
-                .check(matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
+                .check( matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
                 .perform( open() ); // Open Drawer
 
         // Start settings screen.
@@ -107,8 +107,7 @@ public class TitleInfoListActivityAndroidTest {
                 .check( matches( isClosed( Gravity.START ) ) ); // Left Drawer should be closed.
 
         // Open Drawer
-        String navigateUpDesc = mActivityTestRule.getActivity()
-                .getString( android.support.v7.appcompat.R.string.abc_action_bar_up_description );
+        String navigateUpDesc = "Navigate up";
         onView(withContentDescription( navigateUpDesc ) ).perform( click() );
 
         // Check if drawer is open

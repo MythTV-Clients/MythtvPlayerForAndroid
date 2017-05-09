@@ -40,7 +40,7 @@ public class SearchDataStoreFactory {
 
     private static final String TAG = SearchDataStoreFactory.class.getSimpleName();
 
-    private DatabaseHelper mOpenHelper;
+    private final DatabaseHelper mOpenHelper;
 
     @Inject
     public SearchDataStoreFactory( Context context ) {

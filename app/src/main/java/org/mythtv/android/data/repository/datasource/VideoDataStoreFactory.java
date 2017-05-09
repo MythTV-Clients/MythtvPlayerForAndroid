@@ -18,22 +18,12 @@
 
 package org.mythtv.android.data.repository.datasource;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
-import org.mythtv.android.data.cache.VideoCache;
-import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
-import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.net.VideoApi;
-import org.mythtv.android.data.net.VideoApiImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import okhttp3.OkHttpClient;
 
 /**
  *
@@ -48,83 +38,27 @@ public class VideoDataStoreFactory {
 
     private static final String TAG = VideoDataStoreFactory.class.getSimpleName();
 
-    private final Context context;
-    private final SharedPreferences sharedPreferences;
-    private final OkHttpClient okHttpClient;
-    private final Gson gson;
-    private final VideoCache videoCache;
-    private final SearchDataStoreFactory searchDataStoreFactory;
+    private final VideoApi api;
 
     @Inject
-    public VideoDataStoreFactory( Context context, SharedPreferences sharedPreferences, OkHttpClient okHttpClient, Gson gson, VideoCache videoCache, SearchDataStoreFactory searchDataStoreFactory ) {
+    public VideoDataStoreFactory( final VideoApi api ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == gson  || null == videoCache || null == searchDataStoreFactory ) {
+        if( null == api ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
-        this.context = context.getApplicationContext();
-        this.sharedPreferences = sharedPreferences;
-        this.okHttpClient = okHttpClient;
-        this.gson = gson;
-        this.videoCache = videoCache;
-        this.searchDataStoreFactory = searchDataStoreFactory;
+        this.api = api;
 
         Log.d( TAG, "initialize : exit" );
-    }
-
-    public VideoDataStore create() {
-        Log.d( TAG, "create : enter" );
-
-        VideoDataStore videoDataStore;
-
-        if( !this.videoCache.isExpired() && this.videoCache.isCached() ) {
-            Log.d( TAG, "create : cache is not expired and videos exists in cache" );
-
-            videoDataStore = new DiskVideoDataStore( this.videoCache );
-
-        } else {
-            Log.d( TAG, "create : query backend for data" );
-
-            videoDataStore = createMasterBackendDataStore();
-
-        }
-
-        Log.d( TAG, "create : exit" );
-        return videoDataStore;
     }
 
     public VideoDataStore createMasterBackendDataStore() {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
-        VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper = new VideoMetadataInfoEntityJsonMapper( this.gson );
-        BooleanJsonMapper booleanJsonMapper = new BooleanJsonMapper();
-        VideoApi api = new VideoApiImpl( this.context, this.sharedPreferences, this.okHttpClient, videoMetadataInfoEntityJsonMapper, booleanJsonMapper );
-
         Log.d( TAG, "createMasterBackendDataStore : exit" );
-        return new MasterBackendVideoDataStore( api, this.videoCache, this.searchDataStoreFactory );
-    }
-
-    public VideoDataStore createCategoryDataStore() {
-        Log.d( TAG, "createCategoryDataStore : enter" );
-
-        VideoDataStore videoDataStore;
-
-        if( this.videoCache.isExpired() && this.videoCache.isCached() ) {
-            Log.d( TAG, "createCategoryCategoryDataStore : cache is not expired" );
-
-            videoDataStore = new DiskVideoDataStore( this.videoCache );
-
-        } else {
-            Log.d( TAG, "createCategoryCategoryDataStore : query backend for data" );
-
-            videoDataStore = createMasterBackendDataStore();
-
-        }
-
-        Log.d( TAG, "createCategoryDataStore : exit" );
-        return videoDataStore;
+        return new MasterBackendVideoDataStore( this.api );
     }
 
 }

@@ -32,13 +32,6 @@ public class NsdFragment extends AbstractBasePreferenceFragment implements OnSha
 
     private static final String TAG = NsdFragment.class.getSimpleName();
 
-    public interface BackendDiscoveryListerner {
-
-        void onDiscoveryComplete();
-
-        void onDiscoveryFailed();
-    }
-
     private BackendDiscoveryListerner listener;
 
     ListPreference backendScanUrl;
@@ -46,7 +39,15 @@ public class NsdFragment extends AbstractBasePreferenceFragment implements OnSha
 
     Subscription zeroConfSubscription;
 
+    public interface BackendDiscoveryListerner {
+
+        void onDiscoveryComplete();
+
+        void onDiscoveryFailed();
+    }
+
     public NsdFragment() {
+        // this constructor is intentionally left blank
     }
 
     @Override
@@ -130,16 +131,9 @@ public class NsdFragment extends AbstractBasePreferenceFragment implements OnSha
         String masterBackend = getMasterBackendComponents();
         Log.d( TAG, "initialize : scannedMasterBackend=" + scannedMasterBackend + ", masterBackend=" + masterBackend );
 
-        if( !"Empty".equals( scannedMasterBackend ) ) {
+        if( !"Empty".equals( scannedMasterBackend ) && scannedMasterBackend.equals( masterBackend ) ) {
 
-            if( scannedMasterBackend.equals( masterBackend ) ) {
-
-                backendScanUrl.setSummary( scannedMasterBackend );
-
-            }
-
-        } else {
-
+            backendScanUrl.setSummary( scannedMasterBackend );
 
         }
 

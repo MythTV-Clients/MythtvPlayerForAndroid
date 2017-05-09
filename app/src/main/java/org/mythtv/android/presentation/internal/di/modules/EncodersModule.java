@@ -38,7 +38,9 @@ import dagger.Provides;
 @Module
 public class EncodersModule {
 
-    public EncodersModule() { }
+    public EncodersModule() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     @Provides
     @PerActivity

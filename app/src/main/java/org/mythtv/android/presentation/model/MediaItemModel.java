@@ -1,12 +1,16 @@
 package org.mythtv.android.presentation.model;
 
-import android.os.Bundle;
+import android.os.Parcelable;
+
+import com.google.auto.value.AutoValue;
 
 import org.joda.time.DateTime;
 import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.annotations.IgnoreHashEquals;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -16,737 +20,152 @@ import java.util.ArrayList;
  *
  * Created on 7/10/16.
  */
-
-public class MediaItemModel implements Serializable {
+@AutoValue
+@SuppressWarnings( "PMD.GodClass" )
+public abstract class MediaItemModel implements Parcelable {
 
     private static final String WIDTH_QS = "&Width=%s";
 
-    public static final String KEY_ID = "id";
-    public static final String KEY_MEDIA = "media";
-    public static final String KEY_TITLE = "title";
-    public static final String KEY_SUBTITLE = "subtitle";
-    public static final String KEY_DESCRIPTION = "description";
-    public static final String KEY_START_DATE = "start_date";
-    public static final String KEY_PROGRAM_FLAGS = "program_flags";
-    public static final String KEY_SEASON = "season";
-    public static final String KEY_EPISODE = "episode";
-    public static final String KEY_STUDIO = "studio";
-    public static final String KEY_CAST_MEMBERS = "cast_members";
-    public static final String KEY_CHARACTERS = "characters";
-    public static final String KEY_URL = "url";
-    public static final String KEY_FANART_URL = "fanart_url";
-    public static final String KEY_COVERART_URL = "coverart_url";
-    public static final String KEY_BANNER_URL = "banner_url";
-    public static final String KEY_PREVIEW_URL = "preview_url";
-    public static final String KEY_CONTENT_TYPE = "contentType";
-    public static final String KEY_DURATION = "duration";
-    public static final String KEY_RECORDING = "recording";
-    public static final String KEY_LIVE_STREAM_PERCENT_COMPLETE = "percent_complete";
-    public static final String KEY_LIVE_STREAM_ID = "live_stream_id";
-    public static final String KEY_CREATE_LIVE_STREAM_URL = "create_live_stream_url";
-    public static final String KEY_REMOVE_LIVE_STREAM_URL = "remove_live_stream_url";
-    public static final String KEY_GET_LIVE_STREAM_URL = "get_live_stream_url";
-    public static final String KEY_WATCHED_STATUS = "watched_status";
-    public static final String KEY_MARK_WATCHED_URL = "mark_watched_url";
-    public static final String KEY_UPDATE_SAVED_BOOKMARK_URL = "update_saved_bookmark_url";
-    public static final String KEY_BOOKMARK = "bookmark";
-    public static final String KEY_INETREF = "inetref";
-    public static final String KEY_VALIDATION_ERRORS = "validation_errors";
-    public static final String KEY_CERTIFICATION = "certification";
-    public static final String KEY_PARENTAL_LEVEL = "parental_level";
-    public static final String KEY_RECORDING_GROUP = "recording_group";
-
-    private int id;
-    private Media media;
-    private String title;
-    private String subTitle;
-    private String description;
-    private DateTime startDate;
-    private int programFlags;
-    private int season;
-    private int episode;
-    private String studio; // video = studio, recording = channel
-    private String castMembers;
-    private String characters;
-    private String url;
-    private String fanartUrl;
-    private String coverartUrl;
-    private String bannerUrl;
-    private String previewUrl;
-    private String contentType;
-    private long duration;
-    private int percentComplete;
-    private boolean recording;
-    private int liveStreamId;
-    private String createHttpLiveStreamUrl;
-    private String removeHttpLiveStreamUrl;
-    private String getHttpLiveStreamUrl;
-    private boolean watched;
-    private String markWatchedUrl;
-    private String updateSavedBookmarkUrl;
-    private long bookmark;
-    private String inetref;
-    private ArrayList<ErrorModel> validationErrors = new ArrayList<>();
-    private String certification;
-    private int parentalLevel;
-    private String recordingGroup;
+    public abstract int id();
 
-    public MediaItemModel() { }
+    @Nullable
+    public abstract Media media();
 
-    public int getId() {
+    @Nullable
+    public abstract String title();
 
-        return id;
-    }
+    @Nullable
+    public abstract String subTitle();
 
-    public void setId( int id ) {
+    @Nullable
+    public abstract String description();
 
-        this.id = id;
+    @Nullable
+    public abstract DateTime startDate();
 
-    }
+    public abstract int programFlags();
 
-    public Media getMedia() {
+    public abstract int season();
 
-        return media;
-    }
+    public abstract int episode();
 
-    public void setMedia( Media media ) {
+    @Nullable
+    public abstract String studio(); // video = studio, recording = channel
 
-        this.media = media;
+    @Nullable
+    public abstract String castMembers();
 
-    }
+    @Nullable
+    public abstract String characters();
 
-    public String getTitle() {
+    @Nullable
+    public abstract String url();
 
-        return title;
-    }
+    @Nullable
+    public abstract String fanartUrl();
 
-    public void setTitle( String title ) {
+    @Nullable
+    public abstract String coverartUrl();
 
-        this.title = title;
+    @Nullable
+    public abstract String bannerUrl();
 
-    }
+    @Nullable
+    public abstract String previewUrl();
 
-    public String getSubTitle() {
+    @Nullable
+    public abstract String contentType();
 
-        return subTitle;
-    }
+    public abstract long duration();
 
-    public void setSubTitle( String subTitle ) {
+    public abstract int percentComplete();
 
-        this.subTitle = subTitle;
+    public abstract boolean recording();
 
-    }
+    public abstract int liveStreamId();
 
-    public String getDescription() {
+    public abstract boolean watched();
 
-        return description;
-    }
+    @Nullable
+    public abstract String updateSavedBookmarkUrl();
 
-    public void setDescription( String description ) {
+    public abstract long bookmark();
 
-        this.description = description;
+    @Nullable
+    public abstract String inetref();
 
-    }
+    @Nullable
+    public abstract String certification();
 
-    public DateTime getStartDate() {
+    public abstract int parentalLevel();
 
-        return startDate;
-    }
+    @Nullable
+    public abstract String recordingGroup();
 
-    public void setStartDate( DateTime startDate ) {
+    @Nullable
+    @IgnoreHashEquals
+    public abstract List<ErrorModel> validationErrors();
 
-        this.startDate = startDate;
+    public static MediaItemModel create( int id, Media media, String title, String subTitle, String description, DateTime startDate, int programFlags, int season, int episode, String studio,
+                                   String castMembers, String characters, String url, String fanartUrl, String coverartUrl, String bannerUrl, String previewUrl, String contentType,
+                                   long duration, int percentComplete, boolean recording, int liveStreamId,
+                                   boolean watched, String updateSavedBookmarkUrl, long bookmark, String inetref,
+                                   String certification, int parentalLevel, String recordingGroup, List<ErrorModel> validationErrors ) {
 
-    }
-
-    public int getProgramFlags() {
-
-        return programFlags;
-    }
-
-    public void setProgramFlags( int programFlags ) {
-
-        this.programFlags = programFlags;
-
-    }
-
-    public int getSeason() {
-
-        return season;
-    }
-
-    public void setSeason( int season ) {
-
-        this.season = season;
-
-    }
-
-    public int getEpisode() {
-
-        return episode;
-    }
-
-    public void setEpisode( int episode ) {
-
-        this.episode = episode;
-
-    }
-
-    public String getStudio() {
-
-        return studio;
-    }
-
-    public void setStudio( String studio ) {
-
-        this.studio = studio;
-
-    }
-
-    public String getCastMembers() {
-
-        return castMembers;
-    }
-
-    public void setCastMembers( String castMembers ) {
-
-        this.castMembers = castMembers;
-
-    }
-
-    public String getCharacters() {
-
-        return characters;
-    }
-
-    public void setCharacters( String characters ) {
-
-        this.characters = characters;
-
-    }
-
-    public String getUrl() {
-
-        return url;
-    }
-
-    public void setUrl( String url ) {
-
-        this.url = url;
-
-    }
-
-    public String getFanartUrl() {
-
-        return fanartUrl;
-    }
-
-    public String getFanartUrl( String width ) {
-
-        String url = fanartUrl;
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
-    public void setFanartUrl( String fanartUrl ) {
-
-        this.fanartUrl = fanartUrl;
-
-    }
-
-    public String getCoverartUrl() {
-
-        return coverartUrl;
-    }
-
-    public String getCoverartUrl( String width ) {
-
-        String url = coverartUrl;
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
-    public void setCoverartUrl( String coverartUrl ) {
-
-        this.coverartUrl = coverartUrl;
-
-    }
-
-    public String getBannerUrl() {
-
-        return bannerUrl;
-    }
-
-    public String getBannerUrl( String width ) {
-
-        String url = bannerUrl;
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
-    public void setBannerUrl( String bannerUrl ) {
-
-        this.bannerUrl = bannerUrl;
-
-    }
-
-    public String getPreviewUrl() {
-
-        return previewUrl;
-    }
-
-    public String getPreviewUrl( String width ) {
-
-        String url = previewUrl;
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
-    public void setPreviewUrl( String previewUrl ) {
-
-        this.previewUrl = previewUrl;
-
-    }
-
-    public String getContentType() {
-
-        return contentType;
-    }
-
-    public void setContentType( String contentType ) {
-
-        this.contentType = contentType;
-    }
-
-    public long getDuration() {
-
-        return duration;
-    }
-
-    public void setDuration( long duration ) {
-
-        this.duration = duration;
-
-    }
-
-    public int getPercentComplete() {
-        return percentComplete;
-    }
-
-    public void setPercentComplete( int percentComplete ) {
-
-        this.percentComplete = percentComplete;
-
-    }
-
-    public boolean isRecording() {
-
-        return recording;
-    }
-
-    public void setRecording( boolean recording ) {
-
-        this.recording = recording;
-
-    }
-
-    public int getLiveStreamId() {
-
-        return liveStreamId;
-    }
-
-    public void setLiveStreamId( int liveStreamId ) {
-
-        this.liveStreamId = liveStreamId;
-
-    }
-
-    public String getCreateHttpLiveStreamUrl() {
-
-        return createHttpLiveStreamUrl;
-    }
-
-    public void setCreateHttpLiveStreamUrl( String createHttpLiveStreamUrl ) {
-
-        this.createHttpLiveStreamUrl = createHttpLiveStreamUrl;
-
-    }
-
-    public String getRemoveHttpLiveStreamUrl() {
-
-        return removeHttpLiveStreamUrl;
-    }
-
-    public void setRemoveHttpLiveStreamUrl( String removeHttpLiveStreamUrl ) {
-
-        this.removeHttpLiveStreamUrl = removeHttpLiveStreamUrl;
-
-    }
-
-    public String getGetHttpLiveStreamUrl() {
-
-        return getHttpLiveStreamUrl;
-    }
-
-    public void setGetHttpLiveStreamUrl( String getHttpLiveStreamUrl ) {
-
-        this.getHttpLiveStreamUrl = getHttpLiveStreamUrl;
-
-    }
-
-    public boolean isWatched() {
-
-        return watched;
-    }
-
-    public void setWatched( boolean watched ) {
-
-        this.watched = watched;
-
-    }
-
-    public String getMarkWatchedUrl() {
-
-        return markWatchedUrl;
-    }
-
-    public void setMarkWatchedUrl( String markWatchedUrl ) {
-
-        this.markWatchedUrl = markWatchedUrl;
-
-    }
-
-    public String getUpdateSavedBookmarkUrl() {
-
-        return updateSavedBookmarkUrl;
-    }
-
-    public void setUpdateSavedBookmarkUrl( String updateSavedBookmarkUrl ) {
-
-        this.updateSavedBookmarkUrl = updateSavedBookmarkUrl;
-
-    }
-
-    public long getBookmark() {
-
-        return bookmark;
-    }
-
-    public void setBookmark( long bookmark ) {
-
-        this.bookmark = bookmark;
-
-    }
-
-    public String getInetref() {
-
-        return inetref;
-    }
-
-    public void setInetref( String inetref ) {
-
-        this.inetref = inetref;
-
-    }
-
-    public ArrayList<ErrorModel> getValidationErrors() {
-
-        return validationErrors;
-    }
-
-    public void setValidationErrors( ArrayList<ErrorModel> validationErrors ) {
-
-        this.validationErrors = validationErrors;
-
+        return new AutoValue_MediaItemModel( id, media, title, subTitle, description, startDate, programFlags, season, episode, studio,
+                castMembers, characters, url, fanartUrl, coverartUrl, bannerUrl, previewUrl, contentType,
+                duration, percentComplete, recording, liveStreamId,
+                watched, updateSavedBookmarkUrl, bookmark, inetref,
+                certification, parentalLevel, recordingGroup, validationErrors );
     }
 
     public boolean isValid() {
 
-        return null != media && validationErrors.isEmpty();
+        return null != media() && validationErrors().isEmpty();
     }
 
-    public String getCertification() {
+    public String getFanartUrl( String width ) {
 
-        return certification;
+        String url = fanartUrl();
+        if( null != width && !"".equals( width ) ) {
+
+            url = url + String.format( WIDTH_QS, width );
+        }
+
+        return url;
     }
 
-    public void setCertification( String certification ) {
+    public String getCoverartUrl( String width ) {
 
-        this.certification = certification;
+        String url = coverartUrl();
+        if( null != width && !"".equals( width ) ) {
 
+            url = url + String.format( WIDTH_QS, width );
+        }
+
+        return url;
     }
 
-    public int getParentalLevel() {
+    public String getBannerUrl( String width ) {
 
-        return parentalLevel;
+        String url = bannerUrl();
+        if( null != width && !"".equals( width ) ) {
+
+            url = url + String.format( WIDTH_QS, width );
+        }
+
+        return url;
     }
 
-    public void setParentalLevel( int parentalLevel ) {
+    public String getPreviewUrl( String width ) {
 
-        this.parentalLevel = parentalLevel;
+        String url = previewUrl();
+        if( null != width && !"".equals( width ) ) {
 
-    }
-
-    public String getRecordingGroup() {
-
-        return recordingGroup;
-    }
-
-    public void setRecordingGroup( String recordingGroup ) {
-
-        this.recordingGroup = recordingGroup;
-
-    }
-
-    @Override
-    public String toString() {
-        return "MediaItemModel{" +
-                "id=" + id +
-                ", media=" + media +
-                ", title='" + title + '\'' +
-                ", subTitle='" + subTitle + '\'' +
-                ", description='" + description + '\'' +
-                ", startDate=" + startDate +
-                ", programFlags=" + programFlags +
-                ", season=" + season +
-                ", episode=" + episode +
-                ", studio='" + studio + '\'' +
-                ", castMembers='" + castMembers + '\'' +
-                ", characters='" + characters + '\'' +
-                ", url='" + url + '\'' +
-                ", fanartUrl='" + fanartUrl + '\'' +
-                ", coverartUrl='" + coverartUrl + '\'' +
-                ", bannerUrl='" + bannerUrl + '\'' +
-                ", previewUrl='" + previewUrl + '\'' +
-                ", contentType='" + contentType + '\'' +
-                ", duration=" + duration +
-                ", percentComplete=" + percentComplete +
-                ", recording=" + recording +
-                ", liveStreamId=" + liveStreamId +
-                ", createHttpLiveStreamUrl='" + createHttpLiveStreamUrl + '\'' +
-                ", removeHttpLiveStreamUrl='" + removeHttpLiveStreamUrl + '\'' +
-                ", getHttpLiveStreamUrl='" + getHttpLiveStreamUrl + '\'' +
-                ", watched=" + watched +
-                ", markWatchedUrl='" + markWatchedUrl + '\'' +
-                ", updateSavedBookmarkUrl='" + updateSavedBookmarkUrl + '\'' +
-                ", bookmark=" + bookmark +
-                ", inetref='" + inetref + '\'' +
-                ", validationErrors=" + validationErrors +
-                ", certification='" + certification + '\'' +
-                ", parentalLevel=" + parentalLevel +
-                ", recordingGroup='" + recordingGroup + '\'' +
-                '}';
-    }
-
-    public Bundle toBundle() {
-
-        Bundle wrapper = new Bundle();
-        wrapper.putInt( KEY_ID, id );
-        wrapper.putString( KEY_MEDIA, media.name() );
-        if( null != title && !"".equals( title ) ) {
-            wrapper.putString( KEY_TITLE, title );
-        }
-        if( null != subTitle && !"".equals( subTitle ) ) {
-            wrapper.putString( KEY_SUBTITLE, subTitle );
-        }
-        if( null != description && !"".equals( description ) ) {
-            wrapper.putString( KEY_DESCRIPTION, description );
-        }
-        if( null != startDate ) {
-            wrapper.putLong( KEY_START_DATE, startDate.getMillis() );
-        }
-        if( programFlags != -1 ) {
-            wrapper.putInt( KEY_PROGRAM_FLAGS, programFlags );
-        }
-        if( season != -1 ) {
-            wrapper.putInt( KEY_SEASON, season );
-        }
-        if( episode != -1 ) {
-            wrapper.putInt( KEY_EPISODE, episode );
-        }
-        if( null != studio && !"".equals( studio ) ) {
-            wrapper.putString( KEY_STUDIO, studio );
-        }
-        if( null != castMembers && !"".equals( castMembers ) ) {
-            wrapper.putString( KEY_CAST_MEMBERS, castMembers );
-        }
-        if( null != characters && !"".equals( characters ) ) {
-            wrapper.putString( KEY_CHARACTERS, characters );
-        }
-        wrapper.putString( KEY_URL, url );
-        if( null != fanartUrl && !"".equals( fanartUrl ) ) {
-            wrapper.putString( KEY_FANART_URL, fanartUrl );
-        }
-        if( null != contentType && !"".equals( coverartUrl ) ) {
-            wrapper.putString( KEY_COVERART_URL, coverartUrl );
-        }
-        if( null != bannerUrl && !"".equals( bannerUrl ) ) {
-            wrapper.putString( KEY_BANNER_URL, bannerUrl );
-        }
-        if( null != previewUrl && !"".equals( previewUrl ) ) {
-            wrapper.putString( KEY_PREVIEW_URL, previewUrl );
-        }
-        wrapper.putString( KEY_CONTENT_TYPE, contentType );
-
-        wrapper.putLong( KEY_DURATION, duration );
-
-        wrapper.putInt( KEY_LIVE_STREAM_PERCENT_COMPLETE, percentComplete );
-
-        wrapper.putBoolean( KEY_RECORDING, recording );
-
-        if( liveStreamId != -1 ) {
-            wrapper.putInt( KEY_LIVE_STREAM_ID, liveStreamId );
+            url = url + String.format( WIDTH_QS, width );
         }
 
-        if( null != createHttpLiveStreamUrl && !"".equals( createHttpLiveStreamUrl ) ) {
-            wrapper.putString( KEY_CREATE_LIVE_STREAM_URL, createHttpLiveStreamUrl );
-        }
-
-        if( null != removeHttpLiveStreamUrl && !"".equals( removeHttpLiveStreamUrl ) ) {
-            wrapper.putString( KEY_REMOVE_LIVE_STREAM_URL, removeHttpLiveStreamUrl );
-        }
-
-        wrapper.putBoolean( KEY_WATCHED_STATUS, watched );
-
-        if( null != markWatchedUrl && !"".equals( markWatchedUrl ) ) {
-            wrapper.putString( KEY_MARK_WATCHED_URL, markWatchedUrl );
-        }
-
-        if( null != updateSavedBookmarkUrl && !"".equals( updateSavedBookmarkUrl ) ) {
-            wrapper.putString( KEY_UPDATE_SAVED_BOOKMARK_URL, updateSavedBookmarkUrl );
-        }
-
-        wrapper.putLong( KEY_BOOKMARK, bookmark );
-
-        if( null != inetref && !"".equals( inetref ) ) {
-            wrapper.putString( KEY_INETREF, inetref );
-        }
-
-        wrapper.putParcelableArrayList( KEY_VALIDATION_ERRORS, validationErrors );
-
-        if( null != certification && !"".equals( certification ) ) {
-            wrapper.putString( KEY_CERTIFICATION, certification );
-        }
-
-        wrapper.putInt( KEY_PARENTAL_LEVEL, parentalLevel );
-
-        if( null != recordingGroup && !"".equals( recordingGroup ) ) {
-            wrapper.putString( KEY_RECORDING_GROUP, recordingGroup );
-        }
-
-        return wrapper;
-    }
-
-    public static MediaItemModel fromBundle( Bundle wrapper ) {
-
-        if( null == wrapper ) {
-
-            return null;
-        }
-
-        MediaItemModel media = new MediaItemModel();
-        media.setId( wrapper.getInt( KEY_ID ) );
-        media.setMedia( Media.valueOf( wrapper.getString( KEY_MEDIA ) ) );
-        if( wrapper.containsKey( KEY_TITLE ) ) {
-            media.setTitle( wrapper.getString( KEY_TITLE ) );
-        }
-        if( wrapper.containsKey( KEY_SUBTITLE ) ) {
-            media.setSubTitle( wrapper.getString( KEY_SUBTITLE ) );
-        }
-        if( wrapper.containsKey( KEY_DESCRIPTION ) ) {
-            media.setDescription( wrapper.getString( KEY_DESCRIPTION ) );
-        }
-        if( wrapper.containsKey( KEY_START_DATE ) ) {
-            media.setStartDate( new DateTime( wrapper.getLong( KEY_START_DATE ) ) );
-        }
-        if( wrapper.containsKey( KEY_PROGRAM_FLAGS ) ) {
-            media.setProgramFlags( wrapper.getInt( KEY_PROGRAM_FLAGS ) );
-        }
-        if( wrapper.containsKey( KEY_SEASON ) ) {
-            media.setSeason( wrapper.getInt( KEY_SEASON ) );
-        }
-        if( wrapper.containsKey( KEY_EPISODE ) ) {
-            media.setEpisode( wrapper.getInt( KEY_EPISODE ) );
-        }
-        if( wrapper.containsKey( KEY_STUDIO ) ) {
-            media.setStudio( wrapper.getString( KEY_STUDIO ) );
-        }
-        if( wrapper.containsKey( KEY_CAST_MEMBERS ) ) {
-            media.setCastMembers( wrapper.getString( KEY_CAST_MEMBERS ) );
-        }
-        if( wrapper.containsKey( KEY_CHARACTERS ) ) {
-            media.setCharacters( wrapper.getString( KEY_CHARACTERS ) );
-        }
-        media.setUrl( wrapper.getString( KEY_URL ) );
-        if( wrapper.containsKey( KEY_CONTENT_TYPE ) ) {
-            media.setContentType( wrapper.getString( KEY_CONTENT_TYPE ) );
-        }
-        if( wrapper.containsKey( KEY_FANART_URL ) ) {
-            media.setFanartUrl( wrapper.getString( KEY_FANART_URL ) );
-        }
-        if( wrapper.containsKey( KEY_COVERART_URL ) ) {
-            media.setCoverartUrl( wrapper.getString( KEY_COVERART_URL ) );
-        }
-        if( wrapper.containsKey( KEY_BANNER_URL ) ) {
-            media.setBannerUrl( wrapper.getString( KEY_BANNER_URL ) );
-        }
-        if( wrapper.containsKey( KEY_PREVIEW_URL ) ) {
-            media.setPreviewUrl( wrapper.getString( KEY_PREVIEW_URL ) );
-        }
-        media.setContentType( wrapper.getString( KEY_CONTENT_TYPE ) );
-        media.setDuration( wrapper.getLong( KEY_DURATION ) );
-        media.setPercentComplete( wrapper.getInt( KEY_LIVE_STREAM_PERCENT_COMPLETE ) );
-        media.setRecording( wrapper.getBoolean( KEY_RECORDING ) );
-        if( wrapper.containsKey( KEY_LIVE_STREAM_ID ) ) {
-            media.setLiveStreamId( wrapper.getInt( KEY_LIVE_STREAM_ID ) );
-        }
-        if( wrapper.containsKey( KEY_CREATE_LIVE_STREAM_URL ) ) {
-            media.setCreateHttpLiveStreamUrl( wrapper.getString( KEY_CREATE_LIVE_STREAM_URL ) );
-        }
-        if( wrapper.containsKey( KEY_REMOVE_LIVE_STREAM_URL ) ) {
-            media.setRemoveHttpLiveStreamUrl( wrapper.getString( KEY_REMOVE_LIVE_STREAM_URL ) );
-        }
-        media.setWatched( wrapper.getBoolean( KEY_WATCHED_STATUS ) );
-        if( wrapper.containsKey( KEY_MARK_WATCHED_URL ) ) {
-            media.setMarkWatchedUrl( wrapper.getString( KEY_MARK_WATCHED_URL ) );
-        }
-        if( wrapper.containsKey( KEY_UPDATE_SAVED_BOOKMARK_URL ) ) {
-            media.setUpdateSavedBookmarkUrl( wrapper.getString( KEY_UPDATE_SAVED_BOOKMARK_URL ) );
-        }
-        media.setBookmark( wrapper.getLong( KEY_BOOKMARK ) );
-        if( wrapper.containsKey( KEY_INETREF ) ) {
-            media.setInetref( wrapper.getString( KEY_INETREF ) );
-        }
-
-        media.setValidationErrors( wrapper.getParcelableArrayList( KEY_VALIDATION_ERRORS ) );
-
-        if( wrapper.containsKey( KEY_CERTIFICATION ) ) {
-            media.setCertification( wrapper.getString( KEY_CERTIFICATION ) );
-        }
-
-        media.setParentalLevel( wrapper.getInt( KEY_PARENTAL_LEVEL ) );
-
-        if( wrapper.containsKey( KEY_RECORDING_GROUP ) ) {
-            media.setRecordingGroup( wrapper.getString( KEY_RECORDING_GROUP ) );
-        }
-
-        return media;
+        return url;
     }
 
 }

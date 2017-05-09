@@ -20,6 +20,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
+ *
+ *
  * Created by dmfrey on 6/29/16.
  */
 
@@ -35,7 +37,7 @@ public class MainPhoneActivityAndroidTest {
     public void clickOnHomeNavigationItem_ShowsHomeScreen() {
         // Open Drawer to click on navigation.
         onView( withId( R.id.drawer_layout ) )
-                .check(matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
+                .check( matches( isClosed( Gravity.START ) ) ) // Left Drawer should be closed.
                 .perform( open() ); // Open Drawer
 
         // Start home screen.
@@ -106,8 +108,7 @@ public class MainPhoneActivityAndroidTest {
                 .check( matches( isClosed( Gravity.START ) ) ); // Left Drawer should be closed.
 
         // Open Drawer
-        String navigateUpDesc = mActivityTestRule.getActivity()
-                .getString( android.support.v7.appcompat.R.string.abc_action_bar_up_description );
+        String navigateUpDesc = "Navigate up";
         onView( withContentDescription( navigateUpDesc ) ).perform( click() );
 
         // Check if drawer is open

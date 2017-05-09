@@ -18,9 +18,12 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -30,36 +33,20 @@ import java.util.Arrays;
  *
  * Created on 1/18/16.
  */
-public class EncodersEntity {
+@AutoValue
+public abstract class EncodersEntity {
 
     @SerializedName( "Encoders" )
-    private EncoderEntity[] encoders;
+    public abstract List<EncoderEntity> encoders();
 
-    public EncodersEntity() {
+    public static EncodersEntity create( List<EncoderEntity> encoders ) {
+
+        return new AutoValue_EncodersEntity( encoders );
     }
 
-    public EncodersEntity(EncoderEntity[] encoders ) {
+    public static TypeAdapter<EncodersEntity> typeAdapter(Gson gson ) {
 
-        this.encoders = encoders;
-
-    }
-
-    public EncoderEntity[] getEncoders() {
-
-        return encoders;
-    }
-
-    public void setEncoders( EncoderEntity[] encoders ) {
-
-        this.encoders = encoders;
-
-    }
-
-    @Override
-    public String toString() {
-        return "EncodersEntity{" +
-                "encoders=" + Arrays.toString( encoders ) +
-                '}';
+        return new AutoValue_EncodersEntity.GsonTypeAdapter( gson );
     }
 
 }

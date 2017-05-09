@@ -21,11 +21,13 @@ package org.mythtv.android.presentation.internal.di.modules;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.interactor.GetRecordedProgramDetails;
-import org.mythtv.android.domain.interactor.GetVideo;
+import org.mythtv.android.domain.interactor.AddLiveStreamUseCase;
+import org.mythtv.android.domain.interactor.DynamicUseCase;
+import org.mythtv.android.domain.interactor.GetMediaItemDetails;
+import org.mythtv.android.domain.interactor.PostUpdatedWatchedStatus;
+import org.mythtv.android.domain.interactor.RemoveLiveStreamUseCase;
 import org.mythtv.android.domain.interactor.UseCase;
-import org.mythtv.android.domain.repository.DvrRepository;
-import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 
 import javax.inject.Named;
@@ -46,7 +48,9 @@ public class MediaItemModule {
     private int id = -1;
     private Media media = null;
 
-    public MediaItemModule() {}
+    public MediaItemModule() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     public MediaItemModule( final int id, final Media media ) {
 
@@ -58,20 +62,35 @@ public class MediaItemModule {
     @Provides
     @PerActivity
     @Named( "mediaItemDetails" )
-    UseCase provideGetMediaItemDetailsUseCase( DvrRepository dvrRepository, VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    UseCase provideGetMediaItemDetailsUseCase( MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
-        switch( media ) {
+        return new GetMediaItemDetails( media, id, mediaItemRepository, threadExecutor, postExecutionThread );
+    }
 
-            case PROGRAM :
-                return new GetRecordedProgramDetails( id, dvrRepository, threadExecutor, postExecutionThread );
+    @Provides
+    @PerActivity
+    @Named( "addLiveStream" )
+    UseCase provideAddLiveStreamUseCase( MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
-            case VIDEO :
-                return new GetVideo( id, videoRepository, threadExecutor, postExecutionThread );
+        return new AddLiveStreamUseCase( media, id, mediaItemRepository, threadExecutor, postExecutionThread );
 
-            default :
-                return null;
+    }
 
-        }
+    @Provides
+    @PerActivity
+    @Named( "removeLiveStream" )
+    UseCase provideRemoveLiveStreamUseCase( MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+
+        return new RemoveLiveStreamUseCase( media, id, mediaItemRepository, threadExecutor, postExecutionThread );
+
+    }
+
+    @Provides
+    @PerActivity
+    @Named( "updateWatchedStatus" )
+    DynamicUseCase provideUpdateWatchedStatusUseCase( MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+
+        return new PostUpdatedWatchedStatus( media, id, mediaItemRepository, threadExecutor, postExecutionThread );
 
     }
 

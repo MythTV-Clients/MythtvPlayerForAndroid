@@ -172,23 +172,39 @@ public class RecordingSettingsFragment extends AbstractBasePreferenceFragment im
     }
 
     @Override
-    public void showLoading() { }
+    public void showLoading() {
+        Log.v( TAG, "showLoading : enter" );
+
+        Log.v( TAG, "showLoading : enter" );
+    }
 
     @Override
-    public void hideLoading() { }
+    public void hideLoading() {
+        Log.v( TAG, "hideLoading : enter" );
+
+        Log.v( TAG, "hideLoading : enter" );
+    }
 
     @Override
-    public void showRetry() { }
+    public void showRetry() {
+        Log.v( TAG, "showRetry : enter" );
+
+        Log.v( TAG, "showRetry : enter" );
+    }
 
     @Override
-    public void hideRetry() { }
+    public void hideRetry() {
+        Log.v( TAG, "hideRetry : enter" );
+
+        Log.v( TAG, "hideRetry : enter" );
+    }
 
     @Override
     public void renderMediaItemList( Collection<MediaItemModel> mediaItemModelCollection ) {
         Log.d( TAG, "renderMediaItemList : enter" );
 
         Observable.from( mediaItemModelCollection )
-                .map( MediaItemModel::getRecordingGroup )
+                .map( MediaItemModel::recordingGroup )
                 .distinct()
                 .toList()
                 .subscribe( groups -> {
@@ -201,7 +217,11 @@ public class RecordingSettingsFragment extends AbstractBasePreferenceFragment im
     }
 
     @Override
-    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) { }
+    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
+        Log.v( TAG, "viewMediaItem : enter" );
+
+        Log.v( TAG, "viewMediaItem : enter" );
+    }
 
     @Override
     public void showError( String message ) {
@@ -270,19 +290,15 @@ public class RecordingSettingsFragment extends AbstractBasePreferenceFragment im
         Log.d( TAG, "onSharedPreferenceChanged : exit" );
     }
 
-    private void updateDisplay( SharedPreferences sharedPreferences ) {
-
-    }
-
     private void updateDefaultRecordingGroupSummary( final int resourceId, final String filterGroup ) {
 
-        if( null != filterGroup ) {
+        if( null == filterGroup ) {
 
-            defaultRecordingGroup.setSummary(getResources().getString( resourceId, filterGroup ) );
+            defaultRecordingGroup.setSummary(getResources().getString( resourceId ) );
 
         } else {
 
-            defaultRecordingGroup.setSummary(getResources().getString( resourceId ) );
+            defaultRecordingGroup.setSummary(getResources().getString( resourceId, filterGroup ) );
 
         }
 

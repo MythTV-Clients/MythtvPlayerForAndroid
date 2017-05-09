@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,12 +22,17 @@
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
         android:layout_gravity="center" />
 
     <fragment
-        android:id="@+id/playback_controls_fragment"
-        android:name="org.mythtv.android.presentation.view.fragment.tv.PlaybackOverlayFragment"
+        android:id="@+id/playback_overlay"
+        android:name="org.mythtv.android.presentation.view.fragment.tv.MythTvPlaybackFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</FrameLayout>
+</merge>

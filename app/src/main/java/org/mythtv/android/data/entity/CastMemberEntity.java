@@ -18,6 +18,9 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -28,84 +31,29 @@ import com.google.gson.annotations.SerializedName;
  *
  * Created on 11/12/14.
  */
-public class CastMemberEntity {
+@AutoValue
+public abstract class CastMemberEntity {
 
     @SerializedName( "Name" )
-    private String name;
+    public abstract String name();
 
     @SerializedName( "CharacterName" )
-    private String characterName;
+    public abstract String characterName();
 
     @SerializedName( "Role" )
-    private String role;
+    public abstract String role();
 
     @SerializedName( "TranslatedRole" )
-    private String translatedRole;
+    public abstract String translatedRole();
 
-    public CastMemberEntity() {
+    public static CastMemberEntity create( String name, String characterName, String role, String translatedRole ) {
+
+        return new AutoValue_CastMemberEntity( name, characterName, role, translatedRole );
     }
 
-    public CastMemberEntity(String name, String characterName, String role, String translatedRole ) {
+    public static TypeAdapter<CastMemberEntity> typeAdapter(Gson gson ) {
 
-        this.name = name;
-        this.characterName = characterName;
-        this.role = role;
-        this.translatedRole = translatedRole;
-
-    }
-
-    public String getName() {
-
-        return name;
-    }
-
-    public void setName( String name ) {
-
-        this.name = name;
-
-    }
-
-    public String getCharacterName() {
-
-        return characterName;
-    }
-
-    public void setCharacterName( String characterName ) {
-
-        this.characterName = characterName;
-
-    }
-
-    public String getRole() {
-
-        return role;
-    }
-
-    public void setRole( String role ) {
-
-        this.role = role;
-
-    }
-
-    public String getTranslatedRole() {
-
-        return translatedRole;
-    }
-
-    public void setTranslatedRole( String translatedRole ) {
-
-        this.translatedRole = translatedRole;
-
-    }
-
-    @Override
-    public String toString() {
-        return "CastMemberEntity{" +
-                "name='" + name + '\'' +
-                ", characterName='" + characterName + '\'' +
-                ", role='" + role + '\'' +
-                ", translatedRole='" + translatedRole + '\'' +
-                '}';
+        return new AutoValue_CastMemberEntity.GsonTypeAdapter( gson );
     }
 
 }

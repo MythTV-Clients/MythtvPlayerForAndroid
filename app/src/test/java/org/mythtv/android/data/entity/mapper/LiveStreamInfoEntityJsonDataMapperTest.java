@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 
-import java.io.StringReader;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -47,52 +46,52 @@ public class LiveStreamInfoEntityJsonDataMapperTest extends ApplicationTestCase 
     @Test
     public void testTransformLiveStreamInfoEntityHappyCase() {
 
-        LiveStreamInfoEntity liveStreamInfoEntity = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( new StringReader( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO ) );
+        LiveStreamInfoEntity liveStreamInfoEntity = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO );
 
-        assertThat( liveStreamInfoEntity.getId(), is( 128 ) );
-        assertThat( liveStreamInfoEntity.getWidth(), is( 1280 ) );
-        assertThat( liveStreamInfoEntity.getHeight(), is( 720 ) );
-        assertThat( liveStreamInfoEntity.getBitrate(), is( 2000000 ) );
-        assertThat( liveStreamInfoEntity.getAudioBitrate(), is( 128000 ) );
-        assertThat( liveStreamInfoEntity.getSegmentSize(), is( 4 ) );
-        assertThat( liveStreamInfoEntity.getMaxSegments(), is( 0 ) );
-        assertThat( liveStreamInfoEntity.getStartSegment(), is( 1 ) );
-        assertThat( liveStreamInfoEntity.getCurrentSegment(), is( 434 ) );
-        assertThat( liveStreamInfoEntity.getSegmentCount(), is( 434 ) );
-        assertThat( liveStreamInfoEntity.getPercentComplete(), is( 100 ) );
-        assertThat( liveStreamInfoEntity.getCreated(), is( notNullValue() ) );
-        assertThat( liveStreamInfoEntity.getLastModified(), is( notNullValue() ) );
-        assertThat( liveStreamInfoEntity.getRelativeUrl(), is( "/StorageGroup/Streaming/2006_20151017003100.ts.1280x720_2000kV_128kA.m3u8" ) );
-        assertThat( liveStreamInfoEntity.getFullUrl(), is( "http://192.168.10.200:6544/StorageGroup/Streaming/2006_20151017003100.ts.1280x720_2000kV_128kA.m3u8" ) );
-        assertThat( liveStreamInfoEntity.getStatusString(), is( "Completed" ) );
-        assertThat( liveStreamInfoEntity.getStatusInt(), is( 3 ) );
-        assertThat( liveStreamInfoEntity.getStatusMessage(), is( "Transcoding Completed" ) );
-        assertThat( liveStreamInfoEntity.getSourceFile(), is( "/var/lib/mythtv/recordings/2006_20151017003100.ts" ) );
-        assertThat( liveStreamInfoEntity.getSourceHost(), is( "mythcenter" ) );
-        assertThat( liveStreamInfoEntity.getSourceWidth(), is( 1280 ) );
-        assertThat( liveStreamInfoEntity.getSourceHeight(), is( 720 ) );
-        assertThat( liveStreamInfoEntity.getAudioOnlyBitrate(), is( 64000 ) );
+        assertThat( liveStreamInfoEntity.id(), is( 128 ) );
+        assertThat( liveStreamInfoEntity.width(), is( 1280 ) );
+        assertThat( liveStreamInfoEntity.height(), is( 720 ) );
+        assertThat( liveStreamInfoEntity.bitrate(), is( 2000000 ) );
+        assertThat( liveStreamInfoEntity.audioBitrate(), is( 128000 ) );
+        assertThat( liveStreamInfoEntity.segmentSize(), is( 4 ) );
+        assertThat( liveStreamInfoEntity.maxSegments(), is( 0 ) );
+        assertThat( liveStreamInfoEntity.startSegment(), is( 1 ) );
+        assertThat( liveStreamInfoEntity.currentSegment(), is( 434 ) );
+        assertThat( liveStreamInfoEntity.segmentCount(), is( 434 ) );
+        assertThat( liveStreamInfoEntity.percentComplete(), is( 100 ) );
+        assertThat( liveStreamInfoEntity.created(), is( notNullValue() ) );
+        assertThat( liveStreamInfoEntity.lastModified(), is( notNullValue() ) );
+        assertThat( liveStreamInfoEntity.relativeUrl(), is( "/StorageGroup/Streaming/2006_20151017003100.ts.1280x720_2000kV_128kA.m3u8" ) );
+        assertThat( liveStreamInfoEntity.fullUrl(), is( "http://192.168.10.200:6544/StorageGroup/Streaming/2006_20151017003100.ts.1280x720_2000kV_128kA.m3u8" ) );
+        assertThat( liveStreamInfoEntity.statusString(), is( "Completed" ) );
+        assertThat( liveStreamInfoEntity.statusInt(), is( 3 ) );
+        assertThat( liveStreamInfoEntity.statusMessage(), is( "Transcoding Completed" ) );
+        assertThat( liveStreamInfoEntity.sourceFile(), is( "/var/lib/mythtv/recordings/2006_20151017003100.ts" ) );
+        assertThat( liveStreamInfoEntity.sourceHost(), is( "mythcenter" ) );
+        assertThat( liveStreamInfoEntity.sourceWidth(), is( 1280 ) );
+        assertThat( liveStreamInfoEntity.sourceHeight(), is( 720 ) );
+        assertThat( liveStreamInfoEntity.audioOnlyBitrate(), is( 64000 ) );
 
     }
 
     @Test( expected = JsonSyntaxException.class )
     public void testTransformLiveStreamInfoEntityBadJson() {
 
-        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( new StringReader( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_BAD ) );
+        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_BAD );
 
     }
 
     @Test
     public void testTransformLiveStreamInfoEntityCollectionHappyCase() {
 
-        Collection<LiveStreamInfoEntity> LiveStreamInfoEntityCollection = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST ) );
+        Collection<LiveStreamInfoEntity> LiveStreamInfoEntityCollection = LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST );
 
-        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).getId(), is( 128 ) );
-        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).getWidth(), is( 1280 ) );
-        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).getHeight(), is( 720 ) );
-        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 1 ] ).getId(), is( 110 ) );
-        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 1 ] ).getWidth(), is( 1280 ) );
-        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 1 ] ).getHeight(), is( 720 ) );
+        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).id(), is( 128 ) );
+        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).width(), is( 1280 ) );
+        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 0 ] ).height(), is( 720 ) );
+        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 1 ] ).id(), is( 110 ) );
+        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 1 ] ).width(), is( 1280 ) );
+        assertThat( ( (LiveStreamInfoEntity) LiveStreamInfoEntityCollection.toArray() [ 1 ] ).height(), is( 720 ) );
         assertThat( LiveStreamInfoEntityCollection.size(), is( 2 ) );
 
     }
@@ -100,7 +99,7 @@ public class LiveStreamInfoEntityJsonDataMapperTest extends ApplicationTestCase 
     @Test( expected = JsonSyntaxException.class )
     public void testTransformLiveStreamInfoEntityCollectionBadJson() {
 
-        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( new StringReader( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST_BAD ) );
+        LiveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( JSON_RESPONSE_DVR_GET_LIVE_STREAM_INFO_LIST_BAD );
 
     }
 

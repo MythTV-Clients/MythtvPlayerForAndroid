@@ -18,10 +18,7 @@
 
 package org.mythtv.android.domain.repository;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.domain.Encoder;
-import org.mythtv.android.domain.MediaItem;
-import org.mythtv.android.domain.Series;
 
 import java.util.List;
 
@@ -37,18 +34,6 @@ import rx.Observable;
  */
 public interface DvrRepository {
 
-    Observable<List<Series>> titleInfos();
-
-    Observable<List<MediaItem>> recordedPrograms( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup );
-
-    Observable<MediaItem> recordedProgram( final int recordedId );
-
-    Observable<List<MediaItem>> upcoming( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus );
-
-    Observable<List<MediaItem>> recent();
-
     Observable<List<Encoder>> encoders();
-
-    Observable<Boolean> updateWatchedStatus(final int chanId, final DateTime startTime, final boolean watched );
 
 }

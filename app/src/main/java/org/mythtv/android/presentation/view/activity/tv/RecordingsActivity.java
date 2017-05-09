@@ -40,12 +40,12 @@ public class RecordingsActivity extends AbstractBaseTvActivity implements HasCom
 
     private static final String TAG = RecordingsActivity.class.getSimpleName();
 
+    private MediaComponent mediaComponent;
+
     public static Intent getCallingIntent( Context context ) {
 
         return new Intent( context, RecordingsActivity.class );
     }
-
-    private MediaComponent mediaComponent;
 
     @Override
     public int getLayoutResource() {

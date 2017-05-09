@@ -4,9 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -16,12 +17,10 @@ import static org.mockito.Mockito.verifyZeroInteractions;
  */
 public class GetMediaItemListTest {
 
-    private static final int FAKE_RECORDED_ID = 999;
-
-    private GetRecordedProgramDetails getRecordedProgramDetails;
+    private GetMediaItemDetails getMediaItemDetails;
 
     @Mock
-    private DvrRepository mockDvrRepository;
+    private MediaItemRepository mockMediaItemRepository;
     @Mock private ThreadExecutor mockThreadExecutor;
     @Mock private PostExecutionThread mockPostExecutionThread;
 
@@ -29,16 +28,34 @@ public class GetMediaItemListTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getRecordedProgramDetails = new GetRecordedProgramDetails( FAKE_RECORDED_ID, mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
-    public void testGetRecordedProgramDetailsUseCaseObservableHappyCase() {
+    public void testGetMediaItemForRecordedProgramDetailsUseCaseObservableHappyCase() {
 
-        getRecordedProgramDetails.buildUseCaseObservable();
+        Media fakeMedia = Media.PROGRAM;
+        int FAKE_RECORDED_ID = 999;
 
-        verify( mockDvrRepository ).recordedProgram( FAKE_RECORDED_ID );
+        getMediaItemDetails = new GetMediaItemDetails( fakeMedia, FAKE_RECORDED_ID, mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
+        getMediaItemDetails.buildUseCaseObservable();
+
+        verify( mockMediaItemRepository ).mediaItem( fakeMedia, FAKE_RECORDED_ID );
+        verifyZeroInteractions( mockPostExecutionThread );
+        verifyZeroInteractions( mockThreadExecutor );
+
+    }
+
+    @Test
+    public void testGetMediaItemForVideoDetailsUseCaseObservableHappyCase() {
+
+        Media fakeMedia = Media.PROGRAM;
+        int FAKE_ID = 999;
+
+        getMediaItemDetails = new GetMediaItemDetails( fakeMedia, FAKE_ID, mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
+        getMediaItemDetails.buildUseCaseObservable();
+
+        verify( mockMediaItemRepository ).mediaItem( fakeMedia, FAKE_ID );
         verifyZeroInteractions( mockPostExecutionThread );
         verifyZeroInteractions( mockThreadExecutor );
 
