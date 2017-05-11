@@ -24,7 +24,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import javax.annotation.Nullable;
 
@@ -109,8 +108,8 @@ public abstract class ProgramEntity {
     public abstract String hostName();
 
     @Nullable
-    @SerializedName( "AirDate" )
-    public abstract LocalDate airdate();
+    @SerializedName( "Airdate" )
+    public abstract String airdate();
 
     @Nullable
     @SerializedName( "Description" )
@@ -145,7 +144,7 @@ public abstract class ProgramEntity {
     @SerializedName( "Cast" )
     public abstract CastEntity cast();
 
-    public static ProgramEntity create( DateTime startTime, DateTime endTime, String title, String subTitle, String category, String catType, boolean repeat, int videoProps, int audioProps, int subProps, String seriesId, String programId, double stars, long fileSize, DateTime lastModified, int programFlags, String fileName, String hostName, LocalDate airdate, String description, String inetref, int season, int episode, int totalEpisodes, ChannelInfoEntity channel, RecordingInfoEntity recording, ArtworkEntity artwork, CastEntity cast ) {
+    public static ProgramEntity create( DateTime startTime, DateTime endTime, String title, String subTitle, String category, String catType, boolean repeat, int videoProps, int audioProps, int subProps, String seriesId, String programId, double stars, long fileSize, DateTime lastModified, int programFlags, String fileName, String hostName, String airdate, String description, String inetref, int season, int episode, int totalEpisodes, ChannelInfoEntity channel, RecordingInfoEntity recording, ArtworkEntity artwork, CastEntity cast ) {
 
         return new AutoValue_ProgramEntity( startTime, endTime, title, subTitle, category, catType, repeat, videoProps, audioProps, subProps, seriesId, programId, stars, fileSize, lastModified, programFlags, fileName, hostName, airdate, description, inetref, season, episode, totalEpisodes, channel, recording, artwork, cast );
     }

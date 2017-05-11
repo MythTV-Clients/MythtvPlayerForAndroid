@@ -22,8 +22,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.mythtv.android.data.entity.EncoderEntity;
@@ -99,8 +97,8 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
 
                     try {
 
-                        String responseRecordedProgramEntities = getTitleInfoEntitiesFromApi();
-                        if( null == responseRecordedProgramEntities ) {
+                        String responseTitleInfoEntities = getTitleInfoEntitiesFromApi();
+                        if( null == responseTitleInfoEntities ) {
                             Log.d( TAG, "titleInfoEntityList.call : failed to retrieve title info entities" );
 
                             subscriber.onError( new NetworkConnectionException() );
@@ -108,7 +106,7 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
                         } else {
                             Log.d( TAG, "titleInfoEntityList.call : retrieved title info entities" );
 
-                            subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( responseRecordedProgramEntities ) );
+                            subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( responseTitleInfoEntities ) );
                             subscriber.onCompleted();
 
                         }
@@ -186,7 +184,7 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
     }
 
     @Override
-    public Observable<ProgramEntity> recordedProgramById( final int recordedId, final int chanId, final DateTime startTime ) {
+    public Observable<ProgramEntity> recordedProgramById( final int recordedId ) {
 
         return Observable.create( new Observable.OnSubscribe<ProgramEntity>() {
 
@@ -197,7 +195,7 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
 
                     try {
 
-                        String responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId, chanId, startTime );
+                        String responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId );
                         if( null == responseProgramDetails ) {
 
                             subscriber.onError( new NetworkConnectionException() );
@@ -377,7 +375,7 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
     }
 
     @Override
-    public Observable<Long> getBookmark( final int recordedId, final int chanId, final DateTime startTime, final String offsetType) {
+    public Observable<Long> getBookmark( final int recordedId, final String offsetType) {
 
         return Observable.create( new Observable.OnSubscribe<Long>() {
 
@@ -390,7 +388,7 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
 
                     try {
 
-                        String response = getBookmarkFromApi( recordedId, chanId, startTime, offsetType );
+                        String response = getBookmarkFromApi( recordedId, offsetType );
                         if( null == response ) {
                             Log.d( TAG, "getBookmark.call : failed to retrieve status update" );
 
@@ -477,23 +475,12 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private String getRecordedProgramDetailsFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
+    private String getRecordedProgramDetailsFromApi( final int recordedId ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() ).append( RECORDED_BASE_URL ).append( '?' );
 
-        if( recordedId != -1 ) {
-
-            sb.append( String.format( RECORDED_ID_QS, recordedId ) );
-
-        }
-
-        if( chanId != -1 && null != startTime ) {
-
-            sb.append( String.format( CHAN_ID_QS, chanId ) ).append( '&' );
-            fmt.print( startTime.withZone( DateTimeZone.UTC ) );
-
-        }
+        sb.append( String.format( RECORDED_ID_QS, recordedId ) );
 
         Log.i( TAG, "getRecordedProgramDetailsFromApi : apiUrl=" + sb.toString() );
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
@@ -548,23 +535,12 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ).requestSyncCall( parameters );
     }
 
-    private String getBookmarkFromApi( final int recordedId, final int chanId, final DateTime startTime, final String offsetType ) throws MalformedURLException {
+    private String getBookmarkFromApi( final int recordedId, final String offsetType ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
         sb.append( getMasterBackendUrl() ).append( BOOKMARK_BASE_URL ).append( '?' );
 
-        if( recordedId != -1 ) {
-
-            sb.append( String.format( RECORDED_ID_QS, recordedId ) );
-
-        }
-
-        if( chanId != -1 && null != startTime ) {
-
-            sb.append( String.format( CHAN_ID_QS, chanId ) ).append( '&' );
-            fmt.print( startTime.withZone( DateTimeZone.UTC ) );
-
-        }
+        sb.append( String.format( RECORDED_ID_QS, recordedId ) );
 
         if( null != offsetType && !"".equals( offsetType ) ) {
 

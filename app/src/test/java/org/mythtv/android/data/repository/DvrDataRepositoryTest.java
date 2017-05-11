@@ -1,7 +1,6 @@
 package org.mythtv.android.data.repository;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,7 +46,7 @@ public class DvrDataRepositoryTest {
     private static final int FAKE_PROGRAMFLAGS = 1;
     private static final String FAKE_FILENAME = "fake fileName";
     private static final String FAKE_HOSTNAME = "fake hostName";
-    private static final LocalDate FAKE_AIRDATE = new LocalDate();
+    private static final String FAKE_AIRDATE = "fake airdate";
     private static final String FAKE_DESCRIPTION = "fake description";
     private static final String FAKE_INETREF = "fake inetref";
     private static final int FAKE_SEASON = 1;

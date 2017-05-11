@@ -247,6 +247,7 @@ dependencies {
     testCompile "org.assertj:assertj-core:${project.ext.assertJVersion}"
     testCompile "org.robolectric:robolectric:${project.ext.robolectricVersion}"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:${project.ext.leakCanaryVersion}"
+    testCompile "com.squareup.okhttp3:mockwebserver:${project.ext.mockWebServerVersion}"
 
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:${project.ext.testingSupportRunnerVersion}"

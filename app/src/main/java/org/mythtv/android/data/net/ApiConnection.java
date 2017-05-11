@@ -74,7 +74,7 @@ public final class ApiConnection implements Callable<String> {
      * @return A string response
      */
     @Nullable
-    public String requestSyncCall() {
+    String requestSyncCall() {
 
         connectToApi();
 
@@ -90,7 +90,7 @@ public final class ApiConnection implements Callable<String> {
      * @return A string response
      */
     @Nullable
-    public String requestSyncCall( Map<String, String> parameters ) {
+    String requestSyncCall(Map<String, String> parameters) {
 
         FormBody.Builder builder = new FormBody.Builder();
 
@@ -120,6 +120,7 @@ public final class ApiConnection implements Callable<String> {
 //                .cacheControl( CacheControl.FORCE_NETWORK )
                 .build();
 
+        // TODO: Replace with try-with-resources when available at all android levels
         Response call = null;
         try {
 
@@ -155,6 +156,7 @@ public final class ApiConnection implements Callable<String> {
                 .post( formBody )
                 .build();
 
+        // TODO: Replace with try-with-resources when available at all android levels
         Response call = null;
         try {
 

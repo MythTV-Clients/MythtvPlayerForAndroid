@@ -78,7 +78,7 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
 
         Log.d( TAG, "recordedProgramEntityList : recordedId=" + recordedId );
 
-        return this.api.recordedProgramById( recordedId, -1, null )
+        return this.api.recordedProgramById( recordedId )
                 .doOnError( e -> Log.e( TAG, "recordedProgramEntityList : error", e ) );
     }
 
@@ -113,7 +113,7 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
 
         Log.d( TAG, "getBookmark : recordedId=" + recordedId + ", offsetType=" + offsetType );
 
-        return this.api.getBookmark( recordedId, -1, null, offsetType );
+        return this.api.getBookmark( recordedId, offsetType );
     }
 
 }

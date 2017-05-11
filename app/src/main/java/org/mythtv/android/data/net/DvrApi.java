@@ -18,7 +18,6 @@
 
 package org.mythtv.android.data.net;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
@@ -53,19 +52,16 @@ public interface DvrApi {
     String REC_GROUP_QS = "RecGroup=%s";
     String STORAGE_GROUP_QS = "StorageGroup=%s";
     String RECORDED_ID_QS = "RecordedId=%s";
-    String CHAN_ID_QS = "ChanId=%s";
-    String START_TIME_QS = "StartTime=%s";
     String SHOW_ALL_QS = "ShowAll=%s";
     String RECORD_ID_QS = "RecordId=%s";
     String REC_STATUS_QS = "RecStatus=%s";
-    String WATCHED_QS = "Watched=%s";
     String OFFSET_TYPE_QS = "OffsetType=%s";
 
     Observable<List<TitleInfoEntity>> titleInfoEntityList();
 
     Observable<List<ProgramEntity>> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup );
 
-    Observable<ProgramEntity> recordedProgramById( final int recordedId, final int chanId, final DateTime startTime );
+    Observable<ProgramEntity> recordedProgramById( final int recordedId );
 
     Observable<List<ProgramEntity>> upcomingProgramEntityList( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus );
 
@@ -84,6 +80,6 @@ public interface DvrApi {
      */
     Observable<Boolean> updateWatchedStatus( final int id, final boolean watched );
 
-    Observable<Long> getBookmark( final int recordedId, final int chanId, final DateTime startTime, final String offsetType );
+    Observable<Long> getBookmark( final int recordedId, final String offsetType );
 
 }
