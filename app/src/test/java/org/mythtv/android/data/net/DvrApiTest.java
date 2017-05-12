@@ -54,7 +54,7 @@ public class DvrApiTest extends TestData {
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents() )
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -73,7 +73,7 @@ public class DvrApiTest extends TestData {
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents() )
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -110,7 +110,7 @@ public class DvrApiTest extends TestData {
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents() )
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -129,7 +129,7 @@ public class DvrApiTest extends TestData {
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents() )
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -139,7 +139,7 @@ public class DvrApiTest extends TestData {
 
     private Observable<List<TitleInfoEntity>> setupTitleInfos() {
 
-        return Observable.just( Collections.singletonList( TitleInfoEntity.create( "test title", "test inetref", 1 ) ) );
+        return Observable.just( Collections.singletonList( createFakeTitleInfoEntity() ) );
     }
 
     private Observable<List<ProgramEntity>> setupRecordedPrograms() {
