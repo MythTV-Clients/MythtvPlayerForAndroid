@@ -27,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * Created on 5/10/17.
  */
-
 public class DvrApiIntegrationTest extends ApplicationTestCase {
 
     @Rule
@@ -365,8 +364,16 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
         assertThat( entity.recording() ).isNotNull();
         assertThat( entity.artwork() ).isNotNull();
         assertThat( entity.artwork().artworkInfos() ).isNotNull().hasSize( 3 );
+        assertThat( entity.artwork().artworkInfos().get( 0 ).url() ).isEqualTo( "/Content/GetImageFile?StorageGroup=Coverart&FileName=/The Goldbergs (2013) Season 4_coverart.jpg" );
+        assertThat( entity.artwork().artworkInfos().get( 0 ).fileName() ).isEqualTo( "myth://Coverart@mythcenter/The Goldbergs (2013) Season 4_coverart.jpg" );
+        assertThat( entity.artwork().artworkInfos().get( 0 ).storageGroup() ).isEqualTo( "Coverart" );
+        assertThat( entity.artwork().artworkInfos().get( 0 ).type() ).isEqualTo( "coverart" );
         assertThat( entity.cast() ).isNotNull();
         assertThat( entity.cast().castMembers() ).isNotNull().hasSize( 26 );
+        assertThat( entity.cast().castMembers().get( 0 ).name() ).isEqualTo( "AJ Michalka" );
+        assertThat( entity.cast().castMembers().get( 0 ).characterName() ).isEmpty();
+        assertThat( entity.cast().castMembers().get( 0 ).role() ).isEqualTo( "actor" );
+        assertThat( entity.cast().castMembers().get( 0 ).translatedRole() ).isEqualTo( "Actors" );
 
         server.shutdown();
 

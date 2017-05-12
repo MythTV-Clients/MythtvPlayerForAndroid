@@ -162,12 +162,6 @@ public class VideoApiImpl extends BaseApi implements VideoApi {
     }
 
     @Override
-    public Observable<VideoMetadataInfoEntity> getVideoByFilename( String filename ) {
-
-        return null;
-    }
-
-    @Override
     public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
 
         return Observable.create( new Observable.OnSubscribe<Boolean>() {

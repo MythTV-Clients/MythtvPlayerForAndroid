@@ -129,16 +129,6 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
     }
 
     @Override
-    public Observable<VideoMetadataInfoEntity> getVideoByFilename( String filename ) {
-        Log.d( TAG, "getVideoById : enter" );
-
-        Log.d( TAG, "getVideoById : filename=" + filename );
-
-        Log.d( TAG, "getVideoById : exit" );
-        return this.api.getVideoByFilename( filename );
-    }
-
-    @Override
     public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
         Log.d( TAG, "getVideoById : enter" );
 

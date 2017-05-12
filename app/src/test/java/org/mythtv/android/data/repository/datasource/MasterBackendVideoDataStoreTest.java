@@ -79,19 +79,6 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
 
     }
 
-    @Test
-    public void testGetVideoByFilename() {
-
-        VideoMetadataInfoEntity fakeVideoMetadataInfoEntity = createVideoMetadataInfoEntity();
-        Observable<VideoMetadataInfoEntity> fakeObservable = Observable.just( fakeVideoMetadataInfoEntity );
-        given( mockVideoApi.getVideoByFilename( FAKE_VIDEO_FILENAME ) ).willReturn( fakeObservable );
-
-        masterBackendVideoDataStore.getVideoByFilename( FAKE_VIDEO_FILENAME );
-
-        verify( mockVideoApi ).getVideoByFilename( FAKE_VIDEO_FILENAME );
-
-    }
-
     private VideoMetadataInfoEntity createVideoMetadataInfoEntity() {
 
         return VideoMetadataInfoEntity.create(

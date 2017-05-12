@@ -15,9 +15,11 @@ import org.mythtv.android.BuildConfig;
 import org.mythtv.android.data.entity.MythTvTypeAdapterFactory;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.serializers.DateTimeTypeConverter;
 import org.mythtv.android.domain.SettingsKeys;
 import org.robolectric.RobolectricTestRunner;
@@ -38,6 +40,8 @@ public abstract class ApplicationTestCase extends TestData{
     protected final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper;
     protected final ProgramEntityJsonMapper programEntityJsonMapper;
     protected final EncoderEntityJsonMapper encoderEntityJsonMapper;
+    protected final LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper;
+    protected final VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper;
     protected final BooleanJsonMapper booleanJsonMapper;
     protected final LongJsonMapper longJsonMapper;
 
@@ -58,6 +62,8 @@ public abstract class ApplicationTestCase extends TestData{
         this.titleInfoEntityJsonMapper = new TitleInfoEntityJsonMapper( this.gson );
         this.programEntityJsonMapper = new ProgramEntityJsonMapper( this.gson );
         this.encoderEntityJsonMapper = new EncoderEntityJsonMapper( this.gson );
+        this.liveStreamInfoEntityJsonMapper = new LiveStreamInfoEntityJsonMapper( this.gson );
+        this.videoMetadataInfoEntityJsonMapper = new VideoMetadataInfoEntityJsonMapper( this.gson );
         this.booleanJsonMapper = new BooleanJsonMapper();
         this.longJsonMapper = new LongJsonMapper();
 

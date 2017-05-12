@@ -44,14 +44,10 @@ public interface VideoApi {
     String START_INDEX_QS = "StartIndex=%s";
     String COUNT_QS = "Count=%s";
     String ID_QS = "Id=%s";
-    String FILENAME_QS = "FileName=%s";
-    String WATCHED_QS = "Watched=%s";
 
     Observable<List<VideoMetadataInfoEntity>> getVideoList( final String folder, final String sort, final boolean descending, final int startIndex, final int count );
 
     Observable<VideoMetadataInfoEntity> getVideoById( final int id );
-
-    Observable<VideoMetadataInfoEntity> getVideoByFilename( final String filename );
 
     Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched );
 
