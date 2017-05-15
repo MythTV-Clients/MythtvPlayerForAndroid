@@ -9,10 +9,13 @@ import org.mythtv.android.data.entity.ChannelInfoEntity;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.InputEntity;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
+import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.RecordingInfoEntity;
+import org.mythtv.android.data.entity.SeriesEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
+import org.mythtv.android.domain.Media;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -143,27 +146,41 @@ public abstract class TestData {
 
     protected static final int FAKE_COUNT = 1;
 
-    private static final String FAKE_TAG_LINE = "fake tag line";
-    private static final String FAKE_DIRECTOR = "fake director";
-    private static final String FAKE_STUDIO = "fake studio";
-    private static final String FAKE_CERTIFICATION = "fake certification";
-    private static final int FAKE_COLLECTION_REF = 1;
-    private static final String FAKE_HOMEPAGE = "fake homepage";
-    private static final DateTime FAKE_RELEASE_DATE = DateTime.now();
-    private static final DateTime FAKE_ADD_DATE = DateTime.now();
-    private static final float FAKE_USER_RATING = 0.0f;
-    private static final int FAKE_LENGTH = 1;
-    private static final int FAKE_PLAY_COUNT = 1;
-    private static final int FAKE_PARENTAL_LEVEL = 1;
-    private static final boolean FAKE_WATCHED = false;
-    private static final boolean FAKE_PROCESSED = false;
-    private static final String FAKE_CONTENT_TYPE = "fake content type";
-    private static final String FAKE_HASH = "fake hash";
-    private static final String FAKE_COVERART = "fake coverart";
-    private static final String FAKE_FANART = "fake fanart";
-    private static final String FAKE_BANNER = "fake banner";
-    private static final String FAKE_SCREENSHOT = "fake screenshot";
-    private static final String FAKE_TRAILER = "fake trailer";
+    protected static final String FAKE_TAG_LINE = "fake tag line";
+    protected static final String FAKE_DIRECTOR = "fake director";
+    protected static final String FAKE_STUDIO = "fake studio";
+    protected static final String FAKE_CERTIFICATION = "fake certification";
+    protected static final int FAKE_COLLECTION_REF = 1;
+    protected static final String FAKE_HOMEPAGE = "fake homepage";
+    protected static final DateTime FAKE_RELEASE_DATE = DateTime.now();
+    protected static final DateTime FAKE_ADD_DATE = DateTime.now();
+    protected static final float FAKE_USER_RATING = 0.0f;
+    protected static final int FAKE_LENGTH = 1;
+    protected static final int FAKE_PLAY_COUNT = 1;
+    protected static final int FAKE_PARENTAL_LEVEL = 1;
+    protected static final boolean FAKE_WATCHED = false;
+    protected static final boolean FAKE_PROCESSED = false;
+    protected static final String FAKE_CONTENT_TYPE = "fake content type";
+    protected static final String FAKE_HASH = "fake hash";
+    protected static final String FAKE_COVERART = "fake coverart";
+    protected static final String FAKE_FANART = "fake fanart";
+    protected static final String FAKE_BANNER = "fake banner";
+    protected static final String FAKE_SCREENSHOT = "fake screenshot";
+    protected static final String FAKE_TRAILER = "fake trailer";
+
+    protected static final Media FAKE_MEDIA = Media.PROGRAM;
+    protected static final String FAKE_ARTWORK = "fake artwork";
+    protected static final String FAKE_CAST_MEMBERS = "fake cast members";
+    protected static final String FAKE_CHARACTERS = "fake characters";
+    protected static final String FAKE_FANART_URL = "fake fanart url";
+    protected static final String FAKE_COVERART_URL = "fake coverart url";
+    protected static final String FAKE_BANNER_URL = "fake banner url";
+    protected static final String FAKE_PREVIEW_URL = "fake preview url";
+    protected static final long FAKE_DURATION = 1;
+    protected static final boolean FAKE_RECORDING = false;
+    protected static final int FAKE_LIVESTREAM_ID = 1;
+    protected static final String FAKE_UPDATE_SAVED_BOOKMARK_URL = "fake update saved bookmark url";
+    protected static final String FAKE_RECORDING_GROUP = "fake recording group";
 
     protected TitleInfoEntity createFakeTitleInfoEntity() {
 
@@ -268,6 +285,24 @@ public abstract class TestData {
 
         return entity;
     };
+
+    protected SeriesEntity createFakeSeriesEntity() {
+
+        return SeriesEntity.create( FAKE_TITLE, FAKE_MEDIA, FAKE_ARTWORK, FAKE_COUNT, FAKE_INETREF );
+    }
+
+    protected MediaItemEntity createFakeMediaItemEntity() {
+
+        return MediaItemEntity.create(
+                FAKE_ID, FAKE_MEDIA, FAKE_TITLE, FAKE_SUB_TITLE, FAKE_DESCRIPTION, FAKE_START_TIME,
+                FAKE_PROGRAMFLAGS, FAKE_SEASON, FAKE_EPISODE, FAKE_STUDIO, FAKE_CAST_MEMBERS,
+                FAKE_CHARACTERS, FAKE_URL, FAKE_FANART_URL, FAKE_COVERART_URL, FAKE_BANNER_URL,
+                FAKE_PREVIEW_URL, FAKE_CONTENT_TYPE, FAKE_DURATION, FAKE_PERCENT_COMPLETE,
+                FAKE_RECORDING, FAKE_LIVESTREAM_ID, FAKE_WATCHED, FAKE_UPDATE_SAVED_BOOKMARK_URL,
+                FAKE_BOOKMARK, FAKE_INETREF, FAKE_CERTIFICATION, FAKE_PARENTAL_LEVEL,
+                FAKE_RECORDING_GROUP, Collections.emptyList()
+        );
+    }
 
     protected String getUrlContents( String theUrl ) {
 

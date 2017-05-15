@@ -25,6 +25,7 @@ import org.mythtv.android.domain.SettingsKeys;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowLog;
 
 /**
  * Base class for Robolectric data layer tests.
@@ -71,6 +72,8 @@ public abstract class ApplicationTestCase extends TestData{
 
     @Before
     public void setup() throws Exception {
+
+        ShadowLog.stream = System.out;
 
         setMasterBackendInSharedPreferences();
 

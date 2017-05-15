@@ -18,8 +18,6 @@
 
 package org.mythtv.android.data.repository;
 
-import android.util.Log;
-
 import org.mythtv.android.data.entity.mapper.EncoderEntityDataMapper;
 import org.mythtv.android.data.repository.datasource.DvrDataStore;
 import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
@@ -44,7 +42,6 @@ import rx.Observable;
 @Singleton
 public class DvrDataRepository implements DvrRepository {
 
-    private static final String TAG = DvrDataRepository.class.getSimpleName();
     private static final String CONVERT2METHODREF = "Convert2MethodRef";
 
     private final DvrDataStoreFactory dvrDataStoreFactory;
@@ -59,13 +56,11 @@ public class DvrDataRepository implements DvrRepository {
     @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<Encoder>> encoders() {
-        Log.d( TAG, "encoders : enter" );
 
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
         return dvrDataStore.encoderEntityList()
-                .doOnError( throwable -> Log.e( TAG, "encoders : error", throwable ) )
-                .map( encoderEntities -> EncoderEntityDataMapper.transformCollection( encoderEntities ) );
+                .map( EncoderEntityDataMapper::transformCollection );
     }
 
 }

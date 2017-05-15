@@ -22,6 +22,7 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.domain.interactor.GetMediaItemList;
+import org.mythtv.android.domain.interactor.GetSearchResultList;
 import org.mythtv.android.domain.interactor.GetSeriesList;
 import org.mythtv.android.domain.repository.MediaItemRepository;
 import org.mythtv.android.presentation.internal.di.PerActivity;
@@ -59,6 +60,14 @@ public class MediaItemsModule {
     DynamicUseCase provideGetMediaItemListUseCase( MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
         return new GetMediaItemList( mediaItemRepository, threadExecutor, postExecutionThread );
+    }
+
+    @Provides
+    @PerActivity
+    @Named( "searchResultList" )
+    DynamicUseCase provideSearchResultListUseCase( MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+
+        return new GetSearchResultList( mediaItemRepository, threadExecutor, postExecutionThread );
     }
 
 }

@@ -38,7 +38,7 @@ public interface SearchDataStore {
 
     Observable<List<MediaItemEntity>> search( String searchString );
 
-    void refreshTitleInfoData( Collection<SeriesEntity> seriesEntityCollection );
+    void refreshSeriesData( Collection<SeriesEntity> seriesEntityCollection );
 
     void refreshRecordedProgramData( Collection<MediaItemEntity> mediaItemEntityCollection );
 

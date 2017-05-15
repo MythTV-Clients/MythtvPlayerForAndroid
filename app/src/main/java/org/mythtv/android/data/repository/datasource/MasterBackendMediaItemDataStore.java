@@ -52,7 +52,7 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
                     Observable
                             .from( titleInfoEntities )
                             .toList()
-                            .subscribe( searchDataStore::refreshTitleInfoData );
+                            .subscribe( searchDataStore::refreshSeriesData );
                 }
 
             };
@@ -208,6 +208,11 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
     public Observable<MediaItemEntity> updateWatchedStatus( final Media media, final int id, final boolean watched ) {
         Log.d( TAG, "updateWatchedStatus : enter" );
 
+        if( media.equals( Media.UPCOMING ) ) {
+
+            throw new IllegalArgumentException( "can't mark an upcoming program as watched" );
+        }
+
         Observable<MediaItemEntity> mediaItem = mediaItem( media, id );
 
         if( media.equals( Media.PROGRAM ) || media.equals( Media.RECENT ) ) {
@@ -219,7 +224,7 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
 
             return Observable.zip( updateWatchStatus, mediaItem, ( updateWatchStatus1, mediaItem1 ) -> mediaItem1 );
 
-        } else if( media.equals( Media.VIDEO ) || media.equals( Media.TELEVISION ) || media.equals( Media.HOMEVIDEO ) || media.equals( Media.MUSICVIDEO ) || media.equals( Media.ADULT ) ) {
+        } else {
 
             VideoDataStore videoDataStore = this.videoDataStoreFactory.createMasterBackendDataStore();
 
@@ -228,9 +233,6 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
 
             return Observable.zip( updateWatchStatus, mediaItem, ( updateWatchStatus1, mediaItem1 ) -> mediaItem1 );
 
-        } else {
-
-            throw new IllegalArgumentException( "media not supported" );
         }
 
     }
@@ -241,7 +243,7 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
         return dvrDataStore.titleInfoEntityList()
-                .doOnError( throwable -> Log.e( TAG, "recordingSeries : error", throwable ) )
+                .doOnError( throwable -> Log.e( TAG, "recordingSeriesEntity : error", throwable ) )
                 .map( SeriesEntityDataMapper::transformTitleInfoEntities );
     }
 
@@ -312,7 +314,6 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
                 .flatMap( Observable::from )
                 .filter( programEntity -> !programEntity.recording().storageGroup().equalsIgnoreCase( "LiveTV" ) )
                 .take( 10 )
-
                 .toList()
                 .map( recordedProgramEntities -> {
                     try {

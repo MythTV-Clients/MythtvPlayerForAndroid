@@ -149,16 +149,16 @@ public class DbSearchDataStore implements SearchDataStore {
     }
 
     @Override
-    public void refreshTitleInfoData( Collection<SeriesEntity> seriesEntityCollection ) {
-        Log.d( TAG, "refreshTitleInfoData : enter" );
+    public void refreshSeriesData(Collection<SeriesEntity> seriesEntityCollection ) {
+        Log.d( TAG, "refreshSeriesData : enter" );
 
         if( null == seriesEntityCollection || seriesEntityCollection.isEmpty() ) {
-            Log.d( TAG, "refreshTitleInfoData : seriesEntityCollection is empty" );
+            Log.d( TAG, "refreshSeriesData : seriesEntityCollection is empty" );
 
             return;
 
         } else {
-            Log.d( TAG, "refreshTitleInfoData : seriesEntityCollection is not empty" );
+            Log.d( TAG, "refreshSeriesData : seriesEntityCollection is not empty" );
 
             db.beginTransaction();
 
@@ -180,7 +180,7 @@ public class DbSearchDataStore implements SearchDataStore {
 
         }
 
-        Log.d( TAG, "refreshTitleInfoData : exit" );
+        Log.d( TAG, "refreshSeriesData : exit" );
     }
 
     @Override

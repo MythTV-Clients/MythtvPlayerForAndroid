@@ -30,23 +30,24 @@ import com.vincentbrison.openlibraries.android.dualcache.JsonSerializer;
 import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.executor.JobExecutor;
+import org.mythtv.android.data.net.ContentApi;
+import org.mythtv.android.data.net.ContentApiImpl;
 import org.mythtv.android.data.net.DvrApi;
 import org.mythtv.android.data.net.DvrApiImpl;
 import org.mythtv.android.data.net.VideoApi;
 import org.mythtv.android.data.net.VideoApiImpl;
 import org.mythtv.android.data.repository.DvrDataRepository;
 import org.mythtv.android.data.repository.MediaItemDataRepository;
-import org.mythtv.android.data.repository.SearchDataRepository;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
 import org.mythtv.android.domain.repository.MediaItemRepository;
-import org.mythtv.android.domain.repository.SearchRepository;
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.UIThread;
 
@@ -110,13 +111,6 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    SearchRepository provideSearchRepository( SearchDataRepository searchDataRepository ) {
-
-        return searchDataRepository;
-    }
-
-    @Provides
-    @Singleton
     BooleanJsonMapper provideBooleanJsonMapper() {
 
         return new BooleanJsonMapper();
@@ -155,6 +149,13 @@ public class ApplicationModule {
     VideoMetadataInfoEntityJsonMapper provideVideoMetadataInfoEntityJsonMapper( final Gson gson ) {
 
         return new VideoMetadataInfoEntityJsonMapper( gson );
+    }
+
+    @Provides
+    @Singleton
+    ContentApi provideContentApi( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper, final BooleanJsonMapper booleanJsonMapper ) {
+
+        return new ContentApiImpl( context, sharedPreferences, okHttpClient, liveStreamInfoEntityJsonMapper, booleanJsonMapper );
     }
 
     @Provides

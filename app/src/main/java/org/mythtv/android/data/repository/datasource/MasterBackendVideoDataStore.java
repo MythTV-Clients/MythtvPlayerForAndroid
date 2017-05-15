@@ -26,8 +26,6 @@ import org.mythtv.android.data.net.VideoApi;
 import java.util.List;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  *
@@ -55,12 +53,7 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getVideos : folder=" + folder + ", sort=" + sort + ", descending=" + descending + ", startIndex=" + startIndex + ", count=" + count );
 
-        Observable<List<VideoMetadataInfoEntity>> videoList = this.api.getVideoList( folder, sort, descending, startIndex, count )
-                .subscribeOn( Schedulers.io() )
-                .observeOn( AndroidSchedulers.mainThread() );
-
-        Log.d( TAG, "getVideos : exit" );
-        return videoList;
+        return this.api.getVideoList( folder, sort, descending, startIndex, count );
     }
 
     @Override
@@ -74,46 +67,6 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
                 .filter( entity -> entity.contentType().equals( category ) )
                 .toSortedList( ( entity1, entity2 ) -> entity1.title().compareTo( entity2.title() ) )
                 .doOnNext( entity -> Log.d( TAG, "getCategory : entity=" + entity ) );
-
-    }
-
-    @Override
-    public Observable<List<VideoMetadataInfoEntity>> getSeriesInCategory( String category, String series ) {
-        Log.d( TAG, "getSeriesInCategory : enter" );
-
-        Log.d( TAG, "getSeriesInCategory : category=" + category + ". series=" + series );
-
-        return this.api.getVideoList( null, null, false, -1, -1 )
-                .flatMap( Observable::from )
-                .filter( entity -> entity.contentType().equals( category ) )
-                .filter( entity -> entity.title().equals( series ) )
-                .toSortedList( ( entity1, entity2 ) -> {
-
-                    StringBuilder e1 = new StringBuilder();
-                    e1.append( 'S' );
-                    if( entity1.season() < 10 ) {
-                        e1.append( '0' );
-                    }
-                    e1.append( entity1.season() ).append( 'E' );
-                    if( entity1.episode() < 10 ) {
-                        e1.append( '0' );
-                    }
-                    e1.append( entity1.episode() );
-
-                    StringBuilder e2 = new StringBuilder();
-                    e2.append( 'S' );
-                    if( entity2.season() < 10 ) {
-                        e2.append( '0' );
-                    }
-                    e2.append( entity2.season() ).append( 'E' );
-                    if( entity2.episode() < 10 ) {
-                        e2.append( '0' );
-                    }
-                    e2.append( entity2.episode() );
-
-                    return e1.toString().compareTo( e2.toString() );
-                })
-                .doOnNext( entity -> Log.d( TAG, "getSeriesInCategory : entity=" + entity ) );
 
     }
 

@@ -4,6 +4,7 @@ import org.mythtv.android.data.entity.mapper.MediaItemDataMapper;
 import org.mythtv.android.data.entity.mapper.SeriesDataMapper;
 import org.mythtv.android.data.repository.datasource.MediaItemDataStore;
 import org.mythtv.android.data.repository.datasource.MediaItemDataStoreFactory;
+import org.mythtv.android.data.repository.datasource.SearchDataStore;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.Series;
@@ -106,7 +107,11 @@ public class MediaItemDataRepository implements MediaItemRepository {
     @SuppressWarnings( CONVERT2METHODREF )
     @Override
     public Observable<List<MediaItem>> search( String searchString ) {
-        return null;
+
+        SearchDataStore searchDataStore = mediaItemDataStoreFactory.createSearchDataStore();
+
+        return searchDataStore.search( searchString )
+                .map( MediaItemDataMapper::transformMediaItems );
     }
 
 }

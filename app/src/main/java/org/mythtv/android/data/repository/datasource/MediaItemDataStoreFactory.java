@@ -73,4 +73,11 @@ public class MediaItemDataStoreFactory {
         return new MasterBackendMediaItemDataStore( this.dvrDataStoreFactory, this.videoDataStoreFactory, this.contentDataStoreFactory, this.searchDataStoreFactory, this.cache );
     }
 
+    public SearchDataStore createSearchDataStore() {
+        Log.d( TAG, "createSearchDataStore : enter" );
+
+        Log.d( TAG, "createSearchDataStore : exit" );
+        return this.searchDataStoreFactory.createReadSearchDataStore();
+    }
+
 }

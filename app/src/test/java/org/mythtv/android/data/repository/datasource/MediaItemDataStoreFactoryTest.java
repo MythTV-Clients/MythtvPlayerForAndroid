@@ -8,6 +8,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.MediaItemEntity;
+import org.mythtv.android.data.entity.SeriesEntity;
+
+import java.util.Collection;
+import java.util.List;
+
+import rx.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -23,8 +29,6 @@ import static org.mockito.Mockito.verify;
  * Created on 4/26/17.
  */
 public class MediaItemDataStoreFactoryTest extends ApplicationTestCase {
-
-    private static final int FAKE_ID = 1;
 
     private MediaItemDataStoreFactory mediaItemDataStoreFactory;
 
@@ -52,8 +56,43 @@ public class MediaItemDataStoreFactoryTest extends ApplicationTestCase {
 
     }
 
+    @Test( expected = IllegalArgumentException.class )
+    public void whenInitialize_whenDvrDataStoreIsNull_verifyIllegalArgumentException() {
+
+        new MediaItemDataStoreFactory( null, mockVideoDataStoreFactory, mockContentDataStoreFactory, mockSearchDataStoreFactory, mockCache );
+
+    }
+
+    @Test( expected = IllegalArgumentException.class )
+    public void whenInitialize_whenVideoDataStoreIsNull_verifyIllegalArgumentException() {
+
+        new MediaItemDataStoreFactory( mockDvrDataStoreFactory, null, mockContentDataStoreFactory, mockSearchDataStoreFactory, mockCache );
+
+    }
+
+    @Test( expected = IllegalArgumentException.class )
+    public void whenInitialize_whenContentDataStoreIsNull_verifyIllegalArgumentException() {
+
+        new MediaItemDataStoreFactory( mockDvrDataStoreFactory, mockVideoDataStoreFactory, null, mockSearchDataStoreFactory, mockCache );
+
+    }
+
+    @Test( expected = IllegalArgumentException.class )
+    public void whenInitialize_whenSearchDataStoreIsNull_verifyIllegalArgumentException() {
+
+        new MediaItemDataStoreFactory( mockDvrDataStoreFactory, mockVideoDataStoreFactory, mockContentDataStoreFactory, null, mockCache );
+
+    }
+
+    @Test( expected = IllegalArgumentException.class )
+    public void whenInitialize_whenCacheIsNull_verifyIllegalArgumentException() {
+
+        new MediaItemDataStoreFactory( mockDvrDataStoreFactory, mockVideoDataStoreFactory, mockContentDataStoreFactory, mockSearchDataStoreFactory, null );
+
+    }
+
     @Test
-    public void testCreateWithCache() {
+    public void whenCreate_withCache_verifyDiskDataStoreReturned() {
 
         given( mockCache.contains( anyString() ) ).willReturn( true );
 
@@ -68,7 +107,7 @@ public class MediaItemDataStoreFactoryTest extends ApplicationTestCase {
     }
 
     @Test
-    public void testCreateWithoutCache() {
+    public void whenCreate_withCacheMiss_verifyMasterBackendDataStoreReturned() {
 
         given( mockCache.contains( anyString() ) ).willReturn( false );
 
@@ -83,13 +122,54 @@ public class MediaItemDataStoreFactoryTest extends ApplicationTestCase {
     }
 
     @Test
-    public void testCreateMasterBackend() {
+    public void whenCreateMasterBackend_verifyMasterBackendDataStoreReturned() {
 
         MediaItemDataStore mediaItemDataStore = mediaItemDataStoreFactory.createMasterBackendDataStore();
 
         assertThat( mediaItemDataStore )
                 .isNotNull()
                 .isInstanceOf( MasterBackendMediaItemDataStore.class );
+
+    }
+
+    @Test
+    public void whenCreateSearchDataStore_verifyFakeSearchDataStoreReturned() {
+
+        given( mockSearchDataStoreFactory.createReadSearchDataStore() ).willReturn( new FakeSearchDataStore() );
+
+        SearchDataStore searchDataStore = mediaItemDataStoreFactory.createSearchDataStore();
+
+        assertThat( searchDataStore )
+                .isNotNull()
+                .isInstanceOf( FakeSearchDataStore.class );
+
+    }
+
+    private class FakeSearchDataStore implements SearchDataStore {
+
+        @Override
+        public Observable<List<MediaItemEntity>> search( String searchString ) {
+
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void refreshSeriesData( Collection<SeriesEntity> seriesEntityCollection ) {
+
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void refreshRecordedProgramData( Collection<MediaItemEntity> mediaItemEntityCollection ) {
+
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void refreshVideoData( Collection<MediaItemEntity> mediaItemEntityCollection ) {
+
+            throw new UnsupportedOperationException();
+        }
 
     }
 

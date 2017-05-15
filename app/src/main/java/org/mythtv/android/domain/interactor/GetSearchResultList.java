@@ -20,7 +20,7 @@ package org.mythtv.android.domain.interactor;
 
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.SearchRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 
 import java.util.Map;
 
@@ -38,13 +38,13 @@ import rx.Observable;
  */
 public class GetSearchResultList extends DynamicUseCase {
 
-    private final SearchRepository searchRepository;
+    private final MediaItemRepository mediaItemRepository;
 
     @Inject
-    public GetSearchResultList( SearchRepository searchRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetSearchResultList( final MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.searchRepository = searchRepository;
+        this.mediaItemRepository = mediaItemRepository;
 
     }
 
@@ -53,7 +53,7 @@ public class GetSearchResultList extends DynamicUseCase {
 
         final String searchText = (String) parameters.get( "SEARCH_TEXT" );
 
-        return this.searchRepository.search( searchText );
+        return this.mediaItemRepository.search( searchText );
     }
 
 }

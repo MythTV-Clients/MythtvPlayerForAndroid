@@ -1,6 +1,5 @@
 package org.mythtv.android.data.repository;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,13 +8,17 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mythtv.android.data.TestData;
 import org.mythtv.android.data.entity.MediaItemEntity;
 import org.mythtv.android.data.entity.SeriesEntity;
 import org.mythtv.android.data.repository.datasource.MediaItemDataStore;
 import org.mythtv.android.data.repository.datasource.MediaItemDataStoreFactory;
+import org.mythtv.android.data.repository.datasource.SearchDataStore;
+import org.mythtv.android.data.repository.datasource.SearchDataStoreFactory;
 import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.MediaItem;
+import org.mythtv.android.domain.Series;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,51 +42,24 @@ import static org.mockito.Mockito.verify;
  * Created on 4/26/17.
  */
 @RunWith( MockitoJUnitRunner.class )
-public class MediaItemDataRepositoryTest {
-
-    private static final String FAKE_ARTWORK = "fake artwork";
-    private static final int FAKE_COUNT = 1;
-
-    private static final int FAKE_ID = 1;
-    private static final Media FAKE_MEDIA = Media.PROGRAM;
-    private static final String FAKE_TITLE = "fake title";
-    private static final String FAKE_SUBTITLE = "fake subtitle";
-    private static final String FAKE_DESCRIPTION = "fake description";
-    private static final String FAKE_INETREF = "fake inetref";
-    private static final DateTime FAKE_START_DATE = DateTime.now();
-    private static final int FAKE_PROGRAM_FLAGS = 1;
-    private static final int FAKE_SEASON = 1;
-    private static final int FAKE_EPISODE = 1;
-    private static final String FAKE_STUDIO = "fake studio";
-    private static final String FAKE_CAST_MEMBERS = "fake cast members";
-    private static final String FAKE_CHARACTERS = "fake characters";
-    private static final String FAKE_URL = "fake url";
-    private static final String FAKE_FANART_URL = "fake fanart url";
-    private static final String FAKE_COVERART_URL = "fake coverart url";
-    private static final String FAKE_BANNER_URL = "fake bannart url";
-    private static final String FAKE_PREVIEW_URL = "fake preview url";
-    private static final String FAKE_CONTENT_TYPE = "fake content type";
-    private static final long FAKE_DURATION = 1L;
-    private static final int FAKE_PERCENT_COMPLETE = 1;
-    private static final boolean FAKE_RECORDING = false;
-    private static final int FAKE_LIVESTREAM_ID = 999;
-    private static final boolean FAKE_WATCHED = false;
-    private static final String FAKE_UPDATE_SAVED_BOOKMARK_URL = "fake update saved bookmark url";
-    private static final long FAKE_BOOKMARK = 1L;
-    private static final String FAKE_CERTIFICATION = "fake certification";
-    private static final int FAKE_PARENTAL_LEVEL = 1;
-    private static final String FAKE_RECORDING_GROUP = "fake recording group";
+public class MediaItemDataRepositoryTest extends TestData {
 
     private MediaItemDataRepository mediaItemDataRepository;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Mock
     private MediaItemDataStoreFactory mockMediaItemDataStoreFactory;
 
     @Mock
+    private SearchDataStoreFactory mockSearchDataStoreFactory;
+
+    @Mock
     private MediaItemDataStore mockMediaItemDataStore;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    @Mock
+    private SearchDataStore mockSearchDataStore;
 
     @Before
     public void setUp() {
@@ -93,151 +69,166 @@ public class MediaItemDataRepositoryTest {
 
         given( mockMediaItemDataStoreFactory.create( anyInt()) ).willReturn( mockMediaItemDataStore );
         given( mockMediaItemDataStoreFactory.createMasterBackendDataStore() ).willReturn( mockMediaItemDataStore );
+        given( mockMediaItemDataStoreFactory.createSearchDataStore() ).willReturn( mockSearchDataStore );
+
+    }
+
+    @Test( expected = IllegalArgumentException.class )
+    public void whenCreateMediaItemDataRepository_whenMediaItemDataStoreFactoryIsNull_verifyIllegalArgumentException() {
+
+        new MediaItemDataRepository( null );
 
     }
 
     @Test
-    public void testSeriesHappyCase() {
+    public void whenSeries_verifySeriesListReturned() {
 
-        TestSubscriber<Object> subscriber = new TestSubscriber<>();
+        given( mockMediaItemDataStore.series( any( Media.class )) ).willReturn( setupSeriesEntities() );
 
-        List<SeriesEntity> seriesList = new ArrayList<>();
-        seriesList.add( seriesEntity() );
+        Observable<List<Series>> observable = mediaItemDataRepository.series( FAKE_MEDIA );
+        TestSubscriber<List<Series>> testSubscriber = new TestSubscriber<>();
+        observable.subscribe( testSubscriber );
 
-        given( mockMediaItemDataStore.series( any( Media.class )) ).willReturn( Observable.just( seriesList ) );
-
-        mediaItemDataRepository.series( FAKE_MEDIA )
-                .subscribe( subscriber );
-
-        assertThat( subscriber.getOnNextEvents() )
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
         verify( mockMediaItemDataStoreFactory, times( 1 ) ).createMasterBackendDataStore();
         verify( mockMediaItemDataStoreFactory, times( 0 ) ).create( anyInt() );
+        verify( mockMediaItemDataStoreFactory, times( 0 ) ).createSearchDataStore();
         verify( mockMediaItemDataStore ).series( any( Media.class ) );
 
     }
 
     @Test
-    public void testMediaItemsHappyCase() {
+    public void whenMediaItems_verifyMediaItemListReturned() {
 
-        TestSubscriber<Object> subscriber = new TestSubscriber<>();
+        given( mockMediaItemDataStore.mediaItems( any( Media.class ), anyString() ) ).willReturn( setupMediaItemEntities() );
 
-        List<MediaItemEntity> mediaItemsList = new ArrayList<>();
-        mediaItemsList.add( mediaItemEntity() );
+        Observable<List<MediaItem>> observable = mediaItemDataRepository.mediaItems( FAKE_MEDIA, FAKE_TITLE );
+        TestSubscriber<List<MediaItem>> testSubscriber = new TestSubscriber<>();
+        observable.subscribe( testSubscriber );
 
-        given( mockMediaItemDataStore.mediaItems( any( Media.class ), anyString() ) ).willReturn( Observable.just( mediaItemsList ) );
-
-        mediaItemDataRepository.mediaItems( FAKE_MEDIA, FAKE_TITLE )
-                .subscribe( subscriber );
-
-        assertThat( subscriber.getOnNextEvents() )
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
         verify( mockMediaItemDataStoreFactory, times( 1 ) ).createMasterBackendDataStore();
         verify( mockMediaItemDataStoreFactory, times( 0 ) ).create( anyInt() );
+        verify( mockMediaItemDataStoreFactory, times( 0 ) ).createSearchDataStore();
         verify( mockMediaItemDataStore ).mediaItems( any( Media.class ), anyString() );
 
     }
 
     @Test
-    public void testMediaItemHappyCase() {
+    public void whenMediaItem_verifyMediaItemReturned() {
 
-        TestSubscriber<Object> subscriber = new TestSubscriber<>();
+        given( mockMediaItemDataStore.mediaItem( any( Media.class ), anyInt() ) ).willReturn( setupMediaItemEntity() );
 
-        given( mockMediaItemDataStore.mediaItem( any( Media.class ), anyInt() ) ).willReturn( Observable.just( mediaItemEntity() ) );
+        Observable<MediaItem> observable = mediaItemDataRepository.mediaItem( FAKE_MEDIA, FAKE_ID );
+        TestSubscriber<MediaItem> testSubscriber = new TestSubscriber<>();
+        observable.subscribe( testSubscriber );
 
-        mediaItemDataRepository.mediaItem( FAKE_MEDIA, FAKE_ID )
-                .subscribe( subscriber );
-
-        assertThat( subscriber.getOnNextEvents() )
-                .isNotNull()
-                .hasSize( 1 );
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+                .isNotNull();
 
         verify( mockMediaItemDataStoreFactory, times( 0 ) ).createMasterBackendDataStore();
         verify( mockMediaItemDataStoreFactory, times( 1 ) ).create( anyInt() );
+        verify( mockMediaItemDataStoreFactory, times( 0 ) ).createSearchDataStore();
         verify( mockMediaItemDataStore ).mediaItem( any( Media.class ), anyInt() );
 
     }
 
     @Test
-    public void testAddLiveStreamHappyCase() {
+    public void whenAddLiveStream_verifyMediaItemReturned() {
 
-        TestSubscriber<Object> subscriber = new TestSubscriber<>();
+        given( mockMediaItemDataStore.addLiveStream( any( Media.class ), anyInt() ) ).willReturn( setupMediaItemEntity() );
 
-        given( mockMediaItemDataStore.addLiveStream( any( Media.class ), anyInt() ) ).willReturn( Observable.just( mediaItemEntity() ) );
+        Observable<MediaItem> observable = mediaItemDataRepository.addLiveStream( FAKE_MEDIA, FAKE_ID );
+        TestSubscriber<MediaItem> testSubscriber = new TestSubscriber<>();
+        observable.subscribe( testSubscriber );
 
-        mediaItemDataRepository.addLiveStream( FAKE_MEDIA, FAKE_ID )
-                .subscribe( subscriber );
-
-        assertThat( subscriber.getOnNextEvents() )
-                .isNotNull()
-                .hasSize( 1 );
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+                .isNotNull();
 
         verify( mockMediaItemDataStoreFactory, times( 1 ) ).createMasterBackendDataStore();
         verify( mockMediaItemDataStoreFactory, times( 0 ) ).create( anyInt() );
+        verify( mockMediaItemDataStoreFactory, times( 0 ) ).createSearchDataStore();
         verify( mockMediaItemDataStore ).addLiveStream( any( Media.class ), anyInt() );
 
     }
 
     @Test
-    public void testRemoveLiveStreamHappyCase() {
+    public void whenRemoveLiveStream_verifyMediaItemReturned() {
 
-        TestSubscriber<Object> subscriber = new TestSubscriber<>();
+        given( mockMediaItemDataStore.removeLiveStream( any( Media.class ), anyInt() ) ).willReturn( setupMediaItemEntity() );
 
-        given( mockMediaItemDataStore.removeLiveStream( any( Media.class ), anyInt() ) ).willReturn( Observable.just( mediaItemEntity() ) );
+        Observable<MediaItem> observable = mediaItemDataRepository.removeLiveStream( FAKE_MEDIA, FAKE_ID );
+        TestSubscriber<MediaItem> testSubscriber = new TestSubscriber<>();
+        observable.subscribe( testSubscriber );
 
-        mediaItemDataRepository.removeLiveStream( FAKE_MEDIA, FAKE_ID )
-                .subscribe( subscriber );
-
-        assertThat( subscriber.getOnNextEvents() )
-                .isNotNull()
-                .hasSize( 1 );
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+                .isNotNull();
 
         verify( mockMediaItemDataStoreFactory, times( 1 ) ).createMasterBackendDataStore();
         verify( mockMediaItemDataStoreFactory, times( 0 ) ).create( anyInt() );
+        verify( mockMediaItemDataStoreFactory, times( 0 ) ).createSearchDataStore();
         verify( mockMediaItemDataStore ).removeLiveStream( any( Media.class ), anyInt() );
 
     }
 
     @Test
-    public void testUpdateWatchedStatusHappyCase() {
+    public void whenUpdateWatchedStatus_verifyMediaItemReturned() {
 
-        TestSubscriber<Object> subscriber = new TestSubscriber<>();
+        given( mockMediaItemDataStore.updateWatchedStatus( any( Media.class ), anyInt(), anyBoolean() ) ).willReturn( setupMediaItemEntity() );
 
-        given( mockMediaItemDataStore.updateWatchedStatus( any( Media.class ), anyInt(), anyBoolean() ) ).willReturn( Observable.just( mediaItemEntity() ) );
+        Observable<MediaItem> observable = mediaItemDataRepository.updateWatchedStatus( FAKE_MEDIA, FAKE_ID, FAKE_WATCHED );
+        TestSubscriber<MediaItem> testSubscriber = new TestSubscriber<>();
+        observable.subscribe( testSubscriber );
 
-        mediaItemDataRepository.updateWatchedStatus( FAKE_MEDIA, FAKE_ID, FAKE_WATCHED )
-                .subscribe( subscriber );
-
-        assertThat( subscriber.getOnNextEvents() )
-                .isNotNull()
-                .hasSize( 1 );
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+                .isNotNull();
 
         verify( mockMediaItemDataStoreFactory, times( 1 ) ).createMasterBackendDataStore();
         verify( mockMediaItemDataStoreFactory, times( 0 ) ).create( anyInt() );
+        verify( mockMediaItemDataStoreFactory, times( 0 ) ).createSearchDataStore();
         verify( mockMediaItemDataStore ).updateWatchedStatus( any( Media.class ), anyInt(), anyBoolean() );
 
     }
 
-    private SeriesEntity seriesEntity() {
+    @Test
+    public void whenSearch_verifyMediaItemListReturned() {
 
-        return SeriesEntity.create( FAKE_TITLE, FAKE_MEDIA, FAKE_ARTWORK, FAKE_COUNT, FAKE_INETREF );
+        given( mockSearchDataStore.search( anyString() ) ).willReturn( setupMediaItemEntities() );
+
+        Observable<List<MediaItem>> observable = mediaItemDataRepository.search( FAKE_TITLE );
+        TestSubscriber<List<MediaItem>> testSubscriber = new TestSubscriber<>();
+        observable.subscribe( testSubscriber );
+
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+                .isNotNull()
+                .hasSize( 1 );
+
+        verify( mockMediaItemDataStoreFactory, times( 0 ) ).createMasterBackendDataStore();
+        verify( mockMediaItemDataStoreFactory, times( 0 ) ).create( anyInt() );
+        verify( mockMediaItemDataStoreFactory, times( 1 ) ).createSearchDataStore();
+        verify( mockSearchDataStore ).search( anyString() );
+
     }
 
-    private MediaItemEntity mediaItemEntity() {
+    private Observable<List<SeriesEntity>> setupSeriesEntities() {
 
-        return MediaItemEntity.create(
-                FAKE_ID, FAKE_MEDIA, FAKE_TITLE, FAKE_SUBTITLE, FAKE_DESCRIPTION, FAKE_START_DATE,
-                FAKE_PROGRAM_FLAGS, FAKE_SEASON, FAKE_EPISODE, FAKE_STUDIO, FAKE_CAST_MEMBERS,
-                FAKE_CHARACTERS, FAKE_URL, FAKE_FANART_URL, FAKE_COVERART_URL, FAKE_BANNER_URL,
-                FAKE_PREVIEW_URL, FAKE_CONTENT_TYPE, FAKE_DURATION, FAKE_PERCENT_COMPLETE,
-                FAKE_RECORDING, FAKE_LIVESTREAM_ID, FAKE_WATCHED, FAKE_UPDATE_SAVED_BOOKMARK_URL,
-                FAKE_BOOKMARK, FAKE_INETREF, FAKE_CERTIFICATION, FAKE_PARENTAL_LEVEL,
-                FAKE_RECORDING_GROUP, Collections.emptyList()
-        );
+        return Observable.just( Collections.singletonList( createFakeSeriesEntity() ) );
+    }
+
+    private Observable<List<MediaItemEntity>> setupMediaItemEntities() {
+
+        return Observable.just( Collections.singletonList( createFakeMediaItemEntity() ) );
+    }
+
+    private Observable<MediaItemEntity> setupMediaItemEntity() {
+
+        return Observable.just( createFakeMediaItemEntity() );
     }
 
 }

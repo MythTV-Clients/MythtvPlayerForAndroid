@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.SearchRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 
 import java.util.Collections;
 import java.util.Map;
@@ -31,13 +31,13 @@ public class GetSearchResultListTest {
     private PostExecutionThread mockPostExecutionThread;
 
     @Mock
-    private SearchRepository mockSearchRepository;
+    private MediaItemRepository mockMediaItemhRepository;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getSearchResultList = new GetSearchResultList( mockSearchRepository, mockThreadExecutor, mockPostExecutionThread );
+        getSearchResultList = new GetSearchResultList( mockMediaItemhRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
@@ -47,8 +47,8 @@ public class GetSearchResultListTest {
         Map<String, String> parameters = Collections.singletonMap( "SEARCH_TEXT", FAKE_SEARCH_TEXT );
         getSearchResultList.buildUseCaseObservable( parameters );
 
-        verify( mockSearchRepository ).search( FAKE_SEARCH_TEXT );
-        verifyNoMoreInteractions( mockSearchRepository );
+        verify( mockMediaItemhRepository ).search( FAKE_SEARCH_TEXT );
+        verifyNoMoreInteractions( mockMediaItemhRepository );
         verifyZeroInteractions( mockThreadExecutor );
         verifyZeroInteractions( mockPostExecutionThread );
 

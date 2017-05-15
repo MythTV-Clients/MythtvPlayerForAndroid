@@ -7,10 +7,7 @@ import org.mockito.MockitoAnnotations;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.net.DvrApi;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by dmfrey on 9/18/15.
@@ -30,13 +27,21 @@ public class DvrDataStoreFactoryTest extends ApplicationTestCase {
 
     }
 
+    @Test( expected = IllegalArgumentException.class )
+    public void whenInitialize_whenDvrApiIsNull_verifyIllegalArgumentExceptionThrown() {
+
+        new DvrDataStoreFactory( null );
+
+    }
+
     @Test
-    public void testCreateMasterBackendDvrDataStore() {
+    public void whenCreateMasterBackendDataStore_vefifyMasterBackendDataStoreReturned() {
 
-        DvrDataStore userDataStore = dvrDataStoreFactory.createMasterBackendDataStore();
+        DvrDataStore dvrDataStore = dvrDataStoreFactory.createMasterBackendDataStore();
 
-        assertThat( userDataStore, is( notNullValue() ) );
-        assertThat( userDataStore, is( instanceOf( MasterBackendDvrDataStore.class ) ) );
+        assertThat( dvrDataStore )
+            .isNotNull()
+            .isInstanceOf( MasterBackendDvrDataStore.class );
 
     }
 

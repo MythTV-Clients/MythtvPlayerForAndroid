@@ -21,7 +21,6 @@ package org.mythtv.android.data.repository;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import org.mythtv.android.data.entity.MediaItemEntity;
 
@@ -35,8 +34,6 @@ import org.mythtv.android.data.entity.MediaItemEntity;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = DatabaseHelper.class.getSimpleName();
-
     private static final String DATABASE_NAME = "mythtvdb";
     private static final int DATABASE_VERSION = 30;
 
@@ -47,71 +44,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onOpen( SQLiteDatabase db ) {
         super.onOpen( db );
-        Log.i( TAG, "onOpen : enter" );
 
         if( !db.isReadOnly() ) {
-            Log.i( TAG, "onOpen : turn on foreign keys" );
 
             db.execSQL( "PRAGMA encoding = \"UTF-8\";" );
 
         }
 
-        Log.i(TAG, "onOpen : exit");
     }
 
     @Override
     public void onCreate( SQLiteDatabase db ) {
-        Log.i( TAG, "onCreate : enter" );
 
         dropTables( db );
 
         createMediaItemTable( db );
 
-        Log.i( TAG, "onCreate : exit" );
     }
 
     @Override
     public void onUpgrade( SQLiteDatabase db, int oldVersion, int newVersion ) {
-        Log.i( TAG, "onUpgrade : enter" );
 
         if( oldVersion < DATABASE_VERSION ) {
-            Log.i( TAG, "onUpgrade : upgrading to db version " + DATABASE_VERSION );
 
             onCreate( db );
 
         }
 
-        Log.i( TAG, "onUpgrade : exit" );
     }
 
     private void dropTables( SQLiteDatabase db ) {
-        Log.v( TAG, "dropTables : enter" );
 
-        String dropSearchResult = "DROP TABLE IF EXISTS search_result;";
-        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
-            Log.v( TAG, "dropTables : dropSearchResult=" + dropSearchResult );
-        }
-        db.execSQL( dropSearchResult );
+        db.execSQL( "DROP TABLE IF EXISTS search_result;" );
 
-        String dropMediaItem = MediaItemEntity.DROP_TABLE;
-        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
-            Log.v( TAG, "dropTables : dropMediaItem=" + dropMediaItem );
-        }
-        db.execSQL( dropMediaItem );
+        db.execSQL( MediaItemEntity.DROP_TABLE );
 
-        Log.v( TAG, "dropTables : exit" );
     }
 
     private void createMediaItemTable( SQLiteDatabase db) {
-        Log.v( TAG, "createMediaItemTable : enter" );
 
-        String sql = MediaItemEntity.CREATE_TABLE;
-        if( Log.isLoggable( TAG, Log.VERBOSE ) ) {
-            Log.v( TAG, "createMediaItemTable : sql=" + sql );
-        }
-        db.execSQL( sql );
+        db.execSQL( MediaItemEntity.CREATE_TABLE );
 
-        Log.v( TAG, "createMediaItemTable : exit" );
     }
 
 }

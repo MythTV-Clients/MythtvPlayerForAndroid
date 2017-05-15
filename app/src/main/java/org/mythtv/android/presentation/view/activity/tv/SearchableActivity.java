@@ -32,7 +32,6 @@ import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
-import org.mythtv.android.presentation.internal.di.modules.SearchResultsModule;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.provider.MythtvSearchSuggestionProvider;
 import org.mythtv.android.presentation.view.fragment.tv.TvSearchResultListFragment;
@@ -168,7 +167,6 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
 
         this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .searchResultsModule( new SearchResultsModule() )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

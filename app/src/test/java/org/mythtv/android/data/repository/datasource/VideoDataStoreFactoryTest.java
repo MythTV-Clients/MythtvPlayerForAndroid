@@ -28,8 +28,15 @@ public class VideoDataStoreFactoryTest extends ApplicationTestCase {
 
     }
 
+    @Test( expected = IllegalArgumentException.class )
+    public void whenInitialize_whenVideoApiIsNull_verifyIllegalArgumentException() {
+
+        new VideoDataStoreFactory( null );
+
+    }
+
     @Test
-    public void testCreateMasterBackendDvrDataStore() {
+    public void whenCreateMasterBackendDataStore_verifyMasterBackendVideoDataStoreReturned() {
 
         VideoDataStore videoDataStore = videoDataStoreFactory.createMasterBackendDataStore();
 
