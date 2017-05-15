@@ -22,8 +22,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.mythtv.android.data.entity.EncoderEntity;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.TitleInfoEntity;
@@ -56,8 +54,6 @@ import rx.Subscriber;
 public class DvrApiImpl extends BaseApi implements DvrApi {
 
     private static final String TAG = DvrApiImpl.class.getSimpleName();
-
-    private static final DateTimeFormatter fmt = DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
 
     private final OkHttpClient okHttpClient;
     private final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper;
@@ -478,9 +474,9 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
     private String getRecordedProgramDetailsFromApi( final int recordedId ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() ).append( RECORDED_BASE_URL ).append( '?' );
-
-        sb.append( String.format( RECORDED_ID_QS, recordedId ) );
+        sb.append( getMasterBackendUrl() )
+                .append( RECORDED_BASE_URL ).append( '?' )
+                .append( String.format( RECORDED_ID_QS, recordedId ) );
 
         Log.i( TAG, "getRecordedProgramDetailsFromApi : apiUrl=" + sb.toString() );
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
@@ -538,9 +534,9 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
     private String getBookmarkFromApi( final int recordedId, final String offsetType ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() ).append( BOOKMARK_BASE_URL ).append( '?' );
-
-        sb.append( String.format( RECORDED_ID_QS, recordedId ) );
+        sb.append( getMasterBackendUrl() )
+                .append( BOOKMARK_BASE_URL ).append( '?' )
+                .append( String.format( RECORDED_ID_QS, recordedId ) );
 
         if( null != offsetType && !"".equals( offsetType ) ) {
 

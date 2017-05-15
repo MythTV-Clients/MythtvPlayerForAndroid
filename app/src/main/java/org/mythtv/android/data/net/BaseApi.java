@@ -14,7 +14,7 @@ import org.mythtv.android.domain.SettingsKeys;
  *
  * Created on 1/21/17.
  */
-
+@SuppressWarnings( "PMD.AbstractClassWithoutAbstractMethod" )
 abstract class BaseApi {
 
     private static final String TAG = BaseApi.class.getSimpleName();
