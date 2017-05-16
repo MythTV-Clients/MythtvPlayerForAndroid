@@ -42,7 +42,7 @@ public class AddLiveStreamUseCase extends UseCase {
     private final MediaItemRepository mediaItemRepository;
 
     @Inject
-    public AddLiveStreamUseCase( final Media media, final int id, MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public AddLiveStreamUseCase( final Media media, final int id, final MediaItemRepository mediaItemRepository, final ThreadExecutor threadExecutor, final PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
         this.media = media;

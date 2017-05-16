@@ -4,10 +4,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mythtv.android.domain.Encoder;
+import org.mythtv.android.domain.TestData;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
 
+import java.util.Collections;
+import java.util.List;
+
+import rx.Observable;
+import rx.observers.TestSubscriber;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -15,9 +25,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 /**
  * Created by dmfrey on 3/18/16.
  */
-public class GetEncoderListTest {
-
-    private GetEncoderList getEncoderList;
+public class GetEncoderListTest extends TestData {
 
     @Mock
     private ThreadExecutor mockThreadExecutor;
@@ -32,14 +40,22 @@ public class GetEncoderListTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        getEncoderList = new GetEncoderList( mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
     public void testGetEncoderListUseCaseObservableHappyCase() {
 
-        getEncoderList.buildUseCaseObservable();
+        given( mockDvrRepository.encoders() ).willReturn( setupEncoders() );
+
+        GetEncoderList useCase = new GetEncoderList( mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
+        Observable<List<Encoder>> observable = useCase.buildUseCaseObservable();
+        TestSubscriber<List<Encoder>> testSubscriber = new TestSubscriber<>();
+        observable.subscribe( testSubscriber );
+
+        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+                .isNotNull()
+                .hasSize( 1 );
 
         verify( mockDvrRepository ).encoders();
         verifyNoMoreInteractions( mockDvrRepository );
@@ -48,4 +64,8 @@ public class GetEncoderListTest {
 
     }
 
+    private Observable<List<Encoder>> setupEncoders() {
+
+        return Observable.just(Collections.singletonList( createFakeEncoder() ) );
+    }
 }

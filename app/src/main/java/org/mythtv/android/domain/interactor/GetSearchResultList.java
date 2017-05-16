@@ -38,6 +38,8 @@ import rx.Observable;
  */
 public class GetSearchResultList extends DynamicUseCase {
 
+    public static final String SEARCH_TEXT_KEY = "SEARCH_TEXT";
+
     private final MediaItemRepository mediaItemRepository;
 
     @Inject
@@ -49,9 +51,14 @@ public class GetSearchResultList extends DynamicUseCase {
     }
 
     @Override
-    protected Observable buildUseCaseObservable( Map parameters ) {
+    protected Observable buildUseCaseObservable( final Map parameters ) {
 
-        final String searchText = (String) parameters.get( "SEARCH_TEXT" );
+        if( null == parameters || !parameters.containsKey( SEARCH_TEXT_KEY ) ) {
+
+            throw new IllegalArgumentException( "Key [" + SEARCH_TEXT_KEY + "] is required!" );
+        }
+
+        final String searchText = (String) parameters.get( SEARCH_TEXT_KEY );
 
         return this.mediaItemRepository.search( searchText );
     }

@@ -37,7 +37,7 @@ public class GetMediaItemList extends DynamicUseCase {
     @Override
     protected Observable buildUseCaseObservable( Map parameters ) {
 
-        if (!parameters.containsKey( MEDIA_KEY ) ) {
+        if( null == parameters || !parameters.containsKey( MEDIA_KEY ) ) {
 
             throw new IllegalArgumentException( "Key [" + MEDIA_KEY + "] is required!" );
         }
@@ -50,17 +50,8 @@ public class GetMediaItemList extends DynamicUseCase {
                 return getRecordedPrograms( media, parameters );
 
             case RECENT:
-
-                return this.mediaItemRepository.mediaItems( media, null );
-
             case UPCOMING:
-
-                return this.mediaItemRepository.mediaItems( media, null );
-
             case VIDEO:
-
-                return this.mediaItemRepository.mediaItems( media, null );
-
             case MOVIE:
             case HOMEVIDEO:
             case MUSICVIDEO:

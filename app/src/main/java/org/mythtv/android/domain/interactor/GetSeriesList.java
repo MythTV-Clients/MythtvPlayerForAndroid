@@ -34,7 +34,7 @@ public class GetSeriesList extends DynamicUseCase {
     @Override
     protected Observable buildUseCaseObservable( Map parameters ) {
 
-        if (!parameters.containsKey( MEDIA_KEY ) ) {
+        if( null == parameters || !parameters.containsKey( MEDIA_KEY ) ) {
 
             throw new IllegalArgumentException( "Key [" + MEDIA_KEY + "] is required!" );
         }
