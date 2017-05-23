@@ -27,7 +27,7 @@ import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
-import org.mythtv.android.presentation.mapper.SeriesModelMapper;
+import org.mythtv.android.presentation.mapper.SeriesModelDataMapper;
 import org.mythtv.android.presentation.model.SeriesModel;
 import org.mythtv.android.presentation.view.SeriesListView;
 
@@ -53,13 +53,13 @@ public class SeriesListPresenter extends DefaultSubscriber<List<Series>> impleme
     private SeriesListView viewListView;
 
     private final DynamicUseCase getSeriesListUseCase;
-    private final SeriesModelMapper seriesModelMapper;
+    private final SeriesModelDataMapper seriesModelDataMapper;
 
     @Inject
-    public SeriesListPresenter( @Named( "seriesList" ) DynamicUseCase getSeriesListUseCase, SeriesModelMapper seriesModelMapper ) {
+    public SeriesListPresenter( @Named( "seriesList" ) DynamicUseCase getSeriesListUseCase, SeriesModelDataMapper seriesModelDataMapper) {
 
         this.getSeriesListUseCase = getSeriesListUseCase;
-        this.seriesModelMapper = seriesModelMapper;
+        this.seriesModelDataMapper = seriesModelDataMapper;
 
     }
 
@@ -141,7 +141,7 @@ public class SeriesListPresenter extends DefaultSubscriber<List<Series>> impleme
 
     private void showSeriesCollectionInView( Collection<Series> seriesCollection ) {
 
-        final Collection<SeriesModel> seriesModelsCollection = this.seriesModelMapper.transform( seriesCollection );
+        final Collection<SeriesModel> seriesModelsCollection = this.seriesModelDataMapper.transform( seriesCollection );
         this.viewListView.renderSeriesList( seriesModelsCollection );
 
     }

@@ -22,14 +22,19 @@ import javax.inject.Inject;
  */
 
 @PerActivity
-public class MediaItemModelMapper {
+public class MediaItemModelDataMapper {
 
     @Inject
-    public MediaItemModelMapper() {
+    public MediaItemModelDataMapper() {
         // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public MediaItemModel transform( MediaItem mediaItem ) {
+
+        if( null == mediaItem ) {
+
+            return null;
+        }
 
         List<ErrorModel> errors = new ArrayList<>();
         for( Error error : mediaItem.validationErrors() ) {

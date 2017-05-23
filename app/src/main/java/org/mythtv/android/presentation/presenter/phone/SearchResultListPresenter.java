@@ -28,7 +28,7 @@ import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
-import org.mythtv.android.presentation.mapper.MediaItemModelMapper;
+import org.mythtv.android.presentation.mapper.MediaItemModelDataMapper;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.MediaItemListView;
 
@@ -56,13 +56,13 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
     private MediaItemListView viewListView;
 
     private final DynamicUseCase getSearchResultListUseCase;
-    private final MediaItemModelMapper mediaItemModelMapper;
+    private final MediaItemModelDataMapper mediaItemModelDataMapper;
 
     @Inject
-    public SearchResultListPresenter( @Named( "searchResultList" ) DynamicUseCase getSearchResultListUseCase, MediaItemModelMapper mediaItemModelMapper ) {
+    public SearchResultListPresenter( @Named( "searchResultList" ) DynamicUseCase getSearchResultListUseCase, MediaItemModelDataMapper mediaItemModelDataMapper) {
 
         this.getSearchResultListUseCase = getSearchResultListUseCase;
-        this.mediaItemModelMapper = mediaItemModelMapper;
+        this.mediaItemModelDataMapper = mediaItemModelDataMapper;
 
     }
 
@@ -145,7 +145,7 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
 
     private void showSearchResultsCollectionInView( Collection<MediaItem> mediaItemsCollection ) {
 
-        final Collection<MediaItemModel> mediaItemModelsCollection = this.mediaItemModelMapper.transform( mediaItemsCollection );
+        final Collection<MediaItemModel> mediaItemModelsCollection = this.mediaItemModelDataMapper.transform( mediaItemsCollection );
         this.viewListView.renderMediaItemList( mediaItemModelsCollection );
 
     }

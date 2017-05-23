@@ -29,7 +29,7 @@ import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
-import org.mythtv.android.presentation.mapper.MediaItemModelMapper;
+import org.mythtv.android.presentation.mapper.MediaItemModelDataMapper;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.MediaItemDetailsView;
 
@@ -58,7 +58,7 @@ public class MediaItemDetailsPresenter implements Presenter {
     private final UseCase addLiveStreamUseCase;
     private final UseCase removeLiveStreamUseCase;
     private final DynamicUseCase updateWatchedStatusUseCase;
-    private final MediaItemModelMapper mediaItemModelMapper;
+    private final MediaItemModelDataMapper mediaItemModelDataMapper;
 
     @Inject
     public MediaItemDetailsPresenter(
@@ -66,13 +66,13 @@ public class MediaItemDetailsPresenter implements Presenter {
             @Named( "addLiveStream" ) final UseCase addLiveStreamUseCase,
             @Named( "removeLiveStream" ) final UseCase removeLiveStreamUseCase,
             @Named( "updateWatchedStatus" ) final DynamicUseCase updateWatchedStatusUseCase,
-            MediaItemModelMapper mediaItemModelMapper ) {
+            MediaItemModelDataMapper mediaItemModelDataMapper) {
 
         this.getMediaItemDetailsUseCase = getMediaItemDetailsUseCase;
         this.addLiveStreamUseCase = addLiveStreamUseCase;
         this.removeLiveStreamUseCase = removeLiveStreamUseCase;
         this.updateWatchedStatusUseCase = updateWatchedStatusUseCase;
-        this.mediaItemModelMapper = mediaItemModelMapper;
+        this.mediaItemModelDataMapper = mediaItemModelDataMapper;
 
     }
 
@@ -188,7 +188,7 @@ public class MediaItemDetailsPresenter implements Presenter {
     private void updateDetails( MediaItem mediaItem ) {
         Log.d( TAG, "updateDetails : enter" );
 
-        this.mediaItemModel = this.mediaItemModelMapper.transform( mediaItem );
+        this.mediaItemModel = this.mediaItemModelDataMapper.transform( mediaItem );
 
         showDetailsInView();
 
@@ -206,7 +206,7 @@ public class MediaItemDetailsPresenter implements Presenter {
     private void refreshDetails( MediaItem mediaItem ) {
         Log.d( TAG, "refreshDetails : enter" );
 
-        this.mediaItemModel = this.mediaItemModelMapper.transform( mediaItem );
+        this.mediaItemModel = this.mediaItemModelDataMapper.transform( mediaItem );
 
         refreshDetailsInView();
 

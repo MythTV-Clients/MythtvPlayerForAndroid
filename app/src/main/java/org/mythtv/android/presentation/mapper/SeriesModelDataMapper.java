@@ -20,16 +20,23 @@ import javax.inject.Inject;
  */
 
 @PerActivity
-public class SeriesModelMapper {
+public class SeriesModelDataMapper {
 
     @Inject
-    public SeriesModelMapper() {
+    public SeriesModelDataMapper() {
         // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     public SeriesModel transform( Series series ) {
 
-        return SeriesModel.create( series.title(), series.media(), series.artworkUrl(), series.count(), series.inetref() );
+        SeriesModel model = null;
+        if( null != series ) {
+
+            model = SeriesModel.create( series.title(), series.media(), series.artworkUrl(), series.count(), series.inetref() );
+
+        }
+
+        return model;
     }
 
     public List<SeriesModel> transform( Collection<Series> seriesCollection ) {

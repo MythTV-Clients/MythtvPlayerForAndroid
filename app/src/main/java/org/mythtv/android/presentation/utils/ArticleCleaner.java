@@ -53,13 +53,21 @@ public final class ArticleCleaner {
         String upper = cleaned.toUpperCase( Locale.getDefault() );
 
         for( String article : articles ) {
-            article = article + " ";
+
+            if( !article.endsWith( " " ) ) {
+
+                article = article + " ";
+
+            }
+
             Log.d( TAG, "clean : article=" + article + ", cleaned=" + cleaned );
 
             if( upper.startsWith( article ) ) {
                 Log.d( TAG, "clean : article found" );
 
+                upper = upper.substring( article.length() ).trim();
                 cleaned = cleaned.substring( article.length() ).trim();
+
             }
 
         }

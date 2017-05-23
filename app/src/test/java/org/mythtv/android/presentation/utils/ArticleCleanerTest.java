@@ -1,13 +1,14 @@
 package org.mythtv.android.presentation.utils;
 
 import android.content.Context;
-import android.test.ActivityTestCase;
+import android.content.res.Resources;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -17,38 +18,63 @@ import static org.mockito.Mockito.when;
 
 //@RunWith( RobolectricTestRunner.class )
 //@Config( manifest = Config.NONE )
-public class ArticleCleanerTest extends ActivityTestCase {
+public class ArticleCleanerTest {
 
-//    @Mock
-    private Context context;
+    @Mock
+    private Context mockContext;
+    
+    @Mock
+    private Resources mockResources;
 
     @Before
     public void setup() throws Exception {
-        super.setUp();
 
-//        MockitoAnnotations.initMocks( this );
-        context = getInstrumentation().getContext();
+        MockitoAnnotations.initMocks( this );
 
     }
 
     @Test
     public void testClean() throws Exception {
 
-        when( context.getResources().getStringArray( any( int.class ) ) ).thenReturn( new String[] { "THE ", "AN ", "A " } );
+        when( mockResources.getStringArray( any( int.class ) ) ).thenReturn( new String[] { "THE ", "AN ", "A " } );
+        when( mockContext.getResources() ).thenReturn( mockResources );
 
-        assertThat( ArticleCleaner.clean( context, "The quick brown fox..." ), equalTo( "quick brown fox..." ) );
-        assertThat( ArticleCleaner.clean( context, "THE QUICK BROWN FOX..." ), equalTo( "QUICK BROWN FOX..." ) );
-        assertThat( ArticleCleaner.clean( context, "the quick brown fox..." ), equalTo( "quick brown fox..." ) );
+        assertThat( ArticleCleaner.clean( mockContext, "The quick brown fox..." ) ).isEqualTo( "quick brown fox..." );
+        assertThat( ArticleCleaner.clean( mockContext, "THE QUICK BROWN FOX..." ) ).isEqualTo( "QUICK BROWN FOX..." );
+        assertThat( ArticleCleaner.clean( mockContext, "the quick brown fox..." ) ).isEqualTo( "quick brown fox..." );
 
-        assertThat( ArticleCleaner.clean( context, "An interesting idea..." ), equalTo( "interesting idea..." ) );
-        assertThat( ArticleCleaner.clean( context, "an interesting idea..." ), equalTo( "interesting idea..." ) );
+        assertThat( ArticleCleaner.clean( mockContext, "An interesting idea..." ) ).isEqualTo( "interesting idea..." );
+        assertThat( ArticleCleaner.clean( mockContext, "an interesting idea..." ) ).isEqualTo( "interesting idea..." );
 
-        assertThat( ArticleCleaner.clean( context, "A stitch in time..." ), equalTo( "stitch in time..." ) );
-        assertThat( ArticleCleaner.clean( context, "a stitch in time..." ), equalTo( "stitch in time..." ) );
+        assertThat( ArticleCleaner.clean( mockContext, "A stitch in time..." ) ).isEqualTo( "stitch in time..." );
+        assertThat( ArticleCleaner.clean( mockContext, "a stitch in time..." ) ).isEqualTo( "stitch in time..." );
 
-        assertThat( ArticleCleaner.clean( context, "The An A ..." ), equalTo( "..." ) );
-        assertThat( ArticleCleaner.clean( context, "THE AN A ..." ), equalTo( "..." ) );
-        assertThat( ArticleCleaner.clean( context, "the an a ..." ), equalTo( "..." ) );
+        assertThat( ArticleCleaner.clean( mockContext, "The An A ..." ) ).isEqualTo( "..." );
+        assertThat( ArticleCleaner.clean( mockContext, "THE AN A ..." ) ).isEqualTo( "..." );
+        assertThat( ArticleCleaner.clean( mockContext, "the an a ..." ) ).isEqualTo( "..." );
+
+        assertThat( ArticleCleaner.clean( mockContext, "" ) ).isEqualTo( "" );
+        assertThat( ArticleCleaner.clean( mockContext, null ) ).isNull();
+
+        when( mockResources.getStringArray( any( int.class ) ) ).thenReturn( new String[] { "THE", "AN", "A" } );
+        when( mockContext.getResources() ).thenReturn( mockResources );
+
+        assertThat( ArticleCleaner.clean( mockContext, "The quick brown fox..." ) ).isEqualTo( "quick brown fox..." );
+        assertThat( ArticleCleaner.clean( mockContext, "THE QUICK BROWN FOX..." ) ).isEqualTo( "QUICK BROWN FOX..." );
+        assertThat( ArticleCleaner.clean( mockContext, "the quick brown fox..." ) ).isEqualTo( "quick brown fox..." );
+
+        assertThat( ArticleCleaner.clean( mockContext, "An interesting idea..." ) ).isEqualTo( "interesting idea..." );
+        assertThat( ArticleCleaner.clean( mockContext, "an interesting idea..." ) ).isEqualTo( "interesting idea..." );
+
+        assertThat( ArticleCleaner.clean( mockContext, "A stitch in time..." ) ).isEqualTo( "stitch in time..." );
+        assertThat( ArticleCleaner.clean( mockContext, "a stitch in time..." ) ).isEqualTo( "stitch in time..." );
+
+        assertThat( ArticleCleaner.clean( mockContext, "The An A ..." ) ).isEqualTo( "..." );
+        assertThat( ArticleCleaner.clean( mockContext, "THE AN A ..." ) ).isEqualTo( "..." );
+        assertThat( ArticleCleaner.clean( mockContext, "the an a ..." ) ).isEqualTo( "..." );
+
+        assertThat( ArticleCleaner.clean( mockContext, "" ) ).isEqualTo( "" );
+        assertThat( ArticleCleaner.clean( mockContext, null ) ).isNull();
 
     }
 

@@ -28,7 +28,7 @@ import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultSubscriber;
 import org.mythtv.android.domain.interactor.DynamicUseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
-import org.mythtv.android.presentation.mapper.MediaItemModelMapper;
+import org.mythtv.android.presentation.mapper.MediaItemModelDataMapper;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.MediaItemListView;
 
@@ -54,13 +54,13 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
     private MediaItemListView viewListView;
 
     private final DynamicUseCase getMediaItemListUseCase;
-    private final MediaItemModelMapper mediaItemModelMapper;
+    private final MediaItemModelDataMapper mediaItemModelDataMapper;
 
     @Inject
-    public MediaItemListPresenter( @Named( "mediaItemList" ) DynamicUseCase getMediaItemListUseCase, MediaItemModelMapper mediaItemModelMapper ) {
+    public MediaItemListPresenter( @Named( "mediaItemList" ) DynamicUseCase getMediaItemListUseCase, MediaItemModelDataMapper mediaItemModelDataMapper) {
 
         this.getMediaItemListUseCase = getMediaItemListUseCase;
-        this.mediaItemModelMapper = mediaItemModelMapper;
+        this.mediaItemModelDataMapper = mediaItemModelDataMapper;
 
     }
 
@@ -141,7 +141,7 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
 
     private void showMediaItemsCollectionInView( Collection<MediaItem> mediaItemsCollection ) {
 
-        final Collection<MediaItemModel> mediaItemModelsCollection = this.mediaItemModelMapper.transform( mediaItemsCollection );
+        final Collection<MediaItemModel> mediaItemModelsCollection = this.mediaItemModelDataMapper.transform( mediaItemsCollection );
         this.viewListView.renderMediaItemList( mediaItemModelsCollection );
 
     }

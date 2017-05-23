@@ -25,7 +25,6 @@ import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.squareup.leakcanary.LeakCanary;
 
 import org.mythtv.android.BuildConfig;
 import org.mythtv.android.domain.SettingsKeys;
@@ -82,7 +81,6 @@ public class AndroidApplication extends Application {
         this.initializeInjector();
 
         Stetho.initializeWithDefaults( this );
-        LeakCanary.install( this );
 
     }
 

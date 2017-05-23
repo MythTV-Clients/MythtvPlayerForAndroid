@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 @SuppressWarnings( "PMD.GodClass" )
 public abstract class MediaItemModel implements Parcelable {
 
-    private static final String WIDTH_QS = "&Width=%s";
+    public static final String WIDTH_QS = "&Width=%s";
 
     public abstract int id();
 
@@ -127,28 +127,6 @@ public abstract class MediaItemModel implements Parcelable {
     public String getFanartUrl( String width ) {
 
         String url = fanartUrl();
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
-    public String getCoverartUrl( String width ) {
-
-        String url = coverartUrl();
-        if( null != width && !"".equals( width ) ) {
-
-            url = url + String.format( WIDTH_QS, width );
-        }
-
-        return url;
-    }
-
-    public String getBannerUrl( String width ) {
-
-        String url = bannerUrl();
         if( null != width && !"".equals( width ) ) {
 
             url = url + String.format( WIDTH_QS, width );

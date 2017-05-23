@@ -116,11 +116,7 @@ public final class Utils {
     public static long getDuration( String videoUrl ) {
 
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ) {
-            mmr.setDataSource( videoUrl, new HashMap<>() );
-        } else {
-            mmr.setDataSource( videoUrl );
-        }
+        mmr.setDataSource( videoUrl, new HashMap<>() );
 
         return Long.parseLong( mmr.extractMetadata( MediaMetadataRetriever.METADATA_KEY_DURATION ) );
     }

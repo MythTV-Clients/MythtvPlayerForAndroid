@@ -15,6 +15,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UtilsTest {
 
     @Test
+    public void testFormatMillis() {
+
+        assertThat( Utils.formatMillis( 3600000 ) ).isEqualTo( "1:00:00" );
+        assertThat( Utils.formatMillis( 1800000 ) ).isEqualTo( "30:00" );
+        assertThat( Utils.formatMillis( 60000 ) ).isEqualTo( "01:00" );
+        assertThat( Utils.formatMillis( 6000 ) ).isEqualTo( "00:06" );
+        assertThat( Utils.formatMillis( 6 ) ).isEqualTo( "00:00" );
+
+    }
+
+    @Test
     public void testMeetsMinimumVersion() throws Exception {
 
         assertThat( Utils.meetsMinimumVersion( "b6ae90c071", 0.28f ) ).isEqualTo( false );

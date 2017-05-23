@@ -32,7 +32,8 @@ task javaCodeCoverage(type: JacocoReport, dependsOn: 'testDevDebugUnitTest') {
                     '*/*_MembersInjector*.*', //Dagger2 generated code
                     '**/*_*Factory*.*', //Dagger2 generated code
                     '*/*Component*.*', //Dagger2 generated code
-                    '**/*Module*.*' //Dagger2 generated code
+                    '**/*Module*.*', //Dagger2 generated code
+                    '**/Dagger*.*'
             ] //,
             //includes: ['**/*Presenter*.class']
     )

@@ -34,6 +34,10 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 
 import org.mythtv.android.R;
 
+import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
+import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+import static android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
 /**
  *
  *
@@ -110,29 +114,19 @@ public class ExpandedControlsActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setImmersive() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            return;
-        }
+
         int newUiOptions = getWindow().getDecorView().getSystemUiVisibility();
 
         // Navigation bar hiding:  Backwards compatible to ICS.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        }
+        newUiOptions ^= SYSTEM_UI_FLAG_HIDE_NAVIGATION;
 
         // Status bar hiding: Backwards compatible to Jellybean
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        }
+        newUiOptions ^= SYSTEM_UI_FLAG_FULLSCREEN;
+        newUiOptions ^= SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        }
+        getWindow().getDecorView().setSystemUiVisibility( newUiOptions );
+        setImmersive( true );
 
-        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            setImmersive(true);
-        }
     }
 
     private class SessionManagerListenerImpl implements SessionManagerListener {
