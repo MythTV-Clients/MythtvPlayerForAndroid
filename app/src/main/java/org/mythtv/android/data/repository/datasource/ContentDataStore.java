@@ -23,7 +23,7 @@ import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *

@@ -192,7 +192,7 @@ public final class MediaItemEntityDataMapper {
                 programEntity.inetref(), null, -1, recordingGroup, errors );
     }
 
-    public static List<MediaItemEntity> transformPrograms( Collection<ProgramEntity> programEntityCollection ) throws UnsupportedEncodingException {
+    public static List<MediaItemEntity> transformPrograms( Collection<ProgramEntity> programEntityCollection ) {
 
         List<MediaItemEntity> mediaItemList = new ArrayList<>( programEntityCollection.size() );
 
@@ -200,7 +200,7 @@ public final class MediaItemEntityDataMapper {
         for( ProgramEntity programEntity : programEntityCollection ) {
 
             mediaItem = transform( programEntity );
-            if( null != mediaItem && null != mediaItem.media() ) {
+            if( null != mediaItem.media() ) {
                 Log.i( TAG, "transformPrograms : mediaItemEntity=" + mediaItem.toString() );
 
                 mediaItemList.add( mediaItem );
@@ -242,7 +242,7 @@ public final class MediaItemEntityDataMapper {
         watched = videoEntity.watched();
 
         return MediaItemEntity.create(
-                videoEntity.id(), Media.VIDEO, videoEntity.title(),
+                videoEntity.id(), Media.valueOf( videoEntity.contentType() ), videoEntity.title(),
                 videoEntity.subTitle(), videoEntity.description(), null,
                 -1, videoEntity.season(), videoEntity.episode(),
                 videoEntity.studio(), null, null, url, artworks.get( FANART_KEY ),

@@ -25,10 +25,13 @@ import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
-import org.mythtv.android.domain.interactor.DefaultSubscriber;
-import org.mythtv.android.domain.interactor.DynamicUseCase;
-import org.mythtv.android.domain.interactor.UseCase;
+import org.mythtv.android.domain.interactor.AddLiveStreamUseCase;
+import org.mythtv.android.domain.interactor.DefaultObserver;
+import org.mythtv.android.domain.interactor.GetMediaItemDetails;
+import org.mythtv.android.domain.interactor.PostUpdatedWatchedStatus;
+import org.mythtv.android.domain.interactor.RemoveLiveStreamUseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
+import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.mapper.MediaItemModelDataMapper;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.MediaItemDetailsView;
@@ -37,7 +40,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
@@ -47,25 +49,29 @@ import javax.inject.Named;
  *
  * Created on 8/31/15.
  */
+@PerActivity
 public class MediaItemDetailsPresenter implements Presenter {
 
     private static final String TAG = MediaItemDetailsPresenter.class.getSimpleName();
 
+    private Media media;
+    private int id;
+
     private MediaItemModel mediaItemModel;
     private MediaItemDetailsView viewDetailsView;
 
-    private final UseCase getMediaItemDetailsUseCase;
-    private final UseCase addLiveStreamUseCase;
-    private final UseCase removeLiveStreamUseCase;
-    private final DynamicUseCase updateWatchedStatusUseCase;
+    private final GetMediaItemDetails getMediaItemDetailsUseCase;
+    private final AddLiveStreamUseCase addLiveStreamUseCase;
+    private final RemoveLiveStreamUseCase removeLiveStreamUseCase;
+    private final PostUpdatedWatchedStatus updateWatchedStatusUseCase;
     private final MediaItemModelDataMapper mediaItemModelDataMapper;
 
     @Inject
     public MediaItemDetailsPresenter(
-            @Named( "mediaItemDetails" ) final UseCase getMediaItemDetailsUseCase,
-            @Named( "addLiveStream" ) final UseCase addLiveStreamUseCase,
-            @Named( "removeLiveStream" ) final UseCase removeLiveStreamUseCase,
-            @Named( "updateWatchedStatus" ) final DynamicUseCase updateWatchedStatusUseCase,
+            final GetMediaItemDetails getMediaItemDetailsUseCase,
+            final AddLiveStreamUseCase addLiveStreamUseCase,
+            final RemoveLiveStreamUseCase removeLiveStreamUseCase,
+            final PostUpdatedWatchedStatus updateWatchedStatusUseCase,
             MediaItemModelDataMapper mediaItemModelDataMapper) {
 
         this.getMediaItemDetailsUseCase = getMediaItemDetailsUseCase;
@@ -99,16 +105,19 @@ public class MediaItemDetailsPresenter implements Presenter {
     @Override
     public void destroy() {
 
-        this.getMediaItemDetailsUseCase.unsubscribe();
-        this.addLiveStreamUseCase.unsubscribe();
-        this.removeLiveStreamUseCase.unsubscribe();
+        this.getMediaItemDetailsUseCase.dispose();
+        this.addLiveStreamUseCase.dispose();
+        this.removeLiveStreamUseCase.dispose();
 
     }
 
     /**
      * Initializes the presenter by start retrieving media item details.
      */
-    public void initialize() {
+    public void initialize( final Media media, final int id ) {
+
+        this.media = media;
+        this.id = id;
 
         this.loadMediaItemDetails();
 
@@ -116,30 +125,25 @@ public class MediaItemDetailsPresenter implements Presenter {
 
     public void addLiveStream() {
 
-        this.addLiveStreamUseCase.execute( new RefreshMediaItemDetailsSubscriber() );
+        this.addLiveStreamUseCase.execute( new RefreshMediaItemDetailsObserver(), AddLiveStreamUseCase.Params.forMediaItem( this.media, this.id ) );
 
     }
 
     public void removeLiveStream() {
 
-        this.removeLiveStreamUseCase.execute( new RefreshMediaItemDetailsSubscriber() );
+        this.removeLiveStreamUseCase.execute( new RefreshMediaItemDetailsObserver(), RemoveLiveStreamUseCase.Params.forMediaItem( this.media, this.id ) );
 
     }
 
     public void reload() {
 
-        this.getMediaItemDetailsUseCase.execute( new RefreshMediaItemDetailsSubscriber() );
+        this.getMediaItemDetailsUseCase.execute( new RefreshMediaItemDetailsObserver(), GetMediaItemDetails.Params.forMediaItem( this.media, this.id ) );
 
     }
 
-    public void markWatched( Media media, int id, boolean watched ) {
+    public void markWatched( boolean watched ) {
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put( "ID", id );
-        parameters.put( "WATCHED", watched );
-        parameters.put( "MEDIA", media.name() );
-
-        this.updateWatchedStatusUseCase.execute( new MarkWatchedSubscriber(), parameters );
+        this.updateWatchedStatusUseCase.execute( new MarkWatchedSubscriber(), PostUpdatedWatchedStatus.Params.forMediaItem( this.media, this.id, watched) );
 
     }
     /**
@@ -224,15 +228,15 @@ public class MediaItemDetailsPresenter implements Presenter {
     private void getDetails() {
         Log.d( TAG, "getDetails : enter" );
 
-        this.getMediaItemDetailsUseCase.execute( new MediaItemDetailsSubscriber() );
+        this.getMediaItemDetailsUseCase.execute( new MediaItemDetailsObserver(), GetMediaItemDetails.Params.forMediaItem( this.media, this.id ) );
 
         Log.d( TAG, "getDetails : exit" );
     }
 
-    private final class MediaItemDetailsSubscriber extends DefaultSubscriber<MediaItem> {
+    private final class MediaItemDetailsObserver extends DefaultObserver<MediaItem> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             MediaItemDetailsPresenter.this.hideViewLoading();
         }
 
@@ -254,10 +258,10 @@ public class MediaItemDetailsPresenter implements Presenter {
 
     }
 
-    private final class RefreshMediaItemDetailsSubscriber extends DefaultSubscriber<MediaItem> {
+    private final class RefreshMediaItemDetailsObserver extends DefaultObserver<MediaItem> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             MediaItemDetailsPresenter.this.hideViewLoading();
         }
 
@@ -279,10 +283,10 @@ public class MediaItemDetailsPresenter implements Presenter {
 
     }
 
-    private final class MarkWatchedSubscriber extends DefaultSubscriber<MediaItem> {
+    private final class MarkWatchedSubscriber extends DefaultObserver<MediaItem> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             MediaItemDetailsPresenter.this.hideViewLoading();
         }
 

@@ -11,8 +11,8 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.MediaItemRepository;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -43,16 +43,16 @@ public class RemoveLiveStreamUseCaseTest extends TestData {
     }
 
     @Test
-    public void whenAddLiveStream() {
+    public void whenRemoveLiveStream() {
 
         given( mockMediaItemRepository.removeLiveStream( any( Media.class ), anyInt() ) ).willReturn( setupMediaItem() );
 
-        RemoveLiveStreamUseCase useCase = new RemoveLiveStreamUseCase( FAKE_MEDIA, FAKE_RECORDED_ID, mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
-        Observable<MediaItem> observable = useCase.buildUseCaseObservable();
-        TestSubscriber<MediaItem> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        RemoveLiveStreamUseCase useCase = new RemoveLiveStreamUseCase( mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
+        Observable<MediaItem> observable = useCase.buildUseCaseObservable( RemoveLiveStreamUseCase.Params.forMediaItem( FAKE_MEDIA, FAKE_RECORDED_ID ) );
+        TestObserver<MediaItem> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isInstanceOf( MediaItem.class );
 

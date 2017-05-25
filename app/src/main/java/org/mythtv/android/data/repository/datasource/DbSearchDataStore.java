@@ -36,8 +36,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.Observable;
 
 /**
  *
@@ -69,11 +68,7 @@ public class DbSearchDataStore implements SearchDataStore {
         final String query = search;
         Log.d( TAG, "search : query=" + query );
 
-        return Observable.create( new Observable.OnSubscribe<List<MediaItemEntity>>() {
-
-            @Override
-            public void call( Subscriber<? super List<MediaItemEntity>> subscriber ) {
-                Log.d( TAG, "search.call : enter" );
+        return Observable.create( emitter -> {
 
                 Cursor cursor;
 
@@ -131,18 +126,15 @@ public class DbSearchDataStore implements SearchDataStore {
                     }
                     cursor.close();
 
-                    subscriber.onNext( mediaItems );
-                    subscriber.onCompleted();
+                    emitter.onNext( mediaItems );
+                    emitter.onComplete();
 
                 } catch( Exception e ) {
                     Log.e( TAG, "search.call : error", e );
 
-                    subscriber.onError( new DatabaseException( e.getCause() ) );
+                    emitter.onError( new DatabaseException( e.getCause() ) );
 
                 }
-
-                Log.d( TAG, "search.call : exit" );
-            }
 
         });
 
@@ -197,7 +189,7 @@ public class DbSearchDataStore implements SearchDataStore {
 
             db.beginTransaction();
 
-            Observable.from( mediaItemEntityCollection )
+            Observable.fromIterable( mediaItemEntityCollection )
                     .distinct( MediaItemEntity::title )
                     .flatMap( mediaItemEntity -> Observable.just( mediaItemEntity.title() ) )
                     .doOnNext( title -> db.delete( MediaItemEntity.TABLE_NAME, MediaItemEntity.FIELD_MEDIA + " = ? and " + MediaItemEntity.FIELD_TITLE + " = ?", new String[] { Media.PROGRAM.name(), title } ) )
@@ -225,7 +217,7 @@ public class DbSearchDataStore implements SearchDataStore {
             db.beginTransaction();
 
             Log.d( TAG, "refreshVideoData : deleting old videos" );
-            db.delete( MediaItemEntity.TABLE_NAME, MediaItemEntity.FIELD_MEDIA + " = ?", new String[] { Media.VIDEO.name() } );
+            db.delete( MediaItemEntity.TABLE_NAME, MediaItemEntity.FIELD_MEDIA + " IN(?,?,?,?,?,?)", new String[] { Media.VIDEO.name(), Media.MOVIE.name(), Media.TELEVISION.name(), Media.HOMEVIDEO.name(), Media.MUSICVIDEO.name(), Media.ADULT.name() } );
 
             processCollection( mediaItemEntityCollection );
         }

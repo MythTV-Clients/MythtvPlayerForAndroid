@@ -22,8 +22,8 @@ import org.mythtv.android.domain.Series;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -86,10 +86,10 @@ public class MediaItemDataRepositoryTest extends TestData {
         given( mockMediaItemDataStore.series( any( Media.class )) ).willReturn( setupSeriesEntities() );
 
         Observable<List<Series>> observable = mediaItemDataRepository.series( FAKE_MEDIA );
-        TestSubscriber<List<Series>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<Series>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -106,10 +106,10 @@ public class MediaItemDataRepositoryTest extends TestData {
         given( mockMediaItemDataStore.mediaItems( any( Media.class ), anyString() ) ).willReturn( setupMediaItemEntities() );
 
         Observable<List<MediaItem>> observable = mediaItemDataRepository.mediaItems( FAKE_MEDIA, FAKE_TITLE );
-        TestSubscriber<List<MediaItem>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<MediaItem>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -126,10 +126,10 @@ public class MediaItemDataRepositoryTest extends TestData {
         given( mockMediaItemDataStore.mediaItem( any( Media.class ), anyInt() ) ).willReturn( setupMediaItemEntity() );
 
         Observable<MediaItem> observable = mediaItemDataRepository.mediaItem( FAKE_MEDIA, FAKE_ID );
-        TestSubscriber<MediaItem> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItem> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
         verify( mockMediaItemDataStoreFactory, times( 0 ) ).createMasterBackendDataStore();
@@ -145,10 +145,10 @@ public class MediaItemDataRepositoryTest extends TestData {
         given( mockMediaItemDataStore.addLiveStream( any( Media.class ), anyInt() ) ).willReturn( setupMediaItemEntity() );
 
         Observable<MediaItem> observable = mediaItemDataRepository.addLiveStream( FAKE_MEDIA, FAKE_ID );
-        TestSubscriber<MediaItem> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItem> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
         verify( mockMediaItemDataStoreFactory, times( 1 ) ).createMasterBackendDataStore();
@@ -164,10 +164,10 @@ public class MediaItemDataRepositoryTest extends TestData {
         given( mockMediaItemDataStore.removeLiveStream( any( Media.class ), anyInt() ) ).willReturn( setupMediaItemEntity() );
 
         Observable<MediaItem> observable = mediaItemDataRepository.removeLiveStream( FAKE_MEDIA, FAKE_ID );
-        TestSubscriber<MediaItem> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItem> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
         verify( mockMediaItemDataStoreFactory, times( 1 ) ).createMasterBackendDataStore();
@@ -183,10 +183,10 @@ public class MediaItemDataRepositoryTest extends TestData {
         given( mockMediaItemDataStore.updateWatchedStatus( any( Media.class ), anyInt(), anyBoolean() ) ).willReturn( setupMediaItemEntity() );
 
         Observable<MediaItem> observable = mediaItemDataRepository.updateWatchedStatus( FAKE_MEDIA, FAKE_ID, FAKE_WATCHED );
-        TestSubscriber<MediaItem> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItem> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
         verify( mockMediaItemDataStoreFactory, times( 1 ) ).createMasterBackendDataStore();
@@ -202,10 +202,10 @@ public class MediaItemDataRepositoryTest extends TestData {
         given( mockSearchDataStore.search( anyString() ) ).willReturn( setupMediaItemEntities() );
 
         Observable<List<MediaItem>> observable = mediaItemDataRepository.search( FAKE_TITLE );
-        TestSubscriber<List<MediaItem>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<MediaItem>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 

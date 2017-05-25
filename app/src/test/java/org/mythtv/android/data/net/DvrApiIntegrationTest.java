@@ -12,11 +12,13 @@ import org.mythtv.android.data.exception.NetworkConnectionException;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subscribers.TestSubscriber;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import rx.Observable;
-import rx.observers.TestSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -113,12 +115,12 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<List<TitleInfoEntity>> observable = dvrApi.titleInfoEntityList();
 
-        TestSubscriber<List<TitleInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<TitleInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 12 );
 
@@ -138,10 +140,10 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<List<TitleInfoEntity>> observable = dvrApi.titleInfoEntityList();
 
-        TestSubscriber<List<TitleInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<TitleInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -159,10 +161,10 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<List<TitleInfoEntity>> observable = dvrApi.titleInfoEntityList();
 
-        TestSubscriber<List<TitleInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<TitleInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -181,10 +183,10 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<List<TitleInfoEntity>> observable = dvrApi.titleInfoEntityList();
 
-        TestSubscriber<List<TitleInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<TitleInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -202,14 +204,14 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<ProgramEntity>> observable = dvrApi.recordedProgramEntityList( true, 1, 1, "test", "test", "test" );
+        Flowable<ProgramEntity> observable = dvrApi.recordedProgramEntityList( true, 1, 1, "test", "test", "test" );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 78 );
 
@@ -229,14 +231,14 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<ProgramEntity>> observable = dvrApi.recordedProgramEntityList( true, -1, -1, null, null, null );
+        Flowable<ProgramEntity> observable = dvrApi.recordedProgramEntityList( true, -1, -1, null, null, null );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 78 );
 
@@ -256,14 +258,14 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<ProgramEntity>> observable = dvrApi.recordedProgramEntityList( true, 0, -1, "", "", "" );
+        Flowable<ProgramEntity> observable = dvrApi.recordedProgramEntityList( true, 0, -1, "", "", "" );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 78 );
 
@@ -281,9 +283,9 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<ProgramEntity>> observable = dvrApi.recordedProgramEntityList( true, 1, 1, "test", "test", "test" );
+        Flowable<ProgramEntity> observable = dvrApi.recordedProgramEntityList( true, 1, 1, "test", "test", "test" );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertError( NetworkConnectionException.class );
@@ -302,9 +304,9 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<ProgramEntity>> observable = dvrApi.recordedProgramEntityList( true, 1, 1, "test", "test", "test" );
+        Flowable<ProgramEntity> observable = dvrApi.recordedProgramEntityList( true, 1, 1, "test", "test", "test" );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertError( NetworkConnectionException.class );
@@ -327,15 +329,15 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<ProgramEntity> observable = dvrApi.recordedProgramById( 17500 );
 
-        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<ProgramEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
-        ProgramEntity entity = testSubscriber.getOnNextEvents().get( 0 );
+        ProgramEntity entity = testObserver.values().get( 0 );
         assertThat( entity.startTime() ).isNotNull();
         assertThat( entity.endTime() ).isNotNull();
         assertThat( entity.title() ).isEqualTo( "The Goldbergs" );
@@ -391,10 +393,10 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<ProgramEntity> observable = dvrApi.recordedProgramById( 17500 );;
 
-        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<ProgramEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -412,10 +414,10 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<ProgramEntity> observable = dvrApi.recordedProgramById( 17500 );;
 
-        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<ProgramEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -433,14 +435,14 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<ProgramEntity>> observable = dvrApi.upcomingProgramEntityList( 1, -1, true, -1, -1 );
+        Flowable<ProgramEntity> observable = dvrApi.upcomingProgramEntityList( 1, -1, true, -1, -1 );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 43 );
 
@@ -460,14 +462,14 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<ProgramEntity>> observable = dvrApi.upcomingProgramEntityList( -1, 1, true, 1, 1 );
+        Flowable<ProgramEntity> observable = dvrApi.upcomingProgramEntityList( -1, 1, true, 1, 1 );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 43 );
 
@@ -485,9 +487,9 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<ProgramEntity>> observable = dvrApi.upcomingProgramEntityList( 1, -1, true, -1, -1 );
+        Flowable<ProgramEntity> observable = dvrApi.upcomingProgramEntityList( 1, -1, true, -1, -1 );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertError( NetworkConnectionException.class );
@@ -506,9 +508,9 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<ProgramEntity>> observable = dvrApi.upcomingProgramEntityList( 1, -1, true, -1, -1 );
+        Flowable<ProgramEntity> observable = dvrApi.upcomingProgramEntityList( 1, -1, true, -1, -1 );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertError( NetworkConnectionException.class );
@@ -529,14 +531,14 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<EncoderEntity>> observable = dvrApi.encoderEntityList();
+        Flowable<EncoderEntity> observable = dvrApi.encoderEntityList();
 
-        TestSubscriber<List<EncoderEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<EncoderEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 6 );
 
@@ -554,9 +556,9 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<EncoderEntity>> observable = dvrApi.encoderEntityList();
+        Flowable<EncoderEntity> observable = dvrApi.encoderEntityList();
 
-        TestSubscriber<List<EncoderEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<EncoderEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertError( NetworkConnectionException.class );
@@ -575,9 +577,9 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         DvrApi dvrApi = new DvrApiImpl( context, sharedPreferences, client, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
 
-        Observable<List<EncoderEntity>> observable = dvrApi.encoderEntityList();
+        Flowable<EncoderEntity> observable = dvrApi.encoderEntityList();
 
-        TestSubscriber<List<EncoderEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<EncoderEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertError( NetworkConnectionException.class );
@@ -600,12 +602,12 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = dvrApi.updateWatchedStatus( 17504, true );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isTrue();
 
@@ -627,12 +629,12 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = dvrApi.updateWatchedStatus( 17504, false );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isFalse();
 
@@ -652,10 +654,10 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = dvrApi.updateWatchedStatus( 17504, true );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -673,10 +675,10 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = dvrApi.updateWatchedStatus( 17504, true );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -696,12 +698,12 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Long> observable = dvrApi.getBookmark( 17500, null );
 
-        TestSubscriber<Long> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Long> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isEqualTo( 0 );
 
@@ -723,12 +725,12 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Long> observable = dvrApi.getBookmark( 17500, "offsetType" );
 
-        TestSubscriber<Long> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Long> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isEqualTo( 0 );
 
@@ -750,12 +752,12 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Long> observable = dvrApi.getBookmark( 17500, "" );
 
-        TestSubscriber<Long> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Long> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isEqualTo( 0 );
 
@@ -775,10 +777,10 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Long> observable = dvrApi.getBookmark( 17500, null );
 
-        TestSubscriber<Long> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Long> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isEqualTo( 0 );
 
@@ -798,10 +800,10 @@ public class DvrApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Long> observable = dvrApi.getBookmark( 17500, null );
 
-        TestSubscriber<Long> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Long> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isEqualTo( 0 );
 

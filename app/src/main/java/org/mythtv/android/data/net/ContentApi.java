@@ -23,7 +23,7 @@ import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -45,7 +45,7 @@ public interface ContentApi {
     String FILENAME_QS = "FileName=%s";
     String WIDTH_QS = "Width=960";
 
-    Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename );
+    Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList(final String filename );
 
     Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id );
 

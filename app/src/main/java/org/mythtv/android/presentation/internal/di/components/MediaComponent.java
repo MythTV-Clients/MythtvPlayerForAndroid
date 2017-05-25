@@ -20,9 +20,7 @@ package org.mythtv.android.presentation.internal.di.components;
 
 import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.internal.di.modules.ActivityModule;
-import org.mythtv.android.presentation.internal.di.modules.EncodersModule;
 import org.mythtv.android.presentation.internal.di.modules.MediaItemModule;
-import org.mythtv.android.presentation.internal.di.modules.MediaItemsModule;
 import org.mythtv.android.presentation.internal.di.modules.NetModule;
 import org.mythtv.android.presentation.internal.di.modules.SharedPreferencesModule;
 import org.mythtv.android.presentation.view.activity.tv.SettingsActivity;
@@ -45,7 +43,7 @@ import dagger.Component;
  * Created on 8/26/15.
  */
 @PerActivity
-@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, SharedPreferencesModule.class, NetModule.class, MediaItemsModule.class, MediaItemModule.class, EncodersModule.class } )
+@Component( dependencies = ApplicationComponent.class, modules = { ActivityModule.class, SharedPreferencesModule.class, NetModule.class, MediaItemModule.class } )
 public interface MediaComponent {
 
     // Phone fragments

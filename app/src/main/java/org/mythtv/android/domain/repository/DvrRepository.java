@@ -22,7 +22,7 @@ import org.mythtv.android.domain.Encoder;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *

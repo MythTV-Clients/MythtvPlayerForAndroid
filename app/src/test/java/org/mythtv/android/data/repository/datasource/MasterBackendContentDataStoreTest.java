@@ -12,8 +12,8 @@ import org.mythtv.android.domain.Media;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -49,10 +49,10 @@ public class MasterBackendContentDataStoreTest extends ApplicationTestCase {
         given( mockContentApi.liveStreamInfoEntityList( anyString() ) ).willReturn( setupLiveStreams() );
 
         Observable<List<LiveStreamInfoEntity>> observable = masterBackendContentDataStore.liveStreamInfoEntityList( FAKE_FILENAME );
-        TestSubscriber<List<LiveStreamInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<LiveStreamInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -66,10 +66,10 @@ public class MasterBackendContentDataStoreTest extends ApplicationTestCase {
         given( mockContentApi.addLiveStream( any( Media.class ), anyInt() ) ).willReturn( setupLiveStream() );
 
         Observable<LiveStreamInfoEntity> observable = masterBackendContentDataStore.addLiveStream( Media.PROGRAM, 1 );
-        TestSubscriber<LiveStreamInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<LiveStreamInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
         verify( mockContentApi, times( 1 ) ).addLiveStream( any( Media.class ), anyInt() );
@@ -82,10 +82,10 @@ public class MasterBackendContentDataStoreTest extends ApplicationTestCase {
         given( mockContentApi.addLiveStream( any( Media.class ), anyInt() ) ).willReturn( setupLiveStream() );
 
         Observable<LiveStreamInfoEntity> observable = masterBackendContentDataStore.addLiveStream( Media.VIDEO, 1 );
-        TestSubscriber<LiveStreamInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<LiveStreamInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
         verify( mockContentApi, times( 1 ) ).addLiveStream( any( Media.class ), anyInt() );
@@ -98,10 +98,10 @@ public class MasterBackendContentDataStoreTest extends ApplicationTestCase {
         given( mockContentApi.removeLiveStream( anyInt() ) ).willReturn( setupRemoved() );
 
         Observable<Boolean> observable = masterBackendContentDataStore.removeLiveStream( FAKE_ID );
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isTrue();
 

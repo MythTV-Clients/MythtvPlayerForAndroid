@@ -21,7 +21,6 @@ package org.mythtv.android.presentation.view.fragment.phone;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,11 +34,10 @@ import org.mythtv.android.presentation.presenter.phone.SeriesListPresenter;
 import org.mythtv.android.presentation.view.SeriesListView;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
 import org.mythtv.android.presentation.view.adapter.phone.SeriesAdapter;
+import org.mythtv.android.presentation.view.component.EmptyRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -59,29 +57,31 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
     private static final String TAG = SeriesListFragment.class.getSimpleName();
 
-    public static final String MEDIA_KEY = "media";
-    public static final String TITLE_REGEX_KEY = "title_regex";
+    private static final String MEDIA_KEY = "media";
 
     @Inject
-    SeriesListPresenter seriesListPresenter;
+    SeriesListPresenter presenter;
 
-    @BindView( R.id.rv_seriesList )
-    RecyclerView rv_seriesList;
+    @BindView( R.id.rv_items )
+    EmptyRecyclerView rv_items;
+
+    @BindView( R.id.empty_list_view)
+    View emptyView;
 
     private Unbinder unbinder;
 
-    private SeriesAdapter seriesAdapter;
+    private SeriesAdapter adapter;
 
     private SeriesListListener seriesListListener;
 
-    private Map<String, Object> parameters;
+    private Media media;
 
     private final SeriesAdapter.OnItemClickListener onItemClickListener = seriesModel -> {
 
-        if( null != SeriesListFragment.this.seriesListPresenter && null != seriesModel ) {
+        if( null != SeriesListFragment.this.presenter && null != seriesModel ) {
             Log.i( TAG, "onItemClicked : seriesModel=" + seriesModel.toString() );
 
-            SeriesListFragment.this.seriesListPresenter.onSeriesClicked( seriesModel );
+            SeriesListFragment.this.presenter.onSeriesClicked( seriesModel );
 
         }
 
@@ -98,62 +98,15 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
     public SeriesListFragment() { super(); }
 
-    public static SeriesListFragment newInstance( Bundle args ) {
+    public static SeriesListFragment newInstance( final Media media ) {
+
+        Bundle args = new Bundle();
+        args.putString( MEDIA_KEY, media.name() );
 
         SeriesListFragment fragment = new SeriesListFragment();
         fragment.setArguments( args );
 
         return fragment;
-    }
-
-    public static class Builder {
-
-        private final Media media;
-        private String titleRegEx;
-
-        public Builder( Media media ) {
-            this.media = media;
-        }
-
-        public Builder titleRegEx( String titleRegEx ) {
-            this.titleRegEx = titleRegEx;
-            return this;
-        }
-
-        public Map<String, Object> build() {
-
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put( MEDIA_KEY, media );
-
-            if( null != titleRegEx ) {
-                parameters.put( TITLE_REGEX_KEY, titleRegEx );
-            }
-
-            return parameters;
-        }
-
-        public Bundle toBundle() {
-
-            Bundle args = new Bundle();
-            args.putString( MEDIA_KEY, media.name() );
-
-            if( null != titleRegEx ) {
-                args.putString( TITLE_REGEX_KEY, titleRegEx );
-            }
-
-            return args;
-        }
-
-        public static Map<String, Object> fromBundle( Bundle args ) {
-
-            Builder builder = new Builder( Media.valueOf( args.getString( MEDIA_KEY ) ) );
-
-            if( args.containsKey( TITLE_REGEX_KEY ) ) {
-                builder.titleRegEx( args.getString( TITLE_REGEX_KEY ) );
-            }
-
-            return builder.build();
-        }
     }
 
     @Override
@@ -162,9 +115,6 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "onAttach : enter" );
 
         Activity activity = getActivity();
-//        if( activity instanceof NotifyListener) {
-//            this.notifyListener = (NotifyListener) activity;
-//        }
         if( activity instanceof SeriesListListener) {
             this.seriesListListener = (SeriesListListener) activity;
         }
@@ -176,7 +126,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_series_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_empty_item_list, container, false );
         ButterKnife.bind( this, fragmentView );
         unbinder = ButterKnife.bind( this, fragmentView );
 
@@ -192,7 +142,6 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         setupUI();
 
         this.initialize();
-        this.loadSeriesList();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -202,7 +151,8 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-        this.seriesListPresenter.resume();
+        this.presenter.resume();
+        this.loadItems();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -212,7 +162,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-        this.seriesListPresenter.pause();
+        this.presenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -222,7 +172,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
-        this.seriesListPresenter.destroy();
+        this.presenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
     }
@@ -241,9 +191,9 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( MediaComponent.class ).inject( this );
-        this.seriesListPresenter.setView( this );
+        this.presenter.setView( this );
 
-        parameters = Builder.fromBundle( getArguments() );
+        this.media = Media.valueOf( getArguments().getString( MEDIA_KEY ) );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -252,11 +202,12 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
         Log.d( TAG, "setupUI : enter" );
 
         LayoutManager layoutManager = new LayoutManager( getActivity() );
-        this.rv_seriesList.setLayoutManager( layoutManager );
+        this.rv_items.setLayoutManager( layoutManager );
 
-        this.seriesAdapter = new SeriesAdapter( getActivity(), new ArrayList<>() );
-        this.seriesAdapter.setOnItemClickListener( onItemClickListener );
-        this.rv_seriesList.setAdapter( seriesAdapter );
+        this.adapter = new SeriesAdapter( getActivity(), new ArrayList<>() );
+        this.adapter.setOnItemClickListener( onItemClickListener );
+        this.rv_items.setAdapter( adapter );
+        this.rv_items.setEmptyView( emptyView );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -265,16 +216,12 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-//        this.notifyListener.showLoading();
-
         Log.d( TAG, "showLoading : exit" );
     }
 
     @Override
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
-
-//        this.notifyListener.finishLoading();
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -296,7 +243,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     public void reload() {
 
         initialize();
-        loadSeriesList();
+        loadItems();
 
     }
 
@@ -306,7 +253,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 
         if( null != seriesModelCollection ) {
 
-            this.seriesAdapter.setSeriesCollection( seriesModelCollection );
+            this.adapter.setSeriesCollection( seriesModelCollection );
 
         }
 
@@ -334,7 +281,7 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
 //        this.notifyListener.hideLoading();
 
         Log.e( TAG, "showError : error=" + message );
-        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> SeriesListFragment.this.loadSeriesList() );
+        this.showToastMessage( message, getResources().getString( R.string.retry ), v -> SeriesListFragment.this.loadItems() );
 
         Log.d( TAG, "showError : exit" );
     }
@@ -359,12 +306,12 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     /**
      * Loads series.
      */
-    private void loadSeriesList() {
-        Log.d( TAG, "loadSeriesList : enter" );
+    private void loadItems() {
+        Log.d( TAG, "loadItems : enter" );
 
-        this.seriesListPresenter.initialize( parameters );
+        this.presenter.initialize( media );
 
-        Log.d( TAG, "loadSeriesList : exit" );
+        Log.d( TAG, "loadItems : exit" );
     }
 
 }

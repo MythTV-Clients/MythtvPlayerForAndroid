@@ -14,7 +14,7 @@ import org.mythtv.android.data.repository.DatabaseHelper;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

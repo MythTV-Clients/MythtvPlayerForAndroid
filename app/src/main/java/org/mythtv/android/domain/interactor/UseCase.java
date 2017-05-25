@@ -18,14 +18,15 @@
 
 package org.mythtv.android.domain.interactor;
 
+import com.fernandocejas.arrow.checks.Preconditions;
+
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  *
@@ -35,50 +36,65 @@ import rx.subscriptions.Subscriptions;
  *
  * Created on 8/26/15.
  */
-public abstract class UseCase {
+public abstract class UseCase<T, Params> {
 
     protected final ThreadExecutor threadExecutor;
     protected final PostExecutionThread postExecutionThread;
+    private final CompositeDisposable disposables;
 
-    protected Subscription subscription = Subscriptions.empty();
-
-    protected UseCase( ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    UseCase( ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
 
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
+        this.disposables = new CompositeDisposable();
 
     }
 
     /**
-     * Builds an {@link rx.Observable} which will be used when executing the current {@link UseCase}.
+     * Builds an {@link io.reactivex.Observable} which will be used when executing the current {@link UseCase}.
      */
-    protected abstract Observable buildUseCaseObservable();
+    abstract Observable<T> buildUseCaseObservable( Params params );
 
     /**
      * Executes the current use case.
      *
-     * @param UseCaseSubscriber The guy who will be listen to the observable build with {@link #buildUseCaseObservable()}.
+     * @param observer {@link DisposableObserver} which will be listening to the observable build
+     * by {@link #buildUseCaseObservable(Params)} ()} method.
+     * @param params Parameters (Optional) used to build/execute this use case.
      */
     @SuppressWarnings("unchecked")
-    public void execute( Subscriber UseCaseSubscriber ) {
+    public void execute( DisposableObserver<T> observer, Params params ) {
 
-        this.subscription = this.buildUseCaseObservable()
-                .subscribeOn( Schedulers.from( threadExecutor ) )
-                .observeOn( postExecutionThread.getScheduler() )
-                .subscribe( UseCaseSubscriber );
+        Preconditions.checkNotNull( observer );
+
+        final Observable<T> observable = this.buildUseCaseObservable(params)
+                .subscribeOn(io.reactivex.schedulers.Schedulers.from(threadExecutor))
+                .observeOn(postExecutionThread.getScheduler());
+        addDisposable(observable.subscribeWith(observer));
 
     }
 
     /**
-     * Unsubscribes from current {@link rx.Subscription}.
+     * Dispose from current {@link CompositeDisposable}.
      */
-    public void unsubscribe() {
+    public void dispose() {
 
-        if( !subscription.isUnsubscribed() ) {
+        if( !disposables.isDisposed() ) {
 
-            subscription.unsubscribe();
+            disposables.dispose();
 
         }
+
+    }
+
+    /**
+     * Dispose from current {@link CompositeDisposable}.
+     */
+    private void addDisposable( Disposable disposable ) {
+
+        Preconditions.checkNotNull( disposable );
+        Preconditions.checkNotNull( disposables );
+        disposables.add( disposable );
 
     }
 

@@ -51,6 +51,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.interactor.GetMediaItemList;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemListPresenter;
@@ -65,7 +66,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -75,7 +75,7 @@ import java.util.TreeMap;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -94,7 +94,8 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     private static final int BACKGROUND_UPDATE_DELAY = 300;
 
-    private Map<String, Object> parameters;
+    private Media media;
+    private boolean tv;
 
     private final Handler mHandler = new Handler();
     private Drawable mDefaultBackground;
@@ -123,71 +124,12 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     }
 
-    public static MediaItemListFragment newInstance(Bundle args ) {
+    public static MediaItemListFragment newInstance( Bundle args ) {
 
         MediaItemListFragment mediaItemListFragment = new MediaItemListFragment();
         mediaItemListFragment.setArguments( args );
 
         return mediaItemListFragment;
-    }
-
-    public static class Builder {
-
-        private final Media media;
-        private boolean tv;
-
-        public Builder( Media media ) {
-            this.media = media;
-        }
-
-        public Builder tv( boolean tv ) {
-
-            this.tv = tv;
-
-            return this;
-        }
-
-        public Map<String, Object> build() {
-
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put( MEDIA_KEY, media );
-
-            if( tv ) {
-
-                parameters.put( TV_KEY, tv );
-
-            }
-
-            return parameters;
-        }
-
-        public Bundle toBundle() {
-
-            Bundle args = new Bundle();
-            args.putString( MEDIA_KEY, media.name() );
-
-            if( tv ) {
-
-                args.putBoolean( TV_KEY, tv );
-
-            }
-
-            return args;
-        }
-
-        public static Map<String, Object> fromBundle( Bundle args ) {
-
-            Builder builder = new Builder( Media.valueOf( args.getString( MEDIA_KEY ) ) );
-
-            if( args.containsKey( TV_KEY ) ) {
-
-                builder.tv( args.getBoolean( TV_KEY ) );
-
-            }
-
-            return builder.build();
-        }
-
     }
 
     @Override
@@ -207,7 +149,8 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        parameters = Builder.fromBundle( getArguments() );
+        media = Media.valueOf( getArguments().getString( MEDIA_KEY ) );
+        tv = getArguments().getBoolean( TV_KEY );
 
         setupUI();
 
@@ -278,7 +221,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        switch( (Media) parameters.get( MEDIA_KEY ) ) {
+        switch( media ) {
 
             case PROGRAM :
 
@@ -367,7 +310,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
         if( null != mediaItemModelCollection ) {
             Log.d( TAG, "renderMediaItemList : mediaItemModelCollection is not null" );
 
-            Observable.from( mediaItemModelCollection )
+            Observable.fromIterable( mediaItemModelCollection )
                     .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, getActivity() ) )
                     .toList()
                     .subscribe( items -> this.mediaItems = items );
@@ -495,7 +438,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     private void loadMediaItemList() {
         Log.d( TAG, "loadMediaItemList : enter" );
 
-        this.mediaItemListPresenter.initialize( parameters );
+        this.mediaItemListPresenter.initialize( media, null, tv );
 
         Log.d( TAG, "loadMediaItemList : exit" );
     }

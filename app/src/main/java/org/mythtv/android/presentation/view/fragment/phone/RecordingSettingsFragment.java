@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.SettingsKeys;
+import org.mythtv.android.domain.interactor.GetMediaItemList;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemListPresenter;
@@ -39,11 +40,10 @@ import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.phone.TroubleshootClickListener;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -203,7 +203,7 @@ public class RecordingSettingsFragment extends AbstractBasePreferenceFragment im
     public void renderMediaItemList( Collection<MediaItemModel> mediaItemModelCollection ) {
         Log.d( TAG, "renderMediaItemList : enter" );
 
-        Observable.from( mediaItemModelCollection )
+        Observable.fromIterable( mediaItemModelCollection )
                 .map( MediaItemModel::recordingGroup )
                 .distinct()
                 .toList()
@@ -255,7 +255,7 @@ public class RecordingSettingsFragment extends AbstractBasePreferenceFragment im
     private void loadMediaItemList() {
         Log.d( TAG, "loadMediaItemList : enter" );
 
-        this.mediaItemListPresenter.initialize( Collections.singletonMap( MEDIA_KEY, Media.PROGRAM ) );
+        this.mediaItemListPresenter.initialize( Media.PROGRAM, null, false );
 
         Log.d( TAG, "loadMediaItemList : exit" );
     }

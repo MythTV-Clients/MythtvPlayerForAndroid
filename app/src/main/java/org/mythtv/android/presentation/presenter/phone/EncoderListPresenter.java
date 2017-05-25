@@ -24,9 +24,11 @@ import android.util.Log;
 import org.mythtv.android.domain.Encoder;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
-import org.mythtv.android.domain.interactor.DefaultSubscriber;
+import org.mythtv.android.domain.interactor.DefaultObserver;
+import org.mythtv.android.domain.interactor.GetEncoderList;
 import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
+import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.mapper.EncoderModelDataMapper;
 import org.mythtv.android.presentation.model.EncoderModel;
 import org.mythtv.android.presentation.view.EncoderListView;
@@ -45,17 +47,18 @@ import javax.inject.Named;
  *
  * Created on 8/31/15.
  */
-public class EncoderListPresenter extends DefaultSubscriber<List<Encoder>> implements Presenter {
+@PerActivity
+public class EncoderListPresenter extends DefaultObserver<List<Encoder>> implements Presenter {
 
     private static final String TAG = EncoderListPresenter.class.getSimpleName();
 
     private EncoderListView viewListView;
 
-    private final UseCase getEncoderListUseCase;
+    private final GetEncoderList getEncoderListUseCase;
     private final EncoderModelDataMapper encoderModelDataMapper;
 
     @Inject
-    public EncoderListPresenter( @Named( "encoderList" ) UseCase getEncoderListUseCase, EncoderModelDataMapper encoderModelDataMapper ) {
+    public EncoderListPresenter( GetEncoderList getEncoderListUseCase, EncoderModelDataMapper encoderModelDataMapper ) {
 
         this.getEncoderListUseCase = getEncoderListUseCase;
         this.encoderModelDataMapper = encoderModelDataMapper;
@@ -68,22 +71,16 @@ public class EncoderListPresenter extends DefaultSubscriber<List<Encoder>> imple
 
     @Override
     public void resume() {
-        Log.v( TAG, "resume : enter" );
 
-        Log.v( TAG, "resume : exit" );
     }
 
     @Override
     public void pause() {
-        Log.v( TAG, "pause : enter" );
 
-        Log.v( TAG, "pause : exit" );
     }
 
     @Override
     public void destroy() {
-
-        this.getEncoderListUseCase.unsubscribe();
 
     }
 
@@ -139,14 +136,14 @@ public class EncoderListPresenter extends DefaultSubscriber<List<Encoder>> imple
 
     private void getEncoderList() {
 
-        this.getEncoderListUseCase.execute( new EncoderListSubscriber() );
+        this.getEncoderListUseCase.execute( new EncoderListObserver(), null );
 
     }
 
-    private final class EncoderListSubscriber extends DefaultSubscriber<List<Encoder>> {
+    private final class EncoderListObserver extends DefaultObserver<List<Encoder>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             EncoderListPresenter.this.hideViewLoading();
         }
 

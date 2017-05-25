@@ -14,8 +14,10 @@ import org.mythtv.android.data.entity.TitleInfoEntity;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subscribers.TestSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyBoolean;
@@ -49,12 +51,12 @@ public class DvrApiTest extends TestData {
         when( api.titleInfoEntityList() ).thenReturn( setupTitleInfos() );
 
         Observable<List<TitleInfoEntity>> observable = api.titleInfoEntityList();
-        TestSubscriber<List<TitleInfoEntity>> testSubscriber = new TestSubscriber<>();
+        TestObserver<List<TitleInfoEntity>> testSubscriber = new TestObserver<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -67,13 +69,13 @@ public class DvrApiTest extends TestData {
 
         when( api.recordedProgramEntityList( anyBoolean(), anyInt(), anyInt(), anyString(), anyString(), anyString() ) ).thenReturn( setupRecordedPrograms() );
 
-        Observable<List<ProgramEntity>> observable = api.recordedProgramEntityList( true, 1, 1, null, null, null );
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        Flowable<ProgramEntity> observable = api.recordedProgramEntityList( true, 1, 1, null, null, null );
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -87,12 +89,12 @@ public class DvrApiTest extends TestData {
         when( api.recordedProgramById( anyInt() ) ).thenReturn( setupRecordedProgram() );
 
         Observable<ProgramEntity> observable = api.recordedProgramById( 1 );
-        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
+        TestObserver<ProgramEntity> testSubscriber = new TestObserver<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents() )
+        assertThat( testSubscriber.values() )
                 .isNotNull();
 
         verify( api, times( 1 ) ).recordedProgramById( anyInt() );
@@ -104,13 +106,13 @@ public class DvrApiTest extends TestData {
 
         when( api.upcomingProgramEntityList( anyInt(), anyInt(), anyBoolean(), anyInt(), anyInt() ) ).thenReturn( setupRecordedPrograms() );
 
-        Observable<List<ProgramEntity>> observable = api.upcomingProgramEntityList( 1, 1, false, -1, -1 );
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
+        Flowable<ProgramEntity> observable = api.upcomingProgramEntityList( 1, 1, false, -1, -1 );
+        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -123,13 +125,13 @@ public class DvrApiTest extends TestData {
 
         when( api.encoderEntityList() ).thenReturn( setupEncoders() );
 
-        Observable<List<EncoderEntity>> observable = api.encoderEntityList();
-        TestSubscriber<List<EncoderEntity>> testSubscriber = new TestSubscriber<>();
+        Flowable<EncoderEntity> observable = api.encoderEntityList();
+        TestSubscriber<EncoderEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -142,9 +144,9 @@ public class DvrApiTest extends TestData {
         return Observable.just( Collections.singletonList( createFakeTitleInfoEntity() ) );
     }
 
-    private Observable<List<ProgramEntity>> setupRecordedPrograms() {
+    private Flowable<ProgramEntity> setupRecordedPrograms() {
 
-        return Observable.just( Collections.singletonList( createFakeProgramEntity() ) );
+        return Flowable.just( createFakeProgramEntity() );
     }
 
     private Observable<ProgramEntity> setupRecordedProgram() {
@@ -152,9 +154,9 @@ public class DvrApiTest extends TestData {
         return Observable.just( createFakeProgramEntity() );
     }
 
-    private Observable<List<EncoderEntity>> setupEncoders() {
+    private Flowable<EncoderEntity> setupEncoders() {
 
-        return Observable.just( Collections.singletonList( createFakeEncoderEntity() ) );
+        return Flowable.just( createFakeEncoderEntity() );
     }
 
 }

@@ -40,7 +40,6 @@ import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
-import org.mythtv.android.presentation.internal.di.modules.MediaItemModule;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.fragment.phone.CastNotReadyDialogFragment;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemDetailsFragment;
@@ -223,7 +222,7 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
                 }
 
-                fragment = MediaItemDetailsFragment.newInstance();
+                fragment = MediaItemDetailsFragment.newInstance( this.media, this.id );
                 addFragment( R.id.fl_fragment, fragment );
 
             }
@@ -244,7 +243,6 @@ public class MediaItemDetailsActivity extends AbstractBasePhoneActivity implemen
 
         this.mediaComponent = DaggerMediaComponent.builder()
                 .applicationComponent( getApplicationComponent() )
-                .mediaItemModule( new MediaItemModule( this.id, this.media ) )
                 .build();
 
         Log.d( TAG, "initializeInjector : exit" );

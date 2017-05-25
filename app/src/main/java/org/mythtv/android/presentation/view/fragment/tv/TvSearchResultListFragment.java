@@ -53,7 +53,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -238,7 +238,7 @@ public class TvSearchResultListFragment extends AbstractBaseSearchFragment imple
 
             mRowsAdapter.clear();
 
-            Observable.from( mediaItemModelCollection )
+            Observable.fromIterable( mediaItemModelCollection )
                     .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, getActivity() ) )
                     .toList()
                     .subscribe( items -> this.mediaItems = items );

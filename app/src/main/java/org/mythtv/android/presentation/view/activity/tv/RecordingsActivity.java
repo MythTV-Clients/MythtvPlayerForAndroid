@@ -30,6 +30,8 @@ import org.mythtv.android.presentation.internal.di.components.DaggerMediaCompone
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.view.fragment.tv.MediaItemListFragment;
 
+import static org.mythtv.android.domain.interactor.GetMediaItemList.MEDIA_KEY;
+
 /**
  *
  *
@@ -67,8 +69,10 @@ public class RecordingsActivity extends AbstractBaseTvActivity implements HasCom
     private void initializeActivity() {
         Log.d( TAG, "initializeActivity : enter" );
 
-        MediaItemListFragment.Builder recordingsParameters = new MediaItemListFragment.Builder( Media.PROGRAM );
-        MediaItemListFragment mediaItemListFragment = MediaItemListFragment.newInstance( recordingsParameters.toBundle() );
+        Bundle args = new Bundle();
+        args.putString( MEDIA_KEY, Media.PROGRAM.name() );
+
+        MediaItemListFragment mediaItemListFragment = MediaItemListFragment.newInstance( args );
 
         addFragment( R.id.fl_fragment, mediaItemListFragment);
 

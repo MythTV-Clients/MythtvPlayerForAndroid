@@ -154,6 +154,7 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'META-INF/rxjava.properties'
 //        exclude 'changelog.txt'
 
     }
@@ -214,8 +215,9 @@ dependencies {
     implementation "com.android.support:cardview-v7:${project.ext.supportVersion}"
     implementation "com.android.support:recyclerview-v7:${project.ext.supportVersion}"
     implementation "com.android.support:palette-v7:${project.ext.supportVersion}"
-    implementation "io.reactivex:rxjava:${project.ext.rxJavaVersion}"
-    implementation "io.reactivex:rxandroid:${project.ext.rxAndroidVersion}"
+    implementation "io.reactivex.rxjava2:rxjava:${project.ext.rxJavaVersion}"
+    implementation "io.reactivex.rxjava2:rxandroid:${project.ext.rxAndroidVersion}"
+    implementation "com.fernandocejas:arrow:${project.ext.arrowVersion}"
     implementation "com.android.support:support-annotations:${project.ext.supportVersion}"
     implementation "com.android.support:mediarouter-v7:${project.ext.supportVersion}"
     implementation "com.google.android.gms:play-services-cast-framework:${project.ext.playServicesVersion}"
@@ -257,10 +259,8 @@ dependencies {
 
     // Espresso UI Testing dependencies.
     androidTestCompile "com.android.support.test.espresso:espresso-core:${project.ext.testingSupportEspessoVersion}"
-
-    //    androidTestCompile "com.android.support.test.espresso:espresso-contrib:${project.ext.espressoVersion}"
-
-    //    androidTestCompile "com.android.support.test.espresso:espresso-intents:${project.ext.espressoVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-contrib:${project.ext.espressoVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:${project.ext.espressoVersion}"
 
     // UI Testing dependencies.
     androidTestCompile "com.android.support.test.uiautomator:uiautomator-v18:${project.ext.testingSupportuiVersion}"

@@ -18,12 +18,17 @@
 
 package org.mythtv.android.domain.interactor;
 
+import com.fernandocejas.arrow.checks.Preconditions;
+
 import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.MediaItemRepository;
 
-import rx.Observable;
+import javax.inject.Inject;
+
+import io.reactivex.Observable;
 
 /**
  *
@@ -33,25 +38,42 @@ import rx.Observable;
  *
  * Created on 4/24/17.
  */
-public class GetMediaItemDetails extends UseCase {
+public class GetMediaItemDetails extends UseCase<MediaItem, GetMediaItemDetails.Params> {
 
-    private final Media media;
-    private final int id;
     private final MediaItemRepository mediaItemRepository;
 
-    public GetMediaItemDetails( final Media media, final int id, final MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    @Inject
+    public GetMediaItemDetails( final MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.media = media;
-        this.id = id;
         this.mediaItemRepository = mediaItemRepository;
 
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
+    protected Observable<MediaItem> buildUseCaseObservable( Params params ) {
+        Preconditions.checkNotNull( params );
 
-        return this.mediaItemRepository.mediaItem( this.media, this.id );
+        return this.mediaItemRepository.mediaItem( params.media, params.id );
+    }
+
+    public static final class Params {
+
+        private final Media media;
+        private final int id;
+
+        private Params( final Media media, final int id ) {
+
+            this.media = media;
+            this.id = id;
+
+        }
+
+        public static Params forMediaItem( final Media media, final int id ) {
+
+            return new Params( media, id );
+        }
+
     }
 
 }

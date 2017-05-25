@@ -9,9 +9,6 @@ import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.MediaItemRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -40,16 +37,14 @@ public class PostUpdatedWatchedStatusTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks( this );
-        postUpdatedWatchedStatus = new PostUpdatedWatchedStatus( FAKE_MEDIA, FAKE_ID, mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
+        postUpdatedWatchedStatus = new PostUpdatedWatchedStatus( mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
 
     }
 
     @Test
     public void testPostUpdatedRecordedWatchedStatusDynamicUseCaseObservableHappyCase() {
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put( "WATCHED", FAKE_WATCHED );
-        postUpdatedWatchedStatus.buildUseCaseObservable( parameters );
+        postUpdatedWatchedStatus.buildUseCaseObservable(PostUpdatedWatchedStatus.Params.forMediaItem( FAKE_MEDIA, FAKE_ID, FAKE_WATCHED ));
 
         verify( mockMediaItemRepository ).updateWatchedStatus( FAKE_MEDIA, FAKE_ID, FAKE_WATCHED );
         verifyNoMoreInteractions( mockMediaItemRepository );

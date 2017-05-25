@@ -18,14 +18,17 @@
 
 package org.mythtv.android.domain.interactor;
 
+import com.fernandocejas.arrow.checks.Preconditions;
+
 import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.MediaItemRepository;
 
-import java.util.Map;
+import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -35,28 +38,44 @@ import rx.Observable;
  *
  * Created on 4/9/16.
  */
-public class PostUpdatedWatchedStatus extends DynamicUseCase {
+public class PostUpdatedWatchedStatus extends UseCase<MediaItem, PostUpdatedWatchedStatus.Params> {
 
     private final MediaItemRepository mediaItemRepository;
 
-    private final Media media;
-    private final int id;
-
-    public PostUpdatedWatchedStatus( final Media media, final int id, final MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    @Inject
+    public PostUpdatedWatchedStatus( final MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.media = media;
-        this.id = id;
         this.mediaItemRepository = mediaItemRepository;
 
     }
 
     @Override
-    protected Observable buildUseCaseObservable( Map parameters ) {
+    protected Observable<MediaItem> buildUseCaseObservable( Params params ) {
+        Preconditions.checkNotNull( params );
 
-        final boolean watched = (Boolean) parameters.get( "WATCHED" );
+        return mediaItemRepository.updateWatchedStatus( params.media, params.id, params.watched );
+    }
 
-        return mediaItemRepository.updateWatchedStatus( this.media, this.id, watched );
+    public static final class Params {
+
+        private final Media media;
+        private final int id;
+        private final boolean watched;
+
+        private Params( final Media media, final int id, final boolean watched ) {
+
+            this.media = media;
+            this.id = id;
+            this.watched = watched;
+
+        }
+
+        public static Params forMediaItem( final Media media, final int id, final boolean watched ) {
+
+            return new Params( media, id, watched );
+        }
+
     }
 
 }

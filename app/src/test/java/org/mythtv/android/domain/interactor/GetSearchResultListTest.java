@@ -14,8 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -48,37 +48,11 @@ public class GetSearchResultListTest extends TestData {
 
     }
 
-    @Test( expected = UnsupportedOperationException.class )
-    public void givenGetSearchResultList_whenNoParameters_verifyUnsupportedOperationExceptionThrown() {
-
-        GetSearchResultList useCase = new GetSearchResultList( mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
-        useCase.buildUseCaseObservable();
-
-        verifyZeroInteractions( mockMediaItemRepository );
-        verifyNoMoreInteractions( mockMediaItemRepository );
-        verifyZeroInteractions( mockThreadExecutor );
-        verifyZeroInteractions( mockPostExecutionThread );
-
-    }
-
-    @Test( expected = IllegalArgumentException.class )
+    @Test( expected = NullPointerException.class )
     public void givenGetSearchResultList_whenNullParameters_verifyIllegalArgumentExceptionThrown() {
 
         GetSearchResultList useCase = new GetSearchResultList( mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
         useCase.buildUseCaseObservable( null );
-
-        verifyZeroInteractions( mockMediaItemRepository );
-        verifyNoMoreInteractions( mockMediaItemRepository );
-        verifyZeroInteractions( mockThreadExecutor );
-        verifyZeroInteractions( mockPostExecutionThread );
-
-    }
-
-    @Test( expected = IllegalArgumentException.class )
-    public void givenGetSearchResultList_whenEmptyParameters_verifyIllegalArgumentExceptionThrown() {
-
-        GetSearchResultList useCase = new GetSearchResultList( mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
-        useCase.buildUseCaseObservable( Collections.emptyMap() );
 
         verifyZeroInteractions( mockMediaItemRepository );
         verifyNoMoreInteractions( mockMediaItemRepository );
@@ -95,11 +69,11 @@ public class GetSearchResultListTest extends TestData {
         Map<String, String> parameters = Collections.singletonMap( "SEARCH_TEXT", FAKE_TITLE );
 
         GetSearchResultList useCase = new GetSearchResultList( mockMediaItemRepository, mockThreadExecutor, mockPostExecutionThread );
-        Observable<List<MediaItem>> observable = useCase.buildUseCaseObservable( parameters );
-        TestSubscriber<List<MediaItem>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        Observable<List<MediaItem>> observable = useCase.buildUseCaseObservable( GetSearchResultList.Params.forSearch( FAKE_TITLE ) );
+        TestObserver<List<MediaItem>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 

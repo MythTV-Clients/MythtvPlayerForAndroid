@@ -22,12 +22,14 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
-import org.mythtv.android.domain.interactor.DefaultSubscriber;
-import org.mythtv.android.domain.interactor.DynamicUseCase;
+import org.mythtv.android.domain.interactor.DefaultObserver;
+import org.mythtv.android.domain.interactor.GetMediaItemList;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
+import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.mapper.MediaItemModelDataMapper;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.MediaItemListView;
@@ -37,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
@@ -47,17 +48,22 @@ import javax.inject.Named;
  *
  * Created on 9/15/16.
  */
-public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
+@PerActivity
+public class MediaItemListPresenter extends DefaultObserver<List<MediaItem>> implements Presenter {
 
     private static final String TAG = MediaItemListPresenter.class.getSimpleName();
 
     private MediaItemListView viewListView;
 
-    private final DynamicUseCase getMediaItemListUseCase;
+    private final GetMediaItemList getMediaItemListUseCase;
     private final MediaItemModelDataMapper mediaItemModelDataMapper;
 
+    private Media media;
+    private String titleRegEx;
+    private boolean tv;
+
     @Inject
-    public MediaItemListPresenter( @Named( "mediaItemList" ) DynamicUseCase getMediaItemListUseCase, MediaItemModelDataMapper mediaItemModelDataMapper) {
+    public MediaItemListPresenter( GetMediaItemList getMediaItemListUseCase, MediaItemModelDataMapper mediaItemModelDataMapper) {
 
         this.getMediaItemListUseCase = getMediaItemListUseCase;
         this.mediaItemModelDataMapper = mediaItemModelDataMapper;
@@ -92,20 +98,24 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
     /**
      * Initializes the presenter by start retrieving the media item list.
      */
-    public void initialize( Map<String, Object> parameters ) {
+    public void initialize( final Media media, final String titleRegEx, final boolean tv ) {
 
-        this.loadMediaItemList( parameters );
+        this.media = media;
+        this.titleRegEx = titleRegEx;
+        this.tv = tv;
+
+        this.loadMediaItemList();
 
     }
 
     /**
      * Loads media items.
      */
-    private void loadMediaItemList( Map<String, Object> parameters ) {
+    private void loadMediaItemList() {
 
         this.hideViewRetry();
         this.showViewLoading();
-        this.getMediaItemList( parameters );
+        this.getMediaItemList();
 
     }
 
@@ -146,16 +156,16 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
 
     }
 
-    private void getMediaItemList( Map<String, Object> parameters ) {
+    private void getMediaItemList() {
 
-        this.getMediaItemListUseCase.execute( new MediaItemListSubscriber(), parameters );
+        this.getMediaItemListUseCase.execute( new MediaItemListObserver(), GetMediaItemList.Params.forMedia( this.media, this.titleRegEx, this.tv ) );
 
     }
 
-    private final class MediaItemListSubscriber extends DefaultSubscriber<List<MediaItem>> {
+    private final class MediaItemListObserver extends DefaultObserver<List<MediaItem>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             MediaItemListPresenter.this.hideViewLoading();
         }
 

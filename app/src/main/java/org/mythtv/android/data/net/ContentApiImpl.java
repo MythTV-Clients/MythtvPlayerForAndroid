@@ -33,9 +33,8 @@ import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.util.List;
 
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  *
@@ -68,13 +67,9 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
     }
 
     @Override
-    public Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename ) {
+    public Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList(final String filename ) {
 
-        return Observable.create( new Observable.OnSubscribe<List<LiveStreamInfoEntity>>() {
-
-            @Override
-            public void call( Subscriber<? super List<LiveStreamInfoEntity>> subscriber ) {
-                Log.d(TAG, "LiveStreamInfoEntityList.call : enter");
+        return Observable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
                     Log.d(TAG, "LiveStreamInfoEntityList.call : network is connected");
@@ -85,32 +80,31 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
                         if( null == responseLiveStreamInfoEntities ) {
                             Log.d( TAG, "LiveStreamInfoEntityList.call : failed to retrieve LiveStream info entities" );
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
                             Log.d( TAG, "LiveStreamInfoEntityList.call : retrieved LiveStream info entities" );
 
-                            subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( responseLiveStreamInfoEntities) );
-                            subscriber.onCompleted();
+                            emitter.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntityCollection( responseLiveStreamInfoEntities) );
+                            emitter.onComplete();
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "LiveStreamInfoEntityList.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "LiveStreamInfoEntityList.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
 
                 Log.d( TAG, "LiveStreamInfoEntityList.call : exit" );
-            }
 
         });
 
@@ -119,11 +113,7 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
     @Override
     public Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id ) {
 
-        return Observable.create( new Observable.OnSubscribe<LiveStreamInfoEntity>() {
-
-            @Override
-            public void call( Subscriber<? super LiveStreamInfoEntity> subscriber ) {
-                Log.d(TAG, "LiveStreamInfoEntity.call : enter");
+        return Observable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
                     Log.d(TAG, "LiveStreamInfoEntity.call : network is connected");
@@ -138,13 +128,13 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
                                 if( null == responseAddRecordingLiveStreamInfo ) {
                                     Log.d( TAG, "LiveStreamInfoEntity.call : failed to add recording LiveStream" );
 
-                                    subscriber.onError( new NetworkConnectionException() );
+                                    emitter.onError( new NetworkConnectionException() );
 
                                 } else {
                                     Log.d( TAG, "LiveStreamInfoEntity.call : added recording LiveStream info" );
 
-                                    subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseAddRecordingLiveStreamInfo) );
-                                    subscriber.onCompleted();
+                                    emitter.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseAddRecordingLiveStreamInfo) );
+                                    emitter.onComplete();
 
                                 }
 
@@ -156,13 +146,13 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
                                 if( null == responseAddVideoLiveStreamInfo ) {
                                     Log.d( TAG, "LiveStreamInfoEntity.call : failed to add video LiveStream" );
 
-                                    subscriber.onError( new NetworkConnectionException() );
+                                    emitter.onError( new NetworkConnectionException() );
 
                                 } else {
                                     Log.d( TAG, "LiveStreamInfoEntity.call : added video LiveStream info" );
 
-                                    subscriber.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseAddVideoLiveStreamInfo) );
-                                    subscriber.onCompleted();
+                                    emitter.onNext( liveStreamInfoEntityJsonMapper.transformLiveStreamInfoEntity( responseAddVideoLiveStreamInfo) );
+                                    emitter.onComplete();
 
                                 }
 
@@ -171,7 +161,7 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
                             default :
                                 Log.d( TAG, "LiveStreamInfoEntity.call : media type not supported" );
 
-                                subscriber.onError( new NetworkConnectionException() );
+                                emitter.onError( new NetworkConnectionException() );
 
                                 break;
                         }
@@ -179,19 +169,16 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
                     } catch( Exception e ) {
                         Log.e( TAG, "LiveStreamInfoEntity.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "LiveStreamInfoEntity.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
-
-                Log.d( TAG, "LiveStreamInfoEntity.call : exit" );
-            }
 
         });
 
@@ -200,13 +187,9 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
     @Override
     public Observable<Boolean> removeLiveStream( final int id ) {
 
-        return Observable.create( new Observable.OnSubscribe<Boolean>() {
+        return Observable.create( emitter -> {
 
-            @Override
-            public void call( Subscriber<? super Boolean> subscriber ) {
-                Log.d(TAG, "LiveStreamInfoEntity.call : enter");
-
-                if( isThereInternetConnection() ) {
+                 if( isThereInternetConnection() ) {
                     Log.d(TAG, "LiveStreamInfoEntity.call : network is connected");
 
                     try {
@@ -215,32 +198,29 @@ public class ContentApiImpl extends BaseApi implements ContentApi {
                         if( null == responseRemoveLiveStreamInfoEntity ) {
                             Log.d( TAG, "LiveStreamInfoEntity.call : failed to remove LiveStream info entity" );
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
                             Log.d( TAG, "LiveStreamInfoEntity.call : removed LiveStream info entity" );
 
-                            subscriber.onNext( booleanJsonMapper.transformBoolean( responseRemoveLiveStreamInfoEntity ) );
-                            subscriber.onCompleted();
+                            emitter.onNext( booleanJsonMapper.transformBoolean( responseRemoveLiveStreamInfoEntity ) );
+                            emitter.onComplete();
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "LiveStreamInfoEntity.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "LiveStreamInfoEntityL.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                     emitter.onError( new NetworkConnectionException() );
 
                 }
-
-                Log.d( TAG, "LiveStreamInfoEntity.call : exit" );
-            }
 
         });
 

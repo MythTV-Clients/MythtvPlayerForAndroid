@@ -18,15 +18,18 @@
 
 package org.mythtv.android.domain.interactor;
 
+import com.fernandocejas.arrow.checks.Preconditions;
+
+import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.MediaItemRepository;
 
-import java.util.Map;
+import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -36,9 +39,7 @@ import rx.Observable;
  *
  * Created on 10/12/15.
  */
-public class GetSearchResultList extends DynamicUseCase {
-
-    public static final String SEARCH_TEXT_KEY = "SEARCH_TEXT";
+public class GetSearchResultList extends UseCase<List<MediaItem>, GetSearchResultList.Params> {
 
     private final MediaItemRepository mediaItemRepository;
 
@@ -51,16 +52,27 @@ public class GetSearchResultList extends DynamicUseCase {
     }
 
     @Override
-    protected Observable buildUseCaseObservable( final Map parameters ) {
+    protected Observable<List<MediaItem>> buildUseCaseObservable( Params params ) {
+        Preconditions.checkNotNull( params );
 
-        if( null == parameters || !parameters.containsKey( SEARCH_TEXT_KEY ) ) {
+        return this.mediaItemRepository.search( params.searchText );
+    }
 
-            throw new IllegalArgumentException( "Key [" + SEARCH_TEXT_KEY + "] is required!" );
+    public static final class Params {
+
+        private final String searchText;
+
+        private Params( final String searchText ) {
+
+            this.searchText = searchText;
+
         }
 
-        final String searchText = (String) parameters.get( SEARCH_TEXT_KEY );
+        public static Params forSearch( final String searchText ) {
 
-        return this.mediaItemRepository.search( searchText );
+            return new Params( searchText );
+        }
+
     }
 
 }

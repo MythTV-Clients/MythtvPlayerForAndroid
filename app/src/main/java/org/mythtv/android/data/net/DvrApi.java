@@ -24,7 +24,9 @@ import org.mythtv.android.data.entity.TitleInfoEntity;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  *
@@ -59,13 +61,13 @@ public interface DvrApi {
 
     Observable<List<TitleInfoEntity>> titleInfoEntityList();
 
-    Observable<List<ProgramEntity>> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup );
+    Flowable<ProgramEntity> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup );
 
     Observable<ProgramEntity> recordedProgramById( final int recordedId );
 
-    Observable<List<ProgramEntity>> upcomingProgramEntityList( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus );
+    Flowable<ProgramEntity> upcomingProgramEntityList( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus );
 
-    Observable<List<EncoderEntity>> encoderEntityList();
+    Flowable<EncoderEntity> encoderEntityList();
 
     /**
      * Updates Recording Watched status on the backend

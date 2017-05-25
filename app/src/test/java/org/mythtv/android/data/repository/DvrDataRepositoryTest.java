@@ -16,7 +16,7 @@ import org.mythtv.android.data.repository.datasource.DvrDataStoreFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;

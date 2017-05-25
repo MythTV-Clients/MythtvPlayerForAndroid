@@ -180,8 +180,9 @@ public class ApplicationModule {
 
         return new Builder<MediaItemEntity>( "MythtvPlayerCache", 1 )
                 .enableLog()
-                .useReferenceInRam( 5242880, mediaItemEntity -> gson.toJson( mediaItemEntity ).length() )
-                .useSerializerInDisk( 10485760, true, jsonSerializer, context )
+                .useReferenceInRam( 10485760, mediaItemEntity -> gson.toJson( mediaItemEntity ).length() )
+//                .useSerializerInDisk( 10485760, true, jsonSerializer, context )
+                .noDisk()
                 .build();
 
     }

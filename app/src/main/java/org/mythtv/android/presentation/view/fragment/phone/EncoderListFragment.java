@@ -21,7 +21,6 @@ package org.mythtv.android.presentation.view.fragment.phone;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +34,7 @@ import org.mythtv.android.presentation.view.EncoderListView;
 import org.mythtv.android.presentation.view.activity.phone.TroubleshootClickListener;
 import org.mythtv.android.presentation.view.adapter.phone.EncodersAdapter;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
+import org.mythtv.android.presentation.view.component.EmptyRecyclerView;
 import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import java.util.ArrayList;
@@ -59,14 +59,17 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     private static final String TAG = EncoderListFragment.class.getSimpleName();
 
     @Inject
-    EncoderListPresenter encoderListPresenter;
+    EncoderListPresenter presenter;
 
-    @BindView( R.id.rv_encoders )
-    RecyclerView rv_encoders;
+    @BindView( R.id.rv_items )
+    EmptyRecyclerView rv_items;
+
+    @BindView( R.id.empty_list_view)
+    View emptyView;
 
     private Unbinder unbinder;
 
-    private EncodersAdapter encodersAdapter;
+    private EncodersAdapter adapter;
 
     private NotifyListener notifyListener;
     private TroubleshootClickListener troubleshootClickListener;
@@ -100,7 +103,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_phone_encoder_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_empty_item_list, container, false );
         ButterKnife.bind( this, fragmentView );
         unbinder = ButterKnife.bind( this, fragmentView );
 
@@ -116,7 +119,6 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         setupUI();
 
         this.initialize();
-        this.loadEncoderList();
 
         Log.d( TAG, "onActivityCreated : exit" );
     }
@@ -126,7 +128,8 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-        this.encoderListPresenter.resume();
+        this.presenter.resume();
+        this.loadItems();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -136,7 +139,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "onPause : enter" );
         super.onPause();
 
-        this.encoderListPresenter.pause();
+        this.presenter.pause();
 
         Log.d( TAG, "onPause : exit" );
     }
@@ -146,7 +149,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "onDestroy : enter" );
         super.onDestroy();
 
-        this.encoderListPresenter.destroy();
+        this.presenter.destroy();
 
         Log.d( TAG, "onDestroy : exit" );
     }
@@ -165,8 +168,7 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( MediaComponent.class ).inject( this );
-        this.encoderListPresenter.setView( this );
-//        this.encoderListPresenter.initialize( contentType );
+        this.presenter.setView( this );
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -174,10 +176,11 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     private void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
-        this.rv_encoders.setLayoutManager( new LayoutManager( getActivity() ) );
+        this.rv_items.setLayoutManager( new LayoutManager( getActivity() ) );
 
-        this.encodersAdapter = new EncodersAdapter( getActivity(), new ArrayList<>() );
-        this.rv_encoders.setAdapter( encodersAdapter );
+        this.adapter = new EncodersAdapter( getActivity(), new ArrayList<>() );
+        this.rv_items.setAdapter( adapter );
+        this.rv_items.setEmptyView( emptyView );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -186,7 +189,9 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        this.notifyListener.showLoading();
+        if( null != notifyListener ) {
+            this.notifyListener.showLoading();
+        }
 
         Log.d( TAG, "showLoading : exit" );
     }
@@ -195,7 +200,9 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
 
-        this.notifyListener.finishLoading();
+        if( null != notifyListener ) {
+            this.notifyListener.finishLoading();
+        }
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -217,18 +224,18 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     public void reload() {
 
         initialize();
-        loadEncoderList();
+        loadItems();
 
     }
 
     @Override
-    public void renderEncoderList( Collection<EncoderModel> encoderModelCollection ) {
+    public void renderEncoderList( Collection<EncoderModel> modelCollection ) {
         Log.d( TAG, "renderEncoderInfoList : enter" );
 
-        if( null != encoderModelCollection ) {
-            Log.d( TAG, "renderEncoderList : encoderModelCollection is not null, encoderModelCollection=" + encoderModelCollection );
+        if( null != modelCollection ) {
+            Log.d( TAG, "renderEncoderList : modelCollection is not null, modelCollection=" + modelCollection );
 
-            this.encodersAdapter.setEncodersCollection( encoderModelCollection );
+            this.adapter.setEncodersCollection( modelCollection );
 
         }
 
@@ -266,12 +273,12 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     /**
      * Loads all encoders.
      */
-    private void loadEncoderList() {
-        Log.d( TAG, "loadEncoderList : enter" );
+    private void loadItems() {
+        Log.d( TAG, "loadItems : enter" );
 
-        this.encoderListPresenter.initialize();
+        this.presenter.initialize();
 
-        Log.d( TAG, "loadEncoderList : exit" );
+        Log.d( TAG, "loadItems : exit" );
     }
 
 }

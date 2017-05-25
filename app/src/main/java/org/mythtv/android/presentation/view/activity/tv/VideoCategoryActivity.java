@@ -30,6 +30,8 @@ import org.mythtv.android.presentation.internal.di.components.DaggerMediaCompone
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.view.fragment.tv.MediaItemListFragment;
 
+import static org.mythtv.android.domain.interactor.GetMediaItemList.MEDIA_KEY;
+
 /**
  *
  *
@@ -120,43 +122,10 @@ public class VideoCategoryActivity extends AbstractBaseTvActivity implements Has
 
             }
 
-            switch( this.media ) {
+            Bundle args = new Bundle();
+            args.putString( MEDIA_KEY, this.media.name() );
 
-                case MOVIE :
-
-                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.MOVIE ).toBundle() ) );
-
-                    break;
-
-                case TELEVISION :
-
-                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.TELEVISION ).tv( true ).toBundle() ) );
-
-                    break;
-
-                case HOMEVIDEO :
-
-                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.HOMEVIDEO ).toBundle() ) );
-
-                    break;
-
-                case MUSICVIDEO :
-
-                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.MUSICVIDEO ).toBundle() ) );
-
-                    break;
-
-                case ADULT :
-
-                    addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( new MediaItemListFragment.Builder( Media.ADULT ).toBundle() ) );
-
-                    break;
-
-                default :
-
-                    break;
-
-            }
+            addFragment( R.id.fl_fragment, MediaItemListFragment.newInstance( args ) );
 
         } else {
             Log.d( TAG, "initializeActivity : savedInstanceState is not null" );

@@ -51,7 +51,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -124,6 +124,12 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
                 break;
 
             case UPCOMING :
+
+                imageUrl = getMasterBackendUrl() + mediaItemModel.getCoverartUrl("250" );
+
+                break;
+
+            case TELEVISION :
             case VIDEO :
             case MOVIE :
             case ADULT :
@@ -142,7 +148,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
             Glide
                     .with( context )
                     .load( imageUrl )
-                    .centerCrop()
+//                    .centerCrop()
                     .error( brokenMovie )
                     .crossFade()
                     .diskCacheStrategy( DiskCacheStrategy.RESULT )
@@ -215,7 +221,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
         this.validateMediaItemsCollection( mediaItemsCollection );
 
-        Observable.from( mediaItemsCollection )
+        Observable.fromIterable( mediaItemsCollection )
                 .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, context ) )
                 .toList()
                 .subscribe( items -> this.mediaItemsCollection = items );

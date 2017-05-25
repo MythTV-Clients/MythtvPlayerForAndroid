@@ -38,6 +38,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.SettingsKeys;
+import org.mythtv.android.domain.interactor.GetMediaItemList;
 import org.mythtv.android.presentation.internal.di.HasComponent;
 import org.mythtv.android.presentation.internal.di.components.DaggerMediaComponent;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
@@ -1214,7 +1215,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         private void loadMediaItemList() {
             Log.d( TAG, "loadMediaItemList : enter" );
 
-            this.mediaItemListPresenter.initialize( Collections.singletonMap( MEDIA_KEY, Media.PROGRAM ) );
+            this.mediaItemListPresenter.initialize( Media.PROGRAM, null, false );
 
             Log.d( TAG, "loadMediaItemList : exit" );
         }

@@ -25,20 +25,18 @@ import android.view.View;
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
-import org.mythtv.android.domain.interactor.DefaultSubscriber;
-import org.mythtv.android.domain.interactor.DynamicUseCase;
+import org.mythtv.android.domain.interactor.DefaultObserver;
+import org.mythtv.android.domain.interactor.GetSearchResultList;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
+import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.mapper.MediaItemModelDataMapper;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.MediaItemListView;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
@@ -48,18 +46,19 @@ import javax.inject.Named;
  *
  * Created on 10/14/15.
  */
-public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
+@PerActivity
+public class SearchResultListPresenter extends DefaultObserver<List<MediaItem>> implements Presenter {
 
     private static final String TAG = SearchResultListPresenter.class.getSimpleName();
 
     private String searchText;
     private MediaItemListView viewListView;
 
-    private final DynamicUseCase getSearchResultListUseCase;
+    private final GetSearchResultList getSearchResultListUseCase;
     private final MediaItemModelDataMapper mediaItemModelDataMapper;
 
     @Inject
-    public SearchResultListPresenter( @Named( "searchResultList" ) DynamicUseCase getSearchResultListUseCase, MediaItemModelDataMapper mediaItemModelDataMapper) {
+    public SearchResultListPresenter( GetSearchResultList getSearchResultListUseCase, MediaItemModelDataMapper mediaItemModelDataMapper) {
 
         this.getSearchResultListUseCase = getSearchResultListUseCase;
         this.mediaItemModelDataMapper = mediaItemModelDataMapper;
@@ -87,7 +86,7 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
     @Override
     public void destroy() {
 
-        this.getSearchResultListUseCase.unsubscribe();
+        this.getSearchResultListUseCase.dispose();
 
     }
 
@@ -152,17 +151,14 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
 
     private void getSearchResultList() {
 
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put( "SEARCH_TEXT", this.searchText );
-
-        this.getSearchResultListUseCase.execute( new SearchResultListSubscriber(), parameters );
+        this.getSearchResultListUseCase.execute( new SearchResultListObserver(), GetSearchResultList.Params.forSearch( this.searchText ) );
 
     }
 
-    private final class SearchResultListSubscriber extends DefaultSubscriber<List<MediaItem>> {
+    private final class SearchResultListObserver extends DefaultObserver<List<MediaItem>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             SearchResultListPresenter.this.hideViewLoading();
         }
 

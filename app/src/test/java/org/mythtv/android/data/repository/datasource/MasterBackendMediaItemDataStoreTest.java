@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -74,10 +74,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenSeries_whenMediaProgram_verifySeriesListReturned() {
 
         Observable<List<SeriesEntity>> observable = masterBackendMediaItemDataStore.series( Media.PROGRAM );
-        TestSubscriber<List<SeriesEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<SeriesEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -87,10 +87,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenSeries_whenMediaTelevision_verifySeriesListReturned() {
 
         Observable<List<SeriesEntity>> observable = masterBackendMediaItemDataStore.series( Media.TELEVISION );
-        TestSubscriber<List<SeriesEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<SeriesEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -99,7 +99,7 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     @Test( expected = IllegalArgumentException.class )
     public void givenSeries_whenMediaOther_verifyIllegalArgumentExceptionThrown() {
 
-        masterBackendMediaItemDataStore.series( Media.VIDEO );
+        masterBackendMediaItemDataStore.series( Media.ADULT );
 
     }
 
@@ -107,10 +107,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenMediaItems_whenMediaUpcoming_verifyMediaItemListReturned() {
 
         Observable<List<MediaItemEntity>> observable = masterBackendMediaItemDataStore.mediaItems( Media.UPCOMING, null );
-        TestSubscriber<List<MediaItemEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<MediaItemEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -120,10 +120,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenMediaItems_whenMediaRecent_verifyMediaItemListReturned() {
 
         Observable<List<MediaItemEntity>> observable = masterBackendMediaItemDataStore.mediaItems( Media.RECENT, null );
-        TestSubscriber<List<MediaItemEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<MediaItemEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -133,10 +133,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenMediaItems_whenMediaProgram_verifyMediaItemListReturned() {
 
         Observable<List<MediaItemEntity>> observable = masterBackendMediaItemDataStore.mediaItems( Media.PROGRAM, null );
-        TestSubscriber<List<MediaItemEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<MediaItemEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -146,10 +146,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenMediaItems_whenMediaVideo_verifyMediaItemListReturned() {
 
         Observable<List<MediaItemEntity>> observable = masterBackendMediaItemDataStore.mediaItems( Media.VIDEO, null );
-        TestSubscriber<List<MediaItemEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<MediaItemEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -159,10 +159,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenMediaItem_whenMediaUpcoming_verifyMediaItemReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.mediaItem( Media.UPCOMING, FAKE_ID );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
     }
@@ -171,10 +171,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenMediaItem_whenMediaRecent_verifyMediaItemReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.mediaItem( Media.RECENT, FAKE_ID );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
     }
@@ -183,10 +183,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenMediaItem_whenMediaProgram_verifyMediaListReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.mediaItem( Media.PROGRAM, FAKE_ID );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
     }
@@ -195,10 +195,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenMediaItem_whenMediaVideo_verifyMediaItemReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.mediaItem( Media.VIDEO, FAKE_ID );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values() )
                 .isNotNull();
 
     }
@@ -207,10 +207,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenAddLiveStream_whenMediaProgram_verifyMediaListReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.addLiveStream( Media.PROGRAM, FAKE_ID );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
     }
@@ -219,10 +219,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenAddLiveStream_whenMediaVideo_verifyMediaItemReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.addLiveStream( Media.VIDEO, FAKE_ID );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values() )
                 .isNotNull();
 
     }
@@ -231,10 +231,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenRemoveLiveStream_whenMediaProgram_verifyMediaListReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.removeLiveStream( Media.PROGRAM, FAKE_ID );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
     }
@@ -243,10 +243,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenRemoveLiveStream_whenMediaVideo_verifyMediaItemReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.removeLiveStream( Media.VIDEO, FAKE_ID );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values() )
                 .isNotNull();
 
     }
@@ -262,10 +262,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenUpdateWatchedStatus_whenMediaRecent_verifyMediaListReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.updateWatchedStatus( Media.RECENT, FAKE_ID, Boolean.TRUE );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
     }
@@ -274,10 +274,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenUpdateWatchedStatus_whenMediaProgram_verifyMediaListReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.updateWatchedStatus( Media.PROGRAM, FAKE_ID, Boolean.TRUE );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
     }
@@ -286,10 +286,10 @@ public class MasterBackendMediaItemDataStoreTest extends ApplicationTestCase {
     public void givenUpdateWatchedStatus_whenMediaVideo_verifyMediaListReturned() {
 
         Observable<MediaItemEntity> observable = masterBackendMediaItemDataStore.updateWatchedStatus( Media.VIDEO, FAKE_ID, Boolean.TRUE );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values() )
                 .isNotNull();
 
     }

@@ -18,14 +18,17 @@
 
 package org.mythtv.android.domain.interactor;
 
+import com.fernandocejas.arrow.checks.Preconditions;
+
 import org.mythtv.android.domain.Media;
+import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.MediaItemRepository;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -35,26 +38,42 @@ import rx.Observable;
  *
  * Created on 4/2/17.
  */
-public class RemoveLiveStreamUseCase extends UseCase {
+public class RemoveLiveStreamUseCase extends UseCase<MediaItem, RemoveLiveStreamUseCase.Params> {
 
-    private final Media media;
-    private final int id;
     private final MediaItemRepository mediaItemRepository;
 
     @Inject
-    public RemoveLiveStreamUseCase( final Media media, final int id, MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public RemoveLiveStreamUseCase( MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.media = media;
-        this.id = id;
         this.mediaItemRepository = mediaItemRepository;
 
     }
 
     @Override
-    public Observable buildUseCaseObservable() {
+    public Observable<MediaItem> buildUseCaseObservable( Params params ) {
+        Preconditions.checkNotNull( params );
 
-        return this.mediaItemRepository.removeLiveStream( media, id );
+        return this.mediaItemRepository.removeLiveStream( params.media, params.id );
+    }
+
+    public static final class Params {
+
+        private final Media media;
+        private final int id;
+
+        private Params( final Media media, final int id ) {
+
+            this.media = media;
+            this.id = id;
+
+        }
+
+        public static Params forMediaItem( final Media media, final int id ) {
+
+            return new Params( media, id );
+        }
+
     }
 
 }

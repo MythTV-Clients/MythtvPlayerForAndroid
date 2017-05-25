@@ -13,8 +13,9 @@ import org.mythtv.android.data.net.DvrApi;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -48,10 +49,10 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
         given( mockDvrApi.titleInfoEntityList() ).willReturn( setupTitleInfos() );
 
         Observable<List<TitleInfoEntity>> observable = masterBackendDvrDataStore.titleInfoEntityList();
-        TestSubscriber<List<TitleInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<TitleInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -66,10 +67,10 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
         given( mockDvrApi.recordedProgramEntityList( anyBoolean(), anyInt(), anyInt(), anyString(), anyString(), anyString() ) ).willReturn( setupPrograms() );
 
         Observable<List<ProgramEntity>> observable = masterBackendDvrDataStore.recordedProgramEntityList( false, -1, -1, null, null, null );
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<ProgramEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -83,10 +84,10 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
         given( mockDvrApi.recordedProgramById( anyInt() ) ).willReturn( setupProgram() );
 
         Observable<ProgramEntity> observable = masterBackendDvrDataStore.recordedProgramEntityDetails( FAKE_RECORDED_ID );
-        TestSubscriber<ProgramEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<ProgramEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
         verify( mockDvrApi, times( 1 ) ).recordedProgramById( anyInt() );
@@ -99,10 +100,10 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
         given( mockDvrApi.upcomingProgramEntityList( anyInt(), anyInt(), anyBoolean(), anyInt(), anyInt() ) ).willReturn( setupPrograms() );
 
         Observable<List<ProgramEntity>> observable = masterBackendDvrDataStore.upcomingProgramEntityList( 1, -1, true, -1, -1 );
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<ProgramEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -116,10 +117,10 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
         given( mockDvrApi.encoderEntityList() ).willReturn( setupEncoders() );
 
         Observable<List<EncoderEntity>> observable = masterBackendDvrDataStore.encoderEntityList();
-        TestSubscriber<List<EncoderEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<EncoderEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -133,10 +134,10 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
         given( mockDvrApi.updateWatchedStatus( anyInt(), anyBoolean() ) ).willReturn( setupWatched() );
 
         Observable<Boolean> observable = masterBackendDvrDataStore.updateWatchedStatus( 1, Boolean.TRUE );
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isTrue();
 
@@ -150,10 +151,10 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
         given( mockDvrApi.getBookmark( anyInt(), anyString() ) ).willReturn( setupBookmark() );
 
         Observable<Long> observable = masterBackendDvrDataStore.getBookmark( 1, null );
-        TestSubscriber<Long> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Long> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isEqualTo( 1 );
 
@@ -166,9 +167,9 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
         return Observable.just( Collections.singletonList( createFakeTitleInfoEntity() ) );
     }
 
-    private Observable<List<ProgramEntity>> setupPrograms() {
+    private Flowable<ProgramEntity> setupPrograms() {
 
-        return Observable.just( Collections.singletonList( createFakeProgramEntity() ) );
+        return Flowable.just( createFakeProgramEntity() );
     }
 
     private Observable<ProgramEntity> setupProgram() {
@@ -176,9 +177,9 @@ public class MasterBackendDvrDataStoreTest extends ApplicationTestCase {
         return Observable.just( createFakeProgramEntity() );
     }
 
-    private Observable<List<EncoderEntity>> setupEncoders() {
+    private Flowable<EncoderEntity> setupEncoders() {
 
-        return Observable.just( Collections.singletonList( createFakeEncoderEntity() ) );
+        return Flowable.just( createFakeEncoderEntity() );
     }
 
     private Observable<Boolean> setupWatched() {

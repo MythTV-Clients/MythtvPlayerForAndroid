@@ -13,8 +13,8 @@ import org.mythtv.android.domain.repository.DvrRepository;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -49,11 +49,11 @@ public class GetEncoderListTest extends TestData {
         given( mockDvrRepository.encoders() ).willReturn( setupEncoders() );
 
         GetEncoderList useCase = new GetEncoderList( mockDvrRepository, mockThreadExecutor, mockPostExecutionThread );
-        Observable<List<Encoder>> observable = useCase.buildUseCaseObservable();
-        TestSubscriber<List<Encoder>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        Observable<List<Encoder>> observable = useCase.buildUseCaseObservable( null );
+        TestObserver<List<Encoder>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 

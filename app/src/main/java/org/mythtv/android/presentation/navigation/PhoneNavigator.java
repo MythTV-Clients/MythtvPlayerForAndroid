@@ -90,7 +90,7 @@ public class PhoneNavigator {
         Log.d( TAG, "navigateToTitleInfos : exit" );
     }
 
-    public void navigateToSeries( Context context, Media media, boolean descending, int startIndex, int count, String titleRegEx, String recGroup, String storageGroup, String inetref ) {
+    public void navigateToSeries( Context context, Media media, String titleRegEx, String inetref ) {
         Log.d( TAG, "navigateToSeries : enter" );
 
         if( null == context ) {
@@ -100,7 +100,7 @@ public class PhoneNavigator {
         } else {
             Log.d( TAG, "navigateToSeries : context != null" );
 
-            context.startActivity( SeriesListActivity.getCallingIntent( context, media, descending, startIndex, count, titleRegEx, recGroup, storageGroup, inetref ) );
+            context.startActivity( SeriesListActivity.getCallingIntent( context, media, titleRegEx, inetref ) );
 
         }
 

@@ -43,6 +43,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemDetailsPresenter;
@@ -71,9 +72,14 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     private static final String TAG = MediaItemDetailsFragment.class.getSimpleName();
 
+    private static final String MEDIA_KEY = "media";
+    private static final String ID_KEY = "id";
+
     private static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
     private static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
 
+    private Media media;
+    private int id;
     private MediaItemModel mediaItemModel;
     private MediaItemDetailsListener listener;
 
@@ -130,9 +136,16 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     public MediaItemDetailsFragment() { super(); }
 
-    public static MediaItemDetailsFragment newInstance() {
+    public static MediaItemDetailsFragment newInstance( final Media media, final int id ) {
 
-        return new MediaItemDetailsFragment();
+        Bundle args = new Bundle();
+        args.putString( MEDIA_KEY, media.name() );
+        args.putInt( ID_KEY, id );
+
+        MediaItemDetailsFragment fragment = new MediaItemDetailsFragment();
+        fragment.setArguments( args );
+
+        return fragment;
     }
 
     @Override
@@ -295,13 +308,13 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
             case R.id.menu_mark_watched:
 
-                presenter.markWatched( mediaItemModel.media(), mediaItemModel.id(), true );
+                presenter.markWatched( true );
 
                 return true;
 
             case R.id.menu_mark_unwatched:
 
-                presenter.markWatched( mediaItemModel.media(), mediaItemModel.id(), false );
+                presenter.markWatched( false );
 
                 return true;
 
@@ -319,6 +332,9 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
         this.getComponent( MediaComponent.class ).inject( this );
         this.presenter.setView( this );
+
+        this.media = Media.valueOf( getArguments().getString( MEDIA_KEY ) );
+        this.id = getArguments().getInt( ID_KEY );
 
         loadMediaItemDetails();
 
@@ -477,7 +493,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         if( null != this.presenter) {
             Log.d( TAG, "loadMediaItemDetails : presenter is not null" );
 
-            this.presenter.initialize();
+            this.presenter.initialize( this.media, this.id );
 
         }
 

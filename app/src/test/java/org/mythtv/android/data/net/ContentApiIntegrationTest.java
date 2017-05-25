@@ -11,11 +11,12 @@ import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subscribers.TestSubscriber;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import rx.Observable;
-import rx.observers.TestSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -91,12 +92,13 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<List<LiveStreamInfoEntity>> observable = contentApi.liveStreamInfoEntityList( null );
 
-        TestSubscriber<List<LiveStreamInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<LiveStreamInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertComplete();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 8 );
 
@@ -118,12 +120,12 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<List<LiveStreamInfoEntity>> observable = contentApi.liveStreamInfoEntityList( "" );
 
-        TestSubscriber<List<LiveStreamInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<LiveStreamInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 8 );
 
@@ -145,12 +147,12 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<List<LiveStreamInfoEntity>> observable = contentApi.liveStreamInfoEntityList( "2006_20170503000000.ts" );
 
-        TestSubscriber<List<LiveStreamInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<LiveStreamInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -170,10 +172,10 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<List<LiveStreamInfoEntity>> observable = contentApi.liveStreamInfoEntityList( null );
 
-        TestSubscriber<List<LiveStreamInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<LiveStreamInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -191,10 +193,10 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<List<LiveStreamInfoEntity>> observable = contentApi.liveStreamInfoEntityList( null );
 
-        TestSubscriber<List<LiveStreamInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<LiveStreamInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -214,15 +216,15 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<LiveStreamInfoEntity> observable = contentApi.addLiveStream( Media.PROGRAM, 1 );
 
-        TestSubscriber<LiveStreamInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<LiveStreamInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
-        LiveStreamInfoEntity entity = testSubscriber.getOnNextEvents().get( 0 );
+        LiveStreamInfoEntity entity = testObserver.values().get( 0 );
         assertThat( entity.id() ).isEqualTo( 297 );
         assertThat( entity.width() ).isEqualTo( 960 );
         assertThat( entity.height() ).isEqualTo( 544 );
@@ -263,10 +265,10 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<LiveStreamInfoEntity> observable = contentApi.addLiveStream( Media.PROGRAM, 1 );
 
-        TestSubscriber<LiveStreamInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<LiveStreamInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -284,10 +286,10 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<LiveStreamInfoEntity> observable = contentApi.addLiveStream( Media.PROGRAM, 1 );
 
-        TestSubscriber<LiveStreamInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<LiveStreamInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -307,15 +309,15 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<LiveStreamInfoEntity> observable = contentApi.addLiveStream( Media.VIDEO, 1 );
 
-        TestSubscriber<LiveStreamInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<LiveStreamInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
-        LiveStreamInfoEntity entity = testSubscriber.getOnNextEvents().get( 0 );
+        LiveStreamInfoEntity entity = testObserver.values().get( 0 );
         assertThat( entity.id() ).isEqualTo( 297 );
         assertThat( entity.width() ).isEqualTo( 960 );
         assertThat( entity.height() ).isEqualTo( 544 );
@@ -356,10 +358,10 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<LiveStreamInfoEntity> observable = contentApi.addLiveStream( Media.VIDEO, 1 );
 
-        TestSubscriber<LiveStreamInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<LiveStreamInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -377,10 +379,10 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<LiveStreamInfoEntity> observable = contentApi.addLiveStream( Media.VIDEO, 1 );
 
-        TestSubscriber<LiveStreamInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<LiveStreamInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -393,10 +395,10 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<LiveStreamInfoEntity> observable = contentApi.addLiveStream( Media.ADULT, 1 );
 
-        TestSubscriber<LiveStreamInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<LiveStreamInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
     }
 
@@ -414,12 +416,12 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = contentApi.removeLiveStream( 297 );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isTrue();
 
@@ -439,10 +441,10 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = contentApi.removeLiveStream( 297 );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -460,10 +462,10 @@ public class ContentApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = contentApi.removeLiveStream( 297 );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 

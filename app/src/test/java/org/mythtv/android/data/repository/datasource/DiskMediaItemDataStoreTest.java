@@ -17,8 +17,8 @@ import org.mythtv.android.domain.Media;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -94,10 +94,10 @@ public class DiskMediaItemDataStoreTest extends ApplicationTestCase {
         given( mockCache.get( anyString() ) ).willReturn( createFakeMediaItemEntity() );
 
         Observable<MediaItemEntity> observable = diskMediaItemDataStore.mediaItem( Media.PROGRAM, FAKE_RECORDED_ID );
-        TestSubscriber<MediaItemEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<MediaItemEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
     }

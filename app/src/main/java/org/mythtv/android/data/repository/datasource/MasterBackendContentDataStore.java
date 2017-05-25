@@ -26,7 +26,7 @@ import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -49,7 +49,7 @@ public class MasterBackendContentDataStore implements ContentDataStore {
     }
 
     @Override
-    public Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename ) {
+    public Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList(final String filename ) {
         Log.d( TAG, "liveStreamInfoEntityList : enter" );
 
         return this.api.liveStreamInfoEntityList( filename );

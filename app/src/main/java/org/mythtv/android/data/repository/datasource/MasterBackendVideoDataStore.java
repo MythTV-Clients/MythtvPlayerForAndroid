@@ -25,7 +25,7 @@ import org.mythtv.android.data.net.VideoApi;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -53,7 +53,9 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
 
         Log.d( TAG, "getVideos : folder=" + folder + ", sort=" + sort + ", descending=" + descending + ", startIndex=" + startIndex + ", count=" + count );
 
-        return this.api.getVideoList( folder, sort, descending, startIndex, count );
+        return this.api.getVideoList( folder, sort, descending, startIndex, count )
+                .toList()
+                .toObservable();
     }
 
     @Override
@@ -63,10 +65,10 @@ public class MasterBackendVideoDataStore implements VideoDataStore {
         Log.d( TAG, "getCategory : category=" + category );
 
         return this.api.getVideoList( null, null, false, -1, -1 )
-                .flatMap( Observable::from )
                 .filter( entity -> entity.contentType().equals( category ) )
                 .toSortedList( ( entity1, entity2 ) -> entity1.title().compareTo( entity2.title() ) )
-                .doOnNext( entity -> Log.d( TAG, "getCategory : entity=" + entity ) );
+                .toObservable()
+                .doOnEach( entity -> Log.d( TAG, "getCategory : entity=" + entity.toString() ) );
 
     }
 

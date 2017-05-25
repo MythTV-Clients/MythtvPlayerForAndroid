@@ -10,11 +10,13 @@ import org.mythtv.android.data.exception.NetworkConnectionException;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subscribers.TestSubscriber;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import rx.Observable;
-import rx.observers.TestSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -89,14 +91,14 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         VideoApi videoApi = new VideoApiImpl( context, sharedPreferences, client, videoMetadataInfoEntityJsonMapper, booleanJsonMapper );
 
-        Observable<List<VideoMetadataInfoEntity>> observable = videoApi.getVideoList( null, null, false, -1, -1 );
+        Flowable<VideoMetadataInfoEntity> observable = videoApi.getVideoList( null, null, false, -1, -1 );
 
-        TestSubscriber<List<VideoMetadataInfoEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 616 );
 
@@ -116,14 +118,14 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         VideoApi videoApi = new VideoApiImpl( context, sharedPreferences, client, videoMetadataInfoEntityJsonMapper, booleanJsonMapper );
 
-        Observable<List<VideoMetadataInfoEntity>> observable = videoApi.getVideoList( "", "", true, 1, 1 );
+        Flowable<VideoMetadataInfoEntity> observable = videoApi.getVideoList( "", "", true, 1, 1 );
 
-        TestSubscriber<List<VideoMetadataInfoEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 616 );
 
@@ -143,14 +145,14 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         VideoApi videoApi = new VideoApiImpl( context, sharedPreferences, client, videoMetadataInfoEntityJsonMapper, booleanJsonMapper );
 
-        Observable<List<VideoMetadataInfoEntity>> observable = videoApi.getVideoList( "folder", "sort", true, 1, 1 );
+        Flowable<VideoMetadataInfoEntity> observable = videoApi.getVideoList( "folder", "sort", true, 1, 1 );
 
-        TestSubscriber<List<VideoMetadataInfoEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 616 );
 
@@ -168,9 +170,9 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         VideoApi videoApi = new VideoApiImpl( context, sharedPreferences, client, videoMetadataInfoEntityJsonMapper, booleanJsonMapper );
 
-        Observable<List<VideoMetadataInfoEntity>> observable = videoApi.getVideoList( null, null, false, -1, -1 );
+        Flowable<VideoMetadataInfoEntity> observable = videoApi.getVideoList( null, null, false, -1, -1 );
 
-        TestSubscriber<List<VideoMetadataInfoEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertError( NetworkConnectionException.class );
@@ -189,9 +191,9 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         VideoApi videoApi = new VideoApiImpl( context, sharedPreferences, client, videoMetadataInfoEntityJsonMapper, booleanJsonMapper );
 
-        Observable<List<VideoMetadataInfoEntity>> observable = videoApi.getVideoList( null, null, false, -1, -1 );
+        Flowable<VideoMetadataInfoEntity> observable = videoApi.getVideoList( null, null, false, -1, -1 );
 
-        TestSubscriber<List<VideoMetadataInfoEntity>> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertError( NetworkConnectionException.class );
@@ -214,15 +216,15 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         Observable<VideoMetadataInfoEntity> observable = videoApi.getVideoById( 946 );
 
-        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<VideoMetadataInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
-        VideoMetadataInfoEntity entity = testSubscriber.getOnNextEvents().get( 0 );
+        VideoMetadataInfoEntity entity = testObserver.values().get( 0 );
         assertThat( entity.id() ).isEqualTo( 946 );
         assertThat( entity.title() ).isEqualTo( "Ant-Man" );
         assertThat( entity.subTitle() ).isEmpty();
@@ -282,10 +284,10 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         Observable<VideoMetadataInfoEntity> observable = videoApi.getVideoById( 946 );
 
-        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<VideoMetadataInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -303,10 +305,10 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         Observable<VideoMetadataInfoEntity> observable = videoApi.getVideoById( 946 );
 
-        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<VideoMetadataInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -326,12 +328,12 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = videoApi.updateWatchedStatus( 946, true );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isTrue();
 
@@ -353,12 +355,12 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = videoApi.updateWatchedStatus( 946, true );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isFalse();
 
@@ -378,10 +380,10 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = videoApi.updateWatchedStatus( 946, true );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 
@@ -399,10 +401,10 @@ public class VideoApiIntegrationTest extends ApplicationTestCase {
 
         Observable<Boolean> observable = videoApi.updateWatchedStatus( 946, true );
 
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertError( NetworkConnectionException.class );
+        testObserver.assertError( NetworkConnectionException.class );
 
         server.shutdown();
 

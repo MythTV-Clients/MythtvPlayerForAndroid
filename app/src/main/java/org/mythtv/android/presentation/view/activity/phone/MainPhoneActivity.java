@@ -43,6 +43,8 @@ import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import butterknife.BindView;
 
+import static org.mythtv.android.domain.interactor.GetMediaItemList.MEDIA_KEY;
+
 /**
  *
  *
@@ -186,13 +188,9 @@ public class MainPhoneActivity extends AbstractBasePhoneActivity implements HasC
     private void setupTabs() {
         Log.v( TAG, "setupTabs : enter" );
 
-        MediaItemListFragment.Builder recentParameters = new MediaItemListFragment.Builder( Media.RECENT );
-        recentFragment = MediaItemListFragment.newInstance( recentParameters.toBundle() );
-
+        recentFragment = MediaItemListFragment.newInstance( Media.RECENT, null, null );
         encodersFragment = EncoderListFragment.newInstance();
-
-        MediaItemListFragment.Builder upcomingParameters = new MediaItemListFragment.Builder( Media.UPCOMING );
-        upcomingFragment = MediaItemListFragment.newInstance( upcomingParameters.toBundle() );
+        upcomingFragment = MediaItemListFragment.newInstance( Media.UPCOMING, null, null );
 
         mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.main_tabs )[ 0 ] ), true );
         mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.main_tabs )[ 1 ] ) );

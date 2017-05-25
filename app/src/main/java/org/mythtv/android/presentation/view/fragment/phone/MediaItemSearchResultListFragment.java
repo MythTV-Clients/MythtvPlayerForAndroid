@@ -65,7 +65,7 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     @Inject
     SearchResultListPresenter searchResultListPresenter;
 
-    @BindView( R.id.rv_mediaItems )
+    @BindView( R.id.rv_items)
     RecyclerView rv_mediaItems;
 
     private Unbinder unbinder;
@@ -148,7 +148,7 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         Log.d( TAG, "onCreateView : enter" );
 
-        View fragmentView = inflater.inflate( R.layout.fragment_media_item_list, container, false );
+        View fragmentView = inflater.inflate( R.layout.fragment_empty_item_list, container, false );
         ButterKnife.bind( this, fragmentView );
         unbinder = ButterKnife.bind( this, fragmentView );
 

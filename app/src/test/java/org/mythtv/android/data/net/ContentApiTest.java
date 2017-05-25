@@ -12,8 +12,8 @@ import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
@@ -45,12 +45,12 @@ public class ContentApiTest extends TestData {
         when( api.liveStreamInfoEntityList( anyString() ) ).thenReturn( setupLiveStreamInfoList() );
 
         Observable<List<LiveStreamInfoEntity>> observable = api.liveStreamInfoEntityList( FAKE_FILENAME );
-        TestSubscriber<List<LiveStreamInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<LiveStreamInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 

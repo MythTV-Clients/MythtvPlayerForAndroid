@@ -22,7 +22,8 @@ import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -45,7 +46,7 @@ public interface VideoApi {
     String COUNT_QS = "Count=%s";
     String ID_QS = "Id=%s";
 
-    Observable<List<VideoMetadataInfoEntity>> getVideoList( final String folder, final String sort, final boolean descending, final int startIndex, final int count );
+    Flowable<VideoMetadataInfoEntity> getVideoList( final String folder, final String sort, final boolean descending, final int startIndex, final int count );
 
     Observable<VideoMetadataInfoEntity> getVideoById( final int id );
 

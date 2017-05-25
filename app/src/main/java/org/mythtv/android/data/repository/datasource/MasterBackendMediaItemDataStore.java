@@ -21,8 +21,8 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Observable;
-import rx.functions.Action1;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 /**
  *
@@ -42,7 +42,7 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
     private final SearchDataStoreFactory searchDataStoreFactory;
     private final DualCache<MediaItemEntity> cache;
 
-    private final Action1<List<SeriesEntity>> removeStaleTitleInfosDbAction =
+    private final Consumer<List<SeriesEntity>> removeStaleTitleInfosDbAction =
             titleInfoEntities -> {
 
                 if( null != titleInfoEntities ) {
@@ -50,27 +50,27 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
                     final SearchDataStore searchDataStore = MasterBackendMediaItemDataStore.this.searchDataStoreFactory.createWriteSearchDataStore();
 
                     Observable
-                            .from( titleInfoEntities )
+                            .fromIterable( titleInfoEntities )
                             .toList()
                             .subscribe( searchDataStore::refreshSeriesData );
                 }
 
             };
 
-    private final Action1<List<MediaItemEntity>> saveMediaItemsToCacheAction =
+    private final Consumer<List<MediaItemEntity>> saveMediaItemsToCacheAction =
             mediaItemEntities -> {
 
                 if( null != mediaItemEntities ) {
 
                     Observable
-                            .from( mediaItemEntities )
+                            .fromIterable( mediaItemEntities )
                             .doOnNext( mediaItemEntity -> MasterBackendMediaItemDataStore.this.cache.put( String.valueOf( mediaItemEntity.id() ), mediaItemEntity ) )
                             .subscribe();
                 }
 
             };
 
-    private final Action1<List<MediaItemEntity>> saveRecordedProgramMediaItemsToDbAction =
+    private final Consumer<List<MediaItemEntity>> saveRecordedProgramMediaItemsToDbAction =
             mediaItemEntities -> {
 
                 if( null != mediaItemEntities ) {
@@ -78,14 +78,14 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
                     final SearchDataStore searchDataStore = MasterBackendMediaItemDataStore.this.searchDataStoreFactory.createWriteSearchDataStore();
 
                     Observable
-                            .from( mediaItemEntities )
+                            .fromIterable( mediaItemEntities )
                             .toList()
                             .subscribe( searchDataStore::refreshRecordedProgramData );
                 }
 
             };
 
-    private final Action1<List<MediaItemEntity>> saveVideoMediaItemsToDbAction =
+    private final Consumer<List<MediaItemEntity>> saveVideoMediaItemsToDbAction =
             mediaItemEntities -> {
 
                 if( null != mediaItemEntities ) {
@@ -93,7 +93,7 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
                     final SearchDataStore searchDataStore = MasterBackendMediaItemDataStore.this.searchDataStoreFactory.createWriteSearchDataStore();
 
                     Observable
-                            .from( mediaItemEntities )
+                            .fromIterable( mediaItemEntities )
                             .toList()
                             .subscribe( searchDataStore::refreshVideoData );
                 }
@@ -125,7 +125,7 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
             return recordingSeriesEntity()
                     .doOnNext( removeStaleTitleInfosDbAction );
 
-        } else if( Media.TELEVISION.equals( media ) ) {
+        } else if( Media.VIDEO.equals( media ) || Media.TELEVISION.equals( media ) ) {
 
             return videoSeriesEntities( media );
 
@@ -154,6 +154,14 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
             return recordedProgramsInSeries( title )
                     .doOnNext( saveMediaItemsToCacheAction )
                     .doOnNext( saveRecordedProgramMediaItemsToDbAction );
+
+        } else if( Media.TELEVISION.equals( media ) ) {
+
+            return videosInCategory( media )
+                    .flatMap( Observable::fromIterable )
+                    .filter( entity -> entity.title().equals( title ) )
+                    .toList()
+                    .toObservable();
 
         } else {
 
@@ -254,11 +262,12 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
 
         return videoDataStore.getCategory( media.name() )
                 .doOnError( throwable -> Log.e( TAG, "getVideoSeriesListByContentType : error", throwable ) )
-                .flatMap( Observable::from )
+                .flatMap( Observable::fromIterable )
                 .filter( entity -> entity.contentType().equals( media.name() ) )
                 .distinct( VideoMetadataInfoEntity::title )
                 .toSortedList( ( entity1, entity2 ) -> entity1.title().compareTo( entity2.title() ) )
-                .map( SeriesEntityDataMapper::transformVideos );
+                .map( SeriesEntityDataMapper::transformVideos )
+                .toObservable();
     }
 
     private Observable<List<MediaItemEntity>> upcoming() {
@@ -266,17 +275,7 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
         return dvrDataStore.upcomingProgramEntityList( 1, -1, true, -1, -1 )
-                .map( upcomingPrograms -> {
-                    try {
-
-                        return MediaItemEntityDataMapper.transformPrograms( upcomingPrograms );
-
-                    } catch( UnsupportedEncodingException e ) {
-                        Log.e( TAG, "upcoming : error", e );
-                    }
-
-                    return new ArrayList<>();
-                });
+                .map( MediaItemEntityDataMapper::transformPrograms );
     }
 
     private Observable<List<MediaItemEntity>> recent() {
@@ -311,21 +310,8 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
 
         // Limit results to 50, then remove anything in the LiveTV storage group and only take 10 for the final results
         return recordedProgramEntityList
-                .flatMap( Observable::from )
-                .filter( programEntity -> !programEntity.recording().storageGroup().equalsIgnoreCase( "LiveTV" ) )
                 .take( 10 )
-                .toList()
-                .map( recordedProgramEntities -> {
-                    try {
-
-                        return MediaItemEntityDataMapper.transformPrograms( recordedProgramEntities );
-
-                    } catch( UnsupportedEncodingException e ) {
-                        Log.e( TAG, "recent : error", e );
-                    }
-
-                    return new ArrayList<>();
-                });
+                .map( MediaItemEntityDataMapper::transformPrograms );
     }
 
     private Observable<List<MediaItemEntity>> recordedProgramsInSeries( final String title ) {
@@ -333,17 +319,7 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
         final DvrDataStore dvrDataStore = this.dvrDataStoreFactory.createMasterBackendDataStore();
 
         return dvrDataStore.recordedProgramEntityList( true, 0, -1, title, null, null )
-                .map( recordedProgramEntities -> {
-                    try {
-
-                        return MediaItemEntityDataMapper.transformPrograms( recordedProgramEntities );
-
-                    } catch( UnsupportedEncodingException e ) {
-                        Log.e( TAG, "recordedProgramsInSeries : error", e );
-                    }
-
-                    return new ArrayList<>();
-                });
+                .map( MediaItemEntityDataMapper::transformPrograms );
     }
 
     private Observable<List<MediaItemEntity>> videosInCategory( final Media media ) {
@@ -357,7 +333,7 @@ public class MasterBackendMediaItemDataStore implements MediaItemDataStore {
                         return MediaItemEntityDataMapper.transformVideos( videoEntities );
 
                     } catch( UnsupportedEncodingException e ) {
-                        Log.e( TAG, "recordedProgramsInSeries : error", e );
+                        Log.e( TAG, "videosInCategory : error", e );
                     }
 
                     return new ArrayList<>();

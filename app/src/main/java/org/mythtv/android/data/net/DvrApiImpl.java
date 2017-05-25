@@ -39,9 +39,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import okhttp3.OkHttpClient;
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  *
@@ -82,11 +84,7 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
     @Override
     public Observable<List<TitleInfoEntity>> titleInfoEntityList() {
 
-        return Observable.create( new Observable.OnSubscribe<List<TitleInfoEntity>>() {
-
-            @Override
-            public void call( Subscriber<? super List<TitleInfoEntity>> subscriber ) {
-                Log.d(TAG, "titleInfoEntityList.call : enter");
+        return Observable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
                     Log.d( TAG, "titleInfoEntityList.call : network is connected" );
@@ -97,49 +95,42 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
                         if( null == responseTitleInfoEntities ) {
                             Log.d( TAG, "titleInfoEntityList.call : failed to retrieve title info entities" );
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
                             Log.d( TAG, "titleInfoEntityList.call : retrieved title info entities" );
 
-                            subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( responseTitleInfoEntities ) );
-                            subscriber.onCompleted();
+                            emitter.onNext( titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( responseTitleInfoEntities ) );
+                            emitter.onComplete();
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "titleInfoEntityList.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "titleInfoEntityList.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
-
-                Log.d( TAG, "titleInfoEntityList.call : exit" );
-            }
 
         });
 
     }
 
     @Override
-    public Observable<List<ProgramEntity>> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) {
+    public Flowable<ProgramEntity> recordedProgramEntityList( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) {
         Log.d( TAG, "recordedProgramEntityList : enter" );
 
         Log.d( TAG, "recordedProgramEntityList : exit" );
-        return Observable.create( new Observable.OnSubscribe<List<ProgramEntity>>() {
+        return Flowable.create( emitter -> {
 
-            @Override
-            public void call( Subscriber<? super List<ProgramEntity>> subscriber ) {
-                Log.d( TAG, "recordedProgramEntityList.call : enter" );
-
-                if( isThereInternetConnection() ) {
+                 if( isThereInternetConnection() ) {
                     Log.d( TAG, "recordedProgramEntityList.call : network is connected" );
 
                     try {
@@ -148,89 +139,81 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
                         if( null == responseRecordedProgramEntities ) {
                             Log.d( TAG, "recordedProgramEntityList.call : failed to retrieve program entities" );
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
                             Log.d( TAG, "recordedProgramEntityList.call : retrieved program entities" );
 
-                            subscriber.onNext( programEntityJsonMapper.transformProgramEntityCollection( responseRecordedProgramEntities ) );
-                            subscriber.onCompleted();
+                            Observable.fromIterable( programEntityJsonMapper.transformProgramEntityCollection( responseRecordedProgramEntities ) )
+                                    .subscribe(
+                                            emitter::onNext,
+                                            emitter::onError,
+                                            emitter::onComplete
+                                    );
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "recordedProgramEntityList.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "recordedProgramEntityList.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                     emitter.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d( TAG, "recordedProgramEntityList.call : exit" );
-            }
-
-        });
+        }, BackpressureStrategy.BUFFER );
 
     }
 
     @Override
     public Observable<ProgramEntity> recordedProgramById( final int recordedId ) {
 
-        return Observable.create( new Observable.OnSubscribe<ProgramEntity>() {
+        return Observable.create( emitter -> {
 
-            @Override
-            public void call( Subscriber<? super ProgramEntity> subscriber ) {
-
-                if( isThereInternetConnection() ) {
+               if( isThereInternetConnection() ) {
 
                     try {
 
                         String responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId );
                         if( null == responseProgramDetails ) {
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
 
-                            subscriber.onNext( programEntityJsonMapper.transformProgramEntity( responseProgramDetails ) );
-                            subscriber.onCompleted();
+                            emitter.onNext( programEntityJsonMapper.transformProgramEntity( responseProgramDetails ) );
+                            emitter.onComplete();
 
                         }
 
                     } catch( Exception e ) {
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
 
-                    subscriber.onError( new NetworkConnectionException() );
+                   emitter.onError( new NetworkConnectionException() );
 
                 }
-
-            }
 
         });
 
     }
 
     @Override
-    public Observable<List<ProgramEntity>> upcomingProgramEntityList( int startIndex, int count, boolean showAll, int recordId, int recStatus ) {
+    public Flowable<ProgramEntity> upcomingProgramEntityList( int startIndex, int count, boolean showAll, int recordId, int recStatus ) {
         Log.d( TAG, "upcomingProgramEntityList : enter" );
 
         Log.d( TAG, "upcomingProgramEntityList : exit" );
-        return Observable.create( new Observable.OnSubscribe<List<ProgramEntity>>() {
-
-            @Override
-            public void call( Subscriber<? super List<ProgramEntity>> subscriber ) {
-                Log.d( TAG, "upcomingProgramEntityList.call : enter" );
+        return Flowable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
                     Log.d( TAG, "upcomingProgramEntityList.call : network is connected" );
@@ -241,45 +224,42 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
                         if( null == responseUpcomingProgramEntities ) {
                             Log.d( TAG, "upcomingProgramEntityList.call : failed to retrieve program entities" );
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
                             Log.d( TAG, "upcomingEntityList.call : retrieved program entities" );
 
-                            subscriber.onNext( programEntityJsonMapper.transformProgramEntityCollection( responseUpcomingProgramEntities ) );
-                            subscriber.onCompleted();
+                            Observable.fromIterable( programEntityJsonMapper.transformProgramEntityCollection( responseUpcomingProgramEntities ) )
+                                    .subscribe(
+                                            emitter::onNext,
+                                            emitter::onError,
+                                            emitter::onComplete
+                                    );
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "upcomingProgramEntityList.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "upcomingProgramEntityList.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d( TAG, "upcomingProgramEntityList.call : exit" );
-            }
-
-        });
+        }, BackpressureStrategy.BUFFER);
 
     }
 
     @Override
-    public Observable<List<EncoderEntity>> encoderEntityList() {
+    public Flowable<EncoderEntity> encoderEntityList() {
 
-        return Observable.create( new Observable.OnSubscribe<List<EncoderEntity>>() {
-
-            @Override
-            public void call( Subscriber<? super List<EncoderEntity>> subscriber ) {
-                Log.d( TAG, "encoderEntityList.call : enter" );
+        return Flowable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
                     Log.d(TAG, "encoderEntityList.call : network is connected");
@@ -290,45 +270,42 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
                         if( null == responseEncoderEntities ) {
                             Log.d(TAG, "encoderEntityList.call : failed to retrieve encoder entities");
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
-                            Log.d(TAG, "encoderEntityList.call : retrieved encoder entities");
+                            Log.d( TAG, "encoderEntityList.call : retrieved encoder entities");
 
-                            subscriber.onNext( encoderEntityJsonMapper.transformEncoderEntityCollection( responseEncoderEntities ) );
-                            subscriber.onCompleted();
+                            Observable.fromIterable( encoderEntityJsonMapper.transformEncoderEntityCollection( responseEncoderEntities ) )
+                                    .subscribe(
+                                            emitter::onNext,
+                                            emitter::onError,
+                                            emitter::onComplete
+                                    );
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "encoderEntityList.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "encoderEntityList.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d( TAG, "encoderEntityList.call : exit" );
-            }
-
-        });
+        }, BackpressureStrategy.MISSING );
 
     }
 
     @Override
     public Observable<Boolean> updateWatchedStatus( final int id, final boolean watched ) {
 
-        return Observable.create( new Observable.OnSubscribe<Boolean>() {
-
-            @Override
-            public void call( Subscriber<? super Boolean> subscriber ) {
-                Log.d( TAG, "updateWatchedStatus.call : enter" );
+        return Observable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
                     Log.d( TAG, "updateWatchedStatus.call : network is connected" );
@@ -339,32 +316,29 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
                         if( null == response ) {
                             Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
                             Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
 
-                            subscriber.onNext( booleanJsonMapper.transformBoolean( response ) );
-                            subscriber.onCompleted();
+                            emitter.onNext( booleanJsonMapper.transformBoolean( response ) );
+                            emitter.onComplete();
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "updateWatchedStatus.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "updateWatchedStatus.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
-
-                Log.d( TAG, "updateWatchedStatus.call : exit" );
-            }
 
         });
 
@@ -373,11 +347,7 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
     @Override
     public Observable<Long> getBookmark( final int recordedId, final String offsetType) {
 
-        return Observable.create( new Observable.OnSubscribe<Long>() {
-
-            @Override
-            public void call( Subscriber<? super Long> subscriber ) {
-                Log.d( TAG, "getBookmark.call : enter" );
+        return Observable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
                     Log.d( TAG, "getBookmark.call : network is connected" );
@@ -388,33 +358,30 @@ public class DvrApiImpl extends BaseApi implements DvrApi {
                         if( null == response ) {
                             Log.d( TAG, "getBookmark.call : failed to retrieve status update" );
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
                             Log.d( TAG, "getBookmark.call : retrieved status update" );
 
-                            subscriber.onNext( longJsonMapper.transformLong( response ) );
-                            subscriber.onCompleted();
+                            emitter.onNext( longJsonMapper.transformLong( response ) );
+                            emitter.onComplete();
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "getBookmark.call : error", e );
 
-                        subscriber.onNext( 0L );
-                        subscriber.onCompleted();
+                        emitter.onNext( 0L );
+                        emitter.onComplete();
 
                     }
 
                 } else {
                     Log.d( TAG, "getBookmark.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
-
-                Log.d( TAG, "getBookmark.call : exit" );
-            }
 
         });
 

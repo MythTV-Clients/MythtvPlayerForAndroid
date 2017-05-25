@@ -12,8 +12,10 @@ import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subscribers.TestSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyBoolean;
@@ -46,13 +48,13 @@ public class VideoApiTest extends TestData {
 
         when( api.getVideoList( anyString(), anyString(), anyBoolean(), anyInt(), anyInt() ) ).thenReturn( setupVideoList() );
 
-        Observable<List<VideoMetadataInfoEntity>> observable = api.getVideoList( FAKE_FILENAME, null, false, -1, -1 );
-        TestSubscriber<List<VideoMetadataInfoEntity>> testSubscriber = new TestSubscriber<>();
+        Flowable<VideoMetadataInfoEntity> observable = api.getVideoList( FAKE_FILENAME, null, false, -1, -1 );
+        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
         observable.subscribe( testSubscriber );
 
         testSubscriber.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testSubscriber.values() )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -66,21 +68,21 @@ public class VideoApiTest extends TestData {
         when( api.getVideoById( anyInt() ) ).thenReturn( setupVideo() );
 
         Observable<VideoMetadataInfoEntity> observable = api.getVideoById( FAKE_ID );
-        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<VideoMetadataInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        testSubscriber.assertNoErrors();
+        testObserver.assertNoErrors();
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
         verify( api, times( 1 ) ).getVideoById( anyInt() );
 
     }
 
-    private Observable<List<VideoMetadataInfoEntity>> setupVideoList() {
+    private Flowable<VideoMetadataInfoEntity> setupVideoList() {
 
-        return Observable.just( Collections.singletonList( createFakeVideoMetadataInfoEntity() ) );
+        return Flowable.just( createFakeVideoMetadataInfoEntity() );
     }
 
     private Observable<VideoMetadataInfoEntity> setupVideo() {

@@ -179,7 +179,7 @@ public class MediaItemEntityDataMapperTest extends ApplicationTestCase {
         MediaItemEntity mediaItem = MediaItemEntityDataMapper.transform( videoMetadataInfoEntity );
         assertThat( mediaItem, not( nullValue() ) );
         assertThat( mediaItem.id(), is( equalTo( 1 ) ) );
-        assertThat( mediaItem.media(), is( equalTo( Media.VIDEO ) ) );
+        assertThat( mediaItem.media(), is( equalTo( Media.MOVIE ) ) );
         assertThat( mediaItem.title(), is( equalTo( "big buck bunny 1080p stereo" ) ) );
         assertThat( mediaItem.subTitle(), is( equalTo( "" ) ) );
         assertThat( mediaItem.description(), is( equalTo( "None" ) ) );

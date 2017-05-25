@@ -21,22 +21,22 @@ package org.mythtv.android.presentation.presenter.phone;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.Series;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
-import org.mythtv.android.domain.interactor.DefaultSubscriber;
-import org.mythtv.android.domain.interactor.DynamicUseCase;
+import org.mythtv.android.domain.interactor.DefaultObserver;
+import org.mythtv.android.domain.interactor.GetSeriesList;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
+import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.mapper.SeriesModelDataMapper;
 import org.mythtv.android.presentation.model.SeriesModel;
 import org.mythtv.android.presentation.view.SeriesListView;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
@@ -46,17 +46,20 @@ import javax.inject.Named;
  *
  * Created on 9/15/16.
  */
-public class SeriesListPresenter extends DefaultSubscriber<List<Series>> implements Presenter {
+@PerActivity
+public class SeriesListPresenter extends DefaultObserver<List<Series>> implements Presenter {
 
     private static final String TAG = SeriesListPresenter.class.getSimpleName();
 
     private SeriesListView viewListView;
 
-    private final DynamicUseCase getSeriesListUseCase;
+    private final GetSeriesList getSeriesListUseCase;
     private final SeriesModelDataMapper seriesModelDataMapper;
 
+    private Media media;
+
     @Inject
-    public SeriesListPresenter( @Named( "seriesList" ) DynamicUseCase getSeriesListUseCase, SeriesModelDataMapper seriesModelDataMapper) {
+    public SeriesListPresenter( GetSeriesList getSeriesListUseCase, SeriesModelDataMapper seriesModelDataMapper) {
 
         this.getSeriesListUseCase = getSeriesListUseCase;
         this.seriesModelDataMapper = seriesModelDataMapper;
@@ -69,42 +72,38 @@ public class SeriesListPresenter extends DefaultSubscriber<List<Series>> impleme
 
     @Override
     public void resume() {
-        Log.v( TAG, "resume : enter" );
 
-        Log.v( TAG, "resume : exit" );
     }
 
     @Override
     public void pause() {
-        Log.v( TAG, "pause : enter" );
 
-        Log.v( TAG, "pause : exit" );
     }
 
     @Override
     public void destroy() {
-
-        this.getSeriesListUseCase.unsubscribe();
 
     }
 
     /**
      * Initializes the presenter by start retrieving the media item list.
      */
-    public void initialize( Map<String, Object> parameters ) {
+    public void initialize( final Media media ) {
 
-        this.loadMediaItemList( parameters );
+        this.media = media;
+
+        this.loadMediaItemList();
 
     }
 
     /**
      * Loads media items.
      */
-    private void loadMediaItemList( Map<String, Object> parameters ) {
+    private void loadMediaItemList() {
 
         this.hideViewRetry();
         this.showViewLoading();
-        this.getSeriesList( parameters );
+        this.getSeriesList();
 
     }
 
@@ -146,16 +145,16 @@ public class SeriesListPresenter extends DefaultSubscriber<List<Series>> impleme
 
     }
 
-    private void getSeriesList( Map<String, Object> parameters ) {
+    private void getSeriesList() {
 
-        this.getSeriesListUseCase.execute( new SeriesListSubscriber(), parameters );
+        this.getSeriesListUseCase.execute( new SeriesListObserver(), GetSeriesList.Params.forMedia( this.media ) );
 
     }
 
-    private final class SeriesListSubscriber extends DefaultSubscriber<List<Series>> {
+    private final class SeriesListObserver extends DefaultObserver<List<Series>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             SeriesListPresenter.this.hideViewLoading();
         }
 

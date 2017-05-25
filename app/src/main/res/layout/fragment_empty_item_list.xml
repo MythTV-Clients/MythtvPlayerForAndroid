@@ -22,10 +22,37 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_encoders"
+    <org.mythtv.android.presentation.view.component.EmptyRecyclerView
+        android:id="@+id/rv_items"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/empty_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:textAlignment="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/media_item_empty_list" />
+
+        <TextView
+            android:id="@+id/hls_only_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="24dp"
+            android:textSize="18sp"
+            android:gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:text="@string/hls_only_filter_is_enabled" />
+
+    </RelativeLayout>
 
 </FrameLayout>

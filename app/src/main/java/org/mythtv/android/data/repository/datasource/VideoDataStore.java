@@ -22,7 +22,7 @@ import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -36,7 +36,7 @@ public interface VideoDataStore {
 
     Observable<List<VideoMetadataInfoEntity>> getVideos( final String folder, final String sort, final boolean descending, final int startIndex, final int count );
 
-    Observable<List<VideoMetadataInfoEntity>> getCategory( String category );
+    Observable<List<VideoMetadataInfoEntity>> getCategory( final String category );
 
     Observable<VideoMetadataInfoEntity> getVideoById( final int id );
 

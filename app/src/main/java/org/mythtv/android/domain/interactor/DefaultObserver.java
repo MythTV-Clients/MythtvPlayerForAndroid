@@ -18,6 +18,8 @@
 
 package org.mythtv.android.domain.interactor;
 
+import io.reactivex.observers.DisposableObserver;
+
 /**
  * Default subscriber base class to be used whenever you want default error handling.
  *
@@ -25,10 +27,10 @@ package org.mythtv.android.domain.interactor;
  *
  * Created on 8/26/15.
  */
-public class DefaultSubscriber<T> extends rx.Subscriber<T> {
+public class DefaultObserver<T> extends DisposableObserver<T> {
 
     @Override
-    public void onCompleted() {
+    public void onComplete() {
         // no-op by default.
     }
 

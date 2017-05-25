@@ -44,6 +44,8 @@ import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import butterknife.BindView;
 
+import static org.mythtv.android.domain.interactor.GetMediaItemList.MEDIA_KEY;
+
 /**
  *
  *
@@ -182,17 +184,10 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     private void setupTabs() {
         Log.v( TAG, "setupTabs : enter" );
 
-        MediaItemListFragment.Builder movieParameters = new MediaItemListFragment.Builder( Media.MOVIE );
-        movieFragment = MediaItemListFragment.newInstance( movieParameters.toBundle() );
-
-        SeriesListFragment.Builder builder = new SeriesListFragment.Builder( Media.VIDEO );
-        seriesListFragment = SeriesListFragment.newInstance( builder.toBundle() );
-
-        MediaItemListFragment.Builder homeVideoParameters = new MediaItemListFragment.Builder( Media.HOMEVIDEO );
-        homeVideoFragment = MediaItemListFragment.newInstance( homeVideoParameters.toBundle() );
-
-        MediaItemListFragment.Builder musicVideoParameters = new MediaItemListFragment.Builder( Media.MUSICVIDEO );
-        musicVideoFragment = MediaItemListFragment.newInstance( musicVideoParameters.toBundle() );
+        movieFragment = MediaItemListFragment.newInstance( Media.MOVIE, null, null );
+        seriesListFragment = SeriesListFragment.newInstance( Media.TELEVISION );
+        homeVideoFragment = MediaItemListFragment.newInstance( Media.HOMEVIDEO, null, null );
+        musicVideoFragment = MediaItemListFragment.newInstance( Media.MUSICVIDEO, null, null );
 
         mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 0 ] ), true );
         mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 1 ] ) );
@@ -203,8 +198,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
         Log.v( TAG, "setupTabs : showAdultTab=" + showAdultTab );
         if( showAdultTab ) {
 
-            MediaItemListFragment.Builder adultParameters = new MediaItemListFragment.Builder( Media.ADULT );
-            adultFragment = MediaItemListFragment.newInstance( adultParameters.toBundle() );
+            adultFragment = MediaItemListFragment.newInstance( Media.ADULT, null, null );
 
             mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 4 ] ) );
 
@@ -322,7 +316,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     public void onSeriesClicked( final SeriesModel seriesModel ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.title(), null, null, seriesModel.inetref() );
+        navigator.navigateToSeries( this, Media.TELEVISION, seriesModel.title(), seriesModel.inetref() );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

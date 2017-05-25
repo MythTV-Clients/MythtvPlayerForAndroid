@@ -124,6 +124,28 @@ public abstract class MediaItemModel implements Parcelable {
         return null != media() && validationErrors().isEmpty();
     }
 
+    public String getBannerUrl( String width ) {
+
+        String url = bannerUrl();
+        if( null != width && !"".equals( width ) ) {
+
+            url = url + String.format( WIDTH_QS, width );
+        }
+
+        return url;
+    }
+
+    public String getCoverartUrl( String width ) {
+
+        String url = coverartUrl();
+        if( null != width && !"".equals( width ) ) {
+
+            url = url + String.format( WIDTH_QS, width );
+        }
+
+        return url;
+    }
+
     public String getFanartUrl( String width ) {
 
         String url = fanartUrl();

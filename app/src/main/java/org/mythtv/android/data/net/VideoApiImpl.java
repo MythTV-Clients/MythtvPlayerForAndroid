@@ -34,9 +34,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  *
@@ -69,15 +70,11 @@ public class VideoApiImpl extends BaseApi implements VideoApi {
     }
 
     @Override
-    public Observable<List<VideoMetadataInfoEntity>> getVideoList( final String folder, final String sort, final boolean descending, final int startIndex, final int count ) {
+    public Flowable<VideoMetadataInfoEntity> getVideoList( final String folder, final String sort, final boolean descending, final int startIndex, final int count ) {
         Log.d( TAG, "getVideoList : enter" );
 
         Log.d( TAG, "getVideoList : exit" );
-        return Observable.create( new Observable.OnSubscribe<List<VideoMetadataInfoEntity>>() {
-
-            @Override
-            public void call( Subscriber<? super List<VideoMetadataInfoEntity>> subscriber ) {
-                Log.d( TAG, "getVideoList.call : enter" );
+        return Flowable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
                     Log.d( TAG, "getVideoList.call : network is connected" );
@@ -88,44 +85,42 @@ public class VideoApiImpl extends BaseApi implements VideoApi {
                         if( null == responseVideoEntities ) {
                             Log.d( TAG, "getVideoList.call : failed to retrieve video entities" );
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
                             Log.d( TAG, "getVideoList.call : retrieved video entities" );
 
-                            subscriber.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntityCollection( responseVideoEntities ) );
-                            subscriber.onCompleted();
+                            Observable.fromIterable( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntityCollection( responseVideoEntities ) )
+                                    .subscribe(
+                                            emitter::onNext,
+                                            emitter::onError,
+                                            emitter::onComplete
+                                    );
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "getVideoList.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "getVideoList.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d( TAG, "getVideoList.call : exit" );
-            }
-
-        });
+       }, BackpressureStrategy.BUFFER );
 
     }
 
     @Override
     public Observable<VideoMetadataInfoEntity> getVideoById( final int id ) {
 
-        return Observable.create( new Observable.OnSubscribe<VideoMetadataInfoEntity>() {
-
-            @Override
-            public void call( Subscriber<? super VideoMetadataInfoEntity> subscriber ) {
+        return Observable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
 
@@ -134,41 +129,35 @@ public class VideoApiImpl extends BaseApi implements VideoApi {
                         String responseVideoDetails = getVideoDetailsFromApi( id );
                         if( null == responseVideoDetails ) {
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
 
-                            subscriber.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( responseVideoDetails ) );
-                            subscriber.onCompleted();
+                            emitter.onNext( videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( responseVideoDetails ) );
+                            emitter.onComplete();
 
                         }
 
                     } catch( Exception e ) {
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
 
-            }
-
-        });
+       });
 
     }
 
     @Override
     public Observable<Boolean> updateWatchedStatus( final int videoId, final boolean watched ) {
 
-        return Observable.create( new Observable.OnSubscribe<Boolean>() {
-
-            @Override
-            public void call( Subscriber<? super Boolean> subscriber ) {
-                Log.d( TAG, "updateWatchedStatus.call : enter" );
+        return Observable.create( emitter -> {
 
                 if( isThereInternetConnection() ) {
                     Log.d(TAG, "updateWatchedStatus.call : network is connected");
@@ -179,32 +168,29 @@ public class VideoApiImpl extends BaseApi implements VideoApi {
                         if( null == response ) {
                             Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            emitter.onError( new NetworkConnectionException() );
 
                         } else {
                             Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
 
-                            subscriber.onNext( booleanJsonMapper.transformBoolean( response ) );
-                            subscriber.onCompleted();
+                            emitter.onNext( booleanJsonMapper.transformBoolean( response ) );
+                            emitter.onComplete();
 
                         }
 
                     } catch( Exception e ) {
                         Log.e( TAG, "updateWatchedStatus.call : error", e );
 
-                        subscriber.onError( new NetworkConnectionException( e.getCause() ) );
+                        emitter.onError( new NetworkConnectionException( e.getCause() ) );
 
                     }
 
                 } else {
                     Log.d( TAG, "encoderEntityList.call : network is not connected" );
 
-                    subscriber.onError( new NetworkConnectionException() );
+                    emitter.onError( new NetworkConnectionException() );
 
                 }
-
-                Log.d( TAG, "encoderEntityList.call : exit" );
-            }
 
         });
 

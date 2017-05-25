@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.mythtv.android.R;
-import org.mythtv.android.domain.interactor.DefaultSubscriber;
+import org.mythtv.android.domain.interactor.DefaultObserver;
 import org.mythtv.android.presentation.model.TvCategoryModel;
 import org.mythtv.android.presentation.presenter.phone.Presenter;
 import org.mythtv.android.presentation.view.TvCategoryListView;
@@ -42,7 +42,7 @@ import javax.inject.Inject;
  *
  * Created on 1/28/16.
  */
-public class TvCategoryListPresenter extends DefaultSubscriber<List<TvCategoryModel>> implements Presenter {
+public class TvCategoryListPresenter extends DefaultObserver<List<TvCategoryModel>> implements Presenter {
 
     private static final String TAG = TvCategoryListPresenter.class.getSimpleName();
 

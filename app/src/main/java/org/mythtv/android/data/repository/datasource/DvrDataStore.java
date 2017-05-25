@@ -24,7 +24,7 @@ import org.mythtv.android.data.entity.TitleInfoEntity;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *

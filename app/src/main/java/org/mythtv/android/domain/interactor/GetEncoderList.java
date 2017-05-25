@@ -18,13 +18,16 @@
 
 package org.mythtv.android.domain.interactor;
 
+import org.mythtv.android.domain.Encoder;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
 import org.mythtv.android.domain.repository.DvrRepository;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  *
@@ -34,12 +37,12 @@ import rx.Observable;
  *
  * Created on 8/26/15.
  */
-public class GetEncoderList extends UseCase {
+public class GetEncoderList extends UseCase<List<Encoder>, Void> {
 
     private final DvrRepository dvrRepository;
 
     @Inject
-    public GetEncoderList( DvrRepository dvrRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetEncoderList( final DvrRepository dvrRepository, final ThreadExecutor threadExecutor, final PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
         this.dvrRepository = dvrRepository;
@@ -47,7 +50,8 @@ public class GetEncoderList extends UseCase {
     }
 
     @Override
-    public Observable buildUseCaseObservable() {
+    public Observable<List<Encoder>> buildUseCaseObservable( Void unused ) {
+
         return this.dvrRepository.encoders();
     }
 

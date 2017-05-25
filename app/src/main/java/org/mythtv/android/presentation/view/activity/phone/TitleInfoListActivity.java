@@ -32,6 +32,8 @@ import org.mythtv.android.presentation.internal.di.components.MediaComponent;
 import org.mythtv.android.presentation.model.SeriesModel;
 import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
 
+import static org.mythtv.android.domain.interactor.GetMediaItemList.MEDIA_KEY;
+
 /**
  * Activity that shows a list of programs.
  *
@@ -114,13 +116,9 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
 
             }
 
-            SeriesListFragment.Builder builder = new SeriesListFragment.Builder( Media.PROGRAM );
-            seriesListFragment = SeriesListFragment.newInstance( builder.toBundle() );
+            seriesListFragment = SeriesListFragment.newInstance( Media.PROGRAM );
 
             addFragment( R.id.fl_fragment, seriesListFragment );
-
-
-        } else {
 
         }
 
@@ -193,7 +191,7 @@ public class TitleInfoListActivity extends AbstractBasePhoneActivity implements 
         Log.d( TAG, "onSeriesClicked : enter" );
 
         Log.d( TAG, "onSeriesClicked : seriesModel=" + seriesModel );
-        navigator.navigateToSeries( this, Media.PROGRAM, true, -1, -1, seriesModel.title(), null, null, seriesModel.inetref() );
+        navigator.navigateToSeries( this, Media.PROGRAM, seriesModel.title(), seriesModel.inetref() );
 
         Log.d( TAG, "onSeriesClicked : exit" );
     }

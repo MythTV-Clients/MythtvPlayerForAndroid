@@ -27,7 +27,11 @@ import org.mythtv.android.data.net.DvrApi;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  *
@@ -66,9 +70,9 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
         titleInfoEntityList();
 
         return this.api.recordedProgramEntityList( descending, startIndex, count, titleRegEx, recGroup, storageGroup )
-                .flatMap( Observable::from )
                 .filter( programEntity -> ( !programEntity.recording().recGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.recording().storageGroup().equalsIgnoreCase( "LiveTV" ) ) && !"Deleted".equalsIgnoreCase( programEntity.recording().recGroup() ) )
                 .toList()
+                .toObservable()
                 .doOnError( e -> Log.e( TAG, "recordedProgramEntityList : error", e ) );
     }
 
@@ -86,16 +90,22 @@ public class MasterBackendDvrDataStore implements DvrDataStore {
     public Observable<List<ProgramEntity>> upcomingProgramEntityList( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) {
         Log.d( TAG, "upcomingProgramEntityList : enter" );
 
-        Log.d( TAG, "recordedProgramEntityList : startIndex=" + startIndex + ", count=" + count + ", showAll=" + showAll + ", recordId=" + recordId + ", recStatus=" + recStatus );
+        Log.d( TAG, "upcomingProgramEntityList : startIndex=" + startIndex + ", count=" + count + ", showAll=" + showAll + ", recordId=" + recordId + ", recStatus=" + recStatus );
 
-        return this.api.upcomingProgramEntityList( startIndex, count, showAll, recordId, recStatus );
+        return this.api.upcomingProgramEntityList( startIndex, count, showAll, recordId, recStatus )
+                .doOnError( e -> Log.e( TAG, "upcomingProgramEntityList : error", e ) )
+                .toList()
+                .toObservable();
     }
 
     @Override
     public Observable<List<EncoderEntity>> encoderEntityList() {
         Log.d( TAG, "encoderEntityList : enter" );
 
-        return this.api.encoderEntityList();
+        return this.api.encoderEntityList()
+                .doOnError( e -> Log.e( TAG, "encoderEntityList : error", e ) )
+                .toList()
+                .toObservable();
     }
 
     @Override

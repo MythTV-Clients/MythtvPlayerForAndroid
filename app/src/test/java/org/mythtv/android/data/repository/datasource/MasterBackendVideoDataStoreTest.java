@@ -11,8 +11,9 @@ import org.mythtv.android.data.net.VideoApi;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -46,10 +47,10 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
         given( mockVideoApi.getVideoList( anyString(), anyString(), anyBoolean(), anyInt(), anyInt() ) ).willReturn( setupVideos() );
 
         Observable<List<VideoMetadataInfoEntity>> observable = masterBackendVideoDataStore.getVideos( null, null, false, -1, -1 );
-        TestSubscriber<List<VideoMetadataInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<VideoMetadataInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -63,10 +64,10 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
         given( mockVideoApi.getVideoList( anyString(), anyString(), anyBoolean(), anyInt(), anyInt() ) ).willReturn( setupVideos() );
 
         Observable<List<VideoMetadataInfoEntity>> observable = masterBackendVideoDataStore.getCategory( FAKE_CONTENT_TYPE );
-        TestSubscriber<List<VideoMetadataInfoEntity>> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<List<VideoMetadataInfoEntity>> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .hasSize( 1 );
 
@@ -80,10 +81,10 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
         given( mockVideoApi.getVideoById( anyInt() ) ).willReturn( setupVideo() );
 
         Observable<VideoMetadataInfoEntity> observable = masterBackendVideoDataStore.getVideoById( FAKE_ID );
-        TestSubscriber<VideoMetadataInfoEntity> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<VideoMetadataInfoEntity> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull();
 
         verify( mockVideoApi ).getVideoById( anyInt() );
@@ -96,10 +97,10 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
         given( mockVideoApi.updateWatchedStatus( anyInt(), anyBoolean() ) ).willReturn( setupWatched() );
 
         Observable<Boolean> observable = masterBackendVideoDataStore.updateWatchedStatus( 1, Boolean.TRUE );
-        TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        observable.subscribe( testSubscriber );
+        TestObserver<Boolean> testObserver = new TestObserver<>();
+        observable.subscribe( testObserver );
 
-        assertThat( testSubscriber.getOnNextEvents().get( 0 ) )
+        assertThat( testObserver.values().get( 0 ) )
                 .isNotNull()
                 .isTrue();
 
@@ -107,9 +108,9 @@ public class MasterBackendVideoDataStoreTest extends ApplicationTestCase {
 
     }
 
-    private Observable<List<VideoMetadataInfoEntity>> setupVideos() {
+    private Flowable<VideoMetadataInfoEntity> setupVideos() {
 
-        return Observable.just( Collections.singletonList( createFakeVideoMetadataInfoEntity() ) );
+        return Flowable.just( createFakeVideoMetadataInfoEntity() );
     }
 
     private Observable<VideoMetadataInfoEntity> setupVideo() {

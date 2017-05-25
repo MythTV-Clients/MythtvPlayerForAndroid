@@ -22,8 +22,8 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.List;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.IsNot.not;
@@ -82,15 +82,17 @@ public class ProgramEntityJsonDataMapperIssue113Test {
         Type programListEntityType = new TypeToken<ProgramListEntity>() {}.getType();
         ProgramListEntity programListEntity = this.gson.fromJson( reader, programListEntityType );
 
-        TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
-        Observable<List<ProgramEntity>> programEntitiesObservable = Observable.from( programListEntity.programs().programs() )
+        TestObserver<List<ProgramEntity>> testObserver = new TestObserver<>();
+        Observable<List<ProgramEntity>> programEntitiesObservable = Observable.fromIterable( programListEntity.programs().programs() )
                 .filter( programEntity -> !programEntity.recording().recGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.recording().storageGroup().equalsIgnoreCase( "LiveTV" ) || "Deleted".equalsIgnoreCase( programEntity.recording().recGroup() ) )
-                .toList();
+                .toList()
+                .toObservable();
 
-        programEntitiesObservable.subscribe( testSubscriber );
-        testSubscriber.assertNoErrors();
-        testSubscriber.assertCompleted();
-        testSubscriber.assertValueCount( 1 );
+        programEntitiesObservable.subscribe( testObserver );
+
+        testObserver.assertNoErrors();
+        testObserver.assertComplete();
+        testObserver.assertValueCount( 1 );
 
     }
 
