@@ -192,9 +192,9 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.SeriesView
     private String getMasterBackendUrl() {
 
         String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+//        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        return "http://" + host + ":" + port;
+        return "http://" + host; // + ":" + port;
     }
 
     public String getFromPreferences( Context context, String key ) {

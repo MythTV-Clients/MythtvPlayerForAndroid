@@ -43,8 +43,6 @@ import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import butterknife.BindView;
 
-import static org.mythtv.android.domain.interactor.GetMediaItemList.MEDIA_KEY;
-
 /**
  *
  *

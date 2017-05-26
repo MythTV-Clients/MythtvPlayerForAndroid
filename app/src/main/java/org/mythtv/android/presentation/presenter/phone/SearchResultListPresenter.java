@@ -137,7 +137,7 @@ public class SearchResultListPresenter extends DefaultObserver<List<MediaItem>> 
 
     private void showErrorMessage( ErrorBundle errorBundle ) {
 
-        String errorMessage = ErrorMessageFactory.create( this.viewListView.getContext(), errorBundle.getException() );
+        String errorMessage = ErrorMessageFactory.create( this.viewListView.context(), errorBundle.getException() );
         this.viewListView.showError( errorMessage );
 
     }

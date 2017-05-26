@@ -133,7 +133,7 @@ public class SeriesListPresenter extends DefaultObserver<List<Series>> implement
     private void showErrorMessage( ErrorBundle errorBundle ) {
 
         Log.e( TAG, "showErrorMessage : error", errorBundle.getException() );
-        String errorMessage = ErrorMessageFactory.create( this.viewListView.getContext(), errorBundle.getException() );
+        String errorMessage = ErrorMessageFactory.create( this.viewListView.context(), errorBundle.getException() );
         this.viewListView.showError( errorMessage );
 
     }

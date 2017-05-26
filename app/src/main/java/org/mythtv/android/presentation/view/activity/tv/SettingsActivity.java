@@ -102,7 +102,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
     private static MasterBackendFragment mMasterBackendFragment;
     private static MasterBackendScanUrlFragment mMasterBackendScanUrlFragment;
     private static MasterBackendUrlFragment mMasterBackendUrlFragment;
-    private static MasterBackendPortFragment mMasterBackendPortFragment;
+//    private static MasterBackendPortFragment mMasterBackendPortFragment;
 
     private static PlayerFragment mPlayerFragment;
     private static InternalPlayerFragment mInternalPlayerFragment;
@@ -151,7 +151,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         mMasterBackendFragment = new MasterBackendFragment();
         mMasterBackendScanUrlFragment = new MasterBackendScanUrlFragment();
         mMasterBackendUrlFragment = new MasterBackendUrlFragment();
-        mMasterBackendPortFragment = new MasterBackendPortFragment();
+//        mMasterBackendPortFragment = new MasterBackendPortFragment();
 
         mPlayerFragment = new PlayerFragment();
         mInternalPlayerFragment = new InternalPlayerFragment();
@@ -365,11 +365,11 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
                     break;
 
-                case MASTER_BACKEND_PORT :
-
-                    GuidedStepFragment.add( fm, mMasterBackendPortFragment, android.R.id.content );
-
-                    break;
+//                case MASTER_BACKEND_PORT :
+//
+//                    GuidedStepFragment.add( fm, mMasterBackendPortFragment, android.R.id.content );
+//
+//                    break;
 
                 default :
 
@@ -389,7 +389,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             }
 
             String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL );
-            String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
+//            String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
 
             addAction( getActivity(), actions, MASTER_BACKEND_SCAN_URL,
                     getResources().getString( R.string.backend_scan ),
@@ -399,10 +399,10 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
                     url,
                     getResources().getString( R.string.pref_backend_url_description ),
                     true, true );
-            addAction( getActivity(), actions, MASTER_BACKEND_PORT,
-                    port,
-                    getResources().getString( R.string.pref_backend_port_description ),
-                    true, true );
+//            addAction( getActivity(), actions, MASTER_BACKEND_PORT,
+//                    port,
+//                    getResources().getString( R.string.pref_backend_port_description ),
+//                    true, true );
 
             setActions( actions );
 
@@ -476,7 +476,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
             if( updatedComponents.length == 2 ) {
 
                 putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL, updatedComponents[ 0 ] );
-                putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT, updatedComponents[ 1 ] );
+//                putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT, updatedComponents[ 1 ] );
 
                 mMasterBackendFragment.updateActions( null );
                 mSettingsFragment.updateActions( null );
@@ -497,7 +497,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
         public void updateActions( List<GuidedAction> actions ) {
 
-            String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL ) + ":" + getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
+            String url = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_URL ); // + ":" + getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
 
             List<GuidedAction> guidedActions = new ArrayList<>();
             if( null != actions ) {
@@ -617,70 +617,70 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     }
 
-    public static class MasterBackendPortFragment extends GuidedStepFragment {
-
-        @NonNull
-        @Override
-        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
-
-            String title = getResources().getString( R.string.pref_backend_port_title );
-            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.pref_backend_title );
-            String description = getResources().getString( R.string.pref_backend_port_description );
-            Drawable icon = null;
-
-            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
-        }
-
-        @Override
-        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
-
-            updateActions( actions );
-
-        }
-
-        @Override
-        public void onGuidedActionEdited( GuidedAction action ) {
-            super.onGuidedActionEdited( action );
-
-            Log.d( TAG, "onGuidedActionEdited : action=" + action );
-
-            View view = super.getGuidedActionsStylist().getActionsGridView().findFocus();
-            if( null != view ) {
-
-                EditText title = (EditText) view.findViewById( R.id.guidedactions_item_title );
-                Log.d( TAG, "onGuidedActionEdited : title=" + title.getText() );
-                action.setTitle( title.getText() );
-                action.setEditTitle( title.getText() );
-
-                putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT, action.getEditTitle().toString() );
-
-                mSettingsFragment.updateActions( null );
-                mMasterBackendFragment.updateActions( null );
-
-            }
-
-        }
-
-        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
-        public void updateActions( List<GuidedAction> actions ) {
-
-            if( null == actions ) {
-
-                actions = new ArrayList<>();
-
-            }
-
-            String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-            addEditableAction( getActivity(), actions, MASTER_BACKEND_PORT,
-                    port,
-                    getResources().getString( R.string.pref_backend_port_description ) );
-
-            setActions( actions );
-
-        }
-
-    }
+//    public static class MasterBackendPortFragment extends GuidedStepFragment {
+//
+//        @NonNull
+//        @Override
+//        public GuidanceStylist.Guidance onCreateGuidance( Bundle savedInstanceState ) {
+//
+//            String title = getResources().getString( R.string.pref_backend_port_title );
+//            String breadcrumb = getResources().getString( R.string.title_activity_settings ) + SEPARATOR + getResources().getString( R.string.pref_backend_title );
+//            String description = getResources().getString( R.string.pref_backend_port_description );
+//            Drawable icon = null;
+//
+//            return new GuidanceStylist.Guidance( title, description, breadcrumb, icon );
+//        }
+//
+//        @Override
+//        public void onCreateActions( @NonNull List<GuidedAction> actions, Bundle savedInstanceState ) {
+//
+//            updateActions( actions );
+//
+//        }
+//
+//        @Override
+//        public void onGuidedActionEdited( GuidedAction action ) {
+//            super.onGuidedActionEdited( action );
+//
+//            Log.d( TAG, "onGuidedActionEdited : action=" + action );
+//
+//            View view = super.getGuidedActionsStylist().getActionsGridView().findFocus();
+//            if( null != view ) {
+//
+//                EditText title = (EditText) view.findViewById( R.id.guidedactions_item_title );
+//                Log.d( TAG, "onGuidedActionEdited : title=" + title.getText() );
+//                action.setTitle( title.getText() );
+//                action.setEditTitle( title.getText() );
+//
+//                putStringToPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT, action.getEditTitle().toString() );
+//
+//                mSettingsFragment.updateActions( null );
+//                mMasterBackendFragment.updateActions( null );
+//
+//            }
+//
+//        }
+//
+//        @SuppressWarnings( "PMD.AvoidReassigningParameters" )
+//        public void updateActions( List<GuidedAction> actions ) {
+//
+//            if( null == actions ) {
+//
+//                actions = new ArrayList<>();
+//
+//            }
+//
+//            String port = getStringFromPreferences( getActivity(), SettingsKeys.KEY_PREF_BACKEND_PORT );
+//
+//            addEditableAction( getActivity(), actions, MASTER_BACKEND_PORT,
+//                    port,
+//                    getResources().getString( R.string.pref_backend_port_description ) );
+//
+//            setActions( actions );
+//
+//        }
+//
+//    }
 
     public static class PlayerFragment extends GuidedStepFragment {
 
@@ -1202,10 +1202,10 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
         }
 
         @Override
-        public Context getContext() {
-            Log.d( TAG, "getContext : enter" );
+        public Context context() {
+            Log.d( TAG, "context : enter" );
 
-            Log.d( TAG, "getContext : exit" );
+            Log.d( TAG, "context : exit" );
             return this.getActivity().getApplicationContext();
         }
 
@@ -2212,9 +2212,9 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
     private static String getMasterBackendUrl( Context context ) {
 
         String host = getStringFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getStringFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+//        String port = getStringFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        return "http://" + host + ":" + port;
+        return "http://" + host; // + ":" + port;
     }
 
     private static boolean getShouldUseInternalPlayer( Context context ) {

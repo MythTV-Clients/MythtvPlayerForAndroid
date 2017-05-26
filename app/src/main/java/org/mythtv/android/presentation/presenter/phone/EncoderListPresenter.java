@@ -19,14 +19,12 @@
 package org.mythtv.android.presentation.presenter.phone;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import org.mythtv.android.domain.Encoder;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
 import org.mythtv.android.domain.exception.ErrorBundle;
 import org.mythtv.android.domain.interactor.DefaultObserver;
 import org.mythtv.android.domain.interactor.GetEncoderList;
-import org.mythtv.android.domain.interactor.UseCase;
 import org.mythtv.android.presentation.exception.ErrorMessageFactory;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.mapper.EncoderModelDataMapper;
@@ -37,7 +35,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
@@ -49,8 +46,6 @@ import javax.inject.Named;
  */
 @PerActivity
 public class EncoderListPresenter extends DefaultObserver<List<Encoder>> implements Presenter {
-
-    private static final String TAG = EncoderListPresenter.class.getSimpleName();
 
     private EncoderListView viewListView;
 
@@ -122,7 +117,7 @@ public class EncoderListPresenter extends DefaultObserver<List<Encoder>> impleme
 
     private void showErrorMessage( ErrorBundle errorBundle ) {
 
-        String errorMessage = ErrorMessageFactory.create( this.viewListView.getContext(), errorBundle.getException() );
+        String errorMessage = ErrorMessageFactory.create( this.viewListView.context(), errorBundle.getException() );
         this.viewListView.showError( errorMessage );
 
     }

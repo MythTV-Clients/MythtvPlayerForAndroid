@@ -287,9 +287,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     private String getMasterBackendUrl() {
 
         String host = getStringFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getStringFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+//        String port = getStringFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        return "http://" + host + ":" + port;
+        return "http://" + host; // + ":" + port;
     }
 
     private String getStringFromPreferences( Context context, String key ) {

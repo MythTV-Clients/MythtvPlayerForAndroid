@@ -473,7 +473,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     }
 
     @Override
-    public Context getContext() {
+    public Context context() {
 
         return getActivity().getApplicationContext();
     }

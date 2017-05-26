@@ -130,9 +130,9 @@ public class CardPresenter extends Presenter {
     protected String getMasterBackendUrl( Context context ) {
 
         String host = getFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+//        String port = getFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        return "http://" + host + ":" + port;
+        return "http://" + host; // + ":" + port;
     }
 
     protected String getFromPreferences( Context context, String key ) {

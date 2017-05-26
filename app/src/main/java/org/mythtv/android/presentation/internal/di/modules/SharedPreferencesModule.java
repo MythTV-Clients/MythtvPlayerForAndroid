@@ -60,9 +60,9 @@ public class SharedPreferencesModule {
     public String getMasterBackendUrl() {
 
         String host = getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
+//        String port = getStringFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        return "http://" + host + ":" + port;
+        return "http://" + host; // + ":" + port;
     }
 
     public boolean getInternalPlayer() {

@@ -82,8 +82,8 @@ public abstract class ApplicationTestCase extends TestData{
     private void setMasterBackendInSharedPreferences() {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString( SettingsKeys.KEY_PREF_BACKEND_URL, "localhost" );
-        editor.putString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
+        editor.putString( SettingsKeys.KEY_PREF_BACKEND_URL, "localhost:6544" );
+//        editor.putString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
         editor.apply();
 
     }
@@ -91,8 +91,8 @@ public abstract class ApplicationTestCase extends TestData{
     protected void setMasterBackendInSharedPreferences( final String host, final int port ) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString( SettingsKeys.KEY_PREF_BACKEND_URL, host );
-        editor.putString( SettingsKeys.KEY_PREF_BACKEND_PORT, String.valueOf( port ) );
+        editor.putString( SettingsKeys.KEY_PREF_BACKEND_URL, host + ":" + port );
+//        editor.putString( SettingsKeys.KEY_PREF_BACKEND_PORT, String.valueOf( port ) );
         editor.apply();
 
     }

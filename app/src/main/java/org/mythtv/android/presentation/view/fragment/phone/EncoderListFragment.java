@@ -263,10 +263,10 @@ public class EncoderListFragment extends AbstractBaseFragment implements Encoder
     }
 
     @Override
-    public Context getContext() {
-        Log.d( TAG, "getContext : enter" );
+    public Context context() {
+        Log.d( TAG, "context : enter" );
 
-        Log.d( TAG, "getContext : exit" );
+        Log.d( TAG, "context : exit" );
         return this.getActivity().getApplicationContext();
     }
 

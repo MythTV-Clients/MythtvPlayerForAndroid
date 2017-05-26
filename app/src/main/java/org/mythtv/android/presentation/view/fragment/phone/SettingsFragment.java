@@ -19,9 +19,9 @@
 package org.mythtv.android.presentation.view.fragment.phone;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +55,8 @@ public class SettingsFragment extends PreferenceFragment {
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
         EditTextPreference mBackendUrl = (EditTextPreference) getPreferenceManager().findPreference( SettingsKeys.KEY_PREF_BACKEND_URL );
+        mBackendUrl.setSummary( mBackendUrl.getText() );
+
         mBackendUrl.setOnPreferenceChangeListener( ( preference, newValue ) -> {
 
             String backendUrl = ((String) newValue).toLowerCase( Locale.getDefault() );
@@ -64,9 +66,13 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
 
-            boolean isIPv4 = backendUrl.matches( "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}" );
+            boolean isIPv4 = backendUrl.matches( "(([0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3})|(\\w*.\\w*.\\w*)):[0-9]{4}" );
 
-            return isIPv4 || backendUrl.matches( "(?=^.{1,253}$)(^(((?!-)[a-z0-9-]{1,63}(?<!-))|((?!-)[a-z0-9-]{1,63}(?<!-)\\.)+[a-z]{2,63})$)" );
+            boolean ret = isIPv4 || backendUrl.matches( "(?=^.{1,253}$)(^(((?!-)[a-z0-9-]{1,63}(?<!-))|((?!-)[a-z0-9-]{1,63}(?<!-)\\.)+[a-z]{2,63})$)" );
+
+            mBackendUrl.setSummary( (String) newValue );
+
+            return ret;
 
         });
 

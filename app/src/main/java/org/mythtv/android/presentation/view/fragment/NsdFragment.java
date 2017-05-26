@@ -63,7 +63,7 @@ public class NsdFragment extends AbstractBasePreferenceFragment implements OnSha
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
-        backendScanUrl = (ListPreference) getPreferenceManager().findPreference( SettingsKeys.KEY_PREF_BACKEND_SCAN_URL );
+        backendScanUrl = (ListPreference) getPreferenceManager().findPreference( SettingsKeys.KEY_PREF_BACKEND_URL );
 
         setupUI();
 
@@ -127,7 +127,7 @@ public class NsdFragment extends AbstractBasePreferenceFragment implements OnSha
         backendScanUrl.setEntries( backends );
         backendScanUrl.setEntryValues( backends );
 
-        String scannedMasterBackend = getPreferenceManager().getSharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_SCAN_URL, "Empty" );
+        String scannedMasterBackend = getPreferenceManager().getSharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "Empty" );
         String masterBackend = getMasterBackendComponents();
         Log.d( TAG, "initialize : scannedMasterBackend=" + scannedMasterBackend + ", masterBackend=" + masterBackend );
 
@@ -180,17 +180,17 @@ public class NsdFragment extends AbstractBasePreferenceFragment implements OnSha
     public void onSharedPreferenceChanged( SharedPreferences sharedPreferences, String key ) {
         Log.d( TAG, "onSharedPreferenceChanged : enter" );
 
-        if( key.equals( SettingsKeys.KEY_PREF_BACKEND_SCAN_URL ) ) {
+        if( key.equals( SettingsKeys.KEY_PREF_BACKEND_URL ) ) {
 
-            String masterBackend = sharedPreferences.getString( SettingsKeys.KEY_PREF_BACKEND_SCAN_URL, "Empty" );
+            String masterBackend = sharedPreferences.getString( SettingsKeys.KEY_PREF_BACKEND_URL, "Empty" );
             backendScanUrl.setSummary( masterBackend );
 
-            String[] masterBackendComponents = masterBackend.split( ":" );
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString( SettingsKeys.KEY_PREF_BACKEND_URL, masterBackendComponents[ 0 ] );
-            editor.putString( SettingsKeys.KEY_PREF_BACKEND_PORT, masterBackendComponents[ 1 ] );
-            editor.apply();
+//            String[] masterBackendComponents = masterBackend.split( ":" );
+//
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.putString( SettingsKeys.KEY_PREF_BACKEND_URL, masterBackendComponents[ 0 ] );
+//            editor.putString( SettingsKeys.KEY_PREF_BACKEND_PORT, masterBackendComponents[ 1 ] );
+//            editor.apply();
 
         }
 

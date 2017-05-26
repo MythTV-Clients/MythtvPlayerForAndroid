@@ -36,9 +36,6 @@ import org.mythtv.android.presentation.mapper.MediaItemModelDataMapper;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.view.MediaItemDetailsView;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.inject.Inject;
 
 /**
@@ -72,7 +69,7 @@ public class MediaItemDetailsPresenter implements Presenter {
             final AddLiveStreamUseCase addLiveStreamUseCase,
             final RemoveLiveStreamUseCase removeLiveStreamUseCase,
             final PostUpdatedWatchedStatus updateWatchedStatusUseCase,
-            MediaItemModelDataMapper mediaItemModelDataMapper) {
+            MediaItemModelDataMapper mediaItemModelDataMapper ) {
 
         this.getMediaItemDetailsUseCase = getMediaItemDetailsUseCase;
         this.addLiveStreamUseCase = addLiveStreamUseCase;
@@ -184,7 +181,7 @@ public class MediaItemDetailsPresenter implements Presenter {
     private void showErrorMessage( ErrorBundle errorBundle ) {
 
         Log.e( TAG, "showErrorMessage : error", errorBundle.getException() );
-        String errorMessage = ErrorMessageFactory.create( this.viewDetailsView.getContext(), errorBundle.getException() );
+        String errorMessage = ErrorMessageFactory.create( this.viewDetailsView.context(), errorBundle.getException() );
         this.viewDetailsView.showError( errorMessage );
 
     }

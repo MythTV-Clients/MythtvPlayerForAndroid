@@ -48,9 +48,9 @@ abstract class BaseApi {
     protected String getMasterBackendUrl() {
 
         String host = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
+//        String port = getFromPreferences( SettingsKeys.KEY_PREF_BACKEND_PORT );
 
-        String masterBackend = "http://" + host + ":" + port;
+        String masterBackend = "http://" + host; // + ":" + port;
         Log.d( TAG, "getMasterBackendUrl : masterBackend=" + masterBackend );
 
         return masterBackend;

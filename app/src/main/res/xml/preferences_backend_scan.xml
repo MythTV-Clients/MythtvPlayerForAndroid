@@ -25,7 +25,7 @@
 
         <ListPreference
             android:title="@string/pref_backend_scan_title"
-            android:key="backend_scan_url" />
+            android:key="backend_url" />
 
     </PreferenceCategory>
 

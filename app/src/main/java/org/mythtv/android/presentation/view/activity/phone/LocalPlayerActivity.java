@@ -1170,9 +1170,9 @@ public class LocalPlayerActivity extends AppCompatActivity {
     private String getMasterBackendUrl() {
 
         String host = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "" );
-        String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
+//        String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
 
-        return "http://" + host + ":" + port;
+        return "http://" + host; // + ":" + port;
 
     }
 

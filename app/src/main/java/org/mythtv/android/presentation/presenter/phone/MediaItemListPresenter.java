@@ -36,7 +36,6 @@ import org.mythtv.android.presentation.view.MediaItemListView;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -144,7 +143,7 @@ public class MediaItemListPresenter extends DefaultObserver<List<MediaItem>> imp
 
     private void showErrorMessage( ErrorBundle errorBundle ) {
 
-        String errorMessage = ErrorMessageFactory.create( this.viewListView.getContext(), errorBundle.getException() );
+        String errorMessage = ErrorMessageFactory.create( this.viewListView.context(), errorBundle.getException() );
         this.viewListView.showError( errorMessage );
 
     }
