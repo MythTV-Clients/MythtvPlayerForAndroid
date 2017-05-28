@@ -71,16 +71,12 @@ public class SearchResultListPresenter extends DefaultObserver<List<MediaItem>> 
 
     @Override
     public void resume() {
-        Log.v( TAG, "resume : enter" );
-
-        Log.v( TAG, "resume : exit" );
+        // this method is intentionally left blank
     }
 
     @Override
     public void pause() {
-        Log.v( TAG, "pause : enter" );
-
-        Log.v( TAG, "pause : exit" );
+        // this method is intentionally left blank
     }
 
     @Override
@@ -104,7 +100,7 @@ public class SearchResultListPresenter extends DefaultObserver<List<MediaItem>> 
     /**
      * Loads all search results.
      */
-    private void loadSearchResultList() {
+    /* private */ void loadSearchResultList() {
 
         this.hideViewRetry();
         this.showViewLoading();
@@ -119,37 +115,37 @@ public class SearchResultListPresenter extends DefaultObserver<List<MediaItem>> 
 
     }
 
-    private void showViewLoading() {
+    /* private */ void showViewLoading() {
         this.viewListView.showLoading();
     }
 
-    private void hideViewLoading() {
+    /* private */ void hideViewLoading() {
         this.viewListView.hideLoading();
     }
 
-    private void showViewRetry() {
+    /* private */ void showViewRetry() {
         this.viewListView.showRetry();
     }
 
-    private void hideViewRetry() {
+    /* private */ void hideViewRetry() {
         this.viewListView.hideRetry();
     }
 
-    private void showErrorMessage( ErrorBundle errorBundle ) {
+    /* private */ void showErrorMessage( ErrorBundle errorBundle ) {
 
         String errorMessage = ErrorMessageFactory.create( this.viewListView.context(), errorBundle.getException() );
         this.viewListView.showError( errorMessage );
 
     }
 
-    private void showSearchResultsCollectionInView( Collection<MediaItem> mediaItemsCollection ) {
+    /* private */ void showSearchResultsCollectionInView( Collection<MediaItem> mediaItemsCollection ) {
 
         final Collection<MediaItemModel> mediaItemModelsCollection = this.mediaItemModelDataMapper.transform( mediaItemsCollection );
         this.viewListView.renderMediaItemList( mediaItemModelsCollection );
 
     }
 
-    private void getSearchResultList() {
+    /* private */ void getSearchResultList() {
 
         this.getSearchResultListUseCase.execute( new SearchResultListObserver(), GetSearchResultList.Params.forSearch( this.searchText ) );
 

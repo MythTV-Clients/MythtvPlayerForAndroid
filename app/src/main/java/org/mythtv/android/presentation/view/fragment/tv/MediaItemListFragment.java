@@ -87,29 +87,29 @@ import io.reactivex.Observable;
  */
 public class MediaItemListFragment extends AbstractBaseBrowseFragment implements MediaItemListView {
 
-    private static final String TAG = MediaItemListFragment.class.getSimpleName();
+    /* private */ static final String TAG = MediaItemListFragment.class.getSimpleName();
 
     public static final String MEDIA_KEY = "media";
     public static final String TV_KEY = "tv";
 
-    private static final int BACKGROUND_UPDATE_DELAY = 300;
+    /* private */ static final int BACKGROUND_UPDATE_DELAY = 300;
 
-    private Media media;
-    private boolean tv;
+    /* private */ Media media;
+    /* private */ boolean tv;
 
-    private final Handler mHandler = new Handler();
-    private Drawable mDefaultBackground;
-    private DisplayMetrics mMetrics;
-    private Timer mBackgroundTimer;
-    private URI mBackgroundURI;
-    private BackgroundManager mBackgroundManager;
+    /* private */ final Handler mHandler = new Handler();
+    /* private */ Drawable mDefaultBackground;
+    /* private */ DisplayMetrics mMetrics;
+    /* private */ Timer mBackgroundTimer;
+    /* private */ URI mBackgroundURI;
+    /* private */ BackgroundManager mBackgroundManager;
 
     @Inject
-    MediaItemListPresenter mediaItemListPresenter;
+    /* private */ MediaItemListPresenter mediaItemListPresenter;
 
-    private MediaItemListListener listener;
+    /* private */ MediaItemListListener listener;
 
-    private List<MediaItemModel> mediaItems;
+    /* private */ List<MediaItemModel> mediaItems;
 
     public MediaItemListFragment() {
         super();
@@ -209,7 +209,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     }
 
-    private void initialize() {
+    /* private */ void initialize() {
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( MediaComponent.class ).inject( this );
@@ -218,7 +218,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
         Log.d( TAG, "initialize : exit" );
     }
 
-    private void setupUI() {
+    /* private */ void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
         switch( media ) {
@@ -435,7 +435,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     /**
      * Loads all media items.
      */
-    private void loadMediaItemList() {
+    /* private */ void loadMediaItemList() {
         Log.d( TAG, "loadMediaItemList : enter" );
 
         this.mediaItemListPresenter.initialize( media, null, tv );
@@ -443,7 +443,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
         Log.d( TAG, "loadMediaItemList : exit" );
     }
 
-    private void prepareBackgroundManager() {
+    /* private */ void prepareBackgroundManager() {
         Log.d( TAG, "prepareBackgroundManager : enter" );
 
         mBackgroundManager = BackgroundManager.getInstance( getActivity() );
@@ -455,7 +455,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
         Log.d( TAG, "prepareBackgroundManager : exit" );
     }
 
-    private void setupEventListeners() {
+    /* private */ void setupEventListeners() {
         Log.d( TAG, "setupEventListeners : enter" );
 
         setOnSearchClickedListener(view -> MediaItemListFragment.this.listener.onSearchClicked());
@@ -492,7 +492,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
         Log.d( TAG, "updateBackground : exit" );
     }
 
-    private void startBackgroundTimer() {
+    /* private */ void startBackgroundTimer() {
         Log.d( TAG, "startBackgroundTimer : enter" );
 
         if( mBackgroundTimer != null ) {
@@ -507,7 +507,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
         Log.d( TAG, "startBackgroundTimer : exit" );
     }
 
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
+    /* private */ final class ItemViewClickedListener implements OnItemViewClickedListener {
 
         @Override
         public void onItemClicked( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
@@ -545,7 +545,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     }
 
-    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
+    /* private */ final class ItemViewSelectedListener implements OnItemViewSelectedListener {
 
         @Override
         public void onItemSelected( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
@@ -573,7 +573,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     }
 
-    private class UpdateBackgroundTask extends TimerTask {
+    /* private */ class UpdateBackgroundTask extends TimerTask {
 
         @Override
         public void run() {
@@ -589,11 +589,11 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
         }
     }
 
-    private class Category {
+    /* private */ class Category {
 
-        private final String key;
-        private final String title;
-        private final Media media;
+        /* private */ final String key;
+        /* private */ final String title;
+        /* private */ final Media media;
 
         public Category( final String title, final Media media ) {
 

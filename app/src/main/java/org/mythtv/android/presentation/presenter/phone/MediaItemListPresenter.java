@@ -75,23 +75,17 @@ public class MediaItemListPresenter extends DefaultObserver<List<MediaItem>> imp
 
     @Override
     public void resume() {
-        Log.v( TAG, "resume : enter" );
-
-        Log.v( TAG, "resume : exit" );
+        // this method is intentionally left blank
     }
 
     @Override
     public void pause() {
-        Log.v( TAG, "pause : enter" );
-
-        Log.v( TAG, "pause : exit" );
+        // this method is intentionally left blank
     }
 
     @Override
     public void destroy() {
-        Log.v( TAG, "destroy : enter" );
-
-        Log.v( TAG, "destroy : exit" );
+        // this method is intentionally left blank
     }
 
     /**
@@ -110,7 +104,7 @@ public class MediaItemListPresenter extends DefaultObserver<List<MediaItem>> imp
     /**
      * Loads media items.
      */
-    private void loadMediaItemList() {
+    /* private */ void loadMediaItemList() {
 
         this.hideViewRetry();
         this.showViewLoading();
@@ -125,37 +119,37 @@ public class MediaItemListPresenter extends DefaultObserver<List<MediaItem>> imp
 
     }
 
-    private void showViewLoading() {
+    /* private */ void showViewLoading() {
         this.viewListView.showLoading();
     }
 
-    private void hideViewLoading() {
+    /* private */ void hideViewLoading() {
         this.viewListView.hideLoading();
     }
 
-    private void showViewRetry() {
+    /* private */ void showViewRetry() {
         this.viewListView.showRetry();
     }
 
-    private void hideViewRetry() {
+    /* private */ void hideViewRetry() {
         this.viewListView.hideRetry();
     }
 
-    private void showErrorMessage( ErrorBundle errorBundle ) {
+    /* private */ void showErrorMessage( ErrorBundle errorBundle ) {
 
         String errorMessage = ErrorMessageFactory.create( this.viewListView.context(), errorBundle.getException() );
         this.viewListView.showError( errorMessage );
 
     }
 
-    private void showMediaItemsCollectionInView( Collection<MediaItem> mediaItemsCollection ) {
+    /* private */ void showMediaItemsCollectionInView( Collection<MediaItem> mediaItemsCollection ) {
 
         final Collection<MediaItemModel> mediaItemModelsCollection = this.mediaItemModelDataMapper.transform( mediaItemsCollection );
         this.viewListView.renderMediaItemList( mediaItemModelsCollection );
 
     }
 
-    private void getMediaItemList() {
+    /* private */ void getMediaItemList() {
 
         this.getMediaItemListUseCase.execute( new MediaItemListObserver(), GetMediaItemList.Params.forMedia( this.media, this.titleRegEx, this.tv ) );
 

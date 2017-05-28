@@ -44,7 +44,7 @@ public class CardPresenter extends Presenter {
     private static final int CARD_HEIGHT = 176;
     private Drawable mDefaultCardImage;
 
-    private static void updateCardBackgroundColor( ImageCardView view, int color ) {
+    /* private */ static void updateCardBackgroundColor( ImageCardView view, int color ) {
 
         // Both background colors should be set because the view's background is temporarily visible
         // during animations.

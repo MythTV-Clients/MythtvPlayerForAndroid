@@ -50,12 +50,11 @@ import org.mythtv.android.R;
  */
 public class ExpandedControlsFragment extends Fragment {
 
-    private static final String TAG = ExpandedControlsFragment.class.getSimpleName();
+    /* private */ static final String TAG = ExpandedControlsFragment.class.getSimpleName();
 
-    private TextView mSubtitleTextView;
-    private UIMediaController mUIMediaController;
-    private final RemoteMediaClient.Listener mPostRemoteMediaClientListener =
-            new RemoteMediaClientListener();
+    /* private */ TextView mSubtitleTextView;
+    /* private */ UIMediaController mUIMediaController;
+    /* private */ final RemoteMediaClient.Listener mPostRemoteMediaClientListener = new RemoteMediaClientListener();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,13 +92,13 @@ public class ExpandedControlsFragment extends Fragment {
         super.onDestroy();
     }
 
-    private void loadAndSetupViews(View rootView) {
+    /* private */ void loadAndSetupViews(View rootView) {
         setUpBackgroundImage(rootView);
         setUpSeekbarControls(rootView);
         setUpTransportControls(rootView);
     }
 
-    private void setUpBackgroundImage(View rootView) {
+    /* private */ void setUpBackgroundImage(View rootView) {
         ImageView backgroundImageView = (ImageView) rootView.findViewById(
                 R.id.background_imageview);
         ProgressBar loading = (ProgressBar) rootView.findViewById(R.id.loading_indicator);
@@ -109,7 +108,7 @@ public class ExpandedControlsFragment extends Fragment {
         mUIMediaController.bindViewToLoadingIndicator(loading);
     }
 
-    private void setUpSeekbarControls(View rootView) {
+    /* private */ void setUpSeekbarControls(View rootView) {
         TextView start = (TextView) rootView.findViewById(R.id.start_text);
         TextView end = (TextView) rootView.findViewById(R.id.end_text);
         SeekBar seekbar = (SeekBar) rootView.findViewById(R.id.seekbar);
@@ -118,7 +117,7 @@ public class ExpandedControlsFragment extends Fragment {
         mUIMediaController.bindSeekBar(seekbar);
     }
 
-    private void setUpTransportControls(View rootView) {
+    /* private */ void setUpTransportControls(View rootView) {
         setUpClosedCaptionButton((ImageButton) rootView.findViewById(R.id.button_image_view_1),
                 mUIMediaController);
         setUpSkipPrevButton((ImageButton) rootView.findViewById(R.id.button_image_view_2),
@@ -130,7 +129,7 @@ public class ExpandedControlsFragment extends Fragment {
         rootView.findViewById(R.id.button_image_view_5).setVisibility(View.INVISIBLE);
     }
 
-    private void setUpPlayPauseToggleButton(ImageButton button,
+    /* private */ void setUpPlayPauseToggleButton(ImageButton button,
                                             UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
         Drawable pauseDrawable = getResources().getDrawable( R.drawable.ic_pause_circle_white);
@@ -140,7 +139,7 @@ public class ExpandedControlsFragment extends Fragment {
                 pauseDrawable, null, null, false);
     }
 
-    private void setButtonBackgroundResource(ImageButton button) {
+    /* private */ void setButtonBackgroundResource(ImageButton button) {
         int[] attrs = new int[]{
                 android.support.v7.appcompat.R.attr.selectableItemBackgroundBorderless};
 
@@ -150,7 +149,7 @@ public class ExpandedControlsFragment extends Fragment {
         button.setBackgroundResource(selectable);
     }
 
-    private void setUpSkipPrevButton(ImageButton button,
+    /* private */ void setUpSkipPrevButton(ImageButton button,
                                      UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
         Drawable skipPreviousDrawable = getResources().getDrawable(R.drawable.skip_previous_button);
@@ -158,7 +157,7 @@ public class ExpandedControlsFragment extends Fragment {
         uiMediaController.bindViewToSkipPrev(button, View.VISIBLE);
     }
 
-    private void setUpSkipNextButton(ImageButton button,
+    /* private */ void setUpSkipNextButton(ImageButton button,
                                      UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
         Drawable skipNextDrawable = getResources().getDrawable(R.drawable.skip_next_button);
@@ -166,7 +165,7 @@ public class ExpandedControlsFragment extends Fragment {
         uiMediaController.bindViewToSkipNext(button, View.VISIBLE);
     }
 
-    private void setUpClosedCaptionButton(ImageButton button,
+    /* private */ void setUpClosedCaptionButton(ImageButton button,
                                           UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
         Drawable closedCaptionDrawable = getResources().getDrawable(R.drawable.cc);
@@ -219,7 +218,7 @@ public class ExpandedControlsFragment extends Fragment {
     }
 
     @SuppressWarnings( "PMD.AvoidDeeplyNestedIfStmts" )
-    private void updateToolbarTitle() {
+    /* private */ void updateToolbarTitle() {
         RemoteMediaClient remoteMediaClient = getRemoteMediaClient();
         if (remoteMediaClient != null && remoteMediaClient.hasMediaSession()) {
             MediaInfo mediaInfo = remoteMediaClient.getMediaInfo();
@@ -233,7 +232,7 @@ public class ExpandedControlsFragment extends Fragment {
         }
     }
 
-    private RemoteMediaClient getRemoteMediaClient() {
+    /* private */ RemoteMediaClient getRemoteMediaClient() {
         CastSession castSession =
                 CastContext.getSharedInstance(getContext()).getSessionManager()
                         .getCurrentCastSession();
@@ -242,7 +241,7 @@ public class ExpandedControlsFragment extends Fragment {
     }
 
     @SuppressWarnings( "PMD.AvoidDeeplyNestedIfStmts" )
-    private void updateSubtitle() {
+    /* private */ void updateSubtitle() {
         CastSession castSession =
                 CastContext.getSharedInstance(getContext()).getSessionManager()
                         .getCurrentCastSession();

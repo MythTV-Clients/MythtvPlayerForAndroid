@@ -59,8 +59,8 @@ public class RemoveLiveStreamUseCase extends UseCase<MediaItem, RemoveLiveStream
 
     public static final class Params {
 
-        private final Media media;
-        private final int id;
+        /* private */ final Media media;
+        /* private */ final int id;
 
         private Params( final Media media, final int id ) {
 

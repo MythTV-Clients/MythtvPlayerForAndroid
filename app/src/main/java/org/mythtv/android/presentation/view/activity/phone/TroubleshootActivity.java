@@ -90,14 +90,14 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     @BindView( R.id.fab )
     FloatingActionButton fab;
 
-    private AirplaneModeConnectedAsyncTask airplaneModeConnectedAsyncTask;
-    private NetworkConnectedAsyncTask networkConnectedAsyncTask;
-    private PingConnectedAsyncTask pingConnectedAsyncTask;
-    private ServicesConnectedAsyncTask servicesConnectedAsyncTask;
-    private BackendVersionVerificationAsyncTask backendVersionVerificationAsyncTask;
-    private BackendLangVerificationAsyncTask backendLangVerificationAsyncTask;
+    /* private */ AirplaneModeConnectedAsyncTask airplaneModeConnectedAsyncTask;
+    /* private */ NetworkConnectedAsyncTask networkConnectedAsyncTask;
+    /* private */ PingConnectedAsyncTask pingConnectedAsyncTask;
+    /* private */ ServicesConnectedAsyncTask servicesConnectedAsyncTask;
+    /* private */ BackendVersionVerificationAsyncTask backendVersionVerificationAsyncTask;
+    /* private */ BackendLangVerificationAsyncTask backendLangVerificationAsyncTask;
 
-    private Animation pulse;
+    /* private */ Animation pulse;
 
     public static Intent getCallingIntent( Context context ) {
 
@@ -155,7 +155,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     /**
      * Initializes this activity.
      */
-    private void initializeActivity() {
+    /* private */ void initializeActivity() {
         Log.d( TAG, "initializeActivity : enter" );
 
         pulse = AnimationUtils.loadAnimation( this, R.anim.pulse );
@@ -165,7 +165,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         Log.d( TAG, "initializeActivity : exit" );
     }
 
-    private void resetImages() {
+    /* private */ void resetImages() {
         Log.v( TAG, "resetImages : enter" );
 
 //        Requires min API 19
@@ -186,7 +186,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         Log.v( TAG, "resetImages : enter" );
     }
 
-    private void setImage( ImageView imageView, int resource ) {
+    /* private */ void setImage( ImageView imageView, int resource ) {
         Log.v( TAG, "setImage : enter" );
 
         pulse.cancel();
@@ -202,7 +202,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
     /**
      * @return boolean
      **/
-    private boolean isAirplaneModeOn() {
+    /* private */ boolean isAirplaneModeOn() {
         Log.v( TAG, "isAirplaneModeOn : enter" );
 
         boolean result = Settings.Global.getInt( getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0 ) != 0;
@@ -258,7 +258,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     }
 
-    private void startAirplaneModeCheckCheck() {
+    /* private */ void startAirplaneModeCheckCheck() {
 
         resetImages();
 
@@ -306,7 +306,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     }
 
-    private void startNetworkConnectionCheck() {
+    /* private */ void startNetworkConnectionCheck() {
 
         setImage( networkConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
         setImage( pingConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
@@ -356,7 +356,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     }
 
-    private void startPingConnectionCheck() {
+    /* private */ void startPingConnectionCheck() {
 
         setImage( pingConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
         setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
@@ -405,7 +405,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     }
 
-    private void startServicesConnectionCheck() {
+    /* private */ void startServicesConnectionCheck() {
 
         setImage( servicesConnectedImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
         setImage( backendLangImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
@@ -439,14 +439,11 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 StringJsonMapper mapper = new StringJsonMapper();
                 Reader result = okHttpClient.newCall( request ).execute().body().charStream();
-                Log.d( TAG, "doInBackground : result=" + result );
 
                 return mapper.transformString( result );
 
             } catch( IOException e ) {
-
-                Log.e( TAG, "doInBackground : error", e );
-
+                // this is intentionally left blank
             }
 
             return null;
@@ -475,7 +472,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     }
 
-    private void startBackendVersionVerificationCheck() {
+    /* private */ void startBackendVersionVerificationCheck() {
 
         setImage( backendVersionImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
         setImage( backendLangImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
@@ -509,14 +506,11 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 BackendVersionJsonMapper mapper = new BackendVersionJsonMapper();
                 Reader result = okHttpClient.newCall( request ).execute().body().charStream();
-                Log.d( TAG, "doInBackground : result=" + result );
 
                 return mapper.transformString( result );
 
             } catch( IOException | JsonSyntaxException e ) {
-
-                Log.e( TAG, "doInBackground : error", e );
-
+                // this is intentionally left blank
             }
 
             return null;
@@ -556,7 +550,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
     }
 
-    private void startBackendLangVerificationCheck() {
+    /* private */ void startBackendLangVerificationCheck() {
 
         setImage( backendLangImage, R.drawable.ic_signal_wifi_0_bar_black_24dp );
 
@@ -589,14 +583,11 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
 
                 BackendLangJsonMapper mapper = new BackendLangJsonMapper();
                 String result = okHttpClient.newCall( request ).execute().body().string();
-                Log.d( TAG, "doInBackground : result=" + result );
 
                 return mapper.transformString( result );
 
             } catch( IOException | JsonSyntaxException e ) {
-
-                Log.e( TAG, "doInBackground : error", e );
-
+                // this is intentionally left blank
             }
 
             return null;

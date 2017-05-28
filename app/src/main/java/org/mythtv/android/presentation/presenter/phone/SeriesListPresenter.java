@@ -72,17 +72,17 @@ public class SeriesListPresenter extends DefaultObserver<List<Series>> implement
 
     @Override
     public void resume() {
-
+        // this method is intentionally left blank
     }
 
     @Override
     public void pause() {
-
+        // this method is intentionally left blank
     }
 
     @Override
     public void destroy() {
-
+        // this method is intentionally left blank
     }
 
     /**
@@ -114,23 +114,23 @@ public class SeriesListPresenter extends DefaultObserver<List<Series>> implement
 
     }
 
-    private void showViewLoading() {
+    /* private */ void showViewLoading() {
         this.viewListView.showLoading();
     }
 
-    private void hideViewLoading() {
+    /* private */ void hideViewLoading() {
         this.viewListView.hideLoading();
     }
 
-    private void showViewRetry() {
+    /* private */ void showViewRetry() {
         this.viewListView.showRetry();
     }
 
-    private void hideViewRetry() {
+    /* private */ void hideViewRetry() {
         this.viewListView.hideRetry();
     }
 
-    private void showErrorMessage( ErrorBundle errorBundle ) {
+    /* private */ void showErrorMessage( ErrorBundle errorBundle ) {
 
         Log.e( TAG, "showErrorMessage : error", errorBundle.getException() );
         String errorMessage = ErrorMessageFactory.create( this.viewListView.context(), errorBundle.getException() );
@@ -138,14 +138,14 @@ public class SeriesListPresenter extends DefaultObserver<List<Series>> implement
 
     }
 
-    private void showSeriesCollectionInView( Collection<Series> seriesCollection ) {
+    /* private */ void showSeriesCollectionInView( Collection<Series> seriesCollection ) {
 
         final Collection<SeriesModel> seriesModelsCollection = this.seriesModelDataMapper.transform( seriesCollection );
         this.viewListView.renderSeriesList( seriesModelsCollection );
 
     }
 
-    private void getSeriesList() {
+    /* private */ void getSeriesList() {
 
         this.getSeriesListUseCase.execute( new SeriesListObserver(), GetSeriesList.Params.forMedia( this.media ) );
 

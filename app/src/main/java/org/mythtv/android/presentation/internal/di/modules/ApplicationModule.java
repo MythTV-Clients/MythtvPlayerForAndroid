@@ -174,9 +174,9 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    DualCache<MediaItemEntity> provideCache( final Context context, final Gson gson ) {
+    DualCache<MediaItemEntity> provideCache( /* final Context context */ final Gson gson ) {
 
-        CacheSerializer<MediaItemEntity> jsonSerializer = new JsonSerializer<>( MediaItemEntity.class );
+//        CacheSerializer<MediaItemEntity> jsonSerializer = new JsonSerializer<>( MediaItemEntity.class );
 
         return new Builder<MediaItemEntity>( "MythtvPlayerCache", 1 )
                 .enableLog()

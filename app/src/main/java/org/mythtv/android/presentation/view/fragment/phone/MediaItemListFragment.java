@@ -60,34 +60,34 @@ import butterknife.Unbinder;
  */
 public class MediaItemListFragment extends AbstractBaseFragment implements MediaItemListView {
 
-    private static final String TAG = MediaItemListFragment.class.getSimpleName();
+    /* private */ static final String TAG = MediaItemListFragment.class.getSimpleName();
 
-    private static final String MEDIA_KEY = "media";
-    private static final String TITLE_REGEX_KEY = "title_regex";
-    private static final String INETREF_KEY = "inetref";
+    /* private */ static final String MEDIA_KEY = "media";
+    /* private */ static final String TITLE_REGEX_KEY = "title_regex";
+    /* private */ static final String INETREF_KEY = "inetref";
 
     @Inject
-    MediaItemListPresenter presenter;
+    /* private */ MediaItemListPresenter presenter;
 
     @BindView( R.id.rv_items)
-    EmptyRecyclerView rv_items;
+    /* private */ EmptyRecyclerView rv_items;
 
     @BindView( R.id.empty_list_view)
-    View emptyView;
+    /* private */ View emptyView;
 
-    private Unbinder unbinder;
+    /* private */ Unbinder unbinder;
 
-    private MediaItemsAdapter adapter;
+    /* private */ MediaItemsAdapter adapter;
 
-    private TroubleshootClickListener troubleshootClickListener;
-    private NotifyListener notifyListener;
-    private MediaItemListListener mediaItemListListener;
+    /* private */ TroubleshootClickListener troubleshootClickListener;
+    /* private */ NotifyListener notifyListener;
+    /* private */ MediaItemListListener mediaItemListListener;
 
-    private Media media;
-    private String titleRegEx;
-    private String inetref;
+    /* private */ Media media;
+    /* private */ String titleRegEx;
+    /* private */ String inetref;
 
-    private final MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
+    /* private */ final MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
 
         if( null != MediaItemListFragment.this.presenter && null != mediaItemModel ) {
 
@@ -227,7 +227,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "onDestroyView : exit" );
     }
 
-    private void initialize() {
+    /* private */ void initialize() {
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( MediaComponent.class ).inject( this );
@@ -240,7 +240,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "initialize : exit" );
     }
 
-    private void setupUI() {
+    /* private */ void setupUI() {
         Log.d( TAG, "setupUI : enter" );
 
         this.rv_items.setLayoutManager( new LayoutManager( getActivity() ) );
@@ -300,9 +300,17 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void renderMediaItemList( Collection<MediaItemModel> modelCollection ) {
         Log.d( TAG, "renderMediaItemList : enter - media=" + media.name() + ", titleRegEx=" + titleRegEx + ", inetref=" + inetref );
 
-        if( null != modelCollection ) {
+        if( null == modelCollection ) {
 
-            if( null != inetref && !"".equals( inetref ) ) {
+            // this is intentionally left blank
+
+        } else {
+
+            if( null == inetref || "".equals( inetref ) ) {
+
+                this.adapter.setMediaItemsCollection( modelCollection );
+
+            } else {
 
                 List<MediaItemModel> filtered = new ArrayList<>();
                 for( MediaItemModel mediaItemModel : modelCollection ) {
@@ -320,10 +328,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
                     this.adapter.setMediaItemsCollection( modelCollection );
 
                 }
-
-            } else {
-
-                this.adapter.setMediaItemsCollection( modelCollection );
 
             }
 
@@ -379,7 +383,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     /**
      * Loads media items.
      */
-    private void loadItems() {
+    /* private */ void loadItems() {
         Log.d( TAG, "loadItems : enter" );
 
         this.presenter.initialize( this.media, this.titleRegEx, false );

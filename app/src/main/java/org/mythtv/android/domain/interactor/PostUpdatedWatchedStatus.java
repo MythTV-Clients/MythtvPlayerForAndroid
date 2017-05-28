@@ -59,9 +59,9 @@ public class PostUpdatedWatchedStatus extends UseCase<MediaItem, PostUpdatedWatc
 
     public static final class Params {
 
-        private final Media media;
-        private final int id;
-        private final boolean watched;
+        /* private */ final Media media;
+        /* private */ final int id;
+        /* private */ final boolean watched;
 
         private Params( final Media media, final int id, final boolean watched ) {
 

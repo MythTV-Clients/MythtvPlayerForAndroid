@@ -86,35 +86,35 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     private static final String TAG = LocalPlayerActivity.class.getSimpleName();
 
-    private VideoView mVideoView;
-    private TextView mTitleView;
-    private TextView mDescriptionView;
-    private TextView mStartText;
-    private TextView mEndText;
-    private SeekBar mSeekbar;
-    private ImageView mPlayPause;
-    private ProgressBar mLoading;
-    private View mControllers;
-    private View mContainer;
-    private ImageView mCoverArt;
-    private Timer mSeekbarTimer;
-    private Timer mControllersTimer;
-    private Timer mBookmarkTimer;
-    private PlaybackState mPlaybackState;
-    private final Handler mHandler = new Handler();
-    private MediaItemModel mSelectedMedia;
-    private boolean mControllersVisible;
-    private int mDuration;
-    private TextView mAuthorView;
-    private ImageButton mPlayCircle;
-    private PlaybackLocation mLocation;
-    private CastContext mCastContext;
-    private CastSession mCastSession;
-    private SessionManagerListener<CastSession> mSessionManagerListener;
+    /* private */ VideoView mVideoView;
+    /* private */ TextView mTitleView;
+    /* private */ TextView mDescriptionView;
+    /* private */ TextView mStartText;
+    /* private */ TextView mEndText;
+    /* private */ SeekBar mSeekbar;
+    /* private */ ImageView mPlayPause;
+    /* private */ ProgressBar mLoading;
+    /* private */ View mControllers;
+    /* private */ View mContainer;
+    /* private */ ImageView mCoverArt;
+    /* private */ Timer mSeekbarTimer;
+    /* private */ Timer mControllersTimer;
+    /* private */ Timer mBookmarkTimer;
+    /* private */ PlaybackState mPlaybackState;
+    /* private */ final Handler mHandler = new Handler();
+    /* private */ MediaItemModel mSelectedMedia;
+    /* private */ boolean mControllersVisible;
+    /* private */ int mDuration;
+    /* private */ TextView mAuthorView;
+    /* private */ ImageButton mPlayCircle;
+    /* private */ PlaybackLocation mLocation;
+    /* private */ CastContext mCastContext;
+    /* private */ CastSession mCastSession;
+    /* private */ SessionManagerListener<CastSession> mSessionManagerListener;
 
-    private OkHttpClient okHttpClient;
+    /* private */ OkHttpClient okHttpClient;
 
-    private final RemoteMediaClient.ProgressListener progressListener = ( position, duration ) -> new UpdateBookmarkAsyncTask().execute( position  );
+    /* private */ final RemoteMediaClient.ProgressListener progressListener = ( position, duration ) -> new UpdateBookmarkAsyncTask().execute( position  );
 
 
     /**
@@ -224,7 +224,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void setupCastListener() {
+    /* private */ void setupCastListener() {
         mSessionManagerListener = new SessionManagerListener<CastSession>() {
 
             @Override
@@ -264,41 +264,29 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
             @Override
             public void onSessionStarting( CastSession session ) {
-                Log.v( TAG, "onSessionStarting : enter" );
-
-                Log.v( TAG, "onSessionStarting : exit" );
+                // this method is intentionally left blank
             }
 
             @Override
             public void onSessionEnding( CastSession session ) {
-                Log.v( TAG, "onSessionEnding : enter" );
-
-                Log.v( TAG, "onSessionEnding : exit" );
+                // this method is intentionally left blank
             }
 
             @Override
             public void onSessionResuming( CastSession session, String sessionId ) {
-                Log.v( TAG, "onSessionSesuming : enter" );
-
-                Log.v( TAG, "onSessionResuming : exit" );
+                // this method is intentionally left blank
             }
 
             @Override
             public void onSessionSuspended( CastSession session, int reason ) {
-                Log.v( TAG, "onSessionSuspended : enter" );
-
-                Log.v( TAG, "onSessionSuspended : exit" );
+                // this method is intentionally left blank
             }
 
             private void onApplicationConnected( CastSession castSession ) {
-                Log.v( TAG, "onApplicationConnected : enter" );
 
                 mCastSession = castSession;
 
-                if( null == mSelectedMedia ) {
-                    Log.w( TAG, "onApplicationConnected : no selected media" );
-
-                } else {
+                if( null != mSelectedMedia ) {
 
                     if( mPlaybackState == PlaybackState.PLAYING ) {
 
@@ -335,7 +323,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void updatePlaybackLocation( PlaybackLocation location ) {
+    /* private */ void updatePlaybackLocation( PlaybackLocation location ) {
 
         mLocation = location;
         if( location == PlaybackLocation.LOCAL ) {
@@ -362,7 +350,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void play( int position ) {
+    /* private */ void play( int position ) {
 
         startControllersTimer();
 
@@ -393,7 +381,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void togglePlayback() {
+    /* private */ void togglePlayback() {
 
         stopControllersTimer();
 
@@ -489,7 +477,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void loadRemoteMedia( long position, boolean autoPlay ) {
+    /* private */ void loadRemoteMedia( long position, boolean autoPlay ) {
 
         if( null == mCastSession ) {
 
@@ -519,7 +507,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void setCoverArtStatus( String url ) {
+    /* private */ void setCoverArtStatus( String url ) {
 
         if( null == url ) {
 
@@ -540,7 +528,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void stopTrickplayTimer() {
+    /* private */ void stopTrickplayTimer() {
 
         if( null == mSeekbarTimer ) {
             Log.w( TAG, "no TrickPlay Timer to stop" );
@@ -554,7 +542,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void stopBookmarkTimer() {
+    /* private */ void stopBookmarkTimer() {
 
         if( null == mBookmarkTimer ) {
             Log.w( TAG, "no Bookmark Timer to stop" );
@@ -568,7 +556,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void restartTrickplayTimer() {
+    /* private */ void restartTrickplayTimer() {
 
         stopTrickplayTimer();
 
@@ -578,7 +566,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void restartBookmarkTimer() {
+    /* private */ void restartBookmarkTimer() {
 
         stopBookmarkTimer();
 
@@ -588,7 +576,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void stopControllersTimer() {
+    /* private */ void stopControllersTimer() {
 
         if( null == mControllersTimer ) {
             Log.d( TAG, "no Controller Timer to stop" );
@@ -601,7 +589,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void startControllersTimer() {
+    /* private */ void startControllersTimer() {
 
         if( null == mControllersTimer ) {
             Log.d( TAG, "no controller Timer to start" );
@@ -623,7 +611,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
     }
 
     // should be called from the main thread
-    private void updateControllersVisibility( boolean show ) {
+    /* private */ void updateControllersVisibility( boolean show ) {
 
         if( show ) {
 
@@ -798,7 +786,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
             if(  mSelectedMedia.media().equals(Media.PROGRAM)) {
 
                 long currentPos = params[0];
-                Log.d(TAG, "UpdateBookmarkAsyncTask.doInBackground : url=" + (getMasterBackendUrl() + mSelectedMedia.updateSavedBookmarkUrl()));
 
                 String id = mSelectedMedia.media().equals(Media.PROGRAM) ? "RecordedId" : "Id";
 
@@ -809,7 +796,6 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
                 FormBody.Builder builder = new FormBody.Builder();
                 for( Map.Entry<String, String> entry : parameters.entrySet() ) {
-                    Log.d( TAG, "UpdateBookmarkAsyncTask.doInBackground : key=" + entry.getKey() + ", value=" + entry.getValue() );
                     builder.add( entry.getKey(), entry.getValue() );
                 }
 
@@ -821,13 +807,10 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
                 try {
 
-                    String result = okHttpClient.newCall(request).execute().body().string();
-                    Log.d(TAG, "doInBackground : result=" + result);
+                    okHttpClient.newCall(request).execute().body().string();
 
                 } catch (IOException e) {
-
-                    Log.e(TAG, "doInBackground : error", e);
-
+                    // this is intentionally left blank
                 }
 
             }
@@ -837,7 +820,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void setupControlsCallbacks() {
+    /* private */ void setupControlsCallbacks() {
 
         mVideoView.setOnErrorListener( ( mp, what, extra ) -> {
             Log.e( TAG, "OnErrorListener.onError(): VideoView encountered an " + "error, what: " + what + ", extra: " + extra );
@@ -952,7 +935,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void updateSeekbar( int position, int duration ) {
+    /* private */ void updateSeekbar( int position, int duration ) {
 
         mSeekbar.setProgress( position );
         mSeekbar.setMax( duration );
@@ -961,7 +944,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void updatePlayButton( PlaybackState state ) {
+    /* private */ void updatePlayButton( PlaybackState state ) {
         Log.d( TAG, "Controls: PlayBackState: " + state );
 
         boolean isConnected = ( null != mCastSession ) && ( mCastSession.isConnected() || mCastSession.isConnecting() );
@@ -1052,7 +1035,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void updateMetadata( boolean visible ) {
+    /* private */ void updateMetadata( boolean visible ) {
 
         Point displaySize;
         if( visible ) {
@@ -1109,7 +1092,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
         return true;
     }
 
-    private void setupActionBar() {
+    /* private */ void setupActionBar() {
 
         Toolbar toolbar = (Toolbar) findViewById( R.id.toolbar );
         toolbar.setTitle( mSelectedMedia.title() );
@@ -1118,7 +1101,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private void loadViews() {
+    /* private */ void loadViews() {
 
         mVideoView = (VideoView) findViewById( R.id.videoView1 );
         mTitleView = (TextView) findViewById( R.id.textView1 );
@@ -1140,7 +1123,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
 
     }
 
-    private MediaInfo buildMediaInfo() {
+    /* private */ MediaInfo buildMediaInfo() {
 
         MediaMetadata movieMetadata = new MediaMetadata( MediaMetadata.MEDIA_TYPE_MOVIE );
 
@@ -1162,12 +1145,12 @@ public class LocalPlayerActivity extends AppCompatActivity {
      *
      * @return {@link SharedPreferencesComponent}
      */
-    private SharedPreferencesComponent getSharedPreferencesComponent() {
+    /* private */ SharedPreferencesComponent getSharedPreferencesComponent() {
 
         return ( (AndroidApplication) getApplication() ).getSharedPreferencesComponent();
     }
 
-    private String getMasterBackendUrl() {
+    /* private */ String getMasterBackendUrl() {
 
         String host = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "" );
 //        String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );

@@ -132,69 +132,52 @@ public class ExpandedControlsActivity extends AppCompatActivity {
     private class SessionManagerListenerImpl implements SessionManagerListener {
 
         @Override
-        public void onSessionEnded(Session session, int error) {
-            Log.v( TAG, "onSessionEnded : enter" );
+        public void onSessionEnded( Session session, int error ) {
 
             finish();
 
-            Log.v( TAG, "onSessionEnded : exit" );
         }
 
         @Override
-        public void onSessionStarting(Session session) {
-            Log.v( TAG, "onSessionStarting : enter" );
-
-            Log.v( TAG, "onSessionStarting : exit" );
+        public void onSessionStarting( Session session ) {
+            // this method is intentionally left blank
         }
 
         @Override
-        public void onSessionStarted(Session session, String sessionId) {
-            Log.v( TAG, "onSessionStarted : enter" );
-
-            Log.v( TAG, "onSessionStarted : exit" );
+        public void onSessionStarted( Session session, String sessionId ) {
+            // this method is intentionally left blank
         }
 
         @Override
-        public void onSessionStartFailed(Session session, int error) {
-            Log.v( TAG, "onSessionStartFailed : enter" );
-
-            Log.v( TAG, "onSessionStartFailed : exit" );
+        public void onSessionStartFailed( Session session, int error ) {
+            // this method is intentionally left blank
         }
 
         @Override
-        public void onSessionEnding(Session session) {
-            Log.v( TAG, "onSessionEnding : enter" );
-
-            Log.v( TAG, "onSessionEnding : exit" );
+        public void onSessionEnding( Session session ) {
+            // this method is intentionally left blank
         }
 
         @Override
-        public void onSessionResuming(Session session, String sessionId) {
-            Log.v( TAG, "onSessionResuming : enter" );
-
-            Log.v( TAG, "onSessionResuming : exit" );
+        public void onSessionResuming( Session session, String sessionId ) {
+            // this method is intentionally left blank
         }
 
         @Override
-        public void onSessionResumed(Session session, boolean wasSuspended) {
-            Log.v( TAG, "onSessionResumed : enter" );
-
-            Log.v( TAG, "onSessionResumed : exit" );
+        public void onSessionResumed( Session session, boolean wasSuspended ) {
+            // this method is intentionally left blank
         }
 
         @Override
-        public void onSessionResumeFailed(Session session, int error) {
-            Log.v( TAG, "onSessionResumeFailed : enter" );
-
-            Log.v( TAG, "onSessionResumeFailed : exit" );
+        public void onSessionResumeFailed( Session session, int error ) {
+            // this method is intentionally left blank
         }
 
         @Override
-        public void onSessionSuspended(Session session, int reason) {
-            Log.v( TAG, "onSessionSuspended : enter" );
-
-            Log.v( TAG, "onSessionSuspended : exit" );
+        public void onSessionSuspended( Session session, int reason ) {
+            // this method is intentionally left blank
         }
+
     }
 
 }

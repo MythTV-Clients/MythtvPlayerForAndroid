@@ -63,21 +63,21 @@ import org.mythtv.android.presentation.view.activity.tv.PlaybackOverlayActivity;
  */
 public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
-    private static final String TAG = MediaItemDetailsFragment.class.getSimpleName();
+    /* private */ static final String TAG = MediaItemDetailsFragment.class.getSimpleName();
 
-    private static final int ACTION_WATCH = 1;
+    /* private */ static final int ACTION_WATCH = 1;
 
-    private static final int DETAIL_THUMB_WIDTH = 274;
-    private static final int DETAIL_THUMB_HEIGHT = 274;
+    /* private */ static final int DETAIL_THUMB_WIDTH = 274;
+    /* private */ static final int DETAIL_THUMB_HEIGHT = 274;
 
-    private MediaItemModel mediaItemModel;
+    /* private */ MediaItemModel mediaItemModel;
 
-    private ArrayObjectAdapter mAdapter;
-    private ClassPresenterSelector mPresenterSelector;
+    /* private */ ArrayObjectAdapter mAdapter;
+    /* private */ ClassPresenterSelector mPresenterSelector;
 
-    private BackgroundManager mBackgroundManager;
-    private Drawable mDefaultBackground;
-    private DisplayMetrics mMetrics;
+    /* private */ BackgroundManager mBackgroundManager;
+    /* private */ Drawable mDefaultBackground;
+    /* private */ DisplayMetrics mMetrics;
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
@@ -101,7 +101,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     }
 
-    private void prepareBackgroundManager() {
+    /* private */ void prepareBackgroundManager() {
 
         mBackgroundManager = BackgroundManager.getInstance( getActivity() );
         mBackgroundManager.attach( getActivity().getWindow() );
@@ -131,7 +131,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     }
 
-    private void setupAdapter() {
+    /* private */ void setupAdapter() {
 
         mPresenterSelector = new ClassPresenterSelector();
         mAdapter = new ArrayObjectAdapter( mPresenterSelector );
@@ -139,7 +139,7 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     }
 
-    private void setupDetailsOverviewRow() {
+    /* private */ void setupDetailsOverviewRow() {
         Log.d( TAG, "setupDetailsOverviewRow : " + mediaItemModel.toString());
 
         final DetailsOverviewRow row = new DetailsOverviewRow( mediaItemModel );
@@ -198,19 +198,19 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     }
 
-    private boolean mediaSupported() {
+    /* private */ boolean mediaSupported() {
 
         return "mp4".endsWith( mediaItemModel.url() ) || "m4v".endsWith( mediaItemModel.url() ) || "mkv".endsWith( mediaItemModel.url() );
 
     }
 
-    private boolean liveStreamSupported() {
+    /* private */ boolean liveStreamSupported() {
 
         return mediaItemModel.liveStreamId() != -1 && mediaItemModel.percentComplete() > 2;
 
     }
 
-    private void setupDetailsOverviewRowPresenter() {
+    /* private */ void setupDetailsOverviewRowPresenter() {
 
         // Set detail background and style.
         DetailsOverviewRowPresenter detailsPresenter = new DetailsOverviewRowPresenter( new DetailsDescriptionPresenter() );
@@ -263,13 +263,13 @@ public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
         mPresenterSelector.addClassPresenter( DetailsOverviewRow.class, detailsPresenter );
     }
 
-    private void setupMovieListRow() {
+    /* private */ void setupMovieListRow() {
         Log.v( TAG, "setupMovieListRow : enter" );
 
         Log.v( TAG, "setupMovieListRow : exit" );
     }
 
-    private void setupMovieListRowPresenter() {
+    /* private */ void setupMovieListRowPresenter() {
 
         mPresenterSelector.addClassPresenter( ListRow.class, new ListRowPresenter() );
 

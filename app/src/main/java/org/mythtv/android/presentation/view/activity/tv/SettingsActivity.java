@@ -68,67 +68,65 @@ import rx.Subscription;
 @SuppressWarnings({ "PMD.AvoidDuplicateLiterals", "PMD.GodClass" })
 public class SettingsActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent> {
 
-    private static final String TAG = SettingsActivity.class.getSimpleName();
-    private static final String SEPARATOR = " | ";
+    /* private */ static final String TAG = SettingsActivity.class.getSimpleName();
+    /* private */ static final String SEPARATOR = " | ";
 
-    private static final int MASTER_BACKEND_SETTINGS = 10;
-    private static final int MASTER_BACKEND_SCAN_URL = 11;
-    private static final int MASTER_BACKEND_URL = 12;
-    private static final int MASTER_BACKEND_PORT = 13;
-    private static final int PLAYER_SETTINGS = 20;
-    private static final int INTERNAL_PLAYER_SETTINGS = 21;
-    private static final int FILTER_SETTINGS = 30;
-    private static final int FILTER_HLS_ONLY = 31;
-    private static final int RECORDING_SETTINGS = 40;
-    private static final int ENABLE_RECORDING_GROUP = 41;
-    private static final int RECORDING_GROUPS_FILTER = 42;
-    private static final int VIDEO_SETTINGS = 50;
-    private static final int ADULT_SETTINGS = 51;
-    private static final int PARENTAL_CONTROLS = 52;
-    private static final int PARENTAL_CONTROL_LEVEL = 53;
-    private static final int CONTENT_RATINGS = 54;
-    private static final int CONTENT_RATING_NR = 55;
-    private static final int CONTENT_RATING_G = 56;
-    private static final int CONTENT_RATING_PG = 57;
-    private static final int CONTENT_RATING_PG13 = 58;
-    private static final int CONTENT_RATING_R = 59;
-    private static final int CONTENT_RATING_NC17 = 60;
-    private static final int ANALYTICS_SETTINGS = 70;
+    /* private */ static final int MASTER_BACKEND_SETTINGS = 10;
+    /* private */ static final int MASTER_BACKEND_SCAN_URL = 11;
+    /* private */ static final int MASTER_BACKEND_URL = 12;
+    /* private */ static final int PLAYER_SETTINGS = 20;
+    /* private */ static final int INTERNAL_PLAYER_SETTINGS = 21;
+    /* private */ static final int FILTER_SETTINGS = 30;
+    /* private */ static final int FILTER_HLS_ONLY = 31;
+    /* private */ static final int RECORDING_SETTINGS = 40;
+    /* private */ static final int ENABLE_RECORDING_GROUP = 41;
+    /* private */ static final int RECORDING_GROUPS_FILTER = 42;
+    /* private */ static final int VIDEO_SETTINGS = 50;
+    /* private */ static final int ADULT_SETTINGS = 51;
+    /* private */ static final int PARENTAL_CONTROLS = 52;
+    /* private */ static final int PARENTAL_CONTROL_LEVEL = 53;
+    /* private */ static final int CONTENT_RATINGS = 54;
+    /* private */ static final int CONTENT_RATING_NR = 55;
+    /* private */ static final int CONTENT_RATING_G = 56;
+    /* private */ static final int CONTENT_RATING_PG = 57;
+    /* private */ static final int CONTENT_RATING_PG13 = 58;
+    /* private */ static final int CONTENT_RATING_R = 59;
+    /* private */ static final int CONTENT_RATING_NC17 = 60;
+    /* private */ static final int ANALYTICS_SETTINGS = 70;
 
-    private static final int OPTION_CHECK_SET_ID = 10;
+    /* private */ static final int OPTION_CHECK_SET_ID = 10;
 
-    private static SettingsFragment mSettingsFragment;
+    /* private */ static SettingsFragment mSettingsFragment;
 
-    private static MasterBackendFragment mMasterBackendFragment;
-    private static MasterBackendScanUrlFragment mMasterBackendScanUrlFragment;
-    private static MasterBackendUrlFragment mMasterBackendUrlFragment;
-//    private static MasterBackendPortFragment mMasterBackendPortFragment;
+    /* private */ static MasterBackendFragment mMasterBackendFragment;
+    /* private */ static MasterBackendScanUrlFragment mMasterBackendScanUrlFragment;
+    /* private */ static MasterBackendUrlFragment mMasterBackendUrlFragment;
 
-    private static PlayerFragment mPlayerFragment;
-    private static InternalPlayerFragment mInternalPlayerFragment;
+    /* private */ static PlayerFragment mPlayerFragment;
+    /* private */ static InternalPlayerFragment mInternalPlayerFragment;
 
-    private static FilterSettingsFragment mFilterSettingsFragment;
-    private static EnableHlsOnlyFilterFragment mEnableHlsOnlyFilterFragment;
+    /* private */ static FilterSettingsFragment mFilterSettingsFragment;
+    /* private */ static EnableHlsOnlyFilterFragment mEnableHlsOnlyFilterFragment;
 
-    private static RecordingSettingsFragment mRecordingSettingsFragment;
-    private static EnableRecordingGroupFragment mEnableRecordingGroupFragment;
-    private static RecordingGroupFragment mRecordingGroupFragment;
+    /* private */ static RecordingSettingsFragment mRecordingSettingsFragment;
+    /* private */ static EnableRecordingGroupFragment mEnableRecordingGroupFragment;
+    /* private */ static RecordingGroupFragment mRecordingGroupFragment;
 
-    private static VideoSettingsFragment mVideoSettingsFragment;
-    private static AdultContentFragment mAdultContentFragment;
-    private static ParentalControlsFragment mParentalControlsFragment;
-    private static ParentalControlLevelFragment mParentalControlLevelFragment;
-    private static ContentRatingFragment mContentRatingFragment;
-    private static ContentRatingNrFragment mContentRatingNrFragment;
-    private static ContentRatingGFragment mContentRatingGFragment;
-    private static ContentRatingPgFragment mContentRatingPgFragment;
-    private static ContentRatingPg13Fragment mContentRatingPg13Fragment;
-    private static ContentRatingRFragment mContentRatingRFragment;
-    private static ContentRatingNc17Fragment mContentRatingNc17Fragment;
+    /* private */ static VideoSettingsFragment mVideoSettingsFragment;
+    /* private */ static AdultContentFragment mAdultContentFragment;
+    /* private */ static ParentalControlsFragment mParentalControlsFragment;
+    /* private */ static ParentalControlLevelFragment mParentalControlLevelFragment;
+    /* private */ static ContentRatingFragment mContentRatingFragment;
+    /* private */ static ContentRatingNrFragment mContentRatingNrFragment;
+    /* private */ static ContentRatingGFragment mContentRatingGFragment;
+    /* private */ static ContentRatingPgFragment mContentRatingPgFragment;
+    /* private */ static ContentRatingPg13Fragment mContentRatingPg13Fragment;
+    /* private */ static ContentRatingRFragment mContentRatingRFragment;
+    /* private */ static ContentRatingNc17Fragment mContentRatingNc17Fragment;
 
-    private static AnalyticsFragment mAnalyticsFragment;
+    /* private */ static AnalyticsFragment mAnalyticsFragment;
 
-    private MediaComponent mediaComponent;
+    /* private */ MediaComponent mediaComponent;
 
     public static Intent getCallingIntent( Context context ) {
 
@@ -2156,7 +2154,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     }
 
-    private static void addAction( Context context, List<GuidedAction> actions, long id, String title, String desc, boolean enabled, boolean hasNext ) {
+    /* private */ static void addAction( Context context, List<GuidedAction> actions, long id, String title, String desc, boolean enabled, boolean hasNext ) {
 
         actions.add( new GuidedAction.Builder( context )
                 .id( id )
@@ -2170,7 +2168,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     }
 
-    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String desc ) {
+    /* private */ static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String desc ) {
 
         actions.add( new GuidedAction.Builder( context )
                 .id( id )
@@ -2182,20 +2180,7 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     }
 
-//    private static void addEditableAction( Context context, List<GuidedAction> actions, long id, String title, String editTitle, String desc ) {
-//
-//        actions.add( new GuidedAction.Builder( context )
-//                .id( id )
-//                .title( title )
-//                .editTitle( editTitle )
-//                .description( desc )
-//                .editable( true )
-//                .hasNext( false )
-//                .build() );
-//
-//    }
-
-    private static void addCheckedAction( Context context, List<GuidedAction> actions, int iconResId, String title, String desc, boolean checked ) {
+    /* private */ static void addCheckedAction( Context context, List<GuidedAction> actions, int iconResId, String title, String desc, boolean checked ) {
 
         GuidedAction guidedAction = new GuidedAction.Builder( context )
                 .title( title )
@@ -2209,111 +2194,108 @@ public class SettingsActivity extends AbstractBaseTvActivity implements HasCompo
 
     }
 
-    private static String getMasterBackendUrl( Context context ) {
+    /* private */ static String getMasterBackendUrl( Context context ) {
 
-        String host = getStringFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_URL );
-//        String port = getStringFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_PORT );
-
-        return "http://" + host; // + ":" + port;
+        return getStringFromPreferences( context, SettingsKeys.KEY_PREF_BACKEND_URL );
     }
 
-    private static boolean getShouldUseInternalPlayer( Context context ) {
+    /* private */ static boolean getShouldUseInternalPlayer( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_INTERNAL_PLAYER );
     }
 
-    private static boolean getFilterHlsOnly( Context context ) {
+    /* private */ static boolean getFilterHlsOnly( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_FILTER_HLS_ONLY );
     }
 
-    private static boolean getEnableRecordingGroupFilter( Context context ) {
+    /* private */ static boolean getEnableRecordingGroupFilter( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_RECORDING_GROUP_FILTER );
     }
 
-    private static String getRecordingGroupFilter( Context context ) {
+    /* private */ static String getRecordingGroupFilter( Context context ) {
 
         return getStringFromPreferences( context, SettingsKeys.KEY_PREF_RECORDING_GROUP_FILTER );
     }
 
-    private static boolean getShowAdultContent( Context context ) {
+    /* private */ static boolean getShowAdultContent( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_SHOW_ADULT_TAB );
     }
 
-    private static boolean getEnableParentalControls( Context context ) {
+    /* private */ static boolean getEnableParentalControls( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_PARENTAL_CONTROLS );
     }
 
-    private static String getParentalControlLevel( Context context ) {
+    /* private */ static String getParentalControlLevel( Context context ) {
 
         return getStringFromPreferences( context, SettingsKeys.KEY_PREF_PARENTAL_CONTROL_LEVEL );
     }
 
-    private static boolean getRestrictContentType( Context context ) {
+    /* private */ static boolean getRestrictContentType( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RESTRICT_CONTENT_TYPES );
     }
 
-    private static boolean getContentTypeNR( Context context ) {
+    /* private */ static boolean getContentTypeNR( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_NR );
     }
 
-    private static boolean getContentTypeG( Context context ) {
+    /* private */ static boolean getContentTypeG( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_G );
     }
 
-    private static boolean getContentTypePG( Context context ) {
+    /* private */ static boolean getContentTypePG( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_PG );
     }
 
-    private static boolean getContentTypePG13(Context context ) {
+    /* private */ static boolean getContentTypePG13(Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_PG13 );
     }
 
-    private static boolean getContentTypeR( Context context ) {
+    /* private */ static boolean getContentTypeR( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_R );
     }
 
-    private static boolean getContentTypeNC17( Context context ) {
+    /* private */ static boolean getContentTypeNC17( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_RATING_NC17 );
     }
 
-    private static boolean getEnableAnalytics( Context context ) {
+    /* private */ static boolean getEnableAnalytics( Context context ) {
 
         return getBooleanFromPreferences( context, SettingsKeys.KEY_PREF_ENABLE_ANALYTICS );
     }
 
-    private static String getStringFromPreferences( Context context, String key ) {
+    /* private */ static String getStringFromPreferences( Context context, String key ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getString( key, "" );
     }
 
-    private static void putStringToPreferences( Context context, String key, String value ) {
+    /* private */ static void putStringToPreferences( Context context, String key, String value ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
         sharedPreferences.edit().putString( key, value ).apply();
 
     }
 
-    private static boolean getBooleanFromPreferences( Context context, String key ) {
+    /* private */ static boolean getBooleanFromPreferences( Context context, String key ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 
         return sharedPreferences.getBoolean( key, false );
     }
 
-    private static void putBooleanToPreferences( Context context, String key, boolean value ) {
+    /* private */ static void putBooleanToPreferences( Context context, String key, boolean value ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
         sharedPreferences.edit().putBoolean( key, value ).apply();

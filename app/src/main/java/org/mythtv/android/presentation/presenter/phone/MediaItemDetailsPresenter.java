@@ -87,16 +87,12 @@ public class MediaItemDetailsPresenter implements Presenter {
 
     @Override
     public void resume() {
-        Log.v( TAG, "resume : enter" );
-
-        Log.v( TAG, "resume : exit" );
+        // this method is intentionally left blank
     }
 
     @Override
     public void pause() {
-        Log.v( TAG, "pause : enter" );
-
-        Log.v( TAG, "pause : exit" );
+        // this method is intentionally left blank
     }
 
     @Override
@@ -146,7 +142,7 @@ public class MediaItemDetailsPresenter implements Presenter {
     /**
      * Loads mediaItem details.
      */
-    private void loadMediaItemDetails() {
+    /* private */ void loadMediaItemDetails() {
 
         this.hideViewRetry();
         this.showViewLoading();
@@ -154,31 +150,31 @@ public class MediaItemDetailsPresenter implements Presenter {
 
     }
 
-    private void showViewLoading() {
+    /* private */ void showViewLoading() {
 
         this.viewDetailsView.showLoading();
 
     }
 
-    private void hideViewLoading() {
+    /* private */ void hideViewLoading() {
 
         this.viewDetailsView.hideLoading();
 
     }
 
-    private void showViewRetry() {
+    /* private */ void showViewRetry() {
 
         this.viewDetailsView.showRetry();
 
     }
 
-    private void hideViewRetry() {
+    /* private */ void hideViewRetry() {
 
         this.viewDetailsView.hideRetry();
 
     }
 
-    private void showErrorMessage( ErrorBundle errorBundle ) {
+    /* private */ void showErrorMessage( ErrorBundle errorBundle ) {
 
         Log.e( TAG, "showErrorMessage : error", errorBundle.getException() );
         String errorMessage = ErrorMessageFactory.create( this.viewDetailsView.context(), errorBundle.getException() );
@@ -186,7 +182,7 @@ public class MediaItemDetailsPresenter implements Presenter {
 
     }
 
-    private void updateDetails( MediaItem mediaItem ) {
+    /* private */ void updateDetails( MediaItem mediaItem ) {
         Log.d( TAG, "updateDetails : enter" );
 
         this.mediaItemModel = this.mediaItemModelDataMapper.transform( mediaItem );
@@ -196,7 +192,7 @@ public class MediaItemDetailsPresenter implements Presenter {
         Log.d( TAG, "updateDetails : exit" );
     }
 
-    private void showDetailsInView() {
+    /* private */ void showDetailsInView() {
         Log.d( TAG, "showDetailsInView : enter" );
 
         this.viewDetailsView.renderMediaItem( this.mediaItemModel );
@@ -204,7 +200,7 @@ public class MediaItemDetailsPresenter implements Presenter {
         Log.d( TAG, "showDetailsInView : exit" );
     }
 
-    private void refreshDetails( MediaItem mediaItem ) {
+    /* private */ void refreshDetails( MediaItem mediaItem ) {
         Log.d( TAG, "refreshDetails : enter" );
 
         this.mediaItemModel = this.mediaItemModelDataMapper.transform( mediaItem );
@@ -214,7 +210,7 @@ public class MediaItemDetailsPresenter implements Presenter {
         Log.d( TAG, "refreshDetails : exit" );
     }
 
-    private void refreshDetailsInView() {
+    /* private */ void refreshDetailsInView() {
         Log.d( TAG, "refreshDetailsInView : enter" );
 
         this.viewDetailsView.refreshMediaItem( this.mediaItemModel );
@@ -222,7 +218,7 @@ public class MediaItemDetailsPresenter implements Presenter {
         Log.d( TAG, "refreshDetailsInView : exit" );
     }
 
-    private void getDetails() {
+    /* private */ void getDetails() {
         Log.d( TAG, "getDetails : enter" );
 
         this.getMediaItemDetailsUseCase.execute( new MediaItemDetailsObserver(), GetMediaItemDetails.Params.forMediaItem( this.media, this.id ) );

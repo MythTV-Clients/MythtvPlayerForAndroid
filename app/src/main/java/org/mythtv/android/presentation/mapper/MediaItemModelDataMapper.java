@@ -41,7 +41,7 @@ public class MediaItemModelDataMapper {
             errors.add( ErrorModel.fromError( error ) );
         }
 
-        MediaItemModel mediaItemModel = MediaItemModel.create(
+        return MediaItemModel.create(
                 mediaItem.id(),
                 mediaItem.media(),
                 mediaItem.title(),
@@ -72,9 +72,6 @@ public class MediaItemModelDataMapper {
                 mediaItem.parentalLevel(),
                 mediaItem.recordingGroup(),
                 errors );
-
-
-        return mediaItemModel;
     }
 
     public List<MediaItemModel> transform( Collection<MediaItem> mediaItemCollection ) {

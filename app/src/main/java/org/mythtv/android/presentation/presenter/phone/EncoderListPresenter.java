@@ -66,17 +66,17 @@ public class EncoderListPresenter extends DefaultObserver<List<Encoder>> impleme
 
     @Override
     public void resume() {
-
+        // this method is intentionally left blank
     }
 
     @Override
     public void pause() {
-
+        // this method is intentionally left blank
     }
 
     @Override
     public void destroy() {
-
+        // this method is intentionally left blank
     }
 
     /**
@@ -99,37 +99,37 @@ public class EncoderListPresenter extends DefaultObserver<List<Encoder>> impleme
 
     }
 
-    private void showViewLoading() {
+    /* private */ void showViewLoading() {
         this.viewListView.showLoading();
     }
 
-    private void hideViewLoading() {
+    /* private */ void hideViewLoading() {
         this.viewListView.hideLoading();
     }
 
-    private void showViewRetry() {
+    /* private */ void showViewRetry() {
         this.viewListView.showRetry();
     }
 
-    private void hideViewRetry() {
+    /* private */ void hideViewRetry() {
         this.viewListView.hideRetry();
     }
 
-    private void showErrorMessage( ErrorBundle errorBundle ) {
+    /* private */ void showErrorMessage(ErrorBundle errorBundle) {
 
         String errorMessage = ErrorMessageFactory.create( this.viewListView.context(), errorBundle.getException() );
         this.viewListView.showError( errorMessage );
 
     }
 
-    private void showEncodersCollectionInView( Collection<Encoder> encodersCollection ) {
+    /* private */ void showEncodersCollectionInView(Collection<Encoder> encodersCollection) {
 
         final Collection<EncoderModel> encoderModelsCollection = this.encoderModelDataMapper.transform( encodersCollection );
         this.viewListView.renderEncoderList( encoderModelsCollection );
 
     }
 
-    private void getEncoderList() {
+    /* private */ void getEncoderList() {
 
         this.getEncoderListUseCase.execute( new EncoderListObserver(), null );
 

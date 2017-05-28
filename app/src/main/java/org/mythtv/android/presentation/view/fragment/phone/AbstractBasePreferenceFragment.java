@@ -74,10 +74,7 @@ public abstract class AbstractBasePreferenceFragment extends PreferenceFragment 
 
     protected String getMasterBackendComponents() {
 
-        String host = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "" );
-//        String port = getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_PORT, "6544" );
-
-        return host; // + ":" + port;
+        return getSharedPreferencesComponent().sharedPreferences().getString( SettingsKeys.KEY_PREF_BACKEND_URL, "" );
     }
 
     protected String getMasterBackendUrl() {

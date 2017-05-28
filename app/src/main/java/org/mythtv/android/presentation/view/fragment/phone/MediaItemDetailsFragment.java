@@ -70,23 +70,23 @@ import static android.app.Activity.RESULT_OK;
  */
 public class MediaItemDetailsFragment extends AbstractBaseFragment implements MediaItemDetailsView {
 
-    private static final String TAG = MediaItemDetailsFragment.class.getSimpleName();
+    /* private */ static final String TAG = MediaItemDetailsFragment.class.getSimpleName();
 
-    private static final String MEDIA_KEY = "media";
-    private static final String ID_KEY = "id";
+    /* private */ static final String MEDIA_KEY = "media";
+    /* private */ static final String ID_KEY = "id";
 
-    private static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
-    private static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
+    /* private */ static final int ADD_LIVE_STREAM_DIALOG_RESULT = 0;
+    /* private */ static final int REMOVE_LIVE_STREAM_DIALOG_RESULT = 1;
 
-    private Media media;
-    private int id;
-    private MediaItemModel mediaItemModel;
-    private MediaItemDetailsListener listener;
+    /* private */ Media media;
+    /* private */ int id;
+    /* private */ MediaItemModel mediaItemModel;
+    /* private */ MediaItemDetailsListener listener;
 
-    MenuItem menuHlsEnable;
-    MenuItem menuHlsDisable;
-    MenuItem menuMarkWatched;
-    MenuItem menuMarkUnwatched;
+    /* private */ MenuItem menuHlsEnable;
+    /* private */ MenuItem menuHlsDisable;
+    /* private */ MenuItem menuMarkWatched;
+    /* private */ MenuItem menuMarkUnwatched;
 
     @Inject
     MediaItemDetailsPresenter presenter;
@@ -121,11 +121,11 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     @BindView( R.id.media_item_description )
     TextView tv_description;
 
-    private boolean isTimerRunning = false;
+    /* private */ boolean isTimerRunning = false;
 
-    private Unbinder unbinder;
+    /* private */ Unbinder unbinder;
 
-    private final int fifteenMin = 60 * 30000;
+    /* private */ final int fifteenMin = 60 * 30000;
 
     public interface MediaItemDetailsListener {
 
@@ -327,7 +327,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         return super.onOptionsItemSelected( item );
     }
 
-    private void initialize() {
+    /* private */ void initialize() {
         Log.d( TAG, "initialize : enter" );
 
         this.getComponent( MediaComponent.class ).inject( this );
@@ -487,7 +487,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     /**
      * Loads media item details.
      */
-    private void loadMediaItemDetails() {
+    /* private */ void loadMediaItemDetails() {
         Log.d( TAG, "loadMediaItemDetails : enter" );
 
         if( null != this.presenter) {
@@ -500,7 +500,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
         Log.d( TAG, "loadMediaItemDetails : exit" );
     }
 
-    private void updateMenu() {
+    /* private */ void updateMenu() {
 
         if( null == menuHlsDisable || null == menuHlsEnable || null == menuMarkUnwatched || null == menuMarkWatched ) {
 
@@ -537,7 +537,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     }
 
-    private void updateProgress() {
+    /* private */ void updateProgress() {
 
         if( mediaItemModel.liveStreamId() == 0 ) {
 
@@ -574,7 +574,7 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
 
     }
 
-    private final CountDownTimer timer = new CountDownTimer( fifteenMin, 5000 ) {
+    /* private */ final CountDownTimer timer = new CountDownTimer( fifteenMin, 5000 ) {
 
         @Override
         public void onTick( long millisUntilFinished ) {

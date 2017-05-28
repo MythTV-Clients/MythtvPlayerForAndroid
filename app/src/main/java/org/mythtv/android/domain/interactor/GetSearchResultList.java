@@ -60,7 +60,7 @@ public class GetSearchResultList extends UseCase<List<MediaItem>, GetSearchResul
 
     public static final class Params {
 
-        private final String searchText;
+        /* private */ final String searchText;
 
         private Params( final String searchText ) {
 

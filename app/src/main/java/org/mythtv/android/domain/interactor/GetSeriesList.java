@@ -45,7 +45,7 @@ public class GetSeriesList extends UseCase<List<Series>, GetSeriesList.Params> {
 
     public static final class Params {
 
-        private final Media media;
+        /* private */ final Media media;
 
         private Params( final Media media ) {
 

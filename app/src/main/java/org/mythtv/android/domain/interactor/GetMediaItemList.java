@@ -78,9 +78,9 @@ public class GetMediaItemList extends UseCase<List<MediaItem>, GetMediaItemList.
 
     public static final class Params {
 
-        private final Media media;
-        private final String titleRegEx;
-        private final boolean tv;
+        /* private */ final Media media;
+        /* private */ final String titleRegEx;
+        /* private */ final boolean tv;
 
         private Params( final Media media, final String titleRegEx, final boolean tv ) {
 

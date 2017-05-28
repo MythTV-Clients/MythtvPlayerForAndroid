@@ -80,40 +80,40 @@ import java.util.List;
 @SuppressWarnings( "PMD.GodClass" )
 public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
-    private static final String TAG = MythTvPlaybackFragment.class.getSimpleName();
+    /* private */ static final String TAG = MythTvPlaybackFragment.class.getSimpleName();
 
     public static final String VIDEO = "org.mythtv.player.Video";
     public static final String SHARED_ELEMENT_NAME = "hero";
 
-    private static final boolean SHOW_DETAIL = true;
-    private static final boolean HIDE_MORE_ACTIONS = false;
-    private static final int BACKGROUND_TYPE = MythTvPlaybackFragment.BG_LIGHT;
-    private static final int CARD_WIDTH = 150;
-    private static final int CARD_HEIGHT = 240;
-    private static final int DEFAULT_UPDATE_PERIOD = 1000;
-    private static final int UPDATE_PERIOD = 16;
-    private static final int SIMULATED_BUFFERED_TIME = 10000;
+    /* private */ static final boolean SHOW_DETAIL = true;
+    /* private */ static final boolean HIDE_MORE_ACTIONS = false;
+    /* private */ static final int BACKGROUND_TYPE = MythTvPlaybackFragment.BG_LIGHT;
+    /* private */ static final int CARD_WIDTH = 150;
+    /* private */ static final int CARD_HEIGHT = 240;
+    /* private */ static final int DEFAULT_UPDATE_PERIOD = 1000;
+    /* private */ static final int UPDATE_PERIOD = 16;
+    /* private */ static final int SIMULATED_BUFFERED_TIME = 10000;
 
-    private VideoView mVideoView; // VideoView is used to play the video (media) in a view.
-    private VideoModel mSelectedVideo; // Video is the currently playing Video and its metadata.
-    private ArrayObjectAdapter mRowsAdapter;
-    private ArrayObjectAdapter mPrimaryActionsAdapter;
-    private ArrayObjectAdapter mSecondaryActionsAdapter;
-    private PlayPauseAction mPlayPauseAction;
-    private PlaybackControlsRow mPlaybackControlsRow;
-    private Handler mHandler;
-    private Runnable mRunnable;
-    private long mDuration = -1;
-    private int mQueueIndex = -1;
-    private List<MediaSession.QueueItem> mQueue;
-    private int mPosition = 0;
-    private long mStartTimeMillis;
-    private MediaSession mSession; // MediaSession is used to hold the state of our media playback.
+    /* private */ VideoView mVideoView; // VideoView is used to play the video (media) in a view.
+    /* private */ VideoModel mSelectedVideo; // Video is the currently playing Video and its metadata.
+    /* private */ ArrayObjectAdapter mRowsAdapter;
+    /* private */ ArrayObjectAdapter mPrimaryActionsAdapter;
+    /* private */ ArrayObjectAdapter mSecondaryActionsAdapter;
+    /* private */ PlayPauseAction mPlayPauseAction;
+    /* private */ PlaybackControlsRow mPlaybackControlsRow;
+    /* private */ Handler mHandler;
+    /* private */ Runnable mRunnable;
+    /* private */ long mDuration = -1;
+    /* private */ int mQueueIndex = -1;
+    /* private */ List<MediaSession.QueueItem> mQueue;
+    /* private */ int mPosition = 0;
+    /* private */ long mStartTimeMillis;
+    /* private */ MediaSession mSession; // MediaSession is used to hold the state of our media playback.
 
-    private MediaController mMediaController;
-    private final MediaController.Callback mMediaControllerCallback = new MediaControllerCallback();
+    /* private */ MediaController mMediaController;
+    /* private */ final MediaController.Callback mMediaControllerCallback = new MediaControllerCallback();
 
-    private static final String AUTO_PLAY = "auto_play";
+    /* private */ static final String AUTO_PLAY = "auto_play";
 
     @Override
     public void onAttach( Context context ) {
@@ -209,7 +209,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void setPosition( int position ) {
+    /* private */ void setPosition( int position ) {
         if( position > mDuration ) {
 
             mPosition = (int) mDuration;
@@ -230,7 +230,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void createMediaSession() {
+    /* private */ void createMediaSession() {
         Log.d( TAG, "createMediaSession" );
         if( mSession == null ) {
 
@@ -248,7 +248,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void setPlaybackState( int state ) {
+    /* private */ void setPlaybackState( int state ) {
 
         PlaybackState.Builder stateBuilder = new PlaybackState.Builder().setActions( getAvailableActions( state ) );
         stateBuilder.setState( state, mPosition, 1.0f );
@@ -256,7 +256,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private long getAvailableActions( int nextState ) {
+    /* private */ long getAvailableActions( int nextState ) {
 
         long actions = PlaybackState.ACTION_PLAY |
                 PlaybackState.ACTION_PLAY_FROM_MEDIA_ID |
@@ -295,7 +295,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void playPause( boolean doPlay ) {
+    /* private */ void playPause( boolean doPlay ) {
 
         if( getPlaybackState() == PlaybackState.STATE_NONE ) {
 
@@ -326,7 +326,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void setVideoPath( String videoUrl ) {
+    /* private */ void setVideoPath( String videoUrl ) {
         Log.i( TAG, "setVideoPath : videoUrl=" + videoUrl );
 
         setPosition( 0 );
@@ -336,7 +336,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void setupCallbacks() {
+    /* private */ void setupCallbacks() {
 
         mVideoView.setOnErrorListener( ( mp, what, extra ) -> {
 
@@ -356,7 +356,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void setupRows() {
+    /* private */ void setupRows() {
 
         ClassPresenterSelector ps = new ClassPresenterSelector();
         PlaybackControlsRowPresenter playbackControlsRowPresenter;
@@ -411,7 +411,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void togglePlayback( boolean playPause ) {
+    /* private */ void togglePlayback( boolean playPause ) {
 
         if( playPause ) {
 
@@ -425,7 +425,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void addPlaybackControlsRow() {
+    /* private */ void addPlaybackControlsRow() {
 
         if( SHOW_DETAIL ) {
 
@@ -446,7 +446,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void notifyChanged( Action action ) {
+    /* private */ void notifyChanged( Action action ) {
 
         int index = mPrimaryActionsAdapter.indexOf( action );
         if( index >= 0 ) {
@@ -466,7 +466,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void updatePlaybackRow() {
+    /* private */ void updatePlaybackRow() {
 
         mPlaybackControlsRow.setCurrentTime( 0 );
         mPlaybackControlsRow.setBufferedProgress( 0 );
@@ -474,7 +474,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void updateMovieView( MediaMetadata metadata ) {
+    /* private */ void updateMovieView( MediaMetadata metadata ) {
 
         VideoModel v = VideoModel.create(
                 Long.parseLong( metadata.getDescription().getMediaId() ),
@@ -514,13 +514,13 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
     /**
      * Creates a ListRow for related videos.
      */
-    private void addOtherRows() {
+    /* private */ void addOtherRows() {
         Log.v( TAG, "addOtherRows : enter" );
 
         Log.v( TAG, "addOtherRows : exit" );
     }
 
-    private int getUpdatePeriod() {
+    /* private */ int getUpdatePeriod() {
 
         if( getView() == null || mPlaybackControlsRow.getTotalTime() <= 0 ) {
 
@@ -530,7 +530,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
         return Math.max( UPDATE_PERIOD, mPlaybackControlsRow.getTotalTime() / getView().getWidth() );
     }
 
-    private void startProgressAutomation() {
+    /* private */ void startProgressAutomation() {
 
         if( mRunnable == null ) {
 
@@ -567,13 +567,13 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void next() {
+    /* private */ void next() {
 
         mMediaController.getTransportControls().skipToNext();
 
     }
 
-    private void stopProgressAutomation() {
+    /* private */ void stopProgressAutomation() {
 
         if( mHandler != null && mRunnable != null ) {
 
@@ -584,7 +584,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private void updateVideoImage( String uri ) {
+    /* private */ void updateVideoImage( String uri ) {
 
         Glide.with( this )
                 .load( uri )
@@ -604,7 +604,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private static class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {
+    /* private */ static class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
         @Override
         protected void onBindDescription( ViewHolder viewHolder, Object item ) {
@@ -618,7 +618,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
+    /* private */ final class ItemViewClickedListener implements OnItemViewClickedListener {
 
         @Override
         public void onItemClicked( Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row ) {
@@ -643,7 +643,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private int getPlaybackState() {
+    /* private */ int getPlaybackState() {
 
         Activity activity = getActivity();
 
@@ -664,7 +664,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
         return PlaybackState.STATE_NONE;
     }
 
-    private void updateMetadata( final VideoModel videoModel ) {
+    /* private */ void updateMetadata( final VideoModel videoModel ) {
 
         final MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
 
@@ -698,7 +698,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     // An event was triggered by MediaController.TransportControls and must be handled here.
     // Here we update the media itself to act on the event that was triggered.
-    private class MediaSessionCallback extends MediaSession.Callback {
+    /* private */ class MediaSessionCallback extends MediaSession.Callback {
 
         @Override
         public void onPlay() {
@@ -804,7 +804,7 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     }
 
-    private class MediaControllerCallback extends MediaController.Callback {
+    /* private */ class MediaControllerCallback extends MediaController.Callback {
 
         @Override
         public void onPlaybackStateChanged( @NonNull PlaybackState state ) {
