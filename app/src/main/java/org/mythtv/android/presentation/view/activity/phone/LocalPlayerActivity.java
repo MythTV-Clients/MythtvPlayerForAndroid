@@ -783,16 +783,16 @@ public class LocalPlayerActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground( Long... params ) {
 
-            if(  mSelectedMedia.media().equals(Media.PROGRAM)) {
+            if(  mSelectedMedia.media().equals( Media.PROGRAM ) ) {
 
                 long currentPos = params[0];
 
-                String id = mSelectedMedia.media().equals(Media.PROGRAM) ? "RecordedId" : "Id";
+                String id = mSelectedMedia.media().equals( Media.PROGRAM ) ? "RecordedId" : "Id";
 
                 Map<String, String> parameters = new HashMap<>();
                 parameters.put(id, String.valueOf( mSelectedMedia.id() ) );
-                parameters.put("OffsetType", "Duration");
-                parameters.put("Offset", String.valueOf(currentPos));
+                parameters.put( "OffsetType", "Duration" );
+                parameters.put( "Offset", String.valueOf( currentPos ) );
 
                 FormBody.Builder builder = new FormBody.Builder();
                 for( Map.Entry<String, String> entry : parameters.entrySet() ) {

@@ -24,7 +24,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
@@ -32,6 +31,7 @@ import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.Session;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 
+import org.mythtv.android.BuildConfig;
 import org.mythtv.android.R;
 
 import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -112,7 +112,7 @@ public class ExpandedControlsActivity extends AppCompatActivity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setImmersive() {
 
         int newUiOptions = getWindow().getDecorView().getSystemUiVisibility();
@@ -122,10 +122,14 @@ public class ExpandedControlsActivity extends AppCompatActivity {
 
         // Status bar hiding: Backwards compatible to Jellybean
         newUiOptions ^= SYSTEM_UI_FLAG_FULLSCREEN;
-        newUiOptions ^= SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
+            newUiOptions ^= SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        }
 
         getWindow().getDecorView().setSystemUiVisibility( newUiOptions );
-        setImmersive( true );
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ) {
+            setImmersive( true );
+        }
 
     }
 

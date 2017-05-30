@@ -49,8 +49,6 @@
     <string name="pref_backend_url_description">The hostname or ip address of the master backend</string>
     <string name="pref_backend_url">hostname or ip address</string>
 
-    <string name="pref_backend_port_title" translatable="false">Master Backend Port</string>
-    <string name="pref_backend_port_description">The port of the master backend</string>
     <string name="pref_backend_port" translatable="false">6544</string>
 
     <string name="pref_default_player">Default Player</string>

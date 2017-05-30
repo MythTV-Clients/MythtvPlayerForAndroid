@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lint>
-    <issue id="GoogleAppIndexingWarning" severity="ignore" />
+    <issue id="GoogleAppIndexingWarning" severity="informational" />
     <issue id="InvalidPackage">
-        <ignore regexp="okio-1.12.0.jar"/>
+        <ignore regexp="okio-1.12.0.jar" />
+        <ignore regexp="auto-value-1.4.1.jar" />
+        <ignore regexp="ZeRXconf-1.0.3.aar" />
     </issue>
-    <issue id="IconDensities" severity="ignore" />
-    <issue id="UnusedResources">
+    <issue id="IconDensities" severity="informational" />
+    <issue id="UnusedResources" severity="informational">
         <ignore regexp="google_crash_reporting_api_key" />
     </issue>
-    <issue id="UnusedAttribute" severity="ignore" />
-    <issue id="ObsoleteSdkInt" severity="ignore" />
+    <issue id="UnusedAttribute" severity="informational" />
+    <issue id="ObsoleteSdkInt" severity="informational" />
     <issue id="NewApi">
-        <ignore regexp="Try-with-resources requires API level 19"/>
+        <ignore regexp="Try-with-resources requires API level 19" />
     </issue>
+    <issue id="GradleDependency" severity="ignore">
+        <ignore regexp="com.google.guava" />
+    </issue>
+    <issue id="VectorPath" severity="informational" />
+    <issue id="IconDuplicatesConfig" severity="informational" />
+    <issue id="ClickableViewAccessibility" severity="informational" />
+    <issue id="StaticFieldLeak" severity="informational" />
+    <issue id="InlinedApi" severity="informational" />
 </lint>

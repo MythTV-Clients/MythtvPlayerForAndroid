@@ -19,7 +19,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.mythtv.android">
 
-    <uses-sdk tools:overrideLibrary="android.support.v14.preference" />
+    <uses-sdk
+        tools:overrideLibrary="android.support.v14.preference" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -66,7 +67,7 @@
         android:allowBackup="true"
         android:banner="@drawable/mythtv_logo"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/ic_mythtv"
+        android:icon="@mipmap/ic_mythtv"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

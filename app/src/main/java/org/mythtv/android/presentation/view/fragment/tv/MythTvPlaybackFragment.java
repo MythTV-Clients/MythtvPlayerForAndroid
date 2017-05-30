@@ -811,7 +811,6 @@ public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
             // The playback state has changed, so update your UI accordingly.
             // This should not update any media player / state!
-            Log.d( TAG, "Playback state changed: " + state.getState() );
 
             int nextState = state.getState();
 
