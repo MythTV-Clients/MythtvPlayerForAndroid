@@ -2,7 +2,7 @@ package org.mythtv.android.presentation.mapper;
 
 import org.junit.Test;
 import org.mythtv.android.domain.Encoder;
-import org.mythtv.android.domain.TestData;
+import org.mythtv.android.presentation.TestData;
 import org.mythtv.android.presentation.model.EncoderModel;
 
 import java.util.Collections;

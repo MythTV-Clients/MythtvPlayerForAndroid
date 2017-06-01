@@ -3,15 +3,9 @@ package org.mythtv.android.presentation.internal.di.modules;
 import android.content.Context;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.BuildConfig;
 import org.mythtv.android.R;
-import org.mythtv.android.data.entity.MythTvTypeAdapterFactory;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeTypeConverter;
 import org.mythtv.android.presentation.internal.di.interceptors.UserAgentInterceptor;
 
 import java.io.File;
@@ -47,20 +41,6 @@ public class NetModule {
         final int cacheSize = 100 * 1024 * 1024; // 100 MiB
 
         return new Cache( cacheDir, cacheSize );
-    }
-
-    @Provides
-    @Singleton
-    Gson provideGson() {
-
-        return new GsonBuilder()
-                .disableHtmlEscaping()
-                .setFieldNamingPolicy( FieldNamingPolicy.UPPER_CAMEL_CASE )
-                .setPrettyPrinting()
-                .serializeNulls()
-                .registerTypeAdapterFactory( MythTvTypeAdapterFactory.create() )
-                .registerTypeAdapter( DateTime.class, new DateTimeTypeConverter() )
-                .create();
     }
 
     @Provides

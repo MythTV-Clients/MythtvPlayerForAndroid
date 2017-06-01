@@ -157,7 +157,7 @@ public class NsdFragment extends AbstractBasePreferenceFragment implements OnSha
                                         Log.i( TAG, "lookupBackend : " + nsdInfo.getAddress().getHostAddress() + ":" + nsdInfo.getServicePort() );
 
                                         if( !detectedBackends.contains( nsdInfo.getAddress().getHostAddress() + ":" + nsdInfo.getServicePort() ) ) {
-                                            detectedBackends.add(nsdInfo.getAddress().getHostAddress() + ":" + nsdInfo.getServicePort());
+                                            detectedBackends.add( nsdInfo.getAddress().getHostAddress() + ":" + nsdInfo.getServicePort() );
                                         }
 
                                         String[] backends = detectedBackends.toArray( new String[ detectedBackends.size() ] );

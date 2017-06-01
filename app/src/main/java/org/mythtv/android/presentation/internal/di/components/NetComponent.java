@@ -27,6 +27,5 @@ public interface NetComponent {
 
     //Exposed to sub-graphs.
     OkHttpClient okHttpClient();
-    Gson gson();
 
 }

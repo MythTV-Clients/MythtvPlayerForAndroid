@@ -1,0 +1,114 @@
+apply plugin: 'com.android.library'
+
+
+android {
+    defaultPublishConfig "debug"
+
+    compileSdkVersion 25
+    buildToolsVersion '26.0.0 rc2'
+
+    defaultConfig {
+
+        minSdkVersion 17
+        targetSdkVersion 25
+
+        versionCode 1714306
+        versionName "3.0.6"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+
+            annotationProcessorOptions {
+
+                includeCompileClasspath = true
+
+            }
+
+        }
+
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+        disable 'InvalidPackage'  // Some libraries have issues with this
+        disable 'OldTargetApi'    // Due to Robolectric that modifies the manifest when running tests
+    }
+
+    testOptions.unitTests.returnDefaultValues true
+
+}
+
+dependencies {
+
+    implementation project(':domain')
+
+    compileOnly "javax.inject:javax.inject:${javaxInjectVersion}"
+    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+
+    compileOnly "com.google.auto.value:auto-value:${project.ext.autoValueVersion}"
+    annotationProcessor "com.google.auto.value:auto-value:${project.ext.autoValueVersion}"
+
+    compileOnly "com.ryanharter.auto.value:auto-value-gson:${project.ext.autoValueGsonVersion}"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:${project.ext.autoValueGsonVersion}"
+
+    compileOnly "com.ryanharter.auto.value:auto-value-parcel:${project.ext.autoValueParcelVersion}"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:${project.ext.autoValueParcelVersion}"
+
+    compileOnly "com.github.reggar:auto-value-ignore-hash-equals:${project.ext.autoValueIgnoreHashEqualsVersion}"
+    annotationProcessor "com.github.reggar:auto-value-ignore-hash-equals:${project.ext.autoValueIgnoreHashEqualsVersion}"
+
+    implementation "com.android.support:support-annotations:${project.ext.supportVersion}"
+    compileOnly "javax.annotation:jsr250-api:${project.ext.javaxAnnotationVersion}"
+
+    implementation "io.reactivex.rxjava2:rxjava:${project.ext.rxJavaVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${project.ext.okHttpVersion}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${project.ext.okHttpVersion}"
+    implementation "joda-time:joda-time:${project.ext.jodaVersion}"
+    implementation "com.vincentbrison.openlibraries.android:dualcache:${project.ext.dualcacheVersion}"
+    implementation "com.vincentbrison.openlibraries.android:dualcache-jsonserializer:${project.ext.dualcacheVersion}"
+
+    // Dependencies for local testing
+    testImplementation "junit:junit:${project.ext.jUnitVersion}"
+    testImplementation "org.mockito:mockito-all:${project.ext.mockitoVersion}"
+    testImplementation "org.assertj:assertj-core:${project.ext.assertJVersion}"
+    testImplementation "org.robolectric:robolectric:${project.ext.robolectricVersion}"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${project.ext.mockWebServerVersion}"
+
+}
+
+/*
+Resolves dependency versions across test and production APKs, specifically, transitive
+dependencies. This is required since Espresso internally has a dependency on support-annotations.
+*/
+configurations.all {
+    resolutionStrategy.force "com.android.support:support-annotations:${project.ext.supportVersion}"
+}
+
+/*
+All direct/transitive dependencies shared between your test and production APKs need to be
+excluded from the test APK! This is necessary because both APKs will contain the same classes. Not
+excluding these dependencies from your test configuration will result in an dex pre-verifier error
+at runtime. More info in this tools bug: (https://code.google.com/p/android/issues/detail?id=192497)
+*/
+configurations.compile.dependencies.each { compileDependency ->
+    println "Excluding compile dependency: ${compileDependency.getName()}"
+    configurations.androidTestImplementation.dependencies.each { androidTestCompileDependency ->
+        configurations.androidTestImplementation.exclude module: "${compileDependency.getName()}"
+    }
+}

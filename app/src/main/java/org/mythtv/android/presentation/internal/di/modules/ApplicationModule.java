@@ -21,13 +21,15 @@ package org.mythtv.android.presentation.internal.di.modules;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.vincentbrison.openlibraries.android.dualcache.Builder;
-import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer;
 import com.vincentbrison.openlibraries.android.dualcache.DualCache;
-import com.vincentbrison.openlibraries.android.dualcache.JsonSerializer;
 
+import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.MediaItemEntity;
+import org.mythtv.android.data.entity.MythTvTypeAdapterFactory;
 import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
 import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.LiveStreamInfoEntityJsonMapper;
@@ -35,6 +37,7 @@ import org.mythtv.android.data.entity.mapper.LongJsonMapper;
 import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.serializers.DateTimeTypeConverter;
 import org.mythtv.android.data.executor.JobExecutor;
 import org.mythtv.android.data.net.ContentApi;
 import org.mythtv.android.data.net.ContentApiImpl;
@@ -125,30 +128,30 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    TitleInfoEntityJsonMapper provideTitleInfoEntityJsonMapper( final Gson gson ) {
+    TitleInfoEntityJsonMapper provideTitleInfoEntityJsonMapper() {
 
-        return new TitleInfoEntityJsonMapper( gson );
+        return new TitleInfoEntityJsonMapper();
     }
 
     @Provides
     @Singleton
-    ProgramEntityJsonMapper provideProgramEntityJsonMapper( final Gson gson ) {
+    ProgramEntityJsonMapper provideProgramEntityJsonMapper() {
 
-        return new ProgramEntityJsonMapper( gson );
+        return new ProgramEntityJsonMapper();
     }
 
     @Provides
     @Singleton
-    EncoderEntityJsonMapper provideEncoderEntityJsonMapper( final Gson gson ) {
+    EncoderEntityJsonMapper provideEncoderEntityJsonMapper() {
 
-        return new EncoderEntityJsonMapper( gson );
+        return new EncoderEntityJsonMapper();
     }
 
     @Provides
     @Singleton
-    VideoMetadataInfoEntityJsonMapper provideVideoMetadataInfoEntityJsonMapper( final Gson gson ) {
+    VideoMetadataInfoEntityJsonMapper provideVideoMetadataInfoEntityJsonMapper() {
 
-        return new VideoMetadataInfoEntityJsonMapper( gson );
+        return new VideoMetadataInfoEntityJsonMapper();
     }
 
     @Provides
@@ -174,9 +177,18 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    DualCache<MediaItemEntity> provideCache( /* final Context context */ final Gson gson ) {
+    DualCache<MediaItemEntity> provideCache( /* final Context context */ ) {
 
 //        CacheSerializer<MediaItemEntity> jsonSerializer = new JsonSerializer<>( MediaItemEntity.class );
+
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .setFieldNamingPolicy( FieldNamingPolicy.UPPER_CAMEL_CASE )
+                .setPrettyPrinting()
+                .serializeNulls()
+                .registerTypeAdapterFactory( MythTvTypeAdapterFactory.create() )
+                .registerTypeAdapter( DateTime.class, new DateTimeTypeConverter() )
+                .create();
 
         return new Builder<MediaItemEntity>( "MythtvPlayerCache", 1 )
                 .enableLog()
