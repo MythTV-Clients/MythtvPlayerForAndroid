@@ -132,11 +132,11 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     }
 
     @Override
-    public void onAttach( Context context ) {
-        super.onAttach( context );
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        Activity activity = getActivity();
+//        Activity activity = getActivity();
         if( activity instanceof MediaItemListListener ) {
             this.mediaItemListListener = (MediaItemListListener) activity;
         }

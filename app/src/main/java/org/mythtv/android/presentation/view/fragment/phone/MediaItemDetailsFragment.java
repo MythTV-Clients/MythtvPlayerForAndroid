@@ -160,11 +160,11 @@ public class MediaItemDetailsFragment extends AbstractBaseFragment implements Me
     }
 
     @Override
-    public void onAttach( Context context ) {
-        super.onAttach( context );
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        Activity activity = getActivity();
+//        Activity activity = getActivity();
         if( activity instanceof MediaItemDetailsListener ) {
 
             this.listener = (MediaItemDetailsListener) activity;
