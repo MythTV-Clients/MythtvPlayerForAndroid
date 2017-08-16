@@ -36,7 +36,6 @@ import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
 import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.exception.NetworkConnectionException;
 
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -56,7 +55,8 @@ import rx.Subscriber;
  *
  * Created on 8/27/15.
  */
-public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
+@SuppressWarnings( "PMD" )
+public class DvrApiImpl extends BaseApi implements DvrApi {
 
     private static final String TAG = DvrApiImpl.class.getSimpleName();
 
@@ -100,17 +100,17 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseRecordedProgramEntities = getTitleInfoEntitiesFromApi();
-                        if( null != responseRecordedProgramEntities ) {
+                        String responseRecordedProgramEntities = getTitleInfoEntitiesFromApi();
+                        if( null == responseRecordedProgramEntities ) {
+                            Log.d( TAG, "titleInfoEntityList.call : failed to retrieve title info entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "titleInfoEntityList.call : retrieved title info entities" );
 
                             subscriber.onNext( titleInfoEntityJsonMapper.transformTitleInfoEntityCollection( responseRecordedProgramEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "titleInfoEntityList.call : failed to retrieve title info entities" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -122,13 +122,13 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                     }
 
                 } else {
-                    Log.d(TAG, "titleInfoEntityList.call : network is not connected");
+                    Log.d( TAG, "titleInfoEntityList.call : network is not connected" );
 
                     subscriber.onError( new NetworkConnectionException() );
 
                 }
 
-                Log.d(TAG, "titleInfoEntityList.call : exit");
+                Log.d( TAG, "titleInfoEntityList.call : exit" );
             }
 
         });
@@ -151,17 +151,17 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
-                        if( null != responseRecordedProgramEntities ) {
+                        String responseRecordedProgramEntities = getRecordedProgramEntitiesFromApi( descending, startIndex, count, titleRegEx, recGroup, storageGroup );
+                        if( null == responseRecordedProgramEntities ) {
+                            Log.d( TAG, "recordedProgramEntityList.call : failed to retrieve program entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "recordedProgramEntityList.call : retrieved program entities" );
 
                             subscriber.onNext( programEntityJsonMapper.transformProgramEntityCollection( responseRecordedProgramEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "recordedProgramEntityList.call : failed to retrieve program entities" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -198,15 +198,15 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId, chanId, startTime );
-                        if( null != responseProgramDetails ) {
+                        String responseProgramDetails = getRecordedProgramDetailsFromApi( recordedId, chanId, startTime );
+                        if( null == responseProgramDetails ) {
 
-                            subscriber.onNext( programEntityJsonMapper.transformProgramEntity( responseProgramDetails ) );
-                            subscriber.onCompleted();
+                            subscriber.onError( new NetworkConnectionException() );
 
                         } else {
 
-                            subscriber.onError( new NetworkConnectionException() );
+                            subscriber.onNext( programEntityJsonMapper.transformProgramEntity( responseProgramDetails ) );
+                            subscriber.onCompleted();
 
                         }
 
@@ -244,17 +244,17 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseUpcomingProgramEntities = getUpcomingProgramEntitiesFromApi( startIndex, count, showAll, recordId, recStatus );
-                        if( null != responseUpcomingProgramEntities ) {
+                        String responseUpcomingProgramEntities = getUpcomingProgramEntitiesFromApi( startIndex, count, showAll, recordId, recStatus );
+                        if( null == responseUpcomingProgramEntities ) {
+                            Log.d( TAG, "upcomingProgramEntityList.call : failed to retrieve program entities" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "upcomingEntityList.call : retrieved program entities" );
 
                             subscriber.onNext( programEntityJsonMapper.transformProgramEntityCollection( responseUpcomingProgramEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "upcomingProgramEntityList.call : failed to retrieve program entities" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -293,17 +293,17 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader responseEncoderEntities = getEncoderEntitiesFromApi();
-                        if( null != responseEncoderEntities ) {
+                        String responseEncoderEntities = getEncoderEntitiesFromApi();
+                        if( null == responseEncoderEntities ) {
+                            Log.d(TAG, "encoderEntityList.call : failed to retrieve encoder entities");
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d(TAG, "encoderEntityList.call : retrieved encoder entities");
 
                             subscriber.onNext( encoderEntityJsonMapper.transformEncoderEntityCollection( responseEncoderEntities ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d(TAG, "encoderEntityList.call : failed to retrieve encoder entities");
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -329,7 +329,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
     }
 
     @Override
-    public Observable<Boolean> updateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) {
+    public Observable<Boolean> updateWatchedStatus( final int id, final boolean watched ) {
 
         return Observable.create( new Observable.OnSubscribe<Boolean>() {
 
@@ -342,17 +342,17 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
                     try {
 
-                        Reader response = postUpdateWatchedStatus( chanId, startTime, watched );
-                        if( null != response ) {
+                        String response = postUpdateWatchedStatus( id, watched );
+                        if( null == response ) {
+                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "updateWatchedStatus.call : retrieved status update" );
 
                             subscriber.onNext( booleanJsonMapper.transformBoolean( response ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "updateWatchedStatus.call : failed to retrieve status update" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -387,21 +387,21 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
                 Log.d( TAG, "getBookmark.call : enter" );
 
                 if( isThereInternetConnection() ) {
-                    Log.d(TAG, "getBookmark.call : network is connected");
+                    Log.d( TAG, "getBookmark.call : network is connected" );
 
                     try {
 
-                        Reader response = getBookmarkFromApi( recordedId, chanId, startTime, offsetType );
-                        if( null != response ) {
+                        String response = getBookmarkFromApi( recordedId, chanId, startTime, offsetType );
+                        if( null == response ) {
+                            Log.d( TAG, "getBookmark.call : failed to retrieve status update" );
+
+                            subscriber.onError( new NetworkConnectionException() );
+
+                        } else {
                             Log.d( TAG, "getBookmark.call : retrieved status update" );
 
                             subscriber.onNext( longJsonMapper.transformLong( response ) );
                             subscriber.onCompleted();
-
-                        } else {
-                            Log.d( TAG, "getBookmark.call : failed to retrieve status update" );
-
-                            subscriber.onError( new NetworkConnectionException() );
 
                         }
 
@@ -427,30 +427,25 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
     }
 
-    private Reader getTitleInfoEntitiesFromApi() throws MalformedURLException {
+    private String getTitleInfoEntitiesFromApi() throws MalformedURLException {
 
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + TITLE_INFO_LIST_URL ).requestSyncCall();
     }
 
-    private Reader getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
+    private String getRecordedProgramEntitiesFromApi( final boolean descending, final int startIndex, final int count, final String titleRegEx, final String recGroup, final String storageGroup ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append( RECORDED_LIST_BASE_URL );
-        sb.append( "?" );
-        sb.append( String.format( DESCENDING_QS, descending ) );
+        sb.append( getMasterBackendUrl() ).append( RECORDED_LIST_BASE_URL ).append( '?' ).append( String.format( DESCENDING_QS, descending ) );
 
         if( startIndex != -1 ) {
 
-            sb.append( "&" );
-            sb.append( String.format( START_INDEX_QS, startIndex ) );
+            sb.append( '&' ).append( String.format( START_INDEX_QS, startIndex ) );
 
         }
 
         if( count != -1 ) {
 
-            sb.append( "&" );
-            sb.append( String.format( COUNT_QS, count ) );
+            sb.append( '&' ).append( String.format( COUNT_QS, count ) );
 
         }
 
@@ -460,8 +455,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
             try {
 
-                sb.append( "&" );
-                sb.append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( dottedTitleRegex, "UTF-8" ) ) );
+                sb.append( '&' ).append( String.format( TITLE_REG_EX_QS, URLEncoder.encode( dottedTitleRegex, "UTF-8" ) ) );
 
             } catch( UnsupportedEncodingException e ) {
                 Log.e( TAG, "getRecordedProgramEntitiesFromApi : error", e );
@@ -470,15 +464,13 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
         if( null != recGroup && !"".equals( recGroup ) ) {
 
-            sb.append( "&" );
-            sb.append( String.format( REC_GROUP_QS, recGroup ) );
+            sb.append( '&' ).append( String.format( REC_GROUP_QS, recGroup ) );
 
         }
 
         if( null != storageGroup && !"".equals( storageGroup ) ) {
 
-            sb.append( "&" );
-            sb.append( String.format( STORAGE_GROUP_QS, storageGroup ) );
+            sb.append( '&' ).append( String.format( STORAGE_GROUP_QS, storageGroup ) );
 
         }
 
@@ -486,12 +478,10 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private Reader getRecordedProgramDetailsFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
+    private String getRecordedProgramDetailsFromApi( final int recordedId, final int chanId, final DateTime startTime ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append( RECORDED_BASE_URL );
-        sb.append( "?" );
+        sb.append( getMasterBackendUrl() ).append( RECORDED_BASE_URL ).append( '?' );
 
         if( recordedId != -1 ) {
 
@@ -501,8 +491,7 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
         if( chanId != -1 && null != startTime ) {
 
-            sb.append( String.format( CHAN_ID_QS, chanId ) );
-            sb.append( "&" );
+            sb.append( String.format( CHAN_ID_QS, chanId ) ).append( '&' );
             fmt.print( startTime.withZone( DateTimeZone.UTC ) );
 
         }
@@ -511,39 +500,32 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private Reader getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
+    private String getUpcomingProgramEntitiesFromApi( final int startIndex, final int count, final boolean showAll, final int recordId, final int recStatus ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append( UPCOMING_LIST_BASE_URL );
-        sb.append( "?" );
-        sb.append( String.format( SHOW_ALL_QS, showAll ) );
+        sb.append( getMasterBackendUrl() ).append( UPCOMING_LIST_BASE_URL ).append( '?' ).append( String.format( SHOW_ALL_QS, showAll ) );
 
         if( startIndex != -1 ) {
 
-            sb.append( "&" );
-            sb.append( String.format( START_INDEX_QS, startIndex ) );
+            sb.append( '&' ).append( String.format( START_INDEX_QS, startIndex ) );
 
         }
 
         if( count != -1 ) {
 
-            sb.append( "&" );
-            sb.append( String.format( COUNT_QS, count ) );
+            sb.append( '&' ).append( String.format( COUNT_QS, count ) );
 
         }
 
         if( recordId != -1 ) {
 
-            sb.append( "&" );
-            sb.append( String.format( RECORD_ID_QS, recordId ) );
+            sb.append( '&' ).append( String.format( RECORD_ID_QS, recordId ) );
 
         }
 
         if( recStatus != -1 ) {
 
-            sb.append( "&" );
-            sb.append( String.format( REC_STATUS_QS, recStatus ) );
+            sb.append( '&' ).append( String.format( REC_STATUS_QS, recStatus ) );
 
         }
 
@@ -551,29 +533,26 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
         return ApiConnection.create( okHttpClient, sb.toString() ).requestSyncCall();
     }
 
-    private Reader getEncoderEntitiesFromApi() throws MalformedURLException {
+    private String getEncoderEntitiesFromApi() throws MalformedURLException {
 
         Log.i( TAG, "getEncoderEntitiesFromApi : url=" + ( getMasterBackendUrl() + ENCODER_LIST_BASE_URL ) );
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + ENCODER_LIST_BASE_URL ).requestSyncCall();
     }
 
-    private Reader postUpdateWatchedStatus( final int chanId, final DateTime startTime, final boolean watched ) throws MalformedURLException {
+    private String postUpdateWatchedStatus( final int id, final boolean watched ) throws MalformedURLException {
 
         Map<String, String> parameters = new HashMap<>();
-        parameters.put( "ChanId", String.valueOf( chanId ) );
-        parameters.put( "StartTime", fmt.print( startTime.withZone( DateTimeZone.UTC ) ) );
+        parameters.put( "RecordedId", String.valueOf( id ) );
         parameters.put( "Watched", String.valueOf( watched ) );
 
         Log.i( TAG, "postUpdateWatchedStatus : url=" + ( getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ) );
         return ApiConnection.create( okHttpClient, getMasterBackendUrl() + UPDATE_RECORDED_WATCHED_STATUS_URL ).requestSyncCall( parameters );
     }
 
-    private Reader getBookmarkFromApi( final int recordedId, final int chanId, final DateTime startTime, final String offsetType ) throws MalformedURLException {
+    private String getBookmarkFromApi( final int recordedId, final int chanId, final DateTime startTime, final String offsetType ) throws MalformedURLException {
 
         StringBuilder sb = new StringBuilder();
-        sb.append( getMasterBackendUrl() );
-        sb.append( BOOKMARK_BASE_URL );
-        sb.append( "?" );
+        sb.append( getMasterBackendUrl() ).append( BOOKMARK_BASE_URL ).append( '?' );
 
         if( recordedId != -1 ) {
 
@@ -583,16 +562,14 @@ public class DvrApiImpl extends AbstractBaseApi implements DvrApi {
 
         if( chanId != -1 && null != startTime ) {
 
-            sb.append( String.format( CHAN_ID_QS, chanId ) );
-            sb.append( "&" );
+            sb.append( String.format( CHAN_ID_QS, chanId ) ).append( '&' );
             fmt.print( startTime.withZone( DateTimeZone.UTC ) );
 
         }
 
         if( null != offsetType && !"".equals( offsetType ) ) {
 
-            sb.append( "&" );
-            sb.append( String.format( OFFSET_TYPE_QS, offsetType ) );
+            sb.append( '&' ).append( String.format( OFFSET_TYPE_QS, offsetType ) );
 
         }
 

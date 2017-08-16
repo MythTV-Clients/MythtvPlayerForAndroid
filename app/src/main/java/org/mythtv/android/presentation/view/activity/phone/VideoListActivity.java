@@ -23,8 +23,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.view.View;
+
+import com.github.jorgecastilloprz.FABProgressCircle;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -36,6 +39,8 @@ import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.model.SeriesModel;
 import org.mythtv.android.presentation.view.fragment.phone.MediaItemListFragment;
 import org.mythtv.android.presentation.view.fragment.phone.SeriesListFragment;
+import org.mythtv.android.presentation.view.listeners.MediaItemListListener;
+import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import butterknife.BindView;
 
@@ -47,17 +52,9 @@ import butterknife.BindView;
  *
  * Created on 11/13/15.
  */
-public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListFragment.MediaItemListListener, SeriesListFragment.SeriesListListener {
+public class VideoListActivity extends AbstractBasePhoneActivity implements HasComponent<MediaComponent>, View.OnClickListener, TabLayout.OnTabSelectedListener, MediaItemListListener, SeriesListFragment.SeriesListListener, NotifyListener {
 
     private static final String TAG = VideoListActivity.class.getSimpleName();
-
-    public static Intent getCallingIntent( Context context ) {
-
-        Intent callingIntent = new Intent( context, VideoListActivity.class );
-        callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-
-        return callingIntent;
-    }
 
     private MediaItemListFragment movieFragment;
     private SeriesListFragment seriesListFragment;
@@ -70,8 +67,19 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     @BindView( R.id.tabs )
     TabLayout mTabLayout;
 
+    @BindView( R.id.fabProgressCircle )
+    FABProgressCircle fabProgressCircle;
+
     @BindView( R.id.fab )
     FloatingActionButton mFab;
+
+    public static Intent getCallingIntent( Context context ) {
+
+        Intent callingIntent = new Intent( context, VideoListActivity.class );
+        callingIntent.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+        return callingIntent;
+    }
 
     @Override
     public int getLayoutResource() {
@@ -140,6 +148,9 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
                 break;
 
+            default:
+
+                break;
         }
 
         Log.v( TAG, "onClick : exit" );
@@ -156,12 +167,16 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
     @Override
     public void onTabReselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabSelected : enter" );
 
+        Log.v( TAG, "onTabSelected : exit" );
     }
 
     @Override
     public void onTabUnselected( TabLayout.Tab tab ) {
+        Log.v( TAG, "onTabUnselected : enter" );
 
+        Log.v( TAG, "onTabUnselected : exit" );
     }
 
     private void setupTabs() {
@@ -185,6 +200,7 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
         mTabLayout.addTab( mTabLayout.newTab().setText( getResources().getStringArray( R.array.watch_videos_tabs )[ 3 ] ) );
 
         boolean showAdultTab = getSharedPreferencesComponent().sharedPreferences().getBoolean( SettingsKeys.KEY_PREF_SHOW_ADULT_TAB, false );
+        Log.v( TAG, "setupTabs : showAdultTab=" + showAdultTab );
         if( showAdultTab ) {
 
             MediaItemListFragment.Builder adultParameters = new MediaItemListFragment.Builder( Media.ADULT );
@@ -237,6 +253,11 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
 
                 break;
 
+            default :
+                Log.w( TAG, "onTabSelected : incorrect tab selected" );
+
+                break;
+
         }
 
         Log.v( TAG, "setSelectedTab : exit" );
@@ -260,19 +281,48 @@ public class VideoListActivity extends AbstractBasePhoneActivity implements HasC
     }
 
     @Override
-    public void onMediaItemClicked( final MediaItemModel mediaItemModel ) {
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        navigator.navigateToMediaItem( this, mediaItemModel.getId(), mediaItemModel.getMedia() );
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation( this, sharedElement, sharedElementName );
+        navigator.navigateToMediaItem( this, mediaItemModel.id(), mediaItemModel.media(), options );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
+    }
+
+    @Override
+    public void showLoading() {
+
+        if( null != fabProgressCircle ){
+            fabProgressCircle.measure(15, 15);
+            fabProgressCircle.show();
+        }
+
+    }
+
+    @Override
+    public void finishLoading() {
+
+        if( null != fabProgressCircle ) {
+            fabProgressCircle.beginFinalAnimation();
+        }
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+        if( null != fabProgressCircle ) {
+            fabProgressCircle.hide();
+        }
+
     }
 
     @Override
     public void onSeriesClicked( final SeriesModel seriesModel ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.getTitle(), null, null, seriesModel.getInetref() );
+        navigator.navigateToSeries( this, Media.TELEVISION, false, -1, -1, seriesModel.title(), null, null, seriesModel.inetref() );
 
         Log.d( TAG, "onMediaItemClicked : exit" );
     }

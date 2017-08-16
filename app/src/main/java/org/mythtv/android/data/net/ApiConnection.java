@@ -22,7 +22,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -42,26 +41,26 @@ import okhttp3.Response;
  *
  * Created on 8/27/15.
  */
-public class ApiConnection implements Callable<Reader> {
+public final class ApiConnection implements Callable<String> {
 
     private static final String TAG = ApiConnection.class.getSimpleName();
 
     private static final String ACCEPT_LABEL = "Accept";
     private static final String ACCEPT_VALUE_JSON = "application/json";
 
-    private OkHttpClient okHttpClient;
+    private final OkHttpClient okHttpClient;
 
-    private URL url;
-    private Reader response;
+    private final URL url;
+    private String response;
 
-    private ApiConnection( OkHttpClient okHttpClient, String url ) throws MalformedURLException {
+    private ApiConnection( final OkHttpClient okHttpClient, final String url ) throws MalformedURLException {
 
         this.okHttpClient = okHttpClient;
         this.url = new URL( url );
 
     }
 
-    public static ApiConnection create( OkHttpClient okHttpClient, String url ) throws MalformedURLException {
+    public static ApiConnection create( final OkHttpClient okHttpClient, final String url ) throws MalformedURLException {
 
         return new ApiConnection( okHttpClient, url );
     }
@@ -75,7 +74,7 @@ public class ApiConnection implements Callable<Reader> {
      * @return A string response
      */
     @Nullable
-    public Reader requestSyncCall() {
+    public String requestSyncCall() {
 
         connectToApi();
 
@@ -91,15 +90,15 @@ public class ApiConnection implements Callable<Reader> {
      * @return A string response
      */
     @Nullable
-    public Reader requestSyncCall( Map<String, String> parameters ) {
+    public String requestSyncCall( Map<String, String> parameters ) {
 
         FormBody.Builder builder = new FormBody.Builder();
 
         if( null != parameters && !parameters.isEmpty() ) {
 
-            for( String key : parameters.keySet() ) {
-                Log.i( TAG, "requestSyncCall : key=" + key + ", value=" + parameters.get( key ) );
-                builder.add( key, parameters.get( key ) );
+            for( Map.Entry<String, String> entry : parameters.entrySet() ) {
+                Log.i( TAG, "requestSyncCall : key=" + entry.getKey() + ", value=" + entry.getValue() );
+                builder.add( entry.getKey(), entry.getValue() );
 
             }
 
@@ -121,21 +120,25 @@ public class ApiConnection implements Callable<Reader> {
 //                .cacheControl( CacheControl.FORCE_NETWORK )
                 .build();
 
+        Response call = null;
         try {
 
-            Response call = okHttpClient.newCall( request ).execute();
-            this.response = call.body().charStream();
+            call = okHttpClient.newCall( request ).execute();
+            this.response = call.body().string();
             Log.d( TAG, "connectToApi : cacheResponse - " + call.cacheResponse() );
             Log.d( TAG, "connectToApi : networkResponse - " + call.networkResponse() );
-
-//            Logging my be causes of OutOfMemory
-            if( this.url.toString().contains( "GetSavedBookmark" ) ) {
-                Log.d( TAG, "connectToApi : response=" + this.response );
-            }
 
         } catch( IOException e ) {
 
             Log.e( TAG, "connectToApi : error", e );
+
+        } finally {
+
+            if( null != call  ) {
+
+                call.close();
+
+            }
 
         }
 
@@ -152,26 +155,31 @@ public class ApiConnection implements Callable<Reader> {
                 .post( formBody )
                 .build();
 
+        Response call = null;
         try {
 
-            Response call = okHttpClient.newCall( request ).execute();
-            this.response = call.body().charStream();
+            call = okHttpClient.newCall( request ).execute();
+            this.response = call.body().string();
             Log.d( TAG, "connectToApi : cacheResponse - " + call.cacheResponse() );
             Log.d( TAG, "connectToApi : networkResponse - " + call.networkResponse() );
-
-//            Logging my be causes of OutOfMemory
-//            Log.d( TAG, "connectToApi : response=" + this.response );
 
         } catch( IOException e ) {
 
             Log.e( TAG, "connectToApi : error", e );
 
+        } finally {
+
+            if( null != call ) {
+
+                call.close();
+
+            }
         }
 
     }
 
     @Override
-    public Reader call() throws Exception {
+    public String call() throws Exception {
 
         return requestSyncCall();
     }

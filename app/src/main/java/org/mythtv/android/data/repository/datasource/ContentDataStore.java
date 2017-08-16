@@ -18,8 +18,8 @@
 
 package org.mythtv.android.data.repository.datasource;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
+import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
@@ -35,18 +35,10 @@ import rx.Observable;
  */
 public interface ContentDataStore {
 
-    Observable<LiveStreamInfoEntity> addliveStream( final String storageGroup, final String filename, final String hostname );
-
-    Observable<LiveStreamInfoEntity> addRecordingliveStream( final int recordedId, final int chanId, final DateTime startTime );
-
-    Observable<LiveStreamInfoEntity> addVideoliveStream( final int id );
-
     Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename );
 
-    Observable<LiveStreamInfoEntity> liveStreamInfoEntityDetails( final int id );
+    Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id );
 
     Observable<Boolean> removeLiveStream( final int id );
-
-    Observable<Boolean> stopLiveStream( final int id );
 
 }

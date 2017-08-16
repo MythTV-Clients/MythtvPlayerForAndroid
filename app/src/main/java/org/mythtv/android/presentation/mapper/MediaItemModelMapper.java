@@ -25,46 +25,48 @@ import javax.inject.Inject;
 public class MediaItemModelMapper {
 
     @Inject
-    public MediaItemModelMapper() { }
+    public MediaItemModelMapper() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     public MediaItemModel transform( MediaItem mediaItem ) {
 
-        MediaItemModel mediaItemModel = new MediaItemModel();
-        mediaItemModel.setId( mediaItem.getId() );
-        mediaItemModel.setMedia( mediaItem.getMedia() );
-        mediaItemModel.setTitle( mediaItem.getTitle() );
-        mediaItemModel.setSubTitle( mediaItem.getSubTitle() );
-        mediaItemModel.setDescription( mediaItem.getDescription() );
-        mediaItemModel.setStartDate( mediaItem.getStartDate() );
-        mediaItemModel.setSeason( mediaItem.getSeason() );
-        mediaItemModel.setEpisode( mediaItem.getEpisode() );
-        mediaItemModel.setStudio( mediaItem.getStudio() );
-        mediaItemModel.setUrl( mediaItem.getUrl() );
-        mediaItemModel.setFanartUrl( mediaItem.getFanartUrl() );
-        mediaItemModel.setCoverartUrl( mediaItem.getCoverartUrl() );
-        mediaItemModel.setBannerUrl( mediaItem.getBannerUrl() );
-        mediaItemModel.setPreviewUrl( mediaItem.getPreviewUrl() );
-        mediaItemModel.setContentType( mediaItem.getContentType() );
-        mediaItemModel.setDuration( mediaItem.getDuration() );
-        mediaItemModel.setPercentComplete( mediaItem.getPercentComplete() );
-        mediaItemModel.setRecording( mediaItem.isRecording() );
-        mediaItemModel.setLiveStreamId( mediaItem.getLiveStreamId() );
-        mediaItemModel.setCreateHttpLiveStreamUrl( mediaItem.getCreateHttpLiveStreamUrl() );
-        mediaItemModel.setRemoveHttpLiveStreamUrl( mediaItem.getRemoveHttpLiveStreamUrl() );
-        mediaItemModel.setGetHttpLiveStreamUrl( mediaItem.getGetHttpLiveStreamUrl() );
-        mediaItemModel.setWatched( mediaItem.isWatched() );
-        mediaItemModel.setMarkWatchedUrl( mediaItem.getMarkWatchedUrl() );
-        mediaItemModel.setUpdateSavedBookmarkUrl( mediaItem.getUpdateSavedBookmarkUrl() );
-        mediaItemModel.setBookmark( mediaItem.getBookmark() );
-        mediaItemModel.setInetref( mediaItem.getInetref() );
-
-        ArrayList<ErrorModel> errors = new ArrayList<>();
-        for( Error error : mediaItem.getValidationErrors() ) {
+        List<ErrorModel> errors = new ArrayList<>();
+        for( Error error : mediaItem.validationErrors() ) {
             errors.add( ErrorModel.fromError( error ) );
         }
-        mediaItemModel.setValidationErrors( errors );
 
-        return mediaItemModel;
+        return MediaItemModel.create(
+                mediaItem.id(),
+                mediaItem.media(),
+                mediaItem.title(),
+                mediaItem.subTitle(),
+                mediaItem.description(),
+                mediaItem.startDate(),
+                mediaItem.programFlags(),
+                mediaItem.season(),
+                mediaItem.episode(),
+                mediaItem.studio(),
+                mediaItem.castMembers(),
+                mediaItem.characters(),
+                mediaItem.url(),
+                mediaItem.fanartUrl(),
+                mediaItem.coverartUrl(),
+                mediaItem.bannerUrl(),
+                mediaItem.previewUrl(),
+                mediaItem.contentType(),
+                mediaItem.duration(),
+                mediaItem.percentComplete(),
+                mediaItem.recording(),
+                mediaItem.liveStreamId(),
+                mediaItem.watched(),
+                mediaItem.updateSavedBookmarkUrl(),
+                mediaItem.bookmark(),
+                mediaItem.inetref(),
+                mediaItem.certification(),
+                mediaItem.parentalLevel(),
+                mediaItem.recordingGroup(),
+                errors );
     }
 
     public List<MediaItemModel> transform( Collection<MediaItem> mediaItemCollection ) {

@@ -26,9 +26,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.internal.di.components.ApplicationComponent;
 import org.mythtv.android.presentation.internal.di.components.NetComponent;
@@ -49,26 +46,31 @@ import butterknife.ButterKnife;
  */
 public abstract class AbstractBaseTvActivity extends Activity {
 
-    public abstract int getLayoutResource();
-
     @Inject
     TvNavigator navigator;
 
-    protected FirebaseAnalytics mFirebaseAnalytics;
+//    protected FirebaseAnalytics mFirebaseAnalytics;
+
+    public abstract int getLayoutResource();
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
         this.getApplicationComponent().inject( this );
-        setContentView( getLayoutResource() );
-        ButterKnife.bind( this );
 
-        if( !FirebaseApp.getApps( this ).isEmpty() ) {
+        if( getLayoutResource() > 0 ) {
 
-            mFirebaseAnalytics = FirebaseAnalytics.getInstance( this );
+            setContentView( getLayoutResource() );
+            ButterKnife.bind( this );
 
         }
+
+//        if( !FirebaseApp.getApps( this ).isEmpty() ) {
+//
+//            mFirebaseAnalytics = FirebaseAnalytics.getInstance( this );
+//
+//        }
 
     }
 

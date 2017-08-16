@@ -33,94 +33,6 @@
         <item>Pornos</item>
     </string-array>
 
-    <string-array name="pref_hls_video_width_entries">
-        <item>Auto</item>
-        <item>288</item>
-        <item>400</item>
-        <item>480</item>
-        <item>640</item>
-        <item>800</item>
-        <item>960</item>
-        <item>1024</item>
-        <item>1280</item>
-    </string-array>
-
-    <string-array name="pref_hls_video_width_values">
-        <item>0</item>
-        <item>288</item>
-        <item>400</item>
-        <item>480</item>
-        <item>640</item>
-        <item>800</item>
-        <item>960</item>
-        <item>1024</item>
-        <item>1280</item>
-    </string-array>
-
-    <string-array name="pref_hls_video_height_entries">
-        <item>Auto</item>
-        <item>320</item>
-        <item>480</item>
-        <item>540</item>
-        <item>600</item>
-        <item>720</item>
-        <item>768</item>
-    </string-array>
-
-    <string-array name="pref_hls_video_height_values">
-        <item>0</item>
-        <item>320</item>
-        <item>480</item>
-        <item>540</item>
-        <item>600</item>
-        <item>720</item>
-        <item>768</item>
-    </string-array>
-
-    <string-array name="pref_hls_video_bitrate_entries">
-        <item>500k</item>
-        <item>600k</item>
-        <item>700k</item>
-        <item>800k</item>
-        <item>900k</item>
-        <item>1000k</item>
-        <item>1500k</item>
-        <item>2000k</item>
-        <item>2500k</item>
-        <item>3000k</item>
-        <item>3500k</item>
-    </string-array>
-
-    <string-array name="pref_hls_video_bitrate_values">
-        <item>500000</item>
-        <item>600000</item>
-        <item>700000</item>
-        <item>800000</item>
-        <item>900000</item>
-        <item>1000000</item>
-        <item>1500000</item>
-        <item>2000000</item>
-        <item>2500000</item>
-        <item>3000000</item>
-        <item>3500000</item>
-    </string-array>
-
-    <string-array name="pref_hls_audio_bitrate_entries">
-        <item>32k</item>
-        <item>64k</item>
-        <item>96k</item>
-        <item>128k</item>
-        <item>192k</item>
-    </string-array>
-
-    <string-array name="pref_hls_audio_bitrate_values">
-        <item>32000</item>
-        <item>64000</item>
-        <item>96000</item>
-        <item>128000</item>
-        <item>192000</item>
-    </string-array>
-
     <string-array name="parental_control_level_entries">
         <item>Level 1</item>
         <item>Level 2</item>
@@ -133,38 +45,6 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
-    </string-array>
-
-    <string-array name="pref_timeout_entries">
-        <item>10 Sekunden</item>
-        <item>20 Sekunden</item>
-        <item>30 Sekunden</item>
-        <item>40 Sekunden</item>
-        <item>50 Sekunden</item>
-        <item>60 Sekunden</item>
-        <item>70 Sekunden</item>
-        <item>80 Sekunden</item>
-        <item>90 Sekunden</item>
-        <item>100 Sekunden</item>
-        <item>110 Sekunden</item>
-        <item>120 Sekunden</item>
-        <item>keine Begrenzung</item>
-    </string-array>
-
-    <string-array name="pref_timeout_values">
-        <item>10000</item>
-        <item>20000</item>
-        <item>30000</item>
-        <item>40000</item>
-        <item>50000</item>
-        <item>60000</item>
-        <item>70000</item>
-        <item>80000</item>
-        <item>90000</item>
-        <item>100000</item>
-        <item>110000</item>
-        <item>120000</item>
-        <item>0</item>
     </string-array>
 
     <string-array name="articles" tools:ignore="InconsistentArrays">

@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,10 @@ import org.mythtv.android.R;
  *
  * @author dmfrey
  */
+@SuppressWarnings( "PMD" )
 public class ExpandedControlsFragment extends Fragment {
+
+    private static final String TAG = ExpandedControlsFragment.class.getSimpleName();
 
     private TextView mSubtitleTextView;
     private UIMediaController mUIMediaController;
@@ -117,33 +121,21 @@ public class ExpandedControlsFragment extends Fragment {
 
     private void setUpTransportControls(View rootView) {
         setUpClosedCaptionButton((ImageButton) rootView.findViewById(R.id.button_image_view_1),
-                false, mUIMediaController);
-        setUpSkipPrevButton((ImageButton) rootView.findViewById(R.id.button_image_view_2), false,
+                mUIMediaController);
+        setUpSkipPrevButton((ImageButton) rootView.findViewById(R.id.button_image_view_2),
                 mUIMediaController);
         setUpPlayPauseToggleButton((ImageButton) rootView.findViewById(R.id.button_image_view_3),
-                true, mUIMediaController);
-        setUpSkipNextButton((ImageButton) rootView.findViewById(R.id.button_image_view_4), false,
+                mUIMediaController);
+        setUpSkipNextButton((ImageButton) rootView.findViewById(R.id.button_image_view_4),
                 mUIMediaController);
         rootView.findViewById(R.id.button_image_view_5).setVisibility(View.INVISIBLE);
     }
 
-    private void setUpPlayPauseToggleButton(ImageButton button, boolean isAtCenter,
+    private void setUpPlayPauseToggleButton(ImageButton button,
                                             UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
-        Drawable pauseDrawable;
-        Drawable playDrawable;
-        if (isAtCenter) {
-            pauseDrawable = getResources()
-                    .getDrawable(R.drawable.ic_pause_circle_white_80dp);
-            playDrawable = getResources()
-                    .getDrawable(R.drawable.ic_play_circle_white_80dp);
-
-        } else {
-            pauseDrawable = getResources()
-                    .getDrawable(R.drawable.ic_pause_circle_white_80dp);
-
-            playDrawable = getResources().getDrawable(R.drawable.ic_play_circle_white_80dp);
-        }
+        Drawable pauseDrawable = getResources().getDrawable( R.drawable.ic_pause_circle_white);
+        Drawable playDrawable = getResources().getDrawable( R.drawable.ic_play_circle_white);
         button.setImageDrawable(playDrawable);
         uiMediaController.bindImageViewToPlayPauseToggle(button, playDrawable,
                 pauseDrawable, null, null, false);
@@ -159,35 +151,26 @@ public class ExpandedControlsFragment extends Fragment {
         button.setBackgroundResource(selectable);
     }
 
-    private void setUpSkipPrevButton(ImageButton button, boolean isAtCenter,
+    private void setUpSkipPrevButton(ImageButton button,
                                      UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
-        Drawable skipPreviousDrawable = isAtCenter
-                ? getResources()
-                .getDrawable(R.drawable.skip_previous_button)
-                : getResources().getDrawable(R.drawable.skip_previous_button);
+        Drawable skipPreviousDrawable = getResources().getDrawable(R.drawable.skip_previous_button);
         button.setImageDrawable(skipPreviousDrawable);
         uiMediaController.bindViewToSkipPrev(button, View.VISIBLE);
     }
 
-    private void setUpSkipNextButton(ImageButton button, boolean isAtCenter,
+    private void setUpSkipNextButton(ImageButton button,
                                      UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
-        Drawable skipNextDrawable = isAtCenter
-                ? getResources()
-                .getDrawable(R.drawable.skip_next_button)
-                : getResources().getDrawable(R.drawable.skip_next_button);
+        Drawable skipNextDrawable = getResources().getDrawable(R.drawable.skip_next_button);
         button.setImageDrawable(skipNextDrawable);
         uiMediaController.bindViewToSkipNext(button, View.VISIBLE);
     }
 
-    private void setUpClosedCaptionButton(ImageButton button, boolean isAtCenter,
+    private void setUpClosedCaptionButton(ImageButton button,
                                           UIMediaController uiMediaController) {
         setButtonBackgroundResource(button);
-        Drawable closedCaptionDrawable = isAtCenter
-                ? getResources()
-                .getDrawable(R.drawable.cc)
-                : getResources().getDrawable(R.drawable.cc);
+        Drawable closedCaptionDrawable = getResources().getDrawable(R.drawable.cc);
         button.setImageDrawable(closedCaptionDrawable);
         uiMediaController.bindViewToClosedCaption(button);
     }
@@ -210,10 +193,16 @@ public class ExpandedControlsFragment extends Fragment {
 
         @Override
         public void onQueueStatusUpdated() {
+            Log.v( TAG, "onQueueStatusUpdated : enter" );
+
+            Log.v( TAG, "onQueueStatusUpdated : exit" );
         }
 
         @Override
         public void onPreloadStatusUpdated() {
+            Log.v( TAG, "onPreloadStatusUpdated : enter" );
+
+            Log.v( TAG, "onPreloadStatusUpdated : exit" );
         }
 
         @Override
@@ -223,11 +212,14 @@ public class ExpandedControlsFragment extends Fragment {
 
         @Override
         public void onAdBreakStatusUpdated() {
+            Log.v( TAG, "onAdBreakStatusUpdated : enter" );
 
+            Log.v( TAG, "onAdBreakStatusUpdated : exit" );
         }
 
     }
 
+    @SuppressWarnings( "PMD.AvoidDeeplyNestedIfStmts" )
     private void updateToolbarTitle() {
         RemoteMediaClient remoteMediaClient = getRemoteMediaClient();
         if (remoteMediaClient != null && remoteMediaClient.hasMediaSession()) {
@@ -250,6 +242,7 @@ public class ExpandedControlsFragment extends Fragment {
                 ? castSession.getRemoteMediaClient() : null;
     }
 
+    @SuppressWarnings( "PMD.AvoidDeeplyNestedIfStmts" )
     private void updateSubtitle() {
         CastSession castSession =
                 CastContext.getSharedInstance(getContext()).getSessionManager()

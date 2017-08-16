@@ -19,10 +19,8 @@
 package org.mythtv.android.presentation.mapper;
 
 import org.mythtv.android.domain.Encoder;
-import org.mythtv.android.domain.Input;
 import org.mythtv.android.presentation.internal.di.PerActivity;
 import org.mythtv.android.presentation.model.EncoderModel;
-import org.mythtv.android.presentation.model.InputModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,13 +39,9 @@ import javax.inject.Inject;
 @PerActivity
 public class EncoderModelDataMapper {
 
-    private final ProgramModelDataMapper programModelDataMapper;
-
     @Inject
-    public EncoderModelDataMapper( ProgramModelDataMapper programModelDataMapper ) {
-
-        this.programModelDataMapper = programModelDataMapper;
-
+    public EncoderModelDataMapper() {
+        // This constructor is intentionally left blank
     }
 
     public EncoderModel transform( Encoder encoder ) {
@@ -55,41 +49,7 @@ public class EncoderModelDataMapper {
         EncoderModel encoderModel = null;
         if( null != encoder ) {
 
-            encoderModel = new EncoderModel();
-            encoderModel.setId( encoder.getId() );
-            encoderModel.setHostname( encoder.getHostname() );
-            encoderModel.setLocal( encoder.isLocal() );
-            encoderModel.setConnected( encoder.isConnected() );
-            encoderModel.setState( encoder.getState() );
-            encoderModel.setSleepStatus( encoder.getSleepStatus() );
-            encoderModel.setLowOnFreeSpace( encoder.isLowOnFreeSpace() );
-
-            if( null != encoder.getInputs() ) {
-
-                List<InputModel> inputModels = new ArrayList<>();
-                for( Input input : encoder.getInputs() ) {
-
-                    InputModel inputModel = new InputModel();
-                    inputModel.setId( input.getId() );
-                    inputModel.setCardId( input.getCardId() );
-                    inputModel.setSourceId( input.getSourceId() );
-                    inputModel.setInputName( input.getInputName() );
-                    inputModel.setDisplayName( input.getDisplayName() );
-                    inputModel.setQuickTune( input.isQuickTune() );
-                    inputModel.setRecordPriority( input.getRecordPriority() );
-                    inputModel.setScheduleOrder( input.getScheduleOrder() );
-                    inputModel.setLiveTvOrder( input.getLiveTvOrder() );
-                    inputModels.add( inputModel );
-
-                }
-                encoderModel.setInputs( inputModels );
-            }
-
-            if( null != encoder.getRecording() ) {
-
-                encoderModel.setRecording( programModelDataMapper.transform( encoder.getRecording() ) );
-
-            }
+            encoderModel = EncoderModel.create( encoder.id(), encoder.inputName(), encoder.recordingName(), encoder.recordingDescription(), encoder.state() );
 
         }
 

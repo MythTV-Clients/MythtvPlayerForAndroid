@@ -37,7 +37,8 @@
             android:layout_gravity="end"
             android:layout_weight="0.03"
             android:tint="@color/primary_dark"
-            android:src="@drawable/ic_airplanemode_active_black_24dp"  />
+            android:src="@drawable/ic_airplanemode_active_black_24dp"
+            android:contentDescription="@string/troubleshoot_airplane_mode_cd" />
 
     </LinearLayout>
 
@@ -65,7 +66,8 @@
             android:layout_gravity="end"
             android:layout_weight="0.03"
             android:tint="@color/primary_dark"
-            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"
+            android:contentDescription="@string/troubleshoot_network_cd" />
 
     </LinearLayout>
 
@@ -93,7 +95,8 @@
             android:layout_gravity="end"
             android:layout_weight="0.1"
             android:tint="@color/primary_dark"
-            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"
+            android:contentDescription="@string/troubleshoot_ping_cd" />
 
     </LinearLayout>
 
@@ -121,7 +124,8 @@
             android:layout_gravity="end"
             android:layout_weight="0.1"
             android:tint="@color/primary_dark"
-            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"
+            android:contentDescription="@string/troubleshoot_services_cd" />
 
     </LinearLayout>
 
@@ -149,7 +153,8 @@
             android:layout_gravity="end"
             android:layout_weight="0.1"
             android:tint="@color/primary_dark"
-            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"
+            android:contentDescription="@string/troubleshoot_backend_version_cd" />
 
     </LinearLayout>
 
@@ -177,7 +182,8 @@
             android:layout_gravity="end"
             android:layout_weight="0.1"
             android:tint="@color/primary_dark"
-            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"  />
+            android:src="@drawable/ic_signal_wifi_0_bar_black_24dp"
+            android:contentDescription="@string/troubleshoot_backend_language_cd" />
 
     </LinearLayout>
 

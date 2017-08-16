@@ -9,7 +9,6 @@ import org.junit.rules.ExpectedException;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.VideoMetadataInfoEntity;
 
-import java.io.StringReader;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,33 +39,33 @@ public class VideoMetadataInfoEntityJsonDataMapperTest extends ApplicationTestCa
     @Test
     public void testTransformVideoMetadataInfoEntityHappyCase() {
 
-        VideoMetadataInfoEntity videoMetadataInfoEntity = videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( new StringReader( JSON_RESPONSE_VIDEO_GET_VIDEO ) );
+        VideoMetadataInfoEntity videoMetadataInfoEntity = videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( JSON_RESPONSE_VIDEO_GET_VIDEO );
 
-        assertThat( videoMetadataInfoEntity.getId(), is( 1 ) );
-        assertThat( videoMetadataInfoEntity.getTitle(), is( "big buck bunny 1080p stereo" ) );
-        assertThat( videoMetadataInfoEntity.getSubTitle(), is( "" ) );
-        assertThat( videoMetadataInfoEntity.getInetref(), is( "00000000" ) );
+        assertThat( videoMetadataInfoEntity.id(), is( 1 ) );
+        assertThat( videoMetadataInfoEntity.title(), is( "big buck bunny 1080p stereo" ) );
+        assertThat( videoMetadataInfoEntity.subTitle(), is( "" ) );
+        assertThat( videoMetadataInfoEntity.inetref(), is( "00000000" ) );
 
     }
 
     @Test( expected = JsonSyntaxException.class )
     public void testTransformVideoMetadataInfoEntityBadJson() {
 
-        videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( new StringReader( JSON_RESPONSE_VIDEO_GET_VIDEO_BAD ) );
+        videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntity( JSON_RESPONSE_VIDEO_GET_VIDEO_BAD );
 
     }
 
     @Test
     public void testTransformVideoMetadataInfoEntityCollectionHappyCase() {
 
-        Collection<VideoMetadataInfoEntity> videoMetadataInfoEntityCollection = videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntityCollection( new StringReader( JSON_RESPONSE_VIDEO_GET_VIDEO_LIST ) );
+        Collection<VideoMetadataInfoEntity> videoMetadataInfoEntityCollection = videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntityCollection( JSON_RESPONSE_VIDEO_GET_VIDEO_LIST );
 
-        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 0 ] ).getId(), is( 1 ) );
-        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 0 ] ).getTitle(), is( "big buck bunny 1080p stereo" ) );
-        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 0 ] ).getInetref(), is( "00000000" ) );
-        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 1 ] ).getId(), is( 2 ) );
-        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 1 ] ).getTitle(), is( "tears of steel 1080p" ) );
-        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 1 ] ).getInetref(), is( "00000000" ) );
+        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 0 ] ).id(), is( 1 ) );
+        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 0 ] ).title(), is( "big buck bunny 1080p stereo" ) );
+        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 0 ] ).inetref(), is( "00000000" ) );
+        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 1 ] ).id(), is( 2 ) );
+        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 1 ] ).title(), is( "tears of steel 1080p" ) );
+        assertThat( ( (VideoMetadataInfoEntity) videoMetadataInfoEntityCollection.toArray() [ 1 ] ).inetref(), is( "00000000" ) );
         assertThat( videoMetadataInfoEntityCollection.size(), is( 2 ) );
 
     }
@@ -74,7 +73,7 @@ public class VideoMetadataInfoEntityJsonDataMapperTest extends ApplicationTestCa
     @Test( expected = JsonSyntaxException.class )
     public void testTransformVideoMetadataInfoEntityCollectionBadJson() {
 
-        videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntityCollection( new StringReader( JSON_RESPONSE_VIDEO_GET_VIDEO_LIST_BAD ) );
+        videoMetadataInfoEntityJsonMapper.transformVideoMetadataInfoEntityCollection( JSON_RESPONSE_VIDEO_GET_VIDEO_LIST_BAD );
 
     }
 

@@ -38,4 +38,6 @@ public interface MediaItemDetailsView extends LoadDataView {
      */
     void renderMediaItem( MediaItemModel mediaItem );
 
+    void refreshMediaItem(MediaItemModel mediaItem );
+
 }

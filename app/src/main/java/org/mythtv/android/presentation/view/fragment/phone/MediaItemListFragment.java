@@ -21,12 +21,10 @@ package org.mythtv.android.presentation.view.fragment.phone;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
 import org.mythtv.android.domain.Media;
@@ -38,6 +36,9 @@ import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.phone.TroubleshootClickListener;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
 import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
+import org.mythtv.android.presentation.view.component.EmptyRecyclerView;
+import org.mythtv.android.presentation.view.listeners.MediaItemListListener;
+import org.mythtv.android.presentation.view.listeners.NotifyListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,6 +60,7 @@ import butterknife.Unbinder;
  *
  * Created on 1/20/16.
  */
+@SuppressWarnings( "PMD" )
 public class MediaItemListFragment extends AbstractBaseFragment implements MediaItemListView {
 
     private static final String TAG = MediaItemListFragment.class.getSimpleName();
@@ -74,32 +76,65 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public static final String FOLDER_KEY = "folder";
     public static final String SORT_KEY = "sort";
 
-    /**
-     * Interface for listening media item list events.
-     */
-    public interface MediaItemListListener {
-
-        void onMediaItemClicked( final MediaItemModel mediaItemModel );
-
-    }
-
     @Inject
     MediaItemListPresenter mediaItemListPresenter;
 
     @BindView( R.id.rv_mediaItems )
-    RecyclerView rv_mediaItems;
+    EmptyRecyclerView rv_mediaItems;
 
-    @BindView( R.id.rl_progress )
-    RelativeLayout rl_progress;
+    @BindView( R.id.media_item_empty_list_view )
+    View emptyView;
 
     private Unbinder unbinder;
 
     private MediaItemsAdapter mediaItemsAdapter;
 
     private TroubleshootClickListener troubleshootClickListener;
+    private NotifyListener notifyListener;
     private MediaItemListListener mediaItemListListener;
 
     private Map<String, Object> parameters;
+
+    private final MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
+
+        if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
+
+            if( mediaItemModel.isValid() ) {
+                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
+
+            } else {
+                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
+
+                if( null == mediaItemModel.media() ) {
+
+                    String message = getString(R.string.validation_no_media_type);
+                    showToastMessage( message, null, null );
+
+                } else {
+
+                    String fields = "";
+                    for( ErrorModel errorModel : mediaItemModel.validationErrors() ) {
+
+                        if( !"".equals( fields ) ) {
+                            fields += ", ";
+                        }
+
+                        fields += errorModel.field();
+
+                    }
+
+                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
+                    showToastMessage( message, null, null );
+
+                }
+
+            }
+
+        }
+
+    };
 
     public MediaItemListFragment() { super(); }
 
@@ -113,7 +148,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     public static class Builder {
 
-        private Media media;
+        private final Media media;
         private Boolean descending;
         private Integer startIndex;
         private Integer count;
@@ -306,17 +341,22 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     }
 
     @Override
-    public void onAttach( Context context ) {
-        super.onAttach( context );
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        Activity activity = getActivity();
-        if( activity instanceof MediaItemListFragment.MediaItemListListener) {
-            this.mediaItemListListener = (MediaItemListFragment.MediaItemListListener) activity;
-        }
-        if( activity instanceof TroubleshootClickListener) {
-            this.troubleshootClickListener = (TroubleshootClickListener) activity;
-        }
+//        if( context instanceof Activity ) {
+//            Activity activity = (Activity) context;
+            if (activity instanceof MediaItemListListener) {
+                this.mediaItemListListener = (MediaItemListListener) activity;
+            }
+            if (activity instanceof NotifyListener) {
+                this.notifyListener = (NotifyListener) activity;
+            }
+            if (activity instanceof TroubleshootClickListener) {
+                this.troubleshootClickListener = (TroubleshootClickListener) activity;
+            }
+//        }
 
         Log.d( TAG, "onAttach : exit" );
     }
@@ -329,8 +369,6 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         ButterKnife.bind( this, fragmentView );
         unbinder = ButterKnife.bind( this, fragmentView );
 
-        setupUI();
-
         Log.d( TAG, "onCreateView : exit" );
         return fragmentView;
     }
@@ -339,6 +377,8 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void onActivityCreated( Bundle savedInstanceState ) {
         Log.d( TAG, "onActivityCreated : enter" );
         super.onActivityCreated( savedInstanceState );
+
+        setupUI();
 
         this.initialize();
 
@@ -350,9 +390,8 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         Log.d( TAG, "onResume : enter" );
         super.onResume();
 
-        this.loadMediaItemList();
-
         this.mediaItemListPresenter.resume();
+        this.loadMediaItemList();
 
         Log.d( TAG, "onResume : exit" );
     }
@@ -407,6 +446,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
         this.mediaItemsAdapter = new MediaItemsAdapter( getActivity(), new ArrayList<>() );
         this.mediaItemsAdapter.setOnItemClickListener( onItemClickListener );
         this.rv_mediaItems.setAdapter( mediaItemsAdapter );
+        this.rv_mediaItems.setEmptyView( emptyView );
 
         Log.d( TAG, "setupUI : exit" );
     }
@@ -415,8 +455,8 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.VISIBLE );
+        if( null != notifyListener ) {
+            this.notifyListener.showLoading();
         }
 
         Log.d( TAG, "showLoading : exit" );
@@ -426,8 +466,8 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.GONE );
+        if( null != notifyListener ) {
+            this.notifyListener.finishLoading();
         }
 
         Log.d( TAG, "hideLoading : exit" );
@@ -435,12 +475,16 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
     @Override
     public void showRetry() {
+        Log.v( TAG, "showRetry : enter" );
 
+        Log.v( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
+        Log.v( TAG, "hideRetry : enter" );
 
+        Log.v( TAG, "hideRetry : exit" );
     }
 
     public void reload() {
@@ -462,7 +506,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
                 List<MediaItemModel> filtered = new ArrayList<>();
                 for( MediaItemModel mediaItemModel : mediaItemModelCollection ) {
 
-                    if( mediaItemModel.getInetref().equals( inetref ) ) {
+                    if( mediaItemModel.inetref().equals( inetref ) ) {
 
                         filtered.add( mediaItemModel );
 
@@ -472,13 +516,15 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
                 if( !filtered.isEmpty() ) {
 
-                    mediaItemModelCollection = filtered;
+                    this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
 
                 }
 
-            }
+            } else {
 
-            this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
+                this.mediaItemsAdapter.setMediaItemsCollection( mediaItemModelCollection );
+
+            }
 
         }
 
@@ -486,22 +532,26 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     }
 
     @Override
-    public void viewMediaItem( MediaItemModel mediaItemModel ) {
+    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "viewMediaItem : enter" );
 
         if( null != this.mediaItemListListener ) {
             Log.d( TAG, "viewMediaItem : mediaItemModel=" + mediaItemModel.toString() );
 
-            this.mediaItemListListener.onMediaItemClicked( mediaItemModel );
+            this.mediaItemListListener.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
 
         }
 
-        Log.d( TAG, "viewProgram : exit" );
+        Log.d( TAG, "viewMediaItem : exit" );
     }
 
     @Override
     public void showError( String message ) {
         Log.d( TAG, "showError : enter" );
+
+        if( null != notifyListener ) {
+            this.notifyListener.hideLoading();
+        }
 
         this.showToastMessage( message, getResources().getString( R.string.troubleshoot ), v -> troubleshootClickListener.onTroubleshootClicked() );
 
@@ -535,46 +585,5 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
         Log.d( TAG, "loadMediaItemList : exit" );
     }
-
-    private MediaItemsAdapter.OnItemClickListener onItemClickListener = mediaItemModel -> {
-
-        if( null != MediaItemListFragment.this.mediaItemListPresenter && null != mediaItemModel ) {
-
-            if( mediaItemModel.isValid() ) {
-                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
-
-                MediaItemListFragment.this.mediaItemListPresenter.onMediaItemClicked( mediaItemModel );
-
-            } else {
-                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
-
-                if( null == mediaItemModel.getMedia() ) {
-
-                    String message = getString(R.string.validation_no_media_type);
-                    showToastMessage( message, null, null );
-
-                } else {
-
-                    String fields = "";
-                    for( ErrorModel errorModel : mediaItemModel.getValidationErrors() ) {
-
-                        if( !"".equals( fields ) ) {
-                            fields += ", ";
-                        }
-
-                        fields += errorModel.getField();
-
-                    }
-
-                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
-                    showToastMessage( message, null, null );
-
-                }
-
-            }
-
-        }
-
-    };
 
 }

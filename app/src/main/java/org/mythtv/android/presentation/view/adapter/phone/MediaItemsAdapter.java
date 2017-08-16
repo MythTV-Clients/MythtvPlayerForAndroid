@@ -33,20 +33,25 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.mythtv.android.R;
 import org.mythtv.android.domain.SettingsKeys;
 import org.mythtv.android.presentation.model.MediaItemModel;
+import org.mythtv.android.presentation.utils.MediaItemFilter;
 import org.mythtv.android.presentation.utils.SeasonEpisodeFormatter;
-import org.mythtv.android.presentation.view.component.AutoLoadImageView;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 
 /**
  *
@@ -60,25 +65,25 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
     private static final String TAG = MediaItemsAdapter.class.getSimpleName();
 
-    public interface OnItemClickListener {
-
-        void onMediaItemClicked( MediaItemModel mediaItemModel );
-
-    }
-
-    private Context context;
+    private final Context context;
     private List<MediaItemModel> mediaItemsCollection;
     private final LayoutInflater layoutInflater;
     private final Drawable brokenMovie;
 
     private OnItemClickListener onItemClickListener;
 
-    public MediaItemsAdapter( Context context, Collection<MediaItemModel> programsCollection ) {
+    public interface OnItemClickListener {
+
+        void onMediaItemClicked( MediaItemModel mediaItemModel, View sharedElement, String sharedElementName );
+
+    }
+
+    public MediaItemsAdapter( final Context context, Collection<MediaItemModel> programsCollection ) {
 
         this.context = context;
         this.validateMediaItemsCollection( programsCollection );
         this.layoutInflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        this.mediaItemsCollection = (List<MediaItemModel>) programsCollection;
+        this.mediaItemsCollection = new ArrayList<>( programsCollection );
 
         brokenMovie = ContextCompat.getDrawable( context, R.drawable.ic_movie_black_24dp );
 
@@ -87,7 +92,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     @Override
     public int getItemCount() {
 
-        return ( null != this.mediaItemsCollection ) ? this.mediaItemsCollection.size() : 0;
+        return ( null == this.mediaItemsCollection ) ? 0 : this.mediaItemsCollection.size();
     }
 
     @Override
@@ -104,7 +109,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
         final MediaItemModel mediaItemModel = this.mediaItemsCollection.get( position );
         Log.i( TAG, "onBindViewHolder : mediaItemModel=" + mediaItemModel.toString() );
 
-        switch( mediaItemModel.getMedia() ) {
+        String imageUrl = null;
+        switch( mediaItemModel.media() ) {
 
             case MUSICVIDEO :
             case HOMEVIDEO :
@@ -113,15 +119,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
             case PROGRAM :
 
-                if( null != mediaItemModel.getPreviewUrl() && !"".equals( mediaItemModel.getPreviewUrl() ) ) {
-
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getPreviewUrl( "250" ) );
-
-                } else {
-
-                    holder.image.setImageDrawable( brokenMovie );
-
-                }
+                imageUrl = getMasterBackendUrl() + mediaItemModel.getPreviewUrl( "250" );
 
                 break;
 
@@ -130,33 +128,35 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
             case MOVIE :
             case ADULT :
 
-                if( null != mediaItemModel.getFanartUrl() && !"".equals( mediaItemModel.getFanartUrl() ) ) {
-
-                    holder.image.setImageUrl( getMasterBackendUrl() + mediaItemModel.getFanartUrl( "250" ) );
-
-                } else {
-
-                    holder.image.setImageDrawable( brokenMovie );
-
-                }
+                imageUrl = getMasterBackendUrl() + mediaItemModel.getFanartUrl( "250" );
 
                 break;
 
             default :
 
-                holder.image.setImageDrawable( brokenMovie );
-
                 break;
 
         }
+        if( null != imageUrl ) {
 
-        if( mediaItemModel.getLiveStreamId() > 0 ) {
+            Glide
+                    .with( context )
+                    .load( imageUrl )
+                    .centerCrop()
+                    .error( brokenMovie )
+                    .crossFade()
+                    .diskCacheStrategy( DiskCacheStrategy.RESULT )
+                    .into( holder.image );
+
+        }
+
+        if( mediaItemModel.liveStreamId() > 0 ) {
 
             holder.progress.setVisibility( View.VISIBLE );
             holder.progress.setIndeterminate( false );
-            holder.progress.setProgress( mediaItemModel.getPercentComplete() );
+            holder.progress.setProgress( mediaItemModel.percentComplete() );
 
-            if( mediaItemModel.getPercentComplete() < 2 ) {
+            if( mediaItemModel.percentComplete() < 2 ) {
 
                 holder.progress.getProgressDrawable().setColorFilter( Color.RED, android.graphics.PorterDuff.Mode.SRC_IN );
 
@@ -175,12 +175,12 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
         }
 
-        holder.title.setText( mediaItemModel.getTitle() );
-        holder.subTitle.setText( mediaItemModel.getSubTitle() );
-        holder.studio.setText( mediaItemModel.getStudio() );
-        holder.date.setText( null != mediaItemModel.getStartDate() ? mediaItemModel.getStartDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) : "" );
-        holder.episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.getSeason(), mediaItemModel.getEpisode() ) );
-        holder.duration.setText( context.getResources().getString( R.string.minutes, String.valueOf( mediaItemModel.getDuration() ) ) );
+        holder.title.setText( mediaItemModel.title() );
+        holder.subTitle.setText( mediaItemModel.subTitle() );
+        holder.studio.setText( mediaItemModel.studio() );
+        holder.date.setText( null == mediaItemModel.startDate() ? "" : mediaItemModel.startDate().withZone( DateTimeZone.getDefault() ).toString( DateTimeFormat.patternForStyle( "MS", Locale.getDefault() ) ) );
+        holder.episode.setText( SeasonEpisodeFormatter.format( mediaItemModel.season(), mediaItemModel.episode() ) );
+        holder.duration.setText( context.getResources().getString( R.string.minutes, String.valueOf( mediaItemModel.duration() ) ) );
 
         if( mediaItemModel.isValid() ) {
 
@@ -197,7 +197,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
             if( null != MediaItemsAdapter.this.onItemClickListener ) {
                 Log.v( TAG, "onClick : mediaItem=" + mediaItemModel.toString() );
 
-                MediaItemsAdapter.this.onItemClickListener.onMediaItemClicked( mediaItemModel );
+                MediaItemsAdapter.this.onItemClickListener.onMediaItemClicked( mediaItemModel, holder.image, "set_backdrop" );
 
             }
 
@@ -214,7 +214,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     public void setMediaItemsCollection( Collection<MediaItemModel> mediaItemsCollection ) {
 
         this.validateMediaItemsCollection( mediaItemsCollection );
-        this.mediaItemsCollection = (List<MediaItemModel>) mediaItemsCollection;
+
+        Observable.from( mediaItemsCollection )
+                .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, context ) )
+                .toList()
+                .subscribe( items -> this.mediaItemsCollection = items );
+
+//        this.mediaItemsCollection = Utils.filter( PreferenceManager.getDefaultSharedPreferences( context ), mediaItemsCollection );
         this.notifyDataSetChanged();
 
     }
@@ -237,7 +243,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
     static class MediaItemViewHolder extends RecyclerView.ViewHolder {
 
         @BindView( R.id.media_item_image )
-        AutoLoadImageView image;
+        ImageView image;
 
         @BindView( R.id.media_item_error_image )
         ImageView error;
@@ -274,13 +280,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Me
 
     private String getMasterBackendUrl() {
 
-        String host = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
-        String port = getFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
+        String host = getStringFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_URL );
+        String port = getStringFromPreferences( this.context, SettingsKeys.KEY_PREF_BACKEND_PORT );
 
         return "http://" + host + ":" + port;
     }
 
-    public String getFromPreferences( Context context, String key ) {
+    private String getStringFromPreferences( Context context, String key ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
 

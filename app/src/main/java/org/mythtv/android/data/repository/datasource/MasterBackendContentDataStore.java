@@ -20,9 +20,9 @@ package org.mythtv.android.data.repository.datasource;
 
 import android.util.Log;
 
-import org.joda.time.DateTime;
 import org.mythtv.android.data.entity.LiveStreamInfoEntity;
 import org.mythtv.android.data.net.ContentApi;
+import org.mythtv.android.domain.Media;
 
 import java.util.List;
 
@@ -49,58 +49,24 @@ public class MasterBackendContentDataStore implements ContentDataStore {
     }
 
     @Override
-    public Observable<LiveStreamInfoEntity> addliveStream( String storageGroup, String filename, String hostname ) {
-        Log.d( TAG, "addliveStream : enter" );
-
-        Log.d( TAG, "addliveStream : exit" );
-        return this.api.addliveStream( storageGroup, filename, hostname );
-    }
-
-    @Override
-    public Observable<LiveStreamInfoEntity> addRecordingliveStream( int recordedId, int chanId, DateTime startTime ) {
-        Log.d( TAG, "addRecordingliveStream : enter" );
-
-        Log.d( TAG, "addRecordingliveStream : exit" );
-        return this.api.addRecordingliveStream( recordedId, chanId, startTime );
-    }
-
-    @Override
-    public Observable<LiveStreamInfoEntity> addVideoliveStream( int id ) {
-        Log.d( TAG, "addVideoliveStream : enter" );
-
-        Log.d( TAG, "addVideoliveStream : exit" );
-        return this.api.addVideoliveStream( id );
-    }
-
-    @Override
-    public Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( String filename ) {
+    public Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList( final String filename ) {
         Log.d( TAG, "liveStreamInfoEntityList : enter" );
 
-        Log.d( TAG, "liveStreamInfoEntityList : exit" );
         return this.api.liveStreamInfoEntityList( filename );
     }
 
     @Override
-    public Observable<LiveStreamInfoEntity> liveStreamInfoEntityDetails( int id ) {
-        Log.d( TAG, "liveStreamInfoEntityDetails : enter" );
+    public Observable<LiveStreamInfoEntity> addLiveStream( final Media media, final int id ) {
+        Log.d( TAG, "addLiveStream : enter" );
 
-        Log.d( TAG, "liveStreamInfoEntityDetails : exit" );
-        return this.api.liveStreamInfoById( id );
+        return this.api.addLiveStream( media, id );
     }
 
     @Override
-    public Observable<Boolean> removeLiveStream( int id ) {
+    public Observable<Boolean> removeLiveStream( final int id ) {
         Log.d( TAG, "removeLiveStream : enter" );
 
-        Log.d( TAG, "removeLiveStream : exit" );
         return this.api.removeLiveStream( id );
     }
 
-    @Override
-    public Observable<Boolean> stopLiveStream( int id ) {
-        Log.d( TAG, "stopLiveStream : enter" );
-
-        Log.d( TAG, "stopLiveStream : exit" );
-        return this.api.stopLiveStream( id );
-    }
 }

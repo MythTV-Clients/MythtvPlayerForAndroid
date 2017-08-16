@@ -51,16 +51,16 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
 
     private static final String INSTANCE_STATE_PARAM_SEARCH_TEXT = "org.mythtv.android.STATE_PARAM_SEARCH_TEXT";
 
-    public static Intent getCallingIntent( Context context ) {
-
-        return new Intent( context, SearchableActivity.class );
-    }
-
     private String searchText;
     private MediaComponent mediaComponent;
 
     private static final int REQUEST_SPEECH = 1;
     TvSearchResultListFragment mSearchableFragment;
+
+    public static Intent getCallingIntent( Context context ) {
+
+        return new Intent( context, SearchableActivity.class );
+    }
 
     @Override
     public int getLayoutResource() {
@@ -184,17 +184,13 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
     public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
         Log.d( TAG, "onMediaItemClicked : enter" );
 
-        switch( mediaItemModel.getMedia() ) {
+        if( mediaItemModel.media() == org.mythtv.android.domain.Media.PROGRAM ) {
+            Log.d( TAG, "onMediaItemClicked : recording clicked" );
 
-            case PROGRAM:
-                Log.d( TAG, "onMediaItemClicked : recording clicked" );
 
-                break;
+        } else if( mediaItemModel.media() == org.mythtv.android.domain.Media.VIDEO ) {
+            Log.d( TAG, "onMediaItemClicked : video clicked" );
 
-            case VIDEO:
-                Log.d( TAG, "onMediaItemClicked : video clicked" );
-
-                break;
 
         }
 

@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mythtv.android.data.entity.MythTvTypeAdapterFactory;
 import org.mythtv.android.data.entity.ProgramEntity;
 import org.mythtv.android.data.entity.ProgramListEntity;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeDeserializer;
-import org.mythtv.android.data.entity.mapper.serializers.DateTimeSerializer;
+import org.mythtv.android.data.entity.mapper.serializers.DateTimeTypeConverter;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,14 +43,13 @@ public class ProgramEntityJsonDataMapperIssue113Test {
     @Before
     public void setUp() {
 
-        Type dateTimeType = new TypeToken<DateTime>(){}.getType();
         this.gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .setFieldNamingPolicy( FieldNamingPolicy.UPPER_CAMEL_CASE )
                 .setPrettyPrinting()
                 .serializeNulls()
-                .registerTypeAdapter( dateTimeType, new DateTimeSerializer() )
-                .registerTypeAdapter( dateTimeType, new DateTimeDeserializer() )
+                .registerTypeAdapterFactory( MythTvTypeAdapterFactory.create() )
+                .registerTypeAdapter( DateTime.class, new DateTimeTypeConverter() )
                 .create();
 
     }
@@ -66,10 +65,10 @@ public class ProgramEntityJsonDataMapperIssue113Test {
         ProgramListEntity programListEntity = this.gson.fromJson( reader, programListEntityType );
 
         assertThat( programListEntity, not( nullValue() ) );
-        assertThat( programListEntity.getPrograms(), not( nullValue() ) );
-        assertThat( programListEntity.getPrograms().getCount(), equalTo( 5287 ) );
-        assertThat( programListEntity.getPrograms().getPrograms(), not( nullValue() ) );
-        assertThat( programListEntity.getPrograms().getPrograms().length, equalTo( 5287 ) );
+        assertThat( programListEntity.programs(), not( nullValue() ) );
+        assertThat( programListEntity.programs().count(), equalTo( 5287 ) );
+        assertThat( programListEntity.programs().programs(), not( nullValue() ) );
+        assertThat( programListEntity.programs().programs().size(), equalTo( 5287 ) );
 
     }
 
@@ -84,8 +83,8 @@ public class ProgramEntityJsonDataMapperIssue113Test {
         ProgramListEntity programListEntity = this.gson.fromJson( reader, programListEntityType );
 
         TestSubscriber<List<ProgramEntity>> testSubscriber = new TestSubscriber<>();
-        Observable<List<ProgramEntity>> programEntitiesObservable = Observable.from( programListEntity.getPrograms().getPrograms() )
-                .filter( programEntity -> !programEntity.getRecording().getRecGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.getRecording().getStorageGroup().equalsIgnoreCase( "LiveTV" ) || "Deleted".equalsIgnoreCase( programEntity.getRecording().getRecGroup() ) )
+        Observable<List<ProgramEntity>> programEntitiesObservable = Observable.from( programListEntity.programs().programs() )
+                .filter( programEntity -> !programEntity.recording().recGroup().equalsIgnoreCase( "LiveTV" ) || !programEntity.recording().storageGroup().equalsIgnoreCase( "LiveTV" ) || "Deleted".equalsIgnoreCase( programEntity.recording().recGroup() ) )
                 .toList();
 
         programEntitiesObservable.subscribe( testSubscriber );

@@ -18,6 +18,8 @@
 
 package org.mythtv.android.presentation.view;
 
+import android.view.View;
+
 import org.mythtv.android.presentation.model.MediaItemModel;
 
 import java.util.Collection;
@@ -45,6 +47,6 @@ public interface MediaItemListView extends LoadDataView {
      *
      * @param mediaItemModel The mediaItem that will be shown.
      */
-    void viewMediaItem( MediaItemModel mediaItemModel );
+    void viewMediaItem( MediaItemModel mediaItemModel, View sharedElement, String sharedElementName );
 
 }

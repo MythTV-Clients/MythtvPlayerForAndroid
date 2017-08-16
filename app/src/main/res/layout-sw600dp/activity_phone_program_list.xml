@@ -19,7 +19,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -51,6 +52,8 @@
             android:layout_marginRight="64dp"
             android:layout_marginStart="64dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <!--<include layout="@layout/phone_fab_view" />-->
 
     </android.support.design.widget.CoordinatorLayout>
 

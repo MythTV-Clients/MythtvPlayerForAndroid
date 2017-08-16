@@ -8,8 +8,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mythtv.android.data.ApplicationTestCase;
 
-import java.io.StringReader;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -36,7 +34,7 @@ public class BooleanJsonMapperTest extends ApplicationTestCase {
     @Test
     public void testTransformBooleanHappyCase() {
 
-        Boolean booleanEntity = booleanJsonMapper.transformBoolean( new StringReader( JSON_RESPONSE ) );
+        Boolean booleanEntity = booleanJsonMapper.transformBoolean( JSON_RESPONSE );
 
         assertThat( booleanEntity, is( false ) );
 
@@ -45,7 +43,7 @@ public class BooleanJsonMapperTest extends ApplicationTestCase {
     @Test( expected = JsonSyntaxException.class )
     public void testTransformLiveStreamInfoEntityBadJson() {
 
-        booleanJsonMapper.transformBoolean( new StringReader( JSON_RESPONSE_BAD ) );
+        booleanJsonMapper.transformBoolean( JSON_RESPONSE_BAD );
 
     }
 

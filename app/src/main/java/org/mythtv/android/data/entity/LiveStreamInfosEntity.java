@@ -18,9 +18,12 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -30,36 +33,20 @@ import java.util.Arrays;
  *
  * Created on 10/17/15.
  */
-public class LiveStreamInfosEntity {
+@AutoValue
+public abstract class LiveStreamInfosEntity {
 
     @SerializedName( "LiveStreamInfos" )
-    private LiveStreamInfoEntity[] liveStreamInfos;
+    public abstract List<LiveStreamInfoEntity> liveStreamInfos();
 
-    public LiveStreamInfosEntity() {
+    public static LiveStreamInfosEntity create( List<LiveStreamInfoEntity> liveStreamInfos ) {
+
+        return new AutoValue_LiveStreamInfosEntity( liveStreamInfos );
     }
 
-    public LiveStreamInfosEntity(LiveStreamInfoEntity[] liveStreamInfos ) {
+    public static TypeAdapter<LiveStreamInfosEntity> typeAdapter( Gson gson ) {
 
-        this.liveStreamInfos = liveStreamInfos;
-
-    }
-
-    public LiveStreamInfoEntity[] getLiveStreamInfos() {
-
-        return liveStreamInfos;
-    }
-
-    public void setLiveStreamInfos( LiveStreamInfoEntity[] liveStreamInfos ) {
-
-        this.liveStreamInfos = liveStreamInfos;
-
-    }
-
-    @Override
-    public String toString() {
-        return "LiveStreamInfosEntity{" +
-                "liveStreamInfos=" + Arrays.toString( liveStreamInfos ) +
-                '}';
+        return new AutoValue_LiveStreamInfosEntity.GsonTypeAdapter( gson );
     }
 
 }

@@ -41,7 +41,7 @@
 
     <string name="recordings_browse_title" translatable="false"><![CDATA[MythTV Recordings]]></string>
     <string name="videos_browse_title" translatable="false"><![CDATA[MythTV Videos]]></string>
-    <string name="watch_recording">Watch episode</string>
+    <string name="watch_recording">Watch recording</string>
     <string name="watch_video">Watch video</string>
 
     <string name="pref_backend_title" translatable="false">Master Backend</string>
@@ -53,25 +53,13 @@
     <string name="pref_backend_port_description">The port of the master backend</string>
     <string name="pref_backend_port" translatable="false">6544</string>
 
-    <string name="pref_hls_video_width_title">Width</string>
-    <string name="pref_hls_video_width_default" translatable="false">0</string>
-    <string name="pref_hls_video_height_title">Height</string>
-    <string name="pref_hls_video_height_default" translatable="false">0</string>
-    <string name="pref_hls_video_bitrate_title">Bitrate</string>
-    <string name="pref_hls_video_bitrate_default" translatable="false">800000</string>
-    <string name="pref_hls_audio_bitrate_title">Audio Bitrate</string>
-    <string name="pref_hls_audio_bitrate_default" translatable="false">64000</string>
     <string name="pref_default_player">Default Player</string>
     <string name="pref_internal_player">Internal Player</string>
     <string name="pref_internal_player_summary_on">Playback will be handled by the Internal Player</string>
     <string name="pref_internal_player_summary_off">Playback will be handled by an External Player</string>
-    <string name="pref_hls_video_width_title_summary">HLS transcode video width</string>
-    <string name="pref_hls_video_height_title_summary">HLS transcode video height</string>
-    <string name="pref_hls_video_bitrate_title_summary">HLS transcode video bitrate</string>
-    <string name="pref_hls_audio_bitrate_title_summary">HLS transcode audio bitrate</string>
-    <string name="pref_show_adult_tab">Show Adult tab in Watch Videos</string>
-    <string name="pref_show_adult_tab_summary_on">Adult tab will be shown</string>
-    <string name="pref_show_adult_tab_summary_off">Adult tab will not be shown</string>
+    <string name="pref_show_adult_tab">Show Adult content in Watch Videos</string>
+    <string name="pref_show_adult_tab_summary_on">Adult content will be shown</string>
+    <string name="pref_show_adult_tab_summary_off">Adult content will not be shown</string>
     <string name="pref_restrict_content_types">Only Display Selected Video Ratings</string>
     <string name="pref_restrict_content_types_summary_on">Videos for all types selected below will be shown</string>
     <string name="pref_restrict_content_types_summary_off">Show All Videos</string>
@@ -88,22 +76,22 @@
     <string name="pref_rating_r_summary">Under 17 requires accompanying parent or adult guardian. Contains some adult material. Parents are urged to learn more about the film before taking their young children with them.</string>
     <string name="pref_rating_nc17_summary">No One 17 and Under Admitted. Clearly adult. Children are not admitted.</string>
     <string name="pref_content_ratings">Video Content Ratings</string>
-    <string name="pref_video_display_preferences">Video Display Preferences</string>
     <string name="video_preferences">Video Settings</string>
     <string name="video_preferences_summary">Modify Videos Display and Filters</string>
     <string name="pref_parental_controls">Parental Controls</string>
     <string name="pref_enable_parental_controls">Enable Parental Controls</string>
     <string name="pref_enable_parental_controls_summary_on">Parental Controls are enabled</string>
     <string name="pref_enable_parental_controls_summary_off">Parental Controls are disabled</string>
-    <string name="pref_parental_control_level">Select highest Parental Control level displayed</string>
+    <string name="pref_parental_control_level">Select Parental Control level</string>
     <string name="title_activity_settings">Settings</string>
     <string name="recording_preferences">Recording Settings</string>
     <string name="recording_preferences_summary">Modify Recordings Display and Filters</string>
-    <string name="pref_set_default_recording_group">Recording Group Settings [setting unavailable at this time]</string>
-    <string name="pref_enable_default_recording_group">Enable Default Recording Group</string>
-    <string name="pref_default_recording_group_summary_on">Only recordings in selected recording group will be displayed</string>
-    <string name="pref_default_recording_group_summary_off">No Default Recording Group is set</string>
-    <string name="pref_default_recording_group">Select Default Recording Group</string>
+    <string name="pref_enable_recording_group_filter">Enable Recording Group Filter</string>
+    <string name="pref_enable_recording_group_summary_on">Only recordings in selected recording group will be displayed</string>
+    <string name="pref_enable_recording_group_summary_off">Recording Group Filter is off</string>
+    <string name="pref_recording_group_filter">Select Recording Group Filter</string>
+    <string name="pref_recording_group_filter_summary_on">Recordings will be filtered by the \'%s\' Recording Group</string>
+    <string name="pref_recording_group_filter_summary_off">No Recording Group selected</string>
 
     //Exception messages
     <string name="exception_message_generic" translatable="false">There was an application error</string>
@@ -130,26 +118,10 @@
     <string name="error_fragment" translatable="false">Error Fragment</string>
     <string name="watch" translatable="false">Watch</string>
     <string name="movie" translatable="false">Movie</string>
-    <string name="tv_settings_title">MythTV Settings</string>
     <string name="tv_settings_title_description">MythTV Player backend and content settings</string>
-    <string name="tv_settings_master_backend_title">Master Backend Settings</string>
     <string name="tv_settings_master_backend_description">Master Backend Connection Settings</string>
-    <string name="tv_settings_master_backend_url">Master Backend URL</string>
-    <string name="tv_settings_master_backend_port">Master Backend Port</string>
-    <string name="tv_settings_read_timeout">Master Backend Read Timeout</string>
-    <string name="tv_settings_read_timeout_title">Master Backend Read Timeout</string>
-    <string name="tv_settings_connect_timeout">Master Backend Read Timeout</string>
-    <string name="tv_settings_connect_timeout_title">Master Backend Read Timeout</string>
-    <string name="tv_settings_playback_title">Playback Settings</string>
-    <string name="tv_settings_playback_title_description">Recording and Video Player Settings</string>
     <string name="tv_settings_playback_internal_player">Internal Player</string>
     <string name="tv_settings_playback_internal_player_description">Use the Internal Player for Recording and Video Playback</string>
-    <string name="tv_settings_playback_external_player">External Player</string>
-    <string name="tv_settings_content_title">Content Settings</string>
-    <string name="tv_settings_content_title_description">Show Adult Content</string>
-    <string name="tv_settings_content_adult_title">Adult Content</string>
-    <string name="tv_settings_content_adult_shown">Adult Content will be shown</string>
-    <string name="tv_settings_content_adult_hidden">Adult Content will be hidden</string>
     <string name="tv_settings_yes">Yes</string>
     <string name="tv_settings_no">No</string>
     <string name="backdrop_content_description">backdrop</string>
@@ -161,14 +133,6 @@
     <string name="add_live_stream_positive_label">Create</string>
     <string name="add_live_stream_title">Create Live Stream?</string>
 
-    <string name="pref_timeouts">Master Backend Timeouts</string>
-    <string name="pref_timeouts_summary">Timeout settings for connecting to the Master Backend. This is an advanced feature and is not normally needed to change. If you are seeing errors because you have a large library, consider increasing these values. Only set it to \'No Timeout\' if no other values work.</string>
-    <string name="pref_read_timeout_title">Read Timeout</string>
-    <string name="pref_read_timeout_title_summary">Sets the default read timeout for new connections.</string>
-    <string name="pref_read_timeout_default" translatable="false">10000</string>
-    <string name="pref_connect_timeout_title">Connect Timeout</string>
-    <string name="pref_connect_timeout_title_summary">Sets the default connection timeout for new connections.</string>
-    <string name="pref_connect_timeout_default" translatable="false">20000</string>
     <string name="versionLabel">Version:</string>
     <string name="drawer_item_about">About</string>
     <string name="close">Close</string>
@@ -193,10 +157,10 @@
     <string name="transition_image" translatable="false">transition-image</string>
     <string name="loading">Loading&#8230;</string>
 
-    <string name="pref_enable_analytics_label">Analytics &amp; Crash Reporting</string>
-    <string name="pref_enable_analytics_title">Enable Analytics &amp; Crash Reporting</string>
-    <string name="pref_enable_analytics_summary_on">Anonymous Analytics &amp; Crash Reports will be sent</string>
-    <string name="pref_enable_analytics_summary_off">Anonymous Analytics &amp; Crash Reports will not be sent</string>
+    <string name="pref_enable_analytics_label">Analytics</string>
+    <string name="pref_enable_analytics_title">Enable Analytics Reporting</string>
+    <string name="pref_enable_analytics_summary_on">Anonymous Analytics will be sent</string>
+    <string name="pref_enable_analytics_summary_off">Anonymous Analytics will not be sent</string>
     <string name="action_create_hls_stream">Create HTTP Live Stream</string>
     <string name="action_remove_hls_stream">Remove HTTP Live Stream</string>
     <string name="action_mark_watched">Mark Watched</string>
@@ -211,7 +175,6 @@
     <string name="cd_image_view_button_4">image view button 4</string>
     <string name="cd_image_view_button_5">image view button 5</string>
     <string name="player_timer" translatable="false">0:00</string>
-    <string name="media_item_details_corrupt_data">Data is corrupt, check backend</string>
     <string name="title_activity_troubleshoot">Troubleshoot Connection</string>
     <string name="troubleshoot">Troubleshoot</string>
     <string name="airplane_mode_check_label">Airplane Mode must be off</string>
@@ -236,5 +199,21 @@
     <string name="backend_version_verified_label">MythTV Version is v0.28 or greater</string>
     <string name="validation_corrupt_data">This episode has corrupt backend data: %s</string>
     <string name="validation_no_media_type">Media Type could not be determined</string>
+    <string name="tv_settings_analytics_title_description"><![CDATA[Annonymous Analytics & Crash Reports will be sent]]></string>
+    <string name="pref_filter_hls_only_title">Filter recordings and videos</string>
+    <string name="pref_filter_hls_only">Show HLS Only</string>
+    <string name="pref_filter_hls_only_summary_on">Only recordings and videos that are HLS transcoded will be shown</string>
+    <string name="pref_filter_hls_only_summary_off">All recordings and videos will be shown</string>
+    <string name="media_item_empty_list">There are no items to display</string>
+    <string name="hls_only_filter_is_enabled">HLS only filter is enabled</string>
+    <string name="troubleshoot_backend_language_cd">troubleshoot backend language</string>
+    <string name="troubleshoot_backend_version_cd">troubleshoot backend version</string>
+    <string name="troubleshoot_services_cd">troubleshoot services</string>
+    <string name="troubleshoot_ping_cd">troubleshoot ping</string>
+    <string name="troubleshoot_network_cd">troubleshoot network</string>
+    <string name="troubleshoot_airplane_mode_cd">troubleshoot airplane mode</string>
+    <string name="media_item_image_cd">media item image</string>
+    <string name="media_item_image_error_cd">media item image error</string>
+    <string name="series_item_artwork_cd">series item artwork</string>
 
 </resources>

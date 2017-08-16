@@ -69,19 +69,11 @@ public class ContentDataStoreFactory {
         Log.d( TAG, "initialize : exit" );
     }
 
-    public ContentDataStore create() {
-        Log.d( TAG, "create : enter" );
-
-        Log.d( TAG, "create : exit" );
-        return createMasterBackendDataStore();
-    }
-
     public ContentDataStore createMasterBackendDataStore() {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
         LiveStreamInfoEntityJsonMapper liveStreamInfoEntityJsonMapper = new LiveStreamInfoEntityJsonMapper( gson );
-        BooleanJsonMapper booleanJsonMapper = new BooleanJsonMapper();
-        ContentApi api = new ContentApiImpl( this.context, this.sharedPreferences, this.okHttpClient, liveStreamInfoEntityJsonMapper, booleanJsonMapper );
+        ContentApi api = new ContentApiImpl( this.context, this.sharedPreferences, this.okHttpClient, liveStreamInfoEntityJsonMapper, new BooleanJsonMapper() );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
         return new MasterBackendContentDataStore( api );

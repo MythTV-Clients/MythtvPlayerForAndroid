@@ -26,15 +26,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.components.MediaComponent;
+import org.mythtv.android.presentation.model.ErrorModel;
 import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.SearchResultListPresenter;
 import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.adapter.phone.LayoutManager;
 import org.mythtv.android.presentation.view.adapter.phone.MediaItemsAdapter;
+import org.mythtv.android.presentation.view.listeners.MediaItemListListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,29 +62,59 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
 
     private String searchText;
 
-    /**
-     * Interface for listening media item list events.
-     */
-    public interface MediaItemListListener {
-
-        void onMediaItemClicked( final MediaItemModel mediaItemModel );
-
-    }
-
     @Inject
     SearchResultListPresenter searchResultListPresenter;
 
     @BindView( R.id.rv_mediaItems )
     RecyclerView rv_mediaItems;
 
-    @BindView( R.id.rl_progress )
-    RelativeLayout rl_progress;
-
     private Unbinder unbinder;
 
     private MediaItemsAdapter mediaItemsAdapter;
 
     private MediaItemListListener mediaItemListListener;
+
+    private final MediaItemsAdapter.OnItemClickListener onItemClickListener = ( mediaItemModel, sharedElement, sharedElementName ) -> {
+
+        if( null != MediaItemSearchResultListFragment.this.mediaItemListListener && null != mediaItemModel ) {
+            Log.d( TAG, "onProgramItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+            if( mediaItemModel.isValid() ) {
+                Log.i( TAG, "onItemClicked : mediaItemModel=" + mediaItemModel.toString() );
+
+                MediaItemSearchResultListFragment.this.searchResultListPresenter.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
+
+            } else {
+                Log.w( TAG, "onItemClicked : data error - mediaItemModel=" + mediaItemModel.toString() );
+
+                if( null == mediaItemModel.media() ) {
+
+                    String message = getString(R.string.validation_no_media_type);
+                    showToastMessage( message, null, null );
+
+                } else {
+
+                    String fields = "";
+                    for( ErrorModel errorModel : mediaItemModel.validationErrors() ) {
+
+                        if( !"".equals( fields ) ) {
+                            fields += ", ";
+                        }
+
+                        fields += errorModel.field();
+
+                    }
+
+                    String message = getResources().getString( R.string.validation_corrupt_data, fields );
+                    showToastMessage( message, null, null );
+
+                }
+
+            }
+
+        }
+
+    };
 
     public MediaItemSearchResultListFragment() {
         super();
@@ -101,11 +132,11 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     }
 
     @Override
-    public void onAttach( Context context ) {
-        super.onAttach( context );
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        Activity activity = getActivity();
+//        Activity activity = getActivity();
         if( activity instanceof MediaItemListListener ) {
             this.mediaItemListListener = (MediaItemListListener) activity;
         }
@@ -209,20 +240,12 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     public void showLoading() {
         Log.d( TAG, "showLoading : enter" );
 
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.VISIBLE );
-        }
-
         Log.d( TAG, "showLoading : exit" );
     }
 
     @Override
     public void hideLoading() {
         Log.d( TAG, "hideLoading : enter" );
-
-        if( null != this.rl_progress ) {
-            this.rl_progress.setVisibility( View.GONE );
-        }
 
         Log.d( TAG, "hideLoading : exit" );
     }
@@ -256,13 +279,13 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
     }
 
     @Override
-    public void viewMediaItem( MediaItemModel mediaItemModel ) {
+    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.d( TAG, "viewMediaItem : enter" );
 
         if( null != this.mediaItemListListener ) {
             Log.d( TAG, "viewMediaItem : mediaItemModel=" + mediaItemModel.toString() );
 
-            this.mediaItemListListener.onMediaItemClicked( mediaItemModel );
+            this.mediaItemListListener.onMediaItemClicked( mediaItemModel, sharedElement, sharedElementName );
 
         }
 
@@ -306,16 +329,5 @@ public class MediaItemSearchResultListFragment extends AbstractBaseFragment impl
 
         Log.d( TAG, "loadSearchResultList : exit" );
     }
-
-    private MediaItemsAdapter.OnItemClickListener onItemClickListener = mediaItemModel -> {
-
-        if( null != MediaItemSearchResultListFragment.this.mediaItemListListener && null != mediaItemModel ) {
-            Log.d( TAG, "onProgramItemClicked : mediaItemModel=" + mediaItemModel.toString() );
-
-            MediaItemSearchResultListFragment.this.mediaItemListListener.onMediaItemClicked( mediaItemModel );
-
-        }
-
-    };
 
 }

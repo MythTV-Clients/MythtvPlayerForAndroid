@@ -56,15 +56,6 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
 
     private static final String TAG = CategoryListFragment.class.getSimpleName();
 
-    /**
-     * Interface for listening tvCategory list events.
-     */
-    public interface TvCategoryListListener {
-
-        void onTvCategoryClicked( final TvCategoryModel tvCategoryModel );
-
-    }
-
     @Inject
     TvCategoryListPresenter tvCategoryListPresenter;
 
@@ -77,8 +68,27 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
 
     private TvCategoryListListener tvCategoryListListener;
 
+    private final CategoriesAdapter.OnItemClickListener onItemClickListener = tvCategoryModel -> {
+
+        if( null != CategoryListFragment.this.tvCategoryListPresenter && null != tvCategoryModel ) {
+
+            CategoryListFragment.this.tvCategoryListPresenter.onTvCategoryClicked( tvCategoryModel );
+
+        }
+
+    };
+
     public CategoryListFragment() {
         super();
+    }
+
+    /**
+     * Interface for listening tvCategory list events.
+     */
+    public interface TvCategoryListListener {
+
+        void onTvCategoryClicked( final TvCategoryModel tvCategoryModel );
+
     }
 
     public static CategoryListFragment newInstance() {
@@ -274,15 +284,5 @@ public class CategoryListFragment extends AbstractBaseFragment implements TvCate
 
         Log.d( TAG, "loadTvCategoryList : exit" );
     }
-
-    private CategoriesAdapter.OnItemClickListener onItemClickListener = tvCategoryModel -> {
-
-        if( null != CategoryListFragment.this.tvCategoryListPresenter && null != tvCategoryModel ) {
-
-            CategoryListFragment.this.tvCategoryListPresenter.onTvCategoryClicked( tvCategoryModel );
-
-        }
-
-    };
 
 }

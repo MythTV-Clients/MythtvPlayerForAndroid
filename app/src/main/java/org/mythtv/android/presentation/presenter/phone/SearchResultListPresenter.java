@@ -20,6 +20,7 @@ package org.mythtv.android.presentation.presenter.phone;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
@@ -47,6 +48,7 @@ import javax.inject.Named;
  *
  * Created on 10/14/15.
  */
+@SuppressWarnings( "PMD" )
 public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 
     private static final String TAG = SearchResultListPresenter.class.getSimpleName();
@@ -71,12 +73,16 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
 
     @Override
     public void resume() {
+        Log.v( TAG, "resume : enter" );
 
+        Log.v( TAG, "resume : exit" );
     }
 
     @Override
     public void pause() {
+        Log.v( TAG, "pause : enter" );
 
+        Log.v( TAG, "pause : exit" );
     }
 
     @Override
@@ -108,10 +114,10 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
 
     }
 
-    public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.i( TAG, "onMediaItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-        this.viewListView.viewMediaItem( mediaItemModel );
+        this.viewListView.viewMediaItem( mediaItemModel, sharedElement, sharedElementName );
 
     }
 
@@ -165,7 +171,7 @@ public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>
         public void onError( Throwable e ) {
 
             SearchResultListPresenter.this.hideViewLoading();
-            SearchResultListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            SearchResultListPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             SearchResultListPresenter.this.showViewRetry();
 
         }

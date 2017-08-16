@@ -18,89 +18,37 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 /*
  * Created by dmfrey on 11/12/14.
  */
-public class ArtworkInfoEntity {
+@AutoValue
+public abstract class ArtworkInfoEntity {
 
     @SerializedName( "URL" )
-    private String url;
+    public abstract String url();
 
     @SerializedName( "FileName" )
-    private String fileName;
+    public abstract String fileName();
 
     @SerializedName( "StorageGroup" )
-    private String storageGroup;
+    public abstract String storageGroup();
 
     @SerializedName( "Type" )
-    private String type;
+    public abstract String type();
 
-    public ArtworkInfoEntity() {
+    public static ArtworkInfoEntity create( String url, String fileName, String storageGroup, String type ) {
+
+        return new AutoValue_ArtworkInfoEntity( url, fileName, storageGroup, type );
     }
 
-    public ArtworkInfoEntity(String url, String fileName, String storageGroup, String type ) {
+    public static TypeAdapter<ArtworkInfoEntity> typeAdapter( Gson gson ) {
 
-        this.url = url;
-        this.fileName = fileName;
-        this.storageGroup = storageGroup;
-        this.type = type;
-
-    }
-
-    public String getUrl() {
-
-        return url;
-    }
-
-    public void setUrl( String url ) {
-
-        this.url = url;
-
-    }
-
-    public String getFileName() {
-
-        return fileName;
-    }
-
-    public void setFileName( String fileName ) {
-
-        this.fileName = fileName;
-
-    }
-
-    public String getStorageGroup() {
-
-        return storageGroup;
-    }
-
-    public void setStorageGroup( String storageGroup ) {
-
-        this.storageGroup = storageGroup;
-
-    }
-
-    public String getType() {
-
-        return type;
-    }
-
-    public void setType( String type ) {
-
-        this.type = type;
-
-    }
-
-    @Override
-    public String toString() {
-        return "ArtworkInfoEntity{" +
-                "url='" + url + '\'' +
-                ", fileName='" + fileName + '\'' +
-                ", storageGroup='" + storageGroup + '\'' +
-                ", type='" + type + '\'' +
-                '}';
+        return new AutoValue_ArtworkInfoEntity.GsonTypeAdapter( gson );
     }
 
 }

@@ -53,7 +53,11 @@ public class TvNavigator {
     public void navigateToRecordings( Context context ) {
         Log.d( TAG, "navigateToRecordings : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
 
             Intent intentToLaunch = RecordingsActivity.getCallingIntent( context );
             context.startActivity( intentToLaunch );
@@ -66,7 +70,11 @@ public class TvNavigator {
     public void navigateToVideos( Context context ) {
         Log.d( TAG, "navigateToVideos : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
 
             Intent intentToLaunch = VideosActivity.getCallingIntent( context );
             context.startActivity( intentToLaunch );
@@ -79,7 +87,11 @@ public class TvNavigator {
     public void navigateToVideoCategory( Context context, Media media ) {
         Log.d( TAG, "navigateToVideoCategory : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
 
             Intent intentToLaunch = VideoCategoryActivity.getCallingIntent( context, media );
             context.startActivity( intentToLaunch );
@@ -92,7 +104,11 @@ public class TvNavigator {
     public void navigateToSettings( Context context ) {
         Log.d( TAG, "navigateToSettings : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
 
             Intent intentToLaunch = SettingsActivity.getCallingIntent( context );
             context.startActivity( intentToLaunch );
@@ -105,7 +121,11 @@ public class TvNavigator {
     public void navigateToSearch( Context context ) {
         Log.d( TAG, "navigateToSearch : enter" );
 
-        if( null != context ) {
+        if( null == context ) {
+
+            return;
+
+        } else {
 
             Intent intentToLaunch = SearchableActivity.getCallingIntent( context );
             context.startActivity( intentToLaunch );

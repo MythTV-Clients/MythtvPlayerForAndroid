@@ -19,27 +19,42 @@
 package org.mythtv.android.presentation.internal.di.modules;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
-import org.mythtv.android.presentation.AndroidApplication;
-import org.mythtv.android.data.cache.VideoCacheImpl;
-import org.mythtv.android.data.cache.VideoCache;
+import com.google.gson.Gson;
+import com.vincentbrison.openlibraries.android.dualcache.Builder;
+import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer;
+import com.vincentbrison.openlibraries.android.dualcache.DualCache;
+import com.vincentbrison.openlibraries.android.dualcache.JsonSerializer;
+
+import org.mythtv.android.data.entity.MediaItemEntity;
+import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
+import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.LongJsonMapper;
+import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
+import org.mythtv.android.data.entity.mapper.VideoMetadataInfoEntityJsonMapper;
 import org.mythtv.android.data.executor.JobExecutor;
-import org.mythtv.android.data.repository.ContentDataRepository;
+import org.mythtv.android.data.net.DvrApi;
+import org.mythtv.android.data.net.DvrApiImpl;
+import org.mythtv.android.data.net.VideoApi;
+import org.mythtv.android.data.net.VideoApiImpl;
 import org.mythtv.android.data.repository.DvrDataRepository;
+import org.mythtv.android.data.repository.MediaItemDataRepository;
 import org.mythtv.android.data.repository.SearchDataRepository;
-import org.mythtv.android.data.repository.VideoDataRepository;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.ContentRepository;
 import org.mythtv.android.domain.repository.DvrRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 import org.mythtv.android.domain.repository.SearchRepository;
-import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.presentation.AndroidApplication;
 import org.mythtv.android.presentation.UIThread;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 
 /**
  * Dagger module that provides objects which will live during the application lifecycle.
@@ -88,6 +103,13 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
+    MediaItemRepository provideMediaItemRepository( MediaItemDataRepository mediaItemDataRepository ) {
+
+        return mediaItemDataRepository;
+    }
+
+    @Provides
+    @Singleton
     SearchRepository provideSearchRepository( SearchDataRepository searchDataRepository ) {
 
         return searchDataRepository;
@@ -95,23 +117,72 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    ContentRepository provideContentRepository( ContentDataRepository contentDataRepository ) {
+    BooleanJsonMapper provideBooleanJsonMapper() {
 
-        return contentDataRepository;
+        return new BooleanJsonMapper();
     }
 
     @Provides
     @Singleton
-    VideoCache provideVideoCache( VideoCacheImpl videoCacheImpl ) {
+    LongJsonMapper provideLongJsonMapper() {
 
-        return videoCacheImpl;
+        return new LongJsonMapper();
     }
 
     @Provides
     @Singleton
-    VideoRepository provideVideoRepository( VideoDataRepository videoDataRepository ) {
+    TitleInfoEntityJsonMapper provideTitleInfoEntityJsonMapper( final Gson gson ) {
 
-        return videoDataRepository;
+        return new TitleInfoEntityJsonMapper( gson );
+    }
+
+    @Provides
+    @Singleton
+    ProgramEntityJsonMapper provideProgramEntityJsonMapper( final Gson gson ) {
+
+        return new ProgramEntityJsonMapper( gson );
+    }
+
+    @Provides
+    @Singleton
+    EncoderEntityJsonMapper provideEncoderEntityJsonMapper( final Gson gson ) {
+
+        return new EncoderEntityJsonMapper( gson );
+    }
+
+    @Provides
+    @Singleton
+    VideoMetadataInfoEntityJsonMapper provideVideoMetadataInfoEntityJsonMapper( final Gson gson ) {
+
+        return new VideoMetadataInfoEntityJsonMapper( gson );
+    }
+
+    @Provides
+    @Singleton
+    DvrApi provideDvrApi( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final TitleInfoEntityJsonMapper titleInfoEntityJsonMapper, final ProgramEntityJsonMapper programEntityJsonMapper, final EncoderEntityJsonMapper encoderEntityJsonMapper, final LongJsonMapper longJsonMapper, final BooleanJsonMapper booleanJsonMapper ) {
+
+        return new DvrApiImpl( context, sharedPreferences, okHttpClient, titleInfoEntityJsonMapper, programEntityJsonMapper, encoderEntityJsonMapper, booleanJsonMapper, longJsonMapper );
+    }
+
+    @Provides
+    @Singleton
+    VideoApi provideVideoApi( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final VideoMetadataInfoEntityJsonMapper videoMetadataInfoEntityJsonMapper, final BooleanJsonMapper booleanJsonMapper ) {
+
+        return new VideoApiImpl( context, sharedPreferences, okHttpClient, videoMetadataInfoEntityJsonMapper, booleanJsonMapper );
+    }
+
+    @Provides
+    @Singleton
+    DualCache<MediaItemEntity> provideCache( final Context context, final Gson gson ) {
+
+        CacheSerializer<MediaItemEntity> jsonSerializer = new JsonSerializer<>( MediaItemEntity.class );
+
+        return new Builder<MediaItemEntity>( "MythtvPlayerCache", 1 )
+                .enableLog()
+                .useReferenceInRam( 5242880, mediaItemEntity -> gson.toJson( mediaItemEntity ).length() )
+                .useSerializerInDisk( 10485760, true, jsonSerializer, context )
+                .build();
+
     }
 
 }

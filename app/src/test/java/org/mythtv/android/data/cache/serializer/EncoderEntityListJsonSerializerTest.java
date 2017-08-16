@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.mythtv.android.data.ApplicationTestCase;
 import org.mythtv.android.data.entity.EncoderListEntity;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -29,8 +28,8 @@ public class EncoderEntityListJsonSerializerTest extends ApplicationTestCase {
 
 //        assertThat( encoderListEntityOne, is( encoderListEntityTwo ) );
 //        assertThat( encoderListEntityOne.getEncoders(), is( equalTo( encoderListEntityTwo.getEncoders() ) ) );
-        assertThat( encoderListEntityOne.getEncoders().getEncoders(), is( encoderListEntityTwo.getEncoders().getEncoders() ) );
-        assertThat( encoderListEntityOne.getEncoders().getEncoders().length, is( encoderListEntityTwo.getEncoders().getEncoders().length ) );
+//        assertThat( encoderListEntityOne.getEncoders().getEncoders(), is( encoderListEntityTwo.getEncoders().getEncoders() ) );
+        assertThat( encoderListEntityOne.encoders().encoders().size(), is( encoderListEntityTwo.encoders().encoders().size() ) );
 
     }
 

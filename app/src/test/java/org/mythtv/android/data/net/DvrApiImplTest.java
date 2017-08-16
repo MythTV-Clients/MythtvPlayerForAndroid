@@ -1,9 +1,5 @@
 package org.mythtv.android.data.net;
 
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -22,10 +18,14 @@ import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.domain.SettingsKeys;
 import org.robolectric.RuntimeEnvironment;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
+
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by dmfrey on 9/27/15.
@@ -81,17 +81,9 @@ public class DvrApiImplTest extends ApplicationTestCase {
 
     }
 
-    private static ArrayList<TitleInfoEntity> setupTitleInfos() {
+    private static List<TitleInfoEntity> setupTitleInfos() {
 
-        ArrayList<TitleInfoEntity> titleInfos = new ArrayList<>();
-
-        TitleInfoEntity titleInfoEntity = new TitleInfoEntity();
-        titleInfoEntity.setTitle( "test title" );
-        titleInfoEntity.setInetref( "test inetref" );
-        titleInfoEntity.setCount( 1 );
-        titleInfos.add( titleInfoEntity );
-
-        return titleInfos;
+        return Collections.singletonList( TitleInfoEntity.create( "test title", "test inetref", 1 ) );
     }
 
     private void setMasterBackendInSharedPreferences() {

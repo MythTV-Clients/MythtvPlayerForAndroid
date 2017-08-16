@@ -18,6 +18,9 @@
 
 package org.mythtv.android.data.entity;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -28,36 +31,20 @@ import com.google.gson.annotations.SerializedName;
  *
  * Created on 8/27/15.
  */
-public class TitleInfoListEntity {
+@AutoValue
+public abstract class TitleInfoListEntity {
 
     @SerializedName( "TitleInfoList" )
-    private TitleInfosEntity titleInfos;
+    public abstract TitleInfosEntity titleInfos();
 
-    public TitleInfoListEntity() {
+    public static TitleInfoListEntity create( TitleInfosEntity titleInfos ) {
+
+        return new AutoValue_TitleInfoListEntity( titleInfos );
     }
 
-    public TitleInfoListEntity(TitleInfosEntity titleInfos ) {
+    public static TypeAdapter<TitleInfoListEntity> typeAdapter( Gson gson ) {
 
-        this.titleInfos = titleInfos;
-
-    }
-
-    public TitleInfosEntity getTitleInfos() {
-
-        return titleInfos;
-    }
-
-    public void setTitleInfos( TitleInfosEntity titleInfos ) {
-
-        this.titleInfos = titleInfos;
-
-    }
-
-    @Override
-    public String toString() {
-        return "TitleInfoListEntity{" +
-                "titleInfos=" + titleInfos +
-                '}';
+        return new AutoValue_TitleInfoListEntity.GsonTypeAdapter( gson );
     }
 
 }

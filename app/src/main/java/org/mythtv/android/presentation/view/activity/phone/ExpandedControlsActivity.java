@@ -39,6 +39,7 @@ import org.mythtv.android.R;
  *
  * @author dmfrey
  */
+@SuppressWarnings( "PMD" )
 public class ExpandedControlsActivity extends AppCompatActivity {
 
     private static final String TAG = "ExpandedControlsActvty";
@@ -48,8 +49,8 @@ public class ExpandedControlsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CastContext.getSharedInstance(this).registerLifecycleCallbacksBeforeIceCreamSandwich(this,
-                savedInstanceState);
+//        CastContext.getSharedInstance(this).registerLifecycleCallbacksBeforeIceCreamSandwich(this,
+//                savedInstanceState);
         setContentView(R.layout.cast_expanded_controls);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -139,39 +140,67 @@ public class ExpandedControlsActivity extends AppCompatActivity {
 
         @Override
         public void onSessionEnded(Session session, int error) {
+            Log.v( TAG, "onSessionEnded : enter" );
+
             finish();
+
+            Log.v( TAG, "onSessionEnded : exit" );
         }
 
         @Override
         public void onSessionStarting(Session session) {
+            Log.v( TAG, "onSessionStarting : enter" );
+
+            Log.v( TAG, "onSessionStarting : exit" );
         }
 
         @Override
         public void onSessionStarted(Session session, String sessionId) {
+            Log.v( TAG, "onSessionStarted : enter" );
+
+            Log.v( TAG, "onSessionStarted : exit" );
         }
 
         @Override
         public void onSessionStartFailed(Session session, int error) {
+            Log.v( TAG, "onSessionStartFailed : enter" );
+
+            Log.v( TAG, "onSessionStartFailed : exit" );
         }
 
         @Override
         public void onSessionEnding(Session session) {
+            Log.v( TAG, "onSessionEnding : enter" );
+
+            Log.v( TAG, "onSessionEnding : exit" );
         }
 
         @Override
         public void onSessionResuming(Session session, String sessionId) {
+            Log.v( TAG, "onSessionResuming : enter" );
+
+            Log.v( TAG, "onSessionResuming : exit" );
         }
 
         @Override
         public void onSessionResumed(Session session, boolean wasSuspended) {
+            Log.v( TAG, "onSessionResumed : enter" );
+
+            Log.v( TAG, "onSessionResumed : exit" );
         }
 
         @Override
         public void onSessionResumeFailed(Session session, int error) {
+            Log.v( TAG, "onSessionResumeFailed : enter" );
+
+            Log.v( TAG, "onSessionResumeFailed : exit" );
         }
 
         @Override
         public void onSessionSuspended(Session session, int reason) {
+            Log.v( TAG, "onSessionSuspended : enter" );
+
+            Log.v( TAG, "onSessionSuspended : exit" );
         }
     }
 

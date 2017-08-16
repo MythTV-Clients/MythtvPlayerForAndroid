@@ -98,6 +98,7 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     public abstract int getLayoutResource();
 
     @Override
+    @SuppressWarnings( "PMD.AvoidDeeplyNestedIfStmts" )
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
@@ -187,17 +188,12 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-        switch( item.getItemId() ) {
+        int i = item.getItemId();
+        if( i == android.R.id.home && null != navigationView ) {
 
-            case android.R.id.home:
+            drawerLayout.openDrawer( GravityCompat.START );
 
-                if( null != navigationView ) {
-
-                    drawerLayout.openDrawer( GravityCompat.START );
-
-                    return true;
-                }
-
+            return true;
         }
 
         return super.onOptionsItemSelected( item );
@@ -269,6 +265,10 @@ public abstract class AbstractBasePhoneActivity extends AppCompatActivity implem
                 navigator.navigateToTroubleshoot( this );
 
                 return true;
+
+            default :
+
+                break;
         }
 
         return false;

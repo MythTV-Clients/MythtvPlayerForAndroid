@@ -18,24 +18,12 @@
 
 package org.mythtv.android.data.repository.datasource;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
-import org.mythtv.android.data.entity.mapper.BooleanJsonMapper;
-import org.mythtv.android.data.entity.mapper.EncoderEntityJsonMapper;
-import org.mythtv.android.data.entity.mapper.LongJsonMapper;
-import org.mythtv.android.data.entity.mapper.ProgramEntityJsonMapper;
-import org.mythtv.android.data.entity.mapper.TitleInfoEntityJsonMapper;
 import org.mythtv.android.data.net.DvrApi;
-import org.mythtv.android.data.net.DvrApiImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import okhttp3.OkHttpClient;
 
 /**
  *
@@ -50,21 +38,18 @@ public class DvrDataStoreFactory {
 
     private static final String TAG = DvrDataStoreFactory.class.getSimpleName();
 
-    private final SearchDataStoreFactory searchDataStoreFactory;
     private final DvrApi api;
 
     @Inject
-    public DvrDataStoreFactory( final Context context, final SharedPreferences sharedPreferences, final OkHttpClient okHttpClient, final Gson gson, final SearchDataStoreFactory searchDataStoreFactory ) {
+    public DvrDataStoreFactory( final DvrApi api ) {
         Log.d( TAG, "initialize : enter" );
 
-        if( null == context || null == sharedPreferences || null == okHttpClient || null == gson || null == searchDataStoreFactory ) {
+        if( null == api ) {
 
             throw new IllegalArgumentException( "Constructor parameters cannot be null!!!" );
         }
 
-        this.searchDataStoreFactory = searchDataStoreFactory;
-
-        api = new DvrApiImpl( context.getApplicationContext(), sharedPreferences, okHttpClient, new TitleInfoEntityJsonMapper( gson ), new ProgramEntityJsonMapper( gson ), new EncoderEntityJsonMapper( gson ), new BooleanJsonMapper(), new LongJsonMapper() );
+        this.api = api;
 
         Log.d( TAG, "initialize : exit" );
     }
@@ -73,7 +58,7 @@ public class DvrDataStoreFactory {
         Log.d( TAG, "createMasterBackendDataStore : enter" );
 
         Log.d( TAG, "createMasterBackendDataStore : exit" );
-        return new MasterBackendDvrDataStore( api, this.searchDataStoreFactory );
+        return new MasterBackendDvrDataStore( api );
     }
 
 }

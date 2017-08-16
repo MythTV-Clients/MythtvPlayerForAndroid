@@ -24,17 +24,10 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
 
-        <!--<tv_item name="android:dropDownItemStyle">@style/myDropDownItemStyle</tv_item>-->
-
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
-    </style>
+        <item name="android:windowContentTransitions">true</item>
 
-    <!--<style name="myDropDownItemStyle" parent="Widget.AppCompat.DropDownItem.Spinner">-->
-        <!--<tv_item name="android:background">?android:selectableItemBackground</tv_item>-->
-        <!--<tv_item name="android:dropDownSelector">?android:selectableItemBackground</tv_item>-->
-        <!--<tv_item name="android:divider">@null</tv_item>-->
-        <!--<tv_item name="android:overlapAnchor">true</tv_item>-->
-    <!--</style>-->
+    </style>
 
 </resources>

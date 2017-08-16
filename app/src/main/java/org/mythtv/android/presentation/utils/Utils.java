@@ -22,7 +22,6 @@ import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import org.mythtv.android.R;
 
@@ -33,7 +32,9 @@ import java.util.HashMap;
  *
  * @author dmfrey
  */
-public class Utils {
+public final class Utils {
+
+//    private static final String TAG = Utils.class.getSimpleName();
 
     /*
      * Making sure public utility methods remain static
@@ -75,24 +76,6 @@ public class Utils {
     }
 
 
-    /**
-     * Shows a (long) toast
-     */
-    public static void showToast( Context context, String msg ) {
-
-        Toast.makeText( context, msg, Toast.LENGTH_LONG ).show();
-
-    }
-
-    /**
-     * Shows a (long) toast.
-     */
-    public static void showToast( Context context, int resourceId ) {
-
-        Toast.makeText( context, context.getString( resourceId ), Toast.LENGTH_LONG ).show();
-
-    }
-
     public static int convertDpToPixel( Context ctx, int dp ) {
 
         float density = ctx.getResources().getDisplayMetrics().density;
@@ -107,10 +90,10 @@ public class Utils {
 
         String result = "";
         int hr = millis / 3600000;
-        millis %= 3600000;
-        int min = millis / 60000;
-        millis %= 60000;
-        int sec = millis / 1000;
+        int millisHr = millis % 3600000;
+        int min = millisHr / 60000;
+        int millisMin = millisHr % 60000;
+        int sec = millisMin / 1000;
         if( hr > 0 ) {
             result += hr + ":";
         }
@@ -133,7 +116,7 @@ public class Utils {
     public static long getDuration( String videoUrl ) {
 
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH ) {
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ) {
             mmr.setDataSource( videoUrl, new HashMap<>() );
         } else {
             mmr.setDataSource( videoUrl );
@@ -144,33 +127,40 @@ public class Utils {
 
     public static boolean meetsMinimumVersion( String version, float minimumVersion ) {
 
-        if( version.equals( "Unknown" ) || version.matches( "\b[0-9a-f]{5,40}\b" ) ) {
+        if( "Unknown".equals( version ) || version.matches( "\\b[0-9a-f]{5,40}\\b" ) ) {
 
             return false;
         }
 
-        if( version.startsWith( "v" ) ) {
-            version = version.substring( 1 );
+        String cleanVersion = version;
+        if( cleanVersion.startsWith( "v" ) ) {
+            cleanVersion = cleanVersion.substring( 1 );
         }
 
-        if( version.contains( "-" ) ) {
+        if( cleanVersion.contains( "-" ) ) {
 
-            version = version.substring( 0, version.indexOf( "-" ) );
+            cleanVersion = cleanVersion.substring( 0, cleanVersion.indexOf( '-' ) );
+
+        }
+
+        if( cleanVersion.length() > 4 ) {
+
+            cleanVersion = cleanVersion.substring( 0, 4 );
 
         }
 
         try {
 
-            Float.parseFloat( version );
+            Float.parseFloat( cleanVersion );
 
         } catch( NumberFormatException e ) {
 
             return false;
         }
 
-        float extractedVersion = Float.parseFloat( version );
+        float extractedVersion = Float.parseFloat( cleanVersion );
 
-        if( !version.startsWith( "0" ) ) {
+        if( !cleanVersion.startsWith( "0" ) ) {
 
             extractedVersion *= 100;
 

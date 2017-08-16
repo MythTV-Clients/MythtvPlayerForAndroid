@@ -1,11 +1,9 @@
 package org.mythtv.android.domain.interactor;
 
-import org.mythtv.android.domain.ContentType;
 import org.mythtv.android.domain.Media;
 import org.mythtv.android.domain.executor.PostExecutionThread;
 import org.mythtv.android.domain.executor.ThreadExecutor;
-import org.mythtv.android.domain.repository.DvrRepository;
-import org.mythtv.android.domain.repository.VideoRepository;
+import org.mythtv.android.domain.repository.MediaItemRepository;
 
 import java.util.Map;
 
@@ -24,14 +22,12 @@ public class GetSeriesList extends DynamicUseCase {
 
     public static final String MEDIA_KEY = "media";
 
-    private final DvrRepository dvrRepository;
-    private final VideoRepository videoRepository;
+    private final MediaItemRepository mediaItemRepository;
 
-    public GetSeriesList( final DvrRepository dvrRepository, final VideoRepository videoRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
+    public GetSeriesList( final MediaItemRepository mediaItemRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread ) {
         super( threadExecutor, postExecutionThread );
 
-        this.dvrRepository = dvrRepository;
-        this.videoRepository = videoRepository;
+        this.mediaItemRepository = mediaItemRepository;
 
     }
 
@@ -48,11 +44,12 @@ public class GetSeriesList extends DynamicUseCase {
 
             case PROGRAM:
 
-                return dvrRepository.titleInfos();
+                return mediaItemRepository.series( media );
 
+            case TELEVISION:
             case VIDEO:
 
-                return videoRepository.getVideoSeriesListByContentType( ContentType.TELEVISION );
+                return mediaItemRepository.series( Media.TELEVISION );
 
             default :
                 throw new IllegalArgumentException( "Key [" + media.name() + "] not found" );

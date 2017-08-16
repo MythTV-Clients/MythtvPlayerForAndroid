@@ -20,6 +20,7 @@ package org.mythtv.android.presentation.presenter.phone;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
 import org.mythtv.android.domain.MediaItem;
 import org.mythtv.android.domain.exception.DefaultErrorBundle;
@@ -46,6 +47,7 @@ import javax.inject.Named;
  *
  * Created on 9/15/16.
  */
+@SuppressWarnings( "PMD" )
 public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 
     private static final String TAG = MediaItemListPresenter.class.getSimpleName();
@@ -69,19 +71,23 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
 
     @Override
     public void resume() {
+        Log.v( TAG, "resume : enter" );
 
+        Log.v( TAG, "resume : exit" );
     }
 
     @Override
     public void pause() {
+        Log.v( TAG, "pause : enter" );
 
+        Log.v( TAG, "pause : exit" );
     }
 
     @Override
     public void destroy() {
+        Log.v( TAG, "destroy : enter" );
 
-//        this.getMediaItemListUseCase.unsubscribe();
-
+        Log.v( TAG, "destroy : exit" );
     }
 
     /**
@@ -104,10 +110,10 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
 
     }
 
-    public void onMediaItemClicked( MediaItemModel mediaItemModel ) {
+    public void onMediaItemClicked( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
         Log.i( TAG, "onMediaItemClicked : mediaItemModel=" + mediaItemModel.toString() );
 
-        this.viewListView.viewMediaItem( mediaItemModel );
+        this.viewListView.viewMediaItem( mediaItemModel, sharedElement, sharedElementName );
 
     }
 
@@ -158,7 +164,7 @@ public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> i
         public void onError( Throwable e ) {
 
             MediaItemListPresenter.this.hideViewLoading();
-            MediaItemListPresenter.this.showErrorMessage( new DefaultErrorBundle( (Exception) e ) );
+            MediaItemListPresenter.this.showErrorMessage( new DefaultErrorBundle( new Exception( e ) ) );
             MediaItemListPresenter.this.showViewRetry();
 
         }

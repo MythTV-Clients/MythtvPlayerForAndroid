@@ -20,7 +20,13 @@ package org.mythtv.android.domain;
 
 import android.support.annotation.NonNull;
 
+import com.google.auto.value.AutoValue;
+
 import org.mythtv.android.domain.utils.DomainUtils;
+
+import java.util.Locale;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -30,70 +36,26 @@ import org.mythtv.android.domain.utils.DomainUtils;
  *
  * Created on 9/23/16.
  */
-public class Series implements Comparable<Series> {
+@AutoValue
+public abstract class Series implements Comparable<Series> {
 
-    private String title;
-    private Media media;
-    private String artworkUrl;
-    private int count;
-    private String inetref;
+    @Nullable
+    public abstract String title();
 
-    public Series() { }
+    @Nullable
+    public abstract Media media();
 
-    public String getTitle() {
-        return title;
-    }
+    @Nullable
+    public abstract String artworkUrl();
 
-    public void setTitle( String title ) {
-        this.title = title;
-    }
+    public abstract int count();
 
-    public Media getMedia() {
-        return media;
-    }
+    @Nullable
+    public abstract String inetref();
 
-    public void setMedia( Media media ) {
+    public static Series create( String title, Media media, String artwork, int count, String inetref ) {
 
-        this.media = media;
-
-    }
-
-    public String getArtworkUrl() {
-
-        return artworkUrl;
-    }
-
-    public void setArtworkUrl( String artworkUrl ) {
-
-        this.artworkUrl = artworkUrl;
-
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount( int count ) {
-        this.count = count;
-    }
-
-    public String getInetref() {
-        return inetref;
-    }
-
-    public void setInetref(String inetref) {
-        this.inetref = inetref;
-    }
-
-    @Override
-    public String toString() {
-        return "Series{" +
-                "title='" + title + '\'' +
-                ", media=" + media +
-                ", artworkUrl='" + artworkUrl + '\'' +
-                ", count=" + count +
-                ", inetref='" + inetref + '\'' +
-                '}';
+        return new AutoValue_Series( title, media, artwork, count, inetref );
     }
 
     @Override
@@ -101,16 +63,25 @@ public class Series implements Comparable<Series> {
 
         final int EQUAL = 0;
 
-        if( this == another ) return EQUAL;
+        if( this == another ) {
 
-        String thisTitle = DomainUtils.removeArticles( this.title.toUpperCase() );
-        String thatTitle = DomainUtils.removeArticles( another.title.toUpperCase() );
+            return EQUAL;
+        }
+
+        String thisTitle = DomainUtils.removeArticles( this.title().toUpperCase( Locale.getDefault() ) );
+        String thatTitle = DomainUtils.removeArticles( another.title().toUpperCase( Locale.getDefault() ) );
 
         int comparison = thisTitle.compareTo( thatTitle );
-        if( comparison != EQUAL ) return comparison;
+        if( comparison != EQUAL ) {
 
-        comparison = inetref.compareTo( another.inetref );
-        if( comparison != EQUAL ) return comparison;
+            return comparison;
+        }
+
+        comparison = inetref().compareTo( another.inetref() );
+        if( comparison != EQUAL ) {
+
+            return comparison;
+        }
 
         return EQUAL;
     }

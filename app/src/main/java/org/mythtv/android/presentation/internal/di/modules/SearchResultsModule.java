@@ -27,7 +27,9 @@ public class SearchResultsModule {
 
     private static final String TAG = SearchResultsModule.class.getSimpleName();
 
-    public SearchResultsModule() { }
+    public SearchResultsModule() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     @Provides
     @PerActivity

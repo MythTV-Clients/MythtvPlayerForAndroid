@@ -44,6 +44,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -55,6 +56,7 @@ import org.mythtv.android.presentation.model.MediaItemModel;
 import org.mythtv.android.presentation.presenter.phone.MediaItemListPresenter;
 import org.mythtv.android.presentation.presenter.tv.CardPresenter;
 import org.mythtv.android.presentation.utils.ArticleCleaner;
+import org.mythtv.android.presentation.utils.MediaItemFilter;
 import org.mythtv.android.presentation.view.MediaItemListView;
 import org.mythtv.android.presentation.view.activity.tv.MediaItemDetailsActivity;
 
@@ -65,12 +67,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
+
+import rx.Observable;
 
 /**
  *
@@ -80,6 +85,7 @@ import javax.inject.Inject;
  *
  * Created on 1/29/16.
  */
+@SuppressWarnings( "PMD" )
 public class MediaItemListFragment extends AbstractBaseBrowseFragment implements MediaItemListView {
 
     private static final String TAG = MediaItemListFragment.class.getSimpleName();
@@ -98,6 +104,17 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     private URI mBackgroundURI;
     private BackgroundManager mBackgroundManager;
 
+    @Inject
+    MediaItemListPresenter mediaItemListPresenter;
+
+    private MediaItemListListener listener;
+
+    private List<MediaItemModel> mediaItems;
+
+    public MediaItemListFragment() {
+        super();
+    }
+
     /**
      * Interface for listening program list events.
      */
@@ -105,15 +122,6 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
         void onSearchClicked();
 
-    }
-
-    @Inject
-    MediaItemListPresenter mediaItemListPresenter;
-
-    private MediaItemListListener listener;
-
-    public MediaItemListFragment() {
-        super();
     }
 
     public static MediaItemListFragment newInstance(Bundle args ) {
@@ -126,7 +134,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     public static class Builder {
 
-        private Media media;
+        private final Media media;
         private boolean tv;
 
         public Builder( Media media ) {
@@ -217,21 +225,13 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
         this.initialize();
 
-        Log.d( TAG, "onActivityCreated : exit" );
-    }
-
-    @Override
-    public void onResume() {
-        Log.d( TAG, "onResume : enter" );
-        super.onResume();
-
         this.loadMediaItemList();
 
         setupEventListeners();
 
         this.mediaItemListPresenter.resume();
 
-        Log.d( TAG, "onResume : exit" );
+        Log.d( TAG, "onActivityCreated : exit" );
     }
 
     @Override
@@ -309,6 +309,10 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
                 break;
 
+            default :
+
+                break;
+
         }
 
         // over title
@@ -323,22 +327,30 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
     @Override
     public void showLoading() {
+        Log.v( TAG, "showLoading : enter" );
 
+        Log.v( TAG, "showLoading : exit" );
     }
 
     @Override
     public void hideLoading() {
+        Log.v( TAG, "hideLoading : enter" );
 
+        Log.v( TAG, "hideLoading : exit" );
     }
 
     @Override
     public void showRetry() {
+        Log.v( TAG, "showRetry : enter" );
 
+        Log.v( TAG, "showRetry : exit" );
     }
 
     @Override
     public void hideRetry() {
+        Log.v( TAG, "hideRetry : enter" );
 
+        Log.v( TAG, "hideRetry : exit" );
     }
 
     @Override
@@ -347,6 +359,11 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
         if( null != mediaItemModelCollection ) {
             Log.d( TAG, "renderMediaItemList : mediaItemModelCollection is not null" );
+
+            Observable.from( mediaItemModelCollection )
+                    .filter( mediaItemModel -> MediaItemFilter.filter( mediaItemModel, getActivity() ) )
+                    .toList()
+                    .subscribe( items -> this.mediaItems = items );
 
             ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter( new ListRowPresenter() );
             CardPresenter cardPresenter = new CardPresenter();
@@ -361,21 +378,21 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
             });
 
-            for( MediaItemModel mediaItemModel : mediaItemModelCollection ) {
+            for( MediaItemModel mediaItemModel : mediaItems ) {
                 Log.d( TAG, "renderMediaItemList : mediaItemModel=" + mediaItemModel.toString() );
 
-                Category category = new Category( mediaItemModel.getTitle(), mediaItemModel.getMedia() );
-                if( !categories.containsKey( category ) ) {
+                Category category = new Category( mediaItemModel.title(), mediaItemModel.media() );
+                if( categories.containsKey( category ) ) {
+                    Log.d( TAG, "renderMediaItemList : adding to existing category" );
+
+                    categories.get( category ).add( mediaItemModel );
+
+                } else {
                     Log.d( TAG, "renderMediaItemList : new category=" + category );
 
                     List<MediaItemModel> mediaItemModels = new ArrayList<>();
                     mediaItemModels.add( mediaItemModel );
                     categories.put( category, mediaItemModels );
-
-                } else {
-                    Log.d( TAG, "renderMediaItemList : adding to existing category" );
-
-                    categories.get( category ).add( mediaItemModel );
 
                 }
 
@@ -383,49 +400,44 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
             Log.d( TAG, "renderMediaItemList : build the list row adapters, catgory size=" + categories.size() );
             int i = 0;
-            for( Category category : categories.keySet() ) {
-                Log.d( TAG, "renderMediaItemList : category=" + category );
+            for( Map.Entry<Category, List<MediaItemModel>> entry : categories.entrySet() ) {
+                Log.d( TAG, "renderMediaItemList : category=" + entry.getKey() );
 
-                Collections.sort( categories.get( category ), ( lhs, rhs ) -> {
+                Collections.sort( entry.getValue(), ( lhs, rhs ) -> {
 
-                    switch( category.media ) {
+                    if( entry.getKey().media == Media.PROGRAM ) {
 
-                        case PROGRAM :
+                        // Requires min API 19
+//                        int i1 = Integer.compare( lhs.season(), rhs.season() );
+                        int i1 = Integer.valueOf( lhs.season() ).compareTo( rhs.season() );
+                        if( i1 != 0 ) {
 
-//                    int i1 = lhs.getEndTime().compareTo( rhs.getEndTime() );
-//                    if( i1 != 0 ) {
-//
-//                        return i1;
-//                    }
+                            return i1;
+                        }
 
-                            int i1 = Integer.compare( lhs.getSeason(), rhs.getSeason() );
-                            if( i1 != 0 ) {
+                        // Requires min API 19
+//                        return Integer.compare( lhs.episode(), rhs.episode() );
+                        return Integer.valueOf( lhs.episode() ).compareTo( rhs.episode() );
 
-                                return i1;
-                            }
+                    } else {
 
-                            return Integer.compare( lhs.getEpisode(), rhs.getEpisode() );
+                        String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.title() );
+                        String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.title() );
 
-                        default :
-
-                            String lhsTitle = ArticleCleaner.clean( getActivity(), lhs.getTitle() );
-                            String rhsTitle = ArticleCleaner.clean( getActivity(), rhs.getTitle() );
-
-                            return lhsTitle.compareTo( rhsTitle );
-
+                        return lhsTitle.compareTo(rhsTitle);
                     }
 
                 });
 
                 ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter( cardPresenter );
-                for( MediaItemModel mediaItemModel : categories.get( category ) ) {
-                    Log.d( TAG, "renderMediaItemList : adding mediaItem '" + mediaItemModel.getTitle() + "' to category '" + category.getKey() + "' list row adapter" );
+                for( MediaItemModel mediaItemModel : entry.getValue() ) {
+                    Log.d( TAG, "renderMediaItemList : adding mediaItem '" + mediaItemModel.title() + "' to category '" + entry.getKey().getKey() + "' list row adapter" );
 
                     listRowAdapter.add( mediaItemModel );
 
                 }
 
-                HeaderItem header = new HeaderItem( i, category.getTitle() );
+                HeaderItem header = new HeaderItem( i, entry.getKey().getTitle() );
                 mRowsAdapter.add( new ListRow( header, listRowAdapter ) );
 
                 i++;
@@ -440,13 +452,17 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
     }
 
     @Override
-    public void viewMediaItem( MediaItemModel mediaItemModel ) {
+    public void viewMediaItem( final MediaItemModel mediaItemModel, final View sharedElement, final String sharedElementName ) {
+        Log.v( TAG, "viewMediaItem : enter" );
 
+        Log.v( TAG, "viewMediaItem : exit" );
     }
 
     @Override
     public void showError( String message ) {
+        Log.v( TAG, "showError : enter" );
 
+        Log.v( TAG, "showError : exit" );
     }
 
     @Override
@@ -509,6 +525,7 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
                 .load( uri )
 //                .centerCrop()
                 .error( mDefaultBackground )
+                .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into( new SimpleTarget<GlideDrawable>( width, height ) {
 
                     @Override
@@ -585,9 +602,20 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
             if( item instanceof MediaItemModel ) {
 
-                MediaItemModel mediaItemModel = (MediaItemModel) item;
-                mBackgroundURI = URI.create( getSharedPreferencesModule().getMasterBackendUrl() + mediaItemModel.getFanartUrl() );
-                startBackgroundTimer();
+                try {
+
+                    MediaItemModel mediaItemModel = (MediaItemModel) item;
+
+                    String cleanedUrl = mediaItemModel.fanartUrl();
+                    cleanedUrl = cleanedUrl.replaceAll(" ", "%20");
+                    cleanedUrl = cleanedUrl.replaceAll(":", "&#58;");
+
+                    mBackgroundURI = URI.create(getSharedPreferencesModule().getMasterBackendUrl() + cleanedUrl);
+                    startBackgroundTimer();
+
+                } catch( NullPointerException e ) {
+                    Log.w( TAG, e.getLocalizedMessage(), e );
+                }
 
             }
 
@@ -619,22 +647,16 @@ public class MediaItemListFragment extends AbstractBaseBrowseFragment implements
 
         public Category( final String title, final Media media ) {
 
-            switch( media ) {
+            if( media == Media.PROGRAM || media == Media.TELEVISION ) {
 
-                case PROGRAM :
-                case TELEVISION :
+                this.key = ArticleCleaner.clean( getActivity(), title ).toUpperCase( Locale.getDefault() );
+                this.title = title;
 
-                    this.key = ArticleCleaner.clean( getActivity(), title ).toUpperCase();
-                    this.title = title;
+            } else {
 
-                    break;
+                this.key = ArticleCleaner.clean( getActivity(), title ).substring( 0, 1 ).toUpperCase( Locale.getDefault() );
+                this.title = key;
 
-                default :
-
-                    this.key = ArticleCleaner.clean( getActivity(), title ).substring( 0, 1 ).toUpperCase();
-                    this.title = key;
-
-                    break;
             }
 
             this.media = media;
