@@ -51,10 +51,10 @@ public class PlaybackOverlayActivity extends Activity {
 
     @Override
     protected void onStop() {
-        super.onStop();
 
         getMediaController().getTransportControls().pause();
 
+        super.onStop();
     }
 
     @Override

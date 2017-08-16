@@ -47,6 +47,7 @@ import javax.inject.Named;
  *
  * Created on 9/15/16.
  */
+@SuppressWarnings( "PMD" )
 public class MediaItemListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 
     private static final String TAG = MediaItemListPresenter.class.getSimpleName();

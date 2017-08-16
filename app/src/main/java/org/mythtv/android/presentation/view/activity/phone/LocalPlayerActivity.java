@@ -81,7 +81,7 @@ import okhttp3.Request;
  *
  * @author dmfrey
 \ */
-@SuppressWarnings( "PMD.GodClass" )
+@SuppressWarnings( "PMD" )
 public class LocalPlayerActivity extends AppCompatActivity {
 
     private static final String TAG = LocalPlayerActivity.class.getSimpleName();
@@ -154,7 +154,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
         setupCastListener();
 
         mCastContext = CastContext.getSharedInstance( this );
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich( this, savedInstanceState );
+//        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich( this, savedInstanceState );
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         // see what we need to play and where

@@ -47,6 +47,7 @@ import rx.Subscriber;
  *
  * Created on 10/8/15.
  */
+@SuppressWarnings( "PMD" )
 public class DbSearchDataStore implements SearchDataStore {
 
     private static final String TAG = DbSearchDataStore.class.getSimpleName();

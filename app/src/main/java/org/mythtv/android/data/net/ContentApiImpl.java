@@ -45,6 +45,7 @@ import rx.Subscriber;
  *
  * Created on 10/17/15.
  */
+@SuppressWarnings( "PMD" )
 public class ContentApiImpl extends BaseApi implements ContentApi {
 
     private static final String TAG = ContentApiImpl.class.getSimpleName();

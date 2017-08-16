@@ -67,6 +67,7 @@ import static android.app.Activity.RESULT_OK;
  *
  * Created on 8/31/15.
  */
+@SuppressWarnings( "PMD" )
 public class MediaItemDetailsFragment extends AbstractBaseFragment implements MediaItemDetailsView {
 
     private static final String TAG = MediaItemDetailsFragment.class.getSimpleName();
