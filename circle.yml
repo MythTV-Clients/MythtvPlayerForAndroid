@@ -24,7 +24,7 @@ dependencies:
     - echo "y" | android update sdk --no-ui --all --filter tools,build-tools-26.0.0,android-26,extra-google-m2repository,extra-google-google_play_services,extra-android-m2repository
 #    - sudo pip install -U crcmod
   post:
-    - ./gradlew assembleDevDebug assembleDevDebugAndroidTest -PdisablePreDex
+    - ./gradlew clean assemble -PdisablePreDex
 #    - echo $CLIENT_SECRET | base64 --decode --ignore-garbage > ${HOME}/client-secret.json
 #    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
 #    - sudo /opt/google-cloud-sdk/bin/gcloud config set project $FIREBASE_PROJECT
