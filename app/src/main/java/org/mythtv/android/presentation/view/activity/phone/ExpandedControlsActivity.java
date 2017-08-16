@@ -48,8 +48,8 @@ public class ExpandedControlsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CastContext.getSharedInstance(this).registerLifecycleCallbacksBeforeIceCreamSandwich(this,
-                savedInstanceState);
+//        CastContext.getSharedInstance(this).registerLifecycleCallbacksBeforeIceCreamSandwich(this,
+//                savedInstanceState);
         setContentView(R.layout.cast_expanded_controls);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
