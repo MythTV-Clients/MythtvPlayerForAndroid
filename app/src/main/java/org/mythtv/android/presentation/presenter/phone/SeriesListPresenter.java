@@ -46,6 +46,7 @@ import javax.inject.Named;
  *
  * Created on 9/15/16.
  */
+@SuppressWarnings( "PMD" )
 public class SeriesListPresenter extends DefaultSubscriber<List<Series>> implements Presenter {
 
     private static final String TAG = SeriesListPresenter.class.getSimpleName();

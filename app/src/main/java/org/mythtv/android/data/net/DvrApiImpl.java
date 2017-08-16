@@ -55,6 +55,7 @@ import rx.Subscriber;
  *
  * Created on 8/27/15.
  */
+@SuppressWarnings( "PMD" )
 public class DvrApiImpl extends BaseApi implements DvrApi {
 
     private static final String TAG = DvrApiImpl.class.getSimpleName();

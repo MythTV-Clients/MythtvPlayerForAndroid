@@ -85,6 +85,7 @@ import rx.Observable;
  *
  * Created on 1/29/16.
  */
+@SuppressWarnings( "PMD" )
 public class MediaItemListFragment extends AbstractBaseBrowseFragment implements MediaItemListView {
 
     private static final String TAG = MediaItemListFragment.class.getSimpleName();

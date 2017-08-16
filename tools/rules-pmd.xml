@@ -3,6 +3,8 @@
     xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
     xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
+    <rule ref="rulesets/java/android.xml" />
+
     <rule ref="rulesets/java/basic.xml" />
 
     <rule ref="rulesets/java/braces.xml" />

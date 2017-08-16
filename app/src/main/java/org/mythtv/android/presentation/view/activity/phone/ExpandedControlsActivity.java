@@ -39,6 +39,7 @@ import org.mythtv.android.R;
  *
  * @author dmfrey
  */
+@SuppressWarnings( "PMD" )
 public class ExpandedControlsActivity extends AppCompatActivity {
 
     private static final String TAG = "ExpandedControlsActvty";

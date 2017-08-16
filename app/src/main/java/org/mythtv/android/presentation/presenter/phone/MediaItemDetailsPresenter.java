@@ -47,6 +47,7 @@ import javax.inject.Named;
  *
  * Created on 8/31/15.
  */
+@SuppressWarnings( "PMD" )
 public class MediaItemDetailsPresenter implements Presenter {
 
     private static final String TAG = MediaItemDetailsPresenter.class.getSimpleName();

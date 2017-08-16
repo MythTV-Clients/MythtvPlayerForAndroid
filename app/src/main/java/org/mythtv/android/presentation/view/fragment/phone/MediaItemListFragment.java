@@ -60,6 +60,7 @@ import butterknife.Unbinder;
  *
  * Created on 1/20/16.
  */
+@SuppressWarnings( "PMD" )
 public class MediaItemListFragment extends AbstractBaseFragment implements MediaItemListView {
 
     private static final String TAG = MediaItemListFragment.class.getSimpleName();

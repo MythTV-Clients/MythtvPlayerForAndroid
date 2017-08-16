@@ -81,7 +81,7 @@ import okhttp3.Request;
  *
  * @author dmfrey
 \ */
-@SuppressWarnings( "PMD.GodClass" )
+@SuppressWarnings( "PMD" )
 public class LocalPlayerActivity extends AppCompatActivity {
 
     private static final String TAG = LocalPlayerActivity.class.getSimpleName();

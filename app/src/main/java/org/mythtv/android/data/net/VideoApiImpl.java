@@ -46,6 +46,7 @@ import rx.Subscriber;
  *
  * Created on 11/9/15.
  */
+@SuppressWarnings( "PMD" )
 public class VideoApiImpl extends BaseApi implements VideoApi {
 
     private static final String TAG = VideoApiImpl.class.getSimpleName();

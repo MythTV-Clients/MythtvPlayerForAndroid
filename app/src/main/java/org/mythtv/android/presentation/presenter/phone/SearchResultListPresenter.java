@@ -48,6 +48,7 @@ import javax.inject.Named;
  *
  * Created on 10/14/15.
  */
+@SuppressWarnings( "PMD" )
 public class SearchResultListPresenter extends DefaultSubscriber<List<MediaItem>> implements Presenter {
 
     private static final String TAG = SearchResultListPresenter.class.getSimpleName();

@@ -61,6 +61,7 @@ import org.mythtv.android.presentation.view.activity.tv.PlaybackOverlayActivity;
  *
  * @author dmfrey
  */
+@SuppressWarnings( "PMD" )
 public class MediaItemDetailsFragment extends AbstractBaseDetailsFragment {
 
     private static final String TAG = MediaItemDetailsFragment.class.getSimpleName();

@@ -36,6 +36,7 @@ import org.mythtv.android.presentation.model.MediaItemModel;
  *
  * @author dmfrey
  */
+@SuppressWarnings( "PMD" )
 public class CardPresenter extends Presenter {
 
     private static final String TAG = CardPresenter.class.getSimpleName();

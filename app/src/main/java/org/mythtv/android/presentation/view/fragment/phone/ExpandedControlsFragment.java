@@ -48,6 +48,7 @@ import org.mythtv.android.R;
  *
  * @author dmfrey
  */
+@SuppressWarnings( "PMD" )
 public class ExpandedControlsFragment extends Fragment {
 
     private static final String TAG = ExpandedControlsFragment.class.getSimpleName();

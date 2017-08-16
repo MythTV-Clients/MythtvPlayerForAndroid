@@ -77,7 +77,7 @@ import java.util.List;
  */
 @TargetApi( Build.VERSION_CODES.LOLLIPOP )
 @SuppressLint( "InlinedApi" )
-@SuppressWarnings( "PMD.GodClass" )
+@SuppressWarnings( "PMD" )
 public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
 
     private static final String TAG = MythTvPlaybackFragment.class.getSimpleName();

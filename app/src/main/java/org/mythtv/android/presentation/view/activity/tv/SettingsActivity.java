@@ -62,7 +62,7 @@ import rx.Observable;
  *
  * Created on 1/28/16.
  */
-@SuppressWarnings({ "PMD.AvoidDuplicateLiterals", "PMD.GodClass" })
+@SuppressWarnings({ "PMD" })
 public class SettingsActivity extends AbstractBaseTvActivity implements HasComponent<MediaComponent> {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
