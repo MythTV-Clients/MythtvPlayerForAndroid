@@ -157,11 +157,11 @@ public class SeriesListFragment extends AbstractBaseFragment implements SeriesLi
     }
 
     @Override
-    public void onAttach( Context context ) {
-        super.onAttach( context );
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        Activity activity = getActivity();
+//        Activity activity = getActivity();
 //        if( activity instanceof NotifyListener) {
 //            this.notifyListener = (NotifyListener) activity;
 //        }

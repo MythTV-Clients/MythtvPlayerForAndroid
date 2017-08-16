@@ -340,20 +340,22 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
     }
 
     @Override
-    public void onAttach( Context context ) {
-        super.onAttach( context );
+    public void onAttach( Activity activity ) {
+        super.onAttach( activity );
         Log.d( TAG, "onAttach : enter" );
 
-        Activity activity = getActivity();
-        if( activity instanceof MediaItemListListener) {
-            this.mediaItemListListener = (MediaItemListListener) activity;
-        }
-        if( activity instanceof NotifyListener) {
-            this.notifyListener = (NotifyListener) activity;
-        }
-        if( activity instanceof TroubleshootClickListener) {
-            this.troubleshootClickListener = (TroubleshootClickListener) activity;
-        }
+//        if( context instanceof Activity ) {
+//            Activity activity = (Activity) context;
+            if (activity instanceof MediaItemListListener) {
+                this.mediaItemListListener = (MediaItemListListener) activity;
+            }
+            if (activity instanceof NotifyListener) {
+                this.notifyListener = (NotifyListener) activity;
+            }
+            if (activity instanceof TroubleshootClickListener) {
+                this.troubleshootClickListener = (TroubleshootClickListener) activity;
+            }
+//        }
 
         Log.d( TAG, "onAttach : exit" );
     }
@@ -539,7 +541,7 @@ public class MediaItemListFragment extends AbstractBaseFragment implements Media
 
         }
 
-        Log.d( TAG, "viewProgram : exit" );
+        Log.d( TAG, "viewMediaItem : exit" );
     }
 
     @Override
