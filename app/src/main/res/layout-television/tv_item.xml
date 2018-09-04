@@ -19,10 +19,11 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="250dp"
+    android:layout_width="250dp"
     android:layout_height="300dp"
     android:gravity="center_vertical"
-    android:background="@drawable/tv_selector">
+    android:background="@drawable/tv_selector"
+    tools:ignore="MissingDefaultResource" >
 
     <ImageView
         android:id="@+id/tv_item_category"

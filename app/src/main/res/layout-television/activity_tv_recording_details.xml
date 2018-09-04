@@ -24,4 +24,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:deviceIds="tv"/>
+    tools:deviceIds="tv"
+    tools:ignore="MissingDefaultResource" />
