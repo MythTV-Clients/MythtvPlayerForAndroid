@@ -31,7 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v17.leanback.app.PlaybackOverlayFragment;
+import android.support.v17.leanback.app.PlaybackSupportFragment;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -78,7 +78,7 @@ import java.util.List;
 @TargetApi( Build.VERSION_CODES.LOLLIPOP )
 @SuppressLint( "InlinedApi" )
 @SuppressWarnings( "PMD" )
-public class MythTvPlaybackFragment extends PlaybackOverlayFragment {
+public class MythTvPlaybackFragment extends PlaybackSupportFragment {
 
     private static final String TAG = MythTvPlaybackFragment.class.getSimpleName();
 

@@ -19,7 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.google.firebase.crash.FirebaseCrash;
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.JsonSyntaxException;
 
 import org.mythtv.android.R;
@@ -241,7 +241,7 @@ public class TroubleshootActivity extends AbstractBasePhoneActivity {
         } catch( IOException | InterruptedException e ) {
             Log.e( TAG, "pingSucceeded : error", e );
 
-            FirebaseCrash.report( e );
+            Crashlytics.logException( e );
 
         }
 

@@ -26,7 +26,7 @@ import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 
-import com.google.firebase.crash.FirebaseCrash;
+import com.crashlytics.android.Crashlytics;
 
 import org.mythtv.android.R;
 import org.mythtv.android.presentation.internal.di.HasComponent;
@@ -153,8 +153,8 @@ public class SearchableActivity extends AbstractBaseTvActivity implements HasCom
             } catch( ActivityNotFoundException e ) {
                 Log.e( TAG, "initializeActivity : error", e );
 
-                FirebaseCrash.logcat( Log.WARN, TAG, "initializeActivity : activity not found, most likely from a FireTV device" );
-                FirebaseCrash.report( e );
+                Crashlytics.log( Log.WARN, TAG, "initializeActivity : activity not found, most likely from a FireTV device" );
+                Crashlytics.logException( e );
 
             }
 

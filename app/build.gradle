@@ -17,6 +17,7 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply from: '../tools/script-java-code-coverage.gradle'
 apply from: '../tools/script-git-version.gradle'
 apply from: '../tools/script-findbugs.gradle'
@@ -27,8 +28,8 @@ apply plugin: 'com.github.ben-manes.versions'
 
 android {
 
-    compileSdkVersion 26
-    buildToolsVersion '26.0.0'
+    compileSdkVersion 27
+    buildToolsVersion '28.0.2'
 
     adbOptions {
 
@@ -45,8 +46,8 @@ android {
 
     defaultConfig {
 
-        minSdkVersion 17
-        targetSdkVersion 26
+        minSdkVersion 21
+        targetSdkVersion 27
 
         multiDexEnabled true
 
@@ -78,7 +79,7 @@ android {
             annotationProcessorOptions {
 
                 includeCompileClasspath false
-                arguments = ['autovaluegson.defaultCollectionsToEmpty': 'true']
+//                arguments = ['autovaluegson.defaultCollectionsToEmpty': 'true']
 
             }
 
@@ -196,15 +197,16 @@ android {
 
 dependencies {
     implementation "com.google.firebase:firebase-core:${project.ext.firebaseVersion}"
-    implementation "com.google.firebase:firebase-crash:${project.ext.firebaseVersion}"
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
+//    implementation "com.google.firebase:firebase-crash:${project.ext.firebaseVersion}"
 
-    compileOnly "com.google.auto.value:auto-value:${project.ext.autoValueVersion}"
+    api "com.google.auto.value:auto-value:${project.ext.autoValueVersion}"
     annotationProcessor "com.google.auto.value:auto-value:${project.ext.autoValueVersion}"
-    compileOnly "com.ryanharter.auto.value:auto-value-gson:${project.ext.autoValueGsonVersion}"
+    api "com.ryanharter.auto.value:auto-value-gson:${project.ext.autoValueGsonVersion}"
     annotationProcessor "com.ryanharter.auto.value:auto-value-gson:${project.ext.autoValueGsonVersion}"
-    compileOnly "com.ryanharter.auto.value:auto-value-parcel:${project.ext.autoValueParcelVersion}"
+    api "com.ryanharter.auto.value:auto-value-parcel:${project.ext.autoValueParcelVersion}"
     annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:${project.ext.autoValueParcelVersion}"
-    compileOnly "com.github.reggar:auto-value-ignore-hash-equals:${project.ext.autoValueIgnoreHashEqualsVersion}"
+    api "com.github.reggar:auto-value-ignore-hash-equals:${project.ext.autoValueIgnoreHashEqualsVersion}"
     annotationProcessor "com.github.reggar:auto-value-ignore-hash-equals:${project.ext.autoValueIgnoreHashEqualsVersion}"
     implementation "com.google.dagger:dagger:${project.ext.daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-compiler:${project.ext.daggerVersion}"
@@ -237,7 +239,7 @@ dependencies {
     implementation "com.github.bumptech.glide:okhttp3-integration:${project.ext.glideOkHttpVersion}@aar"
     debugImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${project.ext.leakCanaryVersion}"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${project.ext.leakCanaryVersion}"
-    compileOnly "javax.annotation:jsr250-api:${project.ext.javaxAnnotationVersion}"
+    api "javax.annotation:jsr250-api:${project.ext.javaxAnnotationVersion}"
 
     // Dependencies for local testing
     testImplementation "junit:junit:${project.ext.jUnitVersion}"
@@ -287,4 +289,4 @@ tasks.coveralls {
 }
 
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.firebase-crash'
+//apply plugin: 'com.google.firebase.firebase-crash'
