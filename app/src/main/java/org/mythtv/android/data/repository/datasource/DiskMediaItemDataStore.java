@@ -68,7 +68,7 @@ public class DiskMediaItemDataStore implements MediaItemDataStore {
 
         Observable<MediaItemEntity> cached = Observable.just( cache.get( String.valueOf( id ) ) );
         Observable<List<LiveStreamInfoEntity>> liveStreamInfoEntityList = cached
-                .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.url() ) );
+                .flatMap( entity -> contentDataStore.liveStreamInfoEntityList( entity.url().substring( entity.url().lastIndexOf( "=" ) + 1 ) ) );
         Observable<Long> bookmark = dvrDataStore.getBookmark( id, "Duration" );
 
         Observable<MediaItemEntity> mediaItemEntity = Observable.zip( cached, liveStreamInfoEntityList, bookmark, (mediaItemEntity1, liveStreamInfoEntityList1, bookmark1 ) -> {
